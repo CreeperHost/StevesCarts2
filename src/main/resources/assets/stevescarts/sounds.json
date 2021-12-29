@@ -1,0 +1,136 @@
+{
+    "gearswitch": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:gearswitch",
+                "stream": false
+            }
+        ]
+    },
+    "win": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:win",
+                "stream": false
+            }
+        ]
+    },
+    "boop": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:boop1",
+                "stream": false
+            },
+            {
+                "name": "stevescarts:boop2",
+                "stream": false
+            },
+            {
+                "name": "stevescarts:boop3",
+                "stream": false
+            }
+        ]
+    },
+    "gameover": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:gameover",
+                "stream": false
+            }
+        ]
+    },
+    "1lines": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:1lines",
+                "stream": false
+            }
+        ]
+    },
+    "2lines": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:2lines",
+                "stream": false
+            }
+        ]
+    },
+    "3lines": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:3lines",
+                "stream": false
+            }
+        ]
+    },
+    "4lines": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:4lines",
+                "stream": false
+            }
+        ]
+    },
+    "highscore": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:highscore",
+                "stream": false
+            }
+        ]
+    },
+    "hit": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:hit",
+                "stream": false
+            }
+        ]
+    },
+    "click": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:click",
+                "stream": false
+            }
+        ]
+    },
+    "blobclick": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:blobclick",
+                "stream": false
+            }
+        ]
+    },
+    "flagclick": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:flagclick",
+                "stream": false
+            }
+        ]
+    },
+    "goodjob": {
+        "category": "master",
+        "sounds": [
+            {
+                "name": "stevescarts:goodjob",
+                "stream": false
+            }
+        ]
+    }
+}

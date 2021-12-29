@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    "PCP",
+    "I#I"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "tag": "forge:chests/wooden"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    },
+    "X": {
+      "item": "stevescarts:component_advanced_pcb"
+    },
+    "#": {
+      "item": "stevescarts:component_blank_upgrade"
+    }
+  },
+  "result": {
+    "item": "stevescarts:upgrade_module_input"
+  }
+}

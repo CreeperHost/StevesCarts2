@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    "IRI",
+    "R#R"
+  ],
+  "key": {
+    "#": {
+      "item": "stevescarts:component_advanced_pcb"
+    },
+    "X": {
+      "item": "minecraft:piston"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_power_observer"
+  }
+}

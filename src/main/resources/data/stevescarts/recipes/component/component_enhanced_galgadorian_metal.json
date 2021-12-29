@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "stevescarts:component_large_lump_of_galgador"
+  },
+  "result": "stevescarts:component_enhanced_galgadorian_metal",
+  "experience": 0.7,
+  "cookingtime": 200
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X#X",
+    "# #",
+    "X#X"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:module_advanced_sctank"
+    },
+    "#": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "stevescarts:blockliquidmanager"
+  }
+}

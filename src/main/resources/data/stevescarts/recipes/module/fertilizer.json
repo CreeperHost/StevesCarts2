@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "F F",
+    "#X#",
+    "XPX"
+  ],
+  "key": {
+    "P": {
+      "item": "stevescarts:component_simple_pcb"
+    },
+    "X": {
+      "item": "minecraft:leather"
+    },
+    "#": {
+      "item": "minecraft:glass_bottle"
+    },
+    "F": {
+      "item": "minecraft:bone_meal"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_fertilizer"
+  }
+}

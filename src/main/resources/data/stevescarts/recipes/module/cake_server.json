@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "XXX",
+    " # "
+  ],
+  "key": {
+    "X": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "C": {
+      "item": "minecraft:cake"
+    },
+    "#": {
+      "item": "stevescarts:component_simple_pcb"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_cake_server"
+  }
+}

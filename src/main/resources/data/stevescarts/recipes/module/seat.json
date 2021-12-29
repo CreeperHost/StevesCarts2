@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " #",
+    " #",
+    "X#"
+  ],
+  "key": {
+    "X": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "#": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_seat"
+  }
+}

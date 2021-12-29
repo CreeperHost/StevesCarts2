@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    "XEX",
+    "R#R"
+  ],
+  "key": {
+    "#": {
+      "item": "stevescarts:component_advanced_pcb"
+    },
+    "X": {
+      "item": "minecraft:book"
+    },
+    "E": {
+      "item": "minecraft:enchanting_table"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "G": {
+      "item": "stevescarts:component_galgadorian_metal"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_enchanter"
+  }
+}

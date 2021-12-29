@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#X ",
+    "BDX",
+    "#X "
+  ],
+  "key": {
+    "#": {
+      "item": "stevescarts:component_hardened_mesh"
+    },
+    "X": {
+      "item": "stevescarts:component_reinforced_metal"
+    },
+    "B": {
+      "item": "minecraft:diamond_block"
+    },
+    "D": {
+      "item": "stevescarts:module_basic_drill"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_hardened_drill"
+  }
+}

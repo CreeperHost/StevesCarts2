@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "XRX",
+    "###"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:rail"
+    },
+    "X": {
+      "item": "minecraft:iron_ingot"
+    },
+    "#": {
+      "tag": "minecraft:stone_crafting_materials"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_railer"
+  }
+}

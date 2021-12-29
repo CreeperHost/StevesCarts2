@@ -1,0 +1,35 @@
+{
+  "variants": {
+    "facing=north,connected=false": {
+      "model": "stevescarts:block/upgrade_power_crystal",
+      "y": 90
+    },
+    "facing=south,connected=false": {
+      "model": "stevescarts:block/upgrade_power_crystal",
+      "y": 270
+    },
+    "facing=west,connected=false": {
+      "model": "stevescarts:block/upgrade_power_crystal",
+      "y": 0
+    },
+    "facing=east,connected=false": {
+      "model": "stevescarts:block/upgrade_power_crystal",
+      "y": 180
+    },
+    "facing=north,connected=true": {
+      "model": "stevescarts:block/upgrade_power_crystal"
+    },
+    "facing=south,connected=true": {
+      "model": "stevescarts:block/upgrade_power_crystal",
+      "y": 180
+    },
+    "facing=west,connected=true": {
+      "model": "stevescarts:block/upgrade_power_crystal",
+      "y": 270
+    },
+    "facing=east,connected=true": {
+      "model": "stevescarts:block/upgrade_power_crystal",
+      "y": 90
+    }
+  }
+}

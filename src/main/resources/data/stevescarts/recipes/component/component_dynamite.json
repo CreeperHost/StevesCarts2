@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "X",
+    "X"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:gunpowder"
+    },
+    "#": {
+      "item": "stevescarts:component_fuse"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_dynamite"
+  }
+}

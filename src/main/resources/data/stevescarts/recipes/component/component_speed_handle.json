@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  B",
+    "XH ",
+    "#X "
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:blue_dye"
+    },
+    "X": {
+      "item": "minecraft:gold_ingot"
+    },
+    "#": {
+      "item": "minecraft:redstone"
+    },
+    "H": {
+      "item": "stevescarts:component_refined_handle"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_speed_handle"
+  }
+}

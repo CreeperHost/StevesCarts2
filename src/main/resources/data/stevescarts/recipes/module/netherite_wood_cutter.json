@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "stevescarts:module_basic_wood_cutter"
+  },
+  "addition": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "item": "stevescarts:module_netherite_wood_cutter"
+  }
+}

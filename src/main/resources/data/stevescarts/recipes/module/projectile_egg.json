@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "X"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:component_empty_disk"
+    },
+    "#": {
+      "item": "minecraft:egg"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_projectile_egg"
+  }
+}

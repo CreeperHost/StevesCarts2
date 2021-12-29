@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#X#",
+    "XPX",
+    "#X#"
+  ],
+  "key": {
+    "P": {
+      "item": "stevescarts:component_simple_pcb"
+    },
+    "#": {
+      "item": "minecraft:snow"
+    },
+    "X": {
+      "item": "minecraft:water_bucket"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_freezer"
+  }
+}

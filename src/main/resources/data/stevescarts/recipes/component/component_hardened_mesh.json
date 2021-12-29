@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#X#",
+    "X#X",
+    "#X#"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:component_refined_hardener"
+    },
+    "#": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_hardened_mesh"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "variants": {
+    "facing=north,connected=false": {
+      "model": "stevescarts:block/upgrade_experienced_assembler",
+      "y": 90
+    },
+    "facing=south,connected=false": {
+      "model": "stevescarts:block/upgrade_experienced_assembler",
+      "y": 270
+    },
+    "facing=west,connected=false": {
+      "model": "stevescarts:block/upgrade_experienced_assembler",
+      "y": 0
+    },
+    "facing=east,connected=false": {
+      "model": "stevescarts:block/upgrade_experienced_assembler",
+      "y": 180
+    },
+    "facing=north,connected=true": {
+      "model": "stevescarts:block/upgrade_experienced_assembler"
+    },
+    "facing=south,connected=true": {
+      "model": "stevescarts:block/upgrade_experienced_assembler",
+      "y": 180
+    },
+    "facing=west,connected=true": {
+      "model": "stevescarts:block/upgrade_experienced_assembler",
+      "y": 270
+    },
+    "facing=east,connected=true": {
+      "model": "stevescarts:block/upgrade_experienced_assembler",
+      "y": 90
+    }
+  }
+}

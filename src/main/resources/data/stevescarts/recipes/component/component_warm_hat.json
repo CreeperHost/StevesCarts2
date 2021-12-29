@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " #X",
+    "#D#",
+    "###"
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "X": {
+      "item": "minecraft:white_wool"
+    },
+    "#": {
+      "item": "minecraft:red_wool"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_warm_hat"
+  }
+}

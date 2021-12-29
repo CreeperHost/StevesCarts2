@@ -1,0 +1,17 @@
+# everything
+/*
+
+# folders
+!/src
+!/gradle/
+
+# files
+!/.gitignore
+!/README.md
+!/build.gradle
+!/gradle.properties
+!/gradlew
+!/gradlew.bat
+!/build.conf
+!Jenkinsfile
+!settings.gradle

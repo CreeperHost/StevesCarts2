@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:component_shooting_station"
+    },
+    "#": {
+      "item": "stevescarts:component_pipe"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_shooter"
+  }
+}

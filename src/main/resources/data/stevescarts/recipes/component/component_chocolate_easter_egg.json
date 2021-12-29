@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#S#",
+    "#X#",
+    "#S#"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:egg"
+    },
+    "#": {
+      "item": "minecraft:cocoa_beans"
+    },
+    "S": {
+      "item": "minecraft:sugar"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_chocolate_easter_egg"
+  }
+}

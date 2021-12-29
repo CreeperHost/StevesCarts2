@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "XXX",
+    " # "
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:red_dye"
+    },
+    "#": {
+      "item": "minecraft:glowstone_dust"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_red_pigment"
+  }
+}

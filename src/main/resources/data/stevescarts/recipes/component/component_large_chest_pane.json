@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "stevescarts:component_chest_pane"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_large_chest_pane"
+  }
+}

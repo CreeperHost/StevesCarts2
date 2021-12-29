@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "XDX",
+    "X#X"
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "X": {
+      "item": "minecraft:redstone"
+    },
+    "#": {
+      "item": "stevescarts:component_blank_upgrade"
+    }
+  },
+  "result": {
+    "item": "stevescarts:upgrade_batteries"
+  }
+}

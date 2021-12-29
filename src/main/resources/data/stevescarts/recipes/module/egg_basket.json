@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "GCY",
+    "RXB"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:yellow_wool"
+    },
+    "G": {
+      "item": "stevescarts:component_explosive_easter_egg"
+    },
+    "R": {
+      "item": "stevescarts:component_glistering_easter_egg"
+    },
+    "Y": {
+      "item": "stevescarts:component_burning_easter_egg"
+    },
+    "B": {
+      "item": "stevescarts:component_chocolate_easter_egg"
+    },
+    "X": {
+      "item": "stevescarts:component_basket"
+    },
+    "C": {
+      "item": "stevescarts:component_chest_lock"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_egg_basket"
+  }
+}

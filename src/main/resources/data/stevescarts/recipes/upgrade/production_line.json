@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    "LRL",
+    "I#I"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "X": {
+      "item": "stevescarts:component_simple_pcb"
+    },
+    "I": {
+      "item": "stevescarts:component_reinforced_metal"
+    },
+    "L": {
+      "item": "stevescarts:component_advanced_pcb"
+    },
+    "#": {
+      "item": "stevescarts:component_blank_upgrade"
+    }
+  },
+  "result": {
+    "item": "stevescarts:upgrade_production_line"
+  }
+}

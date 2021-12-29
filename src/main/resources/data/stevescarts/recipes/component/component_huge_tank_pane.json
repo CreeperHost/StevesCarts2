@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "stevescarts:component_sctank_pane"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_huge_sctank_pane"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "DRD",
+    "R#R"
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "X": {
+      "item": "stevescarts:component_solar_panel_component"
+    },
+    "#": {
+      "item": "stevescarts:component_blank_upgrade"
+    }
+  },
+  "result": {
+    "item": "stevescarts:upgrade_solar_panel"
+  }
+}

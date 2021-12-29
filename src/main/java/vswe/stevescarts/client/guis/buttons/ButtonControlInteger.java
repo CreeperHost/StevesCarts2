@@ -1,0 +1,86 @@
+package vswe.stevescarts.client.guis.buttons;
+
+import net.minecraft.entity.player.PlayerEntity;
+import vswe.stevescarts.computer.ComputerTask;
+import vswe.stevescarts.modules.workers.ModuleComputer;
+
+public class ButtonControlInteger extends ButtonControl
+{
+    private int dif;
+
+    public ButtonControlInteger(final ModuleComputer module, final LOCATION loc, final int dif)
+    {
+        super(module, loc);
+        this.dif = dif;
+    }
+
+    @Override
+    public String toString()
+    {
+        if (dif < 0)
+        {
+            return "Decrease by " + -1 * dif;
+        }
+        return "Increase by " + dif;
+    }
+
+    @Override
+    public int texture()
+    {
+        if (dif == 1)
+        {
+            return 40;
+        }
+        if (dif == -1)
+        {
+            return 41;
+        }
+        if (dif == 10)
+        {
+            return 42;
+        }
+        if (dif == -10)
+        {
+            return 43;
+        }
+        return super.texture();
+    }
+
+    @Override
+    public boolean isVisible()
+    {
+        if (((ModuleComputer) module).getSelectedTasks() != null)
+        {
+            for (final ComputerTask task : ((ModuleComputer) module).getSelectedTasks())
+            {
+                if (task.getControlUseVar() || !task.getControlUseBigInteger(Math.abs(dif)))
+                {
+                    return false;
+                }
+            }
+        }
+        return super.isVisible();
+    }
+
+    @Override
+    public boolean isEnabled()
+    {
+        for (final ComputerTask task : ((ModuleComputer) module).getSelectedTasks())
+        {
+            if (task.getControlMinInteger() <= task.getControlInteger() + dif && task.getControlInteger() + dif <= task.getControlMaxInteger())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void onServerClick(final PlayerEntity player, final int mousebutton, final boolean ctrlKey, final boolean shiftKey)
+    {
+        for (final ComputerTask task : ((ModuleComputer) module).getSelectedTasks())
+        {
+            task.setControlInteger(task.getControlInteger() + dif);
+        }
+    }
+}

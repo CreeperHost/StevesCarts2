@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "shape=east_west": {
+      "model": "stevescarts:block/advanced_detector_rail",
+      "y": 90
+    },
+    "shape=north_south": {
+      "model": "stevescarts:block/advanced_detector_rail"
+    }
+  }
+}

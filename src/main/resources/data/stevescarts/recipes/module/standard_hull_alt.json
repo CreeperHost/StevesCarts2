@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "X X"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:minecart"
+    },
+    "X": {
+      "item": "stevescarts:component_iron_wheels"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_standard_hull"
+  }
+}

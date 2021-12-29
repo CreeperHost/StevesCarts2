@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DDD",
+    " I ",
+    "#X#"
+  ],
+  "key": {
+    "I": {
+      "item": "stevescarts:component_reinforced_metal"
+    },
+    "X": {
+      "item": "minecraft:gold_ingot"
+    },
+    "#": {
+      "item": "stevescarts:component_advanced_pcb"
+    },
+    "D": {
+      "item": "stevescarts:component_galgadorian_metal"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_galgadorian_farmer"
+  }
+}

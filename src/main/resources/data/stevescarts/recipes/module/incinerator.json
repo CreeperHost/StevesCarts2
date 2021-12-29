@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "OOO",
+    "#X#",
+    "OOO"
+  ],
+  "key": {
+    "O": {
+      "item": "minecraft:nether_bricks"
+    },
+    "#": {
+      "item": "minecraft:obsidian"
+    },
+    "X": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_incinerator"
+  }
+}

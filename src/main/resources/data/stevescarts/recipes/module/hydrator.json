@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I#I",
+    " X "
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "X": {
+      "item": "minecraft:oak_fence"
+    },
+    "#": {
+      "item": "minecraft:glass_bottle"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_hydrator"
+  }
+}

@@ -1,0 +1,6 @@
+{ 
+  "parent": "item/generated", 
+  "textures": { 
+    "layer0": "stevescarts:items/trick_or_treat_cake_server_icon" 
+  }
+}

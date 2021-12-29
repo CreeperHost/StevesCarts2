@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "O#O",
+    "MXM",
+    "O#O"
+  ],
+  "key": {
+    "O": {
+      "item": "minecraft:bricks"
+    },
+    "#": {
+      "item": "minecraft:obsidian"
+    },
+    "X": {
+      "item": "minecraft:lava_bucket"
+    },
+    "M": {
+      "item": "stevescarts:component_chest_lock"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_extreme_melter"
+  }
+}

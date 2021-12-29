@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#X#",
+    "X X",
+    "#X#"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:redstone"
+    },
+    "#": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_cleaning_fan"
+  }
+}

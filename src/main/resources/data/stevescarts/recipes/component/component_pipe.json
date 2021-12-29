@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "#  "
+  ],
+  "key": {
+    "X": {
+      "tag": "minecraft:stone_crafting_materials"
+    },
+    "#": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_pipe"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "#X#",
+    "###"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:component_simple_pcb"
+    },
+    "#": {
+      "item": "minecraft:paper"
+    },
+    "C": {
+      "item": "minecraft:compass"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_height_controller"
+  }
+}

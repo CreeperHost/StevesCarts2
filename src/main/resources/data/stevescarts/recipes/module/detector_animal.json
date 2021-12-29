@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "X"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:component_empty_disk"
+    },
+    "#": {
+      "item": "minecraft:porkchop"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_entity_detector_animal"
+  }
+}

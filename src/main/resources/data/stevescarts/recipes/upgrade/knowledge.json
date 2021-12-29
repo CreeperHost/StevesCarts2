@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BSB",
+    "SES",
+    "X#X"
+  ],
+  "key": {
+    "E": {
+      "item": "minecraft:enchanting_table"
+    },
+    "B": {
+      "item": "minecraft:book"
+    },
+    "S": {
+      "item": "minecraft:bookshelf"
+    },
+    "X": {
+      "item": "stevescarts:component_reinforced_metal"
+    },
+    "#": {
+      "item": "stevescarts:component_blank_upgrade"
+    }
+  },
+  "result": {
+    "item": "stevescarts:upgrade_module_knowledge"
+  }
+}

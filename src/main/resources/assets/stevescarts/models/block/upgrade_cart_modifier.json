@@ -1,0 +1,22 @@
+{
+  "textures": {
+    "side": "stevescarts:blocks/upgrade_side_0_icon",
+    "front": "stevescarts:blocks/cart_modifier_icon",
+    "particle":"stevescarts:blocks/upgrade_side_0_icon"
+  },
+  "elements": [
+    {
+      "name": "Cube",
+      "from": [ 0.0, 3.0, 3.0 ],
+      "to": [ 2.0, 13.0, 13.0 ],
+      "faces": {
+        "north": { "texture": "#side", "uv": [ 0.0, 3.0, 2.0, 13.0 ] },
+        "east": { "texture": "#front", "uv": [ 3.0, 3.0, 13.0, 13.0 ] },
+        "south": { "texture": "#side", "uv": [ 0.0, 3.0, 2.0, 13.0 ] },
+        "west": { "texture": "#front", "uv": [ 3.0, 3.0, 13.0, 13.0 ] },
+        "up": { "texture": "#side", "uv": [ 0.0, 3.0, 2.0, 13.0 ] },
+        "down": { "texture": "#side", "uv": [ 0.0, 3.0, 2.0, 13.0 ] }
+      }
+    }
+  ]
+}

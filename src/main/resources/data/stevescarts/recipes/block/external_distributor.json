@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X#X",
+    "#R#",
+    "X#X"
+  ],
+  "key": {
+    "X": {
+      "tag": "stone_crafting_materials"
+    },
+    "#": {
+      "item": "stevescarts:component_simple_pcb"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "stevescarts:blockdistributor"
+  }
+}

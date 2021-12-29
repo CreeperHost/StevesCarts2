@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:component_simple_pcb"
+    },
+    "#": {
+      "item": "minecraft:oak_fence"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_cage"
+  }
+}

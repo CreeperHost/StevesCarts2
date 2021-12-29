@@ -1,0 +1,336 @@
+package vswe.stevescarts.modules.workers.tools;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import vswe.stevescarts.client.guis.GuiMinecart;
+import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.containers.slots.SlotRepair;
+import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.helpers.EnchantmentInfo;
+import vswe.stevescarts.helpers.Localization;
+import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.modules.addons.ModuleEnchants;
+import vswe.stevescarts.modules.workers.ModuleWorker;
+
+import javax.annotation.Nonnull;
+
+public abstract class ModuleTool extends ModuleWorker
+{
+    private DataParameter<Integer> DURABILITY;
+    private int remainingRepairUnits;
+    private int maximumRepairUnits;
+    protected ModuleEnchants enchanter;
+    private int[] durabilityRect;
+
+    public ModuleTool(final EntityMinecartModular cart)
+    {
+        super(cart);
+        maximumRepairUnits = 1;
+        durabilityRect = new int[]{10, 15, 52, 8};
+    }
+
+    public abstract int getMaxDurability();
+
+    public abstract String getRepairItemName();
+
+    public abstract int getRepairItemUnits(@Nonnull ItemStack p0);
+
+    public abstract int getRepairSpeed();
+
+    public abstract boolean useDurability();
+
+    @Override
+    public void init()
+    {
+        super.init();
+        for (final ModuleBase module : getCart().getModules())
+        {
+            if (module instanceof ModuleEnchants)
+            {
+                (enchanter = (ModuleEnchants) module).addType(EnchantmentInfo.ENCHANTMENT_TYPE.TOOL);
+                break;
+            }
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    {
+        ResourceHelper.bindResource("/gui/tool.png");
+        drawBox(matrixStack, gui, 0, 0, 1.0f);
+        drawBox(matrixStack, gui, 0, 8, useDurability() ? (((float) getCurrentDurability()) / ((float) getMaxDurability())) : 1.0f);
+        drawBox(matrixStack, gui, 0, 16, ((float) remainingRepairUnits) / ((float) maximumRepairUnits));
+        if (inRect(x, y, durabilityRect))
+        {
+            drawBox(matrixStack, gui, 0, 24, 1.0f);
+        }
+    }
+
+    private void drawBox(MatrixStack matrixStack, GuiMinecart gui, final int u, final int v, final float mult)
+    {
+        final int w = (int) (durabilityRect[2] * mult);
+        if (w > 0)
+        {
+            drawImage(matrixStack, gui, durabilityRect[0], durabilityRect[1], u, v, w, durabilityRect[3]);
+        }
+    }
+
+    public boolean isValidRepairMaterial(@Nonnull ItemStack item)
+    {
+        return getRepairItemUnits(item) > 0;
+    }
+
+    @Override
+    public boolean hasGui()
+    {
+        return true;
+    }
+
+    @Override
+    protected SlotBase getSlot(final int slotId, final int x, final int y)
+    {
+        return new SlotRepair(this, getCart(), slotId, 76, 8);
+    }
+
+    @Override
+    protected int getInventoryWidth()
+    {
+        return 1;
+    }
+
+    @Override
+    public int guiWidth()
+    {
+        return 100;
+    }
+
+    @Override
+    public int guiHeight()
+    {
+        return 50;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    {
+        String str;
+        if (useDurability())
+        {
+            str = Localization.MODULES.TOOLS.DURABILITY.translate() + ": " + getCurrentDurability() + "/" + getMaxDurability();
+            if (isBroken())
+            {
+                str = str + " [" + Localization.MODULES.TOOLS.BROKEN.translate() + "]";
+            }
+            else
+            {
+                str = str + " [" + 100 * getCurrentDurability() / getMaxDurability() + "%]";
+            }
+            str += "\n";
+            if (isRepairing())
+            {
+                if (isActuallyRepairing())
+                {
+                    str = str + " [" + getRepairPercentage() + "%]";
+                }
+                else
+                {
+                    str += Localization.MODULES.TOOLS.DECENT.translate();
+                }
+            }
+            else
+            {
+                str += Localization.MODULES.TOOLS.INSTRUCTION.translate(getRepairItemName());
+            }
+        }
+        else
+        {
+            str = Localization.MODULES.TOOLS.UNBREAKABLE.translate();
+            if (isRepairing() && !isActuallyRepairing())
+            {
+                str = str + " " + Localization.MODULES.TOOLS.UNBREAKABLE_REPAIR.translate();
+            }
+        }
+        drawStringOnMouseOver(matrixStack, gui, str, x, y, durabilityRect);
+    }
+
+    @Override
+    public int numberOfDataWatchers()
+    {
+        return 1;
+    }
+
+    @Override
+    public void initDw()
+    {
+        DURABILITY = createDw(DataSerializers.INT);
+        registerDw(DURABILITY, getMaxDurability());
+    }
+
+    @Override
+    public void update()
+    {
+        super.update();
+        if (!getCart().level.isClientSide && useDurability())
+        {
+            if (isActuallyRepairing())
+            {
+                final int dif = 1;
+                remainingRepairUnits -= dif;
+                setDurability(getCurrentDurability() + dif * getRepairSpeed());
+                if (getCurrentDurability() > getMaxDurability())
+                {
+                    setDurability(getCurrentDurability());
+                }
+            }
+            if (!isActuallyRepairing())
+            {
+                final int units = getRepairItemUnits(getStack(0));
+                if (units > 0 && units <= getMaxDurability() - getCurrentDurability())
+                {
+                    final int n = units / getRepairSpeed();
+                    remainingRepairUnits = n;
+                    maximumRepairUnits = n;
+                    @Nonnull ItemStack stack = getStack(0);
+                    stack.shrink(1);
+                    if (getStack(0).getCount() <= 0)
+                    {
+                        setStack(0, ItemStack.EMPTY);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean stopEngines()
+    {
+        return isRepairing();
+    }
+
+    public boolean isRepairing()
+    {
+        return !getStack(0).isEmpty() || isActuallyRepairing();
+    }
+
+    public boolean isActuallyRepairing()
+    {
+        return remainingRepairUnits > 0;
+    }
+
+    public boolean isBroken()
+    {
+        return getCurrentDurability() == 0 && useDurability();
+    }
+
+    public void damageTool(final int val)
+    {
+        final int unbreaking = (enchanter != null) ? enchanter.getUnbreakingLevel() : 0;
+        if (getCart().random.nextInt(100) < 100 / (unbreaking + 1))
+        {
+            setDurability(getCurrentDurability() - val);
+            if (getCurrentDurability() < 0)
+            {
+                setDurability(0);
+            }
+        }
+        if (enchanter != null)
+        {
+            enchanter.damageEnchant(EnchantmentInfo.ENCHANTMENT_TYPE.TOOL, val);
+        }
+    }
+
+    @Override
+    public void receiveGuiData(final int id, final short data)
+    {
+        int dataint = data;
+        if (dataint < 0)
+        {
+            dataint += 65536;
+        }
+        if (id == 0)
+        {
+            setDurability(((getCurrentDurability() & 0xFFFF0000) | dataint));
+        }
+        else if (id == 1)
+        {
+            setDurability(((getCurrentDurability() & 0xFFFF) | dataint << 16));
+        }
+        else if (id == 2)
+        {
+            remainingRepairUnits = data;
+        }
+        else if (id == 3)
+        {
+            maximumRepairUnits = data;
+        }
+    }
+
+    @Override
+    protected void Save(final CompoundNBT tagCompound, final int id)
+    {
+        tagCompound.putShort(generateNBTName("Durability", id), (short) getCurrentDurability());
+        tagCompound.putShort(generateNBTName("Repair", id), (short) remainingRepairUnits);
+        tagCompound.putShort(generateNBTName("MaxRepair", id), (short) maximumRepairUnits);
+    }
+
+    @Override
+    protected void Load(final CompoundNBT tagCompound, final int id)
+    {
+        setDurability(tagCompound.getInt(generateNBTName("Durability", id)));
+        remainingRepairUnits = tagCompound.getShort(generateNBTName("Repair", id));
+        maximumRepairUnits = tagCompound.getShort(generateNBTName("MaxRepair", id));
+    }
+
+    public boolean shouldSilkTouch(BlockState blockState, BlockPos pos)
+    {
+        final boolean doSilkTouch = false;
+        try
+        {
+            //TODO
+            //			if (enchanter != null && enchanter.useSilkTouch() && blockState.getBlock().canSilkHarvest(getCart().world, pos, blockState, null)) {
+            //				return true;
+            //			}
+        } catch (Exception ex)
+        {
+        }
+        return false;
+    }
+
+    @Nonnull
+    public ItemStack getSilkTouchedItem(BlockState blockState)
+    {
+        Block block = blockState.getBlock();
+        ItemStack stack = new ItemStack(block, 1);
+        //TODO
+        //		if (!stack.isEmpty() && stack.getItem().getHasSubtypes()) {
+        //			return new ItemStack(block, 1, block.getMetaFromState(blockState));
+        //		}
+        return stack;
+    }
+
+    public void setDurability(int amount)
+    {
+        updateDw(DURABILITY, amount);
+    }
+
+    public int getCurrentDurability()
+    {
+        return getDw(DURABILITY);
+    }
+
+    public int getRepairPercentage()
+    {
+        return 100 - 100 * remainingRepairUnits / maximumRepairUnits;
+    }
+}

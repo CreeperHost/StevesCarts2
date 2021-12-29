@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " D ",
+    "XWX",
+    "##H"
+  ],
+  "key": {
+    "D": {
+      "item": "stevescarts:component_graphical_interface"
+    },
+    "W": {
+      "item": "stevescarts:component_wheel"
+    },
+    "H": {
+      "item": "stevescarts:component_speed_handle"
+    },
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "X": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_advanced_control_system"
+  }
+}

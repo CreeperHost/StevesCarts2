@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "I#I",
+    "#R#"
+  ],
+  "key": {
+    "#": {
+      "item": "stevescarts:component_advanced_pcb"
+    },
+    "X": {
+      "item": "minecraft:gold_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_drill_intelligence"
+  }
+}

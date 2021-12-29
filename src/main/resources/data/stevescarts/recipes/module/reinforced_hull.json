@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "# #",
+    "###",
+    "X X"
+  ],
+  "key": {
+    "#": {
+      "item": "stevescarts:component_reinforced_metal"
+    },
+    "X": {
+      "item": "stevescarts:component_reinforced_wheels"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_reinforced_hull"
+  }
+}

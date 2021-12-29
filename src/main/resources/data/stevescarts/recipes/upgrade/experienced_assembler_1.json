@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SBS",
+    "XLX",
+    "X#X"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:enchanted_book"
+    },
+    "L": {
+      "item": "stevescarts:component_advanced_pcb"
+    },
+    "S": {
+      "item": "stevescarts:component_simple_pcb"
+    },
+    "X": {
+      "item": "stevescarts:component_reinforced_metal"
+    },
+    "#": {
+      "item": "stevescarts:component_blank_upgrade"
+    }
+  },
+  "result": {
+    "item": "stevescarts:upgrade_experienced_assembler"
+  }
+}

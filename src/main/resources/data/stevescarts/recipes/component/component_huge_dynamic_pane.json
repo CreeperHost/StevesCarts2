@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "stevescarts:component_dynamic_pane"
+    },
+    "X": {
+      "item": "stevescarts:component_simple_pcb"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_huge_dynamic_pane"
+  }
+}

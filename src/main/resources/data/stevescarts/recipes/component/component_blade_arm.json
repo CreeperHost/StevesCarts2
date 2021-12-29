@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "# #",
+    " X ",
+    "# #"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:iron_ingot"
+    },
+    "#": {
+      "item": "stevescarts:component_iron_blade"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_blade_arm"
+  }
+}

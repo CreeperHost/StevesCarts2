@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "C#C",
+    "XXX",
+    "#X#"
+  ],
+  "key": {
+    "C": {
+      "item": "stevescarts:component_cleaning_fan"
+    },
+    "X": {
+      "item": "stevescarts:component_cleaning_tube"
+    },
+    "#": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_cleaning_core"
+  }
+}

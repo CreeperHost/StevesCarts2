@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " D ",
+    " # ",
+    "XCX"
+  ],
+  "key": {
+    "#": {
+      "item": "stevescarts:component_advanced_pcb"
+    },
+    "X": {
+      "item": "stevescarts:component_simple_pcb"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "C": {
+      "item": "stevescarts:module_crafter"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_advanced_crafter"
+  }
+}

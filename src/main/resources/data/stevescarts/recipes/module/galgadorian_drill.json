@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#X ",
+    "BDX",
+    "#X "
+  ],
+  "key": {
+    "D": {
+      "item": "stevescarts:module_hardened_drill"
+    },
+    "#": {
+      "item": "stevescarts:component_galgadorian_metal"
+    },
+    "X": {
+      "item": "stevescarts:component_enhanced_galgadorian_metal"
+    },
+    "B": {
+      "item": "minecraft:diamond_block"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_galgadorian_drill"
+  }
+}

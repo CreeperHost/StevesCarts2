@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#X#",
+    "# #",
+    "# #"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:component_liquid_cleaning_core"
+    },
+    "#": {
+      "item": "stevescarts:component_liquid_cleaning_tube"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_liquid_cleaner"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#I#",
+    " X "
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "X": {
+      "item": "stevescarts:component_wood_cutting_core"
+    },
+    "#": {
+      "item": "stevescarts:component_saw_blade"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_basic_wood_cutter"
+  }
+}

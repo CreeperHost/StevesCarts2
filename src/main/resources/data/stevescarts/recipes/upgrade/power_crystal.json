@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DXD",
+    "XEX",
+    "D#D"
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "X": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "E": {
+      "item": "minecraft:emerald_block"
+    },
+    "#": {
+      "item": "stevescarts:upgrade_batteries"
+    }
+  },
+  "result": {
+    "item": "stevescarts:upgrade_power_crystal"
+  }
+}

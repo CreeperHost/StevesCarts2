@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#X#",
+    "#G#"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:egg"
+    },
+    "#": {
+      "item": "minecraft:gunpowder"
+    },
+    "G": {
+      "item": "minecraft:green_dye"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_explosive_easter_egg"
+  }
+}

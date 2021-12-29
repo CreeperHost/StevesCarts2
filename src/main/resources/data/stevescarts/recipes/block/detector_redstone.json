@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:redstone"
+    },
+    "X": {
+      "item": "stevescarts:blockdetector",
+      "data": 1
+    }
+  },
+  "result": {
+    "item": "stevescarts:blockdetector",
+    "data": 4
+  }
+}

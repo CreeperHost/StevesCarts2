@@ -1,0 +1,35 @@
+{
+  "variants": {
+    "facing=north,connected=false": {
+      "model": "stevescarts:block/upgrade_batteries",
+      "y": 90
+    },
+    "facing=south,connected=false": {
+      "model": "stevescarts:block/upgrade_batteries",
+      "y": 270
+    },
+    "facing=west,connected=false": {
+      "model": "stevescarts:block/upgrade_batteries",
+      "y": 0
+    },
+    "facing=east,connected=false": {
+      "model": "stevescarts:block/upgrade_batteries",
+      "y": 180
+    },
+    "facing=north,connected=true": {
+      "model": "stevescarts:block/upgrade_batteries"
+    },
+    "facing=south,connected=true": {
+      "model": "stevescarts:block/upgrade_batteries",
+      "y": 180
+    },
+    "facing=west,connected=true": {
+      "model": "stevescarts:block/upgrade_batteries",
+      "y": 270
+    },
+    "facing=east,connected=true": {
+      "model": "stevescarts:block/upgrade_batteries",
+      "y": 90
+    }
+  }
+}

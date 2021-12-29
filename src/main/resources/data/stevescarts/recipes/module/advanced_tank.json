@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "X#X",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:component_huge_sctank_pane"
+    },
+    "#": {
+      "item": "stevescarts:component_sctank_valve"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_advanced_sctank"
+  }
+}

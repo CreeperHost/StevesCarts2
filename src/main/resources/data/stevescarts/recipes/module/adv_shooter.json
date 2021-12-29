@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    " XP",
+    "#A#"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:component_shooting_station"
+    },
+    "P": {
+      "item": "stevescarts:module_entity_detector_monster"
+    },
+    "S": {
+      "item": "stevescarts:component_entity_scanner"
+    },
+    "A": {
+      "item": "stevescarts:component_entity_analyzer"
+    },
+    "#": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_advanced_shooter"
+  }
+}

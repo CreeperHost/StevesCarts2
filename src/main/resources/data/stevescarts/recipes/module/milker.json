@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "#B#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "stevescarts:component_simple_pcb"
+    },
+    "X": {
+      "item": "minecraft:wheat"
+    },
+    "B": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_milker"
+  }
+}

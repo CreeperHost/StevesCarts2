@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:galgadorian_metal"
+    }
+  },
+  "result": {
+    "item": "stevescarts:component_galgadorian_metal",
+    "count": 9
+  }
+}

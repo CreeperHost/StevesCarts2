@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X X",
+    " # ",
+    "X X"
+  ],
+  "key": {
+    "#": {
+      "item": "stevescarts:component_simple_pcb"
+    },
+    "X": {
+      "item": "stevescarts:component_blade_arm"
+    }
+  },
+  "result": {
+    "item": "stevescarts:module_lawn_mower"
+  }
+}

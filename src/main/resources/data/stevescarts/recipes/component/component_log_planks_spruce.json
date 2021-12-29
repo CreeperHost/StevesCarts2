@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:component_spruce_log"
+    }
+  },
+  "result": {
+    "item": "minecraft:spruce_planks",
+    "count": 2
+  }
+}

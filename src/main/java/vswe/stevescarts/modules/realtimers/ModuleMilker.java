@@ -1,0 +1,140 @@
+package vswe.stevescarts.modules.realtimers;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.CowEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import vswe.stevescarts.client.guis.GuiMinecart;
+import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.containers.slots.SlotMilker;
+import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.modules.ModuleBase;
+
+import javax.annotation.Nonnull;
+
+public class ModuleMilker extends ModuleBase
+{
+    int cooldown;
+    int milkbuffer;
+
+    public ModuleMilker(final EntityMinecartModular cart)
+    {
+        super(cart);
+        cooldown = 0;
+        milkbuffer = 0;
+    }
+
+    @Override
+    public void update()
+    {
+        super.update();
+        if (cooldown <= 0)
+        {
+            if (!getCart().level.isClientSide && getCart().hasFuel())
+            {
+                generateMilk();
+                depositeMilk();
+            }
+            cooldown = 20;
+        }
+        else
+        {
+            --cooldown;
+        }
+    }
+
+    private void depositeMilk()
+    {
+        //TODO
+        if (milkbuffer > 0)
+        {
+            final FluidStack ret = FluidUtil.getFluidContained(new ItemStack(Items.MILK_BUCKET)).get();
+            if (ret != null)
+            {
+                ret.setAmount(milkbuffer);
+                milkbuffer -= getCart().fill(ret, IFluidHandler.FluidAction.EXECUTE);
+            }
+            if (milkbuffer == 1000)
+            {
+                for (int i = 0; i < getInventorySize(); ++i)
+                {
+                    @Nonnull ItemStack bucket = getStack(i);
+                    if (!bucket.isEmpty() && bucket.getItem() == Items.BUCKET)
+                    {
+                        @Nonnull ItemStack milk = new ItemStack(Items.MILK_BUCKET);
+                        getCart().addItemToChest(milk);
+                        if (milk.getCount() <= 0)
+                        {
+                            milkbuffer = 0;
+                            @Nonnull ItemStack itemStack = bucket;
+                            itemStack.shrink(1);
+                            if (itemStack.getCount() <= 0)
+                            {
+                                setStack(i, ItemStack.EMPTY);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void generateMilk()
+    {
+        if (milkbuffer < 1000)
+        {
+            if (!getCart().getPassengers().isEmpty())
+            {
+                final Entity rider = getCart().getPassengers().get(0);
+                if (rider != null && rider instanceof CowEntity)
+                {
+                    milkbuffer = Math.min(milkbuffer + 75, 1000);
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean hasGui()
+    {
+        return true;
+    }
+
+    @Override
+    protected int getInventoryWidth()
+    {
+        return 2;
+    }
+
+    @Override
+    protected SlotBase getSlot(final int slotId, final int x, final int y)
+    {
+        return new SlotMilker(getCart(), slotId, 8 + x * 18, 23 + y * 18);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    {
+        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+    }
+
+    @Override
+    protected void Save(final CompoundNBT tagCompound, final int id)
+    {
+        tagCompound.putShort(generateNBTName("Milk", id), (short) milkbuffer);
+    }
+
+    @Override
+    protected void Load(final CompoundNBT tagCompound, final int id)
+    {
+        milkbuffer = tagCompound.getShort(generateNBTName("Milk", id));
+    }
+}
