@@ -32,12 +32,12 @@ public class BlockRailAdvDetector extends BaseRailBlock
     private BlockRailAdvDetector(Properties builder)
     {
         super(true, builder);
-        this.registerDefaultState(this.stateDefinition.any().setValue(SHAPE, RailShape.NORTH_SOUTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(SHAPE, RailShape.NORTH_SOUTH).setValue(WATERLOGGED, Boolean.valueOf(false)));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(SHAPE);
+        builder.add(SHAPE, WATERLOGGED);
     }
 
     @Override
