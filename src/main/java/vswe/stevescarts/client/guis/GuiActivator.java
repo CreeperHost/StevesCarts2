@@ -1,11 +1,11 @@
 package vswe.stevescarts.client.guis;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 import vswe.stevescarts.containers.ContainerActivator;
 import vswe.stevescarts.helpers.ActivatorOption;
@@ -14,13 +14,13 @@ import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketActivator;
 
-public class GuiActivator extends ContainerScreen<ContainerActivator>
+public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
 {
     private static ResourceLocation texture;
     TileEntityActivator activator;
-    PlayerInventory invPlayer;
+    Inventory invPlayer;
 
-    public GuiActivator(ContainerActivator containerActivator, PlayerInventory playerInventory, ITextComponent iTextComponent)
+    public GuiActivator(ContainerActivator containerActivator, Inventory playerInventory, Component iTextComponent)
     {
         super(containerActivator, playerInventory, iTextComponent);
         this.invPlayer = playerInventory;
@@ -30,7 +30,7 @@ public class GuiActivator extends ContainerScreen<ContainerActivator>
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float p_230450_2_, int mouseX, int mouseY)
+    protected void renderBg(PoseStack matrixStack, float p_230450_2_, int mouseX, int mouseY)
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
@@ -53,7 +53,7 @@ public class GuiActivator extends ContainerScreen<ContainerActivator>
     }
 
     @Override
-    protected void renderLabels(MatrixStack p_230451_1_, int p_230451_2_, int p_230451_3_)
+    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_)
     {
     }
 
@@ -63,7 +63,7 @@ public class GuiActivator extends ContainerScreen<ContainerActivator>
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float p_230430_4_)
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float p_230430_4_)
     {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, p_230430_4_);
@@ -85,7 +85,7 @@ public class GuiActivator extends ContainerScreen<ContainerActivator>
         }
     }
 
-    private void drawMouseMover(MatrixStack matrixStack, String str, final int x, final int y, final int[] rect)
+    private void drawMouseMover(PoseStack matrixStack, String str, final int x, final int y, final int[] rect)
     {
         if (inRect(x, y, rect))
         {
@@ -93,11 +93,11 @@ public class GuiActivator extends ContainerScreen<ContainerActivator>
         }
     }
 
-    public void drawMouseOver(MatrixStack matrixStack, final String str, final int x, final int y, final int[] rect)
+    public void drawMouseOver(PoseStack matrixStack, final String str, final int x, final int y, final int[] rect)
     {
         if (inRect(x, y, rect))
         {
-            renderTooltip(matrixStack, new StringTextComponent(str), getGuiLeft() + x, getGuiTop() + y);
+            renderTooltip(matrixStack, new TextComponent(str), getGuiLeft() + x, getGuiTop() + y);
         }
     }
 

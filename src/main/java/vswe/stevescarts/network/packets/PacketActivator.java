@@ -1,9 +1,9 @@
 package vswe.stevescarts.network.packets;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraftforge.network.NetworkEvent;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 
 import java.util.function.Supplier;
@@ -21,14 +21,14 @@ public class PacketActivator
         this.array = array;
     }
 
-    public static void encode(PacketActivator msg, PacketBuffer buffer)
+    public static void encode(PacketActivator msg, FriendlyByteBuf buffer)
     {
         buffer.writeBlockPos(msg.blockPos);
         buffer.writeInt(msg.id);
         buffer.writeByteArray(msg.array);
     }
 
-    public static PacketActivator decode(PacketBuffer buffer)
+    public static PacketActivator decode(FriendlyByteBuf buffer)
     {
         return new PacketActivator(buffer.readBlockPos(), buffer.readInt(), buffer.readByteArray());
     }
@@ -39,7 +39,7 @@ public class PacketActivator
         {
             ctx.get().enqueueWork(() ->
             {
-                World world = ctx.get().getSender().getLevel();
+                ServerLevel world = ctx.get().getSender().getLevel();
                 if (msg.blockPos != null)
                 {
                     BlockPos blockPos = msg.blockPos;

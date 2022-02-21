@@ -1,18 +1,19 @@
 package vswe.stevescarts.blocks.tileentities;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class TileEntityBase extends TileEntity implements ITickableTileEntity
+public abstract class TileEntityBase extends BaseContainerBlockEntity
 {
-    public TileEntityBase(TileEntityType<?> p_i48289_1_)
+    public TileEntityBase(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState)
     {
-        super(p_i48289_1_);
+        super(blockEntityType, blockPos, blockState);
     }
 
-    public boolean isUsableByPlayer(final PlayerEntity entityplayer)
+    public boolean isUsableByPlayer(final Player entityplayer)
     {
         return level.getBlockEntity(getBlockPos()) == this;
     }
@@ -39,7 +40,7 @@ public abstract class TileEntityBase extends TileEntity implements ITickableTile
         return oldVal;
     }
 
-    @Override
+//    @Override
     public void tick()
     {
     }

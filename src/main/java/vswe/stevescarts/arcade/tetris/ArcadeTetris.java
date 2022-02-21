@@ -1,9 +1,9 @@
 package vswe.stevescarts.arcade.tetris;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.SoundEvent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
@@ -130,7 +130,7 @@ public class ArcadeTetris extends ArcadeGame {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y) {
+	public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
 		ResourceHelper.bindResource(ArcadeTetris.texture);
 		getModule().drawImage(matrixStack, gui, 187, 7, 0, 40, 104, 154);
 		for (int i = 0; i < board.length; ++i) {
@@ -182,7 +182,7 @@ public class ArcadeTetris extends ArcadeGame {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawForeground(MatrixStack matrixStack, GuiMinecart gui) {
+	public void drawForeground(PoseStack matrixStack, GuiMinecart gui) {
 		getModule().drawString(matrixStack, gui, Localization.ARCADE.HIGH_SCORE.translate(String.valueOf(highscore)), 10, 20, 4210752);
 		getModule().drawString(matrixStack, gui, Localization.ARCADE.SCORE.translate(String.valueOf(score)), 10, 40, 4210752);
 		getModule().drawString(matrixStack, gui, Localization.ARCADE.REMOVED_LINES.translate(String.valueOf(removed)), 10, 60, 4210752);
@@ -207,7 +207,7 @@ public class ArcadeTetris extends ArcadeGame {
 	}
 
 	@Override
-	public void receivePacket(final int id, final byte[] data, final PlayerEntity player) {
+	public void receivePacket(final int id, final byte[] data, final Player player) {
 		if (id == 1) {
 			short data2 = data[0];
 			short data3 = data[1];
@@ -234,12 +234,12 @@ public class ArcadeTetris extends ArcadeGame {
 	}
 
 	@Override
-	public void Save(final CompoundNBT tagCompound, final int id) {
+	public void Save(final CompoundTag tagCompound, final int id) {
 		tagCompound.putShort(getModule().generateNBTName("Highscore", id), (short) highscore);
 	}
 
 	@Override
-	public void Load(final CompoundNBT tagCompound, final int id) {
+	public void Load(final CompoundTag tagCompound, final int id) {
 		highscore = tagCompound.getShort(getModule().generateNBTName("Highscore", id));
 	}
 

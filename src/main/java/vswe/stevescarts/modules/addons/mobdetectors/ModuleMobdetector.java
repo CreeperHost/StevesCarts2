@@ -1,6 +1,6 @@
 package vswe.stevescarts.modules.addons.mobdetectors;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.modules.addons.ModuleAddon;
 

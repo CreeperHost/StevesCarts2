@@ -1,12 +1,11 @@
 package vswe.stevescarts.containers;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.init.ModContainers;
@@ -17,17 +16,17 @@ import java.util.HashMap;
 
 public class ContainerMinecart extends ContainerBase
 {
-    private PlayerInventory playerInventory;
+    private Inventory playerInventory;
     public HashMap<Short, Short> cache;
     public EntityMinecartModular cart;
-    private IIntArray data;
+    private SimpleContainerData data;
 
-    public ContainerMinecart(int id, PlayerInventory playerInventory, PacketBuffer packetBuffer)
+    public ContainerMinecart(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
-        this(id, playerInventory, (EntityMinecartModular) playerInventory.player.level.getEntity(packetBuffer.readInt()), new IntArray(1));
+        this(id, playerInventory, (EntityMinecartModular) playerInventory.player.level.getEntity(packetBuffer.readInt()), new SimpleContainerData(1));
     }
 
-    public ContainerMinecart(int id, PlayerInventory playerInventory, EntityMinecartModular cart, IIntArray data)
+    public ContainerMinecart(int id, Inventory playerInventory, EntityMinecartModular cart, SimpleContainerData data)
     {
         super(ModContainers.CONTAINER_MINECART.get(), id);
         this.data = data;
@@ -65,7 +64,7 @@ public class ContainerMinecart extends ContainerBase
         }
     }
 
-    protected void playerInv(final PlayerInventory playerInventory)
+    protected void playerInv(final Inventory playerInventory)
     {
         this.playerInventory = playerInventory;
         for (int i = 0; i < 3; ++i)
@@ -91,31 +90,8 @@ public class ContainerMinecart extends ContainerBase
         return 174;
     }
 
-    //	@Override
-    //	public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player) {
-    //		ItemStack stack = super.slotClick(slotId, dragType, clickTypeIn, player);
-    //		if (slotId > 0) {
-    //			Slot slot = this.inventorySlots.get(slotId);
-    //			if (slot instanceof SlotFake) {
-    //				return ItemStack.EMPTY;
-    //			}
-    //		}
-    //		return stack;
-    //	}
-    //
-    //	@Override
-    //	public boolean canInteractWith(final PlayerEntity entityplayer) {
-    //		return cart.isUsableByPlayer(entityplayer);
-    //	}
-    //
-    //	@Override
-    //	public void onContainerClosed(final PlayerEntity par1EntityPlayer) {
-    //		super.onContainerClosed(par1EntityPlayer);
-    //		cart.closeInventory(par1EntityPlayer);
-    //	}
-
     @Override
-    public void addSlotListener(final IContainerListener par1ICrafting)
+    public void addSlotListener(final ContainerListener par1ICrafting)
     {
         super.addSlotListener(par1ICrafting);
         if (cart.getModules() != null)
@@ -126,33 +102,9 @@ public class ContainerMinecart extends ContainerBase
             }
         }
     }
-    //
-    //	@SideOnly(Side.CLIENT)
-    //	@Override
-    //	public void updateProgressBar(final int par1, int par2) {
-    //		par2 &= 0xFFFF;
-    //		if (cart.getModules() != null) {
-    //			for (final ModuleBase module : cart.getModules()) {
-    //				if (par1 >= module.getGuiDataStart() && par1 < module.getGuiDataStart() + module.numberOfGuiData()) {
-    //					module.receiveGuiData(par1 - module.getGuiDataStart(), (short) par2);
-    //					break;
-    //				}
-    //			}
-    //		}
-    //	}
-    //
-    //	@Override
-    //	public void detectAndSendChanges() {
-    //		super.detectAndSendChanges();
-    //		if (cart.getModules() != null && listeners.size() > 0) {
-    //			for (final ModuleBase module : cart.getModules()) {
-    //				module.checkGuiData(this, listeners, false);
-    //			}
-    //		}
-    //	}
 
     @Override
-    public boolean stillValid(PlayerEntity playerEntity)
+    public boolean stillValid(Player playerEntity)
     {
         return true;
     }

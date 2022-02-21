@@ -1,12 +1,12 @@
 package vswe.stevescarts.network.packets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 
 import java.util.function.Supplier;
@@ -26,7 +26,7 @@ public class PacketFluidSync
         this.tankID = tankID;
     }
 
-    public static void encode(PacketFluidSync msg, PacketBuffer buffer)
+    public static void encode(PacketFluidSync msg, FriendlyByteBuf buffer)
     {
         buffer.writeFluidStack(msg.fluidStack);
         buffer.writeBlockPos(msg.pos);
@@ -34,7 +34,7 @@ public class PacketFluidSync
         buffer.writeInt(msg.tankID);
     }
 
-    public static PacketFluidSync decode(PacketBuffer buffer)
+    public static PacketFluidSync decode(FriendlyByteBuf buffer)
     {
         return new PacketFluidSync(buffer.readFluidStack(), buffer.readBlockPos(), buffer.readInt(), buffer.readInt());
     }
@@ -47,7 +47,7 @@ public class PacketFluidSync
             {
                 ctx.get().enqueueWork(() ->
                 {
-                    ClientWorld clientWorld = Minecraft.getInstance().level;
+                    ClientLevel clientWorld = Minecraft.getInstance().level;
                     if (clientWorld != null)
                     {
                         if (clientWorld.getBlockEntity(msg.pos) != null && clientWorld.getBlockEntity(msg.pos) instanceof TileEntityLiquid)

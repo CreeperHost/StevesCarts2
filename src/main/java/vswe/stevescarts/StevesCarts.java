@@ -1,12 +1,10 @@
 package vswe.stevescarts;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -75,10 +73,12 @@ public class StevesCarts
         ModScreens.init();
         CompatHandler.initClient();
         ModuleData.initModels();
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.MODULAR_CART.get(), RendererCart::new);
-        RenderTypeLookup.setRenderLayer(ModBlocks.ADVANCED_DETECTOR.get(), RenderType.cutout());
-        RenderTypeLookup.setRenderLayer(ModBlocks.JUNCTION.get(), RenderType.cutout());
 
-        RenderTypeLookup.setRenderLayer(ModBlocks.BATTERIES.get(), RenderType.cutout());
+        //TODO
+//        RenderingRegistry.registerEntityRenderingHandler(ModEntities.MODULAR_CART.get(), RendererCart::new);
+//        RenderTypeLookup.setRenderLayer(ModBlocks.ADVANCED_DETECTOR.get(), RenderType.cutout());
+//        RenderTypeLookup.setRenderLayer(ModBlocks.JUNCTION.get(), RenderType.cutout());
+
+//        RenderTypeLookup.setRenderLayer(ModBlocks.BATTERIES.get(), RenderType.cutout());
     }
 }

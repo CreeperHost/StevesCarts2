@@ -1,8 +1,8 @@
 package vswe.stevescarts.helpers.storages;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.item.ItemStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -114,7 +114,7 @@ public class SCTank extends FluidTank
 
 
     @OnlyIn(Dist.CLIENT)
-    public void drawFluid(MatrixStack matrixStack, ContainerScreen gui, final int startX, final int startY)
+    public void drawFluid(PoseStack matrixStack, AbstractContainerScreen gui, final int startX, final int startY)
     {
         matrixStack.pushPose();
         FluidRenderer fluidRenderer = new FluidRenderer(capacity, 32, 47, 0);

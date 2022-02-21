@@ -1,7 +1,9 @@
 package vswe.stevescarts.modules.engines;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraftforge.api.distmarker.Dist;
@@ -123,7 +125,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
     }
 
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, Localization.MODULES.ENGINES.SOLAR.translate(), 8, 6, 4210752);
         String strfuel = Localization.MODULES.ENGINES.NO_POWER.translate();
@@ -136,7 +138,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         super.drawBackground(matrixStack, gui, x, y);
         ResourceHelper.bindResource("/gui/solar.png");
@@ -249,7 +251,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
     protected abstract void setAnimDone();
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         super.Save(tagCompound, id);
         tagCompound.putInt(generateNBTName("Fuel", id), getFuelLevel());
@@ -257,7 +259,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         super.Load(tagCompound, id);
         setFuelLevel(tagCompound.getInt(generateNBTName("Fuel", id)));

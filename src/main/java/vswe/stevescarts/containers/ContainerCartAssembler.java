@@ -1,13 +1,11 @@
 package vswe.stevescarts.containers;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.containers.slots.SlotAssembler;
 import vswe.stevescarts.init.ModContainers;
@@ -18,14 +16,14 @@ import java.util.Objects;
 public class ContainerCartAssembler extends ContainerBase
 {
     private TileEntityCartAssembler assembler;
-    private IIntArray data;
+    private SimpleContainerData data;
 
-    public ContainerCartAssembler(int id, PlayerInventory playerInventory, PacketBuffer packetBuffer)
+    public ContainerCartAssembler(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
-        this(id, playerInventory, (TileEntityCartAssembler) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new IntArray(7));
+        this(id, playerInventory, (TileEntityCartAssembler) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new SimpleContainerData(7));
     }
 
-    public ContainerCartAssembler(int id, PlayerInventory invPlayer, TileEntityCartAssembler assembler, IIntArray data)
+    public ContainerCartAssembler(int id, Inventory invPlayer, TileEntityCartAssembler assembler, SimpleContainerData data)
     {
         super(ModContainers.CONTAINER_CART_ASSEMBLER.get(), id);
         this.data = data;
@@ -86,7 +84,7 @@ public class ContainerCartAssembler extends ContainerBase
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player)
+    public boolean stillValid(Player player)
     {
         return assembler.isUsableByPlayer(player);
     }

@@ -1,9 +1,9 @@
 package vswe.stevescarts.network.packets;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.modules.ModuleBase;
 
@@ -22,14 +22,14 @@ public class PacketMinecartButton
         this.array = array;
     }
 
-    public static void encode(PacketMinecartButton msg, PacketBuffer buffer)
+    public static void encode(PacketMinecartButton msg, FriendlyByteBuf buffer)
     {
         buffer.writeInt(msg.cartID);
         buffer.writeInt(msg.id);
         buffer.writeByteArray(msg.array);
     }
 
-    public static PacketMinecartButton decode(PacketBuffer buffer)
+    public static PacketMinecartButton decode(FriendlyByteBuf buffer)
     {
         return new PacketMinecartButton(buffer.readInt(), buffer.readInt(), buffer.readByteArray());
     }
@@ -40,12 +40,12 @@ public class PacketMinecartButton
         {
             ctx.get().enqueueWork(() ->
             {
-                World world = ctx.get().getSender().getLevel();
+                Level world = ctx.get().getSender().getLevel();
                 if (world.getEntity(msg.cartID) == null) return;
                 if (world.getEntity(msg.cartID) instanceof EntityMinecartModular)
                 {
                     EntityMinecartModular entityMinecartModular = (EntityMinecartModular) world.getEntity(msg.cartID);
-                    PlayerEntity player = ctx.get().getSender();
+                    Player player = ctx.get().getSender();
                     int id = msg.id;
 
                     for (final ModuleBase module : entityMinecartModular.getModules())

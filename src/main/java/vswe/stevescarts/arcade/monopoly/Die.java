@@ -1,6 +1,6 @@
 package vswe.stevescarts.arcade.monopoly;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class Die {
@@ -14,7 +14,7 @@ public class Die {
 		randomize();
 	}
 
-	public void draw(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y) {
+	public void draw(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
 		game.getModule().drawImage(matrixStack, gui, x, y, 256 - 24 * (graphicalId + 1), 232, 24, 24);
 		switch (number) {
 			case 5: {
@@ -50,7 +50,7 @@ public class Die {
 		}
 	}
 
-	private void drawEye(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y) {
+	private void drawEye(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
 		game.getModule().drawImage(matrixStack, gui, x, y, 256 - 6 * (graphicalId + 1), 226, 6, 6);
 	}
 

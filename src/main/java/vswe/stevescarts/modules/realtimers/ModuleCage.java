@@ -1,17 +1,17 @@
 package vswe.stevescarts.modules.realtimers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.FlyingEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.BatEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.WaterMobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.animal.FlyingAnimal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -67,21 +67,21 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(MatrixStack matrixStack, final GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, final GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/cage.png");
         drawButton(matrixStack, gui, x, y, autoRect, disablePickup ? 2 : 3);
         drawButton(matrixStack, gui, x, y, manualRect, isCageEmpty() ? 0 : 1);
     }
 
-    private void drawButton(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y, final int[] coords, final int imageID)
+    private void drawButton(PoseStack matrixStack, GuiMinecart gui, final int x, final int y, final int[] coords, final int imageID)
     {
         if (inRect(x, y, coords))
         {
@@ -96,7 +96,7 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
     }
 
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         drawStringOnMouseOver(matrixStack, gui, Localization.MODULES.ATTACHMENTS.CAGE_AUTO.translate(disablePickup ? "0" : "1"), x, y, autoRect);
         drawStringOnMouseOver(matrixStack, gui, Localization.MODULES.ATTACHMENTS.CAGE.translate(isCageEmpty() ? "0" : "1"), x, y, manualRect);
@@ -124,7 +124,7 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0)
         {
@@ -189,7 +189,9 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
         for (LivingEntity target : entities)
         {
             //TODO this is horrid, Maybe datatag??
-            if (!(target instanceof PlayerEntity) && !(target instanceof IronGolemEntity) && !(target instanceof EnderDragonEntity) && !(target instanceof SlimeEntity) && !(target instanceof WaterMobEntity) && !(target instanceof WitherEntity) && !(target instanceof EndermanEntity) && (!(target instanceof SpiderEntity) || target instanceof CaveSpiderEntity) && !(target instanceof GiantEntity) && !(target instanceof FlyingEntity))
+            if (!(target instanceof Player) && !(target instanceof IronGolem) && !(target instanceof EnderDragon) &&
+                    !(target instanceof Slime) && !(target instanceof WaterAnimal) && !(target instanceof WitherBoss) && !(target instanceof EnderMan)
+                    && (!(target instanceof Spider) || target instanceof CaveSpider) && !(target instanceof Giant) && !(target instanceof FlyingAnimal))
             {
                 if (target.getPassengers().isEmpty())
                 {
@@ -203,11 +205,11 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
     @Override
     public float mountedOffset(final Entity rider)
     {
-        if (rider instanceof BatEntity)
+        if (rider instanceof Bat)
         {
             return 0.5f;
         }
-        if (rider instanceof ZombieEntity || rider instanceof SkeletonEntity)
+        if (rider instanceof Zombie || rider instanceof Skeleton)
         {
             return -0.75f;
         }
@@ -236,13 +238,13 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         tagCompound.putBoolean(generateNBTName("disablePickup", id), disablePickup);
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         disablePickup = tagCompound.getBoolean(generateNBTName("disablePickup", id));
     }

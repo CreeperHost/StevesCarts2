@@ -1,10 +1,7 @@
 package vswe.stevescarts.modules.data;
 
-import net.minecraft.util.text.TextFormatting;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.modules.ModuleBase;
 
-import java.util.List;
 
 public class ModuleDataHull extends ModuleData
 {

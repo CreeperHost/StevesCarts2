@@ -1,10 +1,10 @@
 package vswe.stevescarts;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
 public class Constants
 {
@@ -19,11 +19,11 @@ public class Constants
     public static boolean arcadeDevOperator = false;
 
     //Blocks
-    public static final ITag.INamedTag<Block> DIRT = BlockTags.bind("forge:dirt");
-    public static final ITag.INamedTag<Block> ORE = BlockTags.bind("forge:ores");
+    public static final Tag.Named<Block> DIRT = BlockTags.bind("forge:dirt");
+    public static final Tag.Named<Block> ORE = BlockTags.bind("forge:ores");
 
 
     //Items
-    public static final ITag.INamedTag<Item> SEEDS = ItemTags.bind("forge:seeds");
+    public static final Tag.Named<Item> SEEDS = ItemTags.bind("forge:seeds");
 
 }

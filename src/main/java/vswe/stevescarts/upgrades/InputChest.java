@@ -1,9 +1,9 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IntArray;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerCartAssembler;
@@ -48,7 +48,7 @@ public class InputChest extends SimpleInventoryEffect
     {
         if (!upgrade.getLevel().isClientSide && upgrade.getMaster() != null)
         {
-            final CompoundNBT comp = upgrade.getCompound();
+            final CompoundTag comp = upgrade.getCompound();
             if (comp.getByte("TransferCooldown") != 0)
             {
                 comp.putByte("TransferCooldown", (byte) (comp.getByte("TransferCooldown") - 1));
@@ -70,7 +70,7 @@ public class InputChest extends SimpleInventoryEffect
                                 if (!willInvalidate(upgrade.getMaster(), module))
                                 {
                                     final int stackSize = itemstack.getCount();
-                                    TransferHandler.TransferItem(itemstack, upgrade.getMaster(), new ContainerCartAssembler(0, null, upgrade.getMaster(), new IntArray(17)), Slot.class, SlotAssemblerFuel.class, 1);
+                                    TransferHandler.TransferItem(itemstack, upgrade.getMaster(), new ContainerCartAssembler(0, null, upgrade.getMaster(), new SimpleContainerData(17)), Slot.class, SlotAssemblerFuel.class, 1);
                                     if (itemstack.getCount() == 0)
                                     {
                                         upgrade.setItem(slotId, ItemStack.EMPTY);

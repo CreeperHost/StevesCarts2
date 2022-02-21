@@ -1,8 +1,8 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 
 import javax.annotation.Nonnull;
@@ -164,7 +164,7 @@ public class AssemblerUpgrade
         }
     }
 
-    public void load(final TileEntityUpgrade upgrade, final CompoundNBT compound)
+    public void load(final TileEntityUpgrade upgrade, final CompoundTag compound)
     {
         for (final BaseEffect effect : effects)
         {
@@ -172,7 +172,7 @@ public class AssemblerUpgrade
         }
     }
 
-    public void save(final TileEntityUpgrade upgrade, final CompoundNBT compound)
+    public void save(final TileEntityUpgrade upgrade, final CompoundTag compound)
     {
         for (final BaseEffect effect : effects)
         {

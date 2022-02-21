@@ -1,14 +1,13 @@
 package vswe.stevescarts.blocks.tileentities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -31,9 +30,9 @@ public abstract class TileEntityManager extends TileEntityBase implements IInven
     public int[] amount;
     public int[] color;
 
-    public TileEntityManager(TileEntityType<?> p_i48289_1_)
+    public TileEntityManager(BlockEntityType<?> p_i48289_1_, BlockPos blockPos, BlockState blockState)
     {
-        super(p_i48289_1_);
+        super(p_i48289_1_, blockPos, blockState);
         toCart = new boolean[]{true, true, true, true};
         doReturn = new boolean[]{false, false, false, false};
         amount = new int[]{0, 0, 0, 0};
@@ -67,14 +66,14 @@ public abstract class TileEntityManager extends TileEntityBase implements IInven
     }
 
     @Override
-    public void load(BlockState blockState, CompoundNBT nbttagcompound)
+    public void load(CompoundTag nbttagcompound)
     {
-        super.load(blockState, nbttagcompound);
-        final ListNBT nbttaglist = nbttagcompound.getList("Items", NBTHelper.COMPOUND.getId());
+        super.load(nbttagcompound);
+        final ListTag nbttaglist = nbttagcompound.getList("Items", NBTHelper.COMPOUND.getId());
         cargoItemStacks = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
         for (int i = 0; i < nbttaglist.size(); ++i)
         {
-            final CompoundNBT nbttagcompound2 = nbttaglist.getCompound(i);
+            final CompoundTag nbttagcompound2 = nbttaglist.getCompound(i);
             final byte byte0 = nbttagcompound2.getByte("Slot");
             if (byte0 >= 0 && byte0 < cargoItemStacks.size())
             {
@@ -100,7 +99,7 @@ public abstract class TileEntityManager extends TileEntityBase implements IInven
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT nbttagcompound)
+    public CompoundTag save(CompoundTag nbttagcompound)
     {
         super.save(nbttagcompound);
         nbttagcompound.putByte("movetime", (byte) moveTime);
@@ -123,12 +122,12 @@ public abstract class TileEntityManager extends TileEntityBase implements IInven
         }
         nbttagcompound.putByte("tocart", temp);
         nbttagcompound.putByte("doReturn", temp2);
-        final ListNBT nbttaglist = new ListNBT();
+        final ListTag nbttaglist = new ListTag();
         for (int j = 0; j < cargoItemStacks.size(); ++j)
         {
             if (!cargoItemStacks.get(j).isEmpty())
             {
-                final CompoundNBT nbttagcompound2 = new CompoundNBT();
+                final CompoundTag nbttagcompound2 = new CompoundTag();
                 nbttagcompound2.putByte("Slot", (byte) j);
                 cargoItemStacks.get(j).save(nbttagcompound2);
                 nbttaglist.add(nbttagcompound2);
@@ -272,12 +271,9 @@ public abstract class TileEntityManager extends TileEntityBase implements IInven
     public void sendPacket(final int id, final byte[] data)
     {
         PacketHandler.sendToServer(new PacketCargpManager(this.getBlockPos(), id, data));
-
-        //TODO Packets
-        //		PacketStevesCarts.sendPacket(id, data);
     }
 
-    public void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    public void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0)
         {
@@ -382,73 +378,6 @@ public abstract class TileEntityManager extends TileEntityBase implements IInven
             }
         }
     }
-    //
-    //	@Override
-    //	public void initGuiData(final Container con, final IContainerListener crafting) {
-    //		checkGuiData((ContainerManager) con, crafting, true);
-    //	}
-    //
-    //	@Override
-    //	public void checkGuiData(final Container con, final IContainerListener crafting) {
-    //		checkGuiData((ContainerManager) con, crafting, false);
-    //	}
-
-    //TODO
-    //	public void checkGuiData(final ContainerManager con, final IContainerListener crafting, final boolean isNew) {
-    //		short header = (short) (moveTime & 0x1F);
-    //		header |= (short) ((layoutType & 0x3) << 5);
-    //		for (int i = 0; i < 4; ++i) {
-    //			header |= (short) ((toCart[i] ? 1 : 0) << 7 + i);
-    //		}
-    //		for (int i = 0; i < 4; ++i) {
-    //			header |= (short) ((doReturn[i] ? 1 : 0) << 11 + i);
-    //		}
-    //		if (isNew || con.lastHeader != header) {
-    //			updateGuiData(con, crafting, 0, header);
-    //			con.lastHeader = header;
-    //		}
-    //		short colorShort = 0;
-    //		for (int j = 0; j < 4; ++j) {
-    //			colorShort |= (short) ((color[j] & 0x7) << j * 3);
-    //		}
-    //		colorShort |= (short) ((getLastSetting() & 0x7) << 12);
-    //		if (isNew || con.lastColor != colorShort) {
-    //			updateGuiData(con, crafting, 1, colorShort);
-    //			con.lastColor = colorShort;
-    //		}
-    //		short amountShort = 0;
-    //		for (int k = 0; k < 4; ++k) {
-    //			amountShort |= (short) ((amount[k] & 0xF) << k * 4);
-    //		}
-    //		if (isNew || con.lastAmount != amountShort) {
-    //			updateGuiData(con, crafting, 3, amountShort);
-    //			con.lastAmount = amountShort;
-    //		}
-    //	}
-
-    //	@Override
-    //	public void receiveGuiData(final int id, final short data) {
-    //		if (id == 0) {
-    //			moveTime = (data & 0x1F);
-    //			layoutType = (data & 0x60) >> 5;
-    //			updateLayout();
-    //			for (int i = 0; i < 4; ++i) {
-    //				toCart[i] = ((data & 1 << 7 + i) != 0x0);
-    //			}
-    //			for (int i = 0; i < 4; ++i) {
-    //				doReturn[i] = ((data & 1 << 11 + i) != 0x0);
-    //			}
-    //		} else if (id == 1) {
-    //			for (int i = 0; i < 4; ++i) {
-    //				color[i] = (data & 7 << i * 3) >> i * 3;
-    //			}
-    //			setLastSetting((data & 0x7000) >> 12);
-    //		} else if (id == 3) {
-    //			for (int i = 0; i < 4; ++i) {
-    //				amount[i] = (data & 15 << i * 4) >> i * 4;
-    //			}
-    //		}
-    //	}
 
     public int moveProgressScaled(final int i)
     {

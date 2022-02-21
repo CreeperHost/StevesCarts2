@@ -1,14 +1,14 @@
 package vswe.stevescarts.containers.slots;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
 
 public class SlotBase extends Slot
 {
     private int ourX;
     private int ourY;
 
-    public SlotBase(final IInventory inventory, final int id, final int x, final int y)
+    public SlotBase(final Container inventory, final int id, final int x, final int y)
     {
         super(inventory, id, x, y);
         this.ourX = x;

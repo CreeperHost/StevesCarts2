@@ -1,11 +1,10 @@
 package vswe.stevescarts.containers;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.SimpleContainerData;
 import vswe.stevescarts.blocks.tileentities.TileEntityDistributor;
 import vswe.stevescarts.helpers.DistributorSide;
 import vswe.stevescarts.init.ModContainers;
@@ -18,12 +17,12 @@ public class ContainerDistributor extends ContainerBase
     private TileEntityDistributor distributor;
     public ArrayList<Short> cachedValues;
 
-    public ContainerDistributor(int id, PlayerInventory playerInventory, PacketBuffer packetBuffer)
+    public ContainerDistributor(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
-        this(id, playerInventory, (TileEntityDistributor) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new IntArray(7));
+        this(id, playerInventory, (TileEntityDistributor) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new SimpleContainerData(7));
     }
 
-    public ContainerDistributor(int id, PlayerInventory invPlayer, TileEntityDistributor distributor, IIntArray data)
+    public ContainerDistributor(int id, Inventory invPlayer, TileEntityDistributor distributor, SimpleContainerData data)
     {
         super(ModContainers.CONTAINER_DISTRIBUTOR.get(), id);
         this.distributor = distributor;
@@ -41,7 +40,7 @@ public class ContainerDistributor extends ContainerBase
     }
 
     @Override
-    public boolean stillValid(PlayerEntity p_75145_1_)
+    public boolean stillValid(Player p_75145_1_)
     {
         return true;
     }

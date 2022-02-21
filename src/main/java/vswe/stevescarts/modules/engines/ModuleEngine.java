@@ -1,9 +1,12 @@
 package vswe.stevescarts.modules.engines;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -120,7 +123,7 @@ public abstract class ModuleEngine extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(MatrixStack matrixStack, final GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, final GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/engine.png");
         final int sourceX = 16 * getPriority();
@@ -133,7 +136,7 @@ public abstract class ModuleEngine extends ModuleBase
     }
 
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         drawStringOnMouseOver(matrixStack, gui, getPriorityText(), x, y, priorityButton);
     }
@@ -157,7 +160,7 @@ public abstract class ModuleEngine extends ModuleBase
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0)
         {
@@ -191,13 +194,13 @@ public abstract class ModuleEngine extends ModuleBase
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         tagCompound.putByte(generateNBTName("Priority", id), (byte) getPriority());
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         setPriority(tagCompound.getByte(generateNBTName("Priority", id)));
     }

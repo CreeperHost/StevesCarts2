@@ -1,6 +1,6 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.fluid.Fluids;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;

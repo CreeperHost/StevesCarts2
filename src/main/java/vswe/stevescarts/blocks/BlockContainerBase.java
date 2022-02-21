@@ -1,20 +1,20 @@
 package vswe.stevescarts.blocks;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class BlockContainerBase extends ContainerBlock
+public abstract class BlockContainerBase extends BaseEntityBlock
 {
-    public BlockContainerBase(AbstractBlock.Properties properties)
+    public BlockContainerBase(Block.Properties properties)
     {
         super(properties);
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState p_149645_1_)
+    public RenderShape getRenderShape(BlockState state)
     {
-        return BlockRenderType.MODEL;
+        return RenderShape.MODEL;
     }
 }

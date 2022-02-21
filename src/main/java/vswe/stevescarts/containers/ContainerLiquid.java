@@ -1,12 +1,11 @@
 package vswe.stevescarts.containers;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.fluids.FluidStack;
 import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 import vswe.stevescarts.containers.slots.SlotLiquidFilter;
@@ -19,16 +18,16 @@ import java.util.Objects;
 public class ContainerLiquid extends ContainerBase
 {
     public FluidStack[] oldLiquids;
-    public IIntArray data;
+    public SimpleContainerData data;
     private TileEntityLiquid tileEntityLiquid;
-    private PlayerEntity playerEntity;
+    private Player playerEntity;
 
-    public ContainerLiquid(int id, PlayerInventory playerInventory, PacketBuffer packetBuffer)
+    public ContainerLiquid(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
-        this(id, playerInventory, (TileEntityLiquid) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new IntArray(13));
+        this(id, playerInventory, (TileEntityLiquid) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new SimpleContainerData(13));
     }
 
-    public ContainerLiquid(int id, PlayerInventory playerInventory, TileEntityLiquid tileEntityLiquid, IIntArray data)
+    public ContainerLiquid(int id, Inventory playerInventory, TileEntityLiquid tileEntityLiquid, SimpleContainerData data)
     {
         super(ModContainers.CONTAINER_LIQUID.get(), id);
         this.playerEntity = playerInventory.player;
@@ -89,7 +88,7 @@ public class ContainerLiquid extends ContainerBase
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerEntity)
+    public boolean stillValid(Player playerEntity)
     {
         return true;
     }

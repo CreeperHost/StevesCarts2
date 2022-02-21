@@ -1,8 +1,8 @@
 package vswe.stevescarts.network.packets;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 
 import java.util.function.Supplier;
@@ -16,12 +16,12 @@ public class PacketMinecartTurn
         this.cartID = cartID;
     }
 
-    public static void encode(PacketMinecartTurn msg, PacketBuffer buffer)
+    public static void encode(PacketMinecartTurn msg, FriendlyByteBuf buffer)
     {
         buffer.writeInt(msg.cartID);
     }
 
-    public static PacketMinecartTurn decode(PacketBuffer buffer)
+    public static PacketMinecartTurn decode(FriendlyByteBuf buffer)
     {
         return new PacketMinecartTurn(buffer.readInt());
     }
@@ -32,7 +32,7 @@ public class PacketMinecartTurn
         {
             ctx.get().enqueueWork(() ->
             {
-                World world = ctx.get().getSender().getLevel();
+                Level world = ctx.get().getSender().getLevel();
                 if (world.getEntity(msg.cartID) == null) return;
                 if (world.getEntity(msg.cartID) instanceof EntityMinecartModular)
                 {

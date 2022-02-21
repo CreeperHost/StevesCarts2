@@ -1,7 +1,7 @@
 package vswe.stevescarts.helpers.storages;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.client.guis.GuiBase;
 
 import javax.annotation.Nonnull;

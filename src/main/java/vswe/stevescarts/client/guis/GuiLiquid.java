@@ -1,29 +1,29 @@
 package vswe.stevescarts.client.guis;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.block.Block;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 import vswe.stevescarts.containers.ContainerLiquid;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModBlocks;
 
-public class GuiLiquid extends ContainerScreen<ContainerLiquid>
+public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
 {
     private static ResourceLocation texture;
     private static ResourceLocation textureExtra;
     private ContainerLiquid containerLiquid;
 
-    public GuiLiquid(ContainerLiquid containerLiquid, PlayerInventory playerInventory, ITextComponent iTextComponent)
+    public GuiLiquid(ContainerLiquid containerLiquid, Inventory playerInventory, Component iTextComponent)
     {
         super(containerLiquid, playerInventory, iTextComponent);
         this.containerLiquid = containerLiquid;
@@ -32,7 +32,7 @@ public class GuiLiquid extends ContainerScreen<ContainerLiquid>
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float p_230450_2_, int mouseX, int mouseY)
+    protected void renderBg(PoseStack matrixStack, float p_230450_2_, int mouseX, int mouseY)
     {
         ResourceHelper.bindResource(GuiLiquid.texture);
         blit(matrixStack, leftPos, topPos, 0, 0, imageWidth, imageHeight);
@@ -65,7 +65,7 @@ public class GuiLiquid extends ContainerScreen<ContainerLiquid>
             blit(matrixStack, leftPos + coords2[0], topPos + coords2[1], 0, 51 * type, 36, 51);
         }
 
-        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         final int left = getGuiLeft();
         final int top = getGuiTop();
         for (int i = 0; i < 4; ++i)
@@ -84,16 +84,16 @@ public class GuiLiquid extends ContainerScreen<ContainerLiquid>
         {
             drawItems(j, renderitem, left, top);
         }
-        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
-    protected void renderLabels(MatrixStack p_230451_1_, int p_230451_2_, int p_230451_3_)
+    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_)
     {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float p_230430_4_)
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float p_230430_4_)
     {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, p_230430_4_);
@@ -124,11 +124,11 @@ public class GuiLiquid extends ContainerScreen<ContainerLiquid>
         drawMouseOver(matrixStack, getLayoutString() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getLayoutOption(containerLiquid.getLayoutType()), mouseX, mouseY, getMiddleCoords());
     }
 
-    public void drawMouseOver(MatrixStack matrixStack, final String str, final int x, final int y, final int[] rect)
+    public void drawMouseOver(PoseStack matrixStack, final String str, final int x, final int y, final int[] rect)
     {
         if (inRect(x - getGuiLeft(), y - getGuiTop(), rect))
         {
-            renderTooltip(matrixStack, new StringTextComponent(str), x, y);
+            renderTooltip(matrixStack, new TextComponent(str), x, y);
         }
     }
 
@@ -193,7 +193,7 @@ public class GuiLiquid extends ContainerScreen<ContainerLiquid>
         return new int[]{xCoord, yCoord, 8, 8};
     }
 
-    private void drawArrow(MatrixStack matrixStack, final int id, final int left, final int top)
+    private void drawArrow(PoseStack matrixStack, final int id, final int left, final int top)
     {
         int sourceX = getArrowSourceX();
         int sourceY = 28;
@@ -341,7 +341,7 @@ public class GuiLiquid extends ContainerScreen<ContainerLiquid>
         return new int[]{xCoord, yCoord, 28, 28};
     }
 
-    protected void drawColors(MatrixStack matrixStack, int id, final int color, final int left, final int top)
+    protected void drawColors(PoseStack matrixStack, int id, final int color, final int left, final int top)
     {
         try
         {
@@ -365,7 +365,7 @@ public class GuiLiquid extends ContainerScreen<ContainerLiquid>
         return -5 + y * 10;
     }
 
-    protected void drawExtraOverlay(MatrixStack matrixStack, int id, final int x, final int y)
+    protected void drawExtraOverlay(PoseStack matrixStack, int id, final int x, final int y)
     {
         drawMouseOver(matrixStack, getLiquid().getTanks()[id].getMouseOver(), x, y, getTankCoords(id));
     }

@@ -1,8 +1,8 @@
 package vswe.stevescarts.upgrades;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.inventory.ContainerListener;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.client.guis.GuiUpgrade;
 import vswe.stevescarts.containers.ContainerUpgrade;
@@ -13,15 +13,15 @@ public abstract class InterfaceEffect extends BaseEffect
     {
     }
 
-    public void drawBackground(MatrixStack matrixStack, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
     {
     }
 
-    public void drawMouseOver(MatrixStack matrixStack, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
     {
     }
 
-    public void checkGuiData(final TileEntityUpgrade upgrade, final ContainerUpgrade con, final IContainerListener crafting, final boolean isNew)
+    public void checkGuiData(final TileEntityUpgrade upgrade, final ContainerUpgrade con, final ContainerListener crafting, final boolean isNew)
     {
     }
 
@@ -29,11 +29,11 @@ public abstract class InterfaceEffect extends BaseEffect
     {
     }
 
-    protected void drawMouseOver(MatrixStack matrixStack, GuiUpgrade gui, final String str, final int x, final int y, final int[] rect)
+    protected void drawMouseOver(PoseStack matrixStack, GuiUpgrade gui, final String str, final int x, final int y, final int[] rect)
     {
         if (gui.inRect(x - gui.getGuiLeft(), y - gui.getGuiTop(), rect))
         {
-            gui.renderTooltip(matrixStack, new StringTextComponent(str), x - gui.getGuiLeft(), y - gui.getGuiTop());
+            gui.renderTooltip(matrixStack, new TextComponent(str), x - gui.getGuiLeft(), y - gui.getGuiTop());
         }
     }
 }

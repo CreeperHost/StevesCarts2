@@ -1,11 +1,8 @@
 package vswe.stevescarts.modules.engines;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.particles.ParticleTypes;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -134,7 +131,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, Localization.MODULES.ENGINES.COAL.translate(), 8, 6, 4210752);
         String strfuel = Localization.MODULES.ENGINES.NO_FUEL.translate();
@@ -195,14 +192,14 @@ public abstract class ModuleCoalBase extends ModuleEngine
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         super.Save(tagCompound, id);
         tagCompound.putShort(generateNBTName("Fuel", id), (short) getFuelLevel());
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         super.Load(tagCompound, id);
         setFuelLevel(tagCompound.getShort(generateNBTName("Fuel", id)));

@@ -1,6 +1,6 @@
 package vswe.stevescarts.arcade.tetris;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class TetrisPiecePart {
@@ -14,7 +14,7 @@ public class TetrisPiecePart {
 		this.offY = offY;
 	}
 
-	public void render(MatrixStack matrixStack,  ArcadeTetris game, final GuiMinecart gui, final int x, final int y) {
+	public void render(PoseStack matrixStack, ArcadeTetris game, final GuiMinecart gui, final int x, final int y) {
 		block.render(matrixStack, game, gui, x + offX, y + offY);
 	}
 

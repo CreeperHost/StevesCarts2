@@ -1,6 +1,6 @@
 package vswe.stevescarts.arcade.sweeper;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class Tile {
@@ -25,7 +25,7 @@ public class Tile {
 		return nearbyCreepers == 9;
 	}
 
-	public void draw(MatrixStack matrixStack, ArcadeSweeper game, final GuiMinecart gui, final int x, final int y, final int mx, final int my) {
+	public void draw(PoseStack matrixStack, ArcadeSweeper game, final GuiMinecart gui, final int x, final int y, final int mx, final int my) {
 		final int[] rect = { x, y, 10, 10 };
 		if (isCreeper() && game.hasFinished) {
 			game.getModule().drawImage(matrixStack, gui, rect, 30, 0);

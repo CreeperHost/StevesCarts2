@@ -1,7 +1,7 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.Constants;
 
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class ResourceHelper
         if (resource != null)
         {
             ResourceLocation lowercaseLocation = new ResourceLocation(resource.getNamespace().toLowerCase(), resource.getPath().toLowerCase());
-            Minecraft.getInstance().getTextureManager().bind(lowercaseLocation);
+            RenderSystem.setShaderTexture(0, lowercaseLocation);
         }
     }
 

@@ -1,9 +1,9 @@
 package vswe.stevescarts.arcade.sweeper;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.SoundEvents;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
@@ -118,7 +118,7 @@ public class ArcadeSweeper extends ArcadeGame {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y) {
+	public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
 		ResourceHelper.bindResource(ArcadeSweeper.textureMenu);
 		for (int i = 0; i < tiles.length; ++i) {
 			for (int j = 0; j < tiles[0].length; ++j) {
@@ -216,7 +216,7 @@ public class ArcadeSweeper extends ArcadeGame {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawForeground(MatrixStack matrixStack, GuiMinecart gui) {
+	public void drawForeground(PoseStack matrixStack, GuiMinecart gui) {
 		final String[] mapnames = { Localization.ARCADE.MAP_1.translate(), Localization.ARCADE.MAP_2.translate(), Localization.ARCADE.MAP_3.translate() };
 		getModule().drawString(matrixStack, gui, Localization.ARCADE.LEFT.translate(String.valueOf(creepersLeft)), 10, 180, 4210752);
 		getModule().drawString(matrixStack, gui, Localization.ARCADE.TIME.translate(String.valueOf(ticks / 20)), 10, 190, 4210752);
@@ -230,7 +230,7 @@ public class ArcadeSweeper extends ArcadeGame {
 	}
 
 	@Override
-	public void receivePacket(final int id, final byte[] data, final PlayerEntity player) {
+	public void receivePacket(final int id, final byte[] data, final Player player) {
 		if (id == 3) {
 			short data2 = data[1];
 			short data3 = data[2];
@@ -259,14 +259,14 @@ public class ArcadeSweeper extends ArcadeGame {
 	}
 
 	@Override
-	public void Save(final CompoundNBT tagCompound, final int id) {
+	public void Save(final CompoundTag tagCompound, final int id) {
 		for (int i = 0; i < 3; ++i) {
 			tagCompound.putShort(getModule().generateNBTName("HighscoreSweeper" + i, id), (short) highscore[i]);
 		}
 	}
 
 	@Override
-	public void Load(final CompoundNBT tagCompound, final int id) {
+	public void Load(final CompoundTag tagCompound, final int id) {
 		for (int i = 0; i < 3; ++i) {
 			highscore[i] = tagCompound.getShort(getModule().generateNBTName("HighscoreSweeper" + i, id));
 		}

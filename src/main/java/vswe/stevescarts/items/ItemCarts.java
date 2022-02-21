@@ -1,22 +1,24 @@
 package vswe.stevescarts.items;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.MinecartItem;
-import net.minecraft.nbt.ByteArrayNBT;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.ByteArrayTag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MinecartItem;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -33,7 +35,9 @@ public class ItemCarts extends MinecartItem
 {
     public ItemCarts()
     {
-        super(AbstractMinecartEntity.Type.RIDEABLE, new Item.Properties().stacksTo(1).setISTER(() -> ItemStackRenderer::new));
+        super(AbstractMinecart.Type.RIDEABLE, new Item.Properties().stacksTo(1));
+        //TODO
+//        super(AbstractMinecart.Type.RIDEABLE, new Item.Properties().stacksTo(1).setISTER(() -> ItemStackRenderer::new));
     }
 
     public String getName()
@@ -42,10 +46,10 @@ public class ItemCarts extends MinecartItem
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext itemUseContext)
+    public InteractionResult useOn(UseOnContext itemUseContext)
     {
-        PlayerEntity player = itemUseContext.getPlayer();
-        World world = itemUseContext.getLevel();
+        Player player = itemUseContext.getPlayer();
+        Level world = itemUseContext.getLevel();
         ItemStack stack = player.getItemInHand(itemUseContext.getHand());
         BlockPos pos = itemUseContext.getClickedPos();
         CartVersion.updateItemStack(stack);
@@ -56,20 +60,20 @@ public class ItemCarts extends MinecartItem
             {
                 try
                 {
-                    final CompoundNBT info = stack.getTag();
+                    final CompoundTag info = stack.getTag();
                     if (info != null && !info.contains("maxTime"))
                     {
                         try
                         {
-                            final EntityMinecartModular cart = new EntityMinecartModular(world, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, info, new TranslationTextComponent(""));
+                            final EntityMinecartModular cart = new EntityMinecartModular(world, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, info, new TranslatableComponent(""));
                             world.addFreshEntity(cart);
                         } catch (Exception e)
                         {
                             e.printStackTrace();
-                            player.sendMessage(new TranslationTextComponent("The cart failed to be placed into the world, this is due to an issue with one or more modules. " + "Please post your log on the issue tracker here: " + TextFormatting.BLUE + " https://github.com/modmuss50/SC2/issues"), null);
+                            player.sendMessage(new TranslatableComponent("The cart failed to be placed into the world, this is due to an issue with one or more modules. " + "Please post your log on the issue tracker here: " + ChatFormatting.BLUE + " https://github.com/modmuss50/SC2/issues"), null);
                             StevesCarts.logger.error(" --------------- Broken cart info --------------- ");
                             StevesCarts.logger.error(info);
-                            ByteArrayNBT moduleIDTag = (ByteArrayNBT) info.get("Modules");
+                            ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
                             for (final byte id : moduleIDTag.getAsByteArray())
                             {
                                 try
@@ -83,29 +87,29 @@ public class ItemCarts extends MinecartItem
                                 }
                             }
                             StevesCarts.logger.error(" --------------- Broken cart info --------------- ");
-                            return ActionResultType.FAIL;
+                            return InteractionResult.FAIL;
                         }
                     }
                 } catch (Exception e)
                 {
                     e.printStackTrace();
-                    return ActionResultType.FAIL;
+                    return InteractionResult.FAIL;
                 }
                 stack.shrink(1);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override
-    public void appendHoverText(ItemStack item, @Nullable World p_77624_2_, List<ITextComponent> list, ITooltipFlag p_77624_4_)
+    public void appendHoverText(ItemStack item, @Nullable Level p_77624_2_, List<Component> list, TooltipFlag p_77624_4_)
     {
         CartVersion.updateItemStack(item);
-        final CompoundNBT info = item.getTag();
+        final CompoundTag info = item.getTag();
         if (info != null)
         {
-            final ByteArrayNBT moduleIDTag = (ByteArrayNBT) info.get("Modules");
+            final ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
             final byte[] bytes = moduleIDTag.getAsByteArray();
             final ArrayList<ModuleCountPair> counts = new ArrayList<>();
             for (int i = 0; i < bytes.length; ++i)
@@ -140,7 +144,7 @@ public class ItemCarts extends MinecartItem
             }
             for (final ModuleCountPair count3 : counts)
             {
-                list.add(new TranslationTextComponent(count3.toString()));
+                list.add(new TranslatableComponent(count3.toString()));
             }
             if (info.contains("Spares"))
             {
@@ -156,22 +160,22 @@ public class ItemCarts extends MinecartItem
                         {
                             name = module2.getCartInfoText(name, info.getByte("Data" + (bytes.length + j)));
                         }
-                        list.add(new TranslationTextComponent(TextFormatting.GOLD + name));
+                        list.add(new TranslatableComponent(ChatFormatting.GOLD + name));
                     }
                 }
             }
             if (info.contains("maxTime"))
             {
-                list.add(new TranslationTextComponent(TextFormatting.RED + "Incomplete cart!"));
+                list.add(new TranslatableComponent(ChatFormatting.RED + "Incomplete cart!"));
                 final int maxTime = info.getInt("maxTime");
                 final int currentTime = info.getInt("currentTime");
                 final int timeLeft = maxTime - currentTime;
-                list.add(new TranslationTextComponent(TextFormatting.RED + "Time left: " + formatTime(timeLeft)));
+                list.add(new TranslatableComponent(ChatFormatting.RED + "Time left: " + formatTime(timeLeft)));
             }
         }
         else
         {
-            list.add(new TranslationTextComponent("No modules loaded"));
+            list.add(new TranslatableComponent("No modules loaded"));
         }
     }
 

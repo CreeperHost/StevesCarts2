@@ -1,10 +1,10 @@
 package vswe.stevescarts.client.creativetabs;
 
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.init.ModBlocks;
 
-public class CreativeTabSC2Blocks extends ItemGroup
+public class CreativeTabSC2Blocks extends CreativeModeTab
 {
     public static final CreativeTabSC2Blocks INSTANCE = new CreativeTabSC2Blocks();
 

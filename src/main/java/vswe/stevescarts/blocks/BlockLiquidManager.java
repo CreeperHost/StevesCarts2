@@ -1,19 +1,17 @@
 package vswe.stevescarts.blocks;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ToolType;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 
 import javax.annotation.Nullable;
@@ -23,7 +21,7 @@ public class BlockLiquidManager extends BlockContainerBase
 
     public BlockLiquidManager()
     {
-        super(Properties.of(Material.STONE).strength(2.0F).harvestTool(ToolType.PICKAXE));
+        super(Properties.of(Material.STONE).strength(2.0F));
     }
 
     //TODO
@@ -37,20 +35,19 @@ public class BlockLiquidManager extends BlockContainerBase
     //	}
 
     @Override
-    public ActionResultType use(BlockState blockState, World level, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockRayTraceResult blockRayTraceResult)
+    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player playerEntity, InteractionHand hand, BlockHitResult blockRayTraceResult)
     {
         if (!level.isClientSide)
         {
-            NetworkHooks.openGui((ServerPlayerEntity) playerEntity, (INamedContainerProvider) level.getBlockEntity(blockPos), blockPos);
-            return ActionResultType.SUCCESS;
+            NetworkHooks.openGui((ServerPlayer) playerEntity, (MenuProvider) level.getBlockEntity(blockPos), blockPos);
+            return InteractionResult.SUCCESS;
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    @Nullable
+    @org.jetbrains.annotations.Nullable
     @Override
-    public TileEntity newBlockEntity(IBlockReader p_196283_1_)
-    {
+    public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
         return new TileEntityLiquid();
     }
 }

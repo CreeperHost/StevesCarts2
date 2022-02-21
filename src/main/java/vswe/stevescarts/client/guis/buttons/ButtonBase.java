@@ -1,8 +1,8 @@
 package vswe.stevescarts.client.guis.buttons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.ModuleBase;
@@ -60,24 +60,13 @@ public abstract class ButtonBase
 
     public final void computeOnClick(final GuiMinecart gui, final int mousebutton)
     {
-        if (isVisible() && isEnabled())
-        {
-            //TODO
-            //			onClientClick(mousebutton, GuiScreen.isCtrlKeyDown(), GuiScreen.isShiftKeyDown());
-            //			if (handleClickOnServer()) {
-            //				byte clickinformation = (byte) (mousebutton & 0x3F);
-            //				clickinformation |= (byte) ((GuiScreen.isCtrlKeyDown() ? 1 : 0) << 6);
-            //				clickinformation |= (byte) ((GuiScreen.isShiftKeyDown() ? 1 : 0) << 7);
-            //				module.sendButtonPacket(this, clickinformation);
-            //			}
-        }
     }
 
     public void onClientClick(final int mousebutton, final boolean ctrlKey, final boolean shiftKey)
     {
     }
 
-    public void onServerClick(final PlayerEntity player, final int mousebutton, final boolean ctrlKey, final boolean shiftKey)
+    public void onServerClick(final Player player, final int mousebutton, final boolean ctrlKey, final boolean shiftKey)
     {
     }
 
@@ -121,7 +110,7 @@ public abstract class ButtonBase
         return 60 + texture() / 21 * 12;
     }
 
-    public void drawButtonText(MatrixStack matrixStack, final GuiMinecart gui, final ModuleBase module)
+    public void drawButtonText(PoseStack matrixStack, final GuiMinecart gui, final ModuleBase module)
     {
         if (isVisible() && hasText())
         {
@@ -129,7 +118,7 @@ public abstract class ButtonBase
         }
     }
 
-    public void drawButton(MatrixStack matrixStack, final GuiMinecart gui, final ModuleBase module, final int x, final int y)
+    public void drawButton(PoseStack matrixStack, final GuiMinecart gui, final ModuleBase module, final int x, final int y)
     {
         final boolean visibility = isVisible();
         if (visibility != lastVisibility)

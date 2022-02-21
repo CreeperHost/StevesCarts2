@@ -1,47 +1,47 @@
 package vswe.stevescarts.entitys;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.EggEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrownEgg;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import vswe.stevescarts.init.ModEntities;
 
-public class EntityCake extends EggEntity
+public class EntityCake extends ThrownEgg
 {
-    public EntityCake(final World world)
+    public EntityCake(final Level world)
     {
         super(ModEntities.CAKE.get(), world);
     }
 
-    public EntityCake(final World world, final LivingEntity thrower)
+    public EntityCake(final Level world, final LivingEntity thrower)
     {
         super(world, thrower);
     }
 
-    public EntityCake(final World world, final double x, final double y, final double z)
+    public EntityCake(final Level world, final double x, final double y, final double z)
     {
         super(world, x, y, z);
     }
 
-    public EntityCake(EntityType<EntityCake> entityCakeEntityType, World world)
+    public EntityCake(EntityType<EntityCake> entityCakeEntityType, Level world)
     {
         super(entityCakeEntityType, world);
     }
 
     @Override
-    protected void onHitEntity(EntityRayTraceResult data)
+    protected void onHitEntity(EntityHitResult data)
     {
         if (data.getEntity() != null)
         {
-            if (data.getEntity() instanceof PlayerEntity)
+            if (data.getEntity() instanceof Player)
             {
-                final PlayerEntity player = (PlayerEntity) data.getEntity();
+                final Player player = (Player) data.getEntity();
                 player.getFoodData().eat(14, 0.7f);
             }
         }
@@ -52,7 +52,7 @@ public class EntityCake extends EggEntity
     }
 
     @Override
-    protected void onHitBlock(BlockRayTraceResult p_230299_1_)
+    protected void onHitBlock(BlockHitResult p_230299_1_)
     {
         BlockPos pos = blockPosition();
 

@@ -1,7 +1,6 @@
 package vswe.stevescarts.helpers;
 
-
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 import vswe.stevescarts.blocks.tileentities.TileEntityDistributor;
 
 public class DistributorSide

@@ -1,10 +1,10 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerCartAssembler;
@@ -61,7 +61,7 @@ public class Disassemble extends InventoryEffect
     }
 
     @Override
-    public void load(final TileEntityUpgrade upgrade, final CompoundNBT compound)
+    public void load(final TileEntityUpgrade upgrade, final CompoundTag compound)
     {
         this.setLastCart(upgrade, upgrade.getItem(0));
     }
@@ -184,7 +184,7 @@ public class Disassemble extends InventoryEffect
                 for (ItemStack item : modules)
                 {
                     TileEntityCartAssembler.getOrCreateCompound(item).putInt(TileEntityCartAssembler.MODIFY_STATUS, 0);
-                    TransferHandler.TransferItem(item, upgrade.getMaster(), new ContainerCartAssembler(0, null, upgrade.getMaster(), new IntArray(0)), 1);
+                    TransferHandler.TransferItem(item, upgrade.getMaster(), new ContainerCartAssembler(0, null, upgrade.getMaster(), new SimpleContainerData(0)), 1);
                     if (!addedHull)
                     {
                         addedHull = true;

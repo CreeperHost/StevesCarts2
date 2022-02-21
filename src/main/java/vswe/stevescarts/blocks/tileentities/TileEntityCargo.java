@@ -1,22 +1,19 @@
 package vswe.stevescarts.blocks.tileentities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -39,14 +36,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-public class TileEntityCargo extends TileEntityManager implements INamedContainerProvider
+public class TileEntityCargo extends TileEntityManager implements MenuProvider
 {
     public static ArrayList<CargoItemSelection> itemSelections;
     public int[] target;
     public ArrayList<SlotCargo> cargoSlots;
     public int lastLayout;
     private TransferManager latestTransferToBeUsed;
-    protected final IIntArray dataAccess = new IIntArray()
+    protected final SimpleContainerData dataAccess = new SimpleContainerData()
     {
         public int get(int id)
         {
@@ -103,9 +100,9 @@ public class TileEntityCargo extends TileEntityManager implements INamedContaine
         }
     };
 
-    public TileEntityCargo()
+    public TileEntityCargo(BlockPos blockPos, BlockState blockState)
     {
-        super(ModBlocks.CARGO_MANAGER_TILE.get());
+        super(ModBlocks.CARGO_MANAGER_TILE.get(), blockPos, blockState);
         target = new int[]{0, 0, 0, 0};
         lastLayout = -1;
     }
@@ -247,9 +244,9 @@ public class TileEntityCargo extends TileEntityManager implements INamedContaine
     }
 
     @Override
-    public void load(BlockState blockState, CompoundNBT nbttagcompound)
+    public void load(CompoundTag nbttagcompound)
     {
-        super.load(blockState, nbttagcompound);
+        super.load(nbttagcompound);
         setWorkload(nbttagcompound.getByte("workload"));
         for (int i = 0; i < 4; ++i)
         {
@@ -258,7 +255,7 @@ public class TileEntityCargo extends TileEntityManager implements INamedContaine
     }
 
     @Override
-    public CompoundNBT save(final CompoundNBT nbttagcompound)
+    public CompoundTag save(final CompoundTag nbttagcompound)
     {
         super.save(nbttagcompound);
         nbttagcompound.putByte("workload", (byte) getWorkload());
@@ -269,7 +266,7 @@ public class TileEntityCargo extends TileEntityManager implements INamedContaine
         return nbttagcompound;
     }
 
-    public void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    public void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0)
         {
@@ -386,15 +383,15 @@ public class TileEntityCargo extends TileEntityManager implements INamedContaine
         }
         final Class slotCargo = SlotCargo.class;
         IInventory fromInv;
-        Container fromCont;
+        AbstractContainerMenu fromCont;
         Class fromValid;
         IInventory toInv;
-        Container toCont;
+        AbstractContainerMenu toCont;
         Class toValid;
         if (toCart[transfer.getSetting()])
         {
             fromInv = this;
-            fromCont = new ContainerCargo(0, null, this, new IntArray(0));
+            fromCont = new ContainerCargo(0, null, this, new SimpleContainerData(0));
             fromValid = slotCargo;
             toInv = transfer.getCart();
             toCont = transfer.getCart().getCon(null);
@@ -487,20 +484,20 @@ public class TileEntityCargo extends TileEntityManager implements INamedContaine
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerEntity)
+    public boolean stillValid(Player playerEntity)
     {
         return true;
     }
 
     @Override
-    public ITextComponent getDisplayName()
+    public Component getDisplayName()
     {
-        return new TranslationTextComponent("screen.cargo.manager");
+        return new TranslatableComponent("screen.cargo.manager");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity playerEntity)
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity)
     {
         return new ContainerCargo(id, playerInventory, this, this.dataAccess);
     }

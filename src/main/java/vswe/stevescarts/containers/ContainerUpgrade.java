@@ -1,12 +1,11 @@
 package vswe.stevescarts.containers;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.init.ModContainers;
 import vswe.stevescarts.upgrades.InventoryEffect;
@@ -16,14 +15,14 @@ import java.util.Objects;
 public class ContainerUpgrade extends ContainerBase
 {
     private TileEntityUpgrade upgrade;
-    private IntArray data;
+    private SimpleContainerData data;
 
-    public ContainerUpgrade(int id, PlayerInventory playerInventory, PacketBuffer packetBuffer)
+    public ContainerUpgrade(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
-        this(id, playerInventory, (TileEntityUpgrade) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new IntArray(7));
+        this(id, playerInventory, (TileEntityUpgrade) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new SimpleContainerData(7));
     }
 
-    public ContainerUpgrade(int containerID, PlayerInventory invPlayer, final TileEntityUpgrade upgrade, IIntArray data)
+    public ContainerUpgrade(int containerID, Inventory invPlayer, final TileEntityUpgrade upgrade, SimpleContainerData data)
     {
         super(ModContainers.CONTAINER_UPGRADE.get(), containerID);
         this.upgrade = upgrade;
@@ -75,7 +74,7 @@ public class ContainerUpgrade extends ContainerBase
     }
 
     @Override
-    public boolean stillValid(PlayerEntity p_75145_1_)
+    public boolean stillValid(Player p_75145_1_)
     {
         return true;
     }

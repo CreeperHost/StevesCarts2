@@ -1,6 +1,6 @@
 package vswe.stevescarts.arcade.monopoly;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.EnumSet;
@@ -19,12 +19,12 @@ public abstract class Property extends Place {
 		this.cost = cost;
 	}
 
-	public void drawValue(MatrixStack matrixStack, GuiMinecart gui) {
+	public void drawValue(PoseStack matrixStack, GuiMinecart gui) {
 		Note.drawValue(matrixStack, game, gui, 10, 103, 2, cost);
 	}
 
 	@Override
-	public void drawText(MatrixStack matrixStack, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
+	public void drawText(PoseStack matrixStack, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
 		game.getModule().drawSplitString(gui, name, 3 + gui.getGuiLeft(), getTextY() + gui.getGuiTop(), 70, true, 4210752);
 	}
 

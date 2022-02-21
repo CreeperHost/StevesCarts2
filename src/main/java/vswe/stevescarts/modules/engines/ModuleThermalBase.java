@@ -1,10 +1,8 @@
 package vswe.stevescarts.modules.engines;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -131,7 +129,7 @@ public abstract class ModuleThermalBase extends ModuleEngine
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, Localization.MODULES.ENGINES.THERMAL.translate(), 8, 6, 4210752);
         int consumption = getCart().getConsumption();
@@ -191,7 +189,7 @@ public abstract class ModuleThermalBase extends ModuleEngine
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         super.Save(tagCompound, id);
         tagCompound.putShort(generateNBTName("Fuel", id), (short) getFuelLevel());
@@ -202,7 +200,7 @@ public abstract class ModuleThermalBase extends ModuleEngine
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         super.Load(tagCompound, id);
         setFuelLevel(tagCompound.getShort(generateNBTName("Fuel", id)));

@@ -1,22 +1,22 @@
 package vswe.stevescarts.client.guis;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerUpgrade;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.upgrades.InterfaceEffect;
 import vswe.stevescarts.upgrades.InventoryEffect;
 
-public class GuiUpgrade extends ContainerScreen<ContainerUpgrade>
+public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
 {
     private static ResourceLocation texture;
     private TileEntityUpgrade upgrade;
 
-    public GuiUpgrade(ContainerUpgrade containerUpgrade, PlayerInventory playerInventory, ITextComponent iTextComponent)
+    public GuiUpgrade(ContainerUpgrade containerUpgrade, Inventory playerInventory, Component iTextComponent)
     {
         super(containerUpgrade, playerInventory, iTextComponent);
         this.upgrade = containerUpgrade.getUpgrade();
@@ -25,7 +25,7 @@ public class GuiUpgrade extends ContainerScreen<ContainerUpgrade>
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float p_230430_4_)
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float p_230430_4_)
     {
         this.renderBackground(matrixStack);
         if (upgrade.getUpgrade() != null)
@@ -47,7 +47,7 @@ public class GuiUpgrade extends ContainerScreen<ContainerUpgrade>
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float p_230450_2_, int mouseX, int mouseY)
+    protected void renderBg(PoseStack matrixStack, float p_230450_2_, int mouseX, int mouseY)
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
@@ -72,7 +72,7 @@ public class GuiUpgrade extends ContainerScreen<ContainerUpgrade>
     }
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int p_230451_2_, int p_230451_3_)
+    protected void renderLabels(PoseStack matrixStack, int p_230451_2_, int p_230451_3_)
     {
         font.draw(matrixStack, upgrade.getUpgrade().getName(), 8, 6, 4210752);
     }

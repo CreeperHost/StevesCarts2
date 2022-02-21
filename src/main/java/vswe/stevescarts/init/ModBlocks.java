@@ -1,10 +1,10 @@
 package vswe.stevescarts.init;
 
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.blocks.*;
 import vswe.stevescarts.blocks.tileentities.*;
@@ -13,25 +13,25 @@ import vswe.stevescarts.upgrades.AssemblerUpgrade;
 public class ModBlocks
 {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MOD_ID);
-    public static final DeferredRegister<TileEntityType<?>> TILES_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Constants.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> TILES_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Constants.MOD_ID);
 
     public static final RegistryObject<Block> CART_ASSEMBLER = BLOCKS.register("blockcartassembler", BlockCartAssembler::new);
-    public static final RegistryObject<TileEntityType<TileEntityCartAssembler>> CART_ASSEMBLER_TILE = TILES_ENTITIES.register("blockcartassembler", () -> TileEntityType.Builder.of(TileEntityCartAssembler::new, ModBlocks.CART_ASSEMBLER.get()).build(null));
+    public static final RegistryObject<BlockEntityType<TileEntityCartAssembler>> CART_ASSEMBLER_TILE = TILES_ENTITIES.register("blockcartassembler", () -> BlockEntityType.Builder.of(TileEntityCartAssembler::new, ModBlocks.CART_ASSEMBLER.get()).build(null));
 
     public static final RegistryObject<Block> CARGO_MANAGER = BLOCKS.register("blockcargomanager", BlockCargoManager::new);
-    public static final RegistryObject<TileEntityType<TileEntityCargo>> CARGO_MANAGER_TILE = TILES_ENTITIES.register("blockcargomanager", () -> TileEntityType.Builder.of(TileEntityCargo::new, ModBlocks.CARGO_MANAGER.get()).build(null));
+    public static final RegistryObject<BlockEntityType<TileEntityCargo>> CARGO_MANAGER_TILE = TILES_ENTITIES.register("blockcargomanager", () -> BlockEntityType.Builder.of(TileEntityCargo::new, ModBlocks.CARGO_MANAGER.get()).build(null));
 
     public static final RegistryObject<Block> LIQUID_MANAGER = BLOCKS.register("blockliquidmanager", BlockLiquidManager::new);
-    public static final RegistryObject<TileEntityType<TileEntityLiquid>> LIQUID_MANAGER_TILE = TILES_ENTITIES.register("blockliquidmanager", () -> TileEntityType.Builder.of(TileEntityLiquid::new, ModBlocks.LIQUID_MANAGER.get()).build(null));
+    public static final RegistryObject<BlockEntityType<TileEntityLiquid>> LIQUID_MANAGER_TILE = TILES_ENTITIES.register("blockliquidmanager", () -> BlockEntityType.Builder.of(TileEntityLiquid::new, ModBlocks.LIQUID_MANAGER.get()).build(null));
 
     public static final RegistryObject<Block> EXTERNAL_DISTRIBUTOR = BLOCKS.register("blockdistributor", BlockDistributor::new);
-    public static final RegistryObject<TileEntityType<TileEntityDistributor>> EXTERNAL_DISTRIBUTOR_TILE = TILES_ENTITIES.register("blockdistributor", () -> TileEntityType.Builder.of(TileEntityDistributor::new, ModBlocks.EXTERNAL_DISTRIBUTOR.get()).build(null));
+    public static final RegistryObject<BlockEntityType<TileEntityDistributor>> EXTERNAL_DISTRIBUTOR_TILE = TILES_ENTITIES.register("blockdistributor", () -> BlockEntityType.Builder.of(TileEntityDistributor::new, ModBlocks.EXTERNAL_DISTRIBUTOR.get()).build(null));
 
     public static final RegistryObject<Block> MODULE_TOGGLER = BLOCKS.register("blockactivator", BlockActivator::new);
-    public static final RegistryObject<TileEntityType<TileEntityActivator>> MODULE_TOGGLER_TILE = TILES_ENTITIES.register("blockactivator", () -> TileEntityType.Builder.of(TileEntityActivator::new, ModBlocks.MODULE_TOGGLER.get()).build(null));
+    public static final RegistryObject<BlockEntityType<TileEntityActivator>> MODULE_TOGGLER_TILE = TILES_ENTITIES.register("blockactivator", () -> BlockEntityType.Builder.of(TileEntityActivator::new, ModBlocks.MODULE_TOGGLER.get()).build(null));
 
     public static final RegistryObject<Block> DETECTOR_UNIT = BLOCKS.register("blockdetector", BlockDetector::new);
-    public static final RegistryObject<TileEntityType<TileEntityDetector>> DETECTOR_TILE = TILES_ENTITIES.register("blockdetector", () -> TileEntityType.Builder.of(TileEntityDetector::new, ModBlocks.DETECTOR_UNIT.get()).build(null));
+    public static final RegistryObject<BlockEntityType<TileEntityDetector>> DETECTOR_TILE = TILES_ENTITIES.register("blockdetector", () -> BlockEntityType.Builder.of(TileEntityDetector::new, ModBlocks.DETECTOR_UNIT.get()).build(null));
 
     public static final RegistryObject<Block> JUNCTION = BLOCKS.register("blockjunction", BlockRailJunction::new);
     public static final RegistryObject<Block> ADVANCED_DETECTOR = BLOCKS.register("blockadvdetector", BlockRailAdvDetector::new);
@@ -64,6 +64,6 @@ public class ModBlocks
     public static final RegistryObject<Block> SOLAR_PANEL = BLOCKS.register("upgrade_solar_panel", () -> new BlockUpgrade(AssemblerUpgrade.getUpgrade(19)));
 
 
-    public static final RegistryObject<TileEntityType<TileEntityUpgrade>> UPGRADE_TILE = TILES_ENTITIES.register("upgrade", () -> TileEntityType.Builder.of(TileEntityUpgrade::new, ModBlocks.BATTERIES.get(), ModBlocks.POWER_CRYSTAL.get(), ModBlocks.KNOWLEDGE.get(), ModBlocks.INDUSTRIAL_ESPIONAGE.get(), ModBlocks.EXPERIENCED_ASSEMBLER.get(), ModBlocks.NEW_ERA.get(), ModBlocks.COTWO_FRIENDLY.get(), ModBlocks.GENERIC_ENGINE.get(), ModBlocks.MODULE_INPUT.get(), ModBlocks.PRODUCTION_LINE.get(), ModBlocks.CART_DEPLOYER.get(), ModBlocks.CART_MODIFIER.get(), ModBlocks.CART_CRANE.get(), ModBlocks.REDSTONE_CONTROL.get(), ModBlocks.CREATIVE_MODE.get(), ModBlocks.QUICK_DEMOLISHER.get(), ModBlocks.QUICK_DEMOLISHER.get(), ModBlocks.ENTROPY.get(), ModBlocks.MANAGER_BRIDGE.get(), ModBlocks.THERMAL_ENGINE.get(), ModBlocks.SOLAR_PANEL.get()).build(null));
+    public static final RegistryObject<BlockEntityType<TileEntityUpgrade>> UPGRADE_TILE = TILES_ENTITIES.register("upgrade", () -> BlockEntityType.Builder.of(TileEntityUpgrade::new, ModBlocks.BATTERIES.get(), ModBlocks.POWER_CRYSTAL.get(), ModBlocks.KNOWLEDGE.get(), ModBlocks.INDUSTRIAL_ESPIONAGE.get(), ModBlocks.EXPERIENCED_ASSEMBLER.get(), ModBlocks.NEW_ERA.get(), ModBlocks.COTWO_FRIENDLY.get(), ModBlocks.GENERIC_ENGINE.get(), ModBlocks.MODULE_INPUT.get(), ModBlocks.PRODUCTION_LINE.get(), ModBlocks.CART_DEPLOYER.get(), ModBlocks.CART_MODIFIER.get(), ModBlocks.CART_CRANE.get(), ModBlocks.REDSTONE_CONTROL.get(), ModBlocks.CREATIVE_MODE.get(), ModBlocks.QUICK_DEMOLISHER.get(), ModBlocks.QUICK_DEMOLISHER.get(), ModBlocks.ENTROPY.get(), ModBlocks.MANAGER_BRIDGE.get(), ModBlocks.THERMAL_ENGINE.get(), ModBlocks.SOLAR_PANEL.get()).build(null));
 
 }

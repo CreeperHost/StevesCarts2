@@ -1,8 +1,8 @@
 package vswe.stevescarts.arcade.tracks;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.Constants;
@@ -229,7 +229,7 @@ public class ArcadeTracks extends ArcadeGame {
 	}
 
 	@Override
-	public void drawForeground(MatrixStack matrixStack,  GuiMinecart gui) {
+	public void drawForeground(PoseStack matrixStack, GuiMinecart gui) {
 		if (isSaveMenuOpen) {
 			final int[] menu = getSaveMenuArea();
 			if (failedToSave) {
@@ -281,7 +281,7 @@ public class ArcadeTracks extends ArcadeGame {
 	}
 
 	@Override
-	public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y) {
+	public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
 		if (!isSaveMenuOpen && isMenuOpen) {
 			ResourceHelper.bindResource(ArcadeTracks.textureMenu);
 			getModule().drawImage(matrixStack, gui, getMenuArea(), 0, 0);
@@ -351,7 +351,7 @@ public class ArcadeTracks extends ArcadeGame {
 	}
 
 	@Override
-	public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y) {
+	public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
 		for (int i = 0; i < 14; ++i) {
 			if (!isButtonDisabled(i) && isButtonVisible(i)) {
 				getModule().drawStringOnMouseOver(matrixStack, gui, getButtonText(i), x, y, getButtonArea(i));
@@ -696,14 +696,14 @@ public class ArcadeTracks extends ArcadeGame {
 	}
 
 	@Override
-	public void Save(final CompoundNBT tagCompound, final int id) {
+	public void Save(final CompoundTag tagCompound, final int id) {
 		for (int i = 0; i < unlockedLevels.length; ++i) {
 			tagCompound.putByte(getModule().generateNBTName("Unlocked" + i, id), (byte) unlockedLevels[i]);
 		}
 	}
 
 	@Override
-	public void Load(final CompoundNBT tagCompound, final int id) {
+	public void Load(final CompoundTag tagCompound, final int id) {
 		for (int i = 0; i < unlockedLevels.length; ++i) {
 			unlockedLevels[i] = tagCompound.getByte(getModule().generateNBTName("Unlocked" + i, id));
 		}
@@ -711,7 +711,7 @@ public class ArcadeTracks extends ArcadeGame {
 	}
 
 	@Override
-	public void receivePacket(final int id, final byte[] data, final PlayerEntity player) {
+	public void receivePacket(final int id, final byte[] data, final Player player) {
 		if (id == 0) {
 			unlockedLevels[data[0]] = data[1];
 			if (unlockedLevels[data[0]] > TrackStory.stories.get(data[0]).getLevels().size() - 1) {

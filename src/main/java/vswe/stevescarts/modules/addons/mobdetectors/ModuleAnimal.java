@@ -1,8 +1,8 @@
 package vswe.stevescarts.modules.addons.mobdetectors;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.animal.Animal;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 
@@ -22,6 +22,6 @@ public class ModuleAnimal extends ModuleMobdetector
     @Override
     public boolean isValidTarget(final Entity target)
     {
-        return target instanceof AnimalEntity && (!(target instanceof TameableEntity) || !((TameableEntity) target).isTame());
+        return target instanceof Animal && (!(target instanceof TamableAnimal) || !((TamableAnimal) target).isTame());
     }
 }

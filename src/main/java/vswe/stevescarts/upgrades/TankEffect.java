@@ -1,9 +1,9 @@
 package vswe.stevescarts.upgrades;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
@@ -58,7 +58,7 @@ public abstract class TankEffect extends InventoryEffect
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(MatrixStack matrixStack, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
     {
         if (TankEffect.texture == null)
         {
@@ -71,7 +71,7 @@ public abstract class TankEffect extends InventoryEffect
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
     {
         drawMouseOver(matrixStack, gui, upgrade.tank.getMouseOver(), x, y, new int[]{tankInterfaceX, tankInterfaceX, 36, 51});
     }
@@ -99,7 +99,7 @@ public abstract class TankEffect extends InventoryEffect
     }
 
     @Override
-    public void load(final TileEntityUpgrade upgrade, final CompoundNBT compound)
+    public void load(final TileEntityUpgrade upgrade, final CompoundTag compound)
     {
         if (compound.getByte("Exists") != 0)
         {
@@ -112,7 +112,7 @@ public abstract class TankEffect extends InventoryEffect
     }
 
     @Override
-    public void save(final TileEntityUpgrade upgrade, final CompoundNBT compound)
+    public void save(final TileEntityUpgrade upgrade, final CompoundTag compound)
     {
         if (upgrade.tank.getFluid() == null)
         {

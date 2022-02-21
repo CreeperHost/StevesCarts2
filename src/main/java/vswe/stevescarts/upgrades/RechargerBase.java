@@ -1,6 +1,6 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 
 public abstract class RechargerBase extends BaseEffect
@@ -10,7 +10,7 @@ public abstract class RechargerBase extends BaseEffect
     {
         if (!upgrade.getLevel().isClientSide && canGenerate(upgrade))
         {
-            final CompoundNBT comp = upgrade.getCompound();
+            final CompoundTag comp = upgrade.getCompound();
             if (comp == null)
             {
                 return;

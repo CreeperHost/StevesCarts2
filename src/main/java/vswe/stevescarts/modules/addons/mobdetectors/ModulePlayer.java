@@ -1,8 +1,6 @@
 package vswe.stevescarts.modules.addons.mobdetectors;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 
@@ -22,6 +20,6 @@ public class ModulePlayer extends ModuleMobdetector
     @Override
     public boolean isValidTarget(final Entity target)
     {
-        return target instanceof PlayerEntity || (target instanceof TameableEntity && ((TameableEntity) target).isTame());
+        return target instanceof Player;
     }
 }

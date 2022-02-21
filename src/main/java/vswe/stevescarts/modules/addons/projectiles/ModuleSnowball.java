@@ -1,9 +1,9 @@
 package vswe.stevescarts.modules.addons.projectiles;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.SnowballEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 
 import javax.annotation.Nonnull;
@@ -24,6 +24,6 @@ public class ModuleSnowball extends ModuleProjectile
     @Override
     public Entity createProjectile(final Entity target, @Nonnull ItemStack item)
     {
-        return new SnowballEntity(getCart().level, 0, 0, 0);
+        return new Snowball(getCart().level, 0, 0, 0);
     }
 }

@@ -1,9 +1,9 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.ByteArrayNBT;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ByteArrayTag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.slots.SlotCart;
 import vswe.stevescarts.helpers.Localization;
@@ -38,12 +38,12 @@ public class Blueprint extends SimpleInventoryEffect
         {
             return false;
         }
-        final CompoundNBT info = blueprint.getTag();
+        final CompoundTag info = blueprint.getTag();
         if (info == null)
         {
             return false;
         }
-        final ByteArrayNBT moduleIDTag = (ByteArrayNBT) info.get("Modules");
+        final ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
         if (moduleIDTag == null)
         {
             return false;

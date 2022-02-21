@@ -1,6 +1,6 @@
 package vswe.stevescarts.arcade.monopoly;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.ArrayList;
@@ -31,21 +31,21 @@ public class Note {
 		return id;
 	}
 
-	public void draw(MatrixStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y) {
+	public void draw(PoseStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y) {
 		game.loadTexture(gui, 1);
 		game.getModule().drawImage(matrixStack, gui, x, y, 76 + u * 16, 38 + v * 16, 16, 16);
 	}
 
-	public void draw(MatrixStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount) {
+	public void draw(PoseStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount) {
 		draw(matrixStack, game, gui, x, y, amount, 4210752);
 	}
 
-	public void draw(MatrixStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount, final int color) {
+	public void draw(PoseStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount, final int color) {
 		draw(matrixStack, game, gui, x + 10, y);
 		game.getModule().drawString(matrixStack, gui, amount + "x ", new int[] { x + gui.getGuiLeft(), y + gui.getGuiTop(), 10, 16 }, color);
 	}
 
-	public void drawPlayer(MatrixStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount) {
+	public void drawPlayer(PoseStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount) {
 		game.loadTexture(gui, 1);
 		game.drawImageInArea(matrixStack, gui, x, y, 76 + u * 16, 38 + v * 16, 16, 16);
 		if (x + 16 < 443) {
@@ -53,7 +53,7 @@ public class Note {
 		}
 	}
 
-	public static int drawValue(MatrixStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, int maxNoteCount, int value) {
+	public static int drawValue(PoseStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, int maxNoteCount, int value) {
 		int id = 0;
 		for (int i = Note.notes.size() - 1; i >= 0; --i) {
 			if (value >= Note.notes.get(i).units && (maxNoteCount != 1 || value % Note.notes.get(i).units == 0)) {
@@ -67,7 +67,7 @@ public class Note {
 		return id;
 	}
 
-	public static void drawPlayerValue(MatrixStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int[] values) {
+	public static void drawPlayerValue(PoseStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int[] values) {
 		for (int i = 0; i < Note.notes.size(); ++i) {
 			Note.notes.get(i).drawPlayer(matrixStack, game, gui, x + (6 - i) * 20, y, values[i]);
 		}

@@ -1,9 +1,9 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.blocks.tileentities.TileEntityDetector;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.init.ModBlocks;
@@ -13,7 +13,7 @@ import java.util.Locale;
 
 import static vswe.stevescarts.blocks.BlockDetector.SATE;
 
-public enum DetectorType implements IStringSerializable
+public enum DetectorType implements StringRepresentable
 {
     NORMAL(0, true, false, true), UNIT(1, false, false, false), STATION(2, true, true, false)
         {
@@ -40,7 +40,7 @@ public enum DetectorType implements IStringSerializable
             {
                 BlockPos posUp = detector.getBlockPos().above();
                 BlockState stateUp = detector.getLevel().getBlockState(posUp);
-                if (stateUp.getBlock() == ModBlocks.ADVANCED_DETECTOR.get().getBlock())
+                if (stateUp.getBlock() == ModBlocks.ADVANCED_DETECTOR.get())
                 {
                     //				((BlockRailAdvDetector) ModBlocks.ADVANCED_DETECTOR.get().getBlock()).refreshState(detector.getWorld(), posUp, stateUp, flag);
                 }

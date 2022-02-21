@@ -1,6 +1,6 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 
 public abstract class BaseEffect
@@ -17,11 +17,11 @@ public abstract class BaseEffect
     {
     }
 
-    public void load(final TileEntityUpgrade upgrade, final CompoundNBT compound)
+    public void load(final TileEntityUpgrade upgrade, final CompoundTag compound)
     {
     }
 
-    public void save(final TileEntityUpgrade upgrade, final CompoundNBT compound)
+    public void save(final TileEntityUpgrade upgrade, final CompoundTag compound)
     {
     }
 

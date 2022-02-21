@@ -1,6 +1,6 @@
 package vswe.stevescarts.containers.slots;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 
 import javax.annotation.Nonnull;

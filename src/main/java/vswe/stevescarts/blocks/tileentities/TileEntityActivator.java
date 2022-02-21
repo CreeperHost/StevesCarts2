@@ -1,14 +1,14 @@
 package vswe.stevescarts.blocks.tileentities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.containers.ContainerActivator;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.ActivatorOption;
@@ -24,14 +24,13 @@ import vswe.stevescarts.modules.workers.tools.ModuleDrill;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-public class TileEntityActivator extends TileEntityBase implements INamedContainerProvider
+public class TileEntityActivator extends TileEntityBase
 {
     private ArrayList<ActivatorOption> options;
 
-
-    public TileEntityActivator()
+    public TileEntityActivator(BlockPos blockPos, BlockState blockState)
     {
-        super(ModBlocks.MODULE_TOGGLER_TILE.get());
+        super(ModBlocks.MODULE_TOGGLER_TILE.get(), blockPos, blockState);
         loadOptions();
     }
 
@@ -52,9 +51,9 @@ public class TileEntityActivator extends TileEntityBase implements INamedContain
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbttagcompound)
+    public void load(CompoundTag nbttagcompound)
     {
-        super.load(state, nbttagcompound);
+        super.load(nbttagcompound);
         for (final ActivatorOption option : options)
         {
             option.setOption(nbttagcompound.getByte(option.getName()));
@@ -62,7 +61,7 @@ public class TileEntityActivator extends TileEntityBase implements INamedContain
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compoundNBT)
+    public CompoundTag save(CompoundTag compoundNBT)
     {
         super.save(compoundNBT);
         for (final ActivatorOption option : options)
@@ -72,7 +71,7 @@ public class TileEntityActivator extends TileEntityBase implements INamedContain
         return compoundNBT;
     }
 
-    public void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    public void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0)
         {
@@ -97,15 +96,15 @@ public class TileEntityActivator extends TileEntityBase implements INamedContain
     }
 
     @Override
-    public ITextComponent getDisplayName()
+    public Component getDisplayName()
     {
-        return new StringTextComponent("container.activator");
+        return new TextComponent("container.activator");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity playerEntity)
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity)
     {
-        return new ContainerActivator(id, playerInventory, this, new IntArray(0));
+        return new ContainerActivator(id, playerInventory, this, new SimpleContainerData(0));
     }
 }

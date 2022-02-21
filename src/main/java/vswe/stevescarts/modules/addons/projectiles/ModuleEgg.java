@@ -1,9 +1,8 @@
 package vswe.stevescarts.modules.addons.projectiles;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.EggEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 
 import javax.annotation.Nonnull;

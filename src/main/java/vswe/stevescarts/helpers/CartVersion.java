@@ -1,7 +1,7 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.items.ItemCarts;
 
@@ -52,7 +52,7 @@ public abstract class CartVersion
     {
         if (!item.isEmpty() && item.getItem() instanceof ItemCarts)
         {
-            final CompoundNBT info = item.getTag();
+            final CompoundTag info = item.getTag();
             if (info != null)
             {
                 final int version = info.getByte("CartVersion");
@@ -69,7 +69,7 @@ public abstract class CartVersion
     {
         if (!item.isEmpty() && item.getItem() instanceof ItemCarts)
         {
-            final CompoundNBT info = item.getTag();
+            final CompoundTag info = item.getTag();
             if (info != null)
             {
                 addVersion(info);
@@ -77,7 +77,7 @@ public abstract class CartVersion
         }
     }
 
-    private static void addVersion(final CompoundNBT info)
+    private static void addVersion(final CompoundTag info)
     {
         info.putByte("CartVersion", (byte) getCurrentVersion());
     }

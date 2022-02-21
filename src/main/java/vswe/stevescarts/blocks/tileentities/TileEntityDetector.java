@@ -1,16 +1,17 @@
 package vswe.stevescarts.blocks.tileentities;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.blocks.BlockDetector;
 import vswe.stevescarts.containers.ContainerDetector;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -27,17 +28,17 @@ public class TileEntityDetector extends TileEntityBase implements INamedContaine
     private short oldData;
     private boolean hasOldData;
 
-    public TileEntityDetector()
+    public TileEntityDetector(BlockPos blockPos, BlockState blockState)
     {
-        super(ModBlocks.DETECTOR_TILE.get());
+        super(ModBlocks.DETECTOR_TILE.get(), blockPos, blockState);
         activeTimer = 20;
         mainObj = new LogicObject((byte) 1, (byte) 0);
     }
 
     @Override
-    public void load(BlockState blockState, CompoundNBT nbttagcompound)
+    public void load(CompoundTag nbttagcompound)
     {
-        super.load(blockState, nbttagcompound);
+        super.load(nbttagcompound);
         final byte count = nbttagcompound.getByte("LogicObjectCount");
         for (int i = 0; i < count; ++i)
         {
@@ -46,7 +47,7 @@ public class TileEntityDetector extends TileEntityBase implements INamedContaine
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT nbttagcompound)
+    public CompoundTag save(CompoundTag nbttagcompound)
     {
         super.save(nbttagcompound);
         final int count = saveLogicObject(nbttagcompound, mainObj, 0, false);
@@ -54,7 +55,7 @@ public class TileEntityDetector extends TileEntityBase implements INamedContaine
         return nbttagcompound;
     }
 
-    private int saveLogicObject(final CompoundNBT nbttagcompound, final LogicObject obj, int id, final boolean saveMe)
+    private int saveLogicObject(final CompoundTag nbttagcompound, final LogicObject obj, int id, final boolean saveMe)
     {
         if (saveMe)
         {
@@ -101,7 +102,7 @@ public class TileEntityDetector extends TileEntityBase implements INamedContaine
         }
     }
 
-    public void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    public void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0)
         {
@@ -195,7 +196,7 @@ public class TileEntityDetector extends TileEntityBase implements INamedContaine
     //		sendUpdatedLogicObjects(con, crafting, mainObj, ((ContainerDetector) con).mainObj);
     //	}
 
-    private void sendUpdatedLogicObjects(final Container con, final IContainerListener crafting, final LogicObject real, LogicObject cache)
+    private void sendUpdatedLogicObjects(final Container con, final ContainerListener crafting, final LogicObject real, LogicObject cache)
     {
         if (!real.equals(cache))
         {
@@ -225,7 +226,7 @@ public class TileEntityDetector extends TileEntityBase implements INamedContaine
         }
     }
 
-    private void sendAllLogicObjects(final Container con, final IContainerListener crafting, final LogicObject obj)
+    private void sendAllLogicObjects(final Container con, final ContainerListener crafting, final LogicObject obj)
     {
         sendLogicObject(con, crafting, obj);
         for (final LogicObject child : obj.getChilds())
@@ -234,7 +235,7 @@ public class TileEntityDetector extends TileEntityBase implements INamedContaine
         }
     }
 
-    private void sendLogicObject(final Container con, final IContainerListener crafting, final LogicObject obj)
+    private void sendLogicObject(final Container con, final ContainerListener crafting, final LogicObject obj)
     {
         if (obj.getParent() == null)
         {
@@ -242,37 +243,9 @@ public class TileEntityDetector extends TileEntityBase implements INamedContaine
         }
         final short data = (short) (obj.getId() << 8 | obj.getParent().getId());
         final short data2 = (short) (obj.getExtra() << 8 | obj.getData());
-        //		updateGuiData(con, crafting, 0, data);
-        //		updateGuiData(con, crafting, 1, data2);
     }
 
-    private void removeLogicObject(final Container con, final IContainerListener crafting, final LogicObject obj)
-    {
-        //		updateGuiData(con, crafting, 2, obj.getId());
-    }
-
-    //	@Override
-    //	public void receiveGuiData(final int id, final short data) {
-    //		if (id == 0) {
-    //			oldData = data;
-    //			hasOldData = true;
-    //		} else if (id == 1) {
-    //			if (!hasOldData) {
-    //				System.out.println("Doesn't have the other part of the data");
-    //				return;
-    //			}
-    //			final byte logicid = (byte) ((oldData & 0xFF00) >> 8);
-    //			final byte parent = (byte) (oldData & 0xFF);
-    //			final byte extra = (byte) ((data & 0xFF00) >> 8);
-    //			final byte logicdata = (byte) (data & 0xFF);
-    //			createObject(logicid, parent, extra, logicdata);
-    //			recalculateTree();
-    //			hasOldData = false;
-    //		} else if (id == 2) {
-    //			removeObject(mainObj, data);
-    //			recalculateTree();
-    //		}
-    //	}
+    private void removeLogicObject(final Container con, final ContainerListener crafting, final LogicObject obj) {}
 
     public void recalculateTree()
     {
@@ -312,16 +285,16 @@ public class TileEntityDetector extends TileEntityBase implements INamedContaine
     }
 
     @Override
-    public ITextComponent getDisplayName()
+    public Component getDisplayName()
     {
-        return new StringTextComponent("container.detector");
+        return new TextComponent("container.detector");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity playerEntity)
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity)
     {
-        return new ContainerDetector(id, playerInventory, this, new IntArray(0));
+        return new ContainerDetector(id, playerInventory, this, new SimpleContainerData(0));
     }
 
     public DetectorType getDetectorType()

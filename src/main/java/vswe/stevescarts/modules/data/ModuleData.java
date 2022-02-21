@@ -1,13 +1,13 @@
 package vswe.stevescarts.modules.data;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.ModList;
@@ -29,7 +29,6 @@ import vswe.stevescarts.client.models.workers.ModelTrackRemover;
 import vswe.stevescarts.client.models.workers.tools.ModelDrill;
 import vswe.stevescarts.client.models.workers.tools.ModelFarmer;
 import vswe.stevescarts.client.models.workers.tools.ModelWoodCutter;
-import vswe.stevescarts.compat.ftbic.CompatFtbic;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.CartVersion;
 import vswe.stevescarts.helpers.Localization;
@@ -710,7 +709,7 @@ public class ModuleData
         final NonNullList<ItemStack> modules = NonNullList.create();
         if (!cart.isEmpty() && cart.getItem() == ModItems.CARTS.get() && cart.getTag() != null)
         {
-            final CompoundNBT info = cart.getTag();
+            final CompoundTag info = cart.getTag();
             if (info.contains("Modules"))
             {
                 final byte[] IDs = info.getByteArray("Modules");
@@ -731,7 +730,7 @@ public class ModuleData
     public static ItemStack createModularCart(final EntityMinecartModular parentcart)
     {
         @Nonnull ItemStack cart = new ItemStack(ModItems.CARTS.get(), 1);
-        final CompoundNBT save = new CompoundNBT();
+        final CompoundTag save = new CompoundTag();
         final byte[] moduleIDs = new byte[parentcart.getModules().size()];
         for (int i = 0; i < parentcart.getModules().size(); ++i)
         {
@@ -756,7 +755,7 @@ public class ModuleData
     public static ItemStack createModularCartFromItems(final NonNullList<ItemStack> modules)
     {
         ItemStack cart = new ItemStack(ModItems.CARTS.get(), 1);
-        final CompoundNBT save = new CompoundNBT();
+        final CompoundTag save = new CompoundTag();
         final byte[] moduleIDs = new byte[modules.size()];
         for (int i = 0; i < moduleIDs.length; ++i)
         {
@@ -799,7 +798,7 @@ public class ModuleData
         }
         if (isUsingExtraData())
         {
-            final CompoundNBT save = new CompoundNBT();
+            final CompoundTag save = new CompoundTag();
             save.putByte("Data", getDefaultExtraData());
             module.setTag(save);
         }
@@ -867,11 +866,11 @@ public class ModuleData
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void addExtraMessage(final List<ITextComponent> list)
+    public void addExtraMessage(final List<Component> list)
     {
         if (message != null)
         {
-            list.add(new TranslationTextComponent(""));
+            list.add(new TranslatableComponent(""));
             for (final Localization.MODULE_INFO m : message)
             {
                 final String str = m.translate();
@@ -903,29 +902,29 @@ public class ModuleData
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void addExtraMessage(final List<ITextComponent> list, final String str)
+    private void addExtraMessage(final List<Component> list, final String str)
     {
-        list.add(new StringTextComponent(TextFormatting.DARK_GRAY + (TextFormatting.ITALIC + str + TextFormatting.RESET)));
+        list.add(new TextComponent(ChatFormatting.DARK_GRAY + (ChatFormatting.ITALIC + str + ChatFormatting.RESET)));
     }
 
     @OnlyIn(Dist.CLIENT)
-    public final void addInformation(final List<ITextComponent> list, final CompoundNBT compound)
+    public final void addInformation(final List<Component> list, final CompoundTag compound)
     {
-        list.add(new StringTextComponent(TextFormatting.GRAY + Localization.MODULE_INFO.MODULAR_COST.translate() + ": " + modularCost));
+        list.add(new TextComponent(ChatFormatting.GRAY + Localization.MODULE_INFO.MODULAR_COST.translate() + ": " + modularCost));
 //        addSpecificInformation(list);
         if (compound != null && compound.contains("Data"))
         {
             final String extradatainfo = getModuleInfoText(compound.getByte("Data"));
             if (extradatainfo != null)
             {
-                list.add(new TranslationTextComponent(TextFormatting.WHITE + extradatainfo));
+                list.add(new TranslatableComponent(ChatFormatting.WHITE + extradatainfo));
             }
         }
         if (Screen.hasShiftDown())
         {
             if (getRenderingSides() == null || getRenderingSides().size() == 0)
             {
-                list.add(new TranslationTextComponent(TextFormatting.DARK_AQUA + Localization.MODULE_INFO.NO_SIDES.translate()));
+                list.add(new TranslatableComponent(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.NO_SIDES.translate()));
             }
             else
             {
@@ -946,44 +945,44 @@ public class ModuleData
                         sides = sides + ", " + side.toString();
                     }
                 }
-                list.add(new TranslationTextComponent(TextFormatting.DARK_AQUA + Localization.MODULE_INFO.OCCUPIED_SIDES.translate(sides, String.valueOf(getRenderingSides().size()))));
+                list.add(new TranslatableComponent(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.OCCUPIED_SIDES.translate(sides, String.valueOf(getRenderingSides().size()))));
             }
             if (getNemesis() != null && getNemesis().size() != 0)
             {
                 if (getRenderingSides() == null || getRenderingSides().size() == 0)
                 {
-                    list.add(new TranslationTextComponent(TextFormatting.RED + Localization.MODULE_INFO.CONFLICT_HOWEVER.translate() + ":"));
+                    list.add(new TranslatableComponent(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_HOWEVER.translate() + ":"));
                 }
                 else
                 {
-                    list.add(new TranslationTextComponent(TextFormatting.RED + Localization.MODULE_INFO.CONFLICT_ALSO.translate() + ":"));
+                    list.add(new TranslatableComponent(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_ALSO.translate() + ":"));
                 }
                 for (final ModuleData module : getNemesis())
                 {
-                    list.add(new TranslationTextComponent(TextFormatting.RED + module.getName()));
+                    list.add(new TranslatableComponent(ChatFormatting.RED + module.getName()));
                 }
             }
             if (parent != null)
             {
-                list.add(new TranslationTextComponent(TextFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + parent.getName()));
+                list.add(new TranslatableComponent(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + parent.getName()));
             }
             if (getRequirement() != null && getRequirement().size() != 0)
             {
                 for (final ModuleDataGroup group : getRequirement())
                 {
-                    list.add(new TranslationTextComponent(TextFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + group.getCountName() + " " + group.getName()));
+                    list.add(new TranslatableComponent(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + group.getCountName() + " " + group.getName()));
                 }
             }
             if (getAllowDuplicate())
             {
-                list.add(new TranslationTextComponent(TextFormatting.GREEN + Localization.MODULE_INFO.DUPLICATES.translate()));
+                list.add(new TranslatableComponent(ChatFormatting.GREEN + Localization.MODULE_INFO.DUPLICATES.translate()));
             }
         }
         else
         {
-            list.add(new TranslationTextComponent(TextFormatting.DARK_AQUA + Localization.MODULE_INFO.SHIFT_FOR_MORE.translate("SHIFT")));
+            list.add(new TranslatableComponent(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.SHIFT_FOR_MORE.translate("SHIFT")));
         }
-        list.add(new TranslationTextComponent(TextFormatting.BLUE + Localization.MODULE_INFO.TYPE.translate() + ": " + ModuleData.moduleGroupNames[groupID].translate()));
+        list.add(new TranslatableComponent(ChatFormatting.BLUE + Localization.MODULE_INFO.TYPE.translate() + ": " + ModuleData.moduleGroupNames[groupID].translate()));
         addExtraMessage(list);
     }
 

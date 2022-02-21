@@ -1,15 +1,13 @@
 package vswe.stevescarts.arcade;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.handlers.SoundHandler;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
@@ -38,15 +36,15 @@ public abstract class ArcadeGame {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void drawForeground(MatrixStack matrixStack,  GuiMinecart gui) {
+	public void drawForeground(PoseStack matrixStack, GuiMinecart gui) {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y) {
+	public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y) {
+	public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -61,13 +59,13 @@ public abstract class ArcadeGame {
 	public void keyPress(final GuiMinecart gui, final int id, final int extraInformation) {
 	}
 
-	public void Save(final CompoundNBT tagCompound, final int id) {
+	public void Save(final CompoundTag tagCompound, final int id) {
 	}
 
-	public void Load(final CompoundNBT tagCompound, final int id) {
+	public void Load(final CompoundTag tagCompound, final int id) {
 	}
 
-	public void receivePacket(final int id, final byte[] data, final PlayerEntity player) {
+	public void receivePacket(final int id, final byte[] data, final Player player) {
 	}
 
 	public void checkGuiData(final Object[] info) {
@@ -83,7 +81,7 @@ public abstract class ArcadeGame {
 	@OnlyIn(Dist.CLIENT)
 	public static void playSound(SoundEvent sound, float volume, float pitch) {
 		if (SCConfig.useArcadeSounds.get() && sound != null) {
-			SoundHandler.playSound(sound, SoundCategory.BLOCKS, volume, pitch);
+//			SoundHandler.playSound(sound, SoundCategory.BLOCKS, volume, pitch);
 		}
 	}
 
@@ -102,11 +100,11 @@ public abstract class ArcadeGame {
 		}
 	}
 
-	public void drawImageInArea(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y, final int u, final int v, final int w, final int h) {
+	public void drawImageInArea(PoseStack matrixStack, GuiMinecart gui, final int x, final int y, final int u, final int v, final int w, final int h) {
 		drawImageInArea(matrixStack,gui, x, y, u, v, w, h, 5, 4, 443, 168);
 	}
 
-	public void drawImageInArea(MatrixStack matrixStack, GuiMinecart gui, int x, int y, int u, int v, int w, int h, final int x1, final int y1, final int x2, final int y2) {
+	public void drawImageInArea(PoseStack matrixStack, GuiMinecart gui, int x, int y, int u, int v, int w, int h, final int x1, final int y1, final int x2, final int y2) {
 		if (x < x1) {
 			w -= x1 - x;
 			u += x1 - x;

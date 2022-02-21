@@ -1,6 +1,6 @@
 package vswe.stevescarts.client.guis.buttons;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.computer.ComputerTask;
 import vswe.stevescarts.modules.workers.ModuleComputer;
 
@@ -61,7 +61,7 @@ public class ButtonFlowEndType extends ButtonAssembly
     }
 
     @Override
-    public void onServerClick(final PlayerEntity player, final int mousebutton, final boolean ctrlKey, final boolean shiftKey)
+    public void onServerClick(final Player player, final int mousebutton, final boolean ctrlKey, final boolean shiftKey)
     {
         for (final ComputerTask task : ((ModuleComputer) module).getSelectedTasks())
         {

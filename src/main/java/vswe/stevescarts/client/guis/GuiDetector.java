@@ -1,13 +1,13 @@
 package vswe.stevescarts.client.guis;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import vswe.stevescarts.blocks.tileentities.TileEntityDetector;
 import vswe.stevescarts.containers.ContainerDetector;
 import vswe.stevescarts.helpers.*;
@@ -16,7 +16,7 @@ import vswe.stevescarts.modules.data.ModuleData;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class GuiDetector extends ContainerScreen<ContainerDetector>
+public class GuiDetector extends AbstractContainerScreen<ContainerDetector>
 {
     private ArrayList<DropDownMenu> menus;
     private DropDownMenuPages modulesMenu;
@@ -28,9 +28,9 @@ public class GuiDetector extends ContainerScreen<ContainerDetector>
     public static ResourceLocation dropdownTexture;
     public LogicObject currentObject;
     TileEntityDetector detector;
-    PlayerInventory invPlayer;
+    Inventory invPlayer;
 
-    public GuiDetector(ContainerDetector containerDetector, PlayerInventory playerInventory, ITextComponent iTextComponent)
+    public GuiDetector(ContainerDetector containerDetector, Inventory playerInventory, Component iTextComponent)
     {
         super(containerDetector, playerInventory, iTextComponent);
         this.invPlayer = playerInventory;
@@ -51,7 +51,7 @@ public class GuiDetector extends ContainerScreen<ContainerDetector>
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float x, int y, int p_230450_4_)
+    protected void renderBg(PoseStack matrixStack, float x, int y, int p_230450_4_)
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
@@ -109,12 +109,12 @@ public class GuiDetector extends ContainerScreen<ContainerDetector>
     }
 
     @Override
-    protected void renderLabels(MatrixStack p_230451_1_, int p_230451_2_, int p_230451_3_)
+    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_)
     {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int x, int y, float p_230430_4_)
+    public void render(PoseStack matrixStack, int x, int y, float p_230430_4_)
     {
         this.renderBackground(matrixStack);
         super.render(matrixStack, x, y, p_230430_4_);
@@ -171,7 +171,7 @@ public class GuiDetector extends ContainerScreen<ContainerDetector>
     }
 
 
-    private boolean drawMouseOverFromObject(MatrixStack matrixStack, LogicObject obj, final int x, final int y)
+    private boolean drawMouseOverFromObject(PoseStack matrixStack, LogicObject obj, final int x, final int y)
     {
         if (drawMouseOver(matrixStack, obj.getName(), x, y, obj.getRect()))
         {
@@ -187,11 +187,11 @@ public class GuiDetector extends ContainerScreen<ContainerDetector>
         return false;
     }
 
-    private boolean drawMouseOver(MatrixStack matrixStack, String str, final int x, final int y, final int[] rect)
+    private boolean drawMouseOver(PoseStack matrixStack, String str, final int x, final int y, final int[] rect)
     {
         if (rect != null && inRect(x - getGuiLeft(), y - getGuiTop(), rect))
         {
-            renderTooltip(matrixStack, new StringTextComponent(str), x, y);
+            renderTooltip(matrixStack, new TranslatableComponent(str), x, y);
             return true;
         }
         return false;

@@ -1,9 +1,9 @@
 package vswe.stevescarts.helpers.storages;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.containers.slots.ISpecialItemTransferValidator;
 import vswe.stevescarts.containers.slots.ISpecialSlotValidator;
 
@@ -31,27 +31,27 @@ public class TransferHandler
         return slot.mayPlace(item);
     }
 
-    public static void TransferItem(@Nonnull ItemStack iStack, final IInventory inv, final Container cont, final int maxItems)
+    public static void TransferItem(@Nonnull ItemStack iStack, final Container inv, final AbstractContainerMenu cont, final int maxItems)
     {
         TransferItem(iStack, inv, cont, Slot.class, null, maxItems);
     }
 
-    public static void TransferItem(@Nonnull ItemStack iStack, final IInventory inv, final Container cont, final Class validSlot, final int maxItems, final TRANSFER_TYPE type)
+    public static void TransferItem(@Nonnull ItemStack iStack, final Container inv, final AbstractContainerMenu cont, final Class validSlot, final int maxItems, final TRANSFER_TYPE type)
     {
         TransferItem(iStack, inv, 0, inv.getContainerSize() - 1, cont, validSlot, null, maxItems, type, false);
     }
 
-    public static void TransferItem(@Nonnull ItemStack iStack, final IInventory inv, final Container cont, final Class validSlot, final Class invalidSlot, final int maxItems)
+    public static void TransferItem(@Nonnull ItemStack iStack, final Container inv, final AbstractContainerMenu cont, final Class validSlot, final Class invalidSlot, final int maxItems)
     {
         TransferItem(iStack, inv, 0, inv.getContainerSize() - 1, cont, validSlot, invalidSlot, maxItems);
     }
 
-    public static void TransferItem(@Nonnull ItemStack iStack, final IInventory inv, final int start, final int end, final Container cont, final Class validSlot, final Class invalidSlot, final int maxItems)
+    public static void TransferItem(@Nonnull ItemStack iStack, final Container inv, final int start, final int end, final AbstractContainerMenu cont, final Class validSlot, final Class invalidSlot, final int maxItems)
     {
         TransferItem(iStack, inv, start, end, cont, validSlot, invalidSlot, maxItems, TRANSFER_TYPE.OTHER, false);
     }
 
-    public static void TransferItem(@Nonnull ItemStack iStack, final IInventory inv, int start, int end, final Container cont, final Class validSlot, final Class invalidSlot, int maxItems, final TRANSFER_TYPE type, final boolean fake)
+    public static void TransferItem(@Nonnull ItemStack iStack, final Container inv, int start, int end, final AbstractContainerMenu cont, final Class validSlot, final Class invalidSlot, int maxItems, final TRANSFER_TYPE type, final boolean fake)
     {
         start = Math.max(0, start);
         end = Math.min(inv.getContainerSize() - 1, end);

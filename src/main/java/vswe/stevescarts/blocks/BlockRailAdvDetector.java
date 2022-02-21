@@ -1,40 +1,42 @@
 package vswe.stevescarts.blocks;
 
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.Property;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.RailShape;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.RailShape;
+import net.minecraft.world.level.material.Material;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 import vswe.stevescarts.blocks.tileentities.TileEntityManager;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.init.ModBlocks;
 
-public class BlockRailAdvDetector extends AbstractRailBlock
+public class BlockRailAdvDetector extends BaseRailBlock
 {
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
 
     public BlockRailAdvDetector()
     {
-        this(AbstractBlock.Properties.of(Material.DECORATION).noCollission().strength(0.7F).sound(SoundType.METAL));
+        this(Properties.of(Material.DECORATION).noCollission().strength(0.7F).sound(SoundType.METAL));
     }
 
-    private BlockRailAdvDetector(AbstractBlock.Properties builder)
+    private BlockRailAdvDetector(Properties builder)
     {
         super(true, builder);
         this.registerDefaultState(this.stateDefinition.any().setValue(SHAPE, RailShape.NORTH_SOUTH));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(SHAPE);
     }
 
@@ -45,13 +47,12 @@ public class BlockRailAdvDetector extends AbstractRailBlock
     }
 
     @Override
-    public boolean canMakeSlopes(BlockState state, IBlockReader world, BlockPos pos)
-    {
-        return false;
+    public boolean canMakeSlopes(BlockState state, BlockGetter world, BlockPos pos) {
+       return false;
     }
 
     @Override
-    public void onMinecartPass(BlockState state, World world, BlockPos pos, AbstractMinecartEntity entityMinecart)
+    public void onMinecartPass(BlockState state, Level world, BlockPos pos, AbstractMinecart entityMinecart)
     {
         if (world.isClientSide || !(entityMinecart instanceof EntityMinecartModular))
         {
@@ -79,9 +80,9 @@ public class BlockRailAdvDetector extends AbstractRailBlock
                 {
                     BlockPos offset = pos.offset(i, 0, j);
                     Block block = world.getBlockState(offset).getBlock();
-                    if (block == ModBlocks.CARGO_MANAGER.get().getBlock() || block == ModBlocks.LIQUID_MANAGER.get().getBlock())
+                    if (block == ModBlocks.CARGO_MANAGER.get() || block == ModBlocks.LIQUID_MANAGER.get())
                     {
-                        TileEntity tileentity = world.getBlockEntity(offset);
+                        BlockEntity tileentity = world.getBlockEntity(offset);
                         if (tileentity instanceof TileEntityManager)
                         {
                             TileEntityManager manager = (TileEntityManager) tileentity;
@@ -93,9 +94,9 @@ public class BlockRailAdvDetector extends AbstractRailBlock
                         }
                         return;
                     }
-                    if (block == ModBlocks.MODULE_TOGGLER.get().getBlock())
+                    if (block == ModBlocks.MODULE_TOGGLER.get())
                     {
-                        TileEntity tileentity = world.getBlockEntity(offset);
+                        BlockEntity tileentity = world.getBlockEntity(offset);
                         if (tileentity instanceof TileEntityActivator)
                         {
                             TileEntityActivator activator = (TileEntityActivator) tileentity;

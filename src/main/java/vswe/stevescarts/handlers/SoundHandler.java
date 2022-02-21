@@ -1,8 +1,8 @@
 package vswe.stevescarts.handlers;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -56,7 +56,7 @@ public class SoundHandler
     public static void playSound(SoundEvent event, SoundCategory category, float volume, float pitch)
     {
         //TODO
-        //		Minecraft.getInstance().getSoundManager().play(new PlayerSound(Minecraft.getInstance().player, category, event, volume, pitch));
+//        		Minecraft.getInstance().getSoundManager().play(new PlayerSound(Minecraft.getInstance().player, category, event, volume, pitch));
     }
 
     //	private static class PlayerSound extends MovingSound {

@@ -1,21 +1,18 @@
 package vswe.stevescarts.blocks.tileentities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -47,9 +44,9 @@ public class TileEntityDistributor extends TileEntityBase implements IInventory,
 
     private Map<Direction, IFluidHandler> fluidHandlerMap;
 
-    public TileEntityDistributor()
+    public TileEntityDistributor(BlockPos blockPos, BlockState blockState)
     {
-        super(ModBlocks.EXTERNAL_DISTRIBUTOR_TILE.get());
+        super(ModBlocks.EXTERNAL_DISTRIBUTOR_TILE.get(), blockPos, blockState);
         dirty = true;
         (sides = new ArrayList<>()).add(new DistributorSide(0, Localization.GUI.DISTRIBUTOR.SIDE_ORANGE, Direction.UP));
         sides.add(new DistributorSide(1, Localization.GUI.DISTRIBUTOR.SIDE_PURPLE, Direction.DOWN));
@@ -126,9 +123,9 @@ public class TileEntityDistributor extends TileEntityBase implements IInventory,
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compoundNBT)
+    public void load(CompoundTag compoundNBT)
     {
-        super.load(state, compoundNBT);
+        super.load(compoundNBT);
         for (final DistributorSide side : getSides())
         {
             side.setData(compoundNBT.getInt("Side" + side.getId()));
@@ -136,7 +133,7 @@ public class TileEntityDistributor extends TileEntityBase implements IInventory,
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compoundNBT)
+    public CompoundTag save(CompoundTag compoundNBT)
     {
         super.save(compoundNBT);
         for (final DistributorSide side : getSides())
@@ -167,7 +164,7 @@ public class TileEntityDistributor extends TileEntityBase implements IInventory,
         PacketHandler.sendToServer(new PacketDistributor(getBlockPos(), id, data));
     }
 
-    public void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    public void receivePacket(final int id, final byte[] data, final ServerPlayer player)
     {
         if (id == 0 || id == 1)
         {
@@ -197,9 +194,9 @@ public class TileEntityDistributor extends TileEntityBase implements IInventory,
     }
 
     @Override
-    public CompoundNBT getUpdateTag()
+    public CompoundTag getUpdateTag()
     {
-        return save(new CompoundNBT());
+        return save(new CompoundTag());
     }
 
     @Override
@@ -262,7 +259,7 @@ public class TileEntityDistributor extends TileEntityBase implements IInventory,
 
     private TileEntityManager generateManager(final int y)
     {
-        final TileEntity te = level.getBlockEntity(getBlockPos().offset(0, y, 0));
+        final BlockEntity te = level.getBlockEntity(getBlockPos().offset(0, y, 0));
         if (te != null && te instanceof TileEntityManager)
         {
             return (TileEntityManager) te;
@@ -271,7 +268,7 @@ public class TileEntityDistributor extends TileEntityBase implements IInventory,
     }
 
     @Override
-    public boolean isUsableByPlayer(final PlayerEntity entityplayer)
+    public boolean isUsableByPlayer(final Player entityplayer)
     {
         return level.getBlockEntity(getBlockPos()) == this && entityplayer.distanceToSqr(entityplayer) <= 64.0;
     }
@@ -352,7 +349,7 @@ public class TileEntityDistributor extends TileEntityBase implements IInventory,
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player)
+    public boolean stillValid(Player player)
     {
         return true;
     }
@@ -565,15 +562,16 @@ public class TileEntityDistributor extends TileEntityBase implements IInventory,
     }
 
     @Override
-    public ITextComponent getDisplayName()
+    public Component getDisplayName()
     {
-        return new StringTextComponent("container.distributor");
+        return new TextComponent("container.distributor");
     }
+
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity playerEntity)
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity)
     {
-        return new ContainerDistributor(id, playerInventory, this, new IntArray(0));
+        return new ContainerDistributor(id, playerInventory, this, new SimpleContainerData(0));
     }
 }

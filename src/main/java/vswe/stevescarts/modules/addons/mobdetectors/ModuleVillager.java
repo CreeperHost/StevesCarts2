@@ -1,8 +1,8 @@
 package vswe.stevescarts.modules.addons.mobdetectors;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.passive.GolemEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.npc.Villager;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 
@@ -22,6 +22,6 @@ public class ModuleVillager extends ModuleMobdetector
     @Override
     public boolean isValidTarget(final Entity target)
     {
-        return target instanceof GolemEntity || target instanceof VillagerEntity;
+        return target instanceof IronGolem || target instanceof Villager;
     }
 }

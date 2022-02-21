@@ -1,9 +1,9 @@
 package vswe.stevescarts.api.farms;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.FakePlayer;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 
@@ -44,6 +44,6 @@ public interface ITreeModule
      * @param fakePlayer
      * @return
      */
-    boolean plantSapling(World world, BlockPos pos, ItemStack stack, FakePlayer fakePlayer);
+    boolean plantSapling(Level world, BlockPos pos, ItemStack stack, FakePlayer fakePlayer);
 
 }

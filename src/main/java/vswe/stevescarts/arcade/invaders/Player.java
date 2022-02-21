@@ -1,6 +1,6 @@
 package vswe.stevescarts.arcade.invaders;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class Player extends Unit {
@@ -18,7 +18,7 @@ public class Player extends Unit {
 	}
 
 	@Override
-	public void draw(MatrixStack matrixStack, GuiMinecart gui) {
+	public void draw(PoseStack matrixStack, GuiMinecart gui) {
 		if (ready || targetY == y) {
 			game.drawImageInArea(matrixStack, gui, x, y, 16, 16, 16, 16);
 		} else {

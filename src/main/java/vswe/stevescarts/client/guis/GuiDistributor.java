@@ -1,12 +1,12 @@
 package vswe.stevescarts.client.guis;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import vswe.stevescarts.blocks.tileentities.TileEntityDistributor;
 import vswe.stevescarts.blocks.tileentities.TileEntityManager;
 import vswe.stevescarts.containers.ContainerDistributor;
@@ -17,14 +17,14 @@ import vswe.stevescarts.helpers.ResourceHelper;
 
 import java.util.ArrayList;
 
-public class GuiDistributor extends ContainerScreen<ContainerDistributor>
+public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor>
 {
     private String mouseOverText;
     private static ResourceLocation texture;
     private int activeId;
     private TileEntityDistributor distributor;
 
-    public GuiDistributor(ContainerDistributor containerDistributor, PlayerInventory playerInventory, ITextComponent iTextComponent)
+    public GuiDistributor(ContainerDistributor containerDistributor, Inventory playerInventory, Component iTextComponent)
     {
         super(containerDistributor, playerInventory, iTextComponent);
         activeId = -1;
@@ -34,9 +34,9 @@ public class GuiDistributor extends ContainerScreen<ContainerDistributor>
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float p_230450_2_, int x, int y)
+    protected void renderBg(PoseStack matrixStack, float p_230450_2_, int x, int y)
     {
-        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         final int j = getGuiLeft();
         final int k = getGuiTop();
         ResourceHelper.bindResource(GuiDistributor.texture);
@@ -89,12 +89,12 @@ public class GuiDistributor extends ContainerScreen<ContainerDistributor>
     }
 
     @Override
-    protected void renderLabels(MatrixStack p_230451_1_, int p_230451_2_, int p_230451_3_)
+    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_)
     {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int x, int y, float p_230430_4_)
+    public void render(PoseStack matrixStack, int x, int y, float p_230430_4_)
     {
         this.renderBackground(matrixStack);
         super.render(matrixStack, x, y, p_230430_4_);
@@ -106,7 +106,7 @@ public class GuiDistributor extends ContainerScreen<ContainerDistributor>
         }
         if (mouseOverText != null && !mouseOverText.equals(""))
         {
-            renderTooltip(matrixStack, new StringTextComponent(mouseOverText), x, y);
+            renderTooltip(matrixStack, new TextComponent(mouseOverText), x, y);
         }
         mouseOverText = null;
     }
@@ -125,7 +125,7 @@ public class GuiDistributor extends ContainerScreen<ContainerDistributor>
         return coords != null && x >= coords[0] && x < coords[0] + coords[2] && y >= coords[1] && y < coords[1] + coords[3];
     }
 
-    private void drawSetting(MatrixStack matrixStack, final DistributorSetting setting, final int[] box, final boolean hover)
+    private void drawSetting(PoseStack matrixStack, final DistributorSetting setting, final int[] box, final boolean hover)
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();

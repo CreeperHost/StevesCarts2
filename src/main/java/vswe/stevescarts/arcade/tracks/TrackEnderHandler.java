@@ -1,6 +1,6 @@
 package vswe.stevescarts.arcade.tracks;
 
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvents;
 import vswe.stevescarts.arcade.ArcadeGame;
 
 public class TrackEnderHandler extends Track {

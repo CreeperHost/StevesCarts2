@@ -1,6 +1,6 @@
 package vswe.stevescarts.client.guis.buttons;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.computer.ComputerProg;
 import vswe.stevescarts.modules.workers.ModuleComputer;
 
@@ -30,7 +30,7 @@ public class ButtonProgramAdd extends ButtonAssembly
     }
 
     @Override
-    public void onServerClick(final PlayerEntity player, final int mousebutton, final boolean ctrlKey, final boolean shiftKey)
+    public void onServerClick(final Player player, final int mousebutton, final boolean ctrlKey, final boolean shiftKey)
     {
         ((ModuleComputer) module).setCurrentProg(new ComputerProg((ModuleComputer) module));
     }

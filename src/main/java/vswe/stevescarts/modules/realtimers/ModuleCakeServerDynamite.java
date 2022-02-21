@@ -1,8 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.Explosion;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotCakeDynamite;
@@ -71,7 +70,7 @@ public class ModuleCakeServerDynamite extends ModuleCakeServer
     }
 
     @Override
-    public boolean onInteractFirst(final PlayerEntity entityplayer)
+    public boolean onInteractFirst(final Player entityplayer)
     {
         if (dynamiteCount > 0)
         {

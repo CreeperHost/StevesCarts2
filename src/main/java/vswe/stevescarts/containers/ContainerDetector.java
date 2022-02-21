@@ -1,11 +1,10 @@
 package vswe.stevescarts.containers;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.SimpleContainerData;
 import vswe.stevescarts.blocks.tileentities.TileEntityDetector;
 import vswe.stevescarts.helpers.LogicObject;
 import vswe.stevescarts.init.ModContainers;
@@ -17,12 +16,12 @@ public class ContainerDetector extends ContainerBase
     private TileEntityDetector detector;
     public LogicObject mainObj;
 
-    public ContainerDetector(int id, PlayerInventory playerInventory, PacketBuffer packetBuffer)
+    public ContainerDetector(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
-        this(id, playerInventory, (TileEntityDetector) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new IntArray(7));
+        this(id, playerInventory, (TileEntityDetector) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new SimpleContainerData(7));
     }
 
-    public ContainerDetector(int id, PlayerInventory invPlayer, TileEntityDetector detector, IIntArray data)
+    public ContainerDetector(int id, Inventory invPlayer, TileEntityDetector detector, SimpleContainerData data)
     {
         super(ModContainers.CONTAINER_DETECTOR.get(), id);
         mainObj = new LogicObject((byte) 1, (byte) 0);
@@ -30,7 +29,7 @@ public class ContainerDetector extends ContainerBase
     }
 
     @Override
-    public boolean stillValid(PlayerEntity p_75145_1_)
+    public boolean stillValid(Player p_75145_1_)
     {
         return true;
     }
@@ -39,19 +38,4 @@ public class ContainerDetector extends ContainerBase
     {
         return detector;
     }
-
-    //	@Override
-    //	public IInventory getMyInventory() {
-    //		return null;
-    //	}
-    //
-    //	@Override
-    //	public TileEntityBase getTileEntity() {
-    //		return detector;
-    //	}
-    //
-    //	public ContainerDetector(final IInventory invPlayer, final TileEntityDetector detector) {
-    //		this.detector = detector;
-    //		mainObj = new LogicObject((byte) 1, (byte) 0);
-    //	}
 }

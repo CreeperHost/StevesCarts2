@@ -1,25 +1,19 @@
 package vswe.stevescarts.blocks.tileentities;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.blocks.BlockUpgrade;
@@ -41,19 +35,19 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
     private TileEntityCartAssembler master;
     private int type;
     private boolean initialized;
-    private CompoundNBT comp;
+    private CompoundTag comp;
     private NonNullList<ItemStack> inventoryStacks;
     private int[] slotsForSide;
     private boolean isCreativeBroken;
 
-    public TileEntityUpgrade()
+    public TileEntityUpgrade(BlockPos blockPos, BlockState blockState)
     {
-        super(ModBlocks.UPGRADE_TILE.get());
+        super(ModBlocks.UPGRADE_TILE.get(), blockPos, blockState);
     }
 
-    public TileEntityUpgrade(AssemblerUpgrade assemblerUpgrade)
+    public TileEntityUpgrade(AssemblerUpgrade assemblerUpgrade, BlockPos blockPos, BlockState blockState)
     {
-        super(ModBlocks.UPGRADE_TILE.get());
+        super(ModBlocks.UPGRADE_TILE.get(), blockPos, blockState);
         this.type = assemblerUpgrade.getId();
         setType(assemblerUpgrade.getId());
     }
@@ -95,7 +89,7 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
             final AssemblerUpgrade upgrade = getUpgrade();
             if (upgrade != null)
             {
-                comp = new CompoundNBT();
+                comp = new CompoundTag();
                 slotsForSide = new int[upgrade.getInventorySize()];
                 upgrade.init(this);
                 if (upgrade.getInventorySize() > 0)
@@ -114,7 +108,7 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
         }
     }
 
-    public CompoundNBT getCompound()
+    public CompoundTag getCompound()
     {
         return comp;
     }
@@ -133,9 +127,9 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
     }
 
     @Override
-    public CompoundNBT getUpdateTag()
+    public CompoundTag getUpdateTag()
     {
-        return save(new CompoundNBT());
+        return save(new CompoundTag());
     }
 
     public AssemblerUpgrade getUpgrade()
@@ -149,9 +143,9 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT compoundNBT)
+    public void load(CompoundTag compoundNBT)
     {
-        super.load(state, compoundNBT);
+        super.load(compoundNBT);
         setType(compoundNBT.getByte("Type"), false);
         ItemStackHelper.loadAllItems(compoundNBT, inventoryStacks);
         setChanged();
@@ -163,7 +157,7 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compoundNBT)
+    public CompoundTag save(CompoundTag compoundNBT)
     {
         super.save(compoundNBT);
         if (inventoryStacks != null)
@@ -299,53 +293,10 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player)
+    public boolean stillValid(Player player)
     {
         return true;
     }
-
-    //
-    //	@Override
-    //	@Nonnull
-    //	public ItemStack decrStackSize(final int i, final int j) {
-    //		if (inventoryStacks == null) {
-    //			if (master == null) {
-    //				return ItemStack.EMPTY;
-    //			}
-    //			return master.decrStackSize(i, j);
-    //		} else {
-    //			if (i < 0 || i >= getSizeInventory()) {
-    //				return ItemStack.EMPTY;
-    //			}
-    //			if (inventoryStacks.get(i).isEmpty()) {
-    //				return ItemStack.EMPTY;
-    //			}
-    //			if (inventoryStacks.get(i).getCount() <= j) {
-    //				@Nonnull
-    //				ItemStack itemstack = inventoryStacks.get(i);
-    //				inventoryStacks.set(i, ItemStack.EMPTY);
-    //				markDirty();
-    //				return itemstack;
-    //			}
-    //			@Nonnull
-    //			ItemStack itemstack2 = inventoryStacks.get(i).splitStack(j);
-    //			if (inventoryStacks.get(i).getCount() == 0) {
-    //				inventoryStacks.set(i, ItemStack.EMPTY);
-    //			}
-    //			markDirty();
-    //			return itemstack2;
-    //		}
-    //	}
-    //	@Override
-    //	public boolean isItemValidForSlot(final int slot, @Nonnull ItemStack item) {
-    //		if (getUpgrade() != null) {
-    //			final InventoryEffect inv = getUpgrade().getInventoryEffect();
-    //			if (inv != null) {
-    //				return inv.isItemValid(slot, item);
-    //			}
-    //		}
-    //		return getMaster() != null && getMaster().isItemValidForSlot(slot, item);
-    //	}
 
     @Override
     @Nonnull
@@ -363,13 +314,11 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
     @Override
     public void addToOutputContainer(final int tankid, @Nonnull ItemStack item)
     {
-        TransferHandler.TransferItem(item, this, 1, 1, new ContainerUpgrade(0, null, this, new IntArray(0)), Slot.class, null, -1);
+        TransferHandler.TransferItem(item, this, 1, 1, new ContainerUpgrade(0, null, this, new SimpleContainerData(0)), Slot.class, null, -1);
     }
 
     @Override
-    public void onFluidUpdated(final int tankid)
-    {
-    }
+    public void onFluidUpdated(final int tankid) {}
 
     @OnlyIn(Dist.CLIENT)
     @Override
@@ -411,15 +360,15 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
 
 
     @Override
-    public ITextComponent getDisplayName()
+    public Component getDisplayName()
     {
-        return new StringTextComponent(getUpgrade().getName());
+        return new TextComponent(getUpgrade().getName());
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity p_createMenu_3_)
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player p_createMenu_3_)
     {
-        return new ContainerUpgrade(id, playerInventory, this, new IntArray(0));
+        return new ContainerUpgrade(id, playerInventory, this, new SimpleContainerData(0));
     }
 }

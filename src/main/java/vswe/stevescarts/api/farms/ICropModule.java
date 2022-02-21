@@ -1,15 +1,15 @@
 package vswe.stevescarts.api.farms;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 public interface ICropModule
 {
     boolean isSeedValid(ItemStack itemStack);
 
-    BlockState getCropFromSeed(ItemStack itemStack, World world, BlockPos pos);
+    BlockState getCropFromSeed(ItemStack itemStack, Level world, BlockPos pos);
 
-    boolean isReadyToHarvest(World world, BlockPos pos);
+    boolean isReadyToHarvest(Level world, BlockPos pos);
 }

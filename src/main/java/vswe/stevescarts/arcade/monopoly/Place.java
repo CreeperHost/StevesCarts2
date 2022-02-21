@@ -1,7 +1,6 @@
 package vswe.stevescarts.arcade.monopoly;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.PoseStack;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.EnumSet;
@@ -17,7 +16,7 @@ public class Place {
 		return -1;
 	}
 
-	public void draw(MatrixStack matrixStack, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
+	public void draw(PoseStack matrixStack, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
 		int t;
 		int u;
 		int v;
@@ -36,27 +35,28 @@ public class Place {
 	}
 
 	public void applyColorFilter(final GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
+		//TODO
 		if (states.contains(PLACE_STATE.SELECTED)) {
 			if (states.contains(PLACE_STATE.HOVER)) {
-				GlStateManager._color4f(1.0f, 0.8f, 0.5f, 1.0f);
+//				GlStateManager._color4f(1.0f, 0.8f, 0.5f, 1.0f);
 			} else {
-				GlStateManager._color4f(1.0f, 1.0f, 0.75f, 1.0f);
+//				GlStateManager._color4f(1.0f, 1.0f, 0.75f, 1.0f);
 			}
 		} else if (states.contains(PLACE_STATE.MARKED)) {
 			if (states.contains(PLACE_STATE.HOVER)) {
-				GlStateManager._color4f(1.0f, 0.75f, 1.0f, 1.0f);
+//				GlStateManager._color4f(1.0f, 0.75f, 1.0f, 1.0f);
 			} else {
-				GlStateManager._color4f(1.0f, 0.85f, 0.85f, 1.0f);
+//				GlStateManager._color4f(1.0f, 0.85f, 0.85f, 1.0f);
 			}
 		} else if (states.contains(PLACE_STATE.HOVER)) {
-			GlStateManager._color4f(0.9f, 0.9f, 1.0f, 1.0f);
+//			GlStateManager._color4f(0.9f, 0.9f, 1.0f, 1.0f);
 		}
 	}
 
-	public void drawText(MatrixStack matrixStack, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
+	public void drawText(PoseStack matrixStack, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
 	}
 
-	public void drawPiece(MatrixStack matrixStack, GuiMinecart gui, final Piece piece, final int total, final int pos, final int area, final EnumSet<PLACE_STATE> states) {
+	public void drawPiece(PoseStack matrixStack, GuiMinecart gui, final Piece piece, final int total, final int pos, final int area, final EnumSet<PLACE_STATE> states) {
 		final int SIZE = 24;
 		final int PADDING = 5;
 		final int MARGIN = 2;

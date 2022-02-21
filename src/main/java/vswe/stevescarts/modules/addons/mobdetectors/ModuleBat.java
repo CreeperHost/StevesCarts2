@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.addons.mobdetectors;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.BatEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ambient.Bat;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 
@@ -21,6 +21,6 @@ public class ModuleBat extends ModuleMobdetector
     @Override
     public boolean isValidTarget(final Entity target)
     {
-        return target instanceof BatEntity;
+        return target instanceof Bat;
     }
 }

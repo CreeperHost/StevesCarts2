@@ -3,9 +3,13 @@ package vswe.stevescarts.containers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.SimpleContainerData;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 import vswe.stevescarts.helpers.ActivatorOption;
 import vswe.stevescarts.init.ModContainers;
@@ -18,12 +22,12 @@ public class ContainerActivator extends ContainerBase
     private TileEntityActivator activator;
     public ArrayList<Integer> lastOptions;
 
-    public ContainerActivator(int id, PlayerInventory playerInventory, PacketBuffer packetBuffer)
+    public ContainerActivator(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
-        this(id, playerInventory, (TileEntityActivator) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new IntArray(17));
+        this(id, playerInventory, (TileEntityActivator) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new SimpleContainerData(17));
     }
 
-    public ContainerActivator(int id, PlayerInventory playerInventory, TileEntityActivator tileEntityActivator, IIntArray data)
+    public ContainerActivator(int id, Inventory playerInventory, TileEntityActivator tileEntityActivator, SimpleContainerData data)
     {
         super(ModContainers.CONTAINER_ACTIVATOR.get(), id);
         this.activator = tileEntityActivator;
@@ -40,7 +44,7 @@ public class ContainerActivator extends ContainerBase
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerEntity)
+    public boolean stillValid(Player playerEntity)
     {
         return true;
     }

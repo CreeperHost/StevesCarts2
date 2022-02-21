@@ -1,11 +1,11 @@
 package vswe.stevescarts.init;
 
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.client.creativetabs.CreativeTabSC2Blocks;
 import vswe.stevescarts.helpers.ComponentTypes;

@@ -9,12 +9,4 @@ public class Redstone extends BaseEffect
     {
         return Localization.UPGRADES.REDSTONE.translate();
     }
-
-    //	@Override
-    //	public void update(final TileEntityUpgrade upgrade) {
-    //TODO
-    //		if (upgrade.getWorld().getRedstonePowerFromNeighbors(upgrade.getPos()) >= 1 && upgrade.getMaster() != null) {
-    //			upgrade.getMaster().doAssemble();
-    //		}
-    //	}
 }

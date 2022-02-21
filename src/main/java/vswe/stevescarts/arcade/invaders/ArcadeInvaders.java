@@ -1,13 +1,8 @@
 package vswe.stevescarts.arcade.invaders;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.sun.jna.platform.KeyboardUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.SoundEvents;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
@@ -184,12 +179,14 @@ public class ArcadeInvaders extends ArcadeGame {
 
 	public boolean isKeyDown(int id)
 	{
-		return InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), id);
+		//TODO
+//		return InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), id);
+		return false;
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y) {
+	public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
 		ResourceHelper.bindResource(ArcadeInvaders.texture);
 		for (int i = 0; i < 27; ++i) {
 			getModule().drawImage(matrixStack, gui, 5 + i * 16, 150, 16, 32, 16, 16);
@@ -216,7 +213,7 @@ public class ArcadeInvaders extends ArcadeGame {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawForeground(MatrixStack matrixStack, GuiMinecart gui) {
+	public void drawForeground(PoseStack matrixStack, GuiMinecart gui) {
 		getModule().drawString(matrixStack, gui, Localization.ARCADE.EXTRA_LIVES.translate() + ":", 10, 180, 4210752);
 		getModule().drawString(matrixStack, gui, Localization.ARCADE.HIGH_SCORE.translate(String.valueOf(highscore)), 10, 210, 4210752);
 		getModule().drawString(matrixStack, gui, Localization.ARCADE.SCORE.translate(String.valueOf(score)), 10, 220, 4210752);
@@ -280,7 +277,7 @@ public class ArcadeInvaders extends ArcadeGame {
 	}
 
 	@Override
-	public void receivePacket(final int id, final byte[] data, final PlayerEntity player) {
+	public void receivePacket(final int id, final byte[] data, final Player player) {
 		if (id == 2) {
 			short data2 = data[0];
 			short data3 = data[1];
@@ -307,12 +304,12 @@ public class ArcadeInvaders extends ArcadeGame {
 	}
 
 	@Override
-	public void Save(final CompoundNBT tagCompound, final int id) {
+	public void Save(final CompoundTag tagCompound, final int id) {
 		tagCompound.putShort(getModule().generateNBTName("HighscoreGhast", id), (short) highscore);
 	}
 
 	@Override
-	public void Load(final CompoundNBT tagCompound, final int id) {
+	public void Load(final CompoundTag tagCompound, final int id) {
 		highscore = tagCompound.getShort(getModule().generateNBTName("HighscoreGhast", id));
 	}
 

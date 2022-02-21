@@ -1,6 +1,6 @@
 package vswe.stevescarts.arcade.invaders;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class Projectile extends Unit {
@@ -12,7 +12,7 @@ public class Projectile extends Unit {
 	}
 
 	@Override
-	public void draw(MatrixStack matrixStack, GuiMinecart gui) {
+	public void draw(PoseStack matrixStack, GuiMinecart gui) {
 		if (playerProjectile) {
 			game.getModule().drawImage(matrixStack, gui, x, y, 38, 0, 5, 16);
 		} else {

@@ -1,13 +1,12 @@
 package vswe.stevescarts.modules.realtimers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.arcade.invaders.ArcadeInvaders;
-import vswe.stevescarts.arcade.monopoly.ArcadeMonopoly;
 import vswe.stevescarts.arcade.sweeper.ArcadeSweeper;
 import vswe.stevescarts.arcade.tetris.ArcadeTetris;
 import vswe.stevescarts.arcade.tracks.ArcadeTracks;
@@ -71,7 +70,7 @@ public class ModuleArcade extends ModuleBase {
 	}
 
 	@Override
-	public void drawForeground(MatrixStack matrixStack, GuiMinecart gui) {
+	public void drawForeground(PoseStack matrixStack, GuiMinecart gui) {
 		if (isGameActive()) {
 			currentGame.drawForeground(matrixStack, gui);
 		} else {
@@ -87,7 +86,7 @@ public class ModuleArcade extends ModuleBase {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y) {
+	public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
 		ResourceHelper.bindResource("/gui/arcade.png");
 		afkTimer = 0;
 		if (isGameActive()) {
@@ -114,7 +113,7 @@ public class ModuleArcade extends ModuleBase {
 
     @OnlyIn(Dist.CLIENT)
 	@Override
-	public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y) {
+	public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
 		if (isGameActive()) {
 			drawStringOnMouseOver(matrixStack, gui, "Exit", x, y, getExitArea());
 			currentGame.drawMouseOver(matrixStack, gui, x, y);
@@ -185,14 +184,14 @@ public class ModuleArcade extends ModuleBase {
 	}
 
 	@Override
-	protected void Save(final CompoundNBT tagCompound, final int id) {
+	protected void Save(final CompoundTag tagCompound, final int id) {
 		for (final ArcadeGame game : games) {
 			game.Save(tagCompound, id);
 		}
 	}
 
 	@Override
-	protected void Load(final CompoundNBT tagCompound, final int id) {
+	protected void Load(final CompoundTag tagCompound, final int id) {
 		for (final ArcadeGame game : games) {
 			game.Load(tagCompound, id);
 		}
@@ -204,7 +203,7 @@ public class ModuleArcade extends ModuleBase {
 	}
 
 	@Override
-	protected void receivePacket(final int id, final byte[] data, final PlayerEntity player) {
+	protected void receivePacket(final int id, final byte[] data, final Player player) {
 		for (final ArcadeGame game : games) {
 			game.receivePacket(id, data, player);
 		}

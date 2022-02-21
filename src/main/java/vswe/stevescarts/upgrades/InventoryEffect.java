@@ -1,8 +1,8 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 
 import javax.annotation.Nonnull;
@@ -53,7 +53,7 @@ public abstract class InventoryEffect extends InterfaceEffect
         try
         {
             final Class<? extends Slot> slotClass = getSlot(id);
-            final Constructor slotConstructor = slotClass.getConstructor(IInventory.class, Integer.TYPE, Integer.TYPE, Integer.TYPE);
+            final Constructor slotConstructor = slotClass.getConstructor(Container.class, Integer.TYPE, Integer.TYPE, Integer.TYPE);
             final Object slotObject = slotConstructor.newInstance(upgrade, id, getSlotX(id), getSlotY(id));
             return (Slot) slotObject;
         } catch (Exception e)

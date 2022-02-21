@@ -1,13 +1,13 @@
 package vswe.stevescarts.items;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import vswe.stevescarts.client.creativetabs.CreativeTabSC2Modules;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.modules.data.ModuleData;
@@ -18,7 +18,6 @@ import java.util.List;
 
 public class ItemCartModule extends Item
 {
-
     public ModuleData moduleData;
 
     public ItemCartModule(ModuleData moduleData)
@@ -29,9 +28,9 @@ public class ItemCartModule extends Item
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack)
+    public Component getName(ItemStack stack)
     {
-        return new TranslationTextComponent("item.stevescarts." + moduleData.getRawName());
+        return new TranslatableComponent("item.stevescarts." + moduleData.getRawName());
     }
 
     public String getModuleName()
@@ -43,22 +42,21 @@ public class ItemCartModule extends Item
         }
         return name;
     }
-
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> textComponents, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> textComponents, TooltipFlag flag)
     {
         if (moduleData != null)
         {
             moduleData.addInformation(textComponents, stack.getTag());
-            textComponents.add(new StringTextComponent("ID " + moduleData.getID()));
+            textComponents.add(new TextComponent("ID " + moduleData.getID()));
         }
         else if (!stack.isEmpty() && stack.getItem() instanceof ItemCartModule)
         {
-            textComponents.add(new TranslationTextComponent("Module id " + moduleData.getID()));
+            textComponents.add(new TranslatableComponent("Module id " + moduleData.getID()));
         }
         else
         {
-            textComponents.add(new TranslationTextComponent("Unknown module id"));
+            textComponents.add(new TranslatableComponent("Unknown module id"));
         }
         super.appendHoverText(stack, world, textComponents, flag);
     }
@@ -93,7 +91,7 @@ public class ItemCartModule extends Item
     //		return null;
     //	}
     //
-    public void addExtraDataToCart(final CompoundNBT save, @Nonnull ItemStack module, final int i)
+    public void addExtraDataToCart(final CompoundTag save, @Nonnull ItemStack module, final int i)
     {
         if (module.getTag() != null && module.getTag().contains("Data"))
         {

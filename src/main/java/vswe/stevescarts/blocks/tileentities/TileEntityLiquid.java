@@ -1,26 +1,25 @@
 package vswe.stevescarts.blocks.tileentities;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import vswe.stevescarts.client.guis.GuiBase;
 import vswe.stevescarts.containers.ContainerLiquid;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -37,14 +36,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-public class TileEntityLiquid extends TileEntityManager implements INamedContainerProvider, ITankHolder
+public class TileEntityLiquid extends TileEntityManager implements ITankHolder
 {
     public SCTank[] tanks;
     private int tick;
     private static final int[] topSlots;
     private static final int[] botSlots;
     private static final int[] sideSlots;
-    protected final IIntArray dataAccess = new IIntArray()
+    protected final SimpleContainerData dataAccess = new SimpleContainerData()
     {
         public int get(int id)
         {
@@ -93,9 +92,9 @@ public class TileEntityLiquid extends TileEntityManager implements INamedContain
     };
 
 
-    public TileEntityLiquid()
+    public TileEntityLiquid(BlockPos blockPos, BlockState blockState)
     {
-        super(ModBlocks.LIQUID_MANAGER_TILE.get());
+        super(ModBlocks.LIQUID_MANAGER_TILE.get(), blockPos, blockState);
         tanks = new SCTank[4];
         for (int i = 0; i < 4; ++i)
         {
@@ -167,7 +166,7 @@ public class TileEntityLiquid extends TileEntityManager implements INamedContain
     @Override
     public void addToOutputContainer(final int tankid, @Nonnull ItemStack item)
     {
-        TransferHandler.TransferItem(item, this, tankid * 3 + 1, tankid * 3 + 1, new ContainerLiquid(0, null, this, new IntArray(13)), Slot.class, null, -1);
+        TransferHandler.TransferItem(item, this, tankid * 3 + 1, tankid * 3 + 1, new ContainerLiquid(0, null, this, new SimpleContainerData(13)), Slot.class, null, -1);
     }
 
     @Override
@@ -368,9 +367,9 @@ public class TileEntityLiquid extends TileEntityManager implements INamedContain
     }
 
     @Override
-    public void load(BlockState blockState, CompoundNBT nbttagcompound)
+    public void load(CompoundTag nbttagcompound)
     {
-        super.load(blockState, nbttagcompound);
+        super.load(nbttagcompound);
         for (int i = 0; i < 4; ++i)
         {
             tanks[i].setFluid(FluidStack.loadFluidStackFromNBT(nbttagcompound.getCompound("Fluid" + i)));
@@ -379,14 +378,14 @@ public class TileEntityLiquid extends TileEntityManager implements INamedContain
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT nbttagcompound)
+    public CompoundTag save(CompoundTag nbttagcompound)
     {
         super.save(nbttagcompound);
         for (int i = 0; i < 4; ++i)
         {
             if (tanks[i].getFluid() != null)
             {
-                final CompoundNBT compound = new CompoundNBT();
+                final CompoundTag compound = new CompoundTag();
                 tanks[i].getFluid().writeToNBT(compound);
                 nbttagcompound.put("Fluid" + i, compound);
             }
@@ -405,44 +404,6 @@ public class TileEntityLiquid extends TileEntityManager implements INamedContain
         return id % 3 == 1;
     }
 
-    //
-    //	@Override
-    //	public boolean isItemValidForSlot(final int slotId, @Nonnull ItemStack item) {
-    //		if (isInput(slotId)) {
-    //			return SlotLiquidManagerInput.isItemStackValid(item, this, -1);
-    //		}
-    //		if (isOutput(slotId)) {
-    //			return SlotLiquidOutput.isItemStackValid(item);
-    //		}
-    //		return SlotLiquidFilter.isItemStackValid(item);
-    //	}
-    //
-    //	public int[] getAccessibleSlotsFromSide(final int side) {
-    //		if (side == 1) {
-    //			return TileEntityLiquid.topSlots;
-    //		}
-    //		if (side == 0) {
-    //			return TileEntityLiquid.botSlots;
-    //		}
-    //		return TileEntityLiquid.sideSlots;
-    //	}
-    //
-    //	public boolean canInsertItem(final int slot, @Nonnull ItemStack item, final int side) {
-    //		return side == 1 && isInput(slot) && isItemValidForSlot(slot, item);
-    //	}
-    //
-    //	public boolean canExtractItem(final int slot, @Nonnull ItemStack item, final int side) {
-    //		return side == 0 && isOutput(slot);
-    //	}
-    //
-    //	@Override
-    //	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-    //		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-    //			return (T) getValidTank(facing);
-    //		}
-    //		return super.getCapability(capability, facing);
-    //	}
-    //
     public SCTank getValidTank(Direction facing)
     {
         for (int i = 0; i < getTanks().length; i++)
@@ -497,14 +458,14 @@ public class TileEntityLiquid extends TileEntityManager implements INamedContain
     }
 
     @Override
-    public ITextComponent getDisplayName()
+    public Component getDisplayName()
     {
-        return new StringTextComponent("container.liquidmanager");
+        return new TextComponent("container.liquidmanager");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player)
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player)
     {
         if (!level.isClientSide)
         {
@@ -514,7 +475,7 @@ public class TileEntityLiquid extends TileEntityManager implements INamedContain
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerEntity)
+    public boolean stillValid(Player playerEntity)
     {
         return true;
     }

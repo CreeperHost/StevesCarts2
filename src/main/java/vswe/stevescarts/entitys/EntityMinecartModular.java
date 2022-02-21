@@ -1,45 +1,48 @@
 package vswe.stevescarts.entitys;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.AbstractRailBlock;
-import net.minecraft.block.BlockState;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.MinecartTickableSound;
-import net.minecraft.entity.*;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.item.minecart.ContainerMinecartEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.ByteArrayNBT;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.state.properties.RailShape;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.ByteArrayTag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.RailBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.RailShape;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeEntityMinecart;
+import net.minecraftforge.common.extensions.IForgeAbstractMinecart;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.containers.ContainerMinecart;
@@ -50,7 +53,6 @@ import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModEntities;
-import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.modules.IActivatorModule;
 import vswe.stevescarts.modules.ModuleBase;
 import vswe.stevescarts.modules.addons.ModuleCreativeSupplies;
@@ -68,22 +70,16 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Consumer;
 
-;
 
-public class EntityMinecartModular extends ContainerMinecartEntity implements IForgeEntityMinecart, IInventory, IEntityAdditionalSpawnData, IFluidHandler
+public class EntityMinecartModular extends AbstractMinecart implements IForgeAbstractMinecart, Container, IEntityAdditionalSpawnData, IFluidHandler
 {
-
     public BlockPos disabledPos;
-    protected boolean wasDisabled;
-    //	public double pushX;
-    //	public double pushZ;
+    protected boolean wasDisabled;;
     public double temppushX;
     public double temppushZ;
     protected boolean engineFlag;
     private int motorRotation;
     private byte[] moduleLoadingData;
-    //TODO
-    //	private ForgeChunkManager.Ticket cartTicket;
 
     private int workingTime;
     private ModuleWorker workingComponent;
@@ -102,17 +98,13 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     private ArrayList<ModuleTank> tankModules;
     private ModuleCreativeSupplies creativeSupplies;
     public Random random;
-    protected ITextComponent name;
+    protected Component name;
     public byte cartVersion;
     private int scrollY;
-    //TODO
-    @OnlyIn(Dist.CLIENT)
-    private MinecartTickableSound sound;
-    //	private MovingSound soundRiding;
     private int keepSilent;
 
-    private static final DataParameter<Boolean> IS_BURNING = EntityDataManager.defineId(EntityMinecartModular.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IS_DISANABLED = EntityDataManager.defineId(EntityMinecartModular.class, DataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> IS_BURNING = SynchedEntityData.defineId(EntityMinecartModular.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> IS_DISANABLED = SynchedEntityData.defineId(EntityMinecartModular.class, EntityDataSerializers.BOOLEAN);
 
     public ArrayList<ModuleBase> getModules()
     {
@@ -120,7 +112,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket()
+    public Packet<?> getAddEntityPacket()
     {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
@@ -157,9 +149,9 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
         return moduleCounts;
     }
 
-    public EntityMinecartModular(final World world, final double x, final double y, final double z, final CompoundNBT info, final ITextComponent name)
+    public EntityMinecartModular(final Level world, final double x, final double y, final double z, final CompoundTag info, final Component name)
     {
-        super(ModEntities.MODULAR_CART.get(), x, y, z, world);
+        super(ModEntities.MODULAR_CART.get(), world, x, y, z);
         engineFlag = false;
         random = new Random();
         cartVersion = info.getByte("CartVersion");
@@ -174,21 +166,21 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
         }
     }
 
-    public EntityMinecartModular(World world)
+    public EntityMinecartModular(Level world)
     {
         super(ModEntities.MODULAR_CART.get(), world);
         engineFlag = false;
         random = new Random();
     }
 
-    public EntityMinecartModular(EntityType<EntityMinecartModular> entityType, World world)
+    public EntityMinecartModular(EntityType<EntityMinecartModular> entityType, Level world)
     {
         super(entityType, world);
         engineFlag = false;
         random = new Random();
     }
 
-    public EntityMinecartModular(final World world, final TileEntityCartAssembler assembler, final byte[] data)
+    public EntityMinecartModular(final Level world, final TileEntityCartAssembler assembler, final byte[] data)
     {
         this(world);
         setPlaceholder(assembler);
@@ -264,9 +256,9 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
         moduleLoadingData = data;
     }
 
-    private void loadModules(final CompoundNBT info)
+    private void loadModules(final CompoundTag info)
     {
-        final ByteArrayNBT moduleIDTag = (ByteArrayNBT) info.get("Modules");
+        final ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
         if (moduleIDTag == null)
         {
             return;
@@ -450,7 +442,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     }
 
     @Override
-    public void remove()
+    public void remove(RemovalReason removalReason)
     {
         if (level.isClientSide)
         {
@@ -459,7 +451,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
                 setItem(var1, ItemStack.EMPTY);
             }
         }
-        super.remove();
+        super.remove(removalReason);
         if (modules != null)
         {
             for (final ModuleBase module : modules)
@@ -471,7 +463,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderOverlay(MatrixStack matrixStack, Minecraft minecraft)
+    public void renderOverlay(PoseStack matrixStack, Minecraft minecraft)
     {
         if (modules != null)
         {
@@ -612,7 +604,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     }
 
     @Override
-    protected float getEyeHeight(Pose p_213316_1_, EntitySize p_213316_2_)
+    protected float getEyeHeight(Pose p_213316_1_, EntityDimensions p_213316_2_)
     {
         return 0.9F;
     }
@@ -650,7 +642,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     @Override
     public void destroy(DamageSource p_94095_1_)
     {
-        this.remove();
+        this.remove(RemovalReason.KILLED);
     }
 
     public boolean dropOnDeath()
@@ -798,14 +790,13 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
             }
         }
         BlockState blockState = level.getBlockState(pos);
-        RailShape railDirection = ((AbstractRailBlock) blockState.getBlock()).getRailDirection(blockState, level, pos, this);
+        RailShape railDirection = ((BaseRailBlock) blockState.getBlock()).getRailDirection(blockState, level, pos, this);
 
-        if (blockState.getBlock() != ModBlocks.ADVANCED_DETECTOR.get().getBlock() && isDisabled())
+        if (blockState.getBlock() != ModBlocks.ADVANCED_DETECTOR.get() && isDisabled())
         {
             releaseCart();
         }
-        boolean canBeDisabled = blockState.getBlock() == ModBlocks.ADVANCED_DETECTOR.get().getBlock();
-        //&& (stateBelow.getBlock() != ModBlocks.DETECTOR_UNIT.get().getBlock()); //TODO //|| !DetectorType.getTypeFromSate(stateBelow).canInteractWithCart() || DetectorType.getTypeFromSate(stateBelow).shouldStopCart());
+        boolean canBeDisabled = blockState.getBlock() == ModBlocks.ADVANCED_DETECTOR.get();
         final boolean forceUnDisable = wasDisabled && disabledPos != null && disabledPos.equals(pos);
         if (!forceUnDisable && wasDisabled)
         {
@@ -942,7 +933,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     }
 
     @Override
-    public boolean stillValid(PlayerEntity p_70300_1_)
+    public boolean stillValid(Player p_70300_1_)
     {
         return true;
     }
@@ -996,7 +987,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     }
 
     @Override
-    public boolean save(CompoundNBT tagCompound)
+    public boolean save(CompoundTag tagCompound)
     {
         super.save(tagCompound);
         tagCompound.putString("cartName", name.getString());
@@ -1020,10 +1011,10 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     }
 
     @Override
-    public void load(final CompoundNBT tagCompound)
+    public void load(final CompoundTag tagCompound)
     {
         super.load(tagCompound);
-        name = new TranslationTextComponent(tagCompound.getString("cartName"));
+        name = new TranslatableComponent(tagCompound.getString("cartName"));
         engineFlag = tagCompound.getBoolean("engineFlag");
         double pushX = tagCompound.getDouble("pushX");
         double pushZ = tagCompound.getDouble("pushZ");
@@ -1083,9 +1074,9 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     public void tick()
     {
         flipped = true;
-        int i = MathHelper.floor(this.getX());
-        int j = MathHelper.floor(this.getY());
-        int k = MathHelper.floor(this.getZ());
+        int i = Mth.floor(this.getX());
+        int j = Mth.floor(this.getY());
+        int k = Mth.floor(this.getZ());
         if (this.level.getBlockState(new BlockPos(i, j - 1, k)).is(BlockTags.RAILS))
         {
             --j;
@@ -1094,9 +1085,9 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
         BlockPos blockpos = new BlockPos(i, j, k);
         BlockState blockState = this.level.getBlockState(blockpos);
 
-        if (blockState.getBlock() instanceof AbstractRailBlock)
+        if (blockState.getBlock() instanceof BaseRailBlock)
         {
-            RailShape railshape = ((AbstractRailBlock) blockState.getBlock()).getRailDirection(blockState, this.level, getExactPosition().below(), this);
+            RailShape railshape = ((BaseRailBlock) blockState.getBlock()).getRailDirection(blockState, this.level, getExactPosition().below(), this);
             if (railshape != null && blockState.getBlock() != ModBlocks.JUNCTION.get())
             {
                 lastRailShape = railshape;
@@ -1129,7 +1120,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
         }
         if (isPlaceholder && keepAlive++ > 20)
         {
-            remove();
+            remove(RemovalReason.KILLED);
             placeholderAsssembler.resetPlaceholder();
         }
     }
@@ -1174,11 +1165,11 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     }
 
     @Override
-    public ActionResultType interactAt(PlayerEntity entityplayer, Vector3d vec, Hand hand)
+    public InteractionResult interactAt(Player entityplayer, Vec3 vec, InteractionHand hand)
     {
         if (isPlaceholder)
         {
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
         if (modules != null && !entityplayer.isCrouching())
         {
@@ -1192,88 +1183,36 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
             }
             if (interupt)
             {
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
         if (!level.isClientSide)
         {
-            NetworkHooks.openGui((ServerPlayerEntity) entityplayer, (INamedContainerProvider) this, new Consumer<PacketBuffer>()
+            NetworkHooks.openGui((ServerPlayer) entityplayer, (MenuProvider) this, new Consumer<FriendlyByteBuf>()
             {
                 @Override
-                public void accept(PacketBuffer packetBuffer)
+                public void accept(FriendlyByteBuf packetBuffer)
                 {
                     packetBuffer.writeInt(getId());
                 }
             });
         }
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public ITextComponent getDisplayName()
+    public Component getDisplayName()
     {
-        return new TranslationTextComponent("entity.minecart");
+        return new TranslatableComponent("entity.minecart");
     }
 
-    public void loadChunks()
-    {
-        //TODO
-        //		loadChunks(cartTicket, x() >> 4, z() >> 4);
-    }
+    public void loadChunks() {}
 
-    public void loadChunks(final int chunkX, final int chunkZ)
-    {
-        //TODO
-        //		loadChunks(cartTicket, chunkX, chunkZ);
-    }
+    public void loadChunks(final int chunkX, final int chunkZ) {}
 
-    //	public void loadChunks(final ForgeChunkManager.Ticket ticket) {
-    //		loadChunks(ticket, x() >> 4, z() >> 4);
-    //	}
-    //
-    //	public void loadChunks(final ForgeChunkManager.Ticket ticket, final int chunkX, final int chunkZ) {
-    //		if (world.isRemote || ticket == null)
-    //			return;
-    //		if (cartTicket == null)
-    //			cartTicket = ticket;
-    //		Set<ChunkPos> loadedChunks = ticket.getChunkList();
-    //
-    //		ArrayList<ChunkPos> newChunks = new ArrayList<>();
-    //		for (int i = -1; i <= 1; ++i)
-    //			for (int j = -1; j <= 1; ++j)
-    //				newChunks.add(new ChunkPos(chunkX + i, chunkZ + j));
-    //
-    //		for (ChunkPos pos: loadedChunks)
-    //			if (!newChunks.contains(pos))
-    //				ForgeChunkManager.unforceChunk(cartTicket, pos);
-    //		for (ChunkPos pos: newChunks)
-    //			if (!loadedChunks.contains(pos))
-    //				ForgeChunkManager.forceChunk(cartTicket, pos);
-    //	}
+    public void initChunkLoading() {}
 
-    public void initChunkLoading()
-    {
-        //		if (level.isClientSide || cartTicket != null) {
-        //			return;
-        //		}
-        //		cartTicket = ForgeChunkManager.requestTicket(StevesCarts.instance, world, ForgeChunkManager.Type.ENTITY);
-        //		if (cartTicket != null) {
-        //			cartTicket.bindEntity(this);
-        //			cartTicket.setChunkListDepth(9);
-        //			loadChunks();
-        //		}
-    }
-
-    public void dropChunkLoading()
-    {
-        //		if (world.isRemote) {
-        //			return;
-        //		}
-        //		if (cartTicket != null) {
-        //			ForgeChunkManager.releaseTicket(cartTicket);
-        //			cartTicket = null;
-        //		}
-    }
+    public void dropChunkLoading() {}
 
     public void setWorker(final ModuleWorker worker)
     {
@@ -1388,17 +1327,17 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
 
     public int x()
     {
-        return MathHelper.floor(position().x);
+        return Mth.floor(position().x);
     }
 
     public int y()
     {
-        return MathHelper.floor(position().y);
+        return Mth.floor(position().y);
     }
 
     public int z()
     {
-        return MathHelper.floor(position().x);
+        return Mth.floor(position().x);
     }
 
     public BlockPos getExactPosition()
@@ -1421,7 +1360,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
         TransferHandler.TransferItem(iStack, this, getCon(null), validSlot, invalidSlot, -1);
     }
 
-    public Container getCon(final PlayerInventory playerInventory)
+    public AbstractContainerMenu getCon(final Inventory playerInventory)
     {
         return new ContainerMinecart(0, playerInventory, this, dataAccess);
     }
@@ -1479,7 +1418,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     }
 
     @Override
-    public void writeSpawnData(final PacketBuffer data)
+    public void writeSpawnData(final FriendlyByteBuf data)
     {
         if (moduleLoadingData == null) return;
         data.writeByte(moduleLoadingData.length);
@@ -1495,7 +1434,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     }
 
     @Override
-    public void readSpawnData(final PacketBuffer data)
+    public void readSpawnData(final FriendlyByteBuf data)
     {
         final byte length = data.readByte();
         final byte[] bytes = new byte[length];
@@ -1571,15 +1510,12 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
         {
             --keepSilent;
             stopSound(sound);
-            //			stopSound(soundRiding);
             sound = null;
-            //			soundRiding = null;
         }
         else if (keepSilent == 1)
         {
             keepSilent = 0;
             Minecraft.getInstance().getSoundManager().play(new MinecartTickableSound(this));
-            //			Minecraft.getMinecraft().getSoundHandler().playSound(new MovingSoundMinecartRiding(Minecraft.getMinecraft().player, this));
         }
     }
 
@@ -1767,7 +1703,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
         super.remove(keepData);
     }
 
-    protected final IIntArray dataAccess = new IIntArray()
+    protected final SimpleContainerData dataAccess = new SimpleContainerData(0)
     {
         public int get(int id)
         {
@@ -1792,7 +1728,7 @@ public class EntityMinecartModular extends ContainerMinecartEntity implements IF
     Container container = null;
 
     @Override
-    protected Container createMenu(int id, PlayerInventory playerInventory)
+    protected Container createMenu(int id, Inventory playerInventory)
     {
         Container container = new ContainerMinecart(id, playerInventory, this, dataAccess);
         this.container = container;

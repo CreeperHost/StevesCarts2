@@ -1,6 +1,6 @@
 package vswe.stevescarts.arcade.monopoly;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.EnumSet;
@@ -16,7 +16,7 @@ public class Community extends CardPlace {
 	}
 
 	@Override
-	public void drawText(MatrixStack matrixStack, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
+	public void drawText(PoseStack matrixStack, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
 		game.getModule().drawSplitString(gui, "Dungeon Chest", 3 + gui.getGuiLeft(), 10 + gui.getGuiTop(), 70, true, 4210752);
 	}
 

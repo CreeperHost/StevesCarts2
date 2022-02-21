@@ -4,9 +4,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.SimpleContainerData;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 import vswe.stevescarts.containers.slots.SlotCargo;
 import vswe.stevescarts.init.ModContainers;
@@ -18,14 +21,14 @@ public class ContainerCargo extends ContainerBase
 {
     public short lastTarget;
     public TileEntityCargo tileEntityCargo;
-    public IIntArray data;
+    public SimpleContainerData data;
 
-    public ContainerCargo(int id, PlayerInventory playerInventory, PacketBuffer packetBuffer)
+    public ContainerCargo(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
-        this(id, playerInventory, (TileEntityCargo) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new IntArray(17));
+        this(id, playerInventory, (TileEntityCargo) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new SimpleContainerData(17));
     }
 
-    public ContainerCargo(int id, PlayerInventory playerInventory, TileEntityCargo tileEntityCargo, IIntArray data)
+    public ContainerCargo(int id, Inventory playerInventory, TileEntityCargo tileEntityCargo, SimpleContainerData data)
     {
         super(ModContainers.CONTAINER_CARGO.get(), id);
         this.tileEntityCargo = tileEntityCargo;

@@ -1,8 +1,8 @@
 package vswe.stevescarts.arcade.tetris;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -118,7 +118,7 @@ public class TetrisPiece {
 		return parts;
 	}
 
-	public void render(MatrixStack matrixStack, ArcadeTetris game, final GuiMinecart gui) {
+	public void render(PoseStack matrixStack, ArcadeTetris game, final GuiMinecart gui) {
 		for (int i = 0; i < parts.length; ++i) {
 			parts[i].render(matrixStack, game, gui, x, y);
 		}

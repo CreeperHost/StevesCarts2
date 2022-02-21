@@ -1,12 +1,12 @@
 package vswe.stevescarts.modules.addons.plants;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.NetherWartBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.NetherWartBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.api.farms.ICropModule;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.modules.addons.ModuleAddon;
@@ -27,13 +27,13 @@ public class ModuleNetherwart extends ModuleAddon implements ICropModule
     }
 
     @Override
-    public BlockState getCropFromSeed(@Nonnull ItemStack seed, World world, BlockPos pos)
+    public BlockState getCropFromSeed(@Nonnull ItemStack seed, Level world, BlockPos pos)
     {
         return Blocks.NETHER_WART.defaultBlockState();
     }
 
     @Override
-    public boolean isReadyToHarvest(World world, BlockPos pos)
+    public boolean isReadyToHarvest(Level world, BlockPos pos)
     {
         BlockState blockState = world.getBlockState(pos);
         return blockState.getBlock() == Blocks.NETHER_WART && blockState.getValue(NetherWartBlock.AGE) == 3;
