@@ -1,8 +1,8 @@
 package vswe.stevescarts.modules.addons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -63,7 +63,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 0x404040);
     }
@@ -107,7 +107,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/intelligence.png");
         final int w = getDrillWidth();
@@ -205,7 +205,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         final int w = getDrillWidth();
         final int h = getDrillHeight();
@@ -257,7 +257,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0)
         {
@@ -266,7 +266,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         initDisabledData();
         for (int i = 0; i < isDisabled.length; ++i)
@@ -276,7 +276,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         initDisabledData();
         for (int i = 0; i < isDisabled.length; ++i)

@@ -1,7 +1,7 @@
 package vswe.stevescarts.containers.slots;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.modules.workers.tools.ModuleTool;
 
@@ -11,7 +11,7 @@ public class SlotRepair extends SlotBase implements ISpecialItemTransferValidato
 {
     private ModuleTool tool;
 
-    public SlotRepair(final ModuleTool tool, final IInventory iinventory, final int i, final int j, final int k)
+    public SlotRepair(final ModuleTool tool, final Container iinventory, final int i, final int j, final int k)
     {
         super(iinventory, i, j, k);
         this.tool = tool;

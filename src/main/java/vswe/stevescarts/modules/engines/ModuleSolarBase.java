@@ -1,11 +1,9 @@
 package vswe.stevescarts.modules.engines;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -22,9 +20,9 @@ public abstract class ModuleSolarBase extends ModuleEngine
     private boolean upState;
     private boolean setup;
 
-    private DataParameter<Integer> LIGHT;
-    private DataParameter<Boolean> UP_STATE;
-    private DataParameter<Integer> PRIORITY;
+    private EntityDataAccessor<Integer> LIGHT;
+    private EntityDataAccessor<Boolean> UP_STATE;
+    private EntityDataAccessor<Integer> PRIORITY;
 
     public ModuleSolarBase(final EntityMinecartModular cart)
     {
@@ -33,7 +31,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
     }
 
     @Override
-    protected DataParameter<Integer> getPriorityDw()
+    protected EntityDataAccessor<Integer> getPriorityDw()
     {
         return PRIORITY;
     }
@@ -160,10 +158,10 @@ public abstract class ModuleSolarBase extends ModuleEngine
     @Override
     public void initDw()
     {
-        PRIORITY = createDw(DataSerializers.INT);
+        PRIORITY = createDw(EntityDataSerializers.INT);
         super.initDw();
-        LIGHT = createDw(DataSerializers.INT);
-        UP_STATE = createDw(DataSerializers.BOOLEAN);
+        LIGHT = createDw(EntityDataSerializers.INT);
+        UP_STATE = createDw(EntityDataSerializers.BOOLEAN);
         registerDw(LIGHT, 0);
         registerDw(UP_STATE, false);
     }

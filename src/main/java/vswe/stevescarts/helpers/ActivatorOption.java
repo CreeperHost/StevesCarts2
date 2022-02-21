@@ -1,6 +1,6 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
 import vswe.stevescarts.modules.ModuleBase;
 
 public class ActivatorOption
@@ -88,6 +88,6 @@ public class ActivatorOption
         {
             return Localization.GUI.TOGGLER.SETTING_DISABLED.translate();
         }
-        return TextFormatting.GOLD + Localization.GUI.TOGGLER.SETTING_ORANGE.translate() + ": " + (shouldActivate(true) ? (TextFormatting.DARK_GREEN + Localization.GUI.TOGGLER.STATE_ACTIVATE.translate()) : (shouldDeactivate(true) ? (TextFormatting.DARK_RED + Localization.GUI.TOGGLER.STATE_DEACTIVATE.translate()) : (TextFormatting.YELLOW + Localization.GUI.TOGGLER.STATE_TOGGLE.translate()))) + "\n" + TextFormatting.DARK_BLUE + Localization.GUI.TOGGLER.SETTING_BLUE.translate() + ": " + (shouldActivate(false) ? (TextFormatting.DARK_GREEN + Localization.GUI.TOGGLER.STATE_ACTIVATE.translate()) : (shouldDeactivate(false) ? (TextFormatting.DARK_RED + Localization.GUI.TOGGLER.STATE_DEACTIVATE.translate()) : (TextFormatting.YELLOW + Localization.GUI.TOGGLER.STATE_TOGGLE.translate())));
+        return ChatFormatting.GOLD + Localization.GUI.TOGGLER.SETTING_ORANGE.translate() + ": " + (shouldActivate(true) ? (ChatFormatting.DARK_GREEN + Localization.GUI.TOGGLER.STATE_ACTIVATE.translate()) : (shouldDeactivate(true) ? (ChatFormatting.DARK_RED + Localization.GUI.TOGGLER.STATE_DEACTIVATE.translate()) : (ChatFormatting.YELLOW + Localization.GUI.TOGGLER.STATE_TOGGLE.translate()))) + "\n" + ChatFormatting.DARK_BLUE + Localization.GUI.TOGGLER.SETTING_BLUE.translate() + ": " + (shouldActivate(false) ? (ChatFormatting.DARK_GREEN + Localization.GUI.TOGGLER.STATE_ACTIVATE.translate()) : (shouldDeactivate(false) ? (ChatFormatting.DARK_RED + Localization.GUI.TOGGLER.STATE_DEACTIVATE.translate()) : (ChatFormatting.YELLOW + Localization.GUI.TOGGLER.STATE_TOGGLE.translate())));
     }
 }

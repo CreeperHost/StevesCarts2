@@ -1,8 +1,8 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import vswe.stevescarts.blocks.tileentities.TileEntityDetector;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 
@@ -153,7 +153,7 @@ public class OperatorObject
             final int x = this.x + detector.getBlockPos().getX();
             final int y = this.y + detector.getBlockPos().getY();
             final int z = this.z + detector.getBlockPos().getZ();
-            final TileEntity tileentity = detector.getLevel().getBlockEntity(new BlockPos(x, y, z));
+            final BlockEntity tileentity = detector.getLevel().getBlockEntity(new BlockPos(x, y, z));
             return tileentity != null && tileentity instanceof TileEntityDetector && ((TileEntityDetector) tileentity).evaluate(cart, depth);
         }
     }

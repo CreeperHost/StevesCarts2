@@ -2,6 +2,8 @@ package vswe.stevescarts.modules.engines;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -14,7 +16,7 @@ public abstract class ModuleThermalBase extends ModuleEngine
 {
     private short coolantLevel;
     private static final int RELOAD_LIQUID_SIZE = 1;
-    private DataParameter<Integer> PRIORITY;
+    private EntityDataAccessor<Integer> PRIORITY;
 
     public ModuleThermalBase(final EntityMinecartModular cart)
     {
@@ -22,7 +24,7 @@ public abstract class ModuleThermalBase extends ModuleEngine
     }
 
     @Override
-    protected DataParameter<Integer> getPriorityDw()
+    protected EntityDataAccessor<Integer> getPriorityDw()
     {
         return PRIORITY;
     }
@@ -30,7 +32,7 @@ public abstract class ModuleThermalBase extends ModuleEngine
     @Override
     public void initDw()
     {
-        PRIORITY = createDw(DataSerializers.INT);
+        PRIORITY = createDw(EntityDataSerializers.INT);
         super.initDw();
     }
 

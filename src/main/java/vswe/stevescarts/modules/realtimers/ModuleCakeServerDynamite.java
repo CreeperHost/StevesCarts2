@@ -1,7 +1,9 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Explosion;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotCakeDynamite;
@@ -46,7 +48,7 @@ public class ModuleCakeServerDynamite extends ModuleCakeServer
 
     private void explode()
     {
-        getCart().level.explode(null, getCart().getExactPosition().getX(), getCart().getExactPosition().getY(), getCart().getExactPosition().getZ(), dynamiteCount * .08f, Explosion.Mode.NONE);
+        getCart().level.explode(null, getCart().getExactPosition().getX(), getCart().getExactPosition().getY(), getCart().getExactPosition().getZ(), dynamiteCount * .08f, Explosion.BlockInteraction.NONE);
     }
 
     @Override
@@ -75,7 +77,7 @@ public class ModuleCakeServerDynamite extends ModuleCakeServer
         if (dynamiteCount > 0)
         {
             explode();
-            getCart().remove();
+            getCart().remove(Entity.RemovalReason.KILLED);
             return true;
         }
         return super.onInteractFirst(entityplayer);

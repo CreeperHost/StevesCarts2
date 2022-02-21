@@ -1,6 +1,8 @@
 package vswe.stevescarts.modules.engines;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -9,7 +11,7 @@ import vswe.stevescarts.helpers.Localization;
 
 public class ModuleCheatEngine extends ModuleEngine
 {
-    private DataParameter<Integer> PRIORITY;
+    private EntityDataAccessor<Integer> PRIORITY;
 
     public ModuleCheatEngine(final EntityMinecartModular cart)
     {
@@ -17,7 +19,7 @@ public class ModuleCheatEngine extends ModuleEngine
     }
 
     @Override
-    protected DataParameter<Integer> getPriorityDw()
+    protected EntityDataAccessor<Integer> getPriorityDw()
     {
         return PRIORITY;
     }
@@ -36,7 +38,7 @@ public class ModuleCheatEngine extends ModuleEngine
     @Override
     public void initDw()
     {
-        PRIORITY = createDw(DataSerializers.INT);
+        PRIORITY = createDw(EntityDataSerializers.INT);
         super.initDw();
     }
 

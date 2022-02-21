@@ -1,15 +1,15 @@
 package vswe.stevescarts.containers.slots;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 
 import javax.annotation.Nonnull;
 
 public class SlotCartCrafterResult extends SlotBase implements ISpecialItemTransferValidator
 {
-    public SlotCartCrafterResult(final IInventory iinventory, final int i, final int j, final int k)
+    public SlotCartCrafterResult(final Container iinventory, final int i, final int j, final int k)
     {
         super(iinventory, i, j, k);
     }
@@ -21,7 +21,7 @@ public class SlotCartCrafterResult extends SlotBase implements ISpecialItemTrans
     }
 
     @Override
-    public boolean mayPickup(PlayerEntity p_82869_1_) {
+    public boolean mayPickup(Player p_82869_1_) {
         return false;
     }
 

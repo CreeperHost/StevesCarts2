@@ -1,10 +1,10 @@
 package vswe.stevescarts.modules.addons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotChest;
@@ -24,10 +24,10 @@ public class ModuleLabel extends ModuleAddon
     private int delay;
     private ArrayList<SlotBase> storageSlots;
     private ModuleTool tool;
-    private DataParameter<Integer> SECONDS;
-    private DataParameter<Byte> USED;
-    private DataParameter<Integer> DATA;
-    private DataParameter<Byte> ACTIVE;
+    private EntityDataAccessor<Integer> SECONDS;
+    private EntityDataAccessor<Byte> USED;
+    private EntityDataAccessor<Integer> DATA;
+    private EntityDataAccessor<Byte> ACTIVE;
 
     public ModuleLabel(final EntityMinecartModular cart)
     {
@@ -181,7 +181,7 @@ public class ModuleLabel extends ModuleAddon
     }
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/label.png");
         for (int i = 0; i < labels.size(); ++i)
@@ -216,10 +216,10 @@ public class ModuleLabel extends ModuleAddon
     @Override
     public void initDw()
     {
-        SECONDS = createDw(DataSerializers.INT);
-        USED = createDw(DataSerializers.BYTE);
-        DATA = createDw(DataSerializers.INT);
-        ACTIVE = createDw(DataSerializers.BYTE);
+        SECONDS = createDw(EntityDataSerializers.INT);
+        USED = createDw(EntityDataSerializers.BYTE);
+        DATA = createDw(EntityDataSerializers.INT);
+        ACTIVE = createDw(EntityDataSerializers.BYTE);
         registerDw(ACTIVE, (byte) 0);
         registerDw(SECONDS, 0);
         registerDw(USED, (byte) 0);
@@ -327,7 +327,7 @@ public class ModuleLabel extends ModuleAddon
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0)
         {
@@ -336,7 +336,7 @@ public class ModuleLabel extends ModuleAddon
     }
 
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, Localization.MODULES.ADDONS.LABELS.translate(), 8, 6, 4210752);
         for (int i = 0; i < labels.size(); ++i)
@@ -371,13 +371,13 @@ public class ModuleLabel extends ModuleAddon
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         updateDw(ACTIVE, tagCompound.getByte(generateNBTName("Active", id)));
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         tagCompound.putByte(generateNBTName("Active", id), getDw(ACTIVE));
     }

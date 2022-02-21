@@ -1,21 +1,25 @@
 package vswe.stevescarts.modules.workers.tools;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.*;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.IFluidBlock;
@@ -44,8 +48,8 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     private int miningCoolDown;
     private int[] buttonRect;
     private boolean setup;
-    private DataParameter<Boolean> IS_MINING;
-    private DataParameter<Boolean> IS_ENABLED;
+    private EntityDataAccessor<Boolean> IS_MINING;
+    private EntityDataAccessor<Boolean> IS_ENABLED;
 
     public ModuleDrill(final EntityMinecartModular cart)
     {
@@ -88,7 +92,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     @Override
     public boolean work()
     {
-        World world = getCart().level;
+        Level world = getCart().level;
         if (!isDrillEnabled())
         {
             stopDrill();
@@ -144,7 +148,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     {
         BlockPos next = getNextblock();
         int yTarget = getCart().getYTarget();
-        if (AbstractRailBlock.isRail(getCart().level, next) || AbstractRailBlock.isRail(getCart().level, next.below()))
+        if (BaseRailBlock.isRail(getCart().level, next) || BaseRailBlock.isRail(getCart().level, next.below()))
         {
             return new int[]{0, blocksOnTop() - 1, 1};
         }
@@ -173,7 +177,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         return blocksOnTop();
     }
 
-    private boolean mineBlockAndRevive(World world, BlockPos coord, BlockPos next, final int holeX, final int holeY)
+    private boolean mineBlockAndRevive(Level world, BlockPos coord, BlockPos next, final int holeX, final int holeY)
     {
         if (mineBlock(world, coord, next, holeX, holeY, false))
         {
@@ -187,7 +191,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         return false;
     }
 
-    protected boolean mineBlock(World world, BlockPos coord, BlockPos next, final int holeX, final int holeY, final boolean flag)
+    protected boolean mineBlock(Level world, BlockPos coord, BlockPos next, final int holeX, final int holeY, final boolean flag)
     {
         if (tracker != null)
         {
@@ -198,10 +202,10 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
             }
         }
         final Object valid = isValidBlock(world, coord, holeX, holeY, flag);
-        TileEntity storage = null;
-        if (valid instanceof TileEntity)
+        BlockEntity storage = null;
+        if (valid instanceof BlockEntity)
         {
-            storage = (TileEntity) valid;
+            storage = (BlockEntity) valid;
         }
         else if (valid == null)
         {
@@ -216,16 +220,16 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         }
         if (storage != null)
         {
-            for (int i = 0; i < ((IInventory) storage).getContainerSize(); ++i)
+            for (int i = 0; i < ((Container) storage).getContainerSize(); ++i)
             {
-                ItemStack iStack = ((IInventory) storage).getItem(i);
+                ItemStack iStack = ((Container) storage).getItem(i);
                 if (!iStack.isEmpty())
                 {
                     if (!minedItem(world, iStack, next))
                     {
                         return false;
                     }
-                    ((IInventory) storage).setItem(i, ItemStack.EMPTY);
+                    ((Container) storage).setItem(i, ItemStack.EMPTY);
                 }
             }
         }
@@ -239,9 +243,9 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
             }
             world.removeBlock(coord, false);
         }
-        else if (block.getDrops(blockState, new LootContext.Builder((ServerWorld) world).withParameter(LootParameters.TOOL, new ItemStack(Items.DIAMOND_PICKAXE)).withParameter(LootParameters.ORIGIN, getCart().position())).size() != 0)
+        else if (block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, new ItemStack(Items.DIAMOND_PICKAXE)).withParameter(LootContextParams.ORIGIN, getCart().position())).size() != 0)
         {
-            List<ItemStack> stacks = block.getDrops(blockState, new LootContext.Builder((ServerWorld) world).withParameter(LootParameters.TOOL, new ItemStack(Items.DIAMOND_PICKAXE)).withParameter(LootParameters.ORIGIN, getCart().position()));
+            List<ItemStack> stacks = block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, new ItemStack(Items.DIAMOND_PICKAXE)).withParameter(LootContextParams.ORIGIN, getCart().position()));
             boolean shouldRemove = false;
             for (int j = 0; j < stacks.size(); ++j)
             {
@@ -266,7 +270,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         return true;
     }
 
-    protected boolean minedItem(World world, @Nonnull ItemStack iStack, BlockPos Coords)
+    protected boolean minedItem(Level world, @Nonnull ItemStack iStack, BlockPos Coords)
     {
         if (iStack.isEmpty() || iStack.getCount() <= 0)
         {
@@ -322,9 +326,9 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
 
     protected abstract float getTimeMult();
 
-    public Object isValidBlock(World world, BlockPos pos, final int holeX, final int holeY, final boolean flag)
+    public Object isValidBlock(Level world, BlockPos pos, final int holeX, final int holeY, final boolean flag)
     {
-        if ((!flag && AbstractRailBlock.isRail(world, pos)) || AbstractRailBlock.isRail(world, pos.above()))
+        if ((!flag && BaseRailBlock.isRail(world, pos)) || BaseRailBlock.isRail(world, pos.above()))
         {
             return null;
         }
@@ -354,10 +358,10 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         {
             return null;
         }
-        if (block instanceof ContainerBlock)
+        if (block instanceof BaseEntityBlock)
         {
-            final TileEntity tileentity = world.getBlockEntity(pos);
-            if (IInventory.class.isInstance(tileentity))
+            final BlockEntity tileentity = world.getBlockEntity(pos);
+            if (Container.class.isInstance(tileentity))
             {
                 if (holeX != 0 || holeY > 0)
                 {
@@ -443,8 +447,8 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     public void initDw()
     {
         super.initDw();
-        IS_MINING = createDw(DataSerializers.BOOLEAN);
-        IS_ENABLED = createDw(DataSerializers.BOOLEAN);
+        IS_MINING = createDw(EntityDataSerializers.BOOLEAN);
+        IS_ENABLED = createDw(EntityDataSerializers.BOOLEAN);
         registerDw(IS_MINING, false);
         registerDw(IS_ENABLED, true);
     }
@@ -480,7 +484,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         setDrillEnabled(!isDrillEnabled());
     }
@@ -499,14 +503,14 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, Localization.MODULES.TOOLS.DRILL.translate(), 8, 6, 4210752);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         super.drawBackground(matrixStack, gui, x, y);
         ResourceHelper.bindResource("/gui/drill.png");
@@ -522,7 +526,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     }
 
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         super.drawMouseOver(matrixStack, gui, x, y);
         drawStringOnMouseOver(matrixStack, gui, getStateName(), x, y, buttonRect);
@@ -534,14 +538,14 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         super.Save(tagCompound, id);
         tagCompound.putBoolean(generateNBTName("DrillEnabled", id), isDrillEnabled());
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         super.Load(tagCompound, id);
         setDrillEnabled(tagCompound.getBoolean(generateNBTName("DrillEnabled", id)));

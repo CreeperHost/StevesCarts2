@@ -1,11 +1,11 @@
 package vswe.stevescarts.modules.realtimers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -56,7 +56,7 @@ public class ModuleNote extends ModuleBase
     private boolean veryLongTrack;
     private int speedSetting;
 
-    private DataParameter<Boolean> PLAYING;
+    private EntityDataAccessor<Boolean> PLAYING;
 
     public ModuleNote(final EntityMinecartModular cart)
     {
@@ -109,7 +109,7 @@ public class ModuleNote extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
         for (int i = getScrollY(); i < Math.min(tracks.size(), getScrollY() + tracksInView); ++i)
@@ -349,7 +349,7 @@ public class ModuleNote extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/note.png");
         for (int i = getScrollY(); i < Math.min(tracks.size(), getScrollY() + tracksInView); ++i)
@@ -498,7 +498,7 @@ public class ModuleNote extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         for (int i = getScrollY(); i < Math.min(tracks.size(), getScrollY() + tracksInView); ++i)
         {
@@ -675,7 +675,7 @@ public class ModuleNote extends ModuleBase
     @Override
     public void initDw()
     {
-        PLAYING = createDw(DataSerializers.BOOLEAN);
+        PLAYING = createDw(EntityDataSerializers.BOOLEAN);
         registerDw(PLAYING, false);
     }
 
@@ -696,7 +696,7 @@ public class ModuleNote extends ModuleBase
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0)
         {
@@ -788,7 +788,7 @@ public class ModuleNote extends ModuleBase
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         short headerInfo = (short) tracks.size();
         headerInfo |= (short) (speedSetting << maximumTracksPerModuleBitCount);
@@ -806,7 +806,7 @@ public class ModuleNote extends ModuleBase
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         final short headerInfo = tagCompound.getShort(generateNBTName("Header", id));
         receiveGuiData(0, headerInfo);
@@ -847,7 +847,7 @@ public class ModuleNote extends ModuleBase
         }
 
         @Override
-        public void draw(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+        public void draw(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
         {
             if (isValid())
             {
@@ -856,7 +856,7 @@ public class ModuleNote extends ModuleBase
         }
 
         @Override
-        public void overlay(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+        public void overlay(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
         {
             if (isValid())
             {
@@ -896,7 +896,7 @@ public class ModuleNote extends ModuleBase
             return rect;
         }
 
-        public void overlay(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+        public void overlay(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
         {
             drawStringOnMouseOver(matrixStack, gui, text, x, y, getRect());
         }
@@ -909,14 +909,16 @@ public class ModuleNote extends ModuleBase
             }
         }
 
-        public void draw(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+        public void draw(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
         {
             if (!inRect(x, y, getRect()))
             {
-                GlStateManager._color4f((color >> 16) / 255.0f, (color >> 8 & 0xFF) / 255.0f, (color & 0xFF) / 255.0f, 1.0f);
+                //TODO
+//                GlStateManager._color4f((color >> 16) / 255.0f, (color >> 8 & 0xFF) / 255.0f, (color & 0xFF) / 255.0f, 1.0f);
             }
             drawImage(matrixStack, gui, getRect(), 32, 0);
-            GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+            //TODO
+//            GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
             int srcX = 0;
             final int srcY = 16;
             if (down)
@@ -941,7 +943,7 @@ public class ModuleNote extends ModuleBase
             track.notes.add(this);
         }
 
-        public void drawText(MatrixStack matrixStack, GuiMinecart gui, final int trackID, final int noteID)
+        public void drawText(PoseStack matrixStack, GuiMinecart gui, final int trackID, final int noteID)
         {
             if (instrumentId == 0)
             {
@@ -956,7 +958,7 @@ public class ModuleNote extends ModuleBase
             drawString(matrixStack, gui, str, rect[0] + 3, rect[1] + 6, instrumentColors[instrumentId]);
         }
 
-        public void draw(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y, final int trackID, final int noteID)
+        public void draw(PoseStack matrixStack, GuiMinecart gui, final int x, final int y, final int trackID, final int noteID)
         {
             int srcX = 0;
             if (instrumentId == 0)
@@ -966,10 +968,12 @@ public class ModuleNote extends ModuleBase
             final int[] rect = getBounds(trackID, noteID);
             if (instrumentId != 0 && playProgress == noteID + getScrollX() && isPlaying())
             {
-                GlStateManager._color4f(0.3f, 0.3f, 0.3f, 1.0f);
+                //TODO
+//                GlStateManager._color4f(0.3f, 0.3f, 0.3f, 1.0f);
             }
             drawImage(matrixStack, gui, rect, srcX, 0);
-            GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+            //TODO
+//            GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
             if (inRect(x, y, rect))
             {
                 drawImage(matrixStack, gui, rect, 32, 0);

@@ -1,8 +1,8 @@
 package vswe.stevescarts.modules.addons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotEnchantment;
@@ -78,7 +78,7 @@ public class ModuleEnchants extends ModuleAddon
     }
 
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
     }
@@ -168,7 +168,7 @@ public class ModuleEnchants extends ModuleAddon
     }
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/enchant.png");
         for (int i = 0; i < 3; ++i)
@@ -212,7 +212,7 @@ public class ModuleEnchants extends ModuleAddon
     }
 
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         for (int i = 0; i < 3; ++i)
         {
@@ -259,8 +259,6 @@ public class ModuleEnchants extends ModuleAddon
             }
             else
             {
-                //TODO Enchantments
-                //				updateGuiData(info, i * 3 + 0, (short) Enchantment.getEnchantmentID(data.getEnchantment().getEnchantment()));
                 updateGuiData(info, i * 3 + 1, (short) (data.getValue() & 0xFFFF));
                 updateGuiData(info, i * 3 + 2, (short) (data.getValue() >> 16 & 0xFFFF));
             }
@@ -302,7 +300,7 @@ public class ModuleEnchants extends ModuleAddon
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         super.Save(tagCompound, id);
         for (int i = 0; i < 3; ++i)
@@ -313,15 +311,13 @@ public class ModuleEnchants extends ModuleAddon
             }
             else
             {
-                //TODO Enchantments
-                //				tagCompound.putShort(generateNBTName("EffectId" + i, id), (short) Enchantment.getEnchantmentID(enchants[i].getEnchantment().getEnchantment()));
                 tagCompound.putInt(generateNBTName("Value" + i, id), enchants[i].getValue());
             }
         }
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         super.Load(tagCompound, id);
         for (int i = 0; i < 3; ++i)

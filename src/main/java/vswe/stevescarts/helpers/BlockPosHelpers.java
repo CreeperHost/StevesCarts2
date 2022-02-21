@@ -1,6 +1,6 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 
 public class BlockPosHelpers

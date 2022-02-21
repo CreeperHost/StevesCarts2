@@ -1,15 +1,14 @@
 package vswe.stevescarts.modules.realtimers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -28,8 +27,8 @@ public class ModuleShooterAdv extends ModuleShooter
     private ArrayList<ModuleMobdetector> detectors;
     private EntityNearestTarget sorter;
     private float detectorAngle;
-    private DataParameter<Byte> OPTION;
-    private DataParameter<Byte> RIFLE_DIRECTION;
+    private EntityDataAccessor<Byte> OPTION;
+    private EntityDataAccessor<Byte> RIFLE_DIRECTION;
 
     public ModuleShooterAdv(final EntityMinecartModular cart)
     {
@@ -81,7 +80,7 @@ public class ModuleShooterAdv extends ModuleShooter
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, Localization.MODULES.ATTACHMENTS.SHOOTER.translate(), 8, 6, 4210752);
         for (int i = 0; i < detectors.size(); ++i)
@@ -93,7 +92,7 @@ public class ModuleShooterAdv extends ModuleShooter
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/mobdetector.png");
         for (int i = 0; i < detectors.size(); ++i)
@@ -167,7 +166,7 @@ public class ModuleShooterAdv extends ModuleShooter
         double disY = target.blockPosition().getX() + (double) target.getEyeHeight() - 0.699999988079071D - posY;
         double disZ = target.blockPosition().getZ() - getCart().getZ();
 
-        final double dis = MathHelper.sqrt(disX * disX + disZ * disZ);
+        final double dis = Math.sqrt(disX * disX + disZ * disZ);
 
         if (dis >= 1.0E-7)
         {
@@ -186,7 +185,7 @@ public class ModuleShooterAdv extends ModuleShooter
             setHeading(projectile, disX, disY + (double) disD5, disZ, 1.6f, 0.0f);
         }
         BlockPos pos = getCart().blockPosition();
-        getCart().level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ARROW_HIT, SoundCategory.NEUTRAL, 1.0f, 1.0f / (getCart().random.nextFloat() * 0.4f + 0.8f));
+        getCart().level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ARROW_HIT, SoundSource.NEUTRAL, 1.0f, 1.0f / (getCart().random.nextFloat() * 0.4f + 0.8f));
 
         setProjectileDamage(projectile);
         setProjectileOnFire(projectile);
@@ -236,7 +235,7 @@ public class ModuleShooterAdv extends ModuleShooter
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0)
         {
@@ -259,8 +258,8 @@ public class ModuleShooterAdv extends ModuleShooter
     @Override
     public void initDw()
     {
-        OPTION = createDw(DataSerializers.BYTE);
-        RIFLE_DIRECTION = createDw(DataSerializers.BYTE);
+        OPTION = createDw(EntityDataSerializers.BYTE);
+        RIFLE_DIRECTION = createDw(EntityDataSerializers.BYTE);
         registerDw(OPTION, (byte) 0);
         registerDw(RIFLE_DIRECTION, (byte) 0);
     }
@@ -341,14 +340,14 @@ public class ModuleShooterAdv extends ModuleShooter
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         tagCompound.putByte(generateNBTName("Options", id), selectedOptions());
         saveTick(tagCompound, id);
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         setOptions(tagCompound.getByte(generateNBTName("Options", id)));
         loadTick(tagCompound, id);

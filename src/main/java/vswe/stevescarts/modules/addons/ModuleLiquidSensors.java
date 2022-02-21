@@ -1,12 +1,12 @@
 package vswe.stevescarts.modules.addons;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FallingBlock;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.IFluidBlock;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.modules.ModuleBase;
@@ -18,7 +18,7 @@ public class ModuleLiquidSensors extends ModuleAddon
     private float sensorRotation;
     private int activetime;
     private int mult;
-    private DataParameter<Byte> SENSOR_INFO;
+    private EntityDataAccessor<Byte> SENSOR_INFO;
 
     public ModuleLiquidSensors(final EntityMinecartModular cart)
     {
@@ -81,7 +81,7 @@ public class ModuleLiquidSensors extends ModuleAddon
     @Override
     public void initDw()
     {
-        SENSOR_INFO = createDw(DataSerializers.BYTE);
+        SENSOR_INFO = createDw(EntityDataSerializers.BYTE);
         registerDw(SENSOR_INFO, (byte) 1);
     }
 

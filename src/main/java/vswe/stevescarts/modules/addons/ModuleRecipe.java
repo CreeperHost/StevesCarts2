@@ -1,13 +1,13 @@
 package vswe.stevescarts.modules.addons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
@@ -25,9 +25,9 @@ import java.util.ArrayList;
 public abstract class ModuleRecipe extends ModuleAddon
 {
 //    private int target;
-    private DataParameter<Byte> TARGET;
-    private DataParameter<Byte> MAX_ITEM_COUNT;
-    private DataParameter<Byte> MODE;
+    private EntityDataAccessor<Byte> TARGET;
+    private EntityDataAccessor<Byte> MAX_ITEM_COUNT;
+    private EntityDataAccessor<Byte> MODE;
 
     protected boolean dirty;
     protected ArrayList<SlotBase> inputSlots;
@@ -51,7 +51,7 @@ public abstract class ModuleRecipe extends ModuleAddon
     protected abstract int getLimitStartY();
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         if (canUseAdvancedFeatures())
         {
@@ -72,7 +72,7 @@ public abstract class ModuleRecipe extends ModuleAddon
         }
     }
 
-    private void drawControlRect(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y, final int i)
+    private void drawControlRect(PoseStack matrixStack, GuiMinecart gui, final int x, final int y, final int i)
     {
         final int v = i * 11;
         final int[] rect = getControlRect(i);
@@ -86,7 +86,7 @@ public abstract class ModuleRecipe extends ModuleAddon
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         if (canUseAdvancedFeatures())
         {
@@ -138,7 +138,7 @@ public abstract class ModuleRecipe extends ModuleAddon
     }
 
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         if (canUseAdvancedFeatures())
         {
@@ -277,7 +277,7 @@ public abstract class ModuleRecipe extends ModuleAddon
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (canUseAdvancedFeatures())
         {
@@ -362,16 +362,16 @@ public abstract class ModuleRecipe extends ModuleAddon
     public void initDw()
     {
         super.initDw();
-        TARGET = createDw(DataSerializers.BYTE);
-        MODE = createDw(DataSerializers.BYTE);
-        MAX_ITEM_COUNT = createDw(DataSerializers.BYTE);
+        TARGET = createDw(EntityDataSerializers.BYTE);
+        MODE = createDw(EntityDataSerializers.BYTE);
+        MAX_ITEM_COUNT = createDw(EntityDataSerializers.BYTE);
         registerDw(TARGET, (byte) 3);
         registerDw(MODE, (byte) 0);
         registerDw(MAX_ITEM_COUNT, (byte) 1);
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         if (canUseAdvancedFeatures())
         {
@@ -382,7 +382,7 @@ public abstract class ModuleRecipe extends ModuleAddon
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         if (canUseAdvancedFeatures())
         {

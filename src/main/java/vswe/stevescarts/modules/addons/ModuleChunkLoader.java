@@ -2,6 +2,8 @@ package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -12,7 +14,7 @@ public class ModuleChunkLoader extends ModuleAddon implements IActivatorModule
 {
     private boolean rdyToInit;
     private int[] buttonRect;
-    private DataParameter<Boolean> LOADING_CHUNK;
+    private EntityDataAccessor<Boolean> LOADING_CHUNK;
 
     public ModuleChunkLoader(final EntityMinecartModular cart)
     {
@@ -151,7 +153,7 @@ public class ModuleChunkLoader extends ModuleAddon implements IActivatorModule
     @Override
     public void initDw()
     {
-        LOADING_CHUNK = createDw(DataSerializers.BOOLEAN);
+        LOADING_CHUNK = createDw(EntityDataSerializers.BOOLEAN);
         registerDw(LOADING_CHUNK, false);
     }
 

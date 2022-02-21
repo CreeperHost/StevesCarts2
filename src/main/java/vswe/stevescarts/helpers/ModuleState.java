@@ -1,13 +1,12 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.monster.piglin.PiglinEntity;
-import net.minecraft.entity.passive.*;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.player.Player;
+import vswe.stevescarts.arcade.monopoly.Villager;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.modules.IActivatorModule;
 import vswe.stevescarts.modules.ISuppliesModule;
@@ -198,51 +197,51 @@ public class ModuleState
         new ModuleStateInv(10, Localization.GUI.DETECTOR.STORAGE_FULL, true);
         new ModuleStateInv(11, Localization.GUI.DETECTOR.STORAGE_EMPTY, false);
         new ModuleStatePassenger(13, Localization.GUI.DETECTOR.PASSENGER, LivingEntity.class);
-        new ModuleStatePassenger(14, Localization.GUI.DETECTOR.ANIMAL, AnimalEntity.class);
-        new ModuleStatePassenger(15, Localization.GUI.DETECTOR.TAMEABLE, TameableEntity.class);
-        new ModuleStatePassenger(16, Localization.GUI.DETECTOR.BREEDABLE, AgeableEntity.class);
-        new ModuleStatePassenger(17, Localization.GUI.DETECTOR.HOSTILE, IMob.class);
-        new ModuleStatePassenger(18, Localization.GUI.DETECTOR.CREEPER, CreeperEntity.class);
-        new ModuleStatePassenger(19, Localization.GUI.DETECTOR.SKELETON, SkeletonEntity.class);
-        new ModuleStatePassenger(20, Localization.GUI.DETECTOR.SPIDER, SpiderEntity.class);
-        new ModuleStatePassenger(21, Localization.GUI.DETECTOR.ZOMBIE, ZombieEntity.class);
-        new ModuleStatePassenger(22, Localization.GUI.DETECTOR.PIG_MAN, PiglinEntity.class);
-        new ModuleStatePassenger(23, Localization.GUI.DETECTOR.SILVERFISH, SilverfishEntity.class);
-        new ModuleStatePassenger(24, Localization.GUI.DETECTOR.BLAZE, BlazeEntity.class);
-        new ModuleStatePassenger(25, Localization.GUI.DETECTOR.BAT, BatEntity.class);
-        new ModuleStatePassenger(26, Localization.GUI.DETECTOR.WITCH, WitchEntity.class);
-        new ModuleStatePassenger(27, Localization.GUI.DETECTOR.PIG, PiglinEntity.class);
-        new ModuleStatePassenger(28, Localization.GUI.DETECTOR.SHEEP, SheepEntity.class);
-        new ModuleStatePassenger(29, Localization.GUI.DETECTOR.COW, CowEntity.class);
-        new ModuleStatePassenger(30, Localization.GUI.DETECTOR.MOOSHROOM, MooshroomEntity.class);
-        new ModuleStatePassenger(31, Localization.GUI.DETECTOR.CHICKEN, ChickenEntity.class);
-        new ModuleStatePassenger(32, Localization.GUI.DETECTOR.WOLF, WolfEntity.class);
+        new ModuleStatePassenger(14, Localization.GUI.DETECTOR.ANIMAL, Animal.class);
+        new ModuleStatePassenger(15, Localization.GUI.DETECTOR.TAMEABLE, TamableAnimal.class);
+        new ModuleStatePassenger(16, Localization.GUI.DETECTOR.BREEDABLE, AgeableMob.class);
+        new ModuleStatePassenger(17, Localization.GUI.DETECTOR.HOSTILE, Mob.class);
+        new ModuleStatePassenger(18, Localization.GUI.DETECTOR.CREEPER, Creeper.class);
+        new ModuleStatePassenger(19, Localization.GUI.DETECTOR.SKELETON, Skeleton.class);
+        new ModuleStatePassenger(20, Localization.GUI.DETECTOR.SPIDER, Spider.class);
+        new ModuleStatePassenger(21, Localization.GUI.DETECTOR.ZOMBIE, Zombie.class);
+        new ModuleStatePassenger(22, Localization.GUI.DETECTOR.PIG_MAN, Piglin.class);
+        new ModuleStatePassenger(23, Localization.GUI.DETECTOR.SILVERFISH, Silverfish.class);
+        new ModuleStatePassenger(24, Localization.GUI.DETECTOR.BLAZE, Blaze.class);
+        new ModuleStatePassenger(25, Localization.GUI.DETECTOR.BAT, Bat.class);
+        new ModuleStatePassenger(26, Localization.GUI.DETECTOR.WITCH, Witch.class);
+        new ModuleStatePassenger(27, Localization.GUI.DETECTOR.PIG, Piglin.class);
+        new ModuleStatePassenger(28, Localization.GUI.DETECTOR.SHEEP, Sheep.class);
+        new ModuleStatePassenger(29, Localization.GUI.DETECTOR.COW, Cow.class);
+        new ModuleStatePassenger(30, Localization.GUI.DETECTOR.MOOSHROOM, MushroomCow.class);
+        new ModuleStatePassenger(31, Localization.GUI.DETECTOR.CHICKEN, Chicken.class);
+        new ModuleStatePassenger(32, Localization.GUI.DETECTOR.WOLF, Wolf.class);
         //		new ModuleStatePassenger(33, Localization.GUI.DETECTOR.SNOW_GOLEM, EntitySnowman.class);
-        new ModuleStatePassenger(34, Localization.GUI.DETECTOR.OCELOT, OcelotEntity.class);
-        new ModuleStatePassenger(35, Localization.GUI.DETECTOR.VILLAGER, VillagerEntity.class);
-        new ModuleStatePassenger(36, Localization.GUI.DETECTOR.PLAYER, PlayerEntity.class);
-        new ModuleStatePassenger(37, Localization.GUI.DETECTOR.ZOMBIE, ZombieEntity.class)
+        new ModuleStatePassenger(34, Localization.GUI.DETECTOR.OCELOT, Ocelot.class);
+        new ModuleStatePassenger(35, Localization.GUI.DETECTOR.VILLAGER, Villager.class);
+        new ModuleStatePassenger(36, Localization.GUI.DETECTOR.PLAYER, Player.class);
+        new ModuleStatePassenger(37, Localization.GUI.DETECTOR.ZOMBIE, Zombie.class)
         {
             @Override
             public boolean isPassengerValid(final Entity passenger)
             {
-                return passenger instanceof ZombieVillagerEntity;
+                return passenger instanceof ZombieVillager;
             }
         };
-        new ModuleStatePassenger(38, Localization.GUI.DETECTOR.CHILD, AgeableEntity.class)
+        new ModuleStatePassenger(38, Localization.GUI.DETECTOR.CHILD, AgeableMob.class)
         {
             @Override
             public boolean isPassengerValid(final Entity passenger)
             {
-                return ((AgeableEntity) passenger).getAge() > 0;
+                return ((AgeableMob) passenger).getAge() > 0;
             }
         };
-        new ModuleStatePassenger(39, Localization.GUI.DETECTOR.TAMED, TameableEntity.class)
+        new ModuleStatePassenger(39, Localization.GUI.DETECTOR.TAMED, TamableAnimal.class)
         {
             @Override
             public boolean isPassengerValid(final Entity passenger)
             {
-                return ((TameableEntity) passenger).isTame();
+                return ((TamableAnimal) passenger).isTame();
             }
         };
         new ModuleStatePower(42, Localization.GUI.DETECTOR.POWER_RED, 0);

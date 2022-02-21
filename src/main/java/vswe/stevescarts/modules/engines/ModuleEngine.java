@@ -1,11 +1,8 @@
 package vswe.stevescarts.modules.engines;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -59,7 +56,7 @@ public abstract class ModuleEngine extends ModuleBase
         return getPriority() >= 3 || getPriority() < 0;
     }
 
-    protected abstract DataParameter<Integer> getPriorityDw();
+    protected abstract EntityDataAccessor<Integer> getPriorityDw();
 
     public int getPriority()
     {

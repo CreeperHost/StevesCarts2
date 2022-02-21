@@ -2,6 +2,8 @@ package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -13,7 +15,7 @@ public class ModuleBrake extends ModuleAddon implements ILeverModule
 {
     private int[] startstopRect;
     private int[] turnbackRect;
-    private DataParameter<Boolean> FORGE_STOPPING;
+    private EntityDataAccessor<Boolean> FORGE_STOPPING;
 
     public ModuleBrake(final EntityMinecartModular cart)
     {
@@ -155,7 +157,7 @@ public class ModuleBrake extends ModuleAddon implements ILeverModule
     @Override
     public void initDw()
     {
-        FORGE_STOPPING = createDw(DataSerializers.BOOLEAN);
+        FORGE_STOPPING = createDw(EntityDataSerializers.BOOLEAN);
         registerDw(FORGE_STOPPING, false);
     }
 

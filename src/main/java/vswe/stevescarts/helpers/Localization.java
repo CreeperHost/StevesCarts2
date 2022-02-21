@@ -1,6 +1,6 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 public final class Localization
 {

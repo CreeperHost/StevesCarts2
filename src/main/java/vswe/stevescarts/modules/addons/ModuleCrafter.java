@@ -1,15 +1,14 @@
 package vswe.stevescarts.modules.addons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
-import net.minecraft.util.NonNullList;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotCartCrafter;
 import vswe.stevescarts.containers.slots.SlotCartCrafterResult;
@@ -24,7 +23,7 @@ import java.util.Set;
 public class ModuleCrafter extends ModuleRecipe
 {
     private int cooldown;
-    CraftingInventory craftingDummy;
+    CraftingContainer craftingDummy;
 
     public ModuleCrafter(final EntityMinecartModular cart)
     {
@@ -135,12 +134,12 @@ public class ModuleCrafter extends ModuleRecipe
     }
 
     @Nullable
-    public ICraftingRecipe getRecipe()
+    public CraftingRecipe getRecipe()
     {
-        Set<IRecipe<?>> recipes = RecipeHelpers.findRecipesByType(IRecipeType.CRAFTING, getCart().level);
-        for (IRecipe<?> iRecipe : recipes)
+        Set<Recipe<?>> recipes = RecipeHelpers.findRecipesByType(RecipeType.CRAFTING, getCart().level);
+        for (Recipe<?> iRecipe : recipes)
         {
-            ICraftingRecipe recipe = (ICraftingRecipe) iRecipe;
+            CraftingRecipe recipe = (CraftingRecipe) iRecipe;
             if (recipe.matches(craftingDummy, getCart().level))
             {
                 return recipe;
@@ -152,7 +151,7 @@ public class ModuleCrafter extends ModuleRecipe
     @Nullable
     public ItemStack getResult()
     {
-        ICraftingRecipe recipe = getRecipe();
+        CraftingRecipe recipe = getRecipe();
         if(recipe != null)
         {
             return recipe.getResultItem().copy();
@@ -205,7 +204,7 @@ public class ModuleCrafter extends ModuleRecipe
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         super.drawForeground(matrixStack, gui);
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);

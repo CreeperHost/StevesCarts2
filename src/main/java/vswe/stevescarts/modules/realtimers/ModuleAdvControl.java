@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -34,7 +36,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule
     private double odo;
     private double trip;
     private int[] buttonRect;
-    private DataParameter<Integer> SPEED;
+    private EntityDataAccessor<Integer> SPEED;
 
     public ModuleAdvControl(final EntityMinecartModular cart)
     {
@@ -469,7 +471,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule
     @Override
     public void initDw()
     {
-        SPEED = createDw(DataSerializers.INT);
+        SPEED = createDw(EntityDataSerializers.INT);
         registerDw(SPEED, 0);
     }
 

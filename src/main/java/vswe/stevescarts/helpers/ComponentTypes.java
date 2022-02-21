@@ -1,6 +1,6 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.items.ItemCartComponent;
 

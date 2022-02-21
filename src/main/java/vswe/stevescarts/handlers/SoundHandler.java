@@ -3,6 +3,7 @@ package vswe.stevescarts.handlers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -53,7 +54,7 @@ public class SoundHandler
         }
     }
 
-    public static void playSound(SoundEvent event, SoundCategory category, float volume, float pitch)
+    public static void playSound(SoundEvent event, SoundSource category, float volume, float pitch)
     {
         //TODO
 //        		Minecraft.getInstance().getSoundManager().play(new PlayerSound(Minecraft.getInstance().player, category, event, volume, pitch));

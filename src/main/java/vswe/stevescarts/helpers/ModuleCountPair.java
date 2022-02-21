@@ -1,6 +1,6 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 import vswe.stevescarts.modules.data.ModuleData;
 
 public class ModuleCountPair

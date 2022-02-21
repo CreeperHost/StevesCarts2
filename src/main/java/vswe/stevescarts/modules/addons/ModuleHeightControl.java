@@ -1,11 +1,11 @@
 package vswe.stevescarts.modules.addons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.HeightControlOre;
@@ -20,7 +20,7 @@ public class ModuleHeightControl extends ModuleAddon
     private int[] arrowDown;
     private int oreMapX;
     private int oreMapY;
-    private DataParameter<Integer> Y_TARGET;
+    private EntityDataAccessor<Integer> Y_TARGET;
 
     public ModuleHeightControl(EntityMinecartModular cart)
     {
@@ -59,7 +59,7 @@ public class ModuleHeightControl extends ModuleAddon
     }
 
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
         final String s = String.valueOf(getYTarget());
@@ -81,7 +81,7 @@ public class ModuleHeightControl extends ModuleAddon
     }
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, int x, int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, int x, int y)
     {
         ResourceHelper.bindResource("/gui/heightcontrol.png");
         drawImage(matrixStack, gui, levelNumberBoxX, levelNumberBoxY, 4, 36, 21, 15);
@@ -126,7 +126,7 @@ public class ModuleHeightControl extends ModuleAddon
         }
     }
 
-    private void drawMarker(MatrixStack matrixStack, GuiMinecart gui, int pos, boolean isTargetLevel)
+    private void drawMarker(PoseStack matrixStack, GuiMinecart gui, int pos, boolean isTargetLevel)
     {
         int srcX = 4;
         int srcY = isTargetLevel ? 6 : 0;
@@ -168,7 +168,7 @@ public class ModuleHeightControl extends ModuleAddon
     }
 
     @Override
-    protected void receivePacket(int id, byte[] data, PlayerEntity player)
+    protected void receivePacket(int id, byte[] data, Player player)
     {
         if (id == 0)
         {
@@ -227,7 +227,7 @@ public class ModuleHeightControl extends ModuleAddon
     @Override
     public void initDw()
     {
-        Y_TARGET = createDw(DataSerializers.INT);
+        Y_TARGET = createDw(EntityDataSerializers.INT);
         registerDw(Y_TARGET, (int) getCart().y());
     }
 
@@ -252,13 +252,13 @@ public class ModuleHeightControl extends ModuleAddon
     }
 
     @Override
-    protected void Save(CompoundNBT tagCompound, int id)
+    protected void Save(CompoundTag tagCompound, int id)
     {
         tagCompound.putShort(generateNBTName("Height", id), (short) getYTarget());
     }
 
     @Override
-    protected void Load(CompoundNBT tagCompound, int id)
+    protected void Load(CompoundTag tagCompound, int id)
     {
         setYTarget(tagCompound.getShort(generateNBTName("Height", id)));
     }

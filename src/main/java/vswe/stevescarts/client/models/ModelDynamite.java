@@ -1,10 +1,7 @@
 package vswe.stevescarts.client.models;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.ModuleBase;
 import vswe.stevescarts.modules.realtimers.ModuleDynamite;
@@ -99,8 +96,9 @@ public class ModelDynamite extends ModelCartbase
     }
 
     @Override
-    public void applyEffects(final ModuleBase module, MatrixStack matrixStack, IRenderTypeBuffer rtb, final float yaw, final float pitch, final float roll)
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, IRenderTypeBuffer rtb, final float yaw, final float pitch, final float roll)
     {
+        super.applyEffects();
         if (module == null)
         {
             //			for (int i = 0; i < dynamites.length; ++i) {

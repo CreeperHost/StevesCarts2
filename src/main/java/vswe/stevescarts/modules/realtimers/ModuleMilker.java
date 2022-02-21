@@ -1,11 +1,11 @@
 package vswe.stevescarts.modules.realtimers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.CowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
@@ -52,7 +52,6 @@ public class ModuleMilker extends ModuleBase
 
     private void depositeMilk()
     {
-        //TODO
         if (milkbuffer > 0)
         {
             final FluidStack ret = FluidUtil.getFluidContained(new ItemStack(Items.MILK_BUCKET)).get();
@@ -93,7 +92,7 @@ public class ModuleMilker extends ModuleBase
             if (!getCart().getPassengers().isEmpty())
             {
                 final Entity rider = getCart().getPassengers().get(0);
-                if (rider != null && rider instanceof CowEntity)
+                if (rider != null && rider instanceof Cow)
                 {
                     milkbuffer = Math.min(milkbuffer + 75, 1000);
                 }
@@ -121,19 +120,19 @@ public class ModuleMilker extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         tagCompound.putShort(generateNBTName("Milk", id), (short) milkbuffer);
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         milkbuffer = tagCompound.getShort(generateNBTName("Milk", id));
     }

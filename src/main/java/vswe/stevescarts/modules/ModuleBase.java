@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -9,11 +10,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerBlock;
@@ -1295,9 +1300,9 @@ public abstract class ModuleBase
      * @param key   The local datamanger key
      * @param value The value to add
      */
-    protected final <T> void registerDw(DataParameter<T> key, T value)
+    protected final <T> void registerDw(EntityDataAccessor<T> key, T value)
     {
-        for (DataEntry entry : getCart().getDataManager().getAll())
+        for (SynchedEntityData.DataItem<?> entry : getCart().getDataManager().getAll())
         {
             if (entry.getAccessor() == key)
             {
@@ -1313,7 +1318,7 @@ public abstract class ModuleBase
      * @param key   The local datamanger key
      * @param value The value to update it to
      */
-    protected final <T> void updateDw(DataParameter<T> key, T value)
+    protected final <T> void updateDw(EntityDataAccessor<T> key, T value)
     {
         getCart().getDataManager().set(key, value);
     }
@@ -1324,12 +1329,12 @@ public abstract class ModuleBase
      * @param key The local datamanger key
      * @return The value of the datamanger
      */
-    protected <T> T getDw(DataParameter<T> key)
+    protected <T> T getDw(EntityDataAccessor<T> key)
     {
         return getCart().getDataManager().get(key);
     }
 
-    protected <T> DataParameter<T> createDw(IDataSerializer<T> serializer)
+    protected <T> EntityDataAccessor<T> createDw(EntityDataSerializer<T> serializer)
     {
         return serializer.createAccessor(cart.getNextDataWatcher());
     }
@@ -1374,9 +1379,9 @@ public abstract class ModuleBase
      * @param id      The global gui data id
      * @param data    The data to update to
      */
-    private final void updateGuiData(Container con, List<IContainerListener> players, final int id, final short data)
+    private final void updateGuiData(Container con, List<ContainerListener> players, final int id, final short data)
     {
-        for (final IContainerListener player : players)
+        for (final ContainerListener player : players)
         {
             //TODO
             //			player.sendWindowProperty(con, id, data);
@@ -1425,7 +1430,7 @@ public abstract class ModuleBase
      * @param con    The container used by the interface
      * @param player The player that opened it
      */
-    public final void initGuiData(final Container con, final IContainerListener player)
+    public final void initGuiData(final Container con, final ContainerListener player)
     {
         final ArrayList players = new ArrayList();
         players.add(player);
@@ -1559,7 +1564,7 @@ public abstract class ModuleBase
     {
         final float var7 = 0.00390625f;
         final float var8 = 0.00390625f;
-        final Tessellator tess = Tessellator.getInstance();
+        final Tesselator tess = Tesselator.getInstance();
         //TODO this is a later problem
         //		BufferBuilder buff = tess.getBuffer();
         //		buff.begin(7, DefaultVertexFormats.POSITION_TEX);

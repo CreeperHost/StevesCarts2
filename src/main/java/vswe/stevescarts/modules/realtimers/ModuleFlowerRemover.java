@@ -1,17 +1,18 @@
 package vswe.stevescarts.modules.realtimers;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
+import com.mojang.math.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.IForgeShearable;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.modules.ModuleBase;
@@ -90,8 +91,8 @@ public class ModuleFlowerRemover extends ModuleBase
                 if (isFlower(relative))
                 {
                     BlockState blockState = getCart().level.getBlockState(relative);
-                    ServerWorld serverWorld = (ServerWorld) getCart().level;
-                    LootContext.Builder lootcontext$builder = (new LootContext.Builder(serverWorld)).withRandom(serverWorld.random).withParameter(LootParameters.ORIGIN, Vector3d.atCenterOf(relative)).withParameter(LootParameters.TOOL, ItemStack.EMPTY).withOptionalParameter(LootParameters.THIS_ENTITY, getCart()).withOptionalParameter(LootParameters.BLOCK_ENTITY, null);
+                    ServerLevel serverWorld = (ServerLevel) getCart().level;
+                    LootContext.Builder lootcontext$builder = (new LootContext.Builder(serverWorld)).withRandom(serverWorld.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(relative)).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withOptionalParameter(LootContextParams.THIS_ENTITY, getCart()).withOptionalParameter(LootContextParams.BLOCK_ENTITY, null);
 
                     List<ItemStack> drops = blockState.getDrops(lootcontext$builder);
                     addStuff(drops);

@@ -1,11 +1,11 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -66,15 +66,6 @@ public class EnchantmentInfo
                         isValid = true;
                     }
                 }
-                if (isValid)
-                {
-                    //TODO
-                    //					final int level = getEnchantmentLevel(Enchantment.getEnchantmentID(info.getEnchantment()), itemstack);
-                    //					if (level > 0) {
-                    //						return true;
-                    //					}
-                    //					continue;
-                }
             }
         }
         return false;
@@ -109,21 +100,6 @@ public class EnchantmentInfo
                 isValid = true;
             }
         }
-        if (isValid)
-        {
-            //TODO Enchantments
-            //			final int level = getEnchantmentLevel(Enchantment.getEnchantmentID(info.getEnchantment()), itemstack);
-            //			if (level > 0) {
-            //				if (data == null) {
-            //					data = new EnchantmentData(info);
-            //				}
-            //				final int newValue = data.getEnchantment().getValue(level) + data.getValue();
-            //				if (newValue <= data.getEnchantment().getMaxValue()) {
-            //					data.setValue(newValue);
-            //					itemstack.shrink(1);
-            //				}
-            //			}
-        }
         return data;
     }
 
@@ -133,35 +109,16 @@ public class EnchantmentInfo
         {
             return 0;
         }
-        final ListNBT nbttaglist = EnchantedBookItem.getEnchantments(par1ItemStack);
+        final ListTag nbttaglist = EnchantedBookItem.getEnchantments(par1ItemStack);
         if (nbttaglist == null)
         {
             return 0;
-        }
-        for (int j = 0; j < nbttaglist.size(); ++j)
-        {
-            //			final short short1 = nbttaglist.getCompoundTagAt(j).getShort("id");
-            //			final short short2 = nbttaglist.getCompoundTagAt(j).getShort("lvl");
-            //			if (short1 == par0) {
-            //				return short2;
-            //			}
         }
         return 0;
     }
 
     public static EnchantmentData createDataFromEffectId(EnchantmentData data, final short id)
     {
-        for (final EnchantmentInfo info : EnchantmentInfo.enchants)
-        {
-            //			if (Enchantment.getEnchantmentID(info.getEnchantment()) == id) {
-            //				if (data == null) {
-            //					data = new EnchantmentData(info);
-            //					break;
-            //				}
-            //				data.setEnchantment(info);
-            //				break;
-            //			}
-        }
         return data;
     }
 

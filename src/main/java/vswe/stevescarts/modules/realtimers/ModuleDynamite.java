@@ -2,8 +2,12 @@ package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Explosion;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -22,9 +26,9 @@ public class ModuleDynamite extends ModuleBase
     private int fuseStartY;
     private final int maxFuseLength = 150;
 
-    private DataParameter<Byte> FUSE;
-    private DataParameter<Byte> FUSE_LENGTH;
-    private DataParameter<Byte> EXPLOSION;
+    private EntityDataAccessor<Byte> FUSE;
+    private EntityDataAccessor<Byte> FUSE_LENGTH;
+    private EntityDataAccessor<Byte> EXPLOSION;
 
     public ModuleDynamite(final EntityMinecartModular cart)
     {
@@ -90,7 +94,7 @@ public class ModuleDynamite extends ModuleBase
                 explode();
                 if (!isPlaceholder())
                 {
-                    getCart().remove();
+                    getCart().remove(Entity.RemovalReason.KILLED);
                 }
             }
         }
@@ -168,7 +172,7 @@ public class ModuleDynamite extends ModuleBase
         {
             final float f = explosionSize();
             setStack(0, ItemStack.EMPTY);
-            getCart().level.explode(null, getCart().blockPosition().getX(), getCart().blockPosition().getY(), getCart().blockPosition().getZ(), f, Explosion.Mode.BREAK);
+            getCart().level.explode(null, getCart().blockPosition().getX(), getCart().blockPosition().getY(), getCart().blockPosition().getZ(), f, Explosion.BlockInteraction.BREAK);
         }
     }
 
@@ -226,9 +230,9 @@ public class ModuleDynamite extends ModuleBase
     @Override
     public void initDw()
     {
-        FUSE = createDw(DataSerializers.BYTE);
-        FUSE_LENGTH = createDw(DataSerializers.BYTE);
-        EXPLOSION = createDw(DataSerializers.BYTE);
+        FUSE = createDw(EntityDataSerializers.BYTE);
+        FUSE_LENGTH = createDw(EntityDataSerializers.BYTE);
+        EXPLOSION = createDw(EntityDataSerializers.BYTE);
         registerDw(FUSE, (byte) 0);
         registerDw(FUSE_LENGTH, (byte) 70);
         registerDw(EXPLOSION, (byte) 8);

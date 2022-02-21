@@ -1,11 +1,11 @@
 package vswe.stevescarts.modules.workers;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -55,7 +55,7 @@ public class ModuleLiquidDrainer extends ModuleWorker
         return true;
     }
 
-    private int drainAt(World world, final ModuleDrill drill, final ArrayList<BlockPos> checked, final BlockPos pos, int buckets)
+    private int drainAt(Level world, final ModuleDrill drill, final ArrayList<BlockPos> checked, final BlockPos pos, int buckets)
     {
         int drained = 0;
         BlockState blockState = world.getBlockState(pos);

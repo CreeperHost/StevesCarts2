@@ -1,6 +1,6 @@
 package vswe.stevescarts.helpers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import vswe.stevescarts.client.guis.GuiDetector;
 
 public class DropDownMenuPages extends DropDownMenu
@@ -26,7 +26,7 @@ public class DropDownMenuPages extends DropDownMenu
     }
 
     @Override
-    public void drawMain(MatrixStack matrixStack, GuiDetector gui, final int x, final int y)
+    public void drawMain(PoseStack matrixStack, GuiDetector gui, final int x, final int y)
     {
         super.drawMain(matrixStack, gui, x, y);
         drawObject(matrixStack, gui, x, y, new int[]{30, 20, 23, 7}, 0, 170, 0, 0);
@@ -35,7 +35,7 @@ public class DropDownMenuPages extends DropDownMenu
         drawObject(matrixStack, gui, x, y, rightArrow, 0, 184, 5, 0);
     }
 
-    private void drawObject(MatrixStack matrixStack, GuiDetector gui, final int x, final int y, int[] rect, int srcX, int srcY, final int hoverDifX, final int hoverDifY)
+    private void drawObject(PoseStack matrixStack, GuiDetector gui, final int x, final int y, int[] rect, int srcX, int srcY, final int hoverDifX, final int hoverDifY)
     {
         final int[] array;
         rect = (array = new int[]{rect[0], rect[1], rect[2], rect[3]});

@@ -1,6 +1,8 @@
 package vswe.stevescarts.modules.realtimers;
 
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -64,21 +66,21 @@ public class ModuleCleaner extends ModuleBase
         final List<ItemEntity> list = getCart().level.getEntitiesOfClass(ItemEntity.class, getCart().getBoundingBox().inflate(3.0, 1.0, 3.0));
         for (ItemEntity eItem : list)
         {
-            if (!eItem.isPickable() && !eItem.removed)
+            if (!eItem.isPickable() && !eItem.isRemoved())
             {
                 int stackSize = eItem.getItem().getCount();
                 getCart().addItemToChest(eItem.getItem());
                 if (stackSize != eItem.getItem().getCount())
                 {
-                    getCart().level.playSound(null, getCart().blockPosition(), SoundEvents.ITEM_PICKUP, SoundCategory.NEUTRAL, 0.2f, ((this.getCart().random.nextFloat() - this.getCart().random.nextFloat()) * 0.7f + 1.0f) * 2.0f);
+                    getCart().level.playSound(null, getCart().blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.2f, ((this.getCart().random.nextFloat() - this.getCart().random.nextFloat()) * 0.7f + 1.0f) * 2.0f);
                     if (eItem.getItem().getCount() <= 0)
                     {
-                        eItem.remove();
+                        eItem.remove(Entity.RemovalReason.DISCARDED);
                     }
                 }
                 else if (failPickup(eItem.getItem()))
                 {
-                    eItem.remove();
+                    eItem.remove(Entity.RemovalReason.DISCARDED);
                 }
             }
         }

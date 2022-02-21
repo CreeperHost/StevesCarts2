@@ -199,7 +199,7 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
     private void overrideDatawatcher()
     {
         //TODO AT
-        //		entityData = new EntityDataManagerLockable(this);
+//        		entityData = new EntityDataManagerLockable(this);
     }
 
     private void loadPlaceholderModules(final byte[] data)
@@ -1487,15 +1487,15 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
     }
 
     //TODO sounds
-    @OnlyIn(Dist.CLIENT)
-    public void setSound(final MinecartTickableSound sound, final boolean riding)
-    {
-        //		if (riding) {
-        //			soundRiding = sound;
-        //		} else {
-        this.sound = sound;
-        //		}
-    }
+//    @OnlyIn(Dist.CLIENT)
+//    public void setSound(final MinecartTickableSound sound, final boolean riding)
+//    {
+//        //		if (riding) {
+//        //			soundRiding = sound;
+//        //		} else {
+//        this.sound = sound;
+//        //		}
+//    }
 
     @OnlyIn(Dist.CLIENT)
     public void silent()
@@ -1506,27 +1506,27 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
     @OnlyIn(Dist.CLIENT)
     private void updateSounds()
     {
-        if (keepSilent > 1)
-        {
-            --keepSilent;
-            stopSound(sound);
-            sound = null;
-        }
-        else if (keepSilent == 1)
-        {
-            keepSilent = 0;
-            Minecraft.getInstance().getSoundManager().play(new MinecartTickableSound(this));
-        }
+//        if (keepSilent > 1)
+//        {
+//            --keepSilent;
+//            stopSound(sound);
+//            sound = null;
+//        }
+//        else if (keepSilent == 1)
+//        {
+//            keepSilent = 0;
+//            Minecraft.getInstance().getSoundManager().play(new MinecartTickableSound(this));
+//        }
     }
 
-    @OnlyIn(Dist.CLIENT)
-    private void stopSound(final MinecartTickableSound sound)
-    {
-        if (sound != null)
-        {
-            Minecraft.getInstance().getSoundManager().stop(sound);
-        }
-    }
+//    @OnlyIn(Dist.CLIENT)
+//    private void stopSound(final MinecartTickableSound sound)
+//    {
+//        if (sound != null)
+//        {
+//            Minecraft.getInstance().getSoundManager().stop(sound);
+//        }
+//    }
 
     static
     {
@@ -1545,7 +1545,7 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
         return null; //Works when returning null, not sure why
     }
 
-    public EntityDataManager getDataManager()
+    public SynchedEntityData getDataManager()
     {
         return entityData;
     }
@@ -1688,20 +1688,20 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
         return drain(maxDrain, action);
     }
 
-
-    @Override
-    public void remove(boolean keepData)
-    {
-        if (!this.level.isClientSide)
-        {
-            if (!removed)
-            {
-                ItemEntity cartItem = new ItemEntity(this.level, this.getExactPosition().getX(), this.getExactPosition().getY(), this.getExactPosition().getZ(), getCartItem());
-                this.level.addFreshEntity(cartItem);
-            }
-        }
-        super.remove(keepData);
-    }
+    //TODO
+//    @Override
+//    public void remove(boolean keepData)
+//    {
+//        if (!this.level.isClientSide)
+//        {
+//            if (!removed)
+//            {
+//                ItemEntity cartItem = new ItemEntity(this.level, this.getExactPosition().getX(), this.getExactPosition().getY(), this.getExactPosition().getZ(), getCartItem());
+//                this.level.addFreshEntity(cartItem);
+//            }
+//        }
+//        super.remove(keepData);
+//    }
 
     protected final SimpleContainerData dataAccess = new SimpleContainerData(0)
     {
@@ -1727,11 +1727,12 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
 
     Container container = null;
 
-    @Override
-    protected Container createMenu(int id, Inventory playerInventory)
-    {
-        Container container = new ContainerMinecart(id, playerInventory, this, dataAccess);
-        this.container = container;
-        return container;
-    }
+    //TODO
+//    @Override
+//    protected Container createMenu(int id, Inventory playerInventory)
+//    {
+//        Container container = new ContainerMinecart(id, playerInventory, this, dataAccess);
+//        this.container = container;
+//        return container;
+//    }
 }

@@ -1,7 +1,8 @@
 package vswe.stevescarts.containers.slots;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.ForgeHooks;
 import vswe.stevescarts.modules.engines.ModuleCoalBase;
 
@@ -9,7 +10,7 @@ import javax.annotation.Nonnull;
 
 public class SlotFuel extends SlotBase
 {
-    public SlotFuel(final IInventory iinventory, final int i, final int j, final int k)
+    public SlotFuel(final Container iinventory, final int i, final int j, final int k)
     {
         super(iinventory, i, j, k);
     }
@@ -17,17 +18,17 @@ public class SlotFuel extends SlotBase
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return ForgeHooks.getBurnTime(itemstack) != 0;
+        return ForgeHooks.getBurnTime(itemstack, RecipeType.SMELTING) != 0;
     }
 
     //TODO
     private int getItemBurnTime(@Nonnull ItemStack itemstack)
     {
-        return ForgeHooks.getBurnTime(itemstack);
+        return ForgeHooks.getBurnTime(itemstack, RecipeType.SMELTING);
     }
 
     public static int getItemBurnTime(final ModuleCoalBase engine, @Nonnull ItemStack itemstack)
     {
-        return (int) (ForgeHooks.getBurnTime(itemstack) * engine.getFuelMultiplier());
+        return (int) (ForgeHooks.getBurnTime(itemstack, RecipeType.SMELTING) * engine.getFuelMultiplier());
     }
 }

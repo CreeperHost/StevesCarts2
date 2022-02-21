@@ -1,15 +1,15 @@
 package vswe.stevescarts.modules.realtimers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -44,7 +44,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     private final int[] AInterval;
     private int arrowTick;
     private int arrowInterval;
-    private DataParameter<Byte> ACTIVE_PIPE;
+    private EntityDataAccessor<Byte> ACTIVE_PIPE;
 
     public ModuleShooter(final EntityMinecartModular cart)
     {
@@ -96,7 +96,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, Localization.MODULES.ATTACHMENTS.SHOOTER.translate(), 8, 6, 0x404040);
         final int delay = AInterval[arrowInterval];
@@ -143,7 +143,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/shooter.png");
         drawImage(matrixStack, gui, pipeSelectionX + 9, pipeSelectionY + 9 - 1, 0, 104, 8, 9);
@@ -235,7 +235,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         //		if (id == 0) {
         byte info = getActivePipes();
@@ -393,7 +393,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
                     x = -y;
                     y = temp;
                 }
-                final Entity projectile = new ArrowEntity(getCart().level, getCart().blockPosition().getX() + x * 1.5, getCart().blockPosition().getY() + 0.75F, getCart().blockPosition().getZ() + y * 1.5);//getProjectile(null, getProjectileItem(true));
+                final Entity projectile = new Arrow(getCart().level, getCart().blockPosition().getX() + x * 1.5, getCart().blockPosition().getY() + 0.75F, getCart().blockPosition().getZ() + y * 1.5);//getProjectile(null, getProjectileItem(true));
                 //				projectile.setPos(getCart().blockPosition().getX() + x * 1.5, getCart().blockPosition().getY() + 0.75F, getCart().blockPosition().getZ() + y * 1.5);
                 setHeading(projectile, x, 0.10000000149011612D, y, 1.6f, 12.0f);
                 setProjectileDamage(projectile);
@@ -428,12 +428,12 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
 
     protected void setProjectileDamage(final Entity projectile)
     {
-        if (enchanter != null && projectile instanceof ArrowEntity)
+        if (enchanter != null && projectile instanceof Arrow)
         {
             final int power = enchanter.getPowerLevel();
             if (power > 0)
             {
-                final ArrowEntity arrow = (ArrowEntity) projectile;
+                final Arrow arrow = (Arrow) projectile;
                 arrow.setBaseDamage(arrow.getBaseDamage() + power * 0.5 + 0.5);
             }
         }
@@ -441,12 +441,12 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
 
     protected void setProjectileKnockback(final Entity projectile)
     {
-        if (enchanter != null && projectile instanceof ArrowEntity)
+        if (enchanter != null && projectile instanceof Arrow)
         {
             final int punch = enchanter.getPunchLevel();
             if (punch > 0)
             {
-                final ArrowEntity arrow = (ArrowEntity) projectile;
+                final Arrow arrow = (Arrow) projectile;
                 arrow.setKnockback(punch);
             }
         }
@@ -454,9 +454,9 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
 
     protected void setHeading(final Entity projectile, final double motionX, final double motionY, final double motionZ, final float motionMult, final float motionNoise)
     {
-        if (projectile instanceof ProjectileEntity)
+        if (projectile instanceof Projectile)
         {
-            ((ProjectileEntity) projectile).shoot(motionX, motionY, motionZ, motionMult, motionNoise);
+            ((Projectile) projectile).shoot(motionX, motionY, motionZ, motionMult, motionNoise);
         }
     }
 
@@ -534,7 +534,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     @Override
     public void initDw()
     {
-        ACTIVE_PIPE = createDw(DataSerializers.BYTE);
+        ACTIVE_PIPE = createDw(EntityDataSerializers.BYTE);
         registerDw(ACTIVE_PIPE, (byte) 0);
     }
 
@@ -568,7 +568,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         tagCompound.putByte(generateNBTName("Pipes", id), getActivePipes());
         tagCompound.putByte(generateNBTName("Interval", id), (byte) arrowInterval);
@@ -576,19 +576,19 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         setActivePipes(tagCompound.getByte(generateNBTName("Pipes", id)));
         arrowInterval = tagCompound.getByte(generateNBTName("Interval", id));
         loadTick(tagCompound, id);
     }
 
-    protected void saveTick(final CompoundNBT tagCompound, final int id)
+    protected void saveTick(final CompoundTag tagCompound, final int id)
     {
         tagCompound.putByte(generateNBTName("Tick", id), (byte) arrowTick);
     }
 
-    protected void loadTick(final CompoundNBT tagCompound, final int id)
+    protected void loadTick(final CompoundTag tagCompound, final int id)
     {
         arrowTick = tagCompound.getByte(generateNBTName("Tick", id));
     }

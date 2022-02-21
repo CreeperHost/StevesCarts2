@@ -1,14 +1,14 @@
 package vswe.stevescarts.containers.slots;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.items.ItemCartComponent;
 
 import javax.annotation.Nonnull;
 
 public class SlotCakeDynamite extends SlotCake implements ISlotExplosions
 {
-    public SlotCakeDynamite(final IInventory iinventory, final int i, final int j, final int k)
+    public SlotCakeDynamite(final Container iinventory, final int i, final int j, final int k)
     {
         super(iinventory, i, j, k);
     }

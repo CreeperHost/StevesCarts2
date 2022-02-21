@@ -1,13 +1,13 @@
 package vswe.stevescarts.modules.workers.tools;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.math.BlockPos;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 
 public abstract class ModuleTool extends ModuleWorker
 {
-    private DataParameter<Integer> DURABILITY;
+    private EntityDataAccessor<Integer> DURABILITY;
     private int remainingRepairUnits;
     private int maximumRepairUnits;
     protected ModuleEnchants enchanter;
@@ -64,7 +64,7 @@ public abstract class ModuleTool extends ModuleWorker
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/tool.png");
         drawBox(matrixStack, gui, 0, 0, 1.0f);
@@ -76,7 +76,7 @@ public abstract class ModuleTool extends ModuleWorker
         }
     }
 
-    private void drawBox(MatrixStack matrixStack, GuiMinecart gui, final int u, final int v, final float mult)
+    private void drawBox(PoseStack matrixStack, GuiMinecart gui, final int u, final int v, final float mult)
     {
         final int w = (int) (durabilityRect[2] * mult);
         if (w > 0)
@@ -122,7 +122,7 @@ public abstract class ModuleTool extends ModuleWorker
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         String str;
         if (useDurability())
@@ -173,7 +173,7 @@ public abstract class ModuleTool extends ModuleWorker
     @Override
     public void initDw()
     {
-        DURABILITY = createDw(DataSerializers.INT);
+        DURABILITY = createDw(EntityDataSerializers.INT);
         registerDw(DURABILITY, getMaxDurability());
     }
 
@@ -277,7 +277,7 @@ public abstract class ModuleTool extends ModuleWorker
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         tagCompound.putShort(generateNBTName("Durability", id), (short) getCurrentDurability());
         tagCompound.putShort(generateNBTName("Repair", id), (short) remainingRepairUnits);
@@ -285,7 +285,7 @@ public abstract class ModuleTool extends ModuleWorker
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         setDurability(tagCompound.getInt(generateNBTName("Durability", id)));
         remainingRepairUnits = tagCompound.getShort(generateNBTName("Repair", id));

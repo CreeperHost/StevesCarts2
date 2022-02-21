@@ -1,11 +1,11 @@
 package vswe.stevescarts.modules.realtimers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.projectile.FireworkRocketEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -59,7 +59,7 @@ public class ModuleFirework extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
     }
@@ -158,9 +158,9 @@ public class ModuleFirework extends ModuleBase
             for (chargeCount = 1; chargeCount < 7 && getCart().random.nextInt(3 + chargeCount / 3) == 0; ++chargeCount)
             {
             }
-            final CompoundNBT itemstackNBT = new CompoundNBT();
-            final CompoundNBT fireworksNBT = new CompoundNBT();
-            final ListNBT explosionsNBT = new ListNBT();
+            final CompoundTag itemstackNBT = new CompoundTag();
+            final CompoundTag fireworksNBT = new CompoundTag();
+            final ListTag explosionsNBT = new ListTag();
             for (int k = 0; k < chargeCount; ++k)
             {
                 @Nonnull ItemStack charge = getCharge();
@@ -197,8 +197,8 @@ public class ModuleFirework extends ModuleBase
             }
         }
         @Nonnull ItemStack charge2 = new ItemStack(Items.FIREWORK_STAR);
-        final CompoundNBT itemNBT = new CompoundNBT();
-        final CompoundNBT explosionNBT = new CompoundNBT();
+        final CompoundTag itemNBT = new CompoundTag();
+        final CompoundTag explosionNBT = new CompoundTag();
         byte type = 0;
         boolean removedGunpowder = false;
         final boolean canHasTrail = getCart().random.nextInt(16) == 0;

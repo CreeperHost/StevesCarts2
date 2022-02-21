@@ -1,6 +1,6 @@
 package vswe.stevescarts.modules.addons;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 
 import javax.annotation.Nonnull;

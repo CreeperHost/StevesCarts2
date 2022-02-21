@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons.projectiles;
 
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.projectile.ThrownEgg;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -23,6 +24,6 @@ public class ModuleEgg extends ModuleProjectile
     @Override
     public Entity createProjectile(final Entity target, @Nonnull ItemStack item)
     {
-        return new EggEntity(getCart().level, 0, 0, 0);
+        return new ThrownEgg(getCart().level, 0, 0, 0);
     }
 }

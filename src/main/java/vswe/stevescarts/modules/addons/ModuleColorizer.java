@@ -1,12 +1,8 @@
 package vswe.stevescarts.modules.addons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entitys.CartDataSerializers;
@@ -19,7 +15,7 @@ public class ModuleColorizer extends ModuleAddon
     private int markerOffsetX;
     private int scrollWidth;
     private int markerMoving;
-    private DataParameter<int[]> COLORS;
+    private EntityDataAccessor<int[]> COLORS;
 
     public ModuleColorizer(final EntityMinecartModular cart)
     {

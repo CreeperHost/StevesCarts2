@@ -1,19 +1,19 @@
 package vswe.stevescarts.entitys;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
 
 import java.util.List;
 
-public class EntityDataManagerLockable extends EntityDataManager
+public class EntityDataManagerLockable extends SynchedEntityData
 {
     private boolean isLocked;
-    private List<DataEntry<?>> lockedList;
+    private List<DataItem<?>> lockedList;
 
     public EntityDataManagerLockable(Entity entity)
     {
         super(entity);
-        for (DataEntry entry : entity.getEntityData().getAll())
+        for (DataItem<?> entry : entity.getEntityData().getAll())
         {
             //TODO
             //			register(entry.getKey(), entry.getValue());
@@ -32,7 +32,7 @@ public class EntityDataManagerLockable extends EntityDataManager
     }
 
     @Override
-    public void assignValues(List<DataEntry<?>> entriesIn)
+    public void assignValues(List<DataItem<?>> entriesIn)
     {
         if (isLocked)
         {

@@ -64,7 +64,6 @@ public class GuiDetector extends AbstractContainerScreen<ContainerDetector>
         flowMenu.drawMain(matrixStack, this, (int) x, y);
         ResourceHelper.bindResource(GuiDetector.texture);
         int flowPosId = 0;
-        //TODO
         for (final OperatorObject operator : OperatorObject.getOperatorList(detector.getDetectorType()))
         {
             if (operator.inTab())

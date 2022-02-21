@@ -1,5 +1,12 @@
 package vswe.stevescarts.modules.realtimers;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -13,7 +20,7 @@ import java.util.List;
 public class ModuleExperience extends ModuleBase
 {
     private static final int MAX_EXPERIENCE_AMOUNT = 1500;
-    private DataParameter<Byte> EXPERIENCE;
+    private EntityDataAccessor<Byte> EXPERIENCE;
 
     public ModuleExperience(final EntityMinecartModular cart)
     {
@@ -28,16 +35,16 @@ public class ModuleExperience extends ModuleBase
             final List list = getCart().level.getEntities(getCart(), getCart().getBoundingBox().inflate(3.0, 1.0, 3.0));
             for (int e = 0; e < list.size(); ++e)
             {
-                if (list.get(e) instanceof ExperienceOrbEntity)
+                if (list.get(e) instanceof ExperienceOrb)
                 {
-                    addExperience(((ExperienceOrbEntity) list.get(e)).getValue());
+                    addExperience(((ExperienceOrb) list.get(e)).getValue());
                     if (getExperienceAmount() > MAX_EXPERIENCE_AMOUNT)
                     {
                         setExperienceAmount(MAX_EXPERIENCE_AMOUNT);
                     }
                     else
                     {
-                        ((ExperienceOrbEntity) list.get(e)).remove();
+                        ((ExperienceOrb) list.get(e)).remove(Entity.RemovalReason.DISCARDED);
                     }
                 }
             }
@@ -78,13 +85,13 @@ public class ModuleExperience extends ModuleBase
     @Override
     public void initDw()
     {
-        EXPERIENCE = createDw(DataSerializers.BYTE);
+        EXPERIENCE = createDw(EntityDataSerializers.BYTE);
         registerDw(EXPERIENCE, (byte) 0);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         drawStringOnMouseOver(matrixStack, gui, Localization.MODULES.ATTACHMENTS.EXPERIENCE_LEVEL.translate(String.valueOf(getExperienceAmount()), String.valueOf(1500)) + "\n" + Localization.MODULES.ATTACHMENTS.EXPERIENCE_EXTRACT.translate() + "\n" + Localization.MODULES.ATTACHMENTS.EXPERIENCE_PLAYER_LEVEL.translate(String.valueOf(getClientPlayer().experienceLevel)), x, y, getContainerRect());
     }
@@ -97,7 +104,7 @@ public class ModuleExperience extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, Localization.MODULES.ATTACHMENTS.EXPERIENCE.translate(), 8, 6, 4210752);
     }
@@ -116,7 +123,7 @@ public class ModuleExperience extends ModuleBase
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void drawContent(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y, final int id)
+    private void drawContent(PoseStack matrixStack, GuiMinecart gui, final int x, final int y, final int id)
     {
         final int lowerLevel = id * 1500 / 3;
         final int currentLevel = getExperienceAmount() - lowerLevel;
@@ -131,7 +138,7 @@ public class ModuleExperience extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/experience.png");
         for (int i = 0; i < 3; ++i)
@@ -181,20 +188,20 @@ public class ModuleExperience extends ModuleBase
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         player.giveExperiencePoints(Math.min(getExperienceAmount(), 50));
         setExperienceAmount(Math.min(getExperienceAmount(), 50));
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         setExperienceAmount(tagCompound.getShort(generateNBTName("Experience", id)));
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         tagCompound.putShort(generateNBTName("Experience", id), (short) getExperienceAmount());
     }

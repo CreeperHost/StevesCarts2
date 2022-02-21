@@ -1,7 +1,7 @@
 package vswe.stevescarts.containers.slots;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.helpers.EnchantmentInfo;
 
 import javax.annotation.Nonnull;
@@ -11,7 +11,7 @@ public class SlotEnchantment extends SlotBase
 {
     private ArrayList<EnchantmentInfo.ENCHANTMENT_TYPE> enabledTypes;
 
-    public SlotEnchantment(final IInventory iinventory, final ArrayList<EnchantmentInfo.ENCHANTMENT_TYPE> enabledTypes, final int i, final int j, final int k)
+    public SlotEnchantment(final Container iinventory, final ArrayList<EnchantmentInfo.ENCHANTMENT_TYPE> enabledTypes, final int i, final int j, final int k)
     {
         super(iinventory, i, j, k);
         this.enabledTypes = enabledTypes;

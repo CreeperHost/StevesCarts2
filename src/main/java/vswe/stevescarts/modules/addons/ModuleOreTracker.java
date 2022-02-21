@@ -1,11 +1,10 @@
 package vswe.stevescarts.modules.addons;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.OreBlock;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.OreBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.modules.workers.tools.ModuleDrill;

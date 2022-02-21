@@ -1,7 +1,10 @@
 package vswe.stevescarts.modules.engines;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -18,7 +21,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
     private int fireCoolDown;
     private int fireIndex;
 
-    private DataParameter<Integer> PRIORITY;
+    private EntityDataAccessor<Integer> PRIORITY;
 
     public ModuleCoalBase(final EntityMinecartModular cart)
     {
@@ -26,7 +29,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
     }
 
     @Override
-    protected DataParameter<Integer> getPriorityDw()
+    protected EntityDataAccessor<Integer> getPriorityDw()
     {
         return PRIORITY;
     }
@@ -34,7 +37,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
     @Override
     public void initDw()
     {
-        PRIORITY = createDw(DataSerializers.INT);
+        PRIORITY = createDw(EntityDataSerializers.INT);
         super.initDw();
     }
 

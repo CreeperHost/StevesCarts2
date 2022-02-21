@@ -2,6 +2,8 @@ package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -25,7 +27,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
     private static final int SLICES_PER_CAKE = 6;
     private static final int MAX_TOTAL_SLICES = 66;
     private int[] rect;
-    private DataParameter<Integer> BUFFER;
+    private EntityDataAccessor<Integer> BUFFER;
 
     public ModuleCakeServer(final EntityMinecartModular cart)
     {
@@ -87,7 +89,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
     @Override
     public void initDw()
     {
-        BUFFER = createDw(DataSerializers.INT);
+        BUFFER = createDw(EntityDataSerializers.INT);
         registerDw(BUFFER, 0);
     }
 

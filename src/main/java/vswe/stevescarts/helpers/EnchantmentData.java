@@ -1,6 +1,6 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
 
 public class EnchantmentData
 {
@@ -89,6 +89,6 @@ public class EnchantmentData
                 }
             }
         }
-        return TextFormatting.YELLOW + "TODO";//TODO //getEnchantment().getEnchantment().getTranslatedName(getLevel()) + "\n" + percentage + "% left of this tier";
+        return ChatFormatting.YELLOW + "TODO";//TODO //getEnchantment().getEnchantment().getTranslatedName(getLevel()) + "\n" + percentage + "% left of this tier";
     }
 }
