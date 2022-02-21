@@ -1,8 +1,8 @@
 package vswe.stevescarts.modules.storages.chests;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -14,7 +14,7 @@ import vswe.stevescarts.modules.storages.ModuleStorage;
 public abstract class ModuleChest extends ModuleStorage
 {
     private float chestAngle;
-    private DataParameter<Boolean> IS_OPEN;
+    private EntityDataAccessor<Boolean> IS_OPEN;
 
     public ModuleChest(final EntityMinecartModular cart)
     {
@@ -42,7 +42,7 @@ public abstract class ModuleChest extends ModuleStorage
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
     }
@@ -104,7 +104,7 @@ public abstract class ModuleChest extends ModuleStorage
     {
         if (hasVisualChest())
         {
-            IS_OPEN = createDw(DataSerializers.BOOLEAN);
+            IS_OPEN = createDw(EntityDataSerializers.BOOLEAN);
             registerDw(IS_OPEN, false);
         }
     }

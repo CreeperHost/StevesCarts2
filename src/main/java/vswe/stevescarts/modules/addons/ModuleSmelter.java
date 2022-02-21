@@ -1,14 +1,13 @@
 package vswe.stevescarts.modules.addons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.AbstractCookingRecipe;
-import net.minecraft.item.crafting.FurnaceRecipe;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.IItemHandler;
@@ -117,12 +116,12 @@ public class ModuleSmelter extends ModuleRecipe
     }
 
     @Nullable
-    public FurnaceRecipe getRecipeSmelting()
+    public SmeltingRecipe getRecipeSmelting()
     {
-        Set<IRecipe<?>> recipes = RecipeHelpers.findRecipesByType(IRecipeType.SMELTING, getCart().level);
-        for (IRecipe<?> iRecipe : recipes)
+        Set<Recipe<?>> recipes = RecipeHelpers.findRecipesByType(RecipeType.SMELTING, getCart().level);
+        for (Recipe<?> iRecipe : recipes)
         {
-            FurnaceRecipe recipe = (FurnaceRecipe) iRecipe;
+            SmeltingRecipe recipe = (SmeltingRecipe) iRecipe;
             NonNullList<ItemStack> stacks = NonNullList.withSize(1, ItemStack.EMPTY);
             stacks.set(0, getStack(0));
             IItemHandlerModifiable iItemHandlerModifiable = new ItemStackHandler(stacks);
@@ -225,7 +224,7 @@ public class ModuleSmelter extends ModuleRecipe
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         super.drawForeground(matrixStack, gui);
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
@@ -250,14 +249,14 @@ public class ModuleSmelter extends ModuleRecipe
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         super.Load(tagCompound, id);
         energyBuffer = tagCompound.getByte(generateNBTName("Buffer", id));
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         super.Save(tagCompound, id);
         tagCompound.putByte(generateNBTName("Buffer", id), (byte) energyBuffer);

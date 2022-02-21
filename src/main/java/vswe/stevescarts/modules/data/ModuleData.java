@@ -292,8 +292,9 @@ public class ModuleData
         engineGroup.add(compactsolar);
         engineGroup.add(cheatengine);
         if(ModList.get().isLoaded("ftbic")) {
-            final ModuleData electricEngine = new ModuleData(103, "Electric Engine", ModuleElectricEngine.class, 15);
-            engineGroup.add(electricEngine);
+            //TODO
+//            final ModuleData electricEngine = new ModuleData(103, "Electric Engine", ModuleElectricEngine.class, 15);
+//            engineGroup.add(electricEngine);
         }
 
         new ModuleData(78, "Steve's Arcade", ModuleArcade.class, 10).addParent(seat);

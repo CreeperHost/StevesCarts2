@@ -52,6 +52,6 @@ public class BlockCargoManager extends BlockContainerBase
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState)
     {
-        return new TileEntityCargo();
+        return new TileEntityCargo(blockPos, blockState);
     }
 }

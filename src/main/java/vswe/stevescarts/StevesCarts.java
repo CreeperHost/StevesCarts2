@@ -72,7 +72,7 @@ public class StevesCarts
     {
         ModScreens.init();
         CompatHandler.initClient();
-        ModuleData.initModels();
+//        ModuleData.initModels();
 
         //TODO
 //        RenderingRegistry.registerEntityRenderingHandler(ModEntities.MODULAR_CART.get(), RendererCart::new);

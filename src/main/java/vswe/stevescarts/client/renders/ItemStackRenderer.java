@@ -1,17 +1,19 @@
 package vswe.stevescarts.client.renders;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.ByteArrayNBT;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.nbt.ByteArrayTag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.init.ModItems;
@@ -21,10 +23,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ItemStackRenderer extends ItemStackTileEntityRenderer
+public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer
 {
+    public ItemStackRenderer(BlockEntityRenderDispatcher p_172550_, EntityModelSet p_172551_) {
+        super(p_172550_, p_172551_);
+    }
+
     @Override
-    public void renderByItem(ItemStack itemStack, ItemCameraTransforms.TransformType transformType, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int p_239207_5_, int p_239207_6_)
+    public void renderByItem(ItemStack itemStack, ItemTransforms.TransformType transformType, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int p_239207_5_, int p_239207_6_)
     {
         if (itemStack.getItem() != ModItems.CARTS.get())
         {
@@ -33,19 +39,19 @@ public class ItemStackRenderer extends ItemStackTileEntityRenderer
         }
         matrixStack.pushPose();
         matrixStack.scale(-1.0f, -1.0f, 1.0f);
-        CompoundNBT info = itemStack.getTag();
+        CompoundTag info = itemStack.getTag();
         if (info != null && info.contains("Modules"))
         {
-            ByteArrayNBT moduleIDTag = (ByteArrayNBT) info.get("Modules");
+            ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
             byte[] bytes = moduleIDTag.getAsByteArray();
             HashMap<String, ModelCartbase> models = new HashMap<>();
             List<ModuleBase> moduleBaseList = new ArrayList<>();
             float lowestMult = 1.0f;
-            IVertexBuilder ivertexbuilder = iRenderTypeBuffer.getBuffer(RenderType.solid());
+            VertexConsumer ivertexbuilder = iRenderTypeBuffer.getBuffer(RenderType.solid());
 
-            EntityMinecartModular cart = new EntityMinecartModular(Minecraft.getInstance().level, 0, 0, 0, itemStack.getTag(), new TranslationTextComponent(""));
+            EntityMinecartModular cart = new EntityMinecartModular(Minecraft.getInstance().level, 0, 0, 0, itemStack.getTag(), new TextComponent(""));
 
-            if (transformType == ItemCameraTransforms.TransformType.GUI)
+            if (transformType == ItemTransforms.TransformType.GUI)
             {
                 matrixStack.translate(-1, 0, 0);
                 matrixStack.scale(lowestMult, lowestMult, lowestMult);

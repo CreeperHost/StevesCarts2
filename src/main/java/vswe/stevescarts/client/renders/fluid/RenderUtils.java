@@ -1,13 +1,13 @@
 package vswe.stevescarts.client.renders.fluid;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraftforge.fluids.FluidStack;
 
 public class RenderUtils
 {
-    public static void renderObject(Model3D object, MatrixStack matrix, IVertexBuilder buffer, int argb, int light) {
+    public static void renderObject(Model3D object, PoseStack matrix, VertexConsumer buffer, int argb, int light) {
         if (object != null) {
             RenderResizableCuboid.INSTANCE.renderCube(object, matrix, buffer, argb, light);
         }

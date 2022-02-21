@@ -1,7 +1,7 @@
 package vswe.stevescarts.client.renders.fluid;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 import java.util.Arrays;
 

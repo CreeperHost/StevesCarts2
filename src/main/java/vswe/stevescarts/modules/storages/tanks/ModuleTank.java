@@ -1,17 +1,16 @@
 package vswe.stevescarts.modules.storages.tanks;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.Screen;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
@@ -38,9 +37,9 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     protected SCTank tank;
     private int tick;
     protected int[] tankBounds;
-    private DataParameter<String> FLUID_NAME;
-    private DataParameter<Integer> FLUID_AMOUNT;
-    private DataParameter<Boolean> LOCKED;
+    private EntityDataAccessor<String> FLUID_NAME;
+    private EntityDataAccessor<Integer> FLUID_AMOUNT;
+    private EntityDataAccessor<Boolean> LOCKED;
 
     public ModuleTank(final EntityMinecartModular cart)
     {
@@ -72,7 +71,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, final GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, final GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
     }
@@ -178,7 +177,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(MatrixStack matrixStack, final GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, final GuiMinecart gui, final int x, final int y)
     {
         tank.drawFluid(matrixStack, gui, gui.getGuiLeft() + getX() + tankBounds[0], gui.getGuiTop() + getY() + tankBounds[1]);
         ResourceHelper.bindResource("/gui/tank.png");
@@ -187,7 +186,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         drawStringOnMouseOver(matrixStack, gui, getTankInfo(), x, y, tankBounds);
     }
@@ -245,16 +244,16 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
-        final CompoundNBT compound = new CompoundNBT();
+        final CompoundTag compound = new CompoundTag();
         tank.getFluid().writeToNBT(compound);
         tagCompound.put(generateNBTName("Fluid", id), compound);
         tagCompound.putBoolean(generateNBTName("Locked", id), getDw(LOCKED));
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(tagCompound.getCompound(generateNBTName("Fluid", id)));
         tank.setFluid(fluidStack);
@@ -277,9 +276,9 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     @Override
     public void initDw()
     {
-        FLUID_NAME = createDw(DataSerializers.STRING);
-        FLUID_AMOUNT = createDw(DataSerializers.INT);
-        LOCKED = createDw(DataSerializers.BOOLEAN);
+        FLUID_NAME = createDw(EntityDataSerializers.STRING);
+        FLUID_AMOUNT = createDw(EntityDataSerializers.INT);
+        LOCKED = createDw(EntityDataSerializers.BOOLEAN);
         registerDw(FLUID_NAME, (tank.getFluid().isEmpty()) ? "" : tank.getFluid().getFluid().getRegistryName().toString());
         registerDw(FLUID_AMOUNT, (tank.getFluid().isEmpty()) ? -1 : tank.getFluid().getAmount());
         registerDw(LOCKED, false);
@@ -317,7 +316,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         if ((!getFluid().isEmpty() || getDw(LOCKED)))
         {

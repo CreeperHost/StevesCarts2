@@ -1,8 +1,8 @@
 package vswe.stevescarts.client.models;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.ModuleBase;
 import vswe.stevescarts.modules.workers.ModuleBridge;
@@ -15,20 +15,21 @@ public class ModelBridge extends ModelCartbase
     private static ResourceLocation normalWarning;
     private static ResourceLocation downWarning;
     private static ResourceLocation upWarning;
-    private ModelRenderer drillAnchor;
+    private ModelPart drillAnchor;
 
     public ModelBridge()
     {
-        final ModelRenderer side1 = new ModelRenderer(this, 0, 0);
-        AddRenderer(side1);
-        side1.addBox(1.0f, 3.0f, 0.5f, 2, 6, 1, 0.0f);
-        side1.setPos(-11.5f, -6.0f, 8.0f);
-        side1.yRot = 1.5707964f;
-        final ModelRenderer side2 = new ModelRenderer(this, 0, 0);
-        AddRenderer(side2);
-        side2.addBox(1.0f, 3.0f, 0.5f, 2, 6, 1, 0.0f);
-        side2.setPos(-11.5f, -6.0f, -4.0f);
-        side2.yRot = 1.5707964f;
+        //TODO
+//        final ModelRenderer side1 = new ModelRenderer(this, 0, 0);
+//        AddRenderer(side1);
+//        side1.addBox(1.0f, 3.0f, 0.5f, 2, 6, 1, 0.0f);
+//        side1.setPos(-11.5f, -6.0f, 8.0f);
+//        side1.yRot = 1.5707964f;
+//        final ModelRenderer side2 = new ModelRenderer(this, 0, 0);
+//        AddRenderer(side2);
+//        side2.addBox(1.0f, 3.0f, 0.5f, 2, 6, 1, 0.0f);
+//        side2.setPos(-11.5f, -6.0f, -4.0f);
+//        side2.yRot = 1.5707964f;
     }
 
     @Override

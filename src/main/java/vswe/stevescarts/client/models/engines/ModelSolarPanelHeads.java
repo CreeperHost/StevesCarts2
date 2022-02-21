@@ -1,9 +1,9 @@
 package vswe.stevescarts.client.models.engines;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.ModuleBase;
 import vswe.stevescarts.modules.engines.ModuleSolarTop;
@@ -14,7 +14,7 @@ public class ModelSolarPanelHeads extends ModelSolarPanel
 {
     private static ResourceLocation texture;
     private static ResourceLocation texture2;
-    ArrayList<ModelRenderer> panels;
+    ArrayList<ModelPart> panels;
 
     @Override
     public ResourceLocation getResource(final ModuleBase module)
@@ -41,14 +41,15 @@ public class ModelSolarPanelHeads extends ModelSolarPanel
     public ModelSolarPanelHeads(final int panelCount)
     {
         panels = new ArrayList<>();
-        final ModelRenderer moving = createMovingHolder(0, 0);
+        //TODO
+//        final ModelPart moving = createMovingHolder(0, 0);
         for (int i = 0; i < panelCount; ++i)
         {
             createPanel(moving, i);
         }
     }
 
-    private void createPanel(final ModelRenderer base, final int index)
+    private void createPanel(final ModelPart base, final int index)
     {
         float rotation = 0.0f;
         float f = 0.0f;
@@ -86,22 +87,23 @@ public class ModelSolarPanelHeads extends ModelSolarPanel
         createPanel(base, rotation, f);
     }
 
-    private void createPanel(final ModelRenderer base, final float rotation, final float f)
+    private void createPanel(final ModelPart base, final float rotation, final float f)
     {
-        final ModelRenderer panel = new ModelRenderer(this, 0, 0);
-        fixSize(panel);
-        base.addChild(panel);
-        panel.addBox(-6.0f, 0.0f, -2.0f, 12, 13, 2, 0.0f);
-        panel.setPos((float) Math.sin(rotation) * f, -5.0f, (float) Math.cos(rotation) * f);
-        panel.yRot = rotation;
-        panels.add(panel);
+        //TODO
+//        final ModelRenderer panel = new ModelRenderer(this, 0, 0);
+//        fixSize(panel);
+//        base.addChild(panel);
+//        panel.addBox(-6.0f, 0.0f, -2.0f, 12, 13, 2, 0.0f);
+//        panel.setPos((float) Math.sin(rotation) * f, -5.0f, (float) Math.cos(rotation) * f);
+//        panel.yRot = rotation;
+//        panels.add(panel);
     }
 
     @Override
-    public void applyEffects(final ModuleBase module, MatrixStack matrixStack, IRenderTypeBuffer rtb, final float yaw, final float pitch, final float roll)
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
     {
         super.applyEffects(module, matrixStack, rtb, yaw, pitch, roll);
-        for (final ModelRenderer panel : panels)
+        for (final ModelPart panel : panels)
         {
             panel.xRot = ((module == null) ? 0.0f : (-((ModuleSolarTop) module).getInnerRotation()));
         }

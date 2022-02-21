@@ -1,9 +1,9 @@
 package vswe.stevescarts.modules.workers;
 
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.level.Level;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.modules.IActivatorModule;
 
@@ -13,7 +13,7 @@ public class ModuleRemover extends ModuleWorker implements IActivatorModule
 {
     @Nonnull
     private BlockPos remove;
-    private DataParameter<Boolean> IS_ENABLED;
+    private EntityDataAccessor<Boolean> IS_ENABLED;
 
     public ModuleRemover(final EntityMinecartModular cart)
     {
@@ -24,7 +24,7 @@ public class ModuleRemover extends ModuleWorker implements IActivatorModule
     @Override
     public void initDw()
     {
-        IS_ENABLED = createDw(DataSerializers.BOOLEAN);
+        IS_ENABLED = createDw(EntityDataSerializers.BOOLEAN);
         registerDw(IS_ENABLED, true);
     }
 
@@ -56,7 +56,7 @@ public class ModuleRemover extends ModuleWorker implements IActivatorModule
     public boolean work()
     {
         EntityMinecartModular cart = getCart();
-        World world = cart.level;
+        Level world = cart.level;
         if (remove.getY() != -1 && (remove.getX() != cart.x() || remove.getZ() != cart.z()) && removeRail(world, remove, true))
         {
             return false;
@@ -83,14 +83,14 @@ public class ModuleRemover extends ModuleWorker implements IActivatorModule
         return false;
     }
 
-    private boolean isRailAtCoords(World world, BlockPos coords)
+    private boolean isRailAtCoords(Level world, BlockPos coords)
     {
         //TODO
         //		return BlockRailBase.isRailBlock(world, coords.up()) || BlockRailBase.isRailBlock(getCart().world, coords) || BlockRailBase.isRailBlock(getCart().world, coords.down());
         return false;
     }
 
-    private boolean removeRail(World world, BlockPos pos, final boolean flag)
+    private boolean removeRail(Level world, BlockPos pos, final boolean flag)
     {
         if (flag)
         {

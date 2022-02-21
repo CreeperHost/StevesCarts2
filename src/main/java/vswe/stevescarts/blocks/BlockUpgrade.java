@@ -85,8 +85,8 @@ public class BlockUpgrade extends BlockContainerBase
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
-        return new TileEntityUpgrade(assemblerUpgrade);
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new TileEntityUpgrade(assemblerUpgrade, blockPos, blockState);
     }
 
     @Override

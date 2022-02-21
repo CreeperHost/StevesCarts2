@@ -173,6 +173,6 @@ public class BlockCartAssembler extends BlockContainerBase
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState)
     {
-        return new TileEntityCartAssembler();
+        return new TileEntityCartAssembler(blockPos, blockState);
     }
 }

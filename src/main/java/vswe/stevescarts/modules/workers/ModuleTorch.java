@@ -1,17 +1,17 @@
 package vswe.stevescarts.modules.workers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -29,7 +29,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule
     private int lightLimit;
     private int[] boxRect;
     boolean markerMoving;
-    private DataParameter<Integer> TORCHES;
+    private EntityDataAccessor<Integer> TORCHES;
 
     public ModuleTorch(final EntityMinecartModular cart)
     {
@@ -59,7 +59,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
     }
@@ -75,7 +75,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule
     {
         final BlockPos next = getLastblock();
         final EntityMinecartModular cart = getCart();
-        final World world = cart.level;
+        final Level world = cart.level;
         final int x = next.getX();
         final int y = next.getY();
         final int z = next.getZ();
@@ -137,7 +137,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/torch.png");
         int barLength = 3 * light;
@@ -156,7 +156,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule
     }
 
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         drawStringOnMouseOver(matrixStack, gui, "Threshold: " + lightLimit + " Current: " + light, x, y, boxRect);
     }
@@ -198,7 +198,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         //		if (id == 0) {
         lightLimit = data[0];
@@ -276,7 +276,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule
     @Override
     public void initDw()
     {
-        TORCHES = createDw(DataSerializers.INT);
+        TORCHES = createDw(EntityDataSerializers.INT);
         registerDw(TORCHES, 0);
     }
 
@@ -317,13 +317,13 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         tagCompound.putByte(generateNBTName("lightLimit", id), (byte) lightLimit);
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         lightLimit = tagCompound.getByte(generateNBTName("lightLimit", id));
         calculateTorches();

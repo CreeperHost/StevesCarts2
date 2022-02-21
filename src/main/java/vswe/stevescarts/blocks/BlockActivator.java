@@ -38,6 +38,6 @@ public class BlockActivator extends BlockContainerBase
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState)
     {
-        return new TileEntityActivator();
+        return new TileEntityActivator(blockPos, blockState);
     }
 }

@@ -1,17 +1,17 @@
 package vswe.stevescarts.modules.workers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.IGrowable;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -32,7 +32,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     private int tankPosX;
     private int tankPosY;
     private int range;
-    private DataParameter<Integer> FERTILIZER;
+    private EntityDataAccessor<Integer> FERTILIZER;
     private final int fertPerBonemeal = 4;
     private final int maxStacksOfBones = 1;
     private final Random random = new Random();
@@ -79,7 +79,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/fertilize.png");
         drawImage(matrixStack, gui, tankPosX, tankPosY, 0, 0, 18, 27);
@@ -90,14 +90,14 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         drawStringOnMouseOver(matrixStack, gui, Localization.MODULES.ATTACHMENTS.FERTILIZERS.translate() + ": " + getFertAmount() + " / " + getMaxFert(), x, y, tankPosX, tankPosY, 18, 27);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
     }
@@ -123,7 +123,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     @Override
     public boolean work()
     {
-        World world = getCart().level;
+        Level world = getCart().level;
         BlockPos next = getNextblock();
         for (int i = -range; i <= range; ++i)
         {
@@ -138,20 +138,20 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
         return false;
     }
 
-    private boolean fertilize(World world, BlockPos pos)
+    private boolean fertilize(Level world, BlockPos pos)
     {
         BlockState stateOfTopBlock = world.getBlockState(pos);
         Block blockTop = stateOfTopBlock.getBlock();
         if (getFertAmount() > 0)
         {
-            if (blockTop instanceof IGrowable)
+            if (blockTop instanceof CropBlock)
             {
-                IGrowable growable = (IGrowable) blockTop;
+                CropBlock growable = (CropBlock) blockTop;
                 if (growable.isValidBonemealTarget(world, pos, stateOfTopBlock, false))
                 {
                     if (growable.isBonemealSuccess(world, getCart().random, pos, stateOfTopBlock))
                     {
-                        growable.performBonemeal((ServerWorld) world, getCart().random, pos, stateOfTopBlock);
+                        growable.performBonemeal((ServerLevel) world, getCart().random, pos, stateOfTopBlock);
                         setFertAmount(getFertAmount() - 2);
                         return true;
                     }
@@ -191,7 +191,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     @Override
     public void initDw()
     {
-        FERTILIZER = createDw(DataSerializers.INT);
+        FERTILIZER = createDw(EntityDataSerializers.INT);
         registerDw(FERTILIZER, 0);
     }
 
@@ -243,13 +243,13 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         tagCompound.putShort(generateNBTName("Fert", id), (short) getFertAmount());
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         setFertAmount(tagCompound.getShort(generateNBTName("Fert", id)));
     }

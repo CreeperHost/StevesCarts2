@@ -1,16 +1,16 @@
 package vswe.stevescarts.modules.workers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.AbstractRailBlock;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -26,7 +26,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule
 {
     private boolean hasGeneratedAngles;
     private float[] railAngles;
-    private DataParameter<Byte> RAILS;
+    private EntityDataAccessor<Byte> RAILS;
 
     public ModuleRailer(final EntityMinecartModular cart)
     {
@@ -48,7 +48,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, Localization.MODULES.ATTACHMENTS.RAILER.translate(), 8, 6, 4210752);
     }
@@ -62,7 +62,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule
     @Override
     public boolean work()
     {
-        World world = getCart().level;
+        Level world = getCart().level;
         BlockPos next = getNextblock();
         int x = next.getX();
         int y = next.getY();
@@ -88,7 +88,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule
                 boolean front = false;
                 for (int j = 0; j < pos.size(); ++j)
                 {
-                    if (AbstractRailBlock.isRail(world, new BlockPos(pos.get(j)[0], pos.get(j)[1], pos.get(j)[2])))
+                    if (BaseRailBlock.isRail(world, new BlockPos(pos.get(j)[0], pos.get(j)[1], pos.get(j)[2])))
                     {
                         front = true;
                         break;
@@ -162,7 +162,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule
     @Override
     public void initDw()
     {
-        RAILS = createDw(DataSerializers.BYTE);
+        RAILS = createDw(EntityDataSerializers.BYTE);
         registerDw(RAILS, (byte) 0);
     }
 
@@ -220,7 +220,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule
     }
 
     @Override
-    protected void Load(CompoundNBT tagCompound, final int id)
+    protected void Load(CompoundTag tagCompound, final int id)
     {
         calculateRails();
     }

@@ -1,12 +1,12 @@
 package vswe.stevescarts.modules.workers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.IFluidBlock;
@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 
 public class ModuleBridge extends ModuleWorker implements ISuppliesModule
 {
-    private DataParameter<Boolean> BRIDGE;
+    private EntityDataAccessor<Boolean> BRIDGE;
 
     public ModuleBridge(final EntityMinecartModular cart)
     {
@@ -47,7 +47,7 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
     }
@@ -61,7 +61,7 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule
     @Override
     public boolean work()
     {
-        World world = getCart().level;
+        Level world = getCart().level;
         BlockPos next = getNextblock();
         if (getCart().getYTarget() < next.getY())
         {
@@ -87,7 +87,7 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule
         return false;
     }
 
-    private boolean tryBuildBridge(World world, BlockPos pos, final boolean flag)
+    private boolean tryBuildBridge(Level world, BlockPos pos, final boolean flag)
     {
         final Block b = world.getBlockState(pos).getBlock();
         if ((countsAsAir(pos) || b instanceof IFluidBlock) && isValidForTrack(pos.above(), false))
@@ -121,7 +121,7 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule
     @Override
     public void initDw()
     {
-        BRIDGE = createDw(DataSerializers.BOOLEAN);
+        BRIDGE = createDw(EntityDataSerializers.BOOLEAN);
         registerDw(BRIDGE, false);
     }
 

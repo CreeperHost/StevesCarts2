@@ -1,8 +1,8 @@
 package vswe.stevescarts.modules.storages.tanks;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 
 public class ModuleCheatTank extends ModuleTank
 {
-    private static final TextFormatting[] colors = new TextFormatting[]{TextFormatting.YELLOW, TextFormatting.GREEN, TextFormatting.RED, TextFormatting.GOLD};
+    private static final ChatFormatting[] colors = new ChatFormatting[]{ChatFormatting.YELLOW, ChatFormatting.GREEN, ChatFormatting.RED, ChatFormatting.GOLD};
     private int mode;
 
     public ModuleCheatTank(final EntityMinecartModular cart)
@@ -45,7 +45,7 @@ public class ModuleCheatTank extends ModuleTank
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0 && (data[0] & 0x1) != 0x0)
         {
@@ -93,14 +93,14 @@ public class ModuleCheatTank extends ModuleTank
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         super.Save(tagCompound, id);
         tagCompound.putByte(generateNBTName("mode", id), (byte) mode);
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         super.Load(tagCompound, id);
         mode = tagCompound.getByte(generateNBTName("mode", id));

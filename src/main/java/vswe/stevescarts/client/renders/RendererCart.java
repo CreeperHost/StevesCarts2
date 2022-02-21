@@ -1,24 +1,19 @@
 package vswe.stevescarts.client.renders;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3d;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import vswe.stevescarts.client.FluidRenderer;
@@ -29,20 +24,20 @@ import vswe.stevescarts.modules.ModuleBase;
 public class RendererCart<T extends EntityMinecartModular> extends EntityRenderer<T>
 {
     public static final int MAX_LIGHT = 15728880;
-    EntityRendererManager entityRendererManager;
+    EntityRendererProvider.Context entityRendererManager;
 
-    public RendererCart(EntityRendererManager entityRendererManager)
+    public RendererCart(EntityRendererProvider.Context entityRendererManager)
     {
         super(entityRendererManager);
         this.entityRendererManager = entityRendererManager;
         shadowRadius = 0.5F;
     }
 
-    public static void quad(Matrix4f matrix4f, IVertexBuilder buffer, TextureAtlasSprite sprite, float width, float height, float r, float g, float b) {
+    public static void quad(Matrix4f matrix4f, VertexConsumer buffer, TextureAtlasSprite sprite, float width, float height, float r, float g, float b) {
         quad(matrix4f, buffer, sprite, width, height, MAX_LIGHT, r, g, b, 1.0F);
     }
 
-    public static void quad(Matrix4f matrix4f, IVertexBuilder buffer, TextureAtlasSprite sprite, float width, float height, int light, float r, float g, float b, float a) {
+    public static void quad(Matrix4f matrix4f, VertexConsumer buffer, TextureAtlasSprite sprite, float width, float height, int light, float r, float g, float b, float a) {
         buffer.vertex(matrix4f, 0, 0, height).color(r, g, b, a).uv(sprite.getU0(), sprite.getU1()).uv2(light).endVertex();
         buffer.vertex(matrix4f, width, 0, height).color(r, g, b, a).uv(sprite.getU0(), sprite.getU1()).uv2(light).endVertex();
         buffer.vertex(matrix4f, width, 0, 0).color(r, g, b, a).uv(sprite.getU0(), sprite.getU1()).uv2(light).endVertex();
@@ -50,7 +45,7 @@ public class RendererCart<T extends EntityMinecartModular> extends EntityRendere
     }
 
     @Override
-    public void render(T p_225623_1_, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight)
+    public void render(T p_225623_1_, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight)
     {
         super.render(p_225623_1_, entityYaw, partialTicks, matrixStack, buffer, packedLight);
         matrixStack.pushPose();
@@ -60,17 +55,17 @@ public class RendererCart<T extends EntityMinecartModular> extends EntityRendere
         float f1 = (((float) (i >> 20 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
         float f2 = (((float) (i >> 24 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
         matrixStack.translate((double) f, (double) f1, (double) f2);
-        double d0 = MathHelper.lerp((double) partialTicks, p_225623_1_.xOld, p_225623_1_.getX());
-        double d1 = MathHelper.lerp((double) partialTicks, p_225623_1_.yOld, p_225623_1_.getY());
-        double d2 = MathHelper.lerp((double) partialTicks, p_225623_1_.zOld, p_225623_1_.getZ());
+        double d0 = Mth.lerp((double) partialTicks, p_225623_1_.xOld, p_225623_1_.getX());
+        double d1 = Mth.lerp((double) partialTicks, p_225623_1_.yOld, p_225623_1_.getY());
+        double d2 = Mth.lerp((double) partialTicks, p_225623_1_.zOld, p_225623_1_.getZ());
         double d3 = (double) 0.3F;
-        Vector3d vector3d = p_225623_1_.getPos(d0, d1, d2);
-        float pitch = MathHelper.lerp(partialTicks, p_225623_1_.xRotO, p_225623_1_.xRot);
+        Vec3 vector3d = p_225623_1_.getPos(d0, d1, d2);
+        float pitch = Mth.lerp(partialTicks, p_225623_1_.xRotO, p_225623_1_.getXRot());
 
         if (vector3d != null)
         {
-            Vector3d vector3d1 = p_225623_1_.getPosOffs(d0, d1, d2, (double) 0.3F);
-            Vector3d vector3d2 = p_225623_1_.getPosOffs(d0, d1, d2, (double) -0.3F);
+            Vec3 vector3d1 = p_225623_1_.getPosOffs(d0, d1, d2, (double) 0.3F);
+            Vec3 vector3d2 = p_225623_1_.getPosOffs(d0, d1, d2, (double) -0.3F);
             if (vector3d1 == null)
             {
                 vector3d1 = vector3d;
@@ -82,7 +77,7 @@ public class RendererCart<T extends EntityMinecartModular> extends EntityRendere
             }
 
             matrixStack.translate(vector3d.x - d0, (vector3d1.y + vector3d2.y) / 2.0D - d1, vector3d.z - d2);
-            Vector3d vector3d3 = vector3d2.add(-vector3d1.x, -vector3d1.y, -vector3d1.z);
+            Vec3 vector3d3 = vector3d2.add(-vector3d1.x, -vector3d1.y, -vector3d1.z);
             if (vector3d3.length() != 0.0D)
             {
                 vector3d3 = vector3d3.normalize();
@@ -98,7 +93,7 @@ public class RendererCart<T extends EntityMinecartModular> extends EntityRendere
         }
         entityYaw += 360;
 
-        double rotationYaw = (p_225623_1_.yRot + 180) % 360;
+        double rotationYaw = (p_225623_1_.getYRot() + 180) % 360;
         if (rotationYaw < 0)
         {
             rotationYaw = rotationYaw + 360;
@@ -123,11 +118,11 @@ public class RendererCart<T extends EntityMinecartModular> extends EntityRendere
 
         if (f5 > 0.0F)
         {
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(MathHelper.sin(f5) * f5 * f6 / 10.0F * (float) p_225623_1_.getHurtDir()));
+            matrixStack.mulPose(Vector3f.XP.rotationDegrees(Mth.sin(f5) * f5 * f6 / 10.0F * (float) p_225623_1_.getHurtDir()));
         }
 
         matrixStack.scale(-1.0F, -1.0F, 1.0F);
-        IVertexBuilder ivertexbuilder = buffer.getBuffer(RenderType.entitySolid(this.getTextureLocation(p_225623_1_)));
+        VertexConsumer ivertexbuilder = buffer.getBuffer(RenderType.entitySolid(this.getTextureLocation(p_225623_1_)));
         EntityMinecartModular cart = p_225623_1_;
         if (cart.getModules() != null)
         {
@@ -141,7 +136,8 @@ public class RendererCart<T extends EntityMinecartModular> extends EntityRendere
                         {
                             buffer.getBuffer(model.getRenderType(module));
                             model.renderToBuffer(matrixStack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-                            model.applyEffects(module, matrixStack, buffer, entityYaw, 1.0F, 1.0F, packedLight);
+                            //TODO
+//                            model.applyEffects(module, matrixStack, buffer, entityYaw, 1.0F, 1.0F, packedLight);
                         }
                     }
                 }

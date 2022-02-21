@@ -277,7 +277,7 @@ public class ArcadeInvaders extends ArcadeGame {
 	}
 
 	@Override
-	public void receivePacket(final int id, final byte[] data, final Player player) {
+	public void receivePacket(final int id, final byte[] data, final net.minecraft.world.entity.player.Player player) {
 		if (id == 2) {
 			short data2 = data[0];
 			short data3 = data[1];

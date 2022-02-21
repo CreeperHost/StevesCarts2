@@ -1,27 +1,32 @@
 package vswe.stevescarts.entitys;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.IDataSerializer;
+//import net.minecraft.network.PacketBuffer;
+//import net.minecraft.network.datasync.DataParameter;
+//import net.minecraft.network.datasync.DataSerializers;
+//import net.minecraft.network.datasync.IDataSerializer;
+
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
 
 public class CartDataSerializers
 {
     public static void init()
     {
-        DataSerializers.registerSerializer(VARINT);
+        EntityDataSerializers.registerSerializer(VARINT);
     }
 
-    public static final IDataSerializer<int[]> VARINT = new IDataSerializer<int[]>()
+    public static final EntityDataSerializer<int[]> VARINT = new EntityDataSerializer<int[]>()
     {
         @Override
-        public void write(PacketBuffer buf, int[] value)
+        public void write(FriendlyByteBuf buf, int[] value)
         {
             buf.writeVarIntArray(value);
         }
 
         @Override
-        public int[] read(PacketBuffer buf)
+        public int[] read(FriendlyByteBuf buf)
         {
             return buf.readVarIntArray();
         }
@@ -33,9 +38,9 @@ public class CartDataSerializers
         }
 
         @Override
-        public DataParameter<int[]> createAccessor(int id)
+        public EntityDataAccessor<int[]> createAccessor(int id)
         {
-            return new DataParameter<>(id, this);
+            return new EntityDataAccessor<>(id, this);
         }
     };
 }

@@ -1,14 +1,14 @@
 package vswe.stevescarts.client.renders.fluid;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3d;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.core.Direction;
 
 import java.util.Arrays;
 
@@ -20,7 +20,8 @@ public class RenderResizableCuboid
     private static final int U_MAX = 1;
     private static final int V_MIN = 2;
     private static final int V_MAX = 3;
-    protected EntityRendererManager manager = Minecraft.getInstance().getEntityRenderDispatcher();
+
+    protected EntityRenderDispatcher manager = Minecraft.getInstance().getEntityRenderDispatcher();
 
     private static Vector3f withValue(Vector3f vector, Direction.Axis axis, float value) {
         if (axis == Direction.Axis.X) {
@@ -51,7 +52,7 @@ public class RenderResizableCuboid
     /**
      * model 3d cube is the fluid
      */
-    public void renderCube(Model3D cube, MatrixStack matrix, IVertexBuilder buffer, int argb, int light) {
+    public void renderCube(Model3D cube, PoseStack matrix, VertexConsumer buffer, int argb, int light) {
         float red = RenderUtils.getRed(argb);
         float green = RenderUtils.getGreen(argb);
         float blue = RenderUtils.getBlue(argb);
@@ -59,7 +60,7 @@ public class RenderResizableCuboid
         Vector3d size = new Vector3d(cube.sizeX(), cube.sizeY(), cube.sizeZ());
         matrix.pushPose();
         matrix.translate(cube.minX, cube.minY, cube.minZ);
-        net.minecraft.util.math.vector.Matrix4f matrix4f = matrix.last().pose();
+        Matrix4f matrix4f = matrix.last().pose();
         for (Direction face : Direction.values()) {
             if (cube.shouldSideRender(face)) {
                 int ordinal = face.ordinal();
@@ -112,7 +113,7 @@ public class RenderResizableCuboid
         matrix.popPose();
     }
 
-    private void renderPoint(Matrix4f matrix4f, IVertexBuilder buffer, Direction face, Direction.Axis u, Direction.Axis v, float other, float[] uv, float[] xyz, boolean minU, boolean minV,
+    private void renderPoint(Matrix4f matrix4f, VertexConsumer buffer, Direction face, Direction.Axis u, Direction.Axis v, float other, float[] uv, float[] xyz, boolean minU, boolean minV,
                              float red, float green, float blue, float alpha, int light) {
         int uFinal = minU ? U_MIN : U_MAX;
         int vFinal = minV ? V_MIN : V_MAX;

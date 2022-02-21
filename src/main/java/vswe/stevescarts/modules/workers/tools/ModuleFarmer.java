@@ -1,20 +1,20 @@
 package vswe.stevescarts.modules.workers.tools;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CropsBlock;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.common.IPlantable;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.api.farms.ICropModule;
@@ -37,7 +37,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     private int farming;
     private float farmAngle;
     private float rigAngle;
-    private DataParameter<Boolean> IS_FARMING;
+    private EntityDataAccessor<Boolean> IS_FARMING;
 
     public ModuleFarmer(final EntityMinecartModular cart)
     {
@@ -83,7 +83,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     }
 
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, Localization.MODULES.TOOLS.FARMER.translate(), 8, 6, 4210752);
     }
@@ -108,7 +108,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     @Override
     public boolean work()
     {
-        World world = getCart().level;
+        Level world = getCart().level;
         BlockPos next = getNextblock();
         for (int i = -getRange(); i <= getRange(); ++i)
         {
@@ -132,7 +132,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
         return false;
     }
 
-    protected boolean till(World world, BlockPos pos)
+    protected boolean till(Level world, BlockPos pos)
     {
         Block block = world.getBlockState(pos).getBlock();
         if (Constants.DIRT.contains(block) && world.getBlockState(pos.above()).isAir())
@@ -148,7 +148,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
         return false;
     }
 
-    protected boolean plant(World world, BlockPos pos)
+    protected boolean plant(Level world, BlockPos pos)
     {
         int hasSeeds = -1;
         BlockState soilState = world.getBlockState(pos);
@@ -188,7 +188,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
         return false;
     }
 
-    protected boolean farm(World world, BlockPos pos)
+    protected boolean farm(Level world, BlockPos pos)
     {
         EntityMinecartModular cart = getCart();
         if (!isBroken())
@@ -220,7 +220,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
                 else
                 {
                     final int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
-                    stuff = block.getDrops(blockState, new LootContext.Builder((ServerWorld) world).withParameter(LootParameters.TOOL, ItemStack.EMPTY).withParameter(LootParameters.ORIGIN, getCart().position()));
+                    stuff = block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withParameter(LootContextParams.ORIGIN, getCart().position()));
                 }
                 for (@Nonnull ItemStack iStack : stuff)
                 {
@@ -248,24 +248,24 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
         return Constants.SEEDS.contains(seed.getItem());
     }
 
-    protected BlockState getCropFromSeedHandler(@Nonnull ItemStack seed, World world, BlockPos pos)
+    protected BlockState getCropFromSeedHandler(@Nonnull ItemStack seed, Level world, BlockPos pos)
     {
         Block cropBlock = Block.byItem(seed.getItem());
         if (cropBlock == null) return null;
-        if (cropBlock instanceof CropsBlock)
+        if (cropBlock instanceof CropBlock)
         {
-            CropsBlock cropsBlock = (CropsBlock) cropBlock;
+            CropBlock cropsBlock = (CropBlock) cropBlock;
             return cropsBlock.defaultBlockState();
 
         }
         return null;
     }
 
-    protected boolean isReadyToHarvestHandler(World world, BlockPos pos)
+    protected boolean isReadyToHarvestHandler(Level world, BlockPos pos)
     {
-        if (world.getBlockState(pos) != null && world.getBlockState(pos).getBlock() instanceof CropsBlock)
+        if (world.getBlockState(pos) != null && world.getBlockState(pos).getBlock() instanceof CropBlock)
         {
-            CropsBlock cropsBlock = (CropsBlock) world.getBlockState(pos).getBlock();
+            CropBlock cropsBlock = (CropBlock) world.getBlockState(pos).getBlock();
             return cropsBlock.isMaxAge(world.getBlockState(pos));
         }
         return false;
@@ -285,7 +285,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     public void initDw()
     {
         super.initDw();
-        IS_FARMING = createDw(DataSerializers.BOOLEAN);
+        IS_FARMING = createDw(EntityDataSerializers.BOOLEAN);
         registerDw(IS_FARMING, false);
     }
 

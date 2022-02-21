@@ -1,11 +1,11 @@
 package vswe.stevescarts.modules.workers;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FarmlandBlock;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.modules.ModuleBase;
@@ -44,7 +44,7 @@ public class ModuleHydrater extends ModuleWorker
     @Override
     public boolean work()
     {
-        World world = getCart().level;
+        Level world = getCart().level;
         BlockPos next = getNextblock();
         for (int i = -range; i <= range; ++i)
         {
@@ -59,12 +59,12 @@ public class ModuleHydrater extends ModuleWorker
         return false;
     }
 
-    private boolean hydrate(World world, BlockPos pos)
+    private boolean hydrate(Level world, BlockPos pos)
     {
         BlockState state = world.getBlockState(pos);
         if (state.getBlock() == Blocks.FARMLAND)
         {
-            int moisture = state.getValue(FarmlandBlock.MOISTURE);
+            int moisture = state.getValue(FarmBlock.MOISTURE);
             if (moisture != 7)
             {
                 int waterCost = 7 - moisture;
@@ -78,7 +78,7 @@ public class ModuleHydrater extends ModuleWorker
                     }
                     stopWorking();
                     getCart().drain(Fluids.WATER, waterCost, IFluidHandler.FluidAction.EXECUTE);
-                    world.setBlock(pos, state.setValue(FarmlandBlock.MOISTURE, moisture + waterCost), 3);
+                    world.setBlock(pos, state.setValue(FarmBlock.MOISTURE, moisture + waterCost), 3);
                 }
             }
         }

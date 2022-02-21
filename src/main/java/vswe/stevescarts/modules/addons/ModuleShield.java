@@ -1,11 +1,11 @@
 package vswe.stevescarts.modules.addons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.DamageSource;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
@@ -18,7 +18,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     private float shieldDistance;
     private float shieldAngle;
     private int[] buttonRect;
-    private DataParameter<Boolean> STATUS;
+    private EntityDataAccessor<Boolean> STATUS;
     private boolean setup;
 
     public ModuleShield(final EntityMinecartModular cart)
@@ -120,7 +120,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     }
 
     @Override
-    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
     }
@@ -143,7 +143,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     }
 
     @Override
-    public void drawBackground(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/shield.png");
         final int imageID = getShieldStatus() ? 1 : 0;
@@ -158,7 +158,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     }
 
     @Override
-    public void drawMouseOver(MatrixStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         drawStringOnMouseOver(matrixStack, gui, getStateName(), x, y, buttonRect);
     }
@@ -178,7 +178,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final PlayerEntity player)
+    protected void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0)
         {
@@ -201,7 +201,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     @Override
     public void initDw()
     {
-        STATUS = createDw(DataSerializers.BOOLEAN);
+        STATUS = createDw(EntityDataSerializers.BOOLEAN);
         registerDw(STATUS, false);
     }
 
@@ -212,13 +212,13 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     }
 
     @Override
-    protected void Save(final CompoundNBT tagCompound, final int id)
+    protected void Save(final CompoundTag tagCompound, final int id)
     {
         tagCompound.putBoolean(generateNBTName("Shield", id), getShieldStatus());
     }
 
     @Override
-    protected void Load(final CompoundNBT tagCompound, final int id)
+    protected void Load(final CompoundTag tagCompound, final int id)
     {
         setShieldStatus(tagCompound.getBoolean(generateNBTName("Shield", id)));
     }
