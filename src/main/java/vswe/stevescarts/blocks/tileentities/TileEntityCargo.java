@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -17,9 +18,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.wrapper.InvWrapper;
-import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import vswe.stevescarts.blocks.BlockCargoManager;
 import vswe.stevescarts.containers.ContainerCargo;
 import vswe.stevescarts.containers.slots.*;
@@ -43,7 +41,7 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     public ArrayList<SlotCargo> cargoSlots;
     public int lastLayout;
     private TransferManager latestTransferToBeUsed;
-    protected final SimpleContainerData dataAccess = new SimpleContainerData()
+    protected final SimpleContainerData dataAccess = new SimpleContainerData(16)
     {
         public int get(int id)
         {
@@ -382,10 +380,10 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
             return true;
         }
         final Class slotCargo = SlotCargo.class;
-        IInventory fromInv;
+        Container fromInv;
         AbstractContainerMenu fromCont;
         Class fromValid;
-        IInventory toInv;
+        Container toInv;
         AbstractContainerMenu toCont;
         Class toValid;
         if (toCart[transfer.getSetting()])
@@ -403,7 +401,7 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
             fromCont = transfer.getCart().getCon(null);
             fromValid = slotCart;
             toInv = this;
-            toCont = new ContainerCargo(0, null, this, new IntArray(0));
+            toCont = new ContainerCargo(0, null, this, new SimpleContainerData(0));
             toValid = slotCargo;
         }
         latestTransferToBeUsed = transfer;

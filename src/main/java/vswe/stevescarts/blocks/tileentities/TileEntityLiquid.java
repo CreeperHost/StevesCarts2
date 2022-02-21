@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -36,14 +37,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-public class TileEntityLiquid extends TileEntityManager implements ITankHolder
+public class TileEntityLiquid extends TileEntityManager implements ITankHolder, MenuProvider
 {
     public SCTank[] tanks;
     private int tick;
     private static final int[] topSlots;
     private static final int[] botSlots;
     private static final int[] sideSlots;
-    protected final SimpleContainerData dataAccess = new SimpleContainerData()
+    protected final SimpleContainerData dataAccess = new SimpleContainerData(12)
     {
         public int get(int id)
         {

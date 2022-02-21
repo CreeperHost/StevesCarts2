@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -24,7 +25,7 @@ import vswe.stevescarts.modules.workers.tools.ModuleDrill;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-public class TileEntityActivator extends TileEntityBase
+public class TileEntityActivator extends TileEntityBase implements MenuProvider
 {
     private ArrayList<ActivatorOption> options;
 

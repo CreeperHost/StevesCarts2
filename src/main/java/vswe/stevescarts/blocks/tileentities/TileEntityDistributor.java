@@ -3,9 +3,13 @@ package vswe.stevescarts.blocks.tileentities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -33,7 +37,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class TileEntityDistributor extends TileEntityBase implements IInventory, ISidedInventory, INamedContainerProvider
+public class TileEntityDistributor extends TileEntityBase implements WorldlyContainer, MenuProvider
 {
     private ArrayList<DistributorSide> sides;
     private boolean dirty;
@@ -182,16 +186,16 @@ public class TileEntityDistributor extends TileEntityBase implements IInventory,
                 }
             }
             BlockState state = level.getBlockState(getBlockPos());
-            //            level.markAndNotifyBlock(getBlockPos(), state, state, 3);
         }
     }
 
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket()
-    {
-        return new SUpdateTileEntityPacket(getBlockPos(), -1, getUpdateTag());
-    }
+    //TODO
+//    @Nullable
+//    @Override
+//    public SUpdateTileEntityPacket getUpdatePacket()
+//    {
+//        return new SUpdateTileEntityPacket(getBlockPos(), -1, getUpdateTag());
+//    }
 
     @Override
     public CompoundTag getUpdateTag()
@@ -200,10 +204,9 @@ public class TileEntityDistributor extends TileEntityBase implements IInventory,
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
     {
-        BlockState state = level.getBlockState(getBlockPos());
-        handleUpdateTag(state, pkt.getTag());
+        handleUpdateTag(pkt.getTag());
     }
 
     public TileEntityManager[] getInventories()

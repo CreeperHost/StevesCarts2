@@ -5,11 +5,19 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,7 +45,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-public class TileEntityCartAssembler extends TileEntityBase implements IInventory, ISidedInventory, INamedContainerProvider
+public class TileEntityCartAssembler extends TileEntityBase implements WorldlyContainer, MenuProvider
 {
     private int maxAssemblingTime;
     private float currentAssemblingTime;
@@ -793,7 +801,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements IInventor
                     if (effect instanceof Disassemble) {
                         for (@Nonnull ItemStack item : spareModules) {
                             item = removeModify(item);
-                            TransferHandler.TransferItem(item, tile, new ContainerUpgrade(0, null, tile, new IntArray(0)), 1);
+                            TransferHandler.TransferItem(item, tile, new ContainerUpgrade(0, null, tile, new SimpleContainerData(0)), 1);
                             if (item.getCount() > 0) {
                                 puke(item);
                             }
@@ -1055,7 +1063,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements IInventor
 
     @Nullable
     @Override
-    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player)
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player)
     {
         return new ContainerCartAssembler(id, playerInventory, this, this.dataAccess);
     }
@@ -1163,7 +1171,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements IInventor
     @Override
     public ItemStack removeItem(int i, int j)
     {
-        ItemStack itemStack = ItemStackHelper.removeItem(this.inventoryStacks, i, j);
+        ItemStack itemStack = ContainerHelper.removeItem(this.inventoryStacks, i, j);
         if (!itemStack.isEmpty()) this.setChanged();
         return itemStack;
     }
@@ -1287,12 +1295,13 @@ public class TileEntityCartAssembler extends TileEntityBase implements IInventor
         return tagCompound;
     }
 
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket()
-    {
-        // Vanilla uses the type parameter to indicate which type of tile entity (command block, skull, or beacon?) is receiving the packet, but it seems like Forge has overridden this behavior
-        return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
-    }
+    //TODO
+//    @Override
+//    public SUpdateTileEntityPacket getUpdatePacket()
+//    {
+//        // Vanilla uses the type parameter to indicate which type of tile entity (command block, skull, or beacon?) is receiving the packet, but it seems like Forge has overridden this behavior
+//        return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
+//    }
 
     @Override
     public CompoundTag getUpdateTag()
@@ -1301,15 +1310,14 @@ public class TileEntityCartAssembler extends TileEntityBase implements IInventor
     }
 
     @Override
-    public void handleUpdateTag(BlockState stateIn, CompoundTag tag)
+    public void handleUpdateTag(CompoundTag tag)
     {
-        load(stateIn, tag);
+        load(tag);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-    {
-        load(this.getBlockState(), pkt.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        load(pkt.getTag());
     }
 
     public CompoundTag getOutputInfo()

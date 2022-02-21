@@ -5,8 +5,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -29,7 +34,7 @@ import vswe.stevescarts.upgrades.InventoryEffect;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISidedInventory, ITankHolder, ITickableTileEntity, INamedContainerProvider
+public class TileEntityUpgrade extends TileEntityBase implements WorldlyContainer, ITankHolder, MenuProvider
 {
     public SCTank tank = new SCTank(this, 0, 0);
     private TileEntityCartAssembler master;
@@ -113,17 +118,18 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
         return comp;
     }
 
-    @Nullable
-    @Override
-    public SUpdateTileEntityPacket getUpdatePacket()
-    {
-        return new SUpdateTileEntityPacket(getBlockPos(), 1, save(new CompoundNBT()));
-    }
+    //TODO
+//    @Nullable
+//    @Override
+//    public SUpdateTileEntityPacket getUpdatePacket()
+//    {
+//        return new SUpdateTileEntityPacket(getBlockPos(), 1, save(new CompoundNBT()));
+//    }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
     {
-        load(level.getBlockState(pkt.getPos()), pkt.getTag());
+        load(pkt.getTag());
     }
 
     @Override
@@ -147,7 +153,7 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
     {
         super.load(compoundNBT);
         setType(compoundNBT.getByte("Type"), false);
-        ItemStackHelper.loadAllItems(compoundNBT, inventoryStacks);
+        ContainerHelper.loadAllItems(compoundNBT, inventoryStacks);
         setChanged();
         final AssemblerUpgrade upgrade = getUpgrade();
         if (upgrade != null)
@@ -162,7 +168,7 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
         super.save(compoundNBT);
         if (inventoryStacks != null)
         {
-            ItemStackHelper.saveAllItems(compoundNBT, inventoryStacks);
+            ContainerHelper.saveAllItems(compoundNBT, inventoryStacks);
         }
         compoundNBT.putByte("Type", (byte) type);
         final AssemblerUpgrade upgrade = getUpgrade();
@@ -233,7 +239,7 @@ public class TileEntityUpgrade extends TileEntityBase implements IInventory, ISi
     @Override
     public ItemStack removeItem(int id, int amount)
     {
-        ItemStack itemStack = ItemStackHelper.removeItem(this.inventoryStacks, id, amount);
+        ItemStack itemStack = ContainerHelper.removeItem(this.inventoryStacks, id, amount);
         if (!itemStack.isEmpty()) this.setChanged();
         return itemStack;
     }

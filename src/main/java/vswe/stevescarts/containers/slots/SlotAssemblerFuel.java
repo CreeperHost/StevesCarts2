@@ -1,6 +1,7 @@
 package vswe.stevescarts.containers.slots;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.ForgeHooks;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 
@@ -26,14 +27,14 @@ public class SlotAssemblerFuel extends SlotAssembler
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return ForgeHooks.getBurnTime(itemstack) != 0;
+        return ForgeHooks.getBurnTime(itemstack, RecipeType.SMELTING) != 0;
     }
 
     public int getFuelLevel(@Nonnull ItemStack itemstack)
     {
         if (mayPlace(itemstack))
         {
-            return (int) ((int) ForgeHooks.getBurnTime(itemstack) * 0.25);//(TileEntityFurnace.getItemBurnTime(itemstack) * 0.25f);
+            return (int) ((int) ForgeHooks.getBurnTime(itemstack, RecipeType.SMELTING) * 0.25);
         }
         return 0;
     }

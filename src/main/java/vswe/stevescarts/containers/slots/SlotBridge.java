@@ -1,14 +1,14 @@
 package vswe.stevescarts.containers.slots;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 
 import javax.annotation.Nonnull;
 
 public class SlotBridge extends SlotBase implements ISpecialItemTransferValidator
 {
-    public SlotBridge(final IInventory iinventory, final int i, final int j, final int k)
+    public SlotBridge(final Container iinventory, final int i, final int j, final int k)
     {
         super(iinventory, i, j, k);
     }
@@ -16,7 +16,7 @@ public class SlotBridge extends SlotBase implements ISpecialItemTransferValidato
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        //		return isBridgeMaterial(itemstack);
+//        		return isBridgeMaterial(itemstack);
         return true;
     }
 

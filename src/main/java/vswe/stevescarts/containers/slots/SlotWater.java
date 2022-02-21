@@ -1,14 +1,14 @@
 package vswe.stevescarts.containers.slots;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import javax.annotation.Nonnull;
 
 public class SlotWater extends SlotBase
 {
-    public SlotWater(final IInventory iinventory, final int i, final int j, final int k)
+    public SlotWater(final Container iinventory, final int i, final int j, final int k)
     {
         super(iinventory, i, j, k);
     }

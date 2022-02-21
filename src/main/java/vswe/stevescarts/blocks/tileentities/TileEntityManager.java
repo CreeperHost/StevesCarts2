@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -19,7 +21,7 @@ import vswe.stevescarts.network.packets.PacketCargpManager;
 
 import javax.annotation.Nonnull;
 
-public abstract class TileEntityManager extends TileEntityBase implements IInventory
+public abstract class TileEntityManager extends TileEntityBase implements Container
 {
     private TransferManager standardTransferHandler;
     private NonNullList<ItemStack> cargoItemStacks;
@@ -205,7 +207,7 @@ public abstract class TileEntityManager extends TileEntityBase implements IInven
             updateLayout();
             return;
         }
-        if (getCart() == null || getCart().removed || getSide() < 0 || getSide() > 3 || !getCart().isDisabled())
+        if (getCart() == null || getCart().isRemoved() || getSide() < 0 || getSide() > 3 || !getCart().isDisabled())
         {
             standardTransferHandler.reset();
             return;
@@ -429,7 +431,7 @@ public abstract class TileEntityManager extends TileEntityBase implements IInven
     @Override
     public ItemStack removeItem(int p_70298_1_, int p_70298_2_)
     {
-        return ItemStackHelper.removeItem(cargoItemStacks, p_70298_1_, p_70298_2_);
+        return ContainerHelper.removeItem(cargoItemStacks, p_70298_1_, p_70298_2_);
     }
 
     @Override

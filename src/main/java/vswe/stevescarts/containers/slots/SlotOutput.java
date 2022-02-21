@@ -1,7 +1,7 @@
 package vswe.stevescarts.containers.slots;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.init.ModItems;
 
@@ -29,7 +29,7 @@ public class SlotOutput extends SlotAssembler
     {
         if (!getAssembler().getIsAssembling() && itemstack.getItem() == ModItems.CARTS.get())
         {
-            final CompoundNBT info = itemstack.getTag();
+            final CompoundTag info = itemstack.getTag();
             if (info != null && info.contains("maxTime"))
             {
                 return true;

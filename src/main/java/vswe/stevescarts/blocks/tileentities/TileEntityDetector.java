@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -21,7 +22,7 @@ import vswe.stevescarts.init.ModBlocks;
 
 import javax.annotation.Nullable;
 
-public class TileEntityDetector extends TileEntityBase implements INamedContainerProvider
+public class TileEntityDetector extends TileEntityBase implements MenuProvider
 {
     public LogicObject mainObj;
     private int activeTimer;
