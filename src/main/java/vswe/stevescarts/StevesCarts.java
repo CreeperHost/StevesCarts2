@@ -1,6 +1,8 @@
 package vswe.stevescarts;
 
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
@@ -74,11 +76,10 @@ public class StevesCarts
         CompatHandler.initClient();
 //        ModuleData.initModels();
 
-        //TODO
-//        RenderingRegistry.registerEntityRenderingHandler(ModEntities.MODULAR_CART.get(), RendererCart::new);
-//        RenderTypeLookup.setRenderLayer(ModBlocks.ADVANCED_DETECTOR.get(), RenderType.cutout());
-//        RenderTypeLookup.setRenderLayer(ModBlocks.JUNCTION.get(), RenderType.cutout());
+        EntityRenderers.register(ModEntities.MODULAR_CART.get(), RendererCart::new);
 
-//        RenderTypeLookup.setRenderLayer(ModBlocks.BATTERIES.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ADVANCED_DETECTOR.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.JUNCTION.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.BATTERIES.get(), RenderType.cutout());
     }
 }
