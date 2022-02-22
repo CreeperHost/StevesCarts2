@@ -101,9 +101,9 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
     }
 
     @Override
-    public CompoundTag save(CompoundTag nbttagcompound)
+    public void saveAdditional(CompoundTag nbttagcompound)
     {
-        super.save(nbttagcompound);
+        super.saveAdditional(nbttagcompound);
         nbttagcompound.putByte("movetime", (byte) moveTime);
         nbttagcompound.putByte("lowestNumber", (byte) getLowestSetting());
         nbttagcompound.putByte("layout", (byte) layoutType);
@@ -136,7 +136,6 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
             }
         }
         nbttagcompound.put("Items", nbttaglist);
-        return nbttagcompound;
     }
 
     public EntityMinecartModular getCart()

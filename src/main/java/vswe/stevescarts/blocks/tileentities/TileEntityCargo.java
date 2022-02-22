@@ -45,7 +45,6 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     {
         public int get(int id)
         {
-            //TODO
             switch (id)
             {
                 case 0:
@@ -253,15 +252,14 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     }
 
     @Override
-    public CompoundTag save(final CompoundTag nbttagcompound)
+    public void saveAdditional(CompoundTag nbttagcompound)
     {
-        super.save(nbttagcompound);
+        super.saveAdditional(nbttagcompound);
         nbttagcompound.putByte("workload", (byte) getWorkload());
         for (int i = 0; i < 4; ++i)
         {
             nbttagcompound.putByte("target" + i, (byte) target[i]);
         }
-        return nbttagcompound;
     }
 
     public void receivePacket(final int id, final byte[] data, final Player player)
