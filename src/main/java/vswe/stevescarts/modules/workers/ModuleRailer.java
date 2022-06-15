@@ -122,7 +122,8 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule
 
     protected boolean validRail(Item item)
     {
-        return ItemTags.RAILS.contains(item);
+        ItemStack stack = new ItemStack(item);
+        return stack.is(ItemTags.RAILS);
     }
 
     private boolean tryPlaceTrack(int i, int j, int k, boolean flag)

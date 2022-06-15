@@ -42,8 +42,7 @@ public class BlockCargoManager extends BlockContainerBase
         final TileEntityCargo tile = (TileEntityCargo) world.getBlockEntity(blockPos);
         if (tile != null)
         {
-            //TODO
-//            InventoryHelper.dropContents(world, blockPos, tile);
+            BlockContainerBase.dropResources(blockState, world, blockPos);
         }
         super.onRemove(blockState1, world, blockPos, blockState, p_196243_5_);
     }

@@ -35,7 +35,8 @@ public class ModuleOpenTank extends ModuleTank
             cooldown = 20;
             if (getCart().level.isRaining() && getCart().level.canSeeSky(new BlockPos(getCart().blockPosition().getX(), getCart().blockPosition().getY() + 1, getCart().blockPosition().getZ())))
             {
-                fill(new FluidStack(Fluids.WATER, getCart().level.getBiome(getCart().blockPosition()).shouldSnow(getCart().level, getCart().blockPosition()) ? 2 : 5), IFluidHandler.FluidAction.EXECUTE);
+                //TODO
+//                fill(new FluidStack(Fluids.WATER, getCart().level.getBiome(getCart().blockPosition()).shouldSnow(getCart().level, getCart().blockPosition()) ? 2 : 5), IFluidHandler.FluidAction.EXECUTE);
             }
         }
     }

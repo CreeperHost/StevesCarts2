@@ -6,87 +6,99 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.model.pipeline.VertexBufferConsumer;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.modules.ModuleBase;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 
 public abstract class ModelCartbase extends Model
 {
-    protected final byte cartLength = 20;
-    protected final byte cartHeight = 8;
-    protected final byte cartWidth = 16;
-    protected final byte cartOnGround = 4;
-    private ArrayList<ModelPart> renderers;
-    private RenderType renderType;
+    protected final ResourceLocation texture;
+    protected final ModelPart root;
 
+    public ModelCartbase(Function<ResourceLocation, RenderType> layerFactory, ResourceLocation texture, ModelPart root)
+    {
+        super(layerFactory);
+        this.texture = texture;
+        this.root = root;
+    }
+
+    public ModelCartbase(ModelPart root, ResourceLocation texture)
+    {
+        this(RenderType::entityCutoutNoCull, texture, root);
+    }
+
+    @Deprecated(forRemoval = true)
     public ModelCartbase()
     {
-        super(RenderType::entitySolid);
-        renderers = new ArrayList<>();
+        super(null);
+        this.texture = null;
+        this.root = null;
     }
 
-    public RenderType getRenderType(ModuleBase moduleBase)
+    @Deprecated(forRemoval = true)
+    public final void render(PoseStack matrices, VertexConsumer vertexConsumers, int light, int overlay, float red, float green, float blue, float alpha)
     {
-        return RenderType.entitySolid(getResource(moduleBase));
+        //TODO
+//        this.root.render(matrices, vertexConsumers.getBuffer(this.getLayer(this.texture)), light, overlay, red, green, blue, alpha);
     }
-
-    public abstract ResourceLocation getResource(final ModuleBase p0);
-
 
     @Override
-    public void renderToBuffer(PoseStack p_225598_1_, VertexConsumer p_225598_2_, int p_225598_3_, int p_225598_4_, float p_225598_5_, float p_225598_6_, float p_225598_7_, float p_225598_8_)
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, float red, float green, float blue, float alpha)
     {
-        for (ModelPart renderer : renderers)
+        if(this.root != null)
         {
-            RenderSystem.setShaderTexture(0, new ResourceLocation("textures/entity/minecart.png"));
-            renderer.render(p_225598_1_, p_225598_2_, p_225598_3_, p_225598_4_, p_225598_5_, p_225598_6_, p_225598_7_, p_225598_8_);
+            this.root.render(poseStack, vertexConsumers, light, overlay, red, green, blue, alpha);
         }
     }
 
-    public void render(PoseStack matrixStack, final ModuleBase module, final float yaw, final float pitch, final float roll, final float mult, final float partialtime)
+    public void animateModel(ModuleBase module, float limbAngle, float limbDistance, float tickDelta) {}
+
+    public ResourceLocation getTexture()
     {
-        //		final ResourceLocation resource = getResource(module);
-        //		if (resource == null) {
-        //			return;
-        //		}
-        //		ResourceHelper.bindResource(resource);
-        //		applyEffects(module, yaw, pitch, roll, partialtime);
+        return texture;
     }
 
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll, final float partialtime)
+    public ModelPart getRoot()
     {
-        applyEffects(module, matrixStack, rtb, yaw, pitch, roll);
+        return root;
     }
 
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
-    {
-    }
-
-    protected void AddRenderer(final ModelPart renderer)
-    {
-        renderers.add(fixSize(renderer));
-    }
-
-    public ModelPart fixSize(final ModelPart renderer)
-    {
-        return renderer;
-        //TODO
-//        return renderer.setTexSize(getTextureWidth(), getTextureHeight());
-    }
-
+    @Deprecated(forRemoval = true)
     protected int getTextureWidth()
     {
         return 64;
     }
 
+    @Deprecated(forRemoval = true)
     protected int getTextureHeight()
     {
         return 64;
     }
 
+    @Deprecated(forRemoval = true)
     public float extraMult()
     {
         return 1.0f;
+    }
+
+    @Deprecated(forRemoval = true)
+    public ResourceLocation getResource(final ModuleBase module)
+    {
+        return texture;
+    }
+
+    @Deprecated(forRemoval = true)
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
+    {
+    }
+
+    public RenderType getRenderType(ModuleBase moduleBase)
+    {
+        return RenderType.entitySolid(getResource(moduleBase));
     }
 }

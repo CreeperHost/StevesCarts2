@@ -23,12 +23,14 @@ public class FluidRenderMap<V> extends Object2ObjectOpenCustomHashMap<FluidStack
         Fluid fluid = fluidStack.getFluid();
         ResourceLocation spriteLocation;
         if (type == FluidType.STILL) {
-            spriteLocation = fluid.getAttributes().getStillTexture(fluidStack);
+            //TODO Fluid Render
+//            spriteLocation = fluid.getAttributes().getStillTexture(fluidStack);
         }
         else {
-            spriteLocation = fluid.getAttributes().getFlowingTexture(fluidStack);
+//            spriteLocation = fluid.getAttributes().getFlowingTexture(fluidStack);
         }
-        return getSprite(spriteLocation);
+//        return getSprite(spriteLocation);
+        return null;
     }
 
     public static TextureAtlasSprite getSprite(ResourceLocation spriteLocation) {

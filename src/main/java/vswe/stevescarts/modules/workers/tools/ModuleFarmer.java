@@ -6,6 +6,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -134,8 +136,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
 
     protected boolean till(Level world, BlockPos pos)
     {
-        Block block = world.getBlockState(pos).getBlock();
-        if (Constants.DIRT.contains(block) && world.getBlockState(pos.above()).isAir())
+        if (world.getBlockState(pos).is(BlockTags.DIRT) && world.getBlockState(pos.above()).isAir())
         {
             if (doPreWork())
             {
@@ -245,7 +246,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
 
     public boolean isSeedValidHandler(@Nonnull ItemStack seed)
     {
-        return Constants.SEEDS.contains(seed.getItem());
+        return seed.is(Constants.SEEDS);
     }
 
     protected BlockState getCropFromSeedHandler(@Nonnull ItemStack seed, Level world, BlockPos pos)

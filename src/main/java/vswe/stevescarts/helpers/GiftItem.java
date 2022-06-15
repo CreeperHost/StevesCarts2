@@ -1,5 +1,6 @@
 package vswe.stevescarts.helpers;
 ;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -63,7 +64,7 @@ public class GiftItem
         }
     }
 
-    public static ArrayList<ItemStack> generateItems(final Random rand, final ArrayList<GiftItem> gifts, int value, final int maxTries)
+    public static ArrayList<ItemStack> generateItems(final RandomSource rand, final ArrayList<GiftItem> gifts, int value, final int maxTries)
     {
         int totalChanceWeight = 0;
         for (final GiftItem gift : gifts)

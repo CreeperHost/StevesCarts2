@@ -3,7 +3,6 @@ package vswe.stevescarts.blocks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -63,7 +62,7 @@ public class BlockDetector extends BlockContainerBase
     @Override
     public void appendHoverText(ItemStack p_190948_1_, @Nullable BlockGetter p_190948_2_, List<Component> textComponents, TooltipFlag p_190948_4_)
     {
-        textComponents.add(new TextComponent(ChatFormatting.RED + "WIP"));
+        textComponents.add(Component.literal(ChatFormatting.RED + "WIP"));
         super.appendHoverText(p_190948_1_, p_190948_2_, textComponents, p_190948_4_);
     }
 

@@ -1,7 +1,8 @@
 package vswe.stevescarts.upgrades;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.ContainerListener;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.client.guis.GuiUpgrade;
@@ -33,7 +34,7 @@ public abstract class InterfaceEffect extends BaseEffect
     {
         if (gui.inRect(x - gui.getGuiLeft(), y - gui.getGuiTop(), rect))
         {
-            gui.renderTooltip(matrixStack, new TextComponent(str), x - gui.getGuiLeft(), y - gui.getGuiTop());
+            gui.renderTooltip(matrixStack, Component.literal(str), x - gui.getGuiLeft(), y - gui.getGuiTop());
         }
     }
 }

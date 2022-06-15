@@ -2,6 +2,7 @@ package vswe.stevescarts.arcade.invaders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
@@ -62,7 +63,7 @@ public class InvaderGhast extends Unit {
 		}
 		if (shooting > -10) {
 			if (shooting == 0) {
-				Random random = game.getModule().getCart().random;
+				RandomSource random = game.getModule().getCart().random;
 				ArcadeGame.playSound(SoundEvents.GHAST_HURT, 0.1f, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
 				this.game.projectiles.add(new Projectile(this.game, x + 8 - 3, y + 8 - 3, false));
 			}

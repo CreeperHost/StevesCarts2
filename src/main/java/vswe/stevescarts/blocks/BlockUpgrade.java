@@ -3,9 +3,9 @@ package vswe.stevescarts.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -102,7 +102,7 @@ public class BlockUpgrade extends BlockContainerBase
     }
 
     @Override
-    public void randomTick(BlockState blockState, ServerLevel serverWorld, BlockPos blockPos, Random p_225542_4_)
+    public void randomTick(BlockState blockState, ServerLevel serverWorld, BlockPos blockPos, RandomSource p_225542_4_)
     {
         if (!canSurvive(blockState, serverWorld, blockPos))
         {
@@ -136,7 +136,7 @@ public class BlockUpgrade extends BlockContainerBase
         {
             for (final BaseEffect effect : assemblerUpgrade.getEffects())
             {
-                tooltip.add(new TextComponent(effect.getName()));
+                tooltip.add(Component.literal(effect.getName()));
             }
         }
     }

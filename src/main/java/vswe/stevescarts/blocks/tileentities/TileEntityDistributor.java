@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
@@ -137,14 +136,13 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public CompoundTag save(CompoundTag compoundNBT)
+    public void saveAdditional(CompoundTag compoundNBT)
     {
-        super.save(compoundNBT);
+        super.saveAdditional(compoundNBT);
         for (final DistributorSide side : getSides())
         {
             compoundNBT.putInt("Side" + side.getId(), side.getData());
         }
-        return compoundNBT;
     }
 
     @Override
@@ -197,11 +195,12 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
 //        return new SUpdateTileEntityPacket(getBlockPos(), -1, getUpdateTag());
 //    }
 
-    @Override
-    public CompoundTag getUpdateTag()
-    {
-        return save(new CompoundTag());
-    }
+    //TODO
+//    @Override
+//    public CompoundTag getUpdateTag()
+//    {
+//        return save(new CompoundTag());
+//    }
 
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
@@ -567,7 +566,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     @Override
     public Component getDisplayName()
     {
-        return new TextComponent("container.distributor");
+        return Component.literal("container.distributor");
     }
 
 

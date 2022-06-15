@@ -5,9 +5,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.ModList;
@@ -58,6 +57,7 @@ public class ModuleData
     private static HashMap<Byte, ModuleData> moduleList;
     private static Class[] moduleGroups;
     private static Localization.MODULE_INFO[] moduleGroupNames;
+    @Deprecated(forRemoval = true)
     private byte id;
     private Class<? extends ModuleBase> moduleClass;
     private String name;
@@ -291,11 +291,6 @@ public class ModuleData
         engineGroup.add(thermal2);
         engineGroup.add(compactsolar);
         engineGroup.add(cheatengine);
-        if(ModList.get().isLoaded("ftbic")) {
-            //TODO
-//            final ModuleData electricEngine = new ModuleData(103, "Electric Engine", ModuleElectricEngine.class, 15);
-//            engineGroup.add(electricEngine);
-        }
 
         new ModuleData(78, "Steve's Arcade", ModuleArcade.class, 10).addParent(seat);
 
@@ -389,7 +384,7 @@ public class ModuleData
         }
         ModuleData.moduleList.get((byte) 28).addModel("Rig", new ModelShootingRig()).addModel("Pipes", new ModelGun(pipes));
         ModuleData.moduleList.get((byte) 29).addModel("Rig", new ModelShootingRig()).addModel("MobDetector", new ModelMobDetector()).addModel("Pipes", new ModelSniperRifle());
-        ModuleData.moduleList.get((byte) 30).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"), false)).addModel("Cleaner", new ModelCleaner());
+        ModuleData.moduleList.get((byte) 30).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelCleaner());
         ModuleData.moduleList.get((byte) 31).addModel("Tnt", new ModelDynamite());
         ModuleData.moduleList.get((byte) 32).addModel("Shield", new ModelShield()).setModelMult(0.68f);
         ModuleData.moduleList.get((byte) 37).addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelWooden.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelWoodenTop.png")));
@@ -407,7 +402,7 @@ public class ModuleData
         ModuleData.moduleList.get((byte) 66).addModel("LargeTank", new ModelAdvancedTank()).removeModel("Top");
         ModuleData.moduleList.get((byte) 67).setModelMult(0.68f).addModel("FrontTank", new ModelFrontTank());
         ModuleData.moduleList.get((byte) 73).addModel("TopTank", new ModelTopTank(true));
-        ModuleData.moduleList.get((byte) 71).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"), false)).addModel("Cleaner", new ModelLiquidDrainer());
+        ModuleData.moduleList.get((byte) 71).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelLiquidDrainer());
         ModuleData.moduleList.get((byte) 74).addModel("TopChest", new ModelEggBasket());
         ModuleData.moduleList.get((byte) 85).addModel("LawnMower", new ModelLawnMower()).setModelMult(0.4f);
         ModuleData.moduleList.get((byte) 99).addModel("Cake", new ModelCake());
@@ -450,8 +445,6 @@ public class ModuleData
 
     public boolean getIsValid()
     {
-        //TODO Config
-        //		return SCConfig.validModules.get(getID()) != null && SCConfig.validModules.get(getID());
         return true;
     }
 
@@ -705,6 +698,7 @@ public class ModuleData
         return name;
     }
 
+    @Deprecated
     public static NonNullList<ItemStack> getModularItems(@Nonnull ItemStack cart)
     {
         final NonNullList<ItemStack> modules = NonNullList.create();
@@ -788,29 +782,18 @@ public class ModuleData
     @Nonnull
     public ItemStack getItemStack()
     {
-        ItemStack module = ItemStack.EMPTY;
-        for (ItemCartModule itemCartModule : ModItems.MODULES)
+        ItemStack stack = new ItemStack(Items.AIR);
+        if(ModItems.MODULES.get(this) != null)
         {
-            if (itemCartModule.getModuleName().equalsIgnoreCase(getName()))
-            {
-                module = new ItemStack(itemCartModule);
-                break;
-            }
+            stack = new ItemStack(ModItems.MODULES.get(this).get());
         }
-        if (isUsingExtraData())
-        {
-            final CompoundTag save = new CompoundTag();
-            save.putByte("Data", getDefaultExtraData());
-            module.setTag(save);
-        }
-        return module;
+        return stack;
     }
 
     public static boolean isValidModuleItem(final int validGroup, @Nonnull ItemStack itemstack)
     {
-        if (itemstack.getItem() instanceof ItemCartModule)
+        if (itemstack.getItem() instanceof ItemCartModule itemCartModule)
         {
-            ItemCartModule itemCartModule = (ItemCartModule) itemstack.getItem();
             final ModuleData module = itemCartModule.getModuleData();
             return isValidModuleItem(validGroup, module);
         }
@@ -871,7 +854,7 @@ public class ModuleData
     {
         if (message != null)
         {
-            list.add(new TranslatableComponent(""));
+            list.add(Component.literal(""));
             for (final Localization.MODULE_INFO m : message)
             {
                 final String str = m.translate();
@@ -905,27 +888,26 @@ public class ModuleData
     @OnlyIn(Dist.CLIENT)
     private void addExtraMessage(final List<Component> list, final String str)
     {
-        list.add(new TextComponent(ChatFormatting.DARK_GRAY + (ChatFormatting.ITALIC + str + ChatFormatting.RESET)));
+        list.add(Component.literal(ChatFormatting.DARK_GRAY + (ChatFormatting.ITALIC + str + ChatFormatting.RESET)));
     }
 
     @OnlyIn(Dist.CLIENT)
     public final void addInformation(final List<Component> list, final CompoundTag compound)
     {
-        list.add(new TextComponent(ChatFormatting.GRAY + Localization.MODULE_INFO.MODULAR_COST.translate() + ": " + modularCost));
-//        addSpecificInformation(list);
+        list.add(Component.literal(ChatFormatting.GRAY + Localization.MODULE_INFO.MODULAR_COST.translate() + ": " + modularCost));
         if (compound != null && compound.contains("Data"))
         {
             final String extradatainfo = getModuleInfoText(compound.getByte("Data"));
             if (extradatainfo != null)
             {
-                list.add(new TranslatableComponent(ChatFormatting.WHITE + extradatainfo));
+                list.add(Component.literal(ChatFormatting.WHITE + extradatainfo));
             }
         }
         if (Screen.hasShiftDown())
         {
             if (getRenderingSides() == null || getRenderingSides().size() == 0)
             {
-                list.add(new TranslatableComponent(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.NO_SIDES.translate()));
+                list.add(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.NO_SIDES.translate()));
             }
             else
             {
@@ -946,44 +928,44 @@ public class ModuleData
                         sides = sides + ", " + side.toString();
                     }
                 }
-                list.add(new TranslatableComponent(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.OCCUPIED_SIDES.translate(sides, String.valueOf(getRenderingSides().size()))));
+                list.add(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.OCCUPIED_SIDES.translate(sides, String.valueOf(getRenderingSides().size()))));
             }
             if (getNemesis() != null && getNemesis().size() != 0)
             {
                 if (getRenderingSides() == null || getRenderingSides().size() == 0)
                 {
-                    list.add(new TranslatableComponent(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_HOWEVER.translate() + ":"));
+                    list.add(Component.literal(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_HOWEVER.translate() + ":"));
                 }
                 else
                 {
-                    list.add(new TranslatableComponent(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_ALSO.translate() + ":"));
+                    list.add(Component.literal(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_ALSO.translate() + ":"));
                 }
                 for (final ModuleData module : getNemesis())
                 {
-                    list.add(new TranslatableComponent(ChatFormatting.RED + module.getName()));
+                    list.add(Component.literal(ChatFormatting.RED + module.getName()));
                 }
             }
             if (parent != null)
             {
-                list.add(new TranslatableComponent(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + parent.getName()));
+                list.add(Component.literal(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + parent.getName()));
             }
             if (getRequirement() != null && getRequirement().size() != 0)
             {
                 for (final ModuleDataGroup group : getRequirement())
                 {
-                    list.add(new TranslatableComponent(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + group.getCountName() + " " + group.getName()));
+                    list.add(Component.literal(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + group.getCountName() + " " + group.getName()));
                 }
             }
             if (getAllowDuplicate())
             {
-                list.add(new TranslatableComponent(ChatFormatting.GREEN + Localization.MODULE_INFO.DUPLICATES.translate()));
+                list.add(Component.literal(ChatFormatting.GREEN + Localization.MODULE_INFO.DUPLICATES.translate()));
             }
         }
         else
         {
-            list.add(new TranslatableComponent(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.SHIFT_FOR_MORE.translate("SHIFT")));
+            list.add(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.SHIFT_FOR_MORE.translate("SHIFT")));
         }
-        list.add(new TranslatableComponent(ChatFormatting.BLUE + Localization.MODULE_INFO.TYPE.translate() + ": " + ModuleData.moduleGroupNames[groupID].translate()));
+        list.add(Component.literal(ChatFormatting.BLUE + Localization.MODULE_INFO.TYPE.translate() + ": " + ModuleData.moduleGroupNames[groupID].translate()));
         addExtraMessage(list);
     }
 

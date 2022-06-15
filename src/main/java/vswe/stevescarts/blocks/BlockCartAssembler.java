@@ -53,11 +53,6 @@ public class BlockCartAssembler extends BlockContainerBase
             ((TileEntityCartAssembler) master).clearUpgrades();
         }
         checkForUpgrades(world, pos);
-        if (!world.isClientSide)
-        {
-            //TODO
-            //			PacketStevesCarts.sendBlockInfoToClients(world, new byte[0], pos);
-        }
         if (master instanceof TileEntityCartAssembler)
         {
             ((TileEntityCartAssembler) master).onUpgradeUpdate();

@@ -14,7 +14,9 @@ public class RenderUtils
     }
 
     public static int calculateGlowLight(int light, FluidStack fluid) {
-        return fluid.isEmpty() ? light : calculateGlowLight(light, fluid.getFluid().getAttributes().getLuminosity(fluid));
+        //TODO fluid render
+//        return fluid.isEmpty() ? light : calculateGlowLight(light, fluid.getFluid().getAttributes().getLuminosity(fluid));
+        return 0;
     }
 
     public static final int FULL_LIGHT = 0xF000F0;
@@ -32,7 +34,10 @@ public class RenderUtils
     }
 
     private static int getColorARGB(FluidStack fluidStack) {
-        return fluidStack.getFluid().getAttributes().getColor(fluidStack);
+        //TODO fluid render
+
+        //        return fluidStack.getFluid().getAttributes().getColor(fluidStack);
+        return 0;
     }
 
     public static float getRed(int color) {

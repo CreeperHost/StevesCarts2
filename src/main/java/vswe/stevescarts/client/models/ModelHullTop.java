@@ -1,66 +1,32 @@
 package vswe.stevescarts.client.models;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.modules.ModuleBase;
 
 public class ModelHullTop extends ModelCartbase
 {
-    private ResourceLocation resource;
-    private boolean useColors;
+    public ModelHullTop(ResourceLocation resourceLocation)
+    {
+        super(getTexturedModelData().bakeRoot(), resourceLocation);
+    }
+
+    public static LayerDefinition getTexturedModelData()
+    {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        modelPartData.addOrReplaceChild("top", CubeListBuilder.create().texOffs(0, 0).addBox(-8.0f, -6.0f, -1.0f, 16, 12, 2), PartPose.offsetAndRotation(0.0f, -4.0f, 0.0f, 1.5707964f, 0.0f, 0.0f));
+        return LayerDefinition.create(modelData, 64, 16);
+    }
 
     @Override
     public RenderType getRenderType(ModuleBase moduleBase)
     {
-        return RenderType.entityCutout(getResource(moduleBase));
+        return RenderType.entityCutout(getTexture());
     }
-
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
-    {
-        return resource;
-    }
-
-    @Override
-    protected int getTextureHeight()
-    {
-        return 16;
-    }
-
-    public ModelHullTop(final ResourceLocation resource)
-    {
-        this(resource, true);
-    }
-
-    public ModelHullTop(final ResourceLocation resource, final boolean useColors)
-    {
-        this.resource = resource;
-        this.useColors = useColors;
-        //TODO
-//        final ModelRenderer top = new ModelRenderer(this, 0, 0);
-//        AddRenderer(top);
-//        top.addBox(-8.0f, -6.0f, -1.0f, 16, 12, 2, 0.0f);
-//        top.setPos(0.0f, -4.0f, 0.0f);
-//        top.xRot = -1.5707964f;
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack p_225598_1_, VertexConsumer p_225598_2_, int p_225598_3_, int p_225598_4_, float p_225598_5_, float p_225598_6_, float p_225598_7_, float p_225598_8_)
-    {
-        super.renderToBuffer(p_225598_1_, p_225598_2_, p_225598_3_, p_225598_4_, p_225598_5_, p_225598_6_, p_225598_7_, p_225598_8_);
-        //TODO render
-    }
-
-    //TODO
-    //	@Override
-    //	public void render(final Render render, final ModuleBase module, final float yaw, final float pitch, final float roll, final float mult, final float partialtime) {
-    //		if (useColors && module != null) {
-    //			final float[] color = module.getCart().getColor();
-    //			GlStateManager.color(color[0], color[1], color[2], 1.0f);
-    //		}
-    //		super.render(render, module, yaw, pitch, roll, mult, partialtime);
-    //		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-    //	}
 }

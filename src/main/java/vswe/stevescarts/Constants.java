@@ -1,8 +1,9 @@
 package vswe.stevescarts;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -19,11 +20,10 @@ public class Constants
     public static boolean arcadeDevOperator = false;
 
     //Blocks
-    public static final Tag.Named<Block> DIRT = BlockTags.bind("forge:dirt");
-    public static final Tag.Named<Block> ORE = BlockTags.bind("forge:ores");
-
+    public static final TagKey<Block> DIRT = BlockTags.DIRT;
+    public static final TagKey<Block> ORE = BlockTags.create(new ResourceLocation("forge:ores"));
 
     //Items
-    public static final Tag.Named<Item> SEEDS = ItemTags.bind("forge:seeds");
+    public static final TagKey<Item> SEEDS = ItemTags.create(new ResourceLocation("forge:seeds"));
 
 }

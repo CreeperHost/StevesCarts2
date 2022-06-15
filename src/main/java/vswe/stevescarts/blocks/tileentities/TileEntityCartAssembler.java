@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -1058,7 +1057,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     @Override
     public Component getDisplayName()
     {
-        return new TranslatableComponent("tile.cart.assembler");
+        return Component.literal("tile.cart.assembler");
     }
 
     @Nullable
@@ -1254,9 +1253,9 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
 
 
     @Override
-    public CompoundTag save(final CompoundTag tagCompound)
+    public void saveAdditional(final CompoundTag tagCompound)
     {
-        super.save(tagCompound);
+        super.saveAdditional(tagCompound);
         final ListTag items = new ListTag();
         for (int i = 0; i < getContainerSize(); ++i)
         {
@@ -1292,7 +1291,6 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         tagCompound.putInt("maxTime", maxAssemblingTime);
         tagCompound.putInt("currentTime", getAssemblingTime());
         tagCompound.putBoolean("isAssembling", isAssembling);
-        return tagCompound;
     }
 
     //TODO
@@ -1303,11 +1301,12 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
 //        return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
 //    }
 
-    @Override
-    public CompoundTag getUpdateTag()
-    {
-        return save(new CompoundTag());
-    }
+    //TODO
+//    @Override
+//    public CompoundTag getUpdateTag()
+//    {
+//        return save(new CompoundTag());
+//    }
 
     @Override
     public void handleUpdateTag(CompoundTag tag)

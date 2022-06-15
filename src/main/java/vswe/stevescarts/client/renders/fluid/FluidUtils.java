@@ -31,13 +31,15 @@ public class FluidUtils
      */
     public static TextureAtlasSprite getBaseFluidTexture(Fluid fluid, FluidRenderMap.FluidType type) {
         ResourceLocation spriteLocation;
+        //TODO Fluid Render
         if (type == FluidRenderMap.FluidType.STILL) {
-            spriteLocation = fluid.getAttributes().getStillTexture();
+//            spriteLocation = fluid.getAttributes().getStillTexture();
         }
         else {
-            spriteLocation = fluid.getAttributes().getFlowingTexture();
+//            spriteLocation = fluid.getAttributes().getFlowingTexture();
         }
-        return getSprite(spriteLocation);
+//        return getSprite(spriteLocation);
+        return null;
     }
 
     public static TextureAtlasSprite getSprite(ResourceLocation spriteLocation) {
@@ -50,17 +52,18 @@ public class FluidUtils
         }
         Model3D model = new Model3D();
         model.setTexture(FluidRenderMap.getFluidTexture(fluid, FluidRenderMap.FluidType.STILL));
-        if (fluid.getFluid().getAttributes().getStillTexture(fluid) != null) {
-            double sideSpacing = 0.00625;
-            double belowSpacing = 0.0625 / 4;
-            double topSpacing = belowSpacing;
-            model.minX = sideSpacing;
-            model.minY = belowSpacing;
-            model.minZ = sideSpacing;
-            model.maxX = 1 - sideSpacing;
-            model.maxY = 1 - topSpacing;
-            model.maxZ = 1 - sideSpacing;
-        }
+        //TODO
+//        if (fluid.getFluid().getAttributes().getStillTexture(fluid) != null) {
+//            double sideSpacing = 0.00625;
+//            double belowSpacing = 0.0625 / 4;
+//            double topSpacing = belowSpacing;
+//            model.minX = sideSpacing;
+//            model.minY = belowSpacing;
+//            model.minZ = sideSpacing;
+//            model.maxX = 1 - sideSpacing;
+//            model.maxY = 1 - topSpacing;
+//            model.maxZ = 1 - sideSpacing;
+//        }
         if (CACHED_FLUIDS.containsKey(fluid)) {
             CACHED_FLUIDS.get(fluid).put(stage, model);
         }

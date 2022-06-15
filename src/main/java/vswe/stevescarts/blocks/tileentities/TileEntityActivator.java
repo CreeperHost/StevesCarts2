@@ -3,7 +3,6 @@ package vswe.stevescarts.blocks.tileentities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -61,15 +60,15 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider
         }
     }
 
+
     @Override
-    public CompoundTag save(CompoundTag compoundNBT)
+    public void saveAdditional(CompoundTag compoundNBT)
     {
-        super.save(compoundNBT);
+        super.saveAdditional(compoundNBT);
         for (final ActivatorOption option : options)
         {
             compoundNBT.putByte(option.getName(), (byte) option.getOption());
         }
-        return compoundNBT;
     }
 
     public void receivePacket(final int id, final byte[] data, final Player player)
@@ -99,7 +98,7 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider
     @Override
     public Component getDisplayName()
     {
-        return new TextComponent("container.activator");
+        return Component.translatable("container.activator");
     }
 
     @Nullable

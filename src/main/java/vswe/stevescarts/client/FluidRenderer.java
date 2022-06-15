@@ -12,7 +12,6 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -24,7 +23,7 @@ import javax.annotation.Nonnull;
 @OnlyIn(Dist.CLIENT)
 public class FluidRenderer
 {
-    public static final FluidRenderer INSTANCE = new FluidRenderer(FluidAttributes.BUCKET_VOLUME, 16, 16, 16);
+    public static final FluidRenderer INSTANCE = new FluidRenderer(1000, 16, 16, 16);
 
     private static final int TEX_WIDTH = 16;
     private static final int TEX_HEIGHT = 16;
@@ -58,30 +57,31 @@ public class FluidRenderer
 
     private void drawFluid(final int xPosition, final int yPosition, @Nonnull FluidStack fluidStack)
     {
-        if (fluidStack.isEmpty())
-        {
-            return;
-        }
-
-        Fluid fluid = fluidStack.getFluid();
-
-        TextureAtlasSprite fluidStillSprite = getStillFluidSprite(fluidStack);
-
-        FluidAttributes attributes = fluid.getAttributes();
-        int fluidColor = attributes.getColor(fluidStack);
-
-        int amount = fluidStack.getAmount();
-        int scaledAmount = (amount * height) / capacityMb;
-        if (amount > 0 && scaledAmount < minHeight)
-        {
-            scaledAmount = minHeight;
-        }
-        if (scaledAmount > height)
-        {
-            scaledAmount = height;
-        }
-
-        drawTiledSprite(xPosition, yPosition, width, height, fluidColor, scaledAmount, fluidStillSprite);
+        //TODO
+//        if (fluidStack.isEmpty())
+//        {
+//            return;
+//        }
+//
+//        Fluid fluid = fluidStack.getFluid();
+//
+//        TextureAtlasSprite fluidStillSprite = getStillFluidSprite(fluidStack);
+//
+//        FluidAttributes attributes = fluid.getAttributes();
+//        int fluidColor = attributes.getColor(fluidStack);
+//
+//        int amount = fluidStack.getAmount();
+//        int scaledAmount = (amount * height) / capacityMb;
+//        if (amount > 0 && scaledAmount < minHeight)
+//        {
+//            scaledAmount = minHeight;
+//        }
+//        if (scaledAmount > height)
+//        {
+//            scaledAmount = height;
+//        }
+//
+//        drawTiledSprite(xPosition, yPosition, width, height, fluidColor, scaledAmount, fluidStillSprite);
     }
 
     private void drawTiledSprite(final int xPosition, final int yPosition, final int tiledWidth, final int tiledHeight, int color, int scaledAmount, TextureAtlasSprite sprite)
@@ -119,9 +119,12 @@ public class FluidRenderer
     private static TextureAtlasSprite getStillFluidSprite(FluidStack fluidStack)
     {
         Fluid fluid = fluidStack.getFluid();
-        FluidAttributes attributes = fluid.getAttributes();
-        ResourceLocation fluidStill = attributes.getStillTexture(fluidStack);
-        return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
+
+        //TODO
+//        FluidAttributes attributes = fluid.getAttributes();
+//        ResourceLocation fluidStill = attributes.getStillTexture(fluidStack);
+//        return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
+        return null;
     }
 
     public static void setGLColorFromInt(int color)

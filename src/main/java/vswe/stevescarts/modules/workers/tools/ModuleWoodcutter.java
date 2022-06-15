@@ -468,17 +468,17 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
 
     public boolean isLeavesHandler(BlockState blockState, BlockPos pos)
     {
-        return BlockTags.LEAVES.contains(blockState.getBlock());
+        return blockState.is(BlockTags.LEAVES);
     }
 
     public boolean isWoodHandler(BlockState blockState, BlockPos pos)
     {
-        return BlockTags.LOGS.contains(blockState.getBlock());
+        return blockState.is(BlockTags.LOGS);
     }
 
     public boolean isSaplingHandler(@Nonnull ItemStack sapling)
     {
-        return ItemTags.SAPLINGS.contains(sapling.getItem());
+        return sapling.is(ItemTags.SAPLINGS);
     }
 
     private int getPlantSize()

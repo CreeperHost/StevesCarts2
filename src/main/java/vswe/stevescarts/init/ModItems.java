@@ -1,8 +1,8 @@
 package vswe.stevescarts.init;
 
+import net.minecraft.Util;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -14,15 +14,13 @@ import vswe.stevescarts.items.ItemCartModule;
 import vswe.stevescarts.items.ItemCarts;
 import vswe.stevescarts.modules.data.ModuleData;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Supplier;
 
 public class ModItems
 {
     public static final Item.Properties ITEM_GROUP = new Item.Properties().tab(CreativeTabSC2Blocks.INSTANCE);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
-    public static final List<ItemCartModule> MODULES = new ArrayList<>();
-    public static final List<ItemCartComponent> CART_COMPONENTS = new ArrayList<>();
 
     public static final RegistryObject<Item> CART_ASSEMBLER = ITEMS.register("blockcartassembler", () -> new BlockItem(ModBlocks.CART_ASSEMBLER.get(), ITEM_GROUP));
     public static final RegistryObject<Item> CARGO_MANAGER = ITEMS.register("blockcargomanager", () -> new BlockItem(ModBlocks.CARGO_MANAGER.get(), ITEM_GROUP));
@@ -64,22 +62,23 @@ public class ModItems
 
     public static final RegistryObject<Item> CARTS = ITEMS.register("modularcart", ItemCarts::new);
 
-    public static void registerItems(RegistryEvent.Register<Item> event)
+    public static final Map<ComponentTypes, Supplier<Item>> COMPONENTS = Util.make(new LinkedHashMap<>(), map ->
     {
-        for (final ModuleData module : ModuleData.getList().values())
+        for (ComponentTypes value : ComponentTypes.values())
         {
-            ItemCartModule itemCartModule = new ItemCartModule(module);
-            MODULES.add(itemCartModule);
-            event.getRegistry().register(itemCartModule);
+            if(value != null && value.getName() != null)
+            {
+                String name = ("component_" + value.getName()).trim().replace(" ", "_").replace("'", "_").toLowerCase(Locale.ROOT);
+                map.put(value, ITEMS.register(name, () -> new ItemCartComponent(value)));
+            }
         }
-        for (ComponentTypes componentTypes : ComponentTypes.values())
+    });
+
+    public static final Map<ModuleData, Supplier<Item>> MODULES = Util.make(new LinkedHashMap<>(), map ->
+    {
+        for (ModuleData value : ModuleData.getList().values())
         {
-            if (componentTypes.getName() == null) continue;
-            if (componentTypes.getName().isEmpty()) continue;
-            if (componentTypes.getName().equals("Unknown_SC2_Component")) continue;
-            ItemCartComponent itemCartComponent = new ItemCartComponent(componentTypes);
-            CART_COMPONENTS.add(itemCartComponent);
-            event.getRegistry().register(itemCartComponent);
+            map.put(value, ITEMS.register(value.getName(), () -> new ItemCartModule(value)));
         }
-    }
+    });
 }

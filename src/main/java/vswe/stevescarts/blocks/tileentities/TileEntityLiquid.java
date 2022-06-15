@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -378,10 +377,11 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
         setWorkload(nbttagcompound.getShort("workload"));
     }
 
+
     @Override
-    public CompoundTag save(CompoundTag nbttagcompound)
+    public void saveAdditional(CompoundTag nbttagcompound)
     {
-        super.save(nbttagcompound);
+        super.saveAdditional(nbttagcompound);
         for (int i = 0; i < 4; ++i)
         {
             if (tanks[i].getFluid() != null)
@@ -392,7 +392,6 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
             }
         }
         nbttagcompound.putShort("workload", (short) getWorkload());
-        return nbttagcompound;
     }
 
     private boolean isInput(final int id)
@@ -461,7 +460,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     @Override
     public Component getDisplayName()
     {
-        return new TextComponent("container.liquidmanager");
+        return Component.translatable("container.liquidmanager");
     }
 
     @Nullable

@@ -7,7 +7,6 @@ import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -15,6 +14,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -28,7 +28,9 @@ import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.RailBlock;
@@ -43,6 +45,7 @@ import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.containers.ContainerMinecart;
@@ -70,8 +73,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Consumer;
 
-
-public class EntityMinecartModular extends AbstractMinecart implements IForgeAbstractMinecart, Container, IEntityAdditionalSpawnData, IFluidHandler
+public class EntityMinecartModular extends AbstractMinecart implements Container, IEntityAdditionalSpawnData, IFluidHandler, MenuProvider
 {
     public BlockPos disabledPos;
     protected boolean wasDisabled;;
@@ -97,7 +99,7 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
     private ArrayList<ModuleEngine> engineModules;
     private ArrayList<ModuleTank> tankModules;
     private ModuleCreativeSupplies creativeSupplies;
-    public Random random;
+    public RandomSource random;
     protected Component name;
     public byte cartVersion;
     private int scrollY;
@@ -110,7 +112,6 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
     {
         return modules;
     }
-
     @Override
     public Packet<?> getAddEntityPacket()
     {
@@ -153,7 +154,7 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
     {
         super(ModEntities.MODULAR_CART.get(), world, x, y, z);
         engineFlag = false;
-        random = new Random();
+        random = world.random;
         cartVersion = info.getByte("CartVersion");
         loadModules(info);
         this.name = name;
@@ -170,14 +171,14 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
     {
         super(ModEntities.MODULAR_CART.get(), world);
         engineFlag = false;
-        random = new Random();
+        random = world.random;
     }
 
     public EntityMinecartModular(EntityType<EntityMinecartModular> entityType, Level world)
     {
         super(entityType, world);
         engineFlag = false;
-        random = new Random();
+        random = RandomSource.create();
     }
 
     public EntityMinecartModular(final Level world, final TileEntityCartAssembler assembler, final byte[] data)
@@ -193,13 +194,6 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
         super.defineSynchedData();
         this.entityData.define(IS_BURNING, false);
         this.entityData.define(IS_DISANABLED, false);
-    }
-
-    @Deprecated
-    private void overrideDatawatcher()
-    {
-        //TODO AT
-//        		entityData = new EntityDataManagerLockable(this);
     }
 
     private void loadPlaceholderModules(final byte[] data)
@@ -479,7 +473,7 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
     {
         if (level.isClientSide && !(entityData instanceof EntityDataManagerLockable))
         {
-            overrideDatawatcher();
+//            overrideDatawatcher();
         }
         super.onAddedToWorld();
     }
@@ -627,16 +621,29 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
     }
 
     @Override
-    @Nonnull
-    public ItemStack getCartItem()
+    @NotNull
+    public Item getDropItem()
     {
-        if (modules != null)
-        {
-            @Nonnull ItemStack cart = ModuleData.createModularCart(this);
-            return cart;
-        }
-        return ItemStack.EMPTY;
+        return Items.MINECART;
+//        if (modules != null)
+//        {
+//            @Nonnull ItemStack cart = ModuleData.createModularCart(this);
+//            return cart;
+//        }
+//        return ItemStack.EMPTY;
     }
+
+//    @Override
+//    @Nonnull
+//    public ItemStack getCartItem()
+//    {
+//        if (modules != null)
+//        {
+//            @Nonnull ItemStack cart = ModuleData.createModularCart(this);
+//            return cart;
+//        }
+//        return ItemStack.EMPTY;
+//    }
 
     //Override this to stop it spawning a vanilla minecart
     @Override
@@ -1014,7 +1021,7 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
     public void load(final CompoundTag tagCompound)
     {
         super.load(tagCompound);
-        name = new TranslatableComponent(tagCompound.getString("cartName"));
+        name = Component.translatable(tagCompound.getString("cartName"));
         engineFlag = tagCompound.getBoolean("engineFlag");
         double pushX = tagCompound.getDouble("pushX");
         double pushZ = tagCompound.getDouble("pushZ");
@@ -1188,14 +1195,7 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
         }
         if (!level.isClientSide)
         {
-            NetworkHooks.openGui((ServerPlayer) entityplayer, (MenuProvider) this, new Consumer<FriendlyByteBuf>()
-            {
-                @Override
-                public void accept(FriendlyByteBuf packetBuffer)
-                {
-                    packetBuffer.writeInt(getId());
-                }
-            });
+            NetworkHooks.openGui((ServerPlayer) entityplayer, (MenuProvider) this, packetBuffer -> packetBuffer.writeInt(getId()));
         }
         return InteractionResult.SUCCESS;
     }
@@ -1203,7 +1203,7 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
     @Override
     public Component getDisplayName()
     {
-        return new TranslatableComponent("entity.minecart");
+        return Component.translatable("entity.minecart");
     }
 
     public void loadChunks() {}
@@ -1440,13 +1440,6 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
         final byte[] bytes = new byte[length];
         data.readBytes(bytes);
         loadModules(bytes);
-        //TODO
-        //		final int nameLength = data.readByte();
-        //		final byte[] nameBytes = new byte[nameLength];
-        //		for (int i = 0; i < nameLength; ++i) {
-        //			nameBytes[i] = data.readByte();
-        //		}
-        //		name = new TranslationTextComponent(new String(nameBytes));
         if (getDataManager() instanceof EntityDataManagerLockable)
         {
             ((EntityDataManagerLockable) getDataManager()).release();
@@ -1725,14 +1718,13 @@ public class EntityMinecartModular extends AbstractMinecart implements IForgeAbs
         }
     };
 
-    Container container = null;
+    AbstractContainerMenu container = null;
 
-    //TODO
-//    @Override
-//    protected Container createMenu(int id, Inventory playerInventory)
-//    {
-//        Container container = new ContainerMinecart(id, playerInventory, this, dataAccess);
-//        this.container = container;
-//        return container;
-//    }
+    @org.jetbrains.annotations.Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory inventory, @NotNull Player player)
+    {
+        this.container = new ContainerMinecart(id, inventory, this, dataAccess);
+        return container;
+    }
 }

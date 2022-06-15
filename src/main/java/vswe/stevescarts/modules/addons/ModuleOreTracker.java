@@ -3,7 +3,6 @@ package vswe.stevescarts.modules.addons;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.OreBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -69,10 +68,6 @@ public class ModuleOreTracker extends ModuleAddon
         {
             return false;
         }
-        if (b instanceof OreBlock)
-        {
-            return true;
-        }
-        return Constants.ORE.contains(b);
+        return state.is(Constants.ORE);
     }
 }

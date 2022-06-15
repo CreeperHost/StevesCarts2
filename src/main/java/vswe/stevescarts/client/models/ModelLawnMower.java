@@ -94,24 +94,25 @@ public class ModelLawnMower extends ModelCartbase
 //        }
     }
 
-    @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll, final float partialtime)
-    {
-        super.applyEffects(module, matrixStack, rtb, yaw, pitch, roll, partialtime);
-        final float angle = (module == null) ? 0.0f : (((ModuleFlowerRemover) module).getBladeAngle() + partialtime * ((ModuleFlowerRemover) module).getBladeSpindSpeed());
-        for (int i = 0; i < bladepins.size(); ++i)
-        {
-            final ModelPart bladepin = bladepins.get(i);
-            if (i % 2 == 0)
-            {
-                bladepin.xRot = angle;
-            }
-            else
-            {
-                bladepin.xRot = -angle;
-            }
-        }
-    }
+    //TODO
+//    @Override
+//    public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll, final float partialtime)
+//    {
+//        super.applyEffects(module, matrixStack, rtb, yaw, pitch, roll, partialtime);
+//        final float angle = (module == null) ? 0.0f : (((ModuleFlowerRemover) module).getBladeAngle() + partialtime * ((ModuleFlowerRemover) module).getBladeSpindSpeed());
+//        for (int i = 0; i < bladepins.size(); ++i)
+//        {
+//            final ModelPart bladepin = bladepins.get(i);
+//            if (i % 2 == 0)
+//            {
+//                bladepin.xRot = angle;
+//            }
+//            else
+//            {
+//                bladepin.xRot = -angle;
+//            }
+//        }
+//    }
 
     static
     {

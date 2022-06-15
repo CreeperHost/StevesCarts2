@@ -5,15 +5,19 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.init.ModItems;
@@ -23,9 +27,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer
+public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implements ItemPropertyFunction
 {
-    public ItemStackRenderer(BlockEntityRenderDispatcher p_172550_, EntityModelSet p_172551_) {
+    public static ItemStackRenderer instance;
+
+    public ItemStackRenderer(BlockEntityRenderDispatcher p_172550_, EntityModelSet p_172551_)
+    {
         super(p_172550_, p_172551_);
     }
 
@@ -49,7 +56,8 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer
             float lowestMult = 1.0f;
             VertexConsumer ivertexbuilder = iRenderTypeBuffer.getBuffer(RenderType.solid());
 
-            EntityMinecartModular cart = new EntityMinecartModular(Minecraft.getInstance().level, 0, 0, 0, itemStack.getTag(), new TextComponent(""));
+            //TODO
+            EntityMinecartModular cart = new EntityMinecartModular(Minecraft.getInstance().level, 0, 0, 0, itemStack.getTag(), Component.literal(""));
 
             if (transformType == ItemTransforms.TransformType.GUI)
             {
@@ -63,6 +71,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer
             matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180));
             matrixStack.mulPose(Vector3f.XP.rotationDegrees(180));
 
+            //TODO
             for (ModuleBase module : cart.getModules())
             {
                 if (module.getModels() != null)
@@ -76,5 +85,20 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer
             }
         }
         matrixStack.popPose();
+    }
+
+    public static ItemStackRenderer getInstance()
+    {
+        if (instance == null)
+        {
+            instance = new ItemStackRenderer(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
+        }
+        return instance;
+    }
+
+    @Override
+    public float call(ItemStack p_174676_, @Nullable ClientLevel p_174677_, @Nullable LivingEntity p_174678_, int p_174679_)
+    {
+        return 1F;
     }
 }

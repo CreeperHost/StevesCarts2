@@ -3,7 +3,6 @@ package vswe.stevescarts.client.guis;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
@@ -97,7 +96,7 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
     {
         if (inRect(x, y, rect))
         {
-            renderTooltip(matrixStack, new TextComponent(str), getGuiLeft() + x, getGuiTop() + y);
+            renderTooltip(matrixStack, Component.literal(str), getGuiLeft() + x, getGuiTop() + y);
         }
     }
 

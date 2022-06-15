@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import vswe.stevescarts.Constants;
@@ -36,23 +35,25 @@ public class SoundHandler
     {
     }
 
+    //TODO
     private static SoundEvent reg(String name)
     {
         ResourceLocation loc = new ResourceLocation(Constants.MOD_ID, name);
-        SoundEvent event = new SoundEvent(loc).setRegistryName(loc);
+//        SoundEvent event = new SoundEvent(loc).setRegistryName(loc);
 
-        SOUNDS.add(event);
-        return event;
+//        SOUNDS.add(event);
+//        return event;
+        return null;
     }
-
-    @SubscribeEvent
-    public static void registerSounds(RegistryEvent.Register<SoundEvent> register)
-    {
-        for (SoundEvent sound : SOUNDS)
-        {
-            register.getRegistry().register(sound);
-        }
-    }
+//
+//    @SubscribeEvent
+//    public static void registerSounds(RegistryEvent.Register<SoundEvent> register)
+//    {
+//        for (SoundEvent sound : SOUNDS)
+//        {
+//            register.getRegistry().register(sound);
+//        }
+//    }
 
     public static void playSound(SoundEvent event, SoundSource category, float volume, float pitch)
     {

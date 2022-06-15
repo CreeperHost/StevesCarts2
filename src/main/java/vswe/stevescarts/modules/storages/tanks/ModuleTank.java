@@ -269,7 +269,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
 
     protected void updateDw()
     {
-        updateDw(FLUID_NAME, (tank.getFluid().isEmpty()) ? "" : tank.getFluid().getFluid().getRegistryName().toString());
+        updateDw(FLUID_NAME, (tank.getFluid().isEmpty()) ? "" : getFluidName(tank.getFluid().getFluid()));
         updateDw(FLUID_AMOUNT, (tank.getFluid().isEmpty()) ? -1 : tank.getFluid().getAmount());
     }
 
@@ -279,9 +279,14 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
         FLUID_NAME = createDw(EntityDataSerializers.STRING);
         FLUID_AMOUNT = createDw(EntityDataSerializers.INT);
         LOCKED = createDw(EntityDataSerializers.BOOLEAN);
-        registerDw(FLUID_NAME, (tank.getFluid().isEmpty()) ? "" : tank.getFluid().getFluid().getRegistryName().toString());
+        registerDw(FLUID_NAME, (tank.getFluid().isEmpty()) ? "" : getFluidName(tank.getFluid().getFluid()));
         registerDw(FLUID_AMOUNT, (tank.getFluid().isEmpty()) ? -1 : tank.getFluid().getAmount());
         registerDw(LOCKED, false);
+    }
+
+    public String getFluidName(Fluid fluid)
+    {
+        return Registry.FLUID.getKey(fluid).toString();
     }
 
     public float getFluidRenderHeight()

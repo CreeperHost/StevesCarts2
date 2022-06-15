@@ -20,6 +20,6 @@ public class SlotSeed extends SlotBase
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return Constants.SEEDS.contains(itemstack.getItem());
+        return itemstack.is(Constants.SEEDS);
     }
 }

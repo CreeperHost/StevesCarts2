@@ -3,6 +3,8 @@ package vswe.stevescarts;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,7 +17,8 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
-import vswe.stevescarts.client.renders.RendererCart;
+import vswe.stevescarts.client.renders.ItemStackRenderer;
+import vswe.stevescarts.client.renders.RenderModulerCart;
 import vswe.stevescarts.compat.CompatHandler;
 import vswe.stevescarts.entitys.CartDataSerializers;
 import vswe.stevescarts.handlers.EventHandler;
@@ -38,7 +41,6 @@ public class StevesCarts
         instance = this;
         IEventBus iEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         iEventBus.addListener(this::commonSetup);
-        iEventBus.addGenericListener(Item.class, ModItems::registerItems);
         ModuleData.init();
         AssemblerUpgrade.init();
         CompatHandler.init(iEventBus);
@@ -74,10 +76,11 @@ public class StevesCarts
     {
         ModScreens.init();
         CompatHandler.initClient();
-//        ModuleData.initModels();
+        ModuleData.initModels();
 
-        EntityRenderers.register(ModEntities.MODULAR_CART.get(), RendererCart::new);
+        ItemProperties.register(ModItems.CARTS.get(), new ResourceLocation(Constants.MOD_ID, ""), ItemStackRenderer.getInstance());
 
+        EntityRenderers.register(ModEntities.MODULAR_CART.get(), RenderModulerCart::new);
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.ADVANCED_DETECTOR.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.JUNCTION.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.BATTERIES.get(), RenderType.cutout());

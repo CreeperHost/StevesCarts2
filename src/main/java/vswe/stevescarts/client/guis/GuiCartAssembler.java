@@ -1,6 +1,7 @@
 package vswe.stevescarts.client.guis;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
@@ -8,11 +9,12 @@ import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.containers.ContainerCartAssembler;
@@ -120,7 +122,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
 
     private void addText(final ArrayList<TextWithColor> lines, final String text, final int color)
     {
-        List<FormattedCharSequence> newlines = ComponentRenderUtils.wrapComponents(new TextComponent(text), 130, font);
+        List<FormattedCharSequence> newlines = ComponentRenderUtils.wrapComponents(Component.literal(text), 130, font);
         for (final FormattedCharSequence line : newlines)
         {
             lines.add(new TextWithColor(line, color));
@@ -140,7 +142,6 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
             updateErrorList();
             firstLoad = false;
         }
-//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         final int j = getGuiLeft();
         final int k = getGuiTop();
         ResourceHelper.bindResource(GuiCartAssembler.backgrounds[assembler.getSimulationInfo().getBackground()]);
@@ -207,9 +208,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
             final int targetY2 = box.getY() - 12;
             final int targetX2 = box.getX();
             blit(matrixStack, j + targetX2, k + targetY2, 0, 40, 115, 11);
-//            GlStateManager._color4f((box.getColor() >> 16) / 255.0f, (box.getColor() >> 8 & 0xFF) / 255.0f, (box.getColor() & 0xFF) / 255.0f, 1.0f);
             blit(matrixStack, j + targetX2 + 8, k + targetY2 + 2, 0, 51 + box.getID() * 7, 115, 7);
-//            GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         }
         int srcX2 = 42;
         int srcY2 = 0;
@@ -326,7 +325,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
     {
         if (inRect(x - getGuiLeft(), y - getGuiTop(), rect))
         {
-            renderTooltip(matrixStack, new TranslatableComponent(str), x, y);
+            renderTooltip(matrixStack, Component.literal(str), x, y);
         }
     }
 
@@ -350,58 +349,53 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         }
     }
 
-    public void renderEntityInInventory(int p_228187_0_, int p_228187_1_, int p_228187_2_, float p_228187_3_, float p_228187_4_)
-    {
+    public void renderEntityInInventory(int p_98851_, int p_98852_, int p_98853_, float p_98854_, float p_98855_) {
         assembler.createPlaceholder();
-        //		float f = (float)Math.atan((double)(p_228187_3_ / 40.0F));
-//        		float f1 = (float)Math.atan((double)(p_228187_4_ / 40.0F));
-        //TODO
-//        RenderSystem.pushMatrix();
-//        RenderSystem.translatef((float) p_228187_0_, (float) p_228187_1_, 1050.0F);
-//        RenderSystem.scalef(1.0F, 1.0F, -1.0F);
-        PoseStack matrixstack = new PoseStack();
-        matrixstack.translate(0.0D, 0.0D, 1000.0D);
-        matrixstack.scale((float) p_228187_2_, (float) p_228187_2_, (float) p_228187_2_);
+
+        float f = (float)Math.atan((double)(p_98854_ / 40.0F));
+        float f1 = (float)Math.atan((double)(p_98855_ / 40.0F));
+        PoseStack posestack = RenderSystem.getModelViewStack();
+        posestack.pushPose();
+        posestack.translate((double)p_98851_, (double)p_98852_, 1050.0D);
+        posestack.scale(1.0F, 1.0F, -1.0F);
+        RenderSystem.applyModelViewMatrix();
+        PoseStack posestack1 = new PoseStack();
+        posestack1.translate(0.0D, 0.0D, 1000.0D);
+        posestack1.scale((float)p_98853_, (float)p_98853_, (float)p_98853_);
+
         Quaternion quaternion = Vector3f.YN.rotationDegrees(assembler.getRoll() * 10F);
         Quaternion quaternion1 = Vector3f.XP.rotationDegrees(180);
         if(spin)
         {
-            matrixstack.mulPose(quaternion);
+            posestack1.mulPose(quaternion);
         }
 
-        matrixstack.mulPose(quaternion1);
-        EntityMinecartModular p_228187_5_ = assembler.getPlaceholder();
-        //TODO
-//        float f3 = p_228187_5_.yRot;
-//        float f4 = p_228187_5_.xRot;
-        //		p_228187_5_.yRot = 180.0F + f * 40.0F;
-        //		p_228187_5_.xRot = -f1 * 20.0F;
-        //TODO
-//        EntityRendererManager entityrenderermanager = Minecraft.getInstance().getEntityRenderDispatcher();
-        //		quaternion1.conj();
-        //		entityrenderermanager.overrideCameraOrientation(quaternion1);
-        //TODO
-//        entityrenderermanager.setRenderShadow(false);
-//        IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
-        RenderSystem.runAsFancy(() ->
+        quaternion.mul(quaternion1);
+        posestack1.mulPose(quaternion);
+        EntityMinecartModular entityMinecartModular = assembler.getPlaceholder();
+
+        Lighting.setupForEntityInInventory();
+        EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
+        quaternion1.conj();
+        entityrenderdispatcher.overrideCameraOrientation(quaternion1);
+        entityrenderdispatcher.setRenderShadow(false);
+        MultiBufferSource.BufferSource multibuffersource$buffersource = Minecraft.getInstance().renderBuffers().bufferSource();
+        if(entityMinecartModular != null)
         {
-            if (p_228187_5_ != null){}
-                //TODO
-//                entityrenderermanager.render(p_228187_5_, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, irendertypebuffer$impl, 15728880);
-        });
-        //TODO
-//        irendertypebuffer$impl.endBatch();
-//        entityrenderermanager.setRenderShadow(true);
-//        p_228187_5_.yRot = f3;
-//        p_228187_5_.xRot = f4;
-//        RenderSystem.popMatrix();
+            RenderSystem.runAsFancy(() ->
+            {
+                entityrenderdispatcher.render(entityMinecartModular, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, posestack1, multibuffersource$buffersource, 15728880);
+            });
+        }
+        multibuffersource$buffersource.endBatch();
+        entityrenderdispatcher.setRenderShadow(true);
+        posestack.popPose();
+        RenderSystem.applyModelViewMatrix();
+        Lighting.setupFor3DItems();
     }
 
     private void renderDropDownMenu(PoseStack matrixStack, final int x, final int y)
     {
-        //TODO
-//        GlStateManager._pushMatrix();
-//        GlStateManager._translatef(0.0f, 0.0f, 200.0f);
         final int j = getGuiLeft();
         final int k = getGuiTop();
         if (dropdownX != -1 && dropdownY != -1)
@@ -468,8 +462,6 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                 }
             }
         }
-        //TODO
-//        GlStateManager._popMatrix();
     }
 
     private void drawString(PoseStack matrixStack, String str, final int x, final int y)

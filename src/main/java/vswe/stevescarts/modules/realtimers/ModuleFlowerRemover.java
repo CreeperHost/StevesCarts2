@@ -4,6 +4,7 @@ import com.mojang.math.Vector3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -126,7 +127,7 @@ public class ModuleFlowerRemover extends ModuleBase
         if (blockState.getBlock() == Blocks.GRASS) return true;
         if (blockState.getBlock() == Blocks.TALL_GRASS) return true;
 
-        return ItemTags.FLOWERS.contains(getCart().level.getBlockState(pos).getBlock().asItem());
+        return blockState.is(BlockTags.FLOWERS);
     }
 
     private void addStuff(final List<ItemStack> stuff)

@@ -3,7 +3,6 @@ package vswe.stevescarts.blocks.tileentities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -488,7 +487,7 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     @Override
     public Component getDisplayName()
     {
-        return new TranslatableComponent("screen.cargo.manager");
+        return Component.translatable("screen.cargo.manager");
     }
 
     @Nullable

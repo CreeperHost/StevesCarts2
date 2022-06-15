@@ -1,11 +1,11 @@
 package vswe.stevescarts.items;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -19,6 +19,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.IItemRenderProperties;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -30,14 +31,13 @@ import vswe.stevescarts.modules.data.ModuleData;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ItemCarts extends MinecartItem
 {
     public ItemCarts()
     {
         super(AbstractMinecart.Type.RIDEABLE, new Item.Properties().stacksTo(1));
-        //TODO
-//        super(AbstractMinecart.Type.RIDEABLE, new Item.Properties().stacksTo(1).setISTER(() -> ItemStackRenderer::new));
     }
 
     public String getName()
@@ -65,12 +65,12 @@ public class ItemCarts extends MinecartItem
                     {
                         try
                         {
-                            final EntityMinecartModular cart = new EntityMinecartModular(world, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, info, new TranslatableComponent(""));
+                            final EntityMinecartModular cart = new EntityMinecartModular(world, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, info, Component.literal(""));
                             world.addFreshEntity(cart);
                         } catch (Exception e)
                         {
                             e.printStackTrace();
-                            player.sendMessage(new TranslatableComponent("The cart failed to be placed into the world, this is due to an issue with one or more modules. " + "Please post your log on the issue tracker here: " + ChatFormatting.BLUE + " https://github.com/modmuss50/SC2/issues"), null);
+                            player.displayClientMessage(Component.literal("The cart failed to be placed into the world, this is due to an issue with one or more modules. " + "Please post your log on the issue tracker here: " + ChatFormatting.BLUE + " https://github.com/modmuss50/SC2/issues"), false);
                             StevesCarts.logger.error(" --------------- Broken cart info --------------- ");
                             StevesCarts.logger.error(info);
                             ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
@@ -144,7 +144,7 @@ public class ItemCarts extends MinecartItem
             }
             for (final ModuleCountPair count3 : counts)
             {
-                list.add(new TranslatableComponent(count3.toString()));
+                list.add(Component.translatable(count3.toString()));
             }
             if (info.contains("Spares"))
             {
@@ -160,22 +160,22 @@ public class ItemCarts extends MinecartItem
                         {
                             name = module2.getCartInfoText(name, info.getByte("Data" + (bytes.length + j)));
                         }
-                        list.add(new TranslatableComponent(ChatFormatting.GOLD + name));
+                        list.add(Component.translatable(ChatFormatting.GOLD + name));
                     }
                 }
             }
             if (info.contains("maxTime"))
             {
-                list.add(new TranslatableComponent(ChatFormatting.RED + "Incomplete cart!"));
+                list.add(Component.literal(ChatFormatting.RED + "Incomplete cart!"));
                 final int maxTime = info.getInt("maxTime");
                 final int currentTime = info.getInt("currentTime");
                 final int timeLeft = maxTime - currentTime;
-                list.add(new TranslatableComponent(ChatFormatting.RED + "Time left: " + formatTime(timeLeft)));
+                list.add(Component.literal(ChatFormatting.RED + "Time left: " + formatTime(timeLeft)));
             }
         }
         else
         {
-            list.add(new TranslatableComponent("No modules loaded"));
+            list.add(Component.literal("No modules loaded"));
         }
     }
 
@@ -188,5 +188,16 @@ public class ItemCarts extends MinecartItem
         final int hours = minutes / 60;
         minutes -= hours * 60;
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    @Override
+    public void initializeClient(Consumer<IItemRenderProperties> consumer)
+    {
+        consumer.accept(new IItemRenderProperties() {
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                return ItemStackRenderer.getInstance();
+            }
+        });
     }
 }

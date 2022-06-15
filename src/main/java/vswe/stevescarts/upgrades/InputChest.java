@@ -108,7 +108,6 @@ public class InputChest extends SimpleInventoryEffect
             {
                 if (effect instanceof Blueprint)
                 {
-                    //TODO
                     return ((Blueprint) effect).isValidForBluePrint(tile, assembler.getModules(true), module);
                 }
             }

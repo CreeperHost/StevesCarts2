@@ -26,11 +26,11 @@ public class ModelExtractingChests extends ModelCartbase
     {
         super();
         ModelPart[] temp = AddChest(false);
-        base1 = temp[0];
-        lid1 = temp[1];
-        temp = AddChest(true);
-        base2 = temp[0];
-        lid2 = temp[1];
+//        base1 = temp[0];
+//        lid1 = temp[1];
+//        temp = AddChest(true);
+//        base2 = temp[0];
+//        lid2 = temp[1];
     }
 
     private ModelPart[] AddChest(final boolean opposite)

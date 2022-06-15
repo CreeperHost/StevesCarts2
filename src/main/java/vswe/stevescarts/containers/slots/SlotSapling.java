@@ -20,6 +20,6 @@ public class SlotSapling extends SlotBase
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return ItemTags.SAPLINGS.contains(itemstack.getItem());
+        return itemstack.is(ItemTags.SAPLINGS);
     }
 }

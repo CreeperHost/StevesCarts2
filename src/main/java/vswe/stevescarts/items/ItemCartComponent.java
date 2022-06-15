@@ -1,11 +1,11 @@
 package vswe.stevescarts.items;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.client.creativetabs.CreativeTabSC2Items;
 import vswe.stevescarts.helpers.ComponentTypes;
 
@@ -15,7 +15,6 @@ import java.util.Locale;
 
 public class ItemCartComponent extends Item
 {
-
     public static int size()
     {
         return ComponentTypes.values().length;
@@ -27,22 +26,13 @@ public class ItemCartComponent extends Item
     {
         super(new Item.Properties().tab(CreativeTabSC2Items.INSTANCE));
         this.componentType = componentType;
-        setRegistryName(getComponentName().trim().replace(" ", "_").replace("'", "_").toLowerCase(Locale.ROOT));
     }
 
     @Override
-    public Component getName(ItemStack stack)
+    public @NotNull Component getName(@NotNull ItemStack itemStack)
     {
-        return new TranslatableComponent(componentType.getName());
-    }
-
-    public String getComponentName()
-    {
-        if (componentType == null || componentType.getName() == null)
-        {
-            return "Unknown_SC2_Component";
-        }
-        return "component_" + componentType.getName();
+        String name = componentType.getName().trim().replace(" ", "_").replace("'", "_").toLowerCase(Locale.ROOT);
+        return Component.translatable("item.stevescarts." + name);
     }
 
     @Override
@@ -51,13 +41,13 @@ public class ItemCartComponent extends Item
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level p_77624_2_, List<Component> tooltip, TooltipFlag p_77624_4_)
+    public void appendHoverText(ItemStack stack, @Nullable Level p_77624_2_, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag)
     {
         if (!stack.isEmpty())
         {
             ItemCartComponent itemCartComponent = (ItemCartComponent) stack.getItem();
             int id = itemCartComponent.componentType.getId();
-            tooltip.add(new TranslatableComponent("Component id " + id));
+            tooltip.add(Component.literal("Component id " + id));
         }
     }
 }

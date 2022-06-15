@@ -18,21 +18,10 @@ import javax.annotation.Nullable;
 
 public class BlockLiquidManager extends BlockContainerBase
 {
-
     public BlockLiquidManager()
     {
         super(Properties.of(Material.STONE).strength(2.0F));
     }
-
-    //TODO
-    //	@Override
-    //	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-    //		final TileEntityLiquid tile = (TileEntityLiquid) world.getTileEntity(pos);
-    //		if (tile != null) {
-    //			InventoryHelper.dropInventoryItems(world, pos, tile);
-    //		}
-    //		super.breakBlock(world, pos, state);
-    //	}
 
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player playerEntity, InteractionHand hand, BlockHitResult blockRayTraceResult)

@@ -3,7 +3,6 @@ package vswe.stevescarts.blocks.tileentities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -48,12 +47,11 @@ public class TileEntityDetector extends TileEntityBase implements MenuProvider
     }
 
     @Override
-    public CompoundTag save(CompoundTag nbttagcompound)
+    public void saveAdditional(CompoundTag nbttagcompound)
     {
-        super.save(nbttagcompound);
+        super.saveAdditional(nbttagcompound);
         final int count = saveLogicObject(nbttagcompound, mainObj, 0, false);
         nbttagcompound.putByte("LogicObjectCount", (byte) count);
-        return nbttagcompound;
     }
 
     private int saveLogicObject(final CompoundTag nbttagcompound, final LogicObject obj, int id, final boolean saveMe)
@@ -288,7 +286,7 @@ public class TileEntityDetector extends TileEntityBase implements MenuProvider
     @Override
     public Component getDisplayName()
     {
-        return new TextComponent("container.detector");
+        return Component.literal("container.detector");
     }
 
     @Nullable

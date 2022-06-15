@@ -12,11 +12,11 @@ public abstract class ModelEngineBase extends ModelCartbase
     public ModelEngineBase()
     {
         //TODO
-        MeshDefinition meshdefinition = new MeshDefinition();
-        PartDefinition partdefinition = meshdefinition.getRoot();
+//        MeshDefinition meshdefinition = new MeshDefinition();
+//        PartDefinition partdefinition = meshdefinition.getRoot();
 
-        AddRenderer(anchor = partdefinition.bake(0, 0));
-        anchor.setPos(10.5f, 0.5f, -0.0f);
-        anchor.yRot = -1.5707964f;
+//        AddRenderer(anchor = partdefinition.bake(0, 0));
+//        anchor.setPos(10.5f, 0.5f, -0.0f);
+//        anchor.yRot = -1.5707964f;
     }
 }

@@ -2,6 +2,7 @@ package vswe.stevescarts.client.creativetabs;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import vswe.stevescarts.init.ModItems;
 
 public class CreativeTabSC2Modules extends CreativeModeTab
@@ -16,6 +17,8 @@ public class CreativeTabSC2Modules extends CreativeModeTab
     @Override
     public ItemStack makeIcon()
     {
-        return new ItemStack(ModItems.MODULES.get(0));
+        return new ItemStack(Items.DIAMOND);
+        //TODO
+//        return new ItemStack(ModItems.MODULES.get(0));
     }
 }

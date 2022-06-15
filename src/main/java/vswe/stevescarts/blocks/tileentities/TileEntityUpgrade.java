@@ -7,7 +7,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
@@ -132,11 +131,12 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
         load(pkt.getTag());
     }
 
-    @Override
-    public CompoundTag getUpdateTag()
-    {
-        return save(new CompoundTag());
-    }
+    //TODO
+//    @Override
+//    public CompoundTag getUpdateTag()
+//    {
+//        return save(new CompoundTag());
+//    }
 
     public AssemblerUpgrade getUpgrade()
     {
@@ -162,10 +162,11 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
         }
     }
 
+
     @Override
-    public CompoundTag save(CompoundTag compoundNBT)
+    public void saveAdditional(CompoundTag compoundNBT)
     {
-        super.save(compoundNBT);
+        super.saveAdditional(compoundNBT);
         if (inventoryStacks != null)
         {
             ContainerHelper.saveAllItems(compoundNBT, inventoryStacks);
@@ -176,7 +177,6 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
         {
             upgrade.save(this, compoundNBT);
         }
-        return compoundNBT;
     }
 
     @Override
@@ -368,7 +368,7 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     @Override
     public Component getDisplayName()
     {
-        return new TextComponent(getUpgrade().getName());
+        return Component.translatable(getUpgrade().getName());
     }
 
     @Nullable

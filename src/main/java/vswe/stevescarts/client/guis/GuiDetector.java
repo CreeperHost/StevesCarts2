@@ -5,7 +5,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import vswe.stevescarts.blocks.tileentities.TileEntityDetector;
@@ -190,7 +189,7 @@ public class GuiDetector extends AbstractContainerScreen<ContainerDetector>
     {
         if (rect != null && inRect(x - getGuiLeft(), y - getGuiTop(), rect))
         {
-            renderTooltip(matrixStack, new TranslatableComponent(str), x, y);
+            renderTooltip(matrixStack, Component.translatable(str), x, y);
             return true;
         }
         return false;
