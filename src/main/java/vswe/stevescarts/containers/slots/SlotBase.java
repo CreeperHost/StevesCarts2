@@ -37,7 +37,6 @@ public class SlotBase extends Slot
 
     public boolean containsValidItem()
     {
-        //TODO
-        return !getItem().isEmpty();// && isItemValid(getStack());
+        return !getItem().isEmpty();
     }
 }

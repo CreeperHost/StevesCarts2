@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 import vswe.stevescarts.containers.ContainerActivator;
 import vswe.stevescarts.helpers.ActivatorOption;
@@ -29,12 +30,12 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float p_230450_2_, int mouseX, int mouseY)
+    protected void renderBg(@NotNull PoseStack poseStack, float p_230450_2_, int mouseX, int mouseY)
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
         ResourceHelper.bindResource(GuiActivator.texture);
-        blit(matrixStack, j, k, 0, 0, imageWidth, imageHeight);
+        blit(poseStack, j, k, 0, 0, imageWidth, imageHeight);
         mouseX -= getGuiLeft();
         mouseY -= getGuiTop();
         for (int i = 0; i < activator.getOptions().size(); ++i)
@@ -46,13 +47,13 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
             {
                 srcX = 16;
             }
-            blit(matrixStack, j + box[0], k + box[1], srcX, imageHeight, box[2], box[3]);
-            blit(matrixStack, j + box[0] + 1, k + box[1] + 1, (box[2] - 2) * option.getOption(), imageHeight + box[3], box[2] - 2, box[3] - 2);
+            blit(poseStack, j + box[0], k + box[1], srcX, imageHeight, box[2], box[3]);
+            blit(poseStack, j + box[0] + 1, k + box[1] + 1, (box[2] - 2) * option.getOption(), imageHeight + box[3], box[2] - 2, box[3] - 2);
         }
     }
 
     @Override
-    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_)
+    protected void renderLabels(@NotNull PoseStack poseStack, int p_230451_2_, int p_230451_3_)
     {
     }
 
@@ -62,25 +63,25 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float p_230430_4_)
+    public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float p_230430_4_)
     {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, p_230430_4_);
-        renderTooltip(matrixStack, mouseX, mouseY);
+        this.renderBackground(poseStack);
+        super.render(poseStack, mouseX, mouseY, p_230430_4_);
+        renderTooltip(poseStack, mouseX, mouseY);
         mouseX -= getGuiLeft();
         mouseY -= getGuiTop();
-        font.draw(matrixStack, Localization.GUI.TOGGLER.TITLE.translate(), getGuiLeft() + 8, getGuiTop() + 6, 4210752);
+        font.draw(poseStack, Localization.GUI.TOGGLER.TITLE.translate(), getGuiLeft() + 8, getGuiTop() + 6, 4210752);
         for (int i = 0; i < activator.getOptions().size(); ++i)
         {
             final ActivatorOption option = activator.getOptions().get(i);
             final int[] box = getBoxRect(i);
-            font.draw(matrixStack, option.getName(), getGuiLeft() + box[0] + box[2] + 6, getGuiTop() + box[1] + 4, 4210752);
+            font.draw(poseStack, option.getName(), getGuiLeft() + box[0] + box[2] + 6, getGuiTop() + box[1] + 4, 4210752);
         }
         for (int i = 0; i < activator.getOptions().size(); ++i)
         {
             final ActivatorOption option = activator.getOptions().get(i);
             final int[] box = getBoxRect(i);
-            drawMouseMover(matrixStack, option.getInfo(), mouseX, mouseY, box);
+            drawMouseMover(poseStack, option.getInfo(), mouseX, mouseY, box);
         }
     }
 

@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,9 +15,9 @@ import java.util.List;
 
 public abstract class GuiBase extends AbstractContainerScreen
 {
-    public GuiBase(AbstractContainerMenu p_i51105_1_, Inventory p_i51105_2_, Component p_i51105_3_)
+    public GuiBase(AbstractContainerMenu abstractContainerMenu, Inventory inventory, Component component)
     {
-        super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
+        super(abstractContainerMenu, inventory, component);
     }
 
     public void drawMouseOver(PoseStack matrixStack, final String str, final int x, final int y)
@@ -38,14 +39,14 @@ public abstract class GuiBase extends AbstractContainerScreen
 
 
     @Override
-    public void renderBackground(PoseStack matrixStack)
+    public void renderBackground(@NotNull PoseStack poseStack)
     {
-        super.renderBackground(matrixStack);
+        super.renderBackground(poseStack);
     }
 
     @Override
-    public void render(PoseStack matrixStack, int x, int y, float f)
+    public void render(@NotNull PoseStack poseStack, int x, int y, float f)
     {
-        super.render(matrixStack, x, y, f);
+        super.render(poseStack, x, y, f);
     }
 }

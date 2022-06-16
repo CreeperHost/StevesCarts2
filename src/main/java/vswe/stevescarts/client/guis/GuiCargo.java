@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 import vswe.stevescarts.containers.ContainerCargo;
 import vswe.stevescarts.helpers.CargoItemSelection;
@@ -21,8 +22,8 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
 {
     private static ResourceLocation[] texturesLeft;
     private static ResourceLocation[] texturesRight;
-    private ContainerCargo containerCargo;
-    private TileEntityCargo manager;
+    private final ContainerCargo containerCargo;
+    private final TileEntityCargo manager;
 
     public GuiCargo(ContainerCargo containerCargo, Inventory playerInventory, Component iTextComponent)
     {
@@ -34,7 +35,7 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float mouseX, int mouseY, int partial)
+    protected void renderBg(@NotNull PoseStack poseStack, float mouseX, int mouseY, int partial)
     {
         int version;
         if (containerCargo.getLayoutType() == 0)
@@ -47,19 +48,19 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
         }
         //version
         ResourceHelper.bindResource(GuiCargo.texturesLeft[version]);
-        blit(matrixStack, leftPos, topPos, 0, 0, 256, imageHeight);
+        blit(poseStack, leftPos, topPos, 0, 0, 256, imageHeight);
         ResourceHelper.bindResource(GuiCargo.texturesRight[version]);
-        blit(matrixStack, leftPos + 256, topPos, 0, 0, imageWidth - 256, imageHeight);
+        blit(poseStack, leftPos + 256, topPos, 0, 0, imageWidth - 256, imageHeight);
 
         final int left = getGuiLeft();
         final int top = getGuiTop();
         for (int i = 0; i < 4; ++i)
         {
-            drawArrow(matrixStack, i, left, top);
+            drawArrow(poseStack, i, left, top);
             final int color = containerCargo.getColor()[i] - 1;
             if (color != 4)
             {
-                drawColors(matrixStack, i, color, left, top);
+                drawColors(poseStack, i, color, left, top);
             }
         }
         final ItemRenderer renderitem = Minecraft.getInstance().getItemRenderer();
@@ -73,42 +74,42 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
 
     //Override this to stop labels from rendering
     @Override
-    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_)
+    protected void renderLabels(@NotNull PoseStack poseStack, int p_230451_2_, int p_230451_3_)
     {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float p_230430_4_)
+    public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float p_230430_4_)
     {
-        this.renderBackground(matrixStack);
+        this.renderBackground(poseStack);
 
-        super.render(matrixStack, mouseX, mouseY, p_230430_4_);
-        renderTooltip(matrixStack, mouseX, mouseY);
+        super.render(poseStack, mouseX, mouseY, p_230430_4_);
+        renderTooltip(poseStack, mouseX, mouseY);
         int[] coords = getMiddleCoords();
 
-        font.draw(matrixStack, getManagerName(), leftPos + coords[0] - 34, topPos + 4, 4210752);
-        font.draw(matrixStack, Localization.GUI.MANAGER.TITLE.translate(), leftPos + coords[0] + coords[2], topPos + 4, 4210752);
+        font.draw(poseStack, getManagerName(), leftPos + coords[0] - 34, topPos + 4, 4210752);
+        font.draw(poseStack, Localization.GUI.MANAGER.TITLE.translate(), leftPos + coords[0] + coords[2], topPos + 4, 4210752);
         for (int i = 0; i < 4; ++i)
         {
             coords = getTextCoords(i);
             final String str = getMaxSizeText(i);
-            font.draw(matrixStack, str, leftPos + coords[0], topPos + coords[1], 4210752);
+            font.draw(poseStack, str, leftPos + coords[0], topPos + coords[1], 4210752);
         }
         for (int i = 0; i < 4; ++i)
         {
             try
             {
-                drawExtraOverlay(matrixStack, i, mouseX, mouseY);
-                drawMouseOver(matrixStack, Localization.GUI.MANAGER.CHANGE_TRANSFER_DIRECTION.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + (containerCargo.toCart()[i] ? Localization.GUI.MANAGER.DIRECTION_TO_CART.translate() : Localization.GUI.MANAGER.DIRECTION_FROM_CART.translate()), mouseX, mouseY, getArrowCoords(i));
-                drawMouseOver(matrixStack, Localization.GUI.MANAGER.CHANGE_TURN_BACK_SETTING.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + ((containerCargo.getColor()[i] == 5) ? Localization.GUI.MANAGER.TURN_BACK_NOT_SELECTED.translate() : (containerCargo.doReturn()[containerCargo.getColor()[i] - 1] ? Localization.GUI.MANAGER.TURN_BACK_DO.translate() : Localization.GUI.MANAGER.TURN_BACK_DO_NOT.translate())), mouseX, mouseY, getReturnCoords(i));
-                drawMouseOver(matrixStack, Localization.GUI.MANAGER.CHANGE_TRANSFER_SIZE.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getMaxSizeOverlay(i), mouseX, mouseY, getTextCoords(i));
-                drawMouseOver(matrixStack, Localization.GUI.MANAGER.CHANGE_SIDE.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SIDE.translate() + ": " + (new String[]{Localization.GUI.MANAGER.SIDE_RED.translate(), Localization.GUI.MANAGER.SIDE_BLUE.translate(), Localization.GUI.MANAGER.SIDE_YELLOW.translate(), Localization.GUI.MANAGER.SIDE_GREEN.translate(), Localization.GUI.MANAGER.SIDE_DISABLED.translate()})[containerCargo.getColor()[i] - 1], mouseX, mouseY, getColorpickerCoords(i));
+                drawExtraOverlay(poseStack, i, mouseX, mouseY);
+                drawMouseOver(poseStack, Localization.GUI.MANAGER.CHANGE_TRANSFER_DIRECTION.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + (containerCargo.toCart()[i] ? Localization.GUI.MANAGER.DIRECTION_TO_CART.translate() : Localization.GUI.MANAGER.DIRECTION_FROM_CART.translate()), mouseX, mouseY, getArrowCoords(i));
+                drawMouseOver(poseStack, Localization.GUI.MANAGER.CHANGE_TURN_BACK_SETTING.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + ((containerCargo.getColor()[i] == 5) ? Localization.GUI.MANAGER.TURN_BACK_NOT_SELECTED.translate() : (containerCargo.doReturn()[containerCargo.getColor()[i] - 1] ? Localization.GUI.MANAGER.TURN_BACK_DO.translate() : Localization.GUI.MANAGER.TURN_BACK_DO_NOT.translate())), mouseX, mouseY, getReturnCoords(i));
+                drawMouseOver(poseStack, Localization.GUI.MANAGER.CHANGE_TRANSFER_SIZE.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getMaxSizeOverlay(i), mouseX, mouseY, getTextCoords(i));
+                drawMouseOver(poseStack, Localization.GUI.MANAGER.CHANGE_SIDE.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SIDE.translate() + ": " + (new String[]{Localization.GUI.MANAGER.SIDE_RED.translate(), Localization.GUI.MANAGER.SIDE_BLUE.translate(), Localization.GUI.MANAGER.SIDE_YELLOW.translate(), Localization.GUI.MANAGER.SIDE_GREEN.translate(), Localization.GUI.MANAGER.SIDE_DISABLED.translate()})[containerCargo.getColor()[i] - 1], mouseX, mouseY, getColorpickerCoords(i));
             } catch (Exception e)
             {
                 e.printStackTrace();
             }
         }
-        drawMouseOver(matrixStack, getLayoutString() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getLayoutOption(containerCargo.getLayoutType()), mouseX, mouseY, getMiddleCoords());
+        drawMouseOver(poseStack, getLayoutString() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getLayoutOption(containerCargo.getLayoutType()), mouseX, mouseY, getMiddleCoords());
     }
 
     protected void drawColors(PoseStack matrixStack, final int id, final int color, final int left, final int top)
@@ -483,7 +484,7 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
 
     private TileEntityCargo getCargo()
     {
-        return (TileEntityCargo) this.manager;
+        return this.manager;
     }
 
     protected String getLayoutString()
@@ -495,16 +496,13 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
     {
         switch (id)
         {
-            default:
-            {
+            default -> {
                 return Localization.GUI.CARGO.LAYOUT_SHARED.translate();
             }
-            case 1:
-            {
+            case 1 -> {
                 return Localization.GUI.CARGO.LAYOUT_SIDE.translate();
             }
-            case 2:
-            {
+            case 2 -> {
                 return Localization.GUI.CARGO.LAYOUT_COLOR.translate();
             }
         }

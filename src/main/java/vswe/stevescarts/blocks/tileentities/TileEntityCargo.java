@@ -17,6 +17,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import vswe.stevescarts.blocks.BlockCargoManager;
 import vswe.stevescarts.containers.ContainerCargo;
 import vswe.stevescarts.containers.slots.*;
@@ -44,45 +46,27 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     {
         public int get(int id)
         {
-            switch (id)
-            {
-                case 0:
-                    return layoutType;
-                case 1:
-                    return color[0];
-                case 2:
-                    return color[1];
-                case 3:
-                    return color[2];
-                case 4:
-                    return color[3];
-                case 5:
-                    return toCart[0] ? 1 : 0;
-                case 6:
-                    return toCart[1] ? 1 : 0;
-                case 7:
-                    return toCart[2] ? 1 : 0;
-                case 8:
-                    return toCart[3] ? 1 : 0;
-                case 9:
-                    return target[0];
-                case 10:
-                    return target[1];
-                case 11:
-                    return target[2];
-                case 12:
-                    return target[3];
-                case 13:
-                    return doReturn[0] ? 1 : 0;
-                case 14:
-                    return doReturn[1] ? 1 : 0;
-                case 15:
-                    return doReturn[2] ? 1 : 0;
-                case 16:
-                    return doReturn[3] ? 1 : 0;
-                default:
-                    throw new IllegalArgumentException("Invalid index: " + id);
-            }
+            return switch (id)
+                    {
+                        case 0 -> layoutType;
+                        case 1 -> color[0];
+                        case 2 -> color[1];
+                        case 3 -> color[2];
+                        case 4 -> color[3];
+                        case 5 -> toCart[0] ? 1 : 0;
+                        case 6 -> toCart[1] ? 1 : 0;
+                        case 7 -> toCart[2] ? 1 : 0;
+                        case 8 -> toCart[3] ? 1 : 0;
+                        case 9 -> target[0];
+                        case 10 -> target[1];
+                        case 11 -> target[2];
+                        case 12 -> target[3];
+                        case 13 -> doReturn[0] ? 1 : 0;
+                        case 14 -> doReturn[1] ? 1 : 0;
+                        case 15 -> doReturn[2] ? 1 : 0;
+                        case 16 -> doReturn[3] ? 1 : 0;
+                        default -> throw new IllegalArgumentException("Invalid index: " + id);
+                    };
         }
 
         public void set(int p_221477_1_, int p_221477_2_)
@@ -172,48 +156,31 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
         final int val = getAmountId(id);
         switch (val)
         {
-            case 1:
-            {
+            case 1, 7 -> {
                 return 1;
             }
-            case 2:
-            {
+            case 2, 9 -> {
                 return 3;
             }
-            case 3:
-            {
+            case 3 -> {
                 return 8;
             }
-            case 4:
-            {
+            case 4 -> {
                 return 16;
             }
-            case 5:
-            {
+            case 5 -> {
                 return 32;
             }
-            case 6:
-            {
+            case 6 -> {
                 return 64;
             }
-            case 7:
-            {
-                return 1;
-            }
-            case 8:
-            {
+            case 8 -> {
                 return 2;
             }
-            case 9:
-            {
-                return 3;
-            }
-            case 10:
-            {
+            case 10 -> {
                 return 5;
             }
-            default:
-            {
+            default -> {
                 return 0;
             }
         }
@@ -370,19 +337,19 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     @Override
     protected boolean doTransfer(final TransferManager transfer)
     {
-        final Class slotCart = TileEntityCargo.itemSelections.get(target[transfer.getSetting()]).getValidSlot();
+        final Class<?> slotCart = TileEntityCargo.itemSelections.get(target[transfer.getSetting()]).getValidSlot();
         if (slotCart == null)
         {
             transfer.setLowestSetting(transfer.getSetting() + 1);
             return true;
         }
-        final Class slotCargo = SlotCargo.class;
+        final Class<?> slotCargo = SlotCargo.class;
         Container fromInv;
         AbstractContainerMenu fromCont;
-        Class fromValid;
+        Class<?> fromValid;
         Container toInv;
         AbstractContainerMenu toCont;
-        Class toValid;
+        Class<?> toValid;
         if (toCart[transfer.getSetting()])
         {
             fromInv = this;
@@ -464,12 +431,12 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
         return super.getCapability(capability);
     }
 
-    private net.minecraftforge.items.IItemHandlerModifiable createHandler()
+    private IItemHandlerModifiable createHandler()
     {
         BlockState state = this.getBlockState();
         if (!(state.getBlock() instanceof BlockCargoManager))
         {
-            return new net.minecraftforge.items.wrapper.InvWrapper(this);
+            return new InvWrapper(this);
         }
         return null;
     }

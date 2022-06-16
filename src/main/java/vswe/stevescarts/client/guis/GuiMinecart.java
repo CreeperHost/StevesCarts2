@@ -12,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.containers.ContainerMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -31,9 +32,9 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     private static ResourceLocation textureRight;
     private static ResourceLocation textureReturn;
     private boolean isScrolling;
-    private int[] scrollBox;
+    private final int[] scrollBox;
     private EntityMinecartModular cart;
-    private int[] returnButton;
+    private final int[] returnButton;
 
     public GuiMinecart(ContainerMinecart containerMinecart, final Inventory invPlayer, final Component iTextComponent)
     {
@@ -51,56 +52,54 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks)
+    public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
     {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
+        this.renderBackground(poseStack);
+        super.render(poseStack, mouseX, mouseY, partialTicks);
+        this.renderTooltip(poseStack, mouseX, mouseY);
         if (cart == null) return;
         if (cart.getModules() != null)
         {
             final ModuleBase thief = cart.getInterfaceThief();
             if (thief != null)
             {
-                drawModuleForeground(matrixStack, thief);
-                drawModuleMouseOver(matrixStack, thief, mouseX, mouseY);
+                drawModuleForeground(poseStack, thief);
+                drawModuleMouseOver(poseStack, thief, mouseX, mouseY);
             }
             else
             {
                 for (final ModuleBase module : cart.getModules())
                 {
-                    drawModuleForeground(matrixStack, module);
+                    drawModuleForeground(poseStack, module);
                 }
-                renderModuleListText(matrixStack, mouseX, mouseY);
+                renderModuleListText(poseStack, mouseX, mouseY);
                 for (final ModuleBase module : cart.getModules())
                 {
-                    drawModuleMouseOver(matrixStack, module, mouseX, mouseY);
+                    drawModuleMouseOver(poseStack, module, mouseX, mouseY);
                 }
-                renderModuleListMouseOver(matrixStack, mouseX, mouseY);
-                renderReturnMouseOver(matrixStack, mouseX, mouseY);
+                renderModuleListMouseOver(poseStack, mouseX, mouseY);
+                renderReturnMouseOver(poseStack, mouseX, mouseY);
             }
         }
     }
 
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float p_230450_2_, int mouseX, int mouseY)
+    protected void renderBg(@NotNull PoseStack poseStack, float p_230450_2_, int mouseX, int mouseY)
     {
-        //        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-
         final int j = getGuiLeft();
         final int k = getGuiTop();
         ResourceHelper.bindResource(GuiMinecart.textureLeft);
-        blit(matrixStack, j, k, 0, 0, 256, 256);
+        blit(poseStack, j, k, 0, 0, 256, 256);
         ResourceHelper.bindResource(GuiMinecart.textureRight);
-        blit(matrixStack, j + 256, k, 0, 0, imageWidth - 256, imageHeight);
+        blit(poseStack, j + 256, k, 0, 0, imageWidth - 256, imageHeight);
         if (cart != null)
         {
             final ModuleBase thief = cart.getInterfaceThief();
             if (thief != null)
             {
-                drawModuleSlots(matrixStack, thief);
-                drawModuleBackground(matrixStack, thief, mouseX, mouseY);
+                drawModuleSlots(poseStack, thief);
+                drawModuleBackground(poseStack, thief, mouseX, mouseY);
                 drawModuleBackgroundItems(thief, mouseX, mouseY);
                 for (final ModuleBase module : cart.getModules())
                 {
@@ -116,55 +115,42 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
             }
             else if (cart.getModules() != null)
             {
-                blit(matrixStack, j + scrollBox[0], k + scrollBox[1], 222, 24, scrollBox[2], scrollBox[3]);
-                blit(matrixStack, j + scrollBox[0] + 2, k + scrollBox[1] + 2 + cart.getScrollY(), 240, 26 + (cart.canScrollModules ? 0 : 25), 14, 25);
+                blit(poseStack, j + scrollBox[0], k + scrollBox[1], 222, 24, scrollBox[2], scrollBox[3]);
+                blit(poseStack, j + scrollBox[0] + 2, k + scrollBox[1] + 2 + cart.getScrollY(), 240, 26 + (cart.canScrollModules ? 0 : 25), 14, 25);
                 for (final ModuleBase module : cart.getModules())
                 {
-                    drawModuleSlots(matrixStack, module);
+                    drawModuleSlots(poseStack, module);
                 }
                 for (final ModuleBase module : cart.getModules())
                 {
-                    drawModuleBackground(matrixStack, module, mouseX, mouseY);
+                    drawModuleBackground(poseStack, module, mouseX, mouseY);
                 }
                 renderModuleList(mouseX, mouseY);
-                renderReturnButton(matrixStack, mouseX, mouseY);
+                renderReturnButton(poseStack, mouseX, mouseY);
                 for (final ModuleBase module : cart.getModules())
                 {
                     drawModuleBackgroundItems(module, mouseX, mouseY);
                 }
             }
         }
-        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
-    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_)
+    protected void renderLabels(@NotNull PoseStack poseStack, int p_230451_2_, int p_230451_3_)
     {
     }
 
     private void renderModuleList(int x, int y)
     {
-        x -= getGuiLeft();
-        y -= getGuiTop();
         ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
 
-        //TODO
-        //        GlStateManager._pushMatrix();
-        //        GlStateManager._enableBlend();
-        //        GlStateManager._disableAlphaTest();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         for (int i = 0; i < moduleCounts.size(); ++i)
         {
             ModuleCountPair count = moduleCounts.get(i);
-            float alpha = inRect(x, y, getModuleDisplayX(i), getModuleDisplayY(i), 16, 16) ? 1.0f : 0.05f;
-
-            //            GlStateManager._color4f(1.0f, 1.0f, 1.0f, alpha);
             drawModuleIcon(count.getData(), getGuiLeft() + getModuleDisplayX(i), getGuiTop() + getModuleDisplayY(i), 1.0f, 1.0f, 0.0f, 0.0f);
         }
         GlStateManager._disableBlend();
-        //        GlStateManager._enableAlphaTest();
-        //        GlStateManager._popMatrix();
-        //        GlStateManager._color4f(1F, 1F, 1F, 1F);
     }
 
     private void renderReturnButton(PoseStack matrixStack, int x, int y)
@@ -187,9 +173,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         x -= getGuiLeft();
         y -= getGuiTop();
         ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
-        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        //TODO
-        //		font.draw(matrixStack, cart.getName(), getGuiLeft() + 5, 172, 4210752);
+        font.draw(matrixStack, cart.getName(), getGuiLeft() + 5, 172, 4210752);
         GlStateManager._enableBlend();
         for (int i = 0; i < moduleCounts.size(); ++i)
         {
@@ -249,7 +233,6 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         x -= getGuiLeft();
         y -= getGuiTop();
 
-        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         if (inRect(x, y, returnButton))
         {
             drawMouseOver(matrixStack, Localization.GUI.CART.RETURN.translate(), x, y);
@@ -363,23 +346,6 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         }
         return true;
     }
-
-    //
-    //	@Override
-    //	public boolean disableStandardKeyFunctionality() {
-    //		if (cart.getModules() != null) {
-    //			final ModuleBase thief = cart.getInterfaceThief();
-    //			if (thief != null) {
-    //				return thief.disableStandardKeyFunctionality();
-    //			}
-    //			for (final ModuleBase module : cart.getModules()) {
-    //				if (module.disableStandardKeyFunctionality()) {
-    //					return true;
-    //				}
-    //			}
-    //		}
-    //		return false;
-    //	}
 
     @OnlyIn(Dist.CLIENT)
     private void drawModuleForeground(PoseStack matrixStack, ModuleBase module)
@@ -534,10 +500,10 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         final float fw = 0.00390625f;
         final float fy = 0.00390625f;
 
-        final double a = (u + 0) * fw;
+        final double a = (u) * fw;
         final double b = (u + w) * fw;
         final double c = (v + h) * fy;
-        final double d = (v + 0) * fy;
+        final double d = (v) * fy;
 
         final double[] ptA = {a, c};
         final double[] ptB = {b, c};
@@ -548,69 +514,53 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 
         switch (rotation)
         {
-            default:
-            {
+            default -> {
                 pt1 = ptA;
                 pt2 = ptB;
                 pt3 = ptC;
                 pt4 = ptD;
-                break;
             }
-            case ROTATE_90:
-            {
+            case ROTATE_90 -> {
                 pt1 = ptB;
                 pt2 = ptC;
                 pt3 = ptD;
                 pt4 = ptA;
-                break;
             }
-            case ROTATE_180:
-            {
+            case ROTATE_180 -> {
                 pt1 = ptC;
                 pt2 = ptD;
                 pt3 = ptA;
                 pt4 = ptB;
-                break;
             }
-            case ROTATE_270:
-            {
+            case ROTATE_270 -> {
                 pt1 = ptD;
                 pt2 = ptA;
                 pt3 = ptB;
                 pt4 = ptC;
-                break;
             }
-            case FLIP_HORIZONTAL:
-            {
+            case FLIP_HORIZONTAL -> {
                 pt1 = ptB;
                 pt2 = ptA;
                 pt3 = ptD;
                 pt4 = ptC;
-                break;
             }
-            case ROTATE_90_FLIP:
-            {
+            case ROTATE_90_FLIP -> {
                 pt1 = ptA;
                 pt2 = ptD;
                 pt3 = ptC;
                 pt4 = ptB;
-                break;
             }
-            case FLIP_VERTICAL:
-            {
+            case FLIP_VERTICAL -> {
                 pt1 = ptD;
                 pt2 = ptC;
                 pt3 = ptB;
                 pt4 = ptA;
-                break;
             }
-            case ROTATE_270_FLIP:
-            {
+            case ROTATE_270_FLIP -> {
                 pt1 = ptC;
                 pt2 = ptB;
                 pt3 = ptA;
                 pt4 = ptD;
-                break;
             }
         }
 
@@ -619,10 +569,10 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         buff.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         float zLevel = 1F;
 
-        buff.vertex((x + 0), y + h, zLevel).uv((float) pt1[0], (float) pt1[1]).endVertex();
+        buff.vertex((x), y + h, zLevel).uv((float) pt1[0], (float) pt1[1]).endVertex();
         buff.vertex((x + w), y + h, zLevel).uv((float) pt2[0], (float) pt2[1]).endVertex();
-        buff.vertex((x + w), y + 0, zLevel).uv((float) pt3[0], (float) pt3[1]).endVertex();
-        buff.vertex((x + 0), y + 0, zLevel).uv((float) pt4[0], (float) pt4[1]).endVertex();
+        buff.vertex((x + w), y, zLevel).uv((float) pt3[0], (float) pt3[1]).endVertex();
+        buff.vertex((x), y, zLevel).uv((float) pt4[0], (float) pt4[1]).endVertex();
         tessellator.end();
     }
 
@@ -634,36 +584,28 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         {
             switch (this)
             {
-                default:
-                {
+                default -> {
                     return RENDER_ROTATION.ROTATE_90;
                 }
-                case ROTATE_90:
-                {
+                case ROTATE_90 -> {
                     return RENDER_ROTATION.ROTATE_180;
                 }
-                case ROTATE_180:
-                {
+                case ROTATE_180 -> {
                     return RENDER_ROTATION.ROTATE_270;
                 }
-                case ROTATE_270:
-                {
+                case ROTATE_270 -> {
                     return RENDER_ROTATION.NORMAL;
                 }
-                case FLIP_HORIZONTAL:
-                {
+                case FLIP_HORIZONTAL -> {
                     return RENDER_ROTATION.ROTATE_90_FLIP;
                 }
-                case ROTATE_90_FLIP:
-                {
+                case ROTATE_90_FLIP -> {
                     return RENDER_ROTATION.FLIP_VERTICAL;
                 }
-                case FLIP_VERTICAL:
-                {
+                case FLIP_VERTICAL -> {
                     return RENDER_ROTATION.ROTATE_270_FLIP;
                 }
-                case ROTATE_270_FLIP:
-                {
+                case ROTATE_270_FLIP -> {
                     return RENDER_ROTATION.FLIP_HORIZONTAL;
                 }
             }
@@ -673,36 +615,28 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         {
             switch (this)
             {
-                default:
-                {
+                default -> {
                     return RENDER_ROTATION.FLIP_HORIZONTAL;
                 }
-                case ROTATE_90:
-                {
+                case ROTATE_90 -> {
                     return RENDER_ROTATION.ROTATE_90_FLIP;
                 }
-                case ROTATE_180:
-                {
+                case ROTATE_180 -> {
                     return RENDER_ROTATION.FLIP_VERTICAL;
                 }
-                case ROTATE_270:
-                {
+                case ROTATE_270 -> {
                     return RENDER_ROTATION.ROTATE_270_FLIP;
                 }
-                case FLIP_HORIZONTAL:
-                {
+                case FLIP_HORIZONTAL -> {
                     return RENDER_ROTATION.NORMAL;
                 }
-                case ROTATE_90_FLIP:
-                {
+                case ROTATE_90_FLIP -> {
                     return RENDER_ROTATION.ROTATE_90;
                 }
-                case FLIP_VERTICAL:
-                {
+                case FLIP_VERTICAL -> {
                     return RENDER_ROTATION.ROTATE_180;
                 }
-                case ROTATE_270_FLIP:
-                {
+                case ROTATE_270_FLIP -> {
                     return RENDER_ROTATION.ROTATE_270;
                 }
             }

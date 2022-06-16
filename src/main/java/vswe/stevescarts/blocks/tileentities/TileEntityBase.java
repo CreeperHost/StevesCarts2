@@ -13,7 +13,7 @@ public abstract class TileEntityBase extends BlockEntity
         super(blockEntityType, blockPos, blockState);
     }
 
-    public boolean isUsableByPlayer(final Player entityplayer)
+    public boolean isUsableByPlayer(final Player player)
     {
         return level.getBlockEntity(getBlockPos()) == this;
     }
@@ -40,8 +40,5 @@ public abstract class TileEntityBase extends BlockEntity
         return oldVal;
     }
 
-    //    @Override
-    public void tick()
-    {
-    }
+    public void tick() {}
 }

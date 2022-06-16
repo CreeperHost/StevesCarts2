@@ -13,7 +13,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotCartCrafter;
 import vswe.stevescarts.containers.slots.SlotCartCrafterResult;
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.helpers.RecipeHelpers;
+import vswe.stevescarts.polylib.RecipeHelpers;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

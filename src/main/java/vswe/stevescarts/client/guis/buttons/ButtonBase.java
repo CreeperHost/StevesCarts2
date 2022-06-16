@@ -161,40 +161,31 @@ public abstract class ButtonBase
     {
         switch (loc)
         {
-            case OVERVIEW:
-            {
+            case OVERVIEW -> {
                 return 15 + currentID * 25;
             }
-            case PROGRAM:
-            {
+            case PROGRAM -> {
                 return 125 + currentID % 6 * 25;
             }
-            case TASK:
-            {
+            case TASK -> {
                 return 306 + currentID % 5 * 25;
             }
-            case DEFINED:
-            {
+            case DEFINED -> {
                 return 0;
             }
-            case FLOATING:
-            {
+            case FLOATING -> {
                 return 115 + currentID % 7 * 25;
             }
-            case VARIABLE:
-            {
+            case VARIABLE -> {
                 return 400 + currentID % 3 * 25;
             }
-            case BUILD:
-            {
+            case BUILD -> {
                 return 366 + currentID % 5 * 25;
             }
-            case MODEL:
-            {
+            case MODEL -> {
                 return 111 + currentID % 6 * 22;
             }
-            default:
-            {
+            default -> {
                 return -1;
             }
         }
@@ -204,40 +195,31 @@ public abstract class ButtonBase
     {
         switch (loc)
         {
-            case OVERVIEW:
-            {
+            case OVERVIEW -> {
                 return 143;
             }
-            case PROGRAM:
-            {
+            case PROGRAM -> {
                 return 118 + currentID / 6 * 25;
             }
-            case TASK:
-            {
+            case TASK -> {
                 return 32 + currentID / 5 * 25;
             }
-            case DEFINED:
-            {
+            case DEFINED -> {
                 return 0;
             }
-            case FLOATING:
-            {
+            case FLOATING -> {
                 return 32 + currentID / 7 * 25;
             }
-            case VARIABLE:
-            {
+            case VARIABLE -> {
                 return 32 + currentID / 3 * 25;
             }
-            case BUILD:
-            {
+            case BUILD -> {
                 return 118 + currentID / 5 * 25;
             }
-            case MODEL:
-            {
+            case MODEL -> {
                 return 19 + currentID / 6 * 22;
             }
-            default:
-            {
+            default -> {
                 return -1;
             }
         }

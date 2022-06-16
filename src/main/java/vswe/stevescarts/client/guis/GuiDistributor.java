@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityDistributor;
 import vswe.stevescarts.blocks.tileentities.TileEntityManager;
 import vswe.stevescarts.containers.ContainerDistributor;
@@ -20,7 +21,7 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
     private String mouseOverText;
     private static ResourceLocation texture;
     private int activeId;
-    private TileEntityDistributor distributor;
+    private final TileEntityDistributor distributor;
 
     public GuiDistributor(ContainerDistributor containerDistributor, Inventory playerInventory, Component iTextComponent)
     {
@@ -32,13 +33,12 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float p_230450_2_, int x, int y)
+    protected void renderBg(@NotNull PoseStack poseStack, float p_230450_2_, int x, int y)
     {
-        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         final int j = getGuiLeft();
         final int k = getGuiTop();
         ResourceHelper.bindResource(GuiDistributor.texture);
-        blit(matrixStack, j, k, 0, 0, imageWidth, imageHeight);
+        blit(poseStack, j, k, 0, 0, imageWidth, imageHeight);
         x -= getGuiLeft();
         y -= getGuiTop();
         final TileEntityManager[] invs = distributor.getInventories();
@@ -54,8 +54,8 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
                 {
                     srcX = box[2];
                 }
-                blit(matrixStack, j + box[0], k + box[1], srcX, imageHeight, box[2], box[3]);
-                blit(matrixStack, j + box[0] + 2, k + box[1] + 2, box[2] * 2 + (box[2] - 4) * side.getId(), imageHeight, box[2] - 4, box[3] - 4);
+                blit(poseStack, j + box[0], k + box[1], srcX, imageHeight, box[2], box[3]);
+                blit(poseStack, j + box[0] + 2, k + box[1] + 2, box[2] * 2 + (box[2] - 4) * side.getId(), imageHeight, box[2] - 4, box[3] - 4);
                 drawMouseMover(Localization.GUI.DISTRIBUTOR.SIDE.translate(side.getName()) + ((activeId != -1) ? (": [" + Localization.GUI.DISTRIBUTOR.DROP_INSTRUCTION.translate() + "]") : ""), x, y, box);
                 int settingCount = 0;
                 for (final DistributorSetting setting : DistributorSetting.settings)
@@ -63,7 +63,7 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
                     if (setting.isEnabled(distributor) && side.isSet(setting.getId()))
                     {
                         final int[] settingbox = getActiveSettingBoxRect(id, settingCount++);
-                        drawSetting(matrixStack, setting, settingbox, inRect(x, y, settingbox));
+                        drawSetting(poseStack, setting, settingbox, inRect(x, y, settingbox));
                         drawMouseMover(setting.getName(invs) + ": [" + Localization.GUI.DISTRIBUTOR.REMOVE_INSTRUCTION.translate() + "]", x, y, settingbox);
                     }
                 }
@@ -75,36 +75,36 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
             if (setting2.isEnabled(distributor))
             {
                 final int[] box = getSettingBoxRect(setting2.getImageId(), setting2.getIsTop());
-                drawSetting(matrixStack, setting2, box, inRect(x, y, box));
+                drawSetting(poseStack, setting2, box, inRect(x, y, box));
                 drawMouseMover(setting2.getName(invs), x, y, box);
             }
         }
         if (activeId != -1)
         {
             final DistributorSetting setting3 = DistributorSetting.settings.get(activeId);
-            drawSetting(matrixStack, setting3, new int[]{x - 8, y - 8, 16, 16}, true);
+            drawSetting(poseStack, setting3, new int[]{x - 8, y - 8, 16, 16}, true);
         }
     }
 
     @Override
-    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_)
+    protected void renderLabels(@NotNull PoseStack poseStack, int p_230451_2_, int p_230451_3_)
     {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int x, int y, float p_230430_4_)
+    public void render(@NotNull PoseStack poseStack, int x, int y, float p_230430_4_)
     {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, x, y, p_230430_4_);
-        font.draw(matrixStack, Localization.GUI.DISTRIBUTOR.TITLE.translate(), leftPos + 8, topPos + 6, 4210752);
+        this.renderBackground(poseStack);
+        super.render(poseStack, x, y, p_230430_4_);
+        font.draw(poseStack, Localization.GUI.DISTRIBUTOR.TITLE.translate(), leftPos + 8, topPos + 6, 4210752);
         final TileEntityManager[] invs = distributor.getInventories();
         if (invs.length == 0)
         {
-            font.draw(matrixStack, Localization.GUI.DISTRIBUTOR.NOT_CONNECTED.translate(), leftPos + 30, topPos + 40, 16728128);
+            font.draw(poseStack, Localization.GUI.DISTRIBUTOR.NOT_CONNECTED.translate(), leftPos + 30, topPos + 40, 16728128);
         }
         if (mouseOverText != null && !mouseOverText.equals(""))
         {
-            renderTooltip(matrixStack, Component.literal(mouseOverText), x, y);
+            renderTooltip(poseStack, Component.literal(mouseOverText), x, y);
         }
         mouseOverText = null;
     }
@@ -192,7 +192,6 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
                             activeId = -1;
                             break;
                         }
-                        continue;
                     }
                 }
             }

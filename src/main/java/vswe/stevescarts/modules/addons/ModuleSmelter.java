@@ -18,7 +18,7 @@ import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotCartCrafterResult;
 import vswe.stevescarts.containers.slots.SlotFurnaceInput;
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.helpers.RecipeHelpers;
+import vswe.stevescarts.polylib.RecipeHelpers;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

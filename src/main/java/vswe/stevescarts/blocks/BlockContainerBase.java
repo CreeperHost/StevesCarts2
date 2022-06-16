@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityBase;
 
 public abstract class BlockContainerBase extends BaseEntityBlock
@@ -18,14 +19,14 @@ public abstract class BlockContainerBase extends BaseEntityBlock
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState state)
+    public @NotNull RenderShape getRenderShape(@NotNull BlockState state)
     {
         return RenderShape.MODEL;
     }
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type)
     {
         return (level1, blockPos, blockState, t) ->
         {

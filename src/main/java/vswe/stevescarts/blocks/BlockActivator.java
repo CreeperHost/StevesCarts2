@@ -14,10 +14,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 
-
 public class BlockActivator extends BlockContainerBase
 {
-
     public BlockActivator()
     {
         super(Properties.of(Material.STONE).strength(2.0F));

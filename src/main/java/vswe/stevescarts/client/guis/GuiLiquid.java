@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 import vswe.stevescarts.containers.ContainerLiquid;
 import vswe.stevescarts.helpers.Localization;
@@ -19,7 +20,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
 {
     private static ResourceLocation texture;
     private static ResourceLocation textureExtra;
-    private ContainerLiquid containerLiquid;
+    private final ContainerLiquid containerLiquid;
 
     public GuiLiquid(ContainerLiquid containerLiquid, Inventory playerInventory, Component iTextComponent)
     {
@@ -30,16 +31,16 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
     }
 
     @Override
-    protected void renderBg(PoseStack matrixStack, float p_230450_2_, int mouseX, int mouseY)
+    protected void renderBg(@NotNull PoseStack poseStack, float p_230450_2_, int mouseX, int mouseY)
     {
         ResourceHelper.bindResource(GuiLiquid.texture);
-        blit(matrixStack, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        blit(poseStack, leftPos, topPos, 0, 0, imageWidth, imageHeight);
         if (getLiquid().getTanks() != null)
         {
             for (int i = 0; i < 4; ++i)
             {
                 final int[] coords = getTankCoords(i);
-                getLiquid().getTanks()[i].drawFluid(matrixStack, this, getGuiLeft() + coords[0], getGuiTop() + coords[1]);
+                getLiquid().getTanks()[i].drawFluid(poseStack, this, getGuiLeft() + coords[0], getGuiTop() + coords[1]);
             }
         }
         ResourceHelper.bindResource(GuiLiquid.textureExtra);
@@ -54,25 +55,24 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
         }
         for (int j = 0; j < 2; ++j)
         {
-            blit(matrixStack, leftPos + ((j == 0) ? 27 : 171), topPos + 63, 0, 102 + version * 12, 32, 12);
+            blit(poseStack, leftPos + ((j == 0) ? 27 : 171), topPos + 63, 0, 102 + version * 12, 32, 12);
         }
         for (int j = 0; j < 4; ++j)
         {
             final int[] coords2 = getTankCoords(j);
             final int type = j % 2;
-            blit(matrixStack, leftPos + coords2[0], topPos + coords2[1], 0, 51 * type, 36, 51);
+            blit(poseStack, leftPos + coords2[0], topPos + coords2[1], 0, 51 * type, 36, 51);
         }
 
-        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         final int left = getGuiLeft();
         final int top = getGuiTop();
         for (int i = 0; i < 4; ++i)
         {
-            drawArrow(matrixStack, i, left, top);
+            drawArrow(poseStack, i, left, top);
             final int color = containerLiquid.getColor()[i] - 1;
             if (color != 4)
             {
-                drawColors(matrixStack, i, color, left, top);
+                drawColors(poseStack, i, color, left, top);
             }
         }
         final ItemRenderer renderitem = Minecraft.getInstance().getItemRenderer();
@@ -82,45 +82,44 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
         {
             drawItems(j, renderitem, left, top);
         }
-        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
-    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_)
+    protected void renderLabels(@NotNull PoseStack poseStack, int p_230451_2_, int p_230451_3_)
     {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float p_230430_4_)
+    public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float p_230430_4_)
     {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, p_230430_4_);
-        renderTooltip(matrixStack, mouseX, mouseY);
+        this.renderBackground(poseStack);
+        super.render(poseStack, mouseX, mouseY, p_230430_4_);
+        renderTooltip(poseStack, mouseX, mouseY);
         int[] coords = getMiddleCoords();
 
-        font.draw(matrixStack, getManagerName(), leftPos + coords[0] - 34, topPos + 4, 4210752);
-        font.draw(matrixStack, Localization.GUI.MANAGER.TITLE.translate(), leftPos + coords[0] + coords[2], topPos + 4, 4210752);
+        font.draw(poseStack, getManagerName(), leftPos + coords[0] - 34, topPos + 4, 4210752);
+        font.draw(poseStack, Localization.GUI.MANAGER.TITLE.translate(), leftPos + coords[0] + coords[2], topPos + 4, 4210752);
         for (int i = 0; i < 4; ++i)
         {
             coords = getTextCoords(i);
             final String str = getMaxSizeText(i);
-            font.draw(matrixStack, str, leftPos + coords[0], topPos + coords[1], 4210752);
+            font.draw(poseStack, str, leftPos + coords[0], topPos + coords[1], 4210752);
         }
         for (int i = 0; i < 4; ++i)
         {
             try
             {
-                drawExtraOverlay(matrixStack, i, mouseX, mouseY);
-                drawMouseOver(matrixStack, Localization.GUI.MANAGER.CHANGE_TRANSFER_DIRECTION.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + (containerLiquid.toCart()[i] ? Localization.GUI.MANAGER.DIRECTION_TO_CART.translate() : Localization.GUI.MANAGER.DIRECTION_FROM_CART.translate()), mouseX, mouseY, getArrowCoords(i));
-                drawMouseOver(matrixStack, Localization.GUI.MANAGER.CHANGE_TURN_BACK_SETTING.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + ((containerLiquid.getColor()[i] == 5) ? Localization.GUI.MANAGER.TURN_BACK_NOT_SELECTED.translate() : (containerLiquid.doReturn()[containerLiquid.getColor()[i] - 1] ? Localization.GUI.MANAGER.TURN_BACK_DO.translate() : Localization.GUI.MANAGER.TURN_BACK_DO_NOT.translate())), mouseX, mouseY, getReturnCoords(i));
-                drawMouseOver(matrixStack, Localization.GUI.MANAGER.CHANGE_TRANSFER_SIZE.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getMaxSizeOverlay(i), mouseX, mouseY, getTextCoords(i));
-                drawMouseOver(matrixStack, Localization.GUI.MANAGER.CHANGE_SIDE.translate() + " " + Localization.GUI.MANAGER.CURRENT_SIDE.translate() + ": " + (new String[]{Localization.GUI.MANAGER.SIDE_RED.translate(), Localization.GUI.MANAGER.SIDE_BLUE.translate(), Localization.GUI.MANAGER.SIDE_YELLOW.translate(), Localization.GUI.MANAGER.SIDE_GREEN.translate(), Localization.GUI.MANAGER.SIDE_DISABLED.translate()})[containerLiquid.getColor()[i] - 1], mouseX, mouseY, getColorpickerCoords(i));
+                drawExtraOverlay(poseStack, i, mouseX, mouseY);
+                drawMouseOver(poseStack, Localization.GUI.MANAGER.CHANGE_TRANSFER_DIRECTION.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + (containerLiquid.toCart()[i] ? Localization.GUI.MANAGER.DIRECTION_TO_CART.translate() : Localization.GUI.MANAGER.DIRECTION_FROM_CART.translate()), mouseX, mouseY, getArrowCoords(i));
+                drawMouseOver(poseStack, Localization.GUI.MANAGER.CHANGE_TURN_BACK_SETTING.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + ((containerLiquid.getColor()[i] == 5) ? Localization.GUI.MANAGER.TURN_BACK_NOT_SELECTED.translate() : (containerLiquid.doReturn()[containerLiquid.getColor()[i] - 1] ? Localization.GUI.MANAGER.TURN_BACK_DO.translate() : Localization.GUI.MANAGER.TURN_BACK_DO_NOT.translate())), mouseX, mouseY, getReturnCoords(i));
+                drawMouseOver(poseStack, Localization.GUI.MANAGER.CHANGE_TRANSFER_SIZE.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getMaxSizeOverlay(i), mouseX, mouseY, getTextCoords(i));
+                drawMouseOver(poseStack, Localization.GUI.MANAGER.CHANGE_SIDE.translate() + " " + Localization.GUI.MANAGER.CURRENT_SIDE.translate() + ": " + (new String[]{Localization.GUI.MANAGER.SIDE_RED.translate(), Localization.GUI.MANAGER.SIDE_BLUE.translate(), Localization.GUI.MANAGER.SIDE_YELLOW.translate(), Localization.GUI.MANAGER.SIDE_GREEN.translate(), Localization.GUI.MANAGER.SIDE_DISABLED.translate()})[containerLiquid.getColor()[i] - 1], mouseX, mouseY, getColorpickerCoords(i));
             } catch (Exception e)
             {
                 e.printStackTrace();
             }
         }
-        drawMouseOver(matrixStack, getLayoutString() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getLayoutOption(containerLiquid.getLayoutType()), mouseX, mouseY, getMiddleCoords());
+        drawMouseOver(poseStack, getLayoutString() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getLayoutOption(containerLiquid.getLayoutType()), mouseX, mouseY, getMiddleCoords());
     }
 
     public void drawMouseOver(PoseStack matrixStack, final String str, final int x, final int y, final int[] rect)
@@ -397,16 +396,13 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
     {
         switch (id)
         {
-            default:
-            {
+            default -> {
                 return Localization.GUI.LIQUID.LAYOUT_ALL.translate();
             }
-            case 1:
-            {
+            case 1 -> {
                 return Localization.GUI.LIQUID.LAYOUT_SIDE.translate();
             }
-            case 2:
-            {
+            case 2 -> {
                 return Localization.GUI.LIQUID.LAYOUT_COLOR.translate();
             }
         }

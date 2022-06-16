@@ -19,6 +19,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.blocks.BlockCartAssembler;
@@ -477,7 +478,6 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         {
             spareModules.clear();
         }
-        //        setItem(outputSlot.getSlotIndex(), outputItem);
     }
 
     public ArrayList<ModuleData> getNonHullModules()
@@ -509,9 +509,8 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                 }
                 if (validSize)
                 {
-                    if (item.getItem() instanceof ItemCartModule)
+                    if (item.getItem() instanceof ItemCartModule itemCartModule)
                     {
-                        ItemCartModule itemCartModule = (ItemCartModule) item.getItem();
                         final ModuleData module = itemCartModule.getModuleData();
                         if (module != null)
                         {
@@ -529,9 +528,8 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         if (!getItem(0).isEmpty())
         {
             ItemStack stack = getItem(0);
-            if (stack.getItem() instanceof ItemCartModule)
+            if (stack.getItem() instanceof ItemCartModule itemCartModule)
             {
-                ItemCartModule itemCartModule = (ItemCartModule) stack.getItem();
                 final ModuleData hulldata = itemCartModule.getModuleData();
                 if (hulldata instanceof ModuleDataHull)
                 {
@@ -600,9 +598,8 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         final ArrayList<ModuleData> modules = new ArrayList<>();
         for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i)
         {
-            if (!getItem(i).isEmpty() && getItem(i).getItem() instanceof ItemCartModule)
+            if (!getItem(i).isEmpty() && getItem(i).getItem() instanceof ItemCartModule itemCartModule)
             {
-                ItemCartModule itemCartModule = (ItemCartModule) getItem(i).getItem();
                 final ModuleData data = itemCartModule.getModuleData();
                 if (data != null)
                 {
@@ -654,13 +651,11 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     {
         if (!hullitem.isEmpty())
         {
-            if (hullitem.getItem() instanceof ItemCartModule)
+            if (hullitem.getItem() instanceof ItemCartModule itemCartModule)
             {
-                ItemCartModule itemCartModule = (ItemCartModule) hullitem.getItem();
                 ModuleData moduleData = itemCartModule.getModuleData();
-                if (moduleData != null && moduleData instanceof ModuleDataHull)
+                if (moduleData != null && moduleData instanceof ModuleDataHull moduleDataHull)
                 {
-                    ModuleDataHull moduleDataHull = (ModuleDataHull) moduleData;
                     return getValidSlotFromHull(moduleDataHull);
                 }
             }
@@ -767,9 +762,6 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                 cost += ((FuelCost) effect).getCost();
             }
         }
-        if (cost < 0.05f)
-        {
-        }
         return cost;
     }
 
@@ -817,6 +809,8 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
 
     public void puke(@Nonnull ItemStack item)
     {
+        if(level == null) return;
+
         final ItemEntity entityitem = new ItemEntity(level, getBlockPos().getX(), getBlockPos().getY() + 0.25, getBlockPos().getZ(), item);
         level.addFreshEntity(entityitem);
     }
@@ -824,6 +818,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     @Override
     public void tick()
     {
+        if(level == null) return;
         if (!loaded)
         {
             ((BlockCartAssembler) ModBlocks.CART_ASSEMBLER.get()).updateMultiBlock(level, getBlockPos());
@@ -985,6 +980,8 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
 
     private void handlePlaceholder()
     {
+        if(level == null) return;
+
         if (level.isClientSide)
         {
             if (placeholder == null)
@@ -1041,32 +1038,32 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @Override
-    public int[] getSlotsForFace(Direction p_180463_1_)
+    public int @NotNull [] getSlotsForFace(@NotNull Direction direction)
     {
         return new int[0];
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int p_180462_1_, ItemStack p_180462_2_, @Nullable Direction p_180462_3_)
+    public boolean canPlaceItemThroughFace(int id, @NotNull ItemStack itemStack, @Nullable Direction direction)
     {
         return false;
     }
 
     @Override
-    public boolean canTakeItemThroughFace(int p_180461_1_, ItemStack p_180461_2_, Direction p_180461_3_)
+    public boolean canTakeItemThroughFace(int id, @NotNull ItemStack itemStack, @NotNull Direction direction)
     {
         return false;
     }
 
     @Override
-    public Component getDisplayName()
+    public @NotNull Component getDisplayName()
     {
         return Component.literal("tile.cart.assembler");
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player)
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player)
     {
         return new ContainerCartAssembler(id, playerInventory, this, this.dataAccess);
     }
@@ -1122,9 +1119,8 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         {
             if (!getItem(i).isEmpty())
             {
-                if (getItem(i).getItem() instanceof ItemCartModule)
+                if (getItem(i).getItem() instanceof ItemCartModule itemCartModule)
                 {
-                    ItemCartModule itemCartModule = (ItemCartModule) getItem(i).getItem();
                     final ModuleData data = itemCartModule.getModuleData();
                     if (data != null)
                     {
@@ -1166,13 +1162,13 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @Override
-    public ItemStack getItem(int i)
+    public @NotNull ItemStack getItem(int i)
     {
         return i >= 0 && i < this.inventoryStacks.size() ? (ItemStack) this.inventoryStacks.get(i) : ItemStack.EMPTY;
     }
 
     @Override
-    public ItemStack removeItem(int i, int j)
+    public @NotNull ItemStack removeItem(int i, int j)
     {
         ItemStack itemStack = ContainerHelper.removeItem(this.inventoryStacks, i, j);
         if (!itemStack.isEmpty()) this.setChanged();
@@ -1180,7 +1176,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int i)
+    public @NotNull ItemStack removeItemNoUpdate(int i)
     {
         ItemStack itemStack = (ItemStack) this.inventoryStacks.get(i);
         if (itemStack.isEmpty())
@@ -1195,14 +1191,14 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @Override
-    public void setItem(int i, ItemStack itemStack)
+    public void setItem(int i, @NotNull ItemStack itemStack)
     {
         this.inventoryStacks.set(i, itemStack);
         this.setChanged();
     }
 
     @Override
-    public boolean stillValid(Player player)
+    public boolean stillValid(@NotNull Player player)
     {
         return true;
     }
@@ -1215,7 +1211,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @Override
-    public void load(CompoundTag tagCompound)
+    public void load(@NotNull CompoundTag tagCompound)
     {
         super.load(tagCompound);
         final ListTag items = tagCompound.getList("Items", NBTHelper.COMPOUND.getId());
@@ -1257,7 +1253,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
 
 
     @Override
-    public void saveAdditional(final CompoundTag tagCompound)
+    public void saveAdditional(final @NotNull CompoundTag tagCompound)
     {
         super.saveAdditional(tagCompound);
         final ListTag items = new ListTag();
@@ -1297,21 +1293,6 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         tagCompound.putBoolean("isAssembling", isAssembling);
     }
 
-    //TODO
-    //    @Override
-    //    public SUpdateTileEntityPacket getUpdatePacket()
-    //    {
-    //        // Vanilla uses the type parameter to indicate which type of tile entity (command block, skull, or beacon?) is receiving the packet, but it seems like Forge has overridden this behavior
-    //        return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
-    //    }
-
-    //TODO
-    //    @Override
-    //    public CompoundTag getUpdateTag()
-    //    {
-    //        return save(new CompoundTag());
-    //    }
-
     @Override
     public void handleUpdateTag(CompoundTag tag)
     {
@@ -1335,32 +1316,6 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
             return null;
         }
         return outputItem.getTag();
-    }
-
-    @Nonnull
-    public ItemStack getOutputOnInterupt()
-    {
-        final CompoundTag info = getOutputInfo();
-        if (info == null)
-        {
-            return ItemStack.EMPTY;
-        }
-        info.putInt("currentTime", getAssemblingTime());
-        info.putInt("maxTime", maxAssemblingTime);
-        final int modulecount = info.getByteArray("Modules").length;
-        final CompoundTag spares = new CompoundTag();
-        final byte[] moduleIDs = new byte[spareModules.size()];
-        for (int i = 0; i < spareModules.size(); ++i)
-        {
-            ItemStack item = spareModules.get(i);
-            //			final ModuleData data = ModItems.MODULES.getModuleData(item);
-            //			if (data != null) {
-            //				moduleIDs[i] = data.getID();
-            //				ModItems.MODULES.addExtraDataToCart(info, item, i + modulecount);
-            //			}
-        }
-        info.putByteArray("Spares", moduleIDs);
-        return outputItem;
     }
 
     public void increaseFuel(final int val)
