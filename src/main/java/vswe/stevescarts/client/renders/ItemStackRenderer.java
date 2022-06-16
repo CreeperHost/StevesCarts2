@@ -16,10 +16,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.init.ModItems;
+import vswe.stevescarts.items.ItemCarts;
 import vswe.stevescarts.modules.ModuleBase;
 
 public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implements ItemPropertyFunction
@@ -32,7 +34,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implement
     }
 
     @Override
-    public void renderByItem(ItemStack itemStack, ItemTransforms.TransformType transformType, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int p_239207_5_, int p_239207_6_)
+    public void renderByItem(ItemStack itemStack, ItemTransforms.@NotNull TransformType transformType, @NotNull PoseStack matrixStack, @NotNull MultiBufferSource iRenderTypeBuffer, int p_239207_5_, int p_239207_6_)
     {
         if (itemStack.getItem() != ModItems.CARTS.get())
         {
@@ -86,7 +88,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implement
     }
 
     @Override
-    public float call(ItemStack p_174676_, @Nullable ClientLevel p_174677_, @Nullable LivingEntity p_174678_, int p_174679_)
+    public float call(@NotNull ItemStack p_174676_, @Nullable ClientLevel p_174677_, @Nullable LivingEntity p_174678_, int p_174679_)
     {
         return 1F;
     }
