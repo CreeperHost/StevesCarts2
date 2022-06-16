@@ -3,6 +3,11 @@ package vswe.stevescarts.client.models.storages.tanks;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -16,81 +21,26 @@ import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 
 public class ModelTopTank extends ModelCartbase
 {
-    private static ResourceLocation texture;
-    private static ResourceLocation textureOpen;
-    private boolean open;
+    public ModelTopTank()
+    {
+        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/tankModelTop.png"));
+    }
+
+    public static LayerDefinition getTexturedModelData()
+    {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        for (int i = 0; i < 2; ++i) {
+            modelPartData.addOrReplaceChild("side" + i, CubeListBuilder.create().texOffs(0, 13).addBox(-8.0f, -2.5f, -0.5f, 16, 5, 1), PartPose.offset(0.0f, -8.5f, -5.5f + i * 11));
+            modelPartData.addOrReplaceChild("topbot" + i, CubeListBuilder.create().texOffs(0, 0).addBox(-8.0f, -6.0f, -0.5f, 16, 12, 1), PartPose.offsetAndRotation(0.0f, -5.5f - i * 6, 0.0f, 1.5707964f, 0.0F, 0.0F));
+            modelPartData.addOrReplaceChild("frontback" + i, CubeListBuilder.create().texOffs(0, 19).addBox(-5.0f, -2.5f, -0.5f, 10, 5, 1), PartPose.offsetAndRotation(-7.5f + i * 15, -8.5f, 0.0f, 0.0F, 1.5707964f, 0.0F));
+        }
+        return LayerDefinition.create(modelData, 64, 32);
+    }
 
     @Override
     public RenderType getRenderType(ModuleBase moduleBase)
     {
-        return RenderType.entityCutout(getResource(moduleBase));
-    }
-
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
-    {
-        return open ? ModelTopTank.textureOpen : ModelTopTank.texture;
-    }
-
-    @Override
-    protected int getTextureHeight()
-    {
-        return 32;
-    }
-
-    public ModelTopTank(final boolean open)
-    {
-        super();
-        this.open = open;
-        //TODO
-//        for (int i = 0; i < 2; ++i)
-//        {
-//            final ModelRenderer tankside = new ModelRenderer(this, 0, 13);
-//            AddRenderer(tankside);
-//            tankside.addBox(-8.0f, -2.5f, -0.5f, 16, 5, 1, 0.0f);
-//            tankside.setPos(0.0f, -8.5f, -5.5f + i * 11);
-//            if (!open || i == 0)
-//            {
-//                final ModelRenderer tanktopbot = new ModelRenderer(this, 0, 0);
-//                AddRenderer(tanktopbot);
-//                tanktopbot.addBox(-8.0f, -6.0f, -0.5f, 16, 12, 1, 0.0f);
-//                tanktopbot.setPos(0.0f, -5.5f - i * 6, 0.0f);
-//                tanktopbot.xRot = 1.5707964f;
-//            }
-//            final ModelRenderer tankfrontback = new ModelRenderer(this, 0, 19);
-//            AddRenderer(tankfrontback);
-//            tankfrontback.addBox(-5.0f, -2.5f, -0.5f, 10, 5, 1, 0.0f);
-//            tankfrontback.setPos(-7.5f + i * 15, -8.5f, 0.0f);
-//            tankfrontback.yRot = 1.5707964f;
-//        }
-    }
-
-    static
-    {
-        ModelTopTank.texture = ResourceHelper.getResource("/models/tankModelTop.png");
-        ModelTopTank.textureOpen = ResourceHelper.getResource("/models/tankModelTopOpen.png");
-    }
-
-    @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, float yaw, float pitch, float roll)
-    {
-        super.applyEffects(module, matrixStack, rtb, yaw, pitch, roll);
-        ModuleTank moduleTank = (ModuleTank) module;
-        FluidStack fluidStack = moduleTank.getFluid();
-        int light = 15;
-        if(fluidStack != null && !fluidStack.isEmpty())
-        {
-            matrixStack.pushPose();
-            //TODO
-//            RenderSystem.color3f(0F, 0F, 0F);
-//            IVertexBuilder buffer = rtb.getBuffer(FluidTankRenderType.RESIZABLE);
-//            matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
-//            matrixStack.translate(-0.5, 0.3, -0.35);
-//            matrixStack.scale(0.95F, (FluidUtils.getScale(moduleTank.getFluidAmount(), moduleTank.getCapacity(), fluidStack.isEmpty()) / 2.2F), 0.7F);
-//            RenderUtils.renderObject(FluidUtils.getFluidModel(fluidStack, FluidUtils.STAGES + 1), matrixStack, buffer, RenderUtils.getColorARGB(fluidStack, 0.2F),
-//                    RenderUtils.calculateGlowLight(light, fluidStack));
-
-            matrixStack.popPose();
-        }
+        return RenderType.entityCutout(getTexture());
     }
 }

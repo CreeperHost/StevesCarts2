@@ -329,17 +329,6 @@ public class ModuleData
         {
             eggBasket.lock();
         }
-
-        /*
-         * Available module ids:
-         * 17
-         * 35
-         * 46
-         * 60
-         * 88
-         * 98
-         * 103+
-         */
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -397,10 +386,9 @@ public class ModuleData
         ModuleData.moduleList.get((byte) 40).setModelMult(0.65f).addModel("Speakers", new ModelNote());
         ModuleData.moduleList.get((byte) 57).removeModel("Top").addModel("Cage", new ModelCage(false), false).addModel("Cage", new ModelCage(true), true).setModelMult(0.65f);
         ModuleData.moduleList.get((byte) 64).addModel("SideTanks", new ModelSideTanks());
-        ModuleData.moduleList.get((byte) 65).addModel("TopTank", new ModelTopTank(false));
+        ModuleData.moduleList.get((byte) 65).addModel("TopTank", new ModelTopTank());
         ModuleData.moduleList.get((byte) 66).addModel("LargeTank", new ModelAdvancedTank()).removeModel("Top");
         ModuleData.moduleList.get((byte) 67).setModelMult(0.68f).addModel("FrontTank", new ModelFrontTank());
-        ModuleData.moduleList.get((byte) 73).addModel("TopTank", new ModelTopTank(true));
         ModuleData.moduleList.get((byte) 71).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelLiquidDrainer());
         ModuleData.moduleList.get((byte) 74).addModel("TopChest", new ModelEggBasket());
         ModuleData.moduleList.get((byte) 85).addModel("LawnMower", new ModelLawnMower()).setModelMult(0.4f);
