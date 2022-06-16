@@ -1,18 +1,14 @@
 package vswe.stevescarts.client.models;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.pipeline.VertexBufferConsumer;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.modules.ModuleBase;
 
-import java.util.ArrayList;
 import java.util.function.Function;
 
 public abstract class ModelCartbase extends Model
@@ -40,13 +36,6 @@ public abstract class ModelCartbase extends Model
         this.root = null;
     }
 
-    @Deprecated(forRemoval = true)
-    public final void render(PoseStack matrices, VertexConsumer vertexConsumers, int light, int overlay, float red, float green, float blue, float alpha)
-    {
-        //TODO
-//        this.root.render(matrices, vertexConsumers.getBuffer(this.getLayer(this.texture)), light, overlay, red, green, blue, alpha);
-    }
-
     @Override
     public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, float red, float green, float blue, float alpha)
     {
@@ -55,8 +44,6 @@ public abstract class ModelCartbase extends Model
             this.root.render(poseStack, vertexConsumers, light, overlay, red, green, blue, alpha);
         }
     }
-
-    public void animateModel(ModuleBase module, float limbAngle, float limbDistance, float tickDelta) {}
 
     public ResourceLocation getTexture()
     {
@@ -92,7 +79,6 @@ public abstract class ModelCartbase extends Model
         return texture;
     }
 
-    @Deprecated(forRemoval = true)
     public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
     {
     }
