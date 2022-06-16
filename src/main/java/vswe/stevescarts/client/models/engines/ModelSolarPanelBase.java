@@ -1,49 +1,47 @@
 package vswe.stevescarts.client.models.engines;
 
-import net.minecraft.resources.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.modules.engines.ModuleSolarTop;
 
-public class ModelSolarPanelBase extends ModelSolarPanel
+public class ModelSolarPanelBase extends ModelCartbase
 {
-    private static ResourceLocation texture;
-
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
-    {
-        return ModelSolarPanelBase.texture;
-    }
-
-    @Override
-    protected int getTextureWidth()
-    {
-        return 32;
-    }
-
-    @Override
-    protected int getTextureHeight()
-    {
-        return 32;
-    }
+    private final ModelPart moving;
+    private final ModelPart top;
 
     public ModelSolarPanelBase()
     {
-        //TODO
-//        final ModelRenderer base = new ModelRenderer(this, 0, 0);
-//        AddRenderer(base);
-//        base.addBox(-1.0f, -5.0f, -1.0f, 2, 10, 2, 0.0f);
-//        base.setPos(0.0f, -4.5f, 0.0f);
-//        final ModelRenderer moving = createMovingHolder(8, 0);
-//        moving.addBox(-2.0f, -3.5f, -2.0f, 4, 7, 4, 0.0f);
-//        final ModelRenderer top = new ModelRenderer(this, 0, 12);
-//        fixSize(top);
-//        moving.addChild(top);
-//        top.addBox(-6.0f, -1.5f, -2.0f, 12, 3, 4, 0.0f);
-//        top.setPos(0.0f, -5.0f, 0.0f);
+        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/panelModelBase.png"));
+        this.moving = this.getRoot().getChild("moving");
+        this.top = this.getRoot().getChild("top");
     }
 
-    static
+    public static LayerDefinition getTexturedModelData()
     {
-        ModelSolarPanelBase.texture = ResourceHelper.getResource("/models/panelModelBase.png");
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        modelPartData.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 0)
+                .addBox(-1.0f, -5.0f, -1.0f, 2, 10, 2), PartPose.offset(0.0f, -4.5f, 0.0f));
+        modelPartData.addOrReplaceChild("moving", CubeListBuilder.create().texOffs(8, 0)
+                .addBox(-2.0f, -3.5f, -2.0f, 4, 7, 4), PartPose.offset(0.0f, 0.0f, 0.0f));
+        modelPartData.addOrReplaceChild("top", CubeListBuilder.create().texOffs(0, 12)
+                .addBox(-6.0f, -1.5f, -2.0f, 12, 3, 4), PartPose.offset(0.0f, -5.0f, 0.0f));
+        return LayerDefinition.create(modelData, 32, 32);
+    }
+
+    @Override
+    public void applyEffects(ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, float yaw, float pitch, float roll)
+    {
+        super.applyEffects(module, matrixStack, rtb, yaw, pitch, roll);
+        moving.y = ((module == null) ? -4.0f : ((ModuleSolarTop) module).getMovingLevel());
     }
 }

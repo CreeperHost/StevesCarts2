@@ -7,6 +7,7 @@ import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.modules.ModuleBase;
 import vswe.stevescarts.modules.engines.ModuleSolarTop;
 
+@Deprecated(forRemoval = true)
 public abstract class ModelSolarPanel extends ModelCartbase
 {
     ModelPart moving;
@@ -22,6 +23,6 @@ public abstract class ModelSolarPanel extends ModelCartbase
     @Override
     public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
     {
-        moving.y = ((module == null) ? -4.0f : ((ModuleSolarTop) module).getMovingLevel());
+//        moving.y = ((module == null) ? -4.0f : ((ModuleSolarTop) module).getMovingLevel());
     }
 }

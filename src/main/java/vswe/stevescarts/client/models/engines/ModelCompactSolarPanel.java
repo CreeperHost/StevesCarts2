@@ -102,55 +102,55 @@ public class ModelCompactSolarPanel extends ModelCartbase
     @Override
     public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
     {
-        if (module == null)
-        {
-            for (int i = 0; i < 2; ++i)
-            {
-                final ModelPart[] models = this.models[i];
-                models[9].z = 0.6f;
-                models[10].z = -8.1f;
-                models[1].y = -0.1f;
-                models[2].y = 0.1f;
-                models[3].x = -2.01f;
-                models[4].x = 2.01f;
-                final ModelPart modelRenderer = models[5];
-                final ModelPart modelRenderer2 = models[6];
-                final float n = -0.1f;
-                modelRenderer2.y = n;
-                modelRenderer.y = n;
-                final ModelPart modelRenderer3 = models[7];
-                final ModelPart modelRenderer4 = models[8];
-                final float n2 = 0.1f;
-                modelRenderer4.y = n2;
-                modelRenderer3.y = n2;
-                models[9].xRot = 0.0f;
-            }
-        }
-        else
-        {
-            final ModuleSolarCompact solar = (ModuleSolarCompact) module;
-            for (int j = 0; j < 2; ++j)
-            {
-                final ModelPart[] models2 = models[j];
-                models2[9].z = 1.0f - solar.getExtractionDist();
-                models2[10].z = -7.7f - solar.getInnerExtraction();
-                models2[1].y = -solar.getTopBotExtractionDist();
-                models2[2].y = solar.getTopBotExtractionDist();
-                models2[3].x = -2.0f - solar.getLeftRightExtractionDist();
-                models2[4].x = 2.0f + solar.getLeftRightExtractionDist();
-                final ModelPart modelRenderer5 = models2[5];
-                final ModelPart modelRenderer6 = models2[6];
-                final float n3 = -solar.getCornerExtractionDist();
-                modelRenderer6.y = n3;
-                modelRenderer5.y = n3;
-                final ModelPart modelRenderer7 = models2[7];
-                final ModelPart modelRenderer8 = models2[8];
-                final float cornerExtractionDist = solar.getCornerExtractionDist();
-                modelRenderer8.y = cornerExtractionDist;
-                modelRenderer7.y = cornerExtractionDist;
-                models2[9].xRot = -solar.getPanelAngle();
-            }
-        }
+//        if (module == null)
+//        {
+//            for (int i = 0; i < 2; ++i)
+//            {
+//                final ModelPart[] models = this.models[i];
+//                models[9].z = 0.6f;
+//                models[10].z = -8.1f;
+//                models[1].y = -0.1f;
+//                models[2].y = 0.1f;
+//                models[3].x = -2.01f;
+//                models[4].x = 2.01f;
+//                final ModelPart modelRenderer = models[5];
+//                final ModelPart modelRenderer2 = models[6];
+//                final float n = -0.1f;
+//                modelRenderer2.y = n;
+//                modelRenderer.y = n;
+//                final ModelPart modelRenderer3 = models[7];
+//                final ModelPart modelRenderer4 = models[8];
+//                final float n2 = 0.1f;
+//                modelRenderer4.y = n2;
+//                modelRenderer3.y = n2;
+//                models[9].xRot = 0.0f;
+//            }
+//        }
+//        else
+//        {
+//            final ModuleSolarCompact solar = (ModuleSolarCompact) module;
+//            for (int j = 0; j < 2; ++j)
+//            {
+//                final ModelPart[] models2 = models[j];
+//                models2[9].z = 1.0f - solar.getExtractionDist();
+//                models2[10].z = -7.7f - solar.getInnerExtraction();
+//                models2[1].y = -solar.getTopBotExtractionDist();
+//                models2[2].y = solar.getTopBotExtractionDist();
+//                models2[3].x = -2.0f - solar.getLeftRightExtractionDist();
+//                models2[4].x = 2.0f + solar.getLeftRightExtractionDist();
+//                final ModelPart modelRenderer5 = models2[5];
+//                final ModelPart modelRenderer6 = models2[6];
+//                final float n3 = -solar.getCornerExtractionDist();
+//                modelRenderer6.y = n3;
+//                modelRenderer5.y = n3;
+//                final ModelPart modelRenderer7 = models2[7];
+//                final ModelPart modelRenderer8 = models2[8];
+//                final float cornerExtractionDist = solar.getCornerExtractionDist();
+//                modelRenderer8.y = cornerExtractionDist;
+//                modelRenderer7.y = cornerExtractionDist;
+//                models2[9].xRot = -solar.getPanelAngle();
+//            }
+//        }
     }
 
     static

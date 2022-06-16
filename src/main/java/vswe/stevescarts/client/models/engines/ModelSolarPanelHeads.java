@@ -3,100 +3,62 @@ package vswe.stevescarts.client.models.engines;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
+import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.ModuleBase;
 import vswe.stevescarts.modules.engines.ModuleSolarTop;
 
 import java.util.ArrayList;
 
-public class ModelSolarPanelHeads extends ModelSolarPanel
+public class ModelSolarPanelHeads extends ModelCartbase
 {
-    private static ResourceLocation texture;
-    private static ResourceLocation texture2;
-    ArrayList<ModelPart> panels;
+    private final ModelPart[] panels;
 
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
+    public ModelSolarPanelHeads(int count)
     {
-        if (module != null && ((ModuleSolarTop) module).getLight() == 15)
-        {
-            return ModelSolarPanelHeads.texture;
-        }
-        return ModelSolarPanelHeads.texture2;
-    }
-
-    @Override
-    protected int getTextureWidth()
-    {
-        return 32;
-    }
-
-    @Override
-    protected int getTextureHeight()
-    {
-        return 16;
-    }
-
-    public ModelSolarPanelHeads(final int panelCount)
-    {
-        panels = new ArrayList<>();
-        //TODO
-//        final ModelPart moving = createMovingHolder(0, 0);
-        for (int i = 0; i < panelCount; ++i)
-        {
-            createPanel(moving, i);
+        super(getTexturedModelData(count).bakeRoot(), ResourceHelper.getResource("/models/panelModelActive.png"));
+        this.panels = new ModelPart[count];
+        for (int i = 0; i < count; i++) {
+            this.panels[i] = this.getRoot().getChild("panel" + i);
         }
     }
 
-    private void createPanel(final ModelPart base, final int index)
+    public static LayerDefinition getTexturedModelData(int count)
     {
-        float rotation = 0.0f;
-        float f = 0.0f;
-        switch (index)
-        {
-            case 0:
-            {
-                rotation = 0.0f;
-                f = -1.5f;
-                break;
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        for (int i = 0; i < count; i++) {
+            float rotation;
+            float f;
+            switch (i) {
+                case 0 -> {
+                    rotation = 0.0f;
+                    f = -1.5f;
+                }
+                case 1 -> {
+                    rotation = 3.1415927f;
+                    f = -1.5f;
+                }
+                case 2 -> {
+                    rotation = 4.712389f;
+                    f = -6.0f;
+                }
+                case 3 -> {
+                    rotation = 1.5707964f;
+                    f = -6.0f;
+                }
+                default -> throw new IllegalArgumentException("Invalid index: " + i);
             }
-            case 1:
-            {
-                rotation = 3.1415927f;
-                f = -1.5f;
-                break;
-            }
-            case 2:
-            {
-                rotation = 4.712389f;
-                f = -6.0f;
-                break;
-            }
-            case 3:
-            {
-                rotation = 1.5707964f;
-                f = -6.0f;
-                break;
-            }
-            default:
-            {
-                return;
-            }
+            modelPartData.addOrReplaceChild("panel" + i, CubeListBuilder.create().texOffs(0, 0)
+                    .addBox(-6.0f, 0.0f, -2.0f, 12, 13, 2), PartPose.offsetAndRotation((float) (Math.sin(rotation) * f), -5.0f, (float) (Math.cos(rotation) * f), 0.0f, rotation, 0.0f));
         }
-        createPanel(base, rotation, f);
-    }
-
-    private void createPanel(final ModelPart base, final float rotation, final float f)
-    {
-        //TODO
-//        final ModelRenderer panel = new ModelRenderer(this, 0, 0);
-//        fixSize(panel);
-//        base.addChild(panel);
-//        panel.addBox(-6.0f, 0.0f, -2.0f, 12, 13, 2, 0.0f);
-//        panel.setPos((float) Math.sin(rotation) * f, -5.0f, (float) Math.cos(rotation) * f);
-//        panel.yRot = rotation;
-//        panels.add(panel);
+        return LayerDefinition.create(modelData, 32, 16);
     }
 
     @Override
@@ -106,12 +68,7 @@ public class ModelSolarPanelHeads extends ModelSolarPanel
         for (final ModelPart panel : panels)
         {
             panel.xRot = ((module == null) ? 0.0f : (-((ModuleSolarTop) module).getInnerRotation()));
+            panel.y = ((module == null) ? -4.0f : ((ModuleSolarTop) module).getMovingLevel());
         }
-    }
-
-    static
-    {
-        ModelSolarPanelHeads.texture = ResourceHelper.getResource("/models/panelModelActive.png");
-        ModelSolarPanelHeads.texture2 = ResourceHelper.getResource("/models/panelModelIdle.png");
     }
 }
