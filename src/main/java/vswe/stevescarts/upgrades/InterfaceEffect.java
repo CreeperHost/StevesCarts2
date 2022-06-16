@@ -1,7 +1,6 @@
 package vswe.stevescarts.upgrades;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.ContainerListener;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;

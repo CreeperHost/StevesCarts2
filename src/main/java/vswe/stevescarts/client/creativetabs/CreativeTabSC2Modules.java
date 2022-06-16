@@ -3,7 +3,6 @@ package vswe.stevescarts.client.creativetabs;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import vswe.stevescarts.init.ModItems;
 
 public class CreativeTabSC2Modules extends CreativeModeTab
 {

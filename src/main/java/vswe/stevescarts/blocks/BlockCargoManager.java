@@ -14,8 +14,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 
-import javax.annotation.Nullable;
-
 public class BlockCargoManager extends BlockContainerBase
 {
 

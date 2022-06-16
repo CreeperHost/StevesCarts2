@@ -1,21 +1,14 @@
 package vswe.stevescarts.client.models.storages.tanks;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
 import vswe.stevescarts.client.models.ModelCartbase;
-import vswe.stevescarts.client.renders.fluid.FluidUtils;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.ModuleBase;
-import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 
 public class ModelFrontTank extends ModelCartbase
 {

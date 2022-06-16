@@ -2,7 +2,6 @@ package vswe.stevescarts.client.renders.fluid;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraftforge.fluids.FluidStack;
 
 public class RenderUtils

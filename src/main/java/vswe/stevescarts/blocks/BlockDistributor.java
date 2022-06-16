@@ -14,8 +14,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import vswe.stevescarts.blocks.tileentities.TileEntityDistributor;
 
-import javax.annotation.Nullable;
-
 public class BlockDistributor extends BlockContainerBase
 {
     public BlockDistributor()

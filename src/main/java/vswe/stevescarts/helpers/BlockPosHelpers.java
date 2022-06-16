@@ -5,7 +5,6 @@ import vswe.stevescarts.entitys.EntityMinecartModular;
 
 public class BlockPosHelpers
 {
-
     public static double getHorizontalDistToCartSquared(BlockPos pos, EntityMinecartModular cart)
     {
         final double xDif = pos.getX() - cart.getX();

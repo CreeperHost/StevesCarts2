@@ -14,7 +14,9 @@ import vswe.stevescarts.items.ItemCartModule;
 import vswe.stevescarts.items.ItemCarts;
 import vswe.stevescarts.modules.data.ModuleData;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class ModItems

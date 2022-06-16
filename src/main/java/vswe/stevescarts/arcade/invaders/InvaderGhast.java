@@ -6,8 +6,6 @@ import net.minecraft.util.RandomSource;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
-import java.util.Random;
-
 public class InvaderGhast extends Unit {
 	private int tentacleTextureId;
 	private int shooting;

@@ -36,7 +36,6 @@ import vswe.stevescarts.upgrades.BaseEffect;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 
 public class BlockUpgrade extends BlockContainerBase
 {

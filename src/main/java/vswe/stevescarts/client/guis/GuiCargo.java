@@ -51,7 +51,6 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
         ResourceHelper.bindResource(GuiCargo.texturesRight[version]);
         blit(matrixStack, leftPos + 256, topPos, 0, 0, imageWidth - 256, imageHeight);
 
-//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         final int left = getGuiLeft();
         final int top = getGuiTop();
         for (int i = 0; i < 4; ++i)
@@ -70,14 +69,11 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
         {
             drawItems(j, renderitem, left, top);
         }
-//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     //Override this to stop labels from rendering
     @Override
-    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_)
-    {
-    }
+    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_) {}
 
     @Override
     public void render(PoseStack matrixStack, int mouseX, int mouseY, float p_230430_4_)

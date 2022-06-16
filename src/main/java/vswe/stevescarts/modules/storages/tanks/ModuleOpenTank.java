@@ -1,9 +1,6 @@
 package vswe.stevescarts.modules.storages.tanks;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 
 public class ModuleOpenTank extends ModuleTank

@@ -7,7 +7,6 @@ import net.minecraftforge.network.NetworkEvent;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 
 import java.util.function.Supplier;
-import java.util.logging.Level;
 
 public class PacketCreateCart
 {

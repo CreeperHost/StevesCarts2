@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.modules.ModuleBase;
-import vswe.stevescarts.modules.engines.ModuleSolarTop;
 
 @Deprecated(forRemoval = true)
 public abstract class ModelSolarPanel extends ModelCartbase

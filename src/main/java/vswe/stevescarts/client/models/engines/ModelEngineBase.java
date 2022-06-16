@@ -1,8 +1,6 @@
 package vswe.stevescarts.client.models.engines;
 
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.client.models.ModelCartbase;
 

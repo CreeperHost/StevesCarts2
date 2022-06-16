@@ -24,8 +24,6 @@ import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketMinecartTurn;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 {

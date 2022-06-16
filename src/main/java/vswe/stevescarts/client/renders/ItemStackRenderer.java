@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
-import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,10 +21,6 @@ import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.modules.ModuleBase;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implements ItemPropertyFunction
 {

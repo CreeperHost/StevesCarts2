@@ -1,6 +1,5 @@
 package vswe.stevescarts.arcade.monopoly;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import vswe.stevescarts.client.guis.GuiMinecart;
 

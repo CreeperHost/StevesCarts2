@@ -1,5 +1,5 @@
 package vswe.stevescarts.helpers;
-;
+
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -10,8 +10,8 @@ import vswe.stevescarts.modules.data.ModuleData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Random;
 
+@Deprecated(forRemoval = true)
 public class GiftItem
 {
     private int chanceWeight;

@@ -1,6 +1,5 @@
 package vswe.stevescarts.arcade.tracks;
 
-import vswe.stevescarts.client.guis.GuiBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.ArrayList;
