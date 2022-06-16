@@ -1,60 +1,33 @@
 package vswe.stevescarts.client.models.engines;
 
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.ModuleBase;
 
 public class ModelEngineFrame extends ModelEngineBase
 {
-    private static ResourceLocation texture;
-
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
-    {
-        return ModelEngineFrame.texture;
-    }
-
-    @Override
-    protected int getTextureWidth()
-    {
-        return 8;
-    }
-
-    @Override
-    protected int getTextureHeight()
-    {
-        return 8;
-    }
-
     public ModelEngineFrame()
     {
-        //TODO
-//        final ModelRenderer left = new ModelRenderer(this, 0, 0);
-//        anchor.addChild(left);
-//        fixSize(left);
-//        left.addBox(-0.5f, -2.5f, -0.5f, 1, 5, 1, 0.0f);
-//        left.setPos(-4.0f, 0.0f, 0.0f);
-//        final ModelRenderer right = new ModelRenderer(this, 0, 0);
-//        anchor.addChild(right);
-//        fixSize(right);
-//        right.addBox(-0.5f, -2.5f, -0.5f, 1, 5, 1, 0.0f);
-//        right.setPos(4.0f, 0.0f, 0.0f);
-//        final ModelRenderer top = new ModelRenderer(this, 4, 0);
-//        anchor.addChild(top);
-//        fixSize(top);
-//        top.addBox(-0.5f, -3.5f, -0.5f, 1, 7, 1, 0.0f);
-//        top.setPos(0.0f, -3.0f, 0.0f);
-//        top.zRot = 1.5707964f;
-//        final ModelRenderer bot = new ModelRenderer(this, 4, 0);
-//        anchor.addChild(bot);
-//        fixSize(bot);
-//        bot.addBox(-0.5f, -3.5f, -0.5f, 1, 7, 1, 0.0f);
-//        bot.setPos(0.0f, 2.0f, 0.0f);
-//        bot.zRot = 1.5707964f;
+        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/engineModelFrame.png"));
     }
 
-    static
+    public static LayerDefinition getTexturedModelData()
     {
-        ModelEngineFrame.texture = ResourceHelper.getResource("/models/engineModelFrame.png");
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        modelPartData.addOrReplaceChild("left", CubeListBuilder.create().texOffs(0, 0)
+                .addBox(-0.5f, -2.5f, -0.5f, 1, 5, 1), PartPose.offset(-4.0f, 0.0f, 0.0f));
+        modelPartData.addOrReplaceChild("right", CubeListBuilder.create().texOffs(0, 0)
+                .addBox(-0.5f, -2.5f, -0.5f, 1, 5, 1), PartPose.offset(4.0f, 0.0f, 0.0f));
+        modelPartData.addOrReplaceChild("top", CubeListBuilder.create().texOffs(4, 0)
+                .addBox(-0.5f, -3.5f, -0.5f, 1, 7, 1), PartPose.offsetAndRotation(0.0f, -3.0f, 0.0f, 0.0f, 0.0f, 1.5707964f));
+        modelPartData.addOrReplaceChild("bot", CubeListBuilder.create().texOffs(4, 0)
+                .addBox(-0.5f, -3.5f, -0.5f, 1, 7, 1), PartPose.offsetAndRotation(0.0f, 2.0f, 0.0f, 0.0f, 0.0f, 1.5707964f));
+        return LayerDefinition.create(modelData, 8, 8);
     }
 }

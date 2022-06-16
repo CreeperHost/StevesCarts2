@@ -1,92 +1,33 @@
 package vswe.stevescarts.client.models.workers;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.modules.ModuleBase;
-import vswe.stevescarts.modules.workers.ModuleTorch;
 
 public class ModelTorchplacer extends ModelCartbase
 {
-    private static ResourceLocation texture;
-    ModelPart[] torches1;
-    ModelPart[] torches2;
-
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
-    {
-        return ModelTorchplacer.texture;
-    }
-
-    @Override
-    protected int getTextureWidth()
-    {
-        return 32;
-    }
-
-    @Override
-    protected int getTextureHeight()
-    {
-        return 32;
-    }
-
     public ModelTorchplacer()
     {
-        super();
-        torches1 = createSide(false);
-        torches2 = createSide(true);
+        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/torchModel.png"));
     }
 
-    private ModelPart[] createSide(final boolean opposite)
+    public static LayerDefinition getTexturedModelData()
     {
-        //TODO
-//        final ModelRenderer anchor = new ModelRenderer(this, 0, 0);
-//        AddRenderer(anchor);
-//        if (opposite)
-//        {
-//            anchor.yRot = 3.1415927f;
-//        }
-//        final ModelRenderer base = new ModelRenderer(this, 0, 0);
-//        anchor.addChild(base);
-//        fixSize(base);
-//        base.addBox(-7.0f, -2.0f, -1.0f, 14, 4, 2, 0.0f);
-//        base.setPos(0.0f, -2.0f, -9.0f);
-//        final ModelRenderer[] torches = new ModelRenderer[3];
-//        for (int i = -1; i <= 1; ++i)
-//        {
-//            final ModelRenderer torchHolder = new ModelRenderer(this, 0, 6);
-//            base.addChild(torchHolder);
-//            fixSize(torchHolder);
-//            torchHolder.addBox(-1.0f, -1.0f, -0.5f, 2, 2, 1, 0.0f);
-//            torchHolder.setPos(i * 4, 0.0f, -1.5f);
-//            final ModelRenderer torch = new ModelRenderer(this, 0, 9);
-//            torchHolder.addChild(torches[i + 1] = torch);
-//            fixSize(torch);
-//            torch.addBox(-1.0f, -5.0f, -1.0f, 2, 10, 2, 0.0f);
-//            torch.setPos(0.0f, 0.0f, -1.5f);
-//        }
-//        return torches;
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        modelPartData.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 0)
+                .addBox(-7.0f, -2.0f, -1.0f, 14, 4, 2), PartPose.offset(0.0f, -2.0f, -9.0f));
 
-        return null;
-    }
-
-    @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
-    {
-        final int torches = (module == null) ? 7 : ((ModuleTorch) module).getTorches();
-        for (int i = 0; i < 3; ++i)
+        for (int i = -1; i <= 1; ++i)
         {
-            final boolean isTorch = (torches & 1 << i) != 0x0;
-            //			torches1[i].isHidden = !isTorch;
-            //			torches2[2 - i].isHidden = !isTorch;
+            modelPartData.addOrReplaceChild("holder" + (i + 1), CubeListBuilder.create().texOffs(0, 6)
+                    .addBox(-1.0f, -1.0f, -0.5f, 2, 2, 1), PartPose.offset(i * 4, -2.0f, -10.5f));
+            			modelPartData.addOrReplaceChild("torch" + (i + 1), CubeListBuilder.create().texOffs(0, 9).addBox(-1.0f, -5.0f, -1.0f, 2, 10, 2), PartPose.offset(i * 4, -2.0f, -12.0f));
         }
-    }
-
-    static
-    {
-        ModelTorchplacer.texture = ResourceHelper.getResource("/models/torchModel.png");
+        return LayerDefinition.create(modelData, 32, 32);
     }
 }
