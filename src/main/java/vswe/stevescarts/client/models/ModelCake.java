@@ -28,21 +28,21 @@ public class ModelCake extends ModelCartbase
     public ModelCake()
     {
         //TODO
-//        cakes = new ModelRenderer[6];
-//        for (int i = 0; i < cakes.length; ++i)
-//        {
-//            cakes[i] = createCake(6 - i);
-//        }
+        //        cakes = new ModelRenderer[6];
+        //        for (int i = 0; i < cakes.length; ++i)
+        //        {
+        //            cakes[i] = createCake(6 - i);
+        //        }
     }
 
     private ModelPart createCake(final int slices)
     {
         //TODO
-//        final ModelRenderer cake = new ModelRenderer(this, 0, 22 * (6 - slices));
-//        AddRenderer(cake);
-//        cake.addBox(-7.0f, -4.0f, -7.0f, 2 * slices + ((slices == 6) ? 2 : 1), 8, 14, 0.0f);
-//        cake.setPos(0.0f, -9.0f, 0.0f);
-//        return cake;
+        //        final ModelRenderer cake = new ModelRenderer(this, 0, 22 * (6 - slices));
+        //        AddRenderer(cake);
+        //        cake.addBox(-7.0f, -4.0f, -7.0f, 2 * slices + ((slices == 6) ? 2 : 1), 8, 14, 0.0f);
+        //        cake.setPos(0.0f, -9.0f, 0.0f);
+        //        return cake;
 
         return null;
     }
@@ -59,8 +59,9 @@ public class ModelCake extends ModelCartbase
         {
             count = 6;
         }
-        for (int i = 0; i < cakes.length; ++i) {
-//            cakes[i].isHidden = (6 - i != count);
+        for (int i = 0; i < cakes.length; ++i)
+        {
+            //            cakes[i].isHidden = (6 - i != count);
         }
     }
 

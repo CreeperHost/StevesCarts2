@@ -12,7 +12,6 @@ public class RecipeHelpers
 {
     public static Set<Recipe<?>> findRecipesByType(RecipeType<?> typeIn, Level world)
     {
-        return world != null ? world.getRecipeManager().getRecipes().stream()
-                .filter(recipe -> recipe.getType() == typeIn).collect(Collectors.toSet()) : Collections.emptySet();
+        return world != null ? world.getRecipeManager().getRecipes().stream().filter(recipe -> recipe.getType() == typeIn).collect(Collectors.toSet()) : Collections.emptySet();
     }
 }

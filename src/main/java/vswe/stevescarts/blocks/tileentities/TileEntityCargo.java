@@ -456,7 +456,7 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
         {
-            if(createHandler() != null)
+            if (createHandler() != null)
             {
                 return LazyOptional.of(this::createHandler).cast();
             }
@@ -464,9 +464,11 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
         return super.getCapability(capability);
     }
 
-    private net.minecraftforge.items.IItemHandlerModifiable createHandler() {
+    private net.minecraftforge.items.IItemHandlerModifiable createHandler()
+    {
         BlockState state = this.getBlockState();
-        if (!(state.getBlock() instanceof BlockCargoManager)) {
+        if (!(state.getBlock() instanceof BlockCargoManager))
+        {
             return new net.minecraftforge.items.wrapper.InvWrapper(this);
         }
         return null;

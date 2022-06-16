@@ -189,9 +189,7 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
         for (LivingEntity target : entities)
         {
             //TODO this is horrid, Maybe datatag??
-            if (!(target instanceof Player) && !(target instanceof IronGolem) && !(target instanceof EnderDragon) &&
-                    !(target instanceof Slime) && !(target instanceof WaterAnimal) && !(target instanceof WitherBoss) && !(target instanceof EnderMan)
-                    && (!(target instanceof Spider) || target instanceof CaveSpider) && !(target instanceof Giant) && !(target instanceof FlyingAnimal))
+            if (!(target instanceof Player) && !(target instanceof IronGolem) && !(target instanceof EnderDragon) && !(target instanceof Slime) && !(target instanceof WaterAnimal) && !(target instanceof WitherBoss) && !(target instanceof EnderMan) && (!(target instanceof Spider) || target instanceof CaveSpider) && !(target instanceof Giant) && !(target instanceof FlyingAnimal))
             {
                 if (target.getPassengers().isEmpty())
                 {

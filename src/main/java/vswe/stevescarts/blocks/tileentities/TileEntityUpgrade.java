@@ -118,12 +118,12 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     }
 
     //TODO
-//    @Nullable
-//    @Override
-//    public SUpdateTileEntityPacket getUpdatePacket()
-//    {
-//        return new SUpdateTileEntityPacket(getBlockPos(), 1, save(new CompoundNBT()));
-//    }
+    //    @Nullable
+    //    @Override
+    //    public SUpdateTileEntityPacket getUpdatePacket()
+    //    {
+    //        return new SUpdateTileEntityPacket(getBlockPos(), 1, save(new CompoundNBT()));
+    //    }
 
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
@@ -132,11 +132,11 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     }
 
     //TODO
-//    @Override
-//    public CompoundTag getUpdateTag()
-//    {
-//        return save(new CompoundTag());
-//    }
+    //    @Override
+    //    public CompoundTag getUpdateTag()
+    //    {
+    //        return save(new CompoundTag());
+    //    }
 
     public AssemblerUpgrade getUpgrade()
     {
@@ -324,11 +324,15 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     }
 
     @Override
-    public void onFluidUpdated(final int tankid) {}
+    public void onFluidUpdated(final int tankid)
+    {
+    }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawImage(int tankid, GuiBase gui, TextureAtlasSprite sprite, int targetX, int targetY, int srcX, int srcY, int width, int height) {}
+    public void drawImage(int tankid, GuiBase gui, TextureAtlasSprite sprite, int targetX, int targetY, int srcX, int srcY, int width, int height)
+    {
+    }
 
     public void setCreativeBroken()
     {

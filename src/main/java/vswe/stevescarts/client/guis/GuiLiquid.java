@@ -63,7 +63,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
             blit(matrixStack, leftPos + coords2[0], topPos + coords2[1], 0, 51 * type, 36, 51);
         }
 
-//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         final int left = getGuiLeft();
         final int top = getGuiTop();
         for (int i = 0; i < 4; ++i)
@@ -82,7 +82,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
         {
             drawItems(j, renderitem, left, top);
         }
-//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
@@ -108,7 +108,8 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
         }
         for (int i = 0; i < 4; ++i)
         {
-            try {
+            try
+            {
                 drawExtraOverlay(matrixStack, i, mouseX, mouseY);
                 drawMouseOver(matrixStack, Localization.GUI.MANAGER.CHANGE_TRANSFER_DIRECTION.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + (containerLiquid.toCart()[i] ? Localization.GUI.MANAGER.DIRECTION_TO_CART.translate() : Localization.GUI.MANAGER.DIRECTION_FROM_CART.translate()), mouseX, mouseY, getArrowCoords(i));
                 drawMouseOver(matrixStack, Localization.GUI.MANAGER.CHANGE_TURN_BACK_SETTING.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + ((containerLiquid.getColor()[i] == 5) ? Localization.GUI.MANAGER.TURN_BACK_NOT_SELECTED.translate() : (containerLiquid.doReturn()[containerLiquid.getColor()[i] - 1] ? Localization.GUI.MANAGER.TURN_BACK_DO.translate() : Localization.GUI.MANAGER.TURN_BACK_DO_NOT.translate())), mouseX, mouseY, getReturnCoords(i));

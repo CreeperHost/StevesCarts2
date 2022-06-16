@@ -79,11 +79,11 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular>
         matrices.scale(-1.0f, -1.0f, 1.0f);
         for (ModuleBase module : entity.getModules())
         {
-            if(module.haveModels())
+            if (module.haveModels())
             {
                 for (ModelCartbase model : module.getModels())
                 {
-                    if(model.getRenderType(module) != null)
+                    if (model.getRenderType(module) != null)
                     {
                         model.renderToBuffer(matrices, vertexConsumers.getBuffer(model.getRenderType(module)), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
                         model.applyEffects(module, matrices, vertexConsumers.getBuffer(model.getRenderType(module)), yaw, pitch, 0);

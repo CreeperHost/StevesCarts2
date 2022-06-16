@@ -21,17 +21,20 @@ public class SlotCartCrafterResult extends SlotBase implements ISpecialItemTrans
     }
 
     @Override
-    public boolean mayPickup(Player p_82869_1_) {
+    public boolean mayPickup(Player p_82869_1_)
+    {
         return false;
     }
 
     @Override
-    public boolean mayPlace(ItemStack p_75214_1_) {
+    public boolean mayPlace(ItemStack p_75214_1_)
+    {
         return false;
     }
 
     @Override
-    public int getMaxStackSize() {
+    public int getMaxStackSize()
+    {
         return 1;
     }
 }

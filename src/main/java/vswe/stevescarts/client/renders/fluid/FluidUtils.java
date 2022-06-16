@@ -29,45 +29,53 @@ public class FluidUtils
      * @param type
      * @return
      */
-    public static TextureAtlasSprite getBaseFluidTexture(Fluid fluid, FluidRenderMap.FluidType type) {
+    public static TextureAtlasSprite getBaseFluidTexture(Fluid fluid, FluidRenderMap.FluidType type)
+    {
         ResourceLocation spriteLocation;
         //TODO Fluid Render
-        if (type == FluidRenderMap.FluidType.STILL) {
-//            spriteLocation = fluid.getAttributes().getStillTexture();
+        if (type == FluidRenderMap.FluidType.STILL)
+        {
+            //            spriteLocation = fluid.getAttributes().getStillTexture();
         }
-        else {
-//            spriteLocation = fluid.getAttributes().getFlowingTexture();
+        else
+        {
+            //            spriteLocation = fluid.getAttributes().getFlowingTexture();
         }
-//        return getSprite(spriteLocation);
+        //        return getSprite(spriteLocation);
         return null;
     }
 
-    public static TextureAtlasSprite getSprite(ResourceLocation spriteLocation) {
+    public static TextureAtlasSprite getSprite(ResourceLocation spriteLocation)
+    {
         return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(spriteLocation);
     }
 
-    public static Model3D getFluidModel(FluidStack fluid, int stage) {
-        if (CACHED_FLUIDS.containsKey(fluid) && CACHED_FLUIDS.get(fluid).containsKey(stage)) {
+    public static Model3D getFluidModel(FluidStack fluid, int stage)
+    {
+        if (CACHED_FLUIDS.containsKey(fluid) && CACHED_FLUIDS.get(fluid).containsKey(stage))
+        {
             return CACHED_FLUIDS.get(fluid).get(stage);
         }
         Model3D model = new Model3D();
         model.setTexture(FluidRenderMap.getFluidTexture(fluid, FluidRenderMap.FluidType.STILL));
         //TODO
-//        if (fluid.getFluid().getAttributes().getStillTexture(fluid) != null) {
-//            double sideSpacing = 0.00625;
-//            double belowSpacing = 0.0625 / 4;
-//            double topSpacing = belowSpacing;
-//            model.minX = sideSpacing;
-//            model.minY = belowSpacing;
-//            model.minZ = sideSpacing;
-//            model.maxX = 1 - sideSpacing;
-//            model.maxY = 1 - topSpacing;
-//            model.maxZ = 1 - sideSpacing;
-//        }
-        if (CACHED_FLUIDS.containsKey(fluid)) {
+        //        if (fluid.getFluid().getAttributes().getStillTexture(fluid) != null) {
+        //            double sideSpacing = 0.00625;
+        //            double belowSpacing = 0.0625 / 4;
+        //            double topSpacing = belowSpacing;
+        //            model.minX = sideSpacing;
+        //            model.minY = belowSpacing;
+        //            model.minZ = sideSpacing;
+        //            model.maxX = 1 - sideSpacing;
+        //            model.maxY = 1 - topSpacing;
+        //            model.maxZ = 1 - sideSpacing;
+        //        }
+        if (CACHED_FLUIDS.containsKey(fluid))
+        {
             CACHED_FLUIDS.get(fluid).put(stage, model);
         }
-        else {
+        else
+        {
             Int2ObjectMap<Model3D> map = new Int2ObjectOpenHashMap<>();
             map.put(stage, model);
             CACHED_FLUIDS.put(fluid, map);
@@ -75,48 +83,58 @@ public class FluidUtils
         return model;
     }
 
-    public static float getScale(FluidTank tank) {
+    public static float getScale(FluidTank tank)
+    {
         return getScale(tank.getFluidAmount(), tank.getCapacity(), tank.isEmpty());
     }
 
-    public static float getScale(int stored, int capacity, boolean empty) {
+    public static float getScale(int stored, int capacity, boolean empty)
+    {
         float targetScale = (float) stored / capacity;
         return targetScale;
     }
 
-    public static IFluidHandler getTank(Level world, BlockPos pos, Direction side) {
+    public static IFluidHandler getTank(Level world, BlockPos pos, Direction side)
+    {
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile == null) {
+        if (tile == null)
+        {
             return null;
         }
         return tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).orElse(null);
     }
 
-    public static boolean tryFillPositionFromTank(Level world, BlockPos posSide, Direction sideOpp, IFluidHandler tankFrom, int amount) {
-        if (tankFrom == null) {
+    public static boolean tryFillPositionFromTank(Level world, BlockPos posSide, Direction sideOpp, IFluidHandler tankFrom, int amount)
+    {
+        if (tankFrom == null)
+        {
             return false;
         }
-        try {
+        try
+        {
             IFluidHandler fluidTo = FluidUtil.getFluidHandler(world, posSide, sideOpp).orElse(null);
-            if (fluidTo != null) {
+            if (fluidTo != null)
+            {
                 FluidStack wasDrained = tankFrom.drain(amount, IFluidHandler.FluidAction.SIMULATE);
-                if (wasDrained == null) {
+                if (wasDrained == null)
+                {
                     return false;
                 }
                 int filled = fluidTo.fill(wasDrained, IFluidHandler.FluidAction.SIMULATE);
-                if (wasDrained != null && wasDrained.getAmount() > 0
-                        && filled > 0) {
+                if (wasDrained != null && wasDrained.getAmount() > 0 && filled > 0)
+                {
                     int realAmt = Math.min(filled, wasDrained.getAmount());
                     wasDrained = tankFrom.drain(realAmt, IFluidHandler.FluidAction.EXECUTE);
-                    if (wasDrained == null) {
+                    if (wasDrained == null)
+                    {
                         return false;
                     }
                     return fluidTo.fill(wasDrained, IFluidHandler.FluidAction.EXECUTE) > 0;
                 }
             }
             return false;
-        }
-        catch (Exception e) {
+        } catch (Exception e)
+        {
             return false;
         }
     }

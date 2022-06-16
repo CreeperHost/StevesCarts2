@@ -347,23 +347,24 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         }
     }
 
-    public void renderEntityInInventory(int p_98851_, int p_98852_, int p_98853_, float p_98854_, float p_98855_) {
+    public void renderEntityInInventory(int p_98851_, int p_98852_, int p_98853_, float p_98854_, float p_98855_)
+    {
         assembler.createPlaceholder();
 
-        float f = (float)Math.atan((double)(p_98854_ / 40.0F));
-        float f1 = (float)Math.atan((double)(p_98855_ / 40.0F));
+        float f = (float) Math.atan((double) (p_98854_ / 40.0F));
+        float f1 = (float) Math.atan((double) (p_98855_ / 40.0F));
         PoseStack posestack = RenderSystem.getModelViewStack();
         posestack.pushPose();
-        posestack.translate((double)p_98851_, (double)p_98852_, 1050.0D);
+        posestack.translate((double) p_98851_, (double) p_98852_, 1050.0D);
         posestack.scale(1.0F, 1.0F, -1.0F);
         RenderSystem.applyModelViewMatrix();
         PoseStack posestack1 = new PoseStack();
         posestack1.translate(0.0D, 0.0D, 1000.0D);
-        posestack1.scale((float)p_98853_, (float)p_98853_, (float)p_98853_);
+        posestack1.scale((float) p_98853_, (float) p_98853_, (float) p_98853_);
 
         Quaternion quaternion = Vector3f.YN.rotationDegrees(assembler.getRoll() * 10F);
         Quaternion quaternion1 = Vector3f.XP.rotationDegrees(180);
-        if(spin)
+        if (spin)
         {
             posestack1.mulPose(quaternion);
         }
@@ -378,7 +379,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         entityrenderdispatcher.overrideCameraOrientation(quaternion1);
         entityrenderdispatcher.setRenderShadow(false);
         MultiBufferSource.BufferSource multibuffersource$buffersource = Minecraft.getInstance().renderBuffers().bufferSource();
-        if(entityMinecartModular != null)
+        if (entityMinecartModular != null)
         {
             RenderSystem.runAsFancy(() ->
             {
@@ -531,7 +532,8 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
     }
 
     @Override
-    public void mouseMoved(final double x0, final double y0) {
+    public void mouseMoved(final double x0, final double y0)
+    {
 
     }
 
@@ -541,23 +543,32 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         super.mouseMoved(x0, y0);
         final int x = (int) (x0 - getGuiLeft());
         final int y = (int) (y0 - getGuiTop());
-        if (dropdownX != -1 && dropdownY != -1) {
+        if (dropdownX != -1 && dropdownY != -1)
+        {
             final ArrayList<DropDownMenuItem> items = assembler.getDropDown();
-            for (int i = 0; i < items.size(); ++i) {
+            for (int i = 0; i < items.size(); ++i)
+            {
                 final DropDownMenuItem item = items.get(i);
                 boolean insideSubRect = false;
-                if (item.hasSubmenu()) {
+                if (item.hasSubmenu())
+                {
                     insideSubRect = inRect(x, y, item.getSubRect(dropdownX, dropdownY, i));
-                    if (!insideSubRect && item.getIsSubMenuOpen()) {
+                    if (!insideSubRect && item.getIsSubMenuOpen())
+                    {
                         item.setIsSubMenuOpen(false);
-                    } else if (insideSubRect && !item.getIsSubMenuOpen()) {
+                    }
+                    else if (insideSubRect && !item.getIsSubMenuOpen())
+                    {
                         item.setIsSubMenuOpen(true);
                     }
                 }
                 final boolean insideRect = insideSubRect || inRect(x, y, item.getRect(dropdownX, dropdownY, i));
-                if (!insideRect && item.getIsLarge()) {
+                if (!insideRect && item.getIsLarge())
+                {
                     item.setIsLarge(false);
-                } else if (insideRect && !item.getIsLarge()) {
+                }
+                else if (insideRect && !item.getIsLarge())
+                {
                     item.setIsLarge(true);
                 }
             }
@@ -600,7 +611,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                     scrollingX = x;
                     scrollingY = y;
                     isScrolling = true;
-                    if(spin)
+                    if (spin)
                     {
                         spin = false;
                         return true;

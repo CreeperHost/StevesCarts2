@@ -74,9 +74,9 @@ public class ModuleColorizer extends ModuleAddon
             drawMarker(matrixStack, gui, x, y, i);
         }
         final float[] color = getColor();
-//        GlStateManager._color4f(color[0], color[1], color[2], 1.0f);
+        //        GlStateManager._color4f(color[0], color[1], color[2], 1.0f);
         drawImage(matrixStack, gui, scrollWidth + 25, 29, 4, 7, 28, 28);
-//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
@@ -107,11 +107,11 @@ public class ModuleColorizer extends ModuleAddon
             }
         }
         //TODO
-//        GlStateManager._color4f(colorArea[0], colorArea[1], colorArea[2], 1.0f);
+        //        GlStateManager._color4f(colorArea[0], colorArea[1], colorArea[2], 1.0f);
         drawImage(matrixStack, gui, getArea(id), 0, 0);
-//        GlStateManager._color4f(colorMarker[0], colorMarker[1], colorMarker[2], 1.0f);
+        //        GlStateManager._color4f(colorMarker[0], colorMarker[1], colorMarker[2], 1.0f);
         drawImage(matrixStack, gui, getMovableMarker(id), 0, 7);
-//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override

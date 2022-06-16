@@ -29,12 +29,9 @@ public class ModelSolarPanelBase extends ModelCartbase
     {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
-        modelPartData.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 0)
-                .addBox(-1.0f, -5.0f, -1.0f, 2, 10, 2), PartPose.offset(0.0f, -4.5f, 0.0f));
-        modelPartData.addOrReplaceChild("moving", CubeListBuilder.create().texOffs(8, 0)
-                .addBox(-2.0f, -3.5f, -2.0f, 4, 7, 4), PartPose.offset(0.0f, 0.0f, 0.0f));
-        modelPartData.addOrReplaceChild("top", CubeListBuilder.create().texOffs(0, 12)
-                .addBox(-6.0f, -1.5f, -2.0f, 12, 3, 4), PartPose.offset(0.0f, -5.0f, 0.0f));
+        modelPartData.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0f, -5.0f, -1.0f, 2, 10, 2), PartPose.offset(0.0f, -4.5f, 0.0f));
+        modelPartData.addOrReplaceChild("moving", CubeListBuilder.create().texOffs(8, 0).addBox(-2.0f, -3.5f, -2.0f, 4, 7, 4), PartPose.offset(0.0f, 0.0f, 0.0f));
+        modelPartData.addOrReplaceChild("top", CubeListBuilder.create().texOffs(0, 12).addBox(-6.0f, -1.5f, -2.0f, 12, 3, 4), PartPose.offset(0.0f, -5.0f, 0.0f));
         return LayerDefinition.create(modelData, 32, 32);
     }
 

@@ -33,32 +33,45 @@ public class SlotAssembler extends Slot
         this.id = id;
     }
 
-    private void invalidationCheck() {
+    private void invalidationCheck()
+    {
         x = -3000;
         y = -3000;
-        if (openingAnimation > 8) {
+        if (openingAnimation > 8)
+        {
             openingAnimation = 8;
         }
     }
 
     public void update()
     {
-        if (!assembler.getLevel().isClientSide) {
-            if (!isValid() && hasItem()) {
+        if (!assembler.getLevel().isClientSide)
+        {
+            if (!isValid() && hasItem())
+            {
                 assembler.puke(getItem());
                 set(ItemStack.EMPTY);
             }
-        } else if (isValid()) {
-            if (openingAnimation == 8) {
+        }
+        else if (isValid())
+        {
+            if (openingAnimation == 8)
+            {
                 x = getX();
                 y = getY();
                 ++openingAnimation;
-            } else if (openingAnimation < 8) {
+            }
+            else if (openingAnimation < 8)
+            {
                 ++openingAnimation;
             }
-        } else if (openingAnimation > 0) {
+        }
+        else if (openingAnimation > 0)
+        {
             --openingAnimation;
-        } else {
+        }
+        else
+        {
             openingAnimation = id * -3;
         }
     }
@@ -67,9 +80,12 @@ public class SlotAssembler extends Slot
     public void setChanged()
     {
         super.setChanged();
-        if (shouldUpdatePlaceholder()) {
+        if (shouldUpdatePlaceholder())
+        {
             assembler.updatePlaceholder();
-        } else {
+        }
+        else
+        {
             assembler.isErrorListOutdated = true;
         }
     }

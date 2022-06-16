@@ -116,13 +116,11 @@ public abstract class ModuleCoalBase extends ModuleEngine
         }
         if (getCart().random.nextInt(2) == 0)
         {
-            getCart().level.addParticle(ParticleTypes.SMOKE, getCart().getExactPosition().getX() + oX * 0.85, getCart().getExactPosition().getY() + 0.12,
-                    getCart().getExactPosition().getZ() + oZ * 0.85, 0.0, 0.0, 0.0);
+            getCart().level.addParticle(ParticleTypes.SMOKE, getCart().getExactPosition().getX() + oX * 0.85, getCart().getExactPosition().getY() + 0.12, getCart().getExactPosition().getZ() + oZ * 0.85, 0.0, 0.0, 0.0);
         }
         if (getCart().random.nextInt(30) == 0)
         {
-            getCart().level.addParticle(ParticleTypes.FLAME, getCart().getExactPosition().getX() + oX * 0.75, getCart().getExactPosition().getY() + 0.15,
-                    getCart().getExactPosition().getZ() + oZ * 0.75, 0, 0, 0);
+            getCart().level.addParticle(ParticleTypes.FLAME, getCart().getExactPosition().getX() + oX * 0.75, getCart().getExactPosition().getY() + 0.15, getCart().getExactPosition().getZ() + oZ * 0.75, 0, 0, 0);
         }
     }
 

@@ -913,11 +913,11 @@ public class ModuleNote extends ModuleBase
             if (!inRect(x, y, getRect()))
             {
                 //TODO
-//                GlStateManager._color4f((color >> 16) / 255.0f, (color >> 8 & 0xFF) / 255.0f, (color & 0xFF) / 255.0f, 1.0f);
+                //                GlStateManager._color4f((color >> 16) / 255.0f, (color >> 8 & 0xFF) / 255.0f, (color & 0xFF) / 255.0f, 1.0f);
             }
             drawImage(matrixStack, gui, getRect(), 32, 0);
             //TODO
-//            GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+            //            GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
             int srcX = 0;
             final int srcY = 16;
             if (down)
@@ -968,11 +968,11 @@ public class ModuleNote extends ModuleBase
             if (instrumentId != 0 && playProgress == noteID + getScrollX() && isPlaying())
             {
                 //TODO
-//                GlStateManager._color4f(0.3f, 0.3f, 0.3f, 1.0f);
+                //                GlStateManager._color4f(0.3f, 0.3f, 0.3f, 1.0f);
             }
             drawImage(matrixStack, gui, rect, srcX, 0);
             //TODO
-//            GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+            //            GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
             if (inRect(x, y, rect))
             {
                 drawImage(matrixStack, gui, rect, 32, 0);

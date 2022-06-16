@@ -772,7 +772,7 @@ public class ModuleData
     public ItemStack getItemStack()
     {
         ItemStack stack = new ItemStack(Items.AIR);
-        if(ModItems.MODULES.get(this) != null)
+        if (ModItems.MODULES.get(this) != null)
         {
             stack = new ItemStack(ModItems.MODULES.get(this).get());
         }

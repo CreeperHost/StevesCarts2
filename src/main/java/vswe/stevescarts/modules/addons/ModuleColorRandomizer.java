@@ -63,9 +63,9 @@ public class ModuleColorRandomizer extends ModuleAddon
         ResourceHelper.bindResource("/gui/color_randomizer.png");
         final float[] color = getColor();
         //TODO
-//        GlStateManager._color4f(color[0], color[1], color[2], 1.0f);
+        //        GlStateManager._color4f(color[0], color[1], color[2], 1.0f);
         drawImage(matrixStack, gui, 50, 20, 0, 16, 28, 28);
-//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         if (inRect(x, y, button))
         {
             drawImage(matrixStack, gui, 10, 26, 32, 0, 16, 16);

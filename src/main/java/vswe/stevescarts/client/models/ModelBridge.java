@@ -20,16 +20,16 @@ public class ModelBridge extends ModelCartbase
     public ModelBridge()
     {
         //TODO
-//        final ModelRenderer side1 = new ModelRenderer(this, 0, 0);
-//        AddRenderer(side1);
-//        side1.addBox(1.0f, 3.0f, 0.5f, 2, 6, 1, 0.0f);
-//        side1.setPos(-11.5f, -6.0f, 8.0f);
-//        side1.yRot = 1.5707964f;
-//        final ModelRenderer side2 = new ModelRenderer(this, 0, 0);
-//        AddRenderer(side2);
-//        side2.addBox(1.0f, 3.0f, 0.5f, 2, 6, 1, 0.0f);
-//        side2.setPos(-11.5f, -6.0f, -4.0f);
-//        side2.yRot = 1.5707964f;
+        //        final ModelRenderer side1 = new ModelRenderer(this, 0, 0);
+        //        AddRenderer(side1);
+        //        side1.addBox(1.0f, 3.0f, 0.5f, 2, 6, 1, 0.0f);
+        //        side1.setPos(-11.5f, -6.0f, 8.0f);
+        //        side1.yRot = 1.5707964f;
+        //        final ModelRenderer side2 = new ModelRenderer(this, 0, 0);
+        //        AddRenderer(side2);
+        //        side2.addBox(1.0f, 3.0f, 0.5f, 2, 6, 1, 0.0f);
+        //        side2.setPos(-11.5f, -6.0f, -4.0f);
+        //        side2.yRot = 1.5707964f;
     }
 
     @Override

@@ -19,14 +19,12 @@ public class ModelTorchplacer extends ModelCartbase
     {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
-        modelPartData.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 0)
-                .addBox(-7.0f, -2.0f, -1.0f, 14, 4, 2), PartPose.offset(0.0f, -2.0f, -9.0f));
+        modelPartData.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 0).addBox(-7.0f, -2.0f, -1.0f, 14, 4, 2), PartPose.offset(0.0f, -2.0f, -9.0f));
 
         for (int i = -1; i <= 1; ++i)
         {
-            modelPartData.addOrReplaceChild("holder" + (i + 1), CubeListBuilder.create().texOffs(0, 6)
-                    .addBox(-1.0f, -1.0f, -0.5f, 2, 2, 1), PartPose.offset(i * 4, -2.0f, -10.5f));
-            			modelPartData.addOrReplaceChild("torch" + (i + 1), CubeListBuilder.create().texOffs(0, 9).addBox(-1.0f, -5.0f, -1.0f, 2, 10, 2), PartPose.offset(i * 4, -2.0f, -12.0f));
+            modelPartData.addOrReplaceChild("holder" + (i + 1), CubeListBuilder.create().texOffs(0, 6).addBox(-1.0f, -1.0f, -0.5f, 2, 2, 1), PartPose.offset(i * 4, -2.0f, -10.5f));
+            modelPartData.addOrReplaceChild("torch" + (i + 1), CubeListBuilder.create().texOffs(0, 9).addBox(-1.0f, -5.0f, -1.0f, 2, 10, 2), PartPose.offset(i * 4, -2.0f, -12.0f));
         }
         return LayerDefinition.create(modelData, 32, 32);
     }

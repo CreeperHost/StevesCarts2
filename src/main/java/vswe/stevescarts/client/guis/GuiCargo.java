@@ -73,7 +73,9 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
 
     //Override this to stop labels from rendering
     @Override
-    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_) {}
+    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_)
+    {
+    }
 
     @Override
     public void render(PoseStack matrixStack, int mouseX, int mouseY, float p_230430_4_)
@@ -94,7 +96,8 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
         }
         for (int i = 0; i < 4; ++i)
         {
-            try {
+            try
+            {
                 drawExtraOverlay(matrixStack, i, mouseX, mouseY);
                 drawMouseOver(matrixStack, Localization.GUI.MANAGER.CHANGE_TRANSFER_DIRECTION.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + (containerCargo.toCart()[i] ? Localization.GUI.MANAGER.DIRECTION_TO_CART.translate() : Localization.GUI.MANAGER.DIRECTION_FROM_CART.translate()), mouseX, mouseY, getArrowCoords(i));
                 drawMouseOver(matrixStack, Localization.GUI.MANAGER.CHANGE_TURN_BACK_SETTING.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + ((containerCargo.getColor()[i] == 5) ? Localization.GUI.MANAGER.TURN_BACK_NOT_SELECTED.translate() : (containerCargo.doReturn()[containerCargo.getColor()[i] - 1] ? Localization.GUI.MANAGER.TURN_BACK_DO.translate() : Localization.GUI.MANAGER.TURN_BACK_DO_NOT.translate())), mouseX, mouseY, getReturnCoords(i));

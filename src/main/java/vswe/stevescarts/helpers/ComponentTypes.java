@@ -34,15 +34,15 @@ public enum ComponentTypes
     public ItemStack getItemStack()
     {
         return new ItemStack(ModItems.COMPONENTS.get(this).get());
-//        for (ItemCartComponent cartComponent : ModItems.CART_COMPONENTS)
-//        {
-//            if (cartComponent.componentType.getId() == this.id)
-//            {
-//                return new ItemStack(cartComponent);
-//            }
-//        }
-//
-//        return new ItemStack(ModItems.CART_COMPONENTS.get(1));
+        //        for (ItemCartComponent cartComponent : ModItems.CART_COMPONENTS)
+        //        {
+        //            if (cartComponent.componentType.getId() == this.id)
+        //            {
+        //                return new ItemStack(cartComponent);
+        //            }
+        //        }
+        //
+        //        return new ItemStack(ModItems.CART_COMPONENTS.get(1));
     }
 
     public int getId()

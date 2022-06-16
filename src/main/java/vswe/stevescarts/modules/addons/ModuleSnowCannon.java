@@ -60,10 +60,10 @@ public class ModuleSnowCannon extends ModuleAddon
                 {
                     BlockPos pos = cartPos.offset(x, y, z);
                     //TODO
-//                    if (countsAsAir(pos) && getCart().level.getBiome(pos).getTemperature(pos) <= 1.0f && Blocks.SNOW.canSurvive(Blocks.SNOW.defaultBlockState(), getCart().level, pos))
-//                    {
-//                        getCart().level.setBlock(pos, Blocks.SNOW.defaultBlockState(), 3);
-//                    }
+                    //                    if (countsAsAir(pos) && getCart().level.getBiome(pos).getTemperature(pos) <= 1.0f && Blocks.SNOW.canSurvive(Blocks.SNOW.defaultBlockState(), getCart().level, pos))
+                    //                    {
+                    //                        getCart().level.setBlock(pos, Blocks.SNOW.defaultBlockState(), 3);
+                    //                    }
                 }
             }
         }

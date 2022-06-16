@@ -34,7 +34,7 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
     @Override
     protected void renderBg(PoseStack matrixStack, float p_230450_2_, int x, int y)
     {
-//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         final int j = getGuiLeft();
         final int k = getGuiTop();
         ResourceHelper.bindResource(GuiDistributor.texture);

@@ -18,6 +18,6 @@ public class CreativeTabSC2Modules extends CreativeModeTab
     {
         return new ItemStack(Items.DIAMOND);
         //TODO
-//        return new ItemStack(ModItems.MODULES.get(0));
+        //        return new ItemStack(ModItems.MODULES.get(0));
     }
 }

@@ -26,9 +26,7 @@ public class ModelDrill extends ModelCartbase
 
         for (int i = 0; i < 6; ++i)
         {
-            modelPartData.addOrReplaceChild("drill" + i, CubeListBuilder.create().texOffs(0, 0)
-                            .addBox(-3.0f + i * 0.5f, -3.0f + i * 0.5f, i, 6 - i, 6 - i, 1),
-                    PartPose.offset(0.0f, 0.0f, 11.0f));
+            modelPartData.addOrReplaceChild("drill" + i, CubeListBuilder.create().texOffs(0, 0).addBox(-3.0f + i * 0.5f, -3.0f + i * 0.5f, i, 6 - i, 6 - i, 1), PartPose.offset(0.0f, 0.0f, 11.0f));
         }
         return LayerDefinition.create(modelData, 32, 32);
     }

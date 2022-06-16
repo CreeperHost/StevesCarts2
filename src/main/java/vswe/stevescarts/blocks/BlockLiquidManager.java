@@ -34,7 +34,8 @@ public class BlockLiquidManager extends BlockContainerBase
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState)
+    {
         return new TileEntityLiquid(blockPos, blockState);
     }
 }

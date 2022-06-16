@@ -18,218 +18,276 @@ import vswe.stevescarts.modules.ModuleBase;
 
 import java.util.ArrayList;
 
-public class ModuleArcade extends ModuleBase {
-	private ArrayList<ArcadeGame> games;
-	private ArcadeGame currentGame;
-	private int afkTimer;
+public class ModuleArcade extends ModuleBase
+{
+    private ArrayList<ArcadeGame> games;
+    private ArcadeGame currentGame;
+    private int afkTimer;
 
-	public ModuleArcade(final EntityMinecartModular cart) {
-		super(cart);
-		(games = new ArrayList<>()).add(new ArcadeTracks(this));
-		games.add(new ArcadeTetris(this));
-		games.add(new ArcadeInvaders(this));
-		games.add(new ArcadeSweeper(this));
-//		games.add(new ArcadeMonopoly(this));
-	}
+    public ModuleArcade(final EntityMinecartModular cart)
+    {
+        super(cart);
+        (games = new ArrayList<>()).add(new ArcadeTracks(this));
+        games.add(new ArcadeTetris(this));
+        games.add(new ArcadeInvaders(this));
+        games.add(new ArcadeSweeper(this));
+        //		games.add(new ArcadeMonopoly(this));
+    }
 
-	private boolean isGameActive() {
-		return getCart().level.isClientSide && currentGame != null;
-	}
+    private boolean isGameActive()
+    {
+        return getCart().level.isClientSide && currentGame != null;
+    }
 
-	@Override
-	public boolean doStealInterface() {
-		return isGameActive();
-	}
+    @Override
+    public boolean doStealInterface()
+    {
+        return isGameActive();
+    }
 
-	@Override
-	public boolean hasSlots() {
-		return false;
-	}
+    @Override
+    public boolean hasSlots()
+    {
+        return false;
+    }
 
-	@Override
-	public boolean hasGui() {
-		return true;
-	}
+    @Override
+    public boolean hasGui()
+    {
+        return true;
+    }
 
-	@Override
-	public int guiWidth() {
-		return 190;
-	}
+    @Override
+    public int guiWidth()
+    {
+        return 190;
+    }
 
-	@Override
-	public int guiHeight() {
-		return 115;
-	}
+    @Override
+    public int guiHeight()
+    {
+        return 115;
+    }
 
-	@Override
-	public void update() {
-		if (isGameActive() && afkTimer < 10) {
-			currentGame.update();
-			++afkTimer;
-		}
-	}
+    @Override
+    public void update()
+    {
+        if (isGameActive() && afkTimer < 10)
+        {
+            currentGame.update();
+            ++afkTimer;
+        }
+    }
 
-	@Override
-	public void drawForeground(PoseStack matrixStack, GuiMinecart gui) {
-		if (isGameActive()) {
-			currentGame.drawForeground(matrixStack, gui);
-		} else {
-			drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
-			for (int i = 0; i < games.size(); ++i) {
-				final int[] text = getButtonTextArea(i);
-				if (text[3] == 8) {
-					drawString(matrixStack, gui, games.get(i).getName(), text[0], text[1], 4210752);
-				}
-			}
-		}
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
-		ResourceHelper.bindResource("/gui/arcade.png");
-		afkTimer = 0;
-		if (isGameActive()) {
-			final int[] rect = getExitArea();
-			final int srcX = 0;
-			final int srcY = 104 + (inRect(x, y, rect) ? 16 : 0);
-			drawImage(matrixStack, gui, rect, srcX, srcY);
-			currentGame.drawBackground(matrixStack, gui, x, y);
-		} else {
-			final int[] rect = getListArea();
-			drawImage(matrixStack, gui, rect, 0, 0);
-			for (int i = 0; i < games.size(); ++i) {
-				final int[] button = getButtonGraphicArea(i);
-				final int srcX2 = 0;
-				final int srcY2 = 136 + (inRect(x, y, getButtonBoundsArea(i)) ? button[3] : 0);
-				if (button[3] > 0) {
-					drawImage(matrixStack, gui, button, srcX2, srcY2);
-					final int[] icon = getButtonIconArea(i);
-					drawImage(matrixStack, gui, icon, i * 16, rect[3]);
-				}
-			}
-		}
-	}
+    @Override
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    {
+        if (isGameActive())
+        {
+            currentGame.drawForeground(matrixStack, gui);
+        }
+        else
+        {
+            drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+            for (int i = 0; i < games.size(); ++i)
+            {
+                final int[] text = getButtonTextArea(i);
+                if (text[3] == 8)
+                {
+                    drawString(matrixStack, gui, games.get(i).getName(), text[0], text[1], 4210752);
+                }
+            }
+        }
+    }
 
     @OnlyIn(Dist.CLIENT)
-	@Override
-	public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
-		if (isGameActive()) {
-			drawStringOnMouseOver(matrixStack, gui, "Exit", x, y, getExitArea());
-			currentGame.drawMouseOver(matrixStack, gui, x, y);
-		}
-	}
+    @Override
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    {
+        ResourceHelper.bindResource("/gui/arcade.png");
+        afkTimer = 0;
+        if (isGameActive())
+        {
+            final int[] rect = getExitArea();
+            final int srcX = 0;
+            final int srcY = 104 + (inRect(x, y, rect) ? 16 : 0);
+            drawImage(matrixStack, gui, rect, srcX, srcY);
+            currentGame.drawBackground(matrixStack, gui, x, y);
+        }
+        else
+        {
+            final int[] rect = getListArea();
+            drawImage(matrixStack, gui, rect, 0, 0);
+            for (int i = 0; i < games.size(); ++i)
+            {
+                final int[] button = getButtonGraphicArea(i);
+                final int srcX2 = 0;
+                final int srcY2 = 136 + (inRect(x, y, getButtonBoundsArea(i)) ? button[3] : 0);
+                if (button[3] > 0)
+                {
+                    drawImage(matrixStack, gui, button, srcX2, srcY2);
+                    final int[] icon = getButtonIconArea(i);
+                    drawImage(matrixStack, gui, icon, i * 16, rect[3]);
+                }
+            }
+        }
+    }
 
-	private int[] getExitArea() {
-		return new int[] { 455, 6, 16, 16 };
-	}
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    {
+        if (isGameActive())
+        {
+            drawStringOnMouseOver(matrixStack, gui, "Exit", x, y, getExitArea());
+            currentGame.drawMouseOver(matrixStack, gui, x, y);
+        }
+    }
 
-	private int[] getListArea() {
-		return new int[] { 15, 20, 170, 88 };
-	}
+    private int[] getExitArea()
+    {
+        return new int[]{455, 6, 16, 16};
+    }
 
-	private int[] getButtonBoundsArea(final int i) {
-		return getButtonArea(i, false);
-	}
+    private int[] getListArea()
+    {
+        return new int[]{15, 20, 170, 88};
+    }
 
-	private int[] getButtonGraphicArea(final int i) {
-		return getButtonArea(i, true);
-	}
+    private int[] getButtonBoundsArea(final int i)
+    {
+        return getButtonArea(i, false);
+    }
 
-	private int[] getButtonArea(final int i, final boolean graphic) {
-		final int[] list = getListArea();
-		return new int[] { list[0] + 2, list[1] + 2 + i * 21, 166, graphic ? 21 : 20 };
-	}
+    private int[] getButtonGraphicArea(final int i)
+    {
+        return getButtonArea(i, true);
+    }
 
-	private int[] getButtonTextArea(final int i) {
-		final int[] button = getButtonGraphicArea(i);
-		return new int[] { button[0] + 24, button[1] + 6, button[2], 8 };
-	}
+    private int[] getButtonArea(final int i, final boolean graphic)
+    {
+        final int[] list = getListArea();
+        return new int[]{list[0] + 2, list[1] + 2 + i * 21, 166, graphic ? 21 : 20};
+    }
 
-	private int[] getButtonIconArea(final int i) {
-		final int[] button = getButtonGraphicArea(i);
-		return new int[] { button[0] + 2, button[1] + 2, 16, 16 };
-	}
+    private int[] getButtonTextArea(final int i)
+    {
+        final int[] button = getButtonGraphicArea(i);
+        return new int[]{button[0] + 24, button[1] + 6, button[2], 8};
+    }
 
-	@Override
-	public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-		if (isGameActive()) {
-			if (button == 0 && inRect(x, y, getExitArea())) {
-				currentGame.unload(gui);
-				currentGame = null;
-			} else {
-				currentGame.mouseClicked(gui, x, y, button);
-			}
-		} else if (button == 0) {
-			for (int i = 0; i < games.size(); ++i) {
-				if (inRect(x, y, getButtonBoundsArea(i))) {
-					(currentGame = games.get(i)).load(gui);
-					break;
-				}
-			}
-		}
-	}
+    private int[] getButtonIconArea(final int i)
+    {
+        final int[] button = getButtonGraphicArea(i);
+        return new int[]{button[0] + 2, button[1] + 2, 16, 16};
+    }
 
-	@Override
-	public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button) {
-		if (isGameActive()) {
-			currentGame.mouseMovedOrUp(gui, x, y, button);
-		}
-	}
-	@Override
-	public void keyPress(final GuiMinecart gui, final int id, final int extraInformation) {
-		if (isGameActive()) {
-			currentGame.keyPress(gui, id, extraInformation);
-		}
-	}
+    @Override
+    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
+    {
+        if (isGameActive())
+        {
+            if (button == 0 && inRect(x, y, getExitArea()))
+            {
+                currentGame.unload(gui);
+                currentGame = null;
+            }
+            else
+            {
+                currentGame.mouseClicked(gui, x, y, button);
+            }
+        }
+        else if (button == 0)
+        {
+            for (int i = 0; i < games.size(); ++i)
+            {
+                if (inRect(x, y, getButtonBoundsArea(i)))
+                {
+                    (currentGame = games.get(i)).load(gui);
+                    break;
+                }
+            }
+        }
+    }
 
-	@Override
-	protected void Save(final CompoundTag tagCompound, final int id) {
-		for (final ArcadeGame game : games) {
-			game.Save(tagCompound, id);
-		}
-	}
+    @Override
+    public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button)
+    {
+        if (isGameActive())
+        {
+            currentGame.mouseMovedOrUp(gui, x, y, button);
+        }
+    }
 
-	@Override
-	protected void Load(final CompoundTag tagCompound, final int id) {
-		for (final ArcadeGame game : games) {
-			game.Load(tagCompound, id);
-		}
-	}
+    @Override
+    public void keyPress(final GuiMinecart gui, final int id, final int extraInformation)
+    {
+        if (isGameActive())
+        {
+            currentGame.keyPress(gui, id, extraInformation);
+        }
+    }
 
-	@Override
-	public int numberOfPackets() {
-		return 4;
-	}
+    @Override
+    protected void Save(final CompoundTag tagCompound, final int id)
+    {
+        for (final ArcadeGame game : games)
+        {
+            game.Save(tagCompound, id);
+        }
+    }
 
-	@Override
-	protected void receivePacket(final int id, final byte[] data, final Player player) {
-		for (final ArcadeGame game : games) {
-			game.receivePacket(id, data, player);
-		}
-	}
+    @Override
+    protected void Load(final CompoundTag tagCompound, final int id)
+    {
+        for (final ArcadeGame game : games)
+        {
+            game.Load(tagCompound, id);
+        }
+    }
 
-	@Override
-	public int numberOfGuiData() {
-		return TrackStory.stories.size() + 5;
-	}
+    @Override
+    public int numberOfPackets()
+    {
+        return 4;
+    }
 
-	@Override
-	protected void checkGuiData(final Object[] info) {
-		for (final ArcadeGame game : games) {
-			game.checkGuiData(info);
-		}
-	}
+    @Override
+    protected void receivePacket(final int id, final byte[] data, final Player player)
+    {
+        for (final ArcadeGame game : games)
+        {
+            game.receivePacket(id, data, player);
+        }
+    }
 
-	@Override
-	public void receiveGuiData(final int id, final short data) {
-		for (final ArcadeGame game : games) {
-			game.receiveGuiData(id, data);
-		}
-	}
+    @Override
+    public int numberOfGuiData()
+    {
+        return TrackStory.stories.size() + 5;
+    }
 
-	@Override
-	public boolean disableStandardKeyFunctionality() {
-		return currentGame != null && currentGame.disableStandardKeyFunctionality();
-	}
+    @Override
+    protected void checkGuiData(final Object[] info)
+    {
+        for (final ArcadeGame game : games)
+        {
+            game.checkGuiData(info);
+        }
+    }
+
+    @Override
+    public void receiveGuiData(final int id, final short data)
+    {
+        for (final ArcadeGame game : games)
+        {
+            game.receiveGuiData(id, data);
+        }
+    }
+
+    @Override
+    public boolean disableStandardKeyFunctionality()
+    {
+        return currentGame != null && currentGame.disableStandardKeyFunctionality();
+    }
 }

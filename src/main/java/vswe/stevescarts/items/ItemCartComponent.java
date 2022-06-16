@@ -36,7 +36,8 @@ public class ItemCartComponent extends Item
     }
 
     @Override
-    public int getEntityLifespan(ItemStack itemStack, Level world) {
+    public int getEntityLifespan(ItemStack itemStack, Level world)
+    {
         return super.getEntityLifespan(itemStack, world);
     }
 

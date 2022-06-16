@@ -54,8 +54,7 @@ public class ModuleSmelter extends ModuleRecipe
                 @Nonnull ItemStack result = ItemStack.EMPTY;
                 if (!recipe.isEmpty())
                 {
-                    if(getSmeltingResult() != null)
-                        result = getSmeltingResult();
+                    if (getSmeltingResult() != null) result = getSmeltingResult();
                 }
                 if (!result.isEmpty())
                 {
@@ -134,7 +133,7 @@ public class ModuleSmelter extends ModuleRecipe
     public ItemStack getSmeltingResult()
     {
         AbstractCookingRecipe recipe = getRecipeSmelting();
-        if(recipe != null)
+        if (recipe != null)
         {
             return recipe.getResultItem().copy();
         }

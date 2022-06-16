@@ -328,8 +328,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                     {
                         if (effect instanceof Disassemble)
                         {
-                            @Nonnull
-                            ItemStack oldcart = tile.getItem(0);
+                            @Nonnull ItemStack oldcart = tile.getItem(0);
                             if (!oldcart.isEmpty() && !outputItem.isEmpty() && oldcart.getItem() instanceof ItemCarts && outputItem.getItem() instanceof ItemCarts && oldcart.hasCustomHoverName())
                             {
                                 outputItem.setHoverName(oldcart.getDisplayName());
@@ -478,7 +477,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         {
             spareModules.clear();
         }
-//        setItem(outputSlot.getSlotIndex(), outputItem);
+        //        setItem(outputSlot.getSlotIndex(), outputItem);
     }
 
     public ArrayList<ModuleData> getNonHullModules()
@@ -793,14 +792,20 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
 
     private void deploySpares()
     {
-        for (final TileEntityUpgrade tile : getUpgradeTiles()) {
-            if (tile.getUpgrade() != null) {
-                for (final BaseEffect effect : tile.getUpgrade().getEffects()) {
-                    if (effect instanceof Disassemble) {
-                        for (@Nonnull ItemStack item : spareModules) {
+        for (final TileEntityUpgrade tile : getUpgradeTiles())
+        {
+            if (tile.getUpgrade() != null)
+            {
+                for (final BaseEffect effect : tile.getUpgrade().getEffects())
+                {
+                    if (effect instanceof Disassemble)
+                    {
+                        for (@Nonnull ItemStack item : spareModules)
+                        {
                             item = removeModify(item);
                             TransferHandler.TransferItem(item, tile, new ContainerUpgrade(0, null, tile, new SimpleContainerData(0)), 1);
-                            if (item.getCount() > 0) {
+                            if (item.getCount() > 0)
+                            {
                                 puke(item);
                             }
                         }
@@ -866,7 +871,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
             {
                 isAssembling = false;
                 setAssemblingTime(0);
-                if(!outputItem.isEmpty())
+                if (!outputItem.isEmpty())
                 {
                     setItem(outputSlot.getSlotIndex(), outputItem);
                 }
@@ -1293,19 +1298,19 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     //TODO
-//    @Override
-//    public SUpdateTileEntityPacket getUpdatePacket()
-//    {
-//        // Vanilla uses the type parameter to indicate which type of tile entity (command block, skull, or beacon?) is receiving the packet, but it seems like Forge has overridden this behavior
-//        return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
-//    }
+    //    @Override
+    //    public SUpdateTileEntityPacket getUpdatePacket()
+    //    {
+    //        // Vanilla uses the type parameter to indicate which type of tile entity (command block, skull, or beacon?) is receiving the packet, but it seems like Forge has overridden this behavior
+    //        return new SUpdateTileEntityPacket(getBlockPos(), 0, getUpdateTag());
+    //    }
 
     //TODO
-//    @Override
-//    public CompoundTag getUpdateTag()
-//    {
-//        return save(new CompoundTag());
-//    }
+    //    @Override
+    //    public CompoundTag getUpdateTag()
+    //    {
+    //        return save(new CompoundTag());
+    //    }
 
     @Override
     public void handleUpdateTag(CompoundTag tag)
@@ -1314,7 +1319,8 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
+    {
         load(pkt.getTag());
     }
 

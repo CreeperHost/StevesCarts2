@@ -22,10 +22,8 @@ public class ModelSeat extends ModelCartbase
     {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
-        modelPartData.addOrReplaceChild("sit", CubeListBuilder.create().texOffs(0, 0)
-                .addBox(-4.0f, -2.0f, -2.0f, 8, 4, 4), PartPose.offset(0.0f, 1.0f, 0.0f));
-        modelPartData.addOrReplaceChild("back", CubeListBuilder.create().texOffs(0, 8)
-                .addBox(-4.0f, -2.0f, -1.0f, 8, 12, 2), PartPose.offset(0.0f, -7.0f, 3.0f));
+        modelPartData.addOrReplaceChild("sit", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0f, -2.0f, -2.0f, 8, 4, 4), PartPose.offset(0.0f, 1.0f, 0.0f));
+        modelPartData.addOrReplaceChild("back", CubeListBuilder.create().texOffs(0, 8).addBox(-4.0f, -2.0f, -1.0f, 8, 12, 2), PartPose.offset(0.0f, -7.0f, 3.0f));
         return LayerDefinition.create(modelData, 32, 32);
     }
 
@@ -34,9 +32,12 @@ public class ModelSeat extends ModelCartbase
     {
         Entity firstPassenger = module.getCart().getFirstPassenger();
         this.root.yRot = 3.1415926F;
-        if (firstPassenger != null) {
+        if (firstPassenger != null)
+        {
             this.root.yRot += (float) Math.toRadians(firstPassenger.getYRot());
-        } else {
+        }
+        else
+        {
             this.root.yRot /= 2.0f;
         }
     }

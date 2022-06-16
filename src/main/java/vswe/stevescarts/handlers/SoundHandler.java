@@ -37,26 +37,26 @@ public class SoundHandler
     private static SoundEvent reg(String name)
     {
         ResourceLocation loc = new ResourceLocation(Constants.MOD_ID, name);
-//        SoundEvent event = new SoundEvent(loc).setRegistryName(loc);
+        //        SoundEvent event = new SoundEvent(loc).setRegistryName(loc);
 
-//        SOUNDS.add(event);
-//        return event;
+        //        SOUNDS.add(event);
+        //        return event;
         return null;
     }
-//
-//    @SubscribeEvent
-//    public static void registerSounds(RegistryEvent.Register<SoundEvent> register)
-//    {
-//        for (SoundEvent sound : SOUNDS)
-//        {
-//            register.getRegistry().register(sound);
-//        }
-//    }
+    //
+    //    @SubscribeEvent
+    //    public static void registerSounds(RegistryEvent.Register<SoundEvent> register)
+    //    {
+    //        for (SoundEvent sound : SOUNDS)
+    //        {
+    //            register.getRegistry().register(sound);
+    //        }
+    //    }
 
     public static void playSound(SoundEvent event, SoundSource category, float volume, float pitch)
     {
         //TODO
-//        		Minecraft.getInstance().getSoundManager().play(new PlayerSound(Minecraft.getInstance().player, category, event, volume, pitch));
+        //        		Minecraft.getInstance().getSoundManager().play(new PlayerSound(Minecraft.getInstance().player, category, event, volume, pitch));
     }
 
     //	private static class PlayerSound extends MovingSound {

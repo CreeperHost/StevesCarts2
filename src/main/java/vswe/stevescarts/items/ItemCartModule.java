@@ -61,7 +61,7 @@ public class ItemCartModule extends Item
         AtomicReference<ItemStack> stack = new AtomicReference<>(ItemStack.EMPTY);
         ModItems.MODULES.forEach((moduleData1, itemSupplier) ->
         {
-            if(moduleData1.getID() == id)
+            if (moduleData1.getID() == id)
             {
                 stack.set(new ItemStack(itemSupplier.get()));
             }

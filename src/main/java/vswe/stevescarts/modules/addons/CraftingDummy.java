@@ -26,5 +26,7 @@ public class CraftingDummy extends CraftingContainer
     }
 
     @Override
-    public void setItem(int id, ItemStack itemStack) {}
+    public void setItem(int id, ItemStack itemStack)
+    {
+    }
 }

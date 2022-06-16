@@ -44,10 +44,10 @@ public abstract class ModelWire extends ModelCartbase
     protected void CreateEnd(final int x, final int y, final int z)
     {
         //TODO
-//        final ModelRenderer end = new ModelRenderer(this, 28, 0);
-//        AddRenderer(end);
-//        end.addBox(0.5f, 0.5f, 0.5f, 1, 1, 1, 0.0f);
-//        end.setPos(-7.5f + y, -5.5f - z, -5.5f + x);
+        //        final ModelRenderer end = new ModelRenderer(this, 28, 0);
+        //        AddRenderer(end);
+        //        end.addBox(0.5f, 0.5f, 0.5f, 1, 1, 1, 0.0f);
+        //        end.setPos(-7.5f + y, -5.5f - z, -5.5f + x);
     }
 
     protected void CreateWire(final int x1, final int y1, final int x2, final int y2)
@@ -108,24 +108,24 @@ public abstract class ModelWire extends ModelCartbase
             return;
         }
         //TODO
-//        final ModelRenderer wire = new ModelRenderer(this, 0, 0);
-//        AddRenderer(wire);
-//        wire.addBox(length / 2.0f, 0.5f, 0.5f, length, 1, 1, 0.0f);
-//        if (rotateZ)
-//        {
-//            //TODO RotationPoint
-//            wire.setPos(-7.5f + y1, -4.0f + length / 2.0f - z1, -5.5f + x1);
-//            wire.zRot = 4.712389f;
-//        }
-//        else if (rotate)
-//        {
-//            wire.setPos(-5.5f + y1, -5.5f - z1, -5.0f - length / 2.0f + x1);
-//            wire.yRot = 4.712389f;
-//        }
-//        else
-//        {
-//            wire.setPos(-7.0f - length / 2.0f + y1, -5.5f - z1, -5.5f + x1);
-//        }
+        //        final ModelRenderer wire = new ModelRenderer(this, 0, 0);
+        //        AddRenderer(wire);
+        //        wire.addBox(length / 2.0f, 0.5f, 0.5f, length, 1, 1, 0.0f);
+        //        if (rotateZ)
+        //        {
+        //            //TODO RotationPoint
+        //            wire.setPos(-7.5f + y1, -4.0f + length / 2.0f - z1, -5.5f + x1);
+        //            wire.zRot = 4.712389f;
+        //        }
+        //        else if (rotate)
+        //        {
+        //            wire.setPos(-5.5f + y1, -5.5f - z1, -5.0f - length / 2.0f + x1);
+        //            wire.yRot = 4.712389f;
+        //        }
+        //        else
+        //        {
+        //            wire.setPos(-7.0f - length / 2.0f + y1, -5.5f - z1, -5.5f + x1);
+        //        }
     }
 
     static

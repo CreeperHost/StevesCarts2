@@ -48,7 +48,7 @@ public class FluidRenderer
         drawFluid(xPosition, yPosition, fluidStack);
 
         //TODO
-//        RenderSystem.color4f(1, 1, 1, 1);
+        //        RenderSystem.color4f(1, 1, 1, 1);
         //
         //        RenderSystem.disableAlphaTest();
         //        RenderSystem.disableBlend();
@@ -57,30 +57,30 @@ public class FluidRenderer
     private void drawFluid(final int xPosition, final int yPosition, @Nonnull FluidStack fluidStack)
     {
         //TODO
-//        if (fluidStack.isEmpty())
-//        {
-//            return;
-//        }
-//
-//        Fluid fluid = fluidStack.getFluid();
-//
-//        TextureAtlasSprite fluidStillSprite = getStillFluidSprite(fluidStack);
-//
-//        FluidAttributes attributes = fluid.getAttributes();
-//        int fluidColor = attributes.getColor(fluidStack);
-//
-//        int amount = fluidStack.getAmount();
-//        int scaledAmount = (amount * height) / capacityMb;
-//        if (amount > 0 && scaledAmount < minHeight)
-//        {
-//            scaledAmount = minHeight;
-//        }
-//        if (scaledAmount > height)
-//        {
-//            scaledAmount = height;
-//        }
-//
-//        drawTiledSprite(xPosition, yPosition, width, height, fluidColor, scaledAmount, fluidStillSprite);
+        //        if (fluidStack.isEmpty())
+        //        {
+        //            return;
+        //        }
+        //
+        //        Fluid fluid = fluidStack.getFluid();
+        //
+        //        TextureAtlasSprite fluidStillSprite = getStillFluidSprite(fluidStack);
+        //
+        //        FluidAttributes attributes = fluid.getAttributes();
+        //        int fluidColor = attributes.getColor(fluidStack);
+        //
+        //        int amount = fluidStack.getAmount();
+        //        int scaledAmount = (amount * height) / capacityMb;
+        //        if (amount > 0 && scaledAmount < minHeight)
+        //        {
+        //            scaledAmount = minHeight;
+        //        }
+        //        if (scaledAmount > height)
+        //        {
+        //            scaledAmount = height;
+        //        }
+        //
+        //        drawTiledSprite(xPosition, yPosition, width, height, fluidColor, scaledAmount, fluidStillSprite);
     }
 
     private void drawTiledSprite(final int xPosition, final int yPosition, final int tiledWidth, final int tiledHeight, int color, int scaledAmount, TextureAtlasSprite sprite)
@@ -120,9 +120,9 @@ public class FluidRenderer
         Fluid fluid = fluidStack.getFluid();
 
         //TODO
-//        FluidAttributes attributes = fluid.getAttributes();
-//        ResourceLocation fluidStill = attributes.getStillTexture(fluidStack);
-//        return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
+        //        FluidAttributes attributes = fluid.getAttributes();
+        //        ResourceLocation fluidStill = attributes.getStillTexture(fluidStack);
+        //        return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
         return null;
     }
 
@@ -134,7 +134,7 @@ public class FluidRenderer
         float alpha = ((color >> 24) & 0xFF) / 255F;
 
         //TODO
-//        RenderSystem.color4f(red, green, blue, alpha);
+        //        RenderSystem.color4f(red, green, blue, alpha);
     }
 
     private static void drawTextureWithMasking(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel)

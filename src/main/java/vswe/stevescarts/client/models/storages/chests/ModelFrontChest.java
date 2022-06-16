@@ -29,12 +29,9 @@ public class ModelFrontChest extends ModelCartbase
     {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
-        modelPartData.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 11)
-                .addBox(7.0f, 3.0f, 4.0f, 14, 6, 8), PartPose.offset(-14.0f, -5.5f, -18.5f));
-        modelPartData.addOrReplaceChild("lid", CubeListBuilder.create().texOffs(0, 0)
-                .addBox(7.0f, -3.0f, -8.0f, 14, 3, 8), PartPose.offset(-14.0f, -1.5f, -6.5f));
-        modelPartData.addOrReplaceChild("lock", CubeListBuilder.create().texOffs(0, 0)
-                .addBox(1.0f, 1.5f, 0.5f, 2, 3, 1), PartPose.offset(-2.0f, -4.5f, -16.0f));
+        modelPartData.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 11).addBox(7.0f, 3.0f, 4.0f, 14, 6, 8), PartPose.offset(-14.0f, -5.5f, -18.5f));
+        modelPartData.addOrReplaceChild("lid", CubeListBuilder.create().texOffs(0, 0).addBox(7.0f, -3.0f, -8.0f, 14, 3, 8), PartPose.offset(-14.0f, -1.5f, -6.5f));
+        modelPartData.addOrReplaceChild("lock", CubeListBuilder.create().texOffs(0, 0).addBox(1.0f, 1.5f, 0.5f, 2, 3, 1), PartPose.offset(-2.0f, -4.5f, -16.0f));
         return LayerDefinition.create(modelData, 64, 32);
     }
 

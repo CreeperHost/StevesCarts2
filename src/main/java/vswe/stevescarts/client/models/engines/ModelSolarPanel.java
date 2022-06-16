@@ -12,16 +12,16 @@ public abstract class ModelSolarPanel extends ModelCartbase
     ModelPart moving;
 
     //TODO
-//    protected ModelPart createMovingHolder(final int x, final int y)
-//    {
-//        final ModelRenderer moving = new ModelRenderer(this, x, y);
-//        AddRenderer(this.moving = moving);
-//        return moving;
-//    }
+    //    protected ModelPart createMovingHolder(final int x, final int y)
+    //    {
+    //        final ModelRenderer moving = new ModelRenderer(this, x, y);
+    //        AddRenderer(this.moving = moving);
+    //        return moving;
+    //    }
 
     @Override
     public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
     {
-//        moving.y = ((module == null) ? -4.0f : ((ModuleSolarTop) module).getMovingLevel());
+        //        moving.y = ((module == null) ? -4.0f : ((ModuleSolarTop) module).getMovingLevel());
     }
 }

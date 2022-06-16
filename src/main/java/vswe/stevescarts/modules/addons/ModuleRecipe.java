@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public abstract class ModuleRecipe extends ModuleAddon
 {
-//    private int target;
+    //    private int target;
     private EntityDataAccessor<Byte> TARGET;
     private EntityDataAccessor<Byte> MAX_ITEM_COUNT;
     private EntityDataAccessor<Byte> MODE;
@@ -33,14 +33,14 @@ public abstract class ModuleRecipe extends ModuleAddon
     protected ArrayList<SlotBase> inputSlots;
     protected ArrayList<SlotBase> outputSlots;
     protected ArrayList<SlotBase> allTheSlots;
-//    private int maxItemCount;
-//    private int mode;
+    //    private int maxItemCount;
+    //    private int mode;
 
     public ModuleRecipe(final EntityMinecartModular cart)
     {
         super(cart);
-//        maxItemCount = 1;
-//        target = 3;
+        //        maxItemCount = 1;
+        //        target = 3;
         dirty = true;
         allTheSlots = new ArrayList<>();
         outputSlots = new ArrayList<>();
@@ -218,15 +218,15 @@ public abstract class ModuleRecipe extends ModuleAddon
         {
             if (id == 0)
             {
-                updateDw(TARGET, (byte)data);
+                updateDw(TARGET, (byte) data);
             }
             else if (id == 1)
             {
-                updateDw(MODE, (byte)data);
+                updateDw(MODE, (byte) data);
             }
             else if (id == 2)
             {
-                updateDw(MAX_ITEM_COUNT, (byte)data);
+                updateDw(MAX_ITEM_COUNT, (byte) data);
             }
         }
     }
@@ -294,13 +294,13 @@ public abstract class ModuleRecipe extends ModuleAddon
                     if (++mode > 2)
                     {
                         mode = 0;
-                        updateDw(MODE, (byte)mode);
+                        updateDw(MODE, (byte) mode);
                     }
                 }
                 else if (--mode < 0)
                 {
                     mode = 2;
-                    updateDw(MODE, (byte)mode);
+                    updateDw(MODE, (byte) mode);
                 }
             }
             else if (id == 2)
@@ -315,7 +315,7 @@ public abstract class ModuleRecipe extends ModuleAddon
                     dif *= 10;
                 }
                 int maxItemCount = Math.min(Math.max(1, getDw(MAX_ITEM_COUNT) + dif), 999);
-                updateDw(MAX_ITEM_COUNT, (byte)maxItemCount);
+                updateDw(MAX_ITEM_COUNT, (byte) maxItemCount);
             }
         }
     }
@@ -323,13 +323,13 @@ public abstract class ModuleRecipe extends ModuleAddon
     private void changeTarget(final boolean up)
     {
         int target = getDw(TARGET);
-        if(target >= TileEntityCargo.itemSelections.size())
+        if (target >= TileEntityCargo.itemSelections.size())
         {
-            updateDw(TARGET, (byte)0);
+            updateDw(TARGET, (byte) 0);
         }
         else
         {
-            if(up)
+            if (up)
             {
                 target++;
             }

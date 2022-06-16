@@ -36,51 +36,51 @@ public class ModelRailer extends ModelCartbase
     {
         super();
         //TODO
-//        rails = new ModelRenderer[railCount];
-//        for (int r = 0; r < rails.length; ++r)
-//        {
-//            final ModelRenderer railAnchor = new ModelRenderer(this);
-//            AddRenderer(railAnchor);
-//            (rails[r] = railAnchor).setPos(0.0f, (-r), 0.0f);
-//            final ModelRenderer rail1 = new ModelRenderer(this, 18, 0);
-//            fixSize(rail1);
-//            railAnchor.addChild(rail1);
-//            rail1.addBox(1.0f, 8.0f, 0.5f, 2, 16, 1, 0.0f);
-//            rail1.setPos(-16.0f, -6.5f, -7.0f);
-//            rail1.zRot = 4.712389f;
-//            rail1.yRot = 4.712389f;
-//            final ModelRenderer rail2 = new ModelRenderer(this, 24, 0);
-//            fixSize(rail2);
-//            railAnchor.addChild(rail2);
-//            rail2.addBox(1.0f, 8.0f, 0.5f, 2, 16, 1, 0.0f);
-//            rail2.setPos(-16.0f, -6.5f, 3.0f);
-//            rail2.zRot = 4.712389f;
-//            rail2.yRot = 4.712389f;
-//            for (int i = 0; i < 4; ++i)
-//            {
-//                final ModelRenderer railbedMiddle = new ModelRenderer(this, 0, 0);
-//                fixSize(railbedMiddle);
-//                railAnchor.addChild(railbedMiddle);
-//                railbedMiddle.addBox(4.0f, 1.0f, 0.5f, 8, 2, 1, 0.0f);
-//                railbedMiddle.setPos(-8.0f + i * 4, -6.5f, -8.0f);
-//                railbedMiddle.zRot = 4.712389f;
-//                railbedMiddle.yRot = 4.712389f;
-//                final ModelRenderer railbedSide1 = new ModelRenderer(this, 0, 3);
-//                fixSize(railbedSide1);
-//                railAnchor.addChild(railbedSide1);
-//                railbedSide1.addBox(0.5f, 1.0f, 0.5f, 1, 2, 1, 0.0f);
-//                railbedSide1.setPos(-8.0f + i * 4, -6.5f, -7.5f);
-//                railbedSide1.zRot = 4.712389f;
-//                railbedSide1.yRot = 4.712389f;
-//                final ModelRenderer railbedSide2 = new ModelRenderer(this, 0, 3);
-//                fixSize(railbedSide2);
-//                railAnchor.addChild(railbedSide2);
-//                railbedSide2.addBox(0.5f, 1.0f, 0.5f, 1, 2, 1, 0.0f);
-//                railbedSide2.setPos(-8.0f + i * 4, -6.5f, 5.5f);
-//                railbedSide2.zRot = 4.712389f;
-//                railbedSide2.yRot = 4.712389f;
-//            }
-//        }
+        //        rails = new ModelRenderer[railCount];
+        //        for (int r = 0; r < rails.length; ++r)
+        //        {
+        //            final ModelRenderer railAnchor = new ModelRenderer(this);
+        //            AddRenderer(railAnchor);
+        //            (rails[r] = railAnchor).setPos(0.0f, (-r), 0.0f);
+        //            final ModelRenderer rail1 = new ModelRenderer(this, 18, 0);
+        //            fixSize(rail1);
+        //            railAnchor.addChild(rail1);
+        //            rail1.addBox(1.0f, 8.0f, 0.5f, 2, 16, 1, 0.0f);
+        //            rail1.setPos(-16.0f, -6.5f, -7.0f);
+        //            rail1.zRot = 4.712389f;
+        //            rail1.yRot = 4.712389f;
+        //            final ModelRenderer rail2 = new ModelRenderer(this, 24, 0);
+        //            fixSize(rail2);
+        //            railAnchor.addChild(rail2);
+        //            rail2.addBox(1.0f, 8.0f, 0.5f, 2, 16, 1, 0.0f);
+        //            rail2.setPos(-16.0f, -6.5f, 3.0f);
+        //            rail2.zRot = 4.712389f;
+        //            rail2.yRot = 4.712389f;
+        //            for (int i = 0; i < 4; ++i)
+        //            {
+        //                final ModelRenderer railbedMiddle = new ModelRenderer(this, 0, 0);
+        //                fixSize(railbedMiddle);
+        //                railAnchor.addChild(railbedMiddle);
+        //                railbedMiddle.addBox(4.0f, 1.0f, 0.5f, 8, 2, 1, 0.0f);
+        //                railbedMiddle.setPos(-8.0f + i * 4, -6.5f, -8.0f);
+        //                railbedMiddle.zRot = 4.712389f;
+        //                railbedMiddle.yRot = 4.712389f;
+        //                final ModelRenderer railbedSide1 = new ModelRenderer(this, 0, 3);
+        //                fixSize(railbedSide1);
+        //                railAnchor.addChild(railbedSide1);
+        //                railbedSide1.addBox(0.5f, 1.0f, 0.5f, 1, 2, 1, 0.0f);
+        //                railbedSide1.setPos(-8.0f + i * 4, -6.5f, -7.5f);
+        //                railbedSide1.zRot = 4.712389f;
+        //                railbedSide1.yRot = 4.712389f;
+        //                final ModelRenderer railbedSide2 = new ModelRenderer(this, 0, 3);
+        //                fixSize(railbedSide2);
+        //                railAnchor.addChild(railbedSide2);
+        //                railbedSide2.addBox(0.5f, 1.0f, 0.5f, 1, 2, 1, 0.0f);
+        //                railbedSide2.setPos(-8.0f + i * 4, -6.5f, 5.5f);
+        //                railbedSide2.zRot = 4.712389f;
+        //                railbedSide2.yRot = 4.712389f;
+        //            }
+        //        }
     }
 
     @Override

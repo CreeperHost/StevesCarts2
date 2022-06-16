@@ -188,19 +188,19 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     //TODO
-//    @Nullable
-//    @Override
-//    public SUpdateTileEntityPacket getUpdatePacket()
-//    {
-//        return new SUpdateTileEntityPacket(getBlockPos(), -1, getUpdateTag());
-//    }
+    //    @Nullable
+    //    @Override
+    //    public SUpdateTileEntityPacket getUpdatePacket()
+    //    {
+    //        return new SUpdateTileEntityPacket(getBlockPos(), -1, getUpdateTag());
+    //    }
 
     //TODO
-//    @Override
-//    public CompoundTag getUpdateTag()
-//    {
-//        return save(new CompoundTag());
-//    }
+    //    @Override
+    //    public CompoundTag getUpdateTag()
+    //    {
+    //        return save(new CompoundTag());
+    //    }
 
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
@@ -556,7 +556,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
                     return handlers[5].cast();
             }
         }
-        if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && hasAnyTank(facing))
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && hasAnyTank(facing))
         {
             return (LazyOptional<T>) LazyOptional.of(() -> fluidHandlerMap.get(facing));
         }

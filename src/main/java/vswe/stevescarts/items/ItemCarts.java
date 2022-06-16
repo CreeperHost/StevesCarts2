@@ -191,9 +191,11 @@ public class ItemCarts extends MinecartItem
     @Override
     public void initializeClient(Consumer<IItemRenderProperties> consumer)
     {
-        consumer.accept(new IItemRenderProperties() {
+        consumer.accept(new IItemRenderProperties()
+        {
             @Override
-            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer()
+            {
                 return ItemStackRenderer.getInstance();
             }
         });

@@ -21,7 +21,8 @@ public class ModelSolarPanelHeads extends ModelCartbase
     {
         super(getTexturedModelData(count).bakeRoot(), ResourceHelper.getResource("/models/panelModelActive.png"));
         this.panels = new ModelPart[count];
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++)
+        {
             this.panels[i] = this.getRoot().getChild("panel" + i);
         }
     }
@@ -30,10 +31,12 @@ public class ModelSolarPanelHeads extends ModelCartbase
     {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++)
+        {
             float rotation;
             float f;
-            switch (i) {
+            switch (i)
+            {
                 case 0 -> {
                     rotation = 0.0f;
                     f = -1.5f;
@@ -52,8 +55,7 @@ public class ModelSolarPanelHeads extends ModelCartbase
                 }
                 default -> throw new IllegalArgumentException("Invalid index: " + i);
             }
-            modelPartData.addOrReplaceChild("panel" + i, CubeListBuilder.create().texOffs(0, 0)
-                    .addBox(-6.0f, 0.0f, -2.0f, 12, 13, 2), PartPose.offsetAndRotation((float) (Math.sin(rotation) * f), -5.0f, (float) (Math.cos(rotation) * f), 0.0f, rotation, 0.0f));
+            modelPartData.addOrReplaceChild("panel" + i, CubeListBuilder.create().texOffs(0, 0).addBox(-6.0f, 0.0f, -2.0f, 12, 13, 2), PartPose.offsetAndRotation((float) (Math.sin(rotation) * f), -5.0f, (float) (Math.cos(rotation) * f), 0.0f, rotation, 0.0f));
         }
         return LayerDefinition.create(modelData, 32, 16);
     }

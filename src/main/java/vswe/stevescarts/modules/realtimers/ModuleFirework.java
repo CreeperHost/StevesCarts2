@@ -338,8 +338,7 @@ public class ModuleFirework extends ModuleBase
 
     private void launchFirework(@Nonnull ItemStack firework)
     {
-        final FireworkRocketEntity rocket = new FireworkRocketEntity(getCart().level, getCart().blockPosition().getX(),
-                getCart().blockPosition().getY() + 1.0, getCart().blockPosition().getZ(), firework);
+        final FireworkRocketEntity rocket = new FireworkRocketEntity(getCart().level, getCart().blockPosition().getX(), getCart().blockPosition().getY() + 1.0, getCart().blockPosition().getZ(), firework);
 
         getCart().level.addFreshEntity(rocket);
     }

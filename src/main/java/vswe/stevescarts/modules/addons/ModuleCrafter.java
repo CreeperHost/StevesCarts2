@@ -152,7 +152,7 @@ public class ModuleCrafter extends ModuleRecipe
     public ItemStack getResult()
     {
         CraftingRecipe recipe = getRecipe();
-        if(recipe != null)
+        if (recipe != null)
         {
             return recipe.getResultItem().copy();
         }

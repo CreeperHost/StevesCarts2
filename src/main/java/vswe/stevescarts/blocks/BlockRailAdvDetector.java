@@ -36,7 +36,8 @@ public class BlockRailAdvDetector extends BaseRailBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
         builder.add(SHAPE, WATERLOGGED);
     }
 
@@ -47,8 +48,9 @@ public class BlockRailAdvDetector extends BaseRailBlock
     }
 
     @Override
-    public boolean canMakeSlopes(BlockState state, BlockGetter world, BlockPos pos) {
-       return false;
+    public boolean canMakeSlopes(BlockState state, BlockGetter world, BlockPos pos)
+    {
+        return false;
     }
 
     @Override

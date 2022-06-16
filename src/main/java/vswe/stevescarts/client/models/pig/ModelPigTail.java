@@ -27,35 +27,35 @@ public class ModelPigTail extends ModelCartbase
     public ModelPigTail()
     {
         //TODO
-//        final ModelRenderer tailanchor = new ModelRenderer(this);
-//        AddRenderer(tailanchor);
-//        tailanchor.setPos(10.0f, -4.0f, 0.0f);
-//        tailanchor.yRot = 1.5707964f;
-//        final ModelRenderer tail1 = new ModelRenderer(this, 0, 0);
-//        fixSize(tail1);
-//        tailanchor.addChild(tail1);
-//        tail1.addBox(-1.5f, -0.5f, -0.0f, 3, 1, 1, 0.0f);
-//        tail1.setPos(0.0f, 0.0f, 0.0f);
-//        final ModelRenderer tail2 = new ModelRenderer(this, 0, 0);
-//        fixSize(tail2);
-//        tailanchor.addChild(tail2);
-//        tail2.addBox(-0.5f, -1.5f, -0.0f, 1, 3, 1, 0.0f);
-//        tail2.setPos(2.0f, -2.0f, 0.0f);
-//        final ModelRenderer tail3 = new ModelRenderer(this, 0, 0);
-//        fixSize(tail3);
-//        tailanchor.addChild(tail3);
-//        tail3.addBox(-1.0f, -0.5f, -0.0f, 2, 1, 1, 0.0f);
-//        tail3.setPos(0.5f, -4.0f, 0.0f);
-//        final ModelRenderer tail4 = new ModelRenderer(this, 0, 0);
-//        fixSize(tail4);
-//        tailanchor.addChild(tail4);
-//        tail4.addBox(-0.5f, -0.5f, -0.0f, 1, 1, 1, 0.0f);
-//        tail4.setPos(-1.0f, -3.0f, 0.0f);
-//        final ModelRenderer tail5 = new ModelRenderer(this, 0, 0);
-//        fixSize(tail5);
-//        tailanchor.addChild(tail5);
-//        tail5.addBox(-0.5f, -0.5f, -0.0f, 1, 1, 1, 0.0f);
-//        tail5.setPos(0.0f, -2.0f, 0.0f);
+        //        final ModelRenderer tailanchor = new ModelRenderer(this);
+        //        AddRenderer(tailanchor);
+        //        tailanchor.setPos(10.0f, -4.0f, 0.0f);
+        //        tailanchor.yRot = 1.5707964f;
+        //        final ModelRenderer tail1 = new ModelRenderer(this, 0, 0);
+        //        fixSize(tail1);
+        //        tailanchor.addChild(tail1);
+        //        tail1.addBox(-1.5f, -0.5f, -0.0f, 3, 1, 1, 0.0f);
+        //        tail1.setPos(0.0f, 0.0f, 0.0f);
+        //        final ModelRenderer tail2 = new ModelRenderer(this, 0, 0);
+        //        fixSize(tail2);
+        //        tailanchor.addChild(tail2);
+        //        tail2.addBox(-0.5f, -1.5f, -0.0f, 1, 3, 1, 0.0f);
+        //        tail2.setPos(2.0f, -2.0f, 0.0f);
+        //        final ModelRenderer tail3 = new ModelRenderer(this, 0, 0);
+        //        fixSize(tail3);
+        //        tailanchor.addChild(tail3);
+        //        tail3.addBox(-1.0f, -0.5f, -0.0f, 2, 1, 1, 0.0f);
+        //        tail3.setPos(0.5f, -4.0f, 0.0f);
+        //        final ModelRenderer tail4 = new ModelRenderer(this, 0, 0);
+        //        fixSize(tail4);
+        //        tailanchor.addChild(tail4);
+        //        tail4.addBox(-0.5f, -0.5f, -0.0f, 1, 1, 1, 0.0f);
+        //        tail4.setPos(-1.0f, -3.0f, 0.0f);
+        //        final ModelRenderer tail5 = new ModelRenderer(this, 0, 0);
+        //        fixSize(tail5);
+        //        tailanchor.addChild(tail5);
+        //        tail5.addBox(-0.5f, -0.5f, -0.0f, 1, 1, 1, 0.0f);
+        //        tail5.setPos(0.0f, -2.0f, 0.0f);
     }
 
     static

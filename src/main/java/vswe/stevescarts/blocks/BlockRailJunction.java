@@ -33,7 +33,8 @@ public class BlockRailJunction extends BaseRailBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
         builder.add(SHAPE, WATERLOGGED);
     }
 
@@ -44,7 +45,8 @@ public class BlockRailJunction extends BaseRailBlock
     }
 
     @Override
-    public boolean canMakeSlopes(BlockState state, BlockGetter world, BlockPos pos) {
+    public boolean canMakeSlopes(BlockState state, BlockGetter world, BlockPos pos)
+    {
         return false;
     }
 

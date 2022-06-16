@@ -81,10 +81,10 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule
                 final int lowerBarLength = engineInformation[i * 2 + 1] & 0x3F;
                 final ModuleEngine engine = getCart().getEngines().get(i);
                 final float[] rgb = engine.getGuiBarColor();
-//                GlStateManager._color4f(rgb[0], rgb[1], rgb[2], 1.0f);
+                //                GlStateManager._color4f(rgb[0], rgb[1], rgb[2], 1.0f);
                 drawImage(7, i * 15 + 2, 66, 0, upperBarLength, 5);
                 drawImage(7, i * 15 + 2 + 6, 66, 6, lowerBarLength, 5);
-//                GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+                //                GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
                 drawImage(5, i * 15, 66 + engine.getPriority() * 7, 11, 7, 15);
             }
         }

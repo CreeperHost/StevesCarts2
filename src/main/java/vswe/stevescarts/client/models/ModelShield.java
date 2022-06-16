@@ -36,19 +36,19 @@ public class ModelShield extends ModelCartbase
     public ModelShield()
     {
         //TODO
-//        shields = new ModelRenderer[4][5];
-//        shieldAnchors = new ModelRenderer[shields.length][shields[0].length];
-//        for (int i = 0; i < shields.length; ++i)
-//        {
-//            for (int j = 0; j < shields[i].length; ++j)
-//            {
-//                AddRenderer(shieldAnchors[i][j] = new ModelRenderer(this));
-//                fixSize(shields[i][j] = new ModelRenderer(this, 0, 0));
-//                shieldAnchors[i][j].addChild(shields[i][j]);
-//                shields[i][j].addBox(-1.0f, -1.0f, -1.0f, 2, 2, 2, 0.0f);
-//                shields[i][j].setPos(0.0f, 0.0f, 0.0f);
-//            }
-//        }
+        //        shields = new ModelRenderer[4][5];
+        //        shieldAnchors = new ModelRenderer[shields.length][shields[0].length];
+        //        for (int i = 0; i < shields.length; ++i)
+        //        {
+        //            for (int j = 0; j < shields[i].length; ++j)
+        //            {
+        //                AddRenderer(shieldAnchors[i][j] = new ModelRenderer(this));
+        //                fixSize(shields[i][j] = new ModelRenderer(this, 0, 0));
+        //                shieldAnchors[i][j].addChild(shields[i][j]);
+        //                shields[i][j].addBox(-1.0f, -1.0f, -1.0f, 2, 2, 2, 0.0f);
+        //                shields[i][j].setPos(0.0f, 0.0f, 0.0f);
+        //            }
+        //        }
     }
 
     //	@Override

@@ -18,8 +18,7 @@ public class ModelEngineInside extends ModelEngineBase
     {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
-        modelPartData.addOrReplaceChild("back", CubeListBuilder.create().texOffs(0, 0)
-                .addBox(-3.5f, -2.0f, 0.0f, 7, 4, 0), PartPose.offset(0.0f, -0.5f, 0.3f));
+        modelPartData.addOrReplaceChild("back", CubeListBuilder.create().texOffs(0, 0).addBox(-3.5f, -2.0f, 0.0f, 7, 4, 0), PartPose.offset(0.0f, -0.5f, 0.3f));
         return LayerDefinition.create(modelData, 8, 4);
     }
 }

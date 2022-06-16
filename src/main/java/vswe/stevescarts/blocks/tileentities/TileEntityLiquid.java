@@ -178,7 +178,9 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(int tankid, GuiBase gui, TextureAtlasSprite sprite, int targetX, int targetY, int srcX, int srcY, int width, int height) {}
+    public void drawImage(int tankid, GuiBase gui, TextureAtlasSprite sprite, int targetX, int targetY, int srcX, int srcY, int width, int height)
+    {
+    }
 
     @Override
     protected boolean doTransfer(final TransferManager transfer)

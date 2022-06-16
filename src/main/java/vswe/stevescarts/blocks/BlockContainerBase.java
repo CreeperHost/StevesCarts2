@@ -25,7 +25,8 @@ public abstract class BlockContainerBase extends BaseEntityBlock
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
+    {
         return (level1, blockPos, blockState, t) ->
         {
             if (t instanceof TileEntityBase tile)

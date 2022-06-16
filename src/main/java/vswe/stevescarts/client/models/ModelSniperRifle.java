@@ -15,8 +15,8 @@ public class ModelSniperRifle extends ModelGun
     public ModelSniperRifle()
     {
         //TODO
-//        AddRenderer(anchor = new ModelRenderer(this));
-//        gun = createGun(anchor);
+        //        AddRenderer(anchor = new ModelRenderer(this));
+        //        gun = createGun(anchor);
     }
 
     @Override

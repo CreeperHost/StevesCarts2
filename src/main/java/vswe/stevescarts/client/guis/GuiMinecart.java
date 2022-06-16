@@ -86,7 +86,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     @Override
     protected void renderBg(PoseStack matrixStack, float p_230450_2_, int mouseX, int mouseY)
     {
-//        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        //        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         final int j = getGuiLeft();
         final int k = getGuiTop();
@@ -134,11 +134,13 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
                 }
             }
         }
-//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
-    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_) {}
+    protected void renderLabels(PoseStack p_230451_1_, int p_230451_2_, int p_230451_3_)
+    {
+    }
 
     private void renderModuleList(int x, int y)
     {
@@ -147,22 +149,22 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
 
         //TODO
-//        GlStateManager._pushMatrix();
-//        GlStateManager._enableBlend();
-//        GlStateManager._disableAlphaTest();
+        //        GlStateManager._pushMatrix();
+        //        GlStateManager._enableBlend();
+        //        GlStateManager._disableAlphaTest();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         for (int i = 0; i < moduleCounts.size(); ++i)
         {
             ModuleCountPair count = moduleCounts.get(i);
             float alpha = inRect(x, y, getModuleDisplayX(i), getModuleDisplayY(i), 16, 16) ? 1.0f : 0.05f;
 
-//            GlStateManager._color4f(1.0f, 1.0f, 1.0f, alpha);
+            //            GlStateManager._color4f(1.0f, 1.0f, 1.0f, alpha);
             drawModuleIcon(count.getData(), getGuiLeft() + getModuleDisplayX(i), getGuiTop() + getModuleDisplayY(i), 1.0f, 1.0f, 0.0f, 0.0f);
         }
         GlStateManager._disableBlend();
-//        GlStateManager._enableAlphaTest();
-//        GlStateManager._popMatrix();
-//        GlStateManager._color4f(1F, 1F, 1F, 1F);
+        //        GlStateManager._enableAlphaTest();
+        //        GlStateManager._popMatrix();
+        //        GlStateManager._color4f(1F, 1F, 1F, 1F);
     }
 
     private void renderReturnButton(PoseStack matrixStack, int x, int y)
@@ -185,7 +187,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         x -= getGuiLeft();
         y -= getGuiTop();
         ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
-//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         //TODO
         //		font.draw(matrixStack, cart.getName(), getGuiLeft() + 5, 172, 4210752);
         GlStateManager._enableBlend();
@@ -207,7 +209,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         x -= getGuiLeft();
         y -= getGuiTop();
         ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
-//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         for (int i = 0; i < moduleCounts.size(); ++i)
         {
             final ModuleCountPair count = moduleCounts.get(i);
@@ -232,14 +234,14 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     public void drawMouseOver(PoseStack matrixStack, final String str, final int x, final int y)
     {
         //TODO
-//        final String[] split = str.split("\n");
-//        final List<String> text = new ArrayList<>(Arrays.asList(split));
-//        List<IReorderingProcessor> list = new ArrayList<>();
-//        for (String s : text)
-//        {
-//            list.add(IReorderingProcessor.forward(s, Style.EMPTY));
-//        }
-//        renderTooltip(matrixStack, list, getGuiLeft() + x, getGuiTop() + y);
+        //        final String[] split = str.split("\n");
+        //        final List<String> text = new ArrayList<>(Arrays.asList(split));
+        //        List<IReorderingProcessor> list = new ArrayList<>();
+        //        for (String s : text)
+        //        {
+        //            list.add(IReorderingProcessor.forward(s, Style.EMPTY));
+        //        }
+        //        renderTooltip(matrixStack, list, getGuiLeft() + x, getGuiTop() + y);
     }
 
     private void renderReturnMouseOver(PoseStack matrixStack, int x, int y)
@@ -247,7 +249,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         x -= getGuiLeft();
         y -= getGuiTop();
 
-//        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         if (inRect(x, y, returnButton))
         {
             drawMouseOver(matrixStack, Localization.GUI.CART.RETURN.translate(), x, y);
@@ -343,13 +345,18 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     @Override
     public boolean keyPressed(int p_231046_1_, int id, int p_231046_3_)
     {
-       super.keyPressed(p_231046_1_, id, p_231046_3_);
-        if (cart.getModules() != null) {
+        super.keyPressed(p_231046_1_, id, p_231046_3_);
+        if (cart.getModules() != null)
+        {
             final ModuleBase thief = cart.getInterfaceThief();
-            if (thief != null) {
+            if (thief != null)
+            {
                 handleModuleKeyPress(thief, id, p_231046_3_);
-            } else {
-                for (final ModuleBase module : cart.getModules()) {
+            }
+            else
+            {
+                for (final ModuleBase module : cart.getModules())
+                {
                     handleModuleKeyPress(module, id, p_231046_3_);
                 }
             }

@@ -54,30 +54,30 @@ public class ModelCage extends ModelCartbase
     private void createBar(final float offsetX, final float offsetZ)
     {
         //TODO
-//        final ModelRenderer bar = new ModelRenderer(this, 0, 0);
-//        AddRenderer(bar);
-//        bar.addBox(-0.5f, -cageHeight / 2.0f, -0.5f, 1, cageHeight, 1, 0.0f);
-//        bar.setPos(offsetX, -cageHeight / 2.0f - 4.0f, offsetZ);
+        //        final ModelRenderer bar = new ModelRenderer(this, 0, 0);
+        //        AddRenderer(bar);
+        //        bar.addBox(-0.5f, -cageHeight / 2.0f, -0.5f, 1, cageHeight, 1, 0.0f);
+        //        bar.setPos(offsetX, -cageHeight / 2.0f - 4.0f, offsetZ);
     }
 
     private void createTopBarLong(final float offsetZ)
     {
         //TODO
-//        final ModelRenderer bar = new ModelRenderer(this, 0, 0);
-//        AddRenderer(bar);
-//        bar.addBox(-0.5f, -9.5f, -0.5f, 1, 19, 1, 0.0f);
-//        bar.setPos(0.005f, -cageHeight - 4.005f, offsetZ + 0.005f);
-//        bar.zRot = 1.5707964f;
+        //        final ModelRenderer bar = new ModelRenderer(this, 0, 0);
+        //        AddRenderer(bar);
+        //        bar.addBox(-0.5f, -9.5f, -0.5f, 1, 19, 1, 0.0f);
+        //        bar.setPos(0.005f, -cageHeight - 4.005f, offsetZ + 0.005f);
+        //        bar.zRot = 1.5707964f;
     }
 
     private void createTopBarShort(final float offsetX)
     {
         //TODO
-//        final ModelRenderer bar = new ModelRenderer(this, 0, 0);
-//        AddRenderer(bar);
-//        bar.addBox(-0.5f, -7.5f, -0.5f, 1, 15, 1, 0.0f);
-//        bar.setPos(offsetX - 0.005f, -cageHeight - 4 + 0.005f, -0.005f);
-//        bar.xRot = 1.5707964f;
+        //        final ModelRenderer bar = new ModelRenderer(this, 0, 0);
+        //        AddRenderer(bar);
+        //        bar.addBox(-0.5f, -7.5f, -0.5f, 1, 15, 1, 0.0f);
+        //        bar.setPos(offsetX - 0.005f, -cageHeight - 4 + 0.005f, -0.005f);
+        //        bar.xRot = 1.5707964f;
     }
 
     static

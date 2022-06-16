@@ -28,12 +28,12 @@ public class ModelPigHelmet extends ModelCartbase
     public ModelPigHelmet(final boolean isOverlay)
     {
         //TODO
-//        this.isOverlay = isOverlay;
-//        final ModelRenderer Headwear = new ModelRenderer(this, 0, 0);
-//        AddRenderer(Headwear);
-//        Headwear.addBox(-4.0f, -4.0f, -4.0f, 8, 8, 8, 0.0f);
-//        Headwear.setPos(-12.2f + (isOverlay ? 0.2f : 0.0f), -5.4f, 0.0f);
-//        Headwear.yRot = 1.5707964f;
+        //        this.isOverlay = isOverlay;
+        //        final ModelRenderer Headwear = new ModelRenderer(this, 0, 0);
+        //        AddRenderer(Headwear);
+        //        Headwear.addBox(-4.0f, -4.0f, -4.0f, 8, 8, 8, 0.0f);
+        //        Headwear.setPos(-12.2f + (isOverlay ? 0.2f : 0.0f), -5.4f, 0.0f);
+        //        Headwear.yRot = 1.5707964f;
     }
 
     @Override

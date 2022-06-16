@@ -26,7 +26,6 @@ public class ModuleMonster extends ModuleMobdetector
     @Override
     public boolean isValidTarget(final Entity target)
     {
-        return (target instanceof Mob || target instanceof EnderDragon || target instanceof Ghast || target instanceof Slime
-                || (target instanceof Wolf && ((Wolf) target).isAngry())) && !(target instanceof EnderMan);
+        return (target instanceof Mob || target instanceof EnderDragon || target instanceof Ghast || target instanceof Slime || (target instanceof Wolf && ((Wolf) target).isAngry())) && !(target instanceof EnderMan);
     }
 }

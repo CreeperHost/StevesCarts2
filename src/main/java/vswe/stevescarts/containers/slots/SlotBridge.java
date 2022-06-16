@@ -16,7 +16,7 @@ public class SlotBridge extends SlotBase implements ISpecialItemTransferValidato
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-//        		return isBridgeMaterial(itemstack);
+        //        		return isBridgeMaterial(itemstack);
         return true;
     }
 

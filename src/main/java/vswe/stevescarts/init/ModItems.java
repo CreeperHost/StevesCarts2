@@ -67,7 +67,7 @@ public class ModItems
     {
         for (ComponentTypes value : ComponentTypes.values())
         {
-            if(value != null && value.getName() != null)
+            if (value != null && value.getName() != null)
             {
                 String name = ("component_" + value.getName()).trim().replace(" ", "_").replace("'", "_").toLowerCase(Locale.ROOT);
                 map.put(value, ITEMS.register(name, () -> new ItemCartComponent(value)));
