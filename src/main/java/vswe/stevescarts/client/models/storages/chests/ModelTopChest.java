@@ -26,8 +26,6 @@ public class ModelTopChest extends ModelCartbase
         modelPartData.addOrReplaceChild("lid", CubeListBuilder.create().texOffs(0, 0)
                 .addBox(6.0f, -3.0f, -16.0f, 12, 3, 16), PartPose.offset(-14.0f, -2.5f, 5.5f));
 
-//        modelPartData.addOrReplaceChild("lock", CubeListBuilder.create().texOffs(0, 0)
-//                .addBox(1.0f, 1.5f, 0.5f, 2, 3, 1), PartPose.offset(-4.0f, -5.5f, -23.0f));
         return LayerDefinition.create(modelData, 64, 64);
     }
 }

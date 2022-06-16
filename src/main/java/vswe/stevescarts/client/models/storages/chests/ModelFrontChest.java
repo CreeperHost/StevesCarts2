@@ -3,7 +3,11 @@ package vswe.stevescarts.client.models.storages.chests;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.ModuleBase;
@@ -11,62 +15,32 @@ import vswe.stevescarts.modules.storages.chests.ModuleChest;
 
 public class ModelFrontChest extends ModelCartbase
 {
-    private static ResourceLocation texture;
-    ModelPart lid;
-
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
-    {
-        return ModelFrontChest.texture;
-    }
-
-    @Override
-    protected int getTextureHeight()
-    {
-        return 32;
-    }
+    private final ModelPart lid;
 
     public ModelFrontChest()
     {
-        super();
-        lid = AddChest();
+        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/frontChestModel.png"));
+        this.root.setPos(-3.5f, 0.0f, 0.0f);
+        this.root.setRotation(0.0f, 1.5707964f, 0.0f);
+        this.lid = this.root.getChild("lid");
     }
 
-    private ModelPart AddChest()
+    public static LayerDefinition getTexturedModelData()
     {
-        //TODO
-//        final ModelRenderer chestAnchor = new ModelRenderer(this);
-//        AddRenderer(chestAnchor);
-//        chestAnchor.yRot = 1.5707964f;
-//        chestAnchor.setPos(-3.5f, 0.0f, 0.0f);
-//        final ModelRenderer base = new ModelRenderer(this, 0, 11);
-//        fixSize(base);
-//        chestAnchor.addChild(base);
-//        base.addBox(7.0f, 3.0f, 4.0f, 14, 6, 8, 0.0f);
-//        base.setPos(-14.0f, -5.5f, -18.5f);
-//        final ModelRenderer lid = new ModelRenderer(this, 0, 0);
-//        fixSize(lid);
-//        chestAnchor.addChild(lid);
-//        lid.addBox(7.0f, -3.0f, -8.0f, 14, 3, 8, 0.0f);
-//        lid.setPos(-14.0f, -1.5f, -6.5f);
-//        final ModelRenderer lock = new ModelRenderer(this, 0, 25);
-//        fixSize(lock);
-//        lid.addChild(lock);
-//        lock.addBox(1.0f, 1.5f, 0.5f, 2, 3, 1, 0.0f);
-//        lock.setPos(12.0f, -3.0f, -9.5f);
-//        return lid;
-
-        return null;
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        modelPartData.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 11)
+                .addBox(7.0f, 3.0f, 4.0f, 14, 6, 8), PartPose.offset(-14.0f, -5.5f, -18.5f));
+        modelPartData.addOrReplaceChild("lid", CubeListBuilder.create().texOffs(0, 0)
+                .addBox(7.0f, -3.0f, -8.0f, 14, 3, 8), PartPose.offset(-14.0f, -1.5f, -6.5f));
+        modelPartData.addOrReplaceChild("lock", CubeListBuilder.create().texOffs(0, 0)
+                .addBox(1.0f, 1.5f, 0.5f, 2, 3, 1), PartPose.offset(-2.0f, -4.5f, -16.0f));
+        return LayerDefinition.create(modelData, 64, 32);
     }
 
     @Override
     public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
     {
         lid.xRot = ((module == null) ? 0.0f : (-((ModuleChest) module).getChestAngle()));
-    }
-
-    static
-    {
-        ModelFrontChest.texture = ResourceHelper.getResource("/models/frontChestModel.png");
     }
 }
