@@ -28,7 +28,6 @@ public class ModItems
 
     public static final RegistryObject<Item> EXTERNAL_DISTRIBUTOR = ITEMS.register("blockdistributor", () -> new BlockItem(ModBlocks.EXTERNAL_DISTRIBUTOR.get(), ITEM_GROUP));
     public static final RegistryObject<Item> MODULE_TOGGLER = ITEMS.register("blockactivator", () -> new BlockItem(ModBlocks.MODULE_TOGGLER.get(), ITEM_GROUP));
-    public static final RegistryObject<Item> DETECTOR_UNIT = ITEMS.register("blockdetector", () -> new BlockItem(ModBlocks.DETECTOR_UNIT.get(), ITEM_GROUP));
     public static final RegistryObject<Item> JUNCTION = ITEMS.register("blockjunction", () -> new BlockItem(ModBlocks.JUNCTION.get(), ITEM_GROUP));
     public static final RegistryObject<Item> ADVANCED_DETECTOR = ITEMS.register("blockadvdetector", () -> new BlockItem(ModBlocks.ADVANCED_DETECTOR.get(), ITEM_GROUP));
 

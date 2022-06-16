@@ -30,9 +30,6 @@ public class ModBlocks
     public static final RegistryObject<Block> MODULE_TOGGLER = BLOCKS.register("blockactivator", BlockActivator::new);
     public static final RegistryObject<BlockEntityType<TileEntityActivator>> MODULE_TOGGLER_TILE = TILES_ENTITIES.register("blockactivator", () -> BlockEntityType.Builder.of(TileEntityActivator::new, ModBlocks.MODULE_TOGGLER.get()).build(null));
 
-    public static final RegistryObject<Block> DETECTOR_UNIT = BLOCKS.register("blockdetector", BlockDetector::new);
-    public static final RegistryObject<BlockEntityType<TileEntityDetector>> DETECTOR_TILE = TILES_ENTITIES.register("blockdetector", () -> BlockEntityType.Builder.of(TileEntityDetector::new, ModBlocks.DETECTOR_UNIT.get()).build(null));
-
     public static final RegistryObject<Block> JUNCTION = BLOCKS.register("blockjunction", BlockRailJunction::new);
     public static final RegistryObject<Block> ADVANCED_DETECTOR = BLOCKS.register("blockadvdetector", BlockRailAdvDetector::new);
 

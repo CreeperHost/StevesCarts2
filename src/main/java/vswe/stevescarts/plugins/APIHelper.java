@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by modmuss50 on 15/11/16.
  */
-@Deprecated
+@Deprecated(forRemoval = true)
 public class APIHelper implements ISCHelpers
 {
 

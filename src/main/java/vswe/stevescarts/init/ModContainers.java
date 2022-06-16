@@ -24,8 +24,6 @@ public class ModContainers
 
     public static final RegistryObject<MenuType<ContainerActivator>> CONTAINER_ACTIVATOR = CONTAINERS.register("activator", () -> IForgeMenuType.create(ContainerActivator::new));
 
-    public static final RegistryObject<MenuType<ContainerDetector>> CONTAINER_DETECTOR = CONTAINERS.register("detector", () -> IForgeMenuType.create(ContainerDetector::new));
-
     public static final RegistryObject<MenuType<ContainerMinecart>> CONTAINER_MINECART = CONTAINERS.register("minecart", () -> IForgeMenuType.create(ContainerMinecart::new));
 
 }

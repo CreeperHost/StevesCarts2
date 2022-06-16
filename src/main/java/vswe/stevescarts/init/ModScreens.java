@@ -14,6 +14,5 @@ public class ModScreens
         MenuScreens.register(ModContainers.CONTAINER_UPGRADE.get(), GuiUpgrade::new);
         MenuScreens.register(ModContainers.CONTAINER_LIQUID.get(), GuiLiquid::new);
         MenuScreens.register(ModContainers.CONTAINER_ACTIVATOR.get(), GuiActivator::new);
-        MenuScreens.register(ModContainers.CONTAINER_DETECTOR.get(), GuiDetector::new);
     }
 }
