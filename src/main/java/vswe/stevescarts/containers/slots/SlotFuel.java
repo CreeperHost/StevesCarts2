@@ -5,6 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.ForgeHooks;
 import vswe.stevescarts.modules.engines.ModuleCoalBase;
+import vswe.stevescarts.polylib.FuelHelper;
 
 import javax.annotation.Nonnull;
 
@@ -18,17 +19,6 @@ public class SlotFuel extends SlotBase
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return ForgeHooks.getBurnTime(itemstack, RecipeType.SMELTING) != 0;
-    }
-
-    //TODO
-    private int getItemBurnTime(@Nonnull ItemStack itemstack)
-    {
-        return ForgeHooks.getBurnTime(itemstack, RecipeType.SMELTING);
-    }
-
-    public static int getItemBurnTime(final ModuleCoalBase engine, @Nonnull ItemStack itemstack)
-    {
-        return (int) (ForgeHooks.getBurnTime(itemstack, RecipeType.SMELTING) * engine.getFuelMultiplier());
+        return FuelHelper.isItemFuel(itemstack);
     }
 }

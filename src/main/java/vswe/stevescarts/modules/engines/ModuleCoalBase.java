@@ -13,6 +13,7 @@ import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotFuel;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
+import vswe.stevescarts.polylib.FuelHelper;
 
 import javax.annotation.Nonnull;
 
@@ -50,7 +51,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
             int i = 0;
             while (i < getInventorySize())
             {
-                setFuelLevel(getFuelLevel() + SlotFuel.getItemBurnTime(this, getStack(i)));
+                setFuelLevel(getFuelLevel() + FuelHelper.getItemBurnTime(getStack(i)));
                 if (getFuelLevel() > consumption)
                 {
                     if (getStack(i).isEmpty())
@@ -89,7 +90,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
         {
             if (!getStack(i).isEmpty())
             {
-                totalfuel += SlotFuel.getItemBurnTime(this, getStack(i)) * getStack(i).getCount();
+                totalfuel += FuelHelper.getItemBurnTime(getStack(i)) * getStack(i).getCount();
             }
         }
         return totalfuel;
