@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.client.renders.RenderModulerCart;
-import vswe.stevescarts.compat.CompatHandler;
 import vswe.stevescarts.entitys.CartDataSerializers;
 import vswe.stevescarts.handlers.EventHandler;
 import vswe.stevescarts.helpers.EventHelper;
@@ -43,7 +42,6 @@ public class StevesCarts
         iEventBus.addListener(this::commonSetup);
         ModuleData.init();
         AssemblerUpgrade.init();
-        CompatHandler.init(iEventBus);
         ModItems.ITEMS.register(iEventBus);
         ModBlocks.BLOCKS.register(iEventBus);
         ModEntities.ENTITIES.register(iEventBus);
@@ -75,7 +73,6 @@ public class StevesCarts
     public void clientInit(final FMLClientSetupEvent event)
     {
         ModScreens.init();
-        CompatHandler.initClient();
         ModuleData.initModels();
 
         ItemProperties.register(ModItems.CARTS.get(), new ResourceLocation(Constants.MOD_ID, ""), ItemStackRenderer.getInstance());
