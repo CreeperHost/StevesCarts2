@@ -109,7 +109,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
 
     implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}"))
-//    implementation fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rootProject.rei_version}")
+    implementation fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rootProject.rei_version}")
     implementation fg.deobf("dev.architectury:architectury-forge:${rootProject.architectury_version}")
     implementation fg.deobf("net.creeperhost:polylib-forge:${rootProject.polylib_version}")
 
