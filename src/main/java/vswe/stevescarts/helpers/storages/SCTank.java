@@ -9,7 +9,7 @@ import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import vswe.stevescarts.client.FluidRenderer;
+import vswe.stevescarts.polylib.FluidRenderer;
 import vswe.stevescarts.helpers.Localization;
 
 import java.text.NumberFormat;

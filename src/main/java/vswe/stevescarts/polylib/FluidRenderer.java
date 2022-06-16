@@ -1,4 +1,4 @@
-package vswe.stevescarts.client;
+package vswe.stevescarts.polylib;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -7,10 +7,12 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -42,50 +44,39 @@ public class FluidRenderer
 
     public void render(final int xPosition, final int yPosition, @Nonnull FluidStack fluidStack)
     {
-        //        RenderSystem.enableBlend();
-        //        RenderSystem.enableAlphaTest();
-
         drawFluid(xPosition, yPosition, fluidStack);
-
-        //TODO
-        //        RenderSystem.color4f(1, 1, 1, 1);
-        //
-        //        RenderSystem.disableAlphaTest();
-        //        RenderSystem.disableBlend();
+        RenderSystem.setShaderColor(1, 1, 1, 1);
     }
 
     private void drawFluid(final int xPosition, final int yPosition, @Nonnull FluidStack fluidStack)
     {
-        //TODO
-        //        if (fluidStack.isEmpty())
-        //        {
-        //            return;
-        //        }
-        //
-        //        Fluid fluid = fluidStack.getFluid();
-        //
-        //        TextureAtlasSprite fluidStillSprite = getStillFluidSprite(fluidStack);
-        //
-        //        FluidAttributes attributes = fluid.getAttributes();
-        //        int fluidColor = attributes.getColor(fluidStack);
-        //
-        //        int amount = fluidStack.getAmount();
-        //        int scaledAmount = (amount * height) / capacityMb;
-        //        if (amount > 0 && scaledAmount < minHeight)
-        //        {
-        //            scaledAmount = minHeight;
-        //        }
-        //        if (scaledAmount > height)
-        //        {
-        //            scaledAmount = height;
-        //        }
-        //
-        //        drawTiledSprite(xPosition, yPosition, width, height, fluidColor, scaledAmount, fluidStillSprite);
+        if (fluidStack.isEmpty())
+        {
+            return;
+        }
+
+        Fluid fluid = fluidStack.getFluid();
+
+        TextureAtlasSprite fluidStillSprite = getStillFluidSprite(fluidStack);
+
+        int fluidColor = RenderProperties.get(fluid).getColorTint();
+
+        int amount = fluidStack.getAmount();
+        int scaledAmount = (amount * height) / capacityMb;
+        if (amount > 0 && scaledAmount < minHeight)
+        {
+            scaledAmount = minHeight;
+        }
+        if (scaledAmount > height)
+        {
+            scaledAmount = height;
+        }
+
+        drawTiledSprite(xPosition, yPosition, width, height, fluidColor, scaledAmount, fluidStillSprite);
     }
 
     private void drawTiledSprite(final int xPosition, final int yPosition, final int tiledWidth, final int tiledHeight, int color, int scaledAmount, TextureAtlasSprite sprite)
     {
-        Minecraft minecraft = Minecraft.getInstance();
         RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
         setGLColorFromInt(color);
 
@@ -119,11 +110,9 @@ public class FluidRenderer
     {
         Fluid fluid = fluidStack.getFluid();
 
-        //TODO
-        //        FluidAttributes attributes = fluid.getAttributes();
-        //        ResourceLocation fluidStill = attributes.getStillTexture(fluidStack);
-        //        return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
-        return null;
+        ResourceLocation fluidStill = RenderProperties.get(fluid).getStillTexture();
+        return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(fluidStill);
+
     }
 
     public static void setGLColorFromInt(int color)
@@ -133,8 +122,7 @@ public class FluidRenderer
         float blue = (color & 0xFF) / 255.0F;
         float alpha = ((color >> 24) & 0xFF) / 255F;
 
-        //TODO
-        //        RenderSystem.color4f(red, green, blue, alpha);
+        RenderSystem.setShaderColor(red, green, blue, alpha);
     }
 
     private static void drawTextureWithMasking(double xCoord, double yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, double zLevel)
