@@ -49,14 +49,9 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implement
         CompoundTag info = itemStack.getTag();
         if (info != null && info.contains("Modules"))
         {
-            ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
-            byte[] bytes = moduleIDTag.getAsByteArray();
-            HashMap<String, ModelCartbase> models = new HashMap<>();
-            List<ModuleBase> moduleBaseList = new ArrayList<>();
             float lowestMult = 1.0f;
             VertexConsumer ivertexbuilder = iRenderTypeBuffer.getBuffer(RenderType.solid());
 
-            //TODO
             EntityMinecartModular cart = new EntityMinecartModular(Minecraft.getInstance().level, 0, 0, 0, itemStack.getTag(), Component.literal(""));
 
             if (transformType == ItemTransforms.TransformType.GUI)
@@ -71,7 +66,6 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implement
             matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180));
             matrixStack.mulPose(Vector3f.XP.rotationDegrees(180));
 
-            //TODO
             for (ModuleBase module : cart.getModules())
             {
                 if (module.getModels() != null)

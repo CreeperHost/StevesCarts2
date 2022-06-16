@@ -77,6 +77,10 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven {
+        name "CreeperHost"
+        url 'https://maven.creeperhost.net'
+    }
+    maven {
         name "JEI"
         url "https://dvs1.progwml6.com/files/maven"
     }
@@ -97,15 +101,17 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven { url "https://maven.shedaniel.me" }
+
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
 
-    // runtimeOnly fg.deobf("mezz.jei:jei-${project.mc_version}:${project.jei_version}")
-//    runtimeOnly fg.deobf("com.ridanisaurus:emendatusenigmatica:${project.ee_version}+mc${project.mc_version}")
-    // implementation  fg.deobf("dev.ftb.mods:ftb-industrial-contraptions:${project.ftb_industrial_contraptions_version}")
-    // implementation fg.deobf("me.shedaniel:architectury-forge:${project.architectury_version}")
+    implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}"))
+//    implementation fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rootProject.rei_version}")
+    implementation fg.deobf("dev.architectury:architectury-forge:${rootProject.architectury_version}")
+    implementation fg.deobf("net.creeperhost:polylib-forge:${rootProject.polylib_version}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 
