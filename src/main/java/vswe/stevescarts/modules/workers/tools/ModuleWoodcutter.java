@@ -242,9 +242,8 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
             return false;
         }
         Block block = Block.byItem(stack.getItem());
-        if (block instanceof SaplingBlock)
+        if (block instanceof SaplingBlock blockSapling)
         {
-            SaplingBlock blockSapling = (SaplingBlock) block;
             if (blockSapling.canSurvive(blockSapling.defaultBlockState(), world, pos.above()))
             {
                 if (fakePlayer.mayUseItemAt(pos.above(), Direction.UP, stack))
@@ -333,40 +332,27 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
             }
         }
         List<ItemStack> stuff;
-        if (shouldSilkTouch(blockState, here))
-        {
-            stuff = new ArrayList<>();
-            @Nonnull ItemStack stack = getSilkTouchedItem(blockState);
-            if (!stack.isEmpty())
+        final int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
+        stuff = block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withParameter(LootContextParams.ORIGIN, getCart().position()));
+        List<ItemStack> dropList = new ArrayList<>();
+        for (ItemStack drop : dropList)
+        { //Here to filter out any bad itemstacks, the mod I was testing with returned stacks with a size of 0
+            if (!drop.isEmpty() && drop.getCount() > 0)
             {
-                stuff.add(stack);
+                stuff.add(drop);
             }
         }
-        else
-        {
-            final int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
-            stuff = block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withParameter(LootContextParams.ORIGIN, getCart().position()));
-            List<ItemStack> dropList = new ArrayList<>();
-            //			BlockEvent.HarvestDropsEvent event = new BlockEvent.HarvestDropsEvent(world, here, blockState, fortune, 1, dropList, getFakePlayer(), false);
-            //			MinecraftForge.EVENT_BUS.post(event);
-            for (ItemStack drop : dropList)
-            { //Here to filter out any bad itemstacks, the mod I was testing with returned stacks with a size of 0
-                if (!drop.isEmpty() && drop.getCount() > 0)
-                {
-                    stuff.add(drop);
-                }
-            }
 
-            int applerand = 200;
-            if (fortune > 0)
+        int applerand = 200;
+        if (fortune > 0)
+        {
+            applerand -= 10 << fortune;
+            if (applerand < 40)
             {
-                applerand -= 10 << fortune;
-                if (applerand < 40)
-                {
-                    applerand = 40;
-                }
+                applerand = 40;
             }
         }
+
         List<ItemStack> nerfedstuff = getTierDrop(stuff);
         boolean first = true;
         for (@Nonnull ItemStack iStack : nerfedstuff)

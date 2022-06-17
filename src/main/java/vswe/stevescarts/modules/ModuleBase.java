@@ -1534,7 +1534,6 @@ public abstract class ModuleBase
         }
         x += getX();
         y += getY();
-        //TODO
         gui.drawMouseOver(matrixStack, str, x, y);
     }
 

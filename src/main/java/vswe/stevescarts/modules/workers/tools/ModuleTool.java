@@ -292,33 +292,6 @@ public abstract class ModuleTool extends ModuleWorker
         maximumRepairUnits = tagCompound.getShort(generateNBTName("MaxRepair", id));
     }
 
-    public boolean shouldSilkTouch(BlockState blockState, BlockPos pos)
-    {
-        final boolean doSilkTouch = false;
-        try
-        {
-            //TODO
-            //			if (enchanter != null && enchanter.useSilkTouch() && blockState.getBlock().canSilkHarvest(getCart().world, pos, blockState, null)) {
-            //				return true;
-            //			}
-        } catch (Exception ex)
-        {
-        }
-        return false;
-    }
-
-    @Nonnull
-    public ItemStack getSilkTouchedItem(BlockState blockState)
-    {
-        Block block = blockState.getBlock();
-        ItemStack stack = new ItemStack(block, 1);
-        //TODO
-        //		if (!stack.isEmpty() && stack.getItem().getHasSubtypes()) {
-        //			return new ItemStack(block, 1, block.getMetaFromState(blockState));
-        //		}
-        return stack;
-    }
-
     public void setDurability(int amount)
     {
         updateDw(DURABILITY, amount);

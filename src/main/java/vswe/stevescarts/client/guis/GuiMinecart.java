@@ -25,6 +25,9 @@ import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketMinecartTurn;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 {
@@ -217,15 +220,14 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 
     public void drawMouseOver(PoseStack matrixStack, final String str, final int x, final int y)
     {
-        //TODO
-        //        final String[] split = str.split("\n");
-        //        final List<String> text = new ArrayList<>(Arrays.asList(split));
-        //        List<IReorderingProcessor> list = new ArrayList<>();
-        //        for (String s : text)
-        //        {
-        //            list.add(IReorderingProcessor.forward(s, Style.EMPTY));
-        //        }
-        //        renderTooltip(matrixStack, list, getGuiLeft() + x, getGuiTop() + y);
+        final String[] split = str.split("\n");
+        final List<String> text = new ArrayList<>(Arrays.asList(split));
+        List<Component> list = new ArrayList<>();
+        for (String s : text)
+        {
+            list.add(Component.literal(s));
+        }
+        renderTooltip(matrixStack, list, Optional.empty(), getGuiLeft() + x, getGuiTop() + y);
     }
 
     private void renderReturnMouseOver(PoseStack matrixStack, int x, int y)

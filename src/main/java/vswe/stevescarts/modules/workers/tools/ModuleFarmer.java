@@ -208,20 +208,9 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
                 }
                 stopWorking();
                 List<ItemStack> stuff;
-                if (shouldSilkTouch(blockState, pos))
-                {
-                    stuff = new ArrayList<>();
-                    @Nonnull ItemStack stack = getSilkTouchedItem(blockState);
-                    if (!stack.isEmpty())
-                    {
-                        stuff.add(stack);
-                    }
-                }
-                else
-                {
-                    final int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
-                    stuff = block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withParameter(LootContextParams.ORIGIN, getCart().position()));
-                }
+
+                final int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
+                stuff = block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withParameter(LootContextParams.ORIGIN, getCart().position()));
                 for (@Nonnull ItemStack iStack : stuff)
                 {
                     cart.addItemToChest(iStack);

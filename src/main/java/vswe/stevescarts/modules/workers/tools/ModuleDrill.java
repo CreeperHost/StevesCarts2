@@ -234,16 +234,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
             }
         }
         final int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
-        if (shouldSilkTouch(blockState, coord))
-        {
-            ItemStack item = getSilkTouchedItem(blockState);
-            if (!item.isEmpty() && !minedItem(world, item, next))
-            {
-                return false;
-            }
-            world.removeBlock(coord, false);
-        }
-        else if (block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, new ItemStack(Items.DIAMOND_PICKAXE)).withParameter(LootContextParams.ORIGIN, getCart().position())).size() != 0)
+        if (block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, new ItemStack(Items.DIAMOND_PICKAXE)).withParameter(LootContextParams.ORIGIN, getCart().position())).size() != 0)
         {
             List<ItemStack> stacks = block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, new ItemStack(Items.DIAMOND_PICKAXE)).withParameter(LootContextParams.ORIGIN, getCart().position()));
             boolean shouldRemove = false;
@@ -285,7 +276,6 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
                 {
                     return true;
                 }
-                continue;
             }
         }
         int size = iStack.getCount();
