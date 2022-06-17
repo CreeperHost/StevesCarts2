@@ -1,44 +1,31 @@
 package vswe.stevescarts.client.models;
 
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.ModuleBase;
 
 public class ModelToolPlate extends ModelCartbase
 {
-    private static ResourceLocation texture;
-
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
-    {
-        return ModelToolPlate.texture;
-    }
-
-    @Override
-    protected int getTextureWidth()
-    {
-        return 32;
-    }
-
-    @Override
-    protected int getTextureHeight()
-    {
-        return 8;
-    }
-
     public ModelToolPlate()
     {
-        //TODO
-        //        final ModelRenderer drillBase = new ModelRenderer(this, 0, 0);
-        //        AddRenderer(drillBase);
-        //        drillBase.addBox(-5.0f, -7.0f, -2.0f, 10, 6, 1, 0.0f);
-        //        drillBase.setPos(-9.0f, 4.0f, 0.0f);
-        //        drillBase.yRot = 1.5707964f;
+        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/toolPlateModel.png"));
     }
 
-    static
+    public static LayerDefinition getTexturedModelData()
     {
-        ModelToolPlate.texture = ResourceHelper.getResource("/models/toolPlateModel.png");
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+
+        modelPartData.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 0)
+                        .addBox(-5.0f, -7.0f, -2.0f, 10, 6, 1),
+                PartPose.offsetAndRotation(-9.0f, 4.0f, 0.0f, 0.0f, 1.5707964f, 0.0f));
+
+        return LayerDefinition.create(modelData, 32, 8);
     }
 
 }
