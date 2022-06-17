@@ -2,6 +2,7 @@ package vswe.stevescarts.items;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -56,7 +57,7 @@ public class ItemCartModule extends Item
         return moduleData;
     }
 
-    public static ItemStack createModuleStack(int id)
+    public static ItemStack createModuleStack(ResourceLocation id)
     {
         AtomicReference<ItemStack> stack = new AtomicReference<>(ItemStack.EMPTY);
         ModItems.MODULES.forEach((moduleData1, itemSupplier) ->

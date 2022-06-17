@@ -729,7 +729,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public boolean hurt(final DamageSource dmg, final float par2)
+    public boolean hurt(final @NotNull DamageSource dmg, final float par2)
     {
         if (isPlaceholder)
         {

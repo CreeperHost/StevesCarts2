@@ -1112,6 +1112,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         }
     }
 
+    //TODO, API CHANGE MEANS NO MORE BYTES
     private byte[] getModularInfoBytes()
     {
         final ArrayList<Byte> datalist = new ArrayList<>();
@@ -1124,7 +1125,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                     final ModuleData data = itemCartModule.getModuleData();
                     if (data != null)
                     {
-                        datalist.add((byte) data.getID());
+//                        datalist.add(data.getID());
                     }
                 }
             }

@@ -5,11 +5,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.Constants;
+import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.client.models.*;
 import vswe.stevescarts.client.models.engines.*;
 import vswe.stevescarts.client.models.pig.ModelPigHead;
@@ -56,11 +58,14 @@ import java.util.*;
 
 public class ModuleData
 {
-    private static HashMap<Byte, ModuleData> moduleList;
-    private static Class[] moduleGroups;
-    private static Localization.MODULE_INFO[] moduleGroupNames;
     @Deprecated(forRemoval = true)
-    private byte id;
+    private static HashMap<Byte, ModuleData> moduleList = new HashMap<>();
+    @Deprecated(forRemoval = true)
+    private static Class[] moduleGroups = new Class[]{ModuleHull.class, ModuleEngine.class, ModuleTool.class, ModuleStorage.class, ModuleAddon.class};
+    @Deprecated(forRemoval = true)
+    private static Localization.MODULE_INFO[] moduleGroupNames;
+
+    private ResourceLocation id;
     private Class<? extends ModuleBase> moduleClass;
     private String name;
     private int modularCost;
@@ -83,6 +88,7 @@ public class ModuleData
     private byte extraDataDefaultValue;
     private static final int MAX_MESSAGE_ROW_LENGTH = 30;
 
+    @Deprecated(forRemoval = true)
     public static HashMap<Byte, ModuleData> getList()
     {
         return ModuleData.moduleList;
@@ -187,13 +193,13 @@ public class ModuleData
         final ModuleData extrememelter = new ModuleData(34, "Extreme Melter", ModuleMelterExtreme.class, 19);
         addNemesis(melter, extrememelter);
         new ModuleData(36, "Invisibility Core", ModuleInvisible.class, 21);
-        new ModuleDataHull(37, "Wooden Hull", ModuleWood.class).setCapacity(50).setEngineMax(1).setAddonMax(0).setComplexityMax(15);
-        new ModuleDataHull(38, "Standard Hull", ModuleStandard.class).setCapacity(200).setEngineMax(3).setAddonMax(6).setComplexityMax(50);
-        new ModuleDataHull(39, "Reinforced Hull", ModuleReinforced.class).setCapacity(500).setEngineMax(5).setAddonMax(12).setComplexityMax(150);
-        final ModuleData pumpkinhull = new ModuleDataHull(47, "Pumpkin chariot", ModulePumpkin.class).setCapacity(40).setEngineMax(1).setAddonMax(0).setComplexityMax(15);
-        new ModuleDataHull(62, "Mechanical Pig", ModulePig.class).setCapacity(150).setEngineMax(2).setAddonMax(4).setComplexityMax(50).addSide(SIDE.FRONT).addMessage(Localization.MODULE_INFO.PIG_MESSAGE);
-        new ModuleDataHull(76, "Creative Hull", ModuleCheatHull.class).setCapacity(10000).setEngineMax(5).setAddonMax(12).setComplexityMax(150);
-        new ModuleDataHull(81, "Galgadorian Hull", ModuleGalgadorian.class).setCapacity(1000).setEngineMax(5).setAddonMax(12).setComplexityMax(150);
+//        new ModuleDataHull(37, "Wooden Hull", ModuleWood.class).setCapacity(50).setEngineMax(1).setAddonMax(0).setComplexityMax(15);
+//        new ModuleDataHull(38, "Standard Hull", ModuleStandard.class).setCapacity(200).setEngineMax(3).setAddonMax(6).setComplexityMax(50);
+//        new ModuleDataHull(39, "Reinforced Hull", ModuleReinforced.class).setCapacity(500).setEngineMax(5).setAddonMax(12).setComplexityMax(150);
+//        final ModuleData pumpkinhull = new ModuleDataHull(47, "Pumpkin chariot", ModulePumpkin.class).setCapacity(40).setEngineMax(1).setAddonMax(0).setComplexityMax(15);
+//        new ModuleDataHull(62, "Mechanical Pig", ModulePig.class).setCapacity(150).setEngineMax(2).setAddonMax(4).setComplexityMax(50).addSide(SIDE.FRONT).addMessage(Localization.MODULE_INFO.PIG_MESSAGE);
+//        new ModuleDataHull(76, "Creative Hull", ModuleCheatHull.class).setCapacity(10000).setEngineMax(5).setAddonMax(12).setComplexityMax(150);
+//        new ModuleDataHull(81, "Galgadorian Hull", ModuleGalgadorian.class).setCapacity(1000).setEngineMax(5).setAddonMax(12).setComplexityMax(150);
 
         new ModuleData(40, "Note Sequencer", ModuleNote.class, 30).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
         final ModuleData colorizer = new ModuleData(41, "Colorizer", ModuleColorizer.class, 15);
@@ -314,23 +320,6 @@ public class ModuleData
         new ModuleData(97, "Creative Supplies", ModuleCreativeSupplies.class, 1);
         new ModuleData(99, "Cake Server", ModuleCakeServer.class, 10).addSide(SIDE.TOP).addMessage(Localization.MODULE_INFO.ALPHA_MESSAGE);
         final ModuleData trickOrTreat = new ModuleData(100, "Trick-or-Treat Cake Server", ModuleCakeServerDynamite.class, 15).addSide(SIDE.TOP);
-
-        if (!Constants.isHalloween)
-        {
-            bats.lock();
-            pumpkinhull.lock();
-            trickOrTreat.lock();
-        }
-        if (!Constants.isChristmas)
-        {
-            gift.lock();
-            snowgenerator.lock();
-            snowballshooter.lock();
-        }
-        if (!Constants.isEaster)
-        {
-            eggBasket.lock();
-        }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -398,13 +387,14 @@ public class ModuleData
         ModuleData.moduleList.get((byte) 100).addModel("Cake", new ModelCake());
     }
 
+    @Deprecated(forRemoval = true)
     public ModuleData(final int id, final String name, final Class<? extends ModuleBase> moduleClass, final int modularCost)
     {
         nemesis = null;
         requirement = null;
         parent = null;
         modelMult = 0.75f;
-        this.id = (byte) id;
+//        this.id = id;
         this.moduleClass = moduleClass;
         this.name = name;
         this.modularCost = modularCost;
@@ -417,14 +407,29 @@ public class ModuleData
                 break;
             }
         }
-        if (ModuleData.moduleList.containsKey(this.id))
-        {
-            throw new Error("WARNING! " + name + " can't be added with ID " + id + " since that ID is already occupied by " + ModuleData.moduleList.get(this.id).getName());
-        }
-        else
-        {
-            ModuleData.moduleList.put(this.id, this);
-        }
+//        if (ModuleData.moduleList.containsKey(this.id))
+//        {
+//            throw new Error("WARNING! " + name + " can't be added with ID " + id + " since that ID is already occupied by " + ModuleData.moduleList.get(this.id).getName());
+//        }
+//        else
+//        {
+//            ModuleData.moduleList.put(this.id, this);
+//        }
+    }
+
+    ModuleType moduleType;
+
+    public ModuleData(final ResourceLocation id, final String name, final Class<? extends ModuleBase> moduleClass, ModuleType moduleType, final int modularCost)
+    {
+        this.nemesis = null;
+        this.requirement = null;
+        this.parent = null;
+        this.modelMult = 0.75f;
+        this.id = id;
+        this.moduleClass = moduleClass;
+        this.name = name;
+        this.modularCost = modularCost;
+        this.moduleType = moduleType;
     }
 
     public Class<? extends ModuleBase> getModuleClass()
@@ -432,11 +437,13 @@ public class ModuleData
         return moduleClass;
     }
 
+    @Deprecated(forRemoval = true)
     public boolean getIsValid()
     {
         return true;
     }
 
+    @Deprecated(forRemoval = true)
     public boolean getIsLocked()
     {
         return isLocked;
@@ -652,7 +659,7 @@ public class ModuleData
         return "item.SC2." + getRawName() + ".name";
     }
 
-    public byte getID()
+    public ResourceLocation getID()
     {
         return id;
     }
@@ -723,7 +730,8 @@ public class ModuleData
             {
                 if (module.getClass() == moduledata.moduleClass)
                 {
-                    moduleIDs[i] = moduledata.getID();
+                    //TODO API CHANGE, NO MORE BYTES
+//                    moduleIDs[i] = moduledata.getID();
                     break;
                 }
             }
@@ -746,7 +754,8 @@ public class ModuleData
             if (modules.get(i).getItem() instanceof ItemCartModule)
             {
                 ItemCartModule itemCartModule = (ItemCartModule) modules.get(i).getItem();
-                moduleIDs[i] = (byte) itemCartModule.getModuleData().getID();
+                //TODO API CHANGE NO MORE BYTES
+//                moduleIDs[i] = (byte) itemCartModule.getModuleData().getID();
                 itemCartModule.addExtraDataToCart(save, modules.get(i), i);
             }
         }
@@ -954,7 +963,8 @@ public class ModuleData
         {
             list.add(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.SHIFT_FOR_MORE.translate("SHIFT")));
         }
-        list.add(Component.literal(ChatFormatting.BLUE + Localization.MODULE_INFO.TYPE.translate() + ": " + ModuleData.moduleGroupNames[groupID].translate()));
+        //TODO API CHANGE
+        list.add(Component.literal(ChatFormatting.BLUE + "Module Type: " + ChatFormatting.WHITE + moduleType.name()));
         addExtraMessage(list);
     }
 

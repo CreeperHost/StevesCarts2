@@ -26,7 +26,6 @@ public class SCConfig
     public static ForgeConfigSpec.ConfigValue<Integer> compact_solar_production;
     public static ForgeConfigSpec.ConfigValue<Integer> standard_solar_production;
 
-
     static
     {
         COMMON_BUILDER.comment("General settings").push(CATEGORY_GENERAL);

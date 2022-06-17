@@ -6,6 +6,7 @@ import vswe.stevescarts.helpers.GiftItem;
 
 import java.util.ArrayList;
 
+@Deprecated(forRemoval = true)
 public class ModuleGiftStorage extends ModuleChest
 {
     public ModuleGiftStorage(final EntityMinecartModular cart)

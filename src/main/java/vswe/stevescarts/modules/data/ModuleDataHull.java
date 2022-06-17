@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.data;
 
+import net.minecraft.resources.ResourceLocation;
+import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.modules.ModuleBase;
 
 
@@ -10,9 +12,9 @@ public class ModuleDataHull extends ModuleData
     private int addonMaxCount;
     private int complexityMax;
 
-    public ModuleDataHull(final int id, final String name, final Class<? extends ModuleBase> moduleClass)
+    public ModuleDataHull(final ResourceLocation id, final String name, final Class<? extends ModuleBase> moduleClass, ModuleType moduleType)
     {
-        super(id, name, moduleClass, 0);
+        super(id, name, moduleClass, moduleType, 0);
     }
 
     public ModuleDataHull setCapacity(final int val)

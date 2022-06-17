@@ -54,14 +54,14 @@ public class GiftItem
 
     public static void addModuleGifts(final ArrayList<GiftItem> gifts)
     {
-        for (final ModuleData module : ModuleData.getList().values())
-        {
+//        for (final ModuleData module : ModuleData.getList().values())
+//        {
             //			if (!module.getIsLocked() && module.getIsValid() && module.getCost() > 0) {
             //				final GiftItem item = new GiftItem(new ItemStack(ModItems.MODULES.get(), 1, module.getID()), module.getCost() * 20, (int) Math.pow(151 - module.getCost(), 2.0));
             //				item.fixedSize = true;
             //				gifts.add(item);
             //			}
-        }
+//        }
     }
 
     public static ArrayList<ItemStack> generateItems(final RandomSource rand, final ArrayList<GiftItem> gifts, int value, final int maxTries)

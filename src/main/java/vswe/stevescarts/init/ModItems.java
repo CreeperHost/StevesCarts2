@@ -7,6 +7,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import vswe.stevescarts.Constants;
+import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.client.creativetabs.CreativeTabSC2Blocks;
 import vswe.stevescarts.helpers.ComponentTypes;
 import vswe.stevescarts.items.ItemCartComponent;
@@ -77,7 +78,12 @@ public class ModItems
 
     public static final Map<ModuleData, Supplier<Item>> MODULES = Util.make(new LinkedHashMap<>(), map ->
     {
-        for (ModuleData value : ModuleData.getList().values())
+//        for (ModuleData value : ModuleData.getList().values())
+//        {
+//            map.put(value, ITEMS.register(value.getName(), () -> new ItemCartModule(value)));
+//        }
+
+        for (ModuleData value : StevesCartsAPI.MODULE_REGISTRY.values())
         {
             map.put(value, ITEMS.register(value.getName(), () -> new ItemCartModule(value)));
         }
