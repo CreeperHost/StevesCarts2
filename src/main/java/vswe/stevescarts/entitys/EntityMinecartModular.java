@@ -21,6 +21,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
@@ -30,6 +31,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -621,51 +623,33 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     @NotNull
     public Item getDropItem()
     {
-        return Items.MINECART;
-        //        if (modules != null)
-        //        {
-        //            @Nonnull ItemStack cart = ModuleData.createModularCart(this);
-        //            return cart;
-        //        }
-        //        return ItemStack.EMPTY;
+        return Items.AIR;
     }
 
-    //    @Override
-    //    @Nonnull
-    //    public ItemStack getCartItem()
-    //    {
-    //        if (modules != null)
-    //        {
-    //            @Nonnull ItemStack cart = ModuleData.createModularCart(this);
-    //            return cart;
-    //        }
-    //        return ItemStack.EMPTY;
-    //    }
+    @Nonnull
+    public ItemStack getCartItem()
+    {
+        if (modules != null)
+        {
+            @Nonnull ItemStack cart = ModuleData.createModularCart(this);
+            return cart;
+        }
+        return ItemStack.EMPTY;
+    }
 
     //Override this to stop it spawning a vanilla minecart
     @Override
-    public void destroy(DamageSource p_94095_1_)
+    public void destroy(@NotNull DamageSource damageSource)
     {
-        this.remove(RemovalReason.KILLED);
-    }
-
-    public boolean dropOnDeath()
-    {
-        if (isPlaceholder)
-        {
-            return false;
-        }
-        if (modules != null)
-        {
-            for (final ModuleBase module : modules)
-            {
-                if (!module.dropOnDeath())
-                {
-                    return false;
-                }
+        this.kill();
+        if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+            ItemStack itemstack = getCartItem();
+            if (this.hasCustomName()) {
+                itemstack.setHoverName(this.getCustomName());
             }
+
+            this.spawnAtLocation(itemstack);
         }
-        return true;
     }
 
     @Override
@@ -783,7 +767,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public void moveMinecartOnRail(BlockPos pos)
+    public void moveMinecartOnRail(@NotNull BlockPos pos)
     {
         super.moveMinecartOnRail(pos);
         if (modules != null)
@@ -873,7 +857,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public ItemStack getItem(int i)
+    public @NotNull ItemStack getItem(int i)
     {
         if (modules != null)
         {
@@ -890,7 +874,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public ItemStack removeItem(int i, int p_70298_2_)
+    public @NotNull ItemStack removeItem(int i, int p_70298_2_)
     {
         if (!getItem(i).isEmpty())
         {
@@ -902,13 +886,13 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int p_70304_1_)
+    public @NotNull ItemStack removeItemNoUpdate(int i)
     {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItem(int i, ItemStack item)
+    public void setItem(int i, @NotNull ItemStack item)
     {
         if (modules != null)
         {
@@ -937,7 +921,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public boolean stillValid(Player p_70300_1_)
+    public boolean stillValid(@NotNull Player player)
     {
         return true;
     }
@@ -945,17 +929,17 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     RailShape lastRailShape;
 
     @Override
-    protected void moveAlongTrack(BlockPos pos, BlockState state)
+    protected void moveAlongTrack(@NotNull BlockPos pos, @NotNull BlockState state)
     {
         if (!getPassengers().isEmpty())
         {
             Entity riddenByEntity = getPassengers().get(0);
             if (riddenByEntity instanceof LivingEntity)
             {
-                final float move = ((LivingEntity) riddenByEntity).moveDist;
-                ((LivingEntity) riddenByEntity).moveDist = 0.0f;
+                final float move = riddenByEntity.moveDist;
+                riddenByEntity.moveDist = 0.0f;
                 super.moveAlongTrack(pos, state);
-                ((LivingEntity) riddenByEntity).moveDist = move;
+                riddenByEntity.moveDist = move;
             }
             else
             {
@@ -991,7 +975,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public boolean save(CompoundTag tagCompound)
+    public boolean save(@NotNull CompoundTag tagCompound)
     {
         super.save(tagCompound);
         tagCompound.putString("cartName", name.getString());
@@ -1015,7 +999,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public void load(final CompoundTag tagCompound)
+    public void load(final @NotNull CompoundTag tagCompound)
     {
         super.load(tagCompound);
         name = Component.translatable(tagCompound.getString("cartName"));
@@ -1169,7 +1153,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public InteractionResult interactAt(Player entityplayer, Vec3 vec, InteractionHand hand)
+    public @NotNull InteractionResult interactAt(@NotNull Player entityplayer, @NotNull Vec3 vec, @NotNull InteractionHand hand)
     {
         if (isPlaceholder)
         {
@@ -1198,7 +1182,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public Component getDisplayName()
+    public @NotNull Component getDisplayName()
     {
         return Component.translatable("entity.minecart");
     }
@@ -1287,9 +1271,8 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     {
         for (final ModuleBase module : modules)
         {
-            if (module instanceof IActivatorModule && option.getModule().isAssignableFrom(module.getClass()))
+            if (module instanceof final IActivatorModule iactivator && option.getModule().isAssignableFrom(module.getClass()))
             {
-                final IActivatorModule iactivator = (IActivatorModule) module;
                 if (option.shouldActivate(isOrange))
                 {
                     iactivator.doActivate(option.getId());
@@ -1484,17 +1467,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         return true;
     }
 
-    //TODO sounds
-    //    @OnlyIn(Dist.CLIENT)
-    //    public void setSound(final MinecartTickableSound sound, final boolean riding)
-    //    {
-    //        //		if (riding) {
-    //        //			soundRiding = sound;
-    //        //		} else {
-    //        this.sound = sound;
-    //        //		}
-    //    }
-
     @OnlyIn(Dist.CLIENT)
     public void silent()
     {
@@ -1502,29 +1474,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void updateSounds()
-    {
-        //        if (keepSilent > 1)
-        //        {
-        //            --keepSilent;
-        //            stopSound(sound);
-        //            sound = null;
-        //        }
-        //        else if (keepSilent == 1)
-        //        {
-        //            keepSilent = 0;
-        //            Minecraft.getInstance().getSoundManager().play(new MinecartTickableSound(this));
-        //        }
-    }
-
-    //    @OnlyIn(Dist.CLIENT)
-    //    private void stopSound(final MinecartTickableSound sound)
-    //    {
-    //        if (sound != null)
-    //        {
-    //            Minecraft.getInstance().getSoundManager().stop(sound);
-    //        }
-    //    }
+    private void updateSounds() {}
 
     static
     {
@@ -1557,9 +1507,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public void clearContent()
-    {
-    }
+    public void clearContent() {}
 
     @Override
     public int getTanks()
@@ -1686,20 +1634,19 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         return drain(maxDrain, action);
     }
 
-    //TODO
-    //    @Override
-    //    public void remove(boolean keepData)
-    //    {
-    //        if (!this.level.isClientSide)
-    //        {
-    //            if (!removed)
-    //            {
-    //                ItemEntity cartItem = new ItemEntity(this.level, this.getExactPosition().getX(), this.getExactPosition().getY(), this.getExactPosition().getZ(), getCartItem());
-    //                this.level.addFreshEntity(cartItem);
-    //            }
-    //        }
-    //        super.remove(keepData);
-    //    }
+    @Override
+    public void removeVehicle()
+    {
+        if (!this.level.isClientSide)
+        {
+            if (!isRemoved())
+            {
+                ItemEntity cartItem = new ItemEntity(this.level, this.getExactPosition().getX(), this.getExactPosition().getY(), this.getExactPosition().getZ(), getCartItem());
+                this.level.addFreshEntity(cartItem);
+            }
+        }
+        super.removeVehicle();
+    }
 
     protected final SimpleContainerData dataAccess = new SimpleContainerData(0)
     {
