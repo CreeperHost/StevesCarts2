@@ -41,7 +41,7 @@ public class ModelCage extends ModelCartbase
 
     private static void createBar(PartDefinition partDefinition, final float offsetX, final float offsetZ)
     {
-        partDefinition.addOrReplaceChild("bar" + offsetX, CubeListBuilder.create().texOffs(0, 0)
+        partDefinition.addOrReplaceChild("bar" + offsetX + offsetZ, CubeListBuilder.create().texOffs(0, 0)
                 .addBox(-0.5f, -cageHeight / 2.0f, -0.5f, 1, cageHeight, 1),
                 PartPose.offset(offsetX, (float) (-cageHeight / 2.0 - 4.0), offsetZ));
     }
