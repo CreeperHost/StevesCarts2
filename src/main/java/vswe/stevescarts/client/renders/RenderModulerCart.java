@@ -63,12 +63,27 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular>
                 pitch = (float) (Math.atan(vec3d4.y) * 73.0);
             }
         }
+        yaw = yaw % 360;
+        if (yaw < 0)
+        {
+            yaw += 360;
+        }
+        yaw += 360;
+        double rotationYaw = (entity.getYRot() + 180) % 360;
+        if (rotationYaw < 0)
+        {
+            rotationYaw = rotationYaw + 360;
+        }
+        rotationYaw = rotationYaw + 360;
+
+        if (Math.abs(yaw - rotationYaw) > 90)
+        {
+            yaw += 180;
+            pitch = -pitch;
+        }
+
         matrices.translate(0.0, 0.375, 0.0);
         matrices.mulPose(Vector3f.YP.rotationDegrees(180.0F - yaw));
-        if (entity.flipped)
-        {
-            matrices.mulPose(Vector3f.YP.rotationDegrees(180.0f));
-        }
         matrices.mulPose(Vector3f.ZP.rotationDegrees(-pitch));
         float damageWobbleTicks = (float) entity.getHurtTime() - tickDelta;
         float damageWobbleStrength = Mth.clamp(entity.getDamage() - tickDelta, 0, Float.MAX_VALUE);
