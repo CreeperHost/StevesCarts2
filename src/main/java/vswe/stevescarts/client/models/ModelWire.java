@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.ModuleBase;
 
+@Deprecated(forRemoval = true)
 public abstract class ModelWire extends ModelCartbase
 {
     private static ResourceLocation texture;

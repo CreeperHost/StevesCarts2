@@ -1,5 +1,6 @@
 package vswe.stevescarts.client.models;
 
+@Deprecated(forRemoval = true)
 public class ModelWireTop extends ModelWire
 {
     public ModelWireTop()
