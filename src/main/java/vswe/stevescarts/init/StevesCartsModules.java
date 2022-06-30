@@ -58,6 +58,9 @@ public class StevesCartsModules
     //ENGINES
     public static ModuleData COAL_ENGINE;
     public static ModuleData TINY_COAL_ENGINE;
+    public static ModuleData CREATIVE_ENGINE;
+    public static ModuleData THERMAL_ENGINE;
+    public static ModuleData ADVANCED_THERMAL_ENGINE;
 
     public static ModuleData SOLAR_ENGINE;
     public static ModuleData BASIC_SOLAR_ENGINE;
@@ -130,6 +133,15 @@ public class StevesCartsModules
         TINY_COAL_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "tiny_coal_engine"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "tiny_coal_engine"), "Tiny Coal Engine", ModuleCoalTiny.class, ModuleType.ENGINE, 2));
 
+        CREATIVE_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "creative_engine"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "creative_engine"), "Creative Engine", ModuleCheatEngine.class, ModuleType.ENGINE, 1));
+
+        THERMAL_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "thermal_engine"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "thermal_engine"), "Thermal Engine", ModuleThermalStandard.class, ModuleType.ENGINE, 28));//.addRequirement(tankGroup);
+
+        ADVANCED_THERMAL_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_thermal_engine"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_thermal_engine"), "Advanced Thermal Engine", ModuleThermalAdvanced.class, ModuleType.ENGINE, 58));//.addRequirement(tankGroup);
+
 
         //Solar engine
         SOLAR_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "solar_engine"),
@@ -156,6 +168,7 @@ public class StevesCartsModules
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "internal_storage"), "Internal Storage", ModuleInternalStorage.class, ModuleType.STORAGE, 6));
 
 
+        //TOOLS
         TORCH_PLACER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "torch_placer"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "torch_placer"), "Torch Placer", ModuleTorch.class, ModuleType.TOOL, 10)).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT});
 
@@ -203,6 +216,7 @@ public class StevesCartsModules
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "netherite_wood_cutter"), "Netherite Wood Cutter", ModuleWoodcutterNetherite.class, ModuleType.TOOL, 120).addSide(ModuleData.SIDE.FRONT));
 
 
+        //ADDONS
         HYDRATER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "hydrator"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "hydrator"), "Hydrator", ModuleHydrater.class, ModuleType.ADDON, 6));//.addRequirement(tankGroup);
 
@@ -223,6 +237,7 @@ public class StevesCartsModules
 
         ADVANCED_CONTROL_SYSTEM = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_control_system"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_control_system"), "Advanced Control System", ModuleAdvControl.class, ModuleType.ADDON, 38).addSide(ModuleData.SIDE.RIGHT).addParent(SEAT));
+
 
     }
 
@@ -282,7 +297,7 @@ public class StevesCartsModules
 //        ModuleData.moduleList.get((byte) 30).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelCleaner());
 //        ModuleData.moduleList.get((byte) 31).addModel("Tnt", new ModelDynamite());
 //        ModuleData.moduleList.get((byte) 32).addModel("Shield", new ModelShield()).setModelMult(0.68f);
-        //        ModuleData.moduleList.get((byte) 40).setModelMult(0.65f).addModel("Speakers", new ModelNote());
+//        ModuleData.moduleList.get((byte) 40).setModelMult(0.65f).addModel("Speakers", new ModelNote());
 //        ModuleData.moduleList.get((byte) 57).removeModel("Top").addModel("Cage", new ModelCage(), false).addModel("Cage", new ModelCage(), true).setModelMult(0.65f);
 //        ModuleData.moduleList.get((byte) 64).addModel("SideTanks", new ModelSideTanks());
 //        ModuleData.moduleList.get((byte) 65).addModel("TopTank", new ModelTopTank());

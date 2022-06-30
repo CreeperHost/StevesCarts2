@@ -103,7 +103,6 @@ public class ModuleData
 //        final ModuleData cage = new ModuleData(57, "Cage", ModuleCage.class, 7).addSides(new SIDE[]{SIDE.TOP, SIDE.CENTER});
 //        new ModuleData(58, "Crop: Nether Wart", ModuleNetherwart.class, 20).addRequirement(farmerGroup);
 //        new ModuleData(59, "Firework display", ModuleFirework.class, 45);
-//        final ModuleData cheatengine = new ModuleData(61, "Creative Engine", ModuleCheatEngine.class, 1);
 //        final ModuleData internalTank = new ModuleData(63, "Internal SCTank", ModuleInternalTank.class, 37).setAllowDuplicate();
 //        final ModuleData sideTank = new ModuleData(64, "Side Tanks", ModuleSideTanks.class, 10).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
 //        final ModuleData topTank = new ModuleData(65, "Top SCTank", ModuleTopTank.class, 22).addSide(SIDE.TOP);
@@ -116,36 +115,11 @@ public class ModuleData
 //
 //        new ModuleData(68, "Incinerator", ModuleIncinerator.class, 23).addRequirement(tankGroup).addRequirement(drillGroup);
 //
-//        final ModuleData thermal0 = new ModuleData(69, "Thermal Engine", ModuleThermalStandard.class, 28).addRequirement(tankGroup);
-//        final ModuleData thermal2 = new ModuleData(70, "Advanced Thermal Engine", ModuleThermalAdvanced.class, 58).addRequirement(tankGroup.copy(2));
 //        addNemesis(thermal0, thermal2);
 //
 //        final ModuleData cleanerliquid = new ModuleData(71, "Liquid Cleaner", ModuleLiquidDrainer.class, 30).addSide(SIDE.CENTER).addParent(liquidsensors).addRequirement(tankGroup);
 //        addNemesis(frontTank, cleanerliquid);
 //        addNemesis(frontChest, cleanerliquid);
-//
-//        final ModuleData eggBasket = new ModuleData(74, "Egg Basket", ModuleEggBasket.class, 14)
-//        {
-//            @Override
-//            public String getModuleInfoText(final byte b)
-//            {
-//                if (b == 0)
-//                {
-//                    return Localization.MODULE_INFO.STORAGE_EMPTY.translate();
-//                }
-//                return Localization.MODULE_INFO.EGG_STORAGE_FULL.translate();
-//            }
-//
-//            @Override
-//            public String getCartInfoText(final String name, final byte b)
-//            {
-//                if (b == 0)
-//                {
-//                    return Localization.MODULE_INFO.STORAGE_EMPTY.translate() + " " + name;
-//                }
-//                return Localization.MODULE_INFO.STORAGE_FULL.translate() + " " + name;
-//            }
-//        }.addSide(SIDE.TOP).useExtraData((byte) 1);
 //
 //        new ModuleData(75, "Drill Intelligence", ModuleDrillIntelligence.class, 21).addRequirement(drillGroup);
 //        new ModuleData(77, "Power Observer", ModulePowerObserver.class, 12).addRequirement(engineGroup);
