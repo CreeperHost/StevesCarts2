@@ -23,7 +23,6 @@ import vswe.stevescarts.handlers.EventHandler;
 import vswe.stevescarts.helpers.EventHelper;
 import vswe.stevescarts.helpers.GiftItem;
 import vswe.stevescarts.init.*;
-import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
 
@@ -39,7 +38,6 @@ public class StevesCarts
         instance = this;
         IEventBus iEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         iEventBus.addListener(this::commonSetup);
-//        ModuleData.init();
         StevesCartsModules.init();
 
         AssemblerUpgrade.init();
@@ -60,7 +58,6 @@ public class StevesCarts
         EventHelper.setupEvents();
         PacketHandler.register();
 
-//        ModuleData.init();
         AssemblerUpgrade.init();
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -74,7 +71,7 @@ public class StevesCarts
     public void clientInit(final FMLClientSetupEvent event)
     {
         ModScreens.init();
-//        ModuleData.initModels();
+        StevesCartsModules.initModels();
 
         ItemProperties.register(ModItems.CARTS.get(), new ResourceLocation(Constants.MOD_ID, ""), ItemStackRenderer.getInstance());
 

@@ -5,7 +5,9 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +20,9 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.IItemRenderProperties;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.StevesCarts;
+import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.CartVersion;
@@ -76,7 +80,7 @@ public class ItemCarts extends MinecartItem
                             {
                                 try
                                 {
-                                    final Class<? extends ModuleBase> moduleClass = ModuleData.getList().get(id).getModuleClass();
+                                    final Class<? extends ModuleBase> moduleClass = StevesCartsAPI.MODULE_REGISTRY.get(id).getModuleClass();
                                     StevesCarts.logger.error("--- " + moduleClass.getCanonicalName());
                                 } catch (Exception ex)
                                 {
@@ -101,80 +105,103 @@ public class ItemCarts extends MinecartItem
     }
 
     @Override
-    public void appendHoverText(ItemStack item, @Nullable Level p_77624_2_, List<Component> list, TooltipFlag p_77624_4_)
+    public void appendHoverText(@NotNull ItemStack item, @Nullable Level p_77624_2_, @NotNull List<Component> list, @NotNull TooltipFlag p_77624_4_)
     {
-        CartVersion.updateItemStack(item);
-        final CompoundTag info = item.getTag();
-        if (info != null)
+        if(item.hasTag())
         {
-            final ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
-            final byte[] bytes = moduleIDTag.getAsByteArray();
-            final ArrayList<ModuleCountPair> counts = new ArrayList<>();
-            for (int i = 0; i < bytes.length; ++i)
+            if(item.getTag().contains("modules"))
             {
-                final byte id = bytes[i];
-                final ModuleData module = ModuleData.getList().get(id);
-                if (module != null)
+                list.add(Component.literal(ChatFormatting.BLUE + "Installed Modules:"));
+                ListTag moduleListTag = (ListTag) item.getTag().get("modules");
+                if (moduleListTag != null && !moduleListTag.isEmpty())
                 {
-                    boolean found = false;
-                    if (!info.contains("Data" + i))
+                    for (int i = 0; i < moduleListTag.size(); i++)
                     {
-                        for (final ModuleCountPair count : counts)
-                        {
-                            if (count.isContainingData(module))
-                            {
-                                count.increase();
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found)
-                    {
-                        final ModuleCountPair count2 = new ModuleCountPair(module);
-                        if (info.contains("Data" + i))
-                        {
-                            count2.setExtraData(info.getByte("Data" + i));
-                        }
-                        counts.add(count2);
+                        CompoundTag moduleTag = (CompoundTag) moduleListTag.get(i);
+                        ResourceLocation resourceLocation = new ResourceLocation(moduleTag.getString(String.valueOf(i)));
+                        ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(resourceLocation);
+                        list.add(Component.literal(ChatFormatting.GOLD + moduleData.getName()));
                     }
                 }
-            }
-            for (final ModuleCountPair count3 : counts)
-            {
-                list.add(Component.translatable(count3.toString()));
-            }
-            if (info.contains("Spares"))
-            {
-                final byte[] spares = info.getByteArray("Spares");
-                for (int j = 0; j < spares.length; ++j)
+                else
                 {
-                    final byte id2 = spares[j];
-                    final ModuleData module2 = ModuleData.getList().get(id2);
-                    if (module2 != null)
-                    {
-                        String name = module2.getName();
-                        if (info.contains("Data" + (bytes.length + j)))
-                        {
-                            name = module2.getCartInfoText(name, info.getByte("Data" + (bytes.length + j)));
-                        }
-                        list.add(Component.translatable(ChatFormatting.GOLD + name));
-                    }
+                    list.add(Component.literal(ChatFormatting.RED + "No modules loaded"));
                 }
             }
-            if (info.contains("maxTime"))
-            {
-                list.add(Component.literal(ChatFormatting.RED + "Incomplete cart!"));
-                final int maxTime = info.getInt("maxTime");
-                final int currentTime = info.getInt("currentTime");
-                final int timeLeft = maxTime - currentTime;
-                list.add(Component.literal(ChatFormatting.RED + "Time left: " + formatTime(timeLeft)));
-            }
         }
-        else
-        {
-            list.add(Component.literal("No modules loaded"));
-        }
+        //TODO
+//        CartVersion.updateItemStack(item);
+//        final CompoundTag info = item.getTag();
+//        if (info != null)
+//        {
+//            final ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
+//            final byte[] bytes = moduleIDTag.getAsByteArray();
+//            final ArrayList<ModuleCountPair> counts = new ArrayList<>();
+//            for (int i = 0; i < bytes.length; ++i)
+//            {
+//                final byte id = bytes[i];
+//                final ModuleData module = ModuleData.getList().get(id);
+//                if (module != null)
+//                {
+//                    boolean found = false;
+//                    if (!info.contains("Data" + i))
+//                    {
+//                        for (final ModuleCountPair count : counts)
+//                        {
+//                            if (count.isContainingData(module))
+//                            {
+//                                count.increase();
+//                                found = true;
+//                                break;
+//                            }
+//                        }
+//                    }
+//                    if (!found)
+//                    {
+//                        final ModuleCountPair count2 = new ModuleCountPair(module);
+//                        if (info.contains("Data" + i))
+//                        {
+//                            count2.setExtraData(info.getByte("Data" + i));
+//                        }
+//                        counts.add(count2);
+//                    }
+//                }
+//            }
+//            for (final ModuleCountPair count3 : counts)
+//            {
+//                list.add(Component.translatable(count3.toString()));
+//            }
+//            if (info.contains("Spares"))
+//            {
+//                final byte[] spares = info.getByteArray("Spares");
+//                for (int j = 0; j < spares.length; ++j)
+//                {
+//                    final byte id2 = spares[j];
+//                    final ModuleData module2 = ModuleData.getList().get(id2);
+//                    if (module2 != null)
+//                    {
+//                        String name = module2.getName();
+//                        if (info.contains("Data" + (bytes.length + j)))
+//                        {
+//                            name = module2.getCartInfoText(name, info.getByte("Data" + (bytes.length + j)));
+//                        }
+//                        list.add(Component.translatable(ChatFormatting.GOLD + name));
+//                    }
+//                }
+//            }
+//            if (info.contains("maxTime"))
+//            {
+//                list.add(Component.literal(ChatFormatting.RED + "Incomplete cart!"));
+//                final int maxTime = info.getInt("maxTime");
+//                final int currentTime = info.getInt("currentTime");
+//                final int timeLeft = maxTime - currentTime;
+//                list.add(Component.literal(ChatFormatting.RED + "Time left: " + formatTime(timeLeft)));
+//            }
+//        }
+//        else
+//        {
+//            list.add(Component.literal("No modules loaded"));
+//        }
     }
 
     private String formatTime(int ticks)

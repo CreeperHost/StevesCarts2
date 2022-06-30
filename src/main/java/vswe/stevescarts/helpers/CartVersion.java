@@ -8,6 +8,7 @@ import vswe.stevescarts.items.ItemCarts;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
+@Deprecated(forRemoval = true)
 public abstract class CartVersion
 {
     private static ArrayList<CartVersion> versions;

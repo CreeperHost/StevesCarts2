@@ -92,16 +92,19 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular>
             matrices.mulPose(Vector3f.XP.rotationDegrees(Mth.sin(damageWobbleTicks) * damageWobbleTicks * damageWobbleStrength / 10.0f * entity.getHurtDir()));
         }
         matrices.scale(-1.0f, -1.0f, 1.0f);
-        for (ModuleBase module : entity.getModules())
+        if(entity.getModules() != null)
         {
-            if (module.haveModels())
+            for (ModuleBase module : entity.getModules())
             {
-                for (ModelCartbase model : module.getModels())
+                if (module.haveModels())
                 {
-                    if (model.getRenderType(module) != null)
+                    for (ModelCartbase model : module.getModels())
                     {
-                        model.renderToBuffer(matrices, vertexConsumers.getBuffer(model.getRenderType(module)), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-                        model.applyEffects(module, matrices, vertexConsumers.getBuffer(model.getRenderType(module)), yaw, pitch, 0);
+                        if (model.getRenderType(module) != null)
+                        {
+                            model.renderToBuffer(matrices, vertexConsumers.getBuffer(model.getRenderType(module)), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                            model.applyEffects(module, matrices, vertexConsumers.getBuffer(model.getRenderType(module)), yaw, pitch, 0);
+                        }
                     }
                 }
             }

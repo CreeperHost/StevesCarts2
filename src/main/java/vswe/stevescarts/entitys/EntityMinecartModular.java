@@ -3,14 +3,15 @@ package vswe.stevescarts.entitys;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
@@ -45,11 +46,11 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.containers.ContainerMinecart;
 import vswe.stevescarts.helpers.ActivatorOption;
-import vswe.stevescarts.helpers.CartVersion;
 import vswe.stevescarts.helpers.GuiAllocationHelper;
 import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.helpers.storages.TransferHandler;
@@ -69,6 +70,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EntityMinecartModular extends AbstractMinecart implements Container, IEntityAdditionalSpawnData, IFluidHandler, MenuProvider
 {
@@ -79,7 +81,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public double temppushZ;
     protected boolean engineFlag;
     private int motorRotation;
-    private byte[] moduleLoadingData;
+    private List<ResourceLocation> moduleLoadingData;
 
     private int workingTime;
     private ModuleWorker workingComponent;
@@ -99,8 +101,10 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     private ModuleCreativeSupplies creativeSupplies;
     public RandomSource random;
     protected Component name;
+    @Deprecated(forRemoval = true)
     public byte cartVersion;
     private int scrollY;
+    @Deprecated(forRemoval = true)
     private int keepSilent;
 
     private static final EntityDataAccessor<Boolean> IS_BURNING = SynchedEntityData.defineId(EntityMinecartModular.class, EntityDataSerializers.BOOLEAN);
@@ -156,14 +160,15 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         random = world.random;
         cartVersion = info.getByte("CartVersion");
         loadModules(info);
-        this.name = name;
-        for (int i = 0; i < modules.size(); ++i)
-        {
-            if (modules.get(i).hasExtraData() && info.contains("Data" + i))
-            {
-                modules.get(i).setExtraData(info.getByte("Data" + i));
-            }
-        }
+        //TODO
+//        this.name = name;
+//        for (int i = 0; i < modules.size(); ++i)
+//        {
+//            if (modules.get(i).hasExtraData() && info.contains("Data" + i))
+//            {
+//                modules.get(i).setExtraData(info.getByte("Data" + i));
+//            }
+//        }
     }
 
     public EntityMinecartModular(Level world)
@@ -180,11 +185,11 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         random = RandomSource.create();
     }
 
-    public EntityMinecartModular(final Level world, final TileEntityCartAssembler assembler, final byte[] data)
+    public EntityMinecartModular(final Level world, final TileEntityCartAssembler assembler, final ArrayList<ResourceLocation> data)
     {
         this(world);
         setPlaceholder(assembler);
-        loadPlaceholderModules(data);
+        loadPlaceHolderModules(data);
     }
 
     @Override
@@ -195,79 +200,69 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         this.entityData.define(IS_DISANABLED, false);
     }
 
-    private void loadPlaceholderModules(final byte[] data)
+    private void loadPlaceHolderModules(final List<ResourceLocation> data)
     {
-        if (modules == null)
+        if(modules == null)
         {
             modules = new ArrayList<>();
-            doLoadModules(data);
+            for (ResourceLocation moduleResourceLocation : data)
+            {
+                ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(moduleResourceLocation);
+                doLoadModules(moduleData);
+            }
         }
         else
         {
-            final ArrayList<Byte> modulesToAdd = new ArrayList<>();
-            final ArrayList<Byte> oldModules = new ArrayList<>();
-            for (int i = 0; i < moduleLoadingData.length; ++i)
+            modules.clear();
+            for (ResourceLocation moduleResourceLocation : data)
             {
-                oldModules.add(moduleLoadingData[i]);
+                ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(moduleResourceLocation);
+                doLoadModules(moduleData);
             }
-            for (int i = 0; i < data.length; ++i)
-            {
-                boolean found = false;
-                for (int j = 0; j < oldModules.size(); ++j)
-                {
-                    if (data[i] == oldModules.get(j))
-                    {
-                        found = true;
-                        oldModules.remove(j);
-                        break;
-                    }
-                }
-                if (!found)
-                {
-                    modulesToAdd.add(data[i]);
-                }
-            }
-            for (final byte id : oldModules)
-            {
-                for (int k = 0; k < modules.size(); ++k)
-                {
-                    if (id == modules.get(k).getModuleId())
-                    {
-                        modules.remove(k);
-                        break;
-                    }
-                }
-            }
-            final byte[] newModuleData = new byte[modulesToAdd.size()];
-            for (int l = 0; l < modulesToAdd.size(); ++l)
-            {
-                newModuleData[l] = modulesToAdd.get(l);
-            }
-            doLoadModules(newModuleData);
         }
         initModules();
         moduleLoadingData = data;
     }
 
+    private void doLoadModules(ModuleData moduleData)
+    {
+        if(moduleData == null) return;
+        try
+        {
+            final Class<? extends ModuleBase> moduleClass = moduleData.getModuleClass();
+            final Constructor<? extends ModuleBase> moduleConstructor = moduleClass.getConstructor(EntityMinecartModular.class);
+            final Object moduleObject = moduleConstructor.newInstance(this);
+            final ModuleBase module = (ModuleBase) moduleObject;
+            module.setModuleId(moduleData.getID());
+            modules.add(module);
+        }
+        catch (Exception e)
+        {
+            System.out.println("Failed to load module with ID " + moduleData.getID() + "! More info below.");
+            e.printStackTrace();
+        }
+    }
+
     private void loadModules(final CompoundTag info)
     {
-        final ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
-        if (moduleIDTag == null)
+        List<ResourceLocation> modules = new ArrayList<>();
+        if(info == null) return;
+
+        ListTag listTag = (ListTag) info.get("modules");
+        if(listTag != null && !listTag.isEmpty())
         {
-            return;
-        }
-        if (level.isClientSide)
-        {
-            moduleLoadingData = moduleIDTag.getAsByteArray();
-        }
-        else
-        {
-            moduleLoadingData = CartVersion.updateCart(this, moduleIDTag.getAsByteArray());
+            for (int i = 0; i < listTag.size(); i++)
+            {
+                CompoundTag moduleTag = (CompoundTag) listTag.get(i);
+                ResourceLocation resourceLocation = new ResourceLocation(moduleTag.getString(String.valueOf(i)));
+                modules.add(resourceLocation);
+            }
+            moduleLoadingData = modules;
         }
         loadModules(moduleLoadingData);
     }
 
-    public void updateSimulationModules(final byte[] bytes)
+    public void updateSimulationModules(final List<ResourceLocation> data)
     {
         if (!isPlaceholder)
         {
@@ -275,35 +270,21 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         }
         else
         {
-            loadPlaceholderModules(bytes);
+            loadPlaceHolderModules(data);
         }
     }
 
-    protected void loadModules(final byte[] bytes)
+    protected void loadModules(final List<ResourceLocation> data)
     {
         modules = new ArrayList<>();
-        doLoadModules(bytes);
-        initModules();
-    }
-
-    private void doLoadModules(final byte[] bytes)
-    {
-        for (final byte id : bytes)
+        if(data != null)
         {
-            try
+            for (ResourceLocation datum : data)
             {
-                final Class<? extends ModuleBase> moduleClass = ModuleData.getList().get(id).getModuleClass();
-                final Constructor moduleConstructor = moduleClass.getConstructor(EntityMinecartModular.class);
-                final Object moduleObject = moduleConstructor.newInstance(this);
-                final ModuleBase module = (ModuleBase) moduleObject;
-                module.setModuleId(id);
-                modules.add(module);
-            } catch (Exception e)
-            {
-                System.out.println("Failed to load module with ID " + id + "! More info below.");
-                e.printStackTrace();
+                doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(datum));
             }
         }
+        initModules();
     }
 
     private void initModules()
@@ -311,7 +292,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         moduleCounts = new ArrayList<>();
         for (final ModuleBase module : modules)
         {
-            final ModuleData data = ModuleData.getList().get(module.getModuleId());
+            final ModuleData data = StevesCartsAPI.MODULE_REGISTRY.get(module.getModuleId());
             boolean found = false;
             for (final ModuleCountPair count : moduleCounts)
             {
@@ -334,8 +315,11 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         workModules = new ArrayList<>();
         engineModules = new ArrayList<>();
         tankModules = new ArrayList<>();
+        @Deprecated(forRemoval = true)
         final int x = 0;
+        @Deprecated(forRemoval = true)
         final int y = 0;
+        @Deprecated(forRemoval = true)
         final int maxH = 0;
         int guidata = 0;
         int packets = 0;
@@ -435,7 +419,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public void remove(RemovalReason removalReason)
+    public void remove(@NotNull RemovalReason removalReason)
     {
         if (level.isClientSide)
         {
@@ -465,16 +449,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 module.renderOverlay(matrixStack, minecraft);
             }
         }
-    }
-
-    @Override
-    public void onAddedToWorld()
-    {
-        if (level.isClientSide && !(entityData instanceof EntityDataManagerLockable))
-        {
-            //            overrideDatawatcher();
-        }
-        super.onAddedToWorld();
     }
 
     public void updateFuel()
@@ -597,7 +571,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    protected float getEyeHeight(Pose p_213316_1_, EntityDimensions p_213316_2_)
+    protected float getEyeHeight(@NotNull Pose pose, @NotNull EntityDimensions entityDimensions)
     {
         return 0.9F;
     }
@@ -985,7 +959,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         tagCompound.putDouble("temppushX", temppushX);
         tagCompound.putDouble("temppushZ", temppushZ);
         tagCompound.putShort("workingTime", (short) workingTime);
-        tagCompound.putByteArray("Modules", moduleLoadingData);
+//        tagCompound.putByteArray("Modules", moduleLoadingData);
         tagCompound.putByte("CartVersion", cartVersion);
         if (modules != null)
         {
@@ -1385,7 +1359,8 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             {
                 final ModuleBase module = modules.get(i);
                 final ModuleData data = module.getData();
-                if (data != null && data.haveModels(isPlaceholder))
+                if (data != null &&
+                        data.haveModels(isPlaceholder))
                 {
                     final ArrayList<ModelCartbase> models = new ArrayList<>();
                     for (final String str : data.getModels(isPlaceholder).keySet())
@@ -1408,30 +1383,32 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     @Override
     public void writeSpawnData(final FriendlyByteBuf data)
     {
-        if (moduleLoadingData == null) return;
-        data.writeByte(moduleLoadingData.length);
-        for (final byte b : moduleLoadingData)
-        {
-            data.writeByte(b);
-        }
-        data.writeByte(name.toString().getBytes().length);
-        for (final byte b : name.toString().getBytes())
-        {
-            data.writeByte(b);
-        }
+        //TODO
+//        if (moduleLoadingData == null) return;
+//        data.writeByte(moduleLoadingData.length);
+//        for (final byte b : moduleLoadingData)
+//        {
+//            data.writeByte(b);
+//        }
+//        data.writeByte(name.toString().getBytes().length);
+//        for (final byte b : name.toString().getBytes())
+//        {
+//            data.writeByte(b);
+//        }
     }
 
     @Override
     public void readSpawnData(final FriendlyByteBuf data)
     {
-        final byte length = data.readByte();
-        final byte[] bytes = new byte[length];
-        data.readBytes(bytes);
-        loadModules(bytes);
-        if (getDataManager() instanceof EntityDataManagerLockable)
-        {
-            ((EntityDataManagerLockable) getDataManager()).release();
-        }
+        //TODO
+//        final byte length = data.readByte();
+//        final byte[] bytes = new byte[length];
+//        data.readBytes(bytes);
+//        loadModules(bytes);
+//        if (getDataManager() instanceof EntityDataManagerLockable)
+//        {
+//            ((EntityDataManagerLockable) getDataManager()).release();
+//        }
     }
 
     public void setScrollY(final int val)

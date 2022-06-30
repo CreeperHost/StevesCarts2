@@ -4,6 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -577,7 +578,7 @@ public class ModuleData
     }
 
     @OnlyIn(Dist.CLIENT)
-    protected ModuleData addModel(final String tag, final ModelCartbase model)
+    public ModuleData addModel(final String tag, final ModelCartbase model)
     {
         addModel(tag, model, false);
         addModel(tag, model, true);
@@ -747,24 +748,20 @@ public class ModuleData
     public static ItemStack createModularCartFromItems(final NonNullList<ItemStack> modules)
     {
         ItemStack cart = new ItemStack(ModItems.CARTS.get(), 1);
-        final CompoundTag save = new CompoundTag();
-        final byte[] moduleIDs = new byte[modules.size()];
-        for (int i = 0; i < moduleIDs.length; ++i)
+        ListTag modulesTag = new ListTag();
+        for (int i = 0; i < modules.size(); i++)
         {
-            if (modules.get(i).getItem() instanceof ItemCartModule)
-            {
-                ItemCartModule itemCartModule = (ItemCartModule) modules.get(i).getItem();
-                //TODO API CHANGE NO MORE BYTES
-//                moduleIDs[i] = (byte) itemCartModule.getModuleData().getID();
-                itemCartModule.addExtraDataToCart(save, modules.get(i), i);
-            }
+            CompoundTag moduleTag = new CompoundTag();
+            ItemCartModule cartModule = (ItemCartModule) modules.get(i).getItem();
+            moduleTag.putString(String.valueOf(i), cartModule.getModuleData().getID().toString());
+            modulesTag.add(i, moduleTag);
         }
-        save.putByteArray("Modules", moduleIDs);
-        cart.setTag(save);
+        cart.getOrCreateTag().put("modules", modulesTag);
         CartVersion.addVersion(cart);
         return cart;
     }
 
+    @Deprecated(forRemoval = true)
     public static boolean isItemOfModularType(@Nonnull ItemStack itemstack, final Class<? extends ModuleBase> validClass)
     {
         //		if (itemstack.getItem() == ModItems.MODULES.get()) {

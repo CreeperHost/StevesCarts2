@@ -13,6 +13,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
@@ -28,6 +29,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.client.guis.buttons.ButtonBase;
 import vswe.stevescarts.client.models.ModelCartbase;
@@ -61,7 +63,7 @@ public abstract class ModuleBase
     private int packetOffset;
     private ArrayList<ButtonBase> buttons;
     protected int slotGlobalStart;
-    private byte moduleId;
+    private ResourceLocation moduleId;
     private ArrayList<ModelCartbase> models;
     protected ArrayList<SlotBase> slotList;
     private int moduleButtonId;
@@ -133,7 +135,7 @@ public abstract class ModuleBase
      *
      * @param val The module id
      */
-    public void setModuleId(final byte val)
+    public void setModuleId(final ResourceLocation val)
     {
         moduleId = val;
     }
@@ -143,7 +145,7 @@ public abstract class ModuleBase
      *
      * @return The module id
      */
-    public byte getModuleId()
+    public ResourceLocation getModuleId()
     {
         return moduleId;
     }
@@ -1681,7 +1683,7 @@ public abstract class ModuleBase
      */
     public ModuleData getData()
     {
-        return ModuleData.getList().get(getModuleId());
+        return StevesCartsAPI.MODULE_REGISTRY.get(getModuleId());
     }
 
     /**
@@ -1735,7 +1737,7 @@ public abstract class ModuleBase
 
     public String getModuleName()
     {
-        return I18n.get("item.stevescarts." + ModuleData.getList().get(getModuleId()).getRawName());
+        return I18n.get("item.stevescarts." + StevesCartsAPI.MODULE_REGISTRY.get(getModuleId()).getRawName());
     }
 
     public enum RAILDIRECTION

@@ -8,6 +8,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
@@ -1072,7 +1073,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     {
         if (placeholder == null)
         {
-            placeholder = new EntityMinecartModular(level, this, getModularInfoBytes());
+            placeholder = new EntityMinecartModular(level, this, getModularInfo());
             updateRenderMenu();
             isErrorListOutdated = true;
         }
@@ -1082,7 +1083,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     {
         if (placeholder != null)
         {
-            placeholder.updateSimulationModules(getModularInfoBytes());
+            placeholder.updateSimulationModules(getModularInfo());
             updateRenderMenu();
             isErrorListOutdated = true;
         }
@@ -1112,10 +1113,9 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         }
     }
 
-    //TODO, API CHANGE MEANS NO MORE BYTES
-    private byte[] getModularInfoBytes()
+    private ArrayList<ResourceLocation> getModularInfo()
     {
-        final ArrayList<Byte> datalist = new ArrayList<>();
+        final ArrayList<ResourceLocation> datalist = new ArrayList<>();
         for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i)
         {
             if (!getItem(i).isEmpty())
@@ -1125,17 +1125,12 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                     final ModuleData data = itemCartModule.getModuleData();
                     if (data != null)
                     {
-//                        datalist.add(data.getID());
+                        datalist.add(data.getID());
                     }
                 }
             }
         }
-        final byte[] bytes = new byte[datalist.size()];
-        for (int j = 0; j < datalist.size(); ++j)
-        {
-            bytes[j] = datalist.get(j);
-        }
-        return bytes;
+        return datalist;
     }
 
     public boolean getIsDisassembling()
