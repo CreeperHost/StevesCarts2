@@ -35,10 +35,7 @@ import vswe.stevescarts.modules.storages.chests.ModuleInternalStorage;
 import vswe.stevescarts.modules.storages.chests.ModuleSideChests;
 import vswe.stevescarts.modules.storages.chests.ModuleTopChest;
 import vswe.stevescarts.modules.workers.*;
-import vswe.stevescarts.modules.workers.tools.ModuleDrillDiamond;
-import vswe.stevescarts.modules.workers.tools.ModuleDrillGalgadorian;
-import vswe.stevescarts.modules.workers.tools.ModuleDrillHardened;
-import vswe.stevescarts.modules.workers.tools.ModuleDrillIron;
+import vswe.stevescarts.modules.workers.tools.*;
 
 import java.util.ArrayList;
 
@@ -79,6 +76,9 @@ public class StevesCartsModules
 
     public static ModuleData BRIDGE_BUILDER;
     public static ModuleData TRACK_REMOVER;
+
+    public static ModuleData BASIC_FARMER;
+    public static ModuleData GALGADORIAN_FARMER;
 
 
     public static void init()
@@ -165,6 +165,12 @@ public class StevesCartsModules
 
         TRACK_REMOVER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "track_remover"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "track_remover"), "Track Remover", ModuleRemover.class, ModuleType.TOOL, 8).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.TOP, ModuleData.SIDE.BACK}));
+
+        BASIC_FARMER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "basic_farmer"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "basic_farmer"), "Basic Farmer", ModuleFarmerDiamond.class, ModuleType.TOOL, 36).addSide(ModuleData.SIDE.FRONT));
+
+        GALGADORIAN_FARMER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "galgadorian_farmer"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "galgadorian_farmer"), "Galgadorian Farmer", ModuleFarmerGalgadorian.class, ModuleType.TOOL, 55).addSide(ModuleData.SIDE.FRONT));
     }
 
     public static void initModels()
@@ -198,8 +204,8 @@ public class StevesCartsModules
         LARGE_RAILER.addModel("Rails", new ModelRailer(6));
         BRIDGE_BUILDER.addModel("Bridge", new ModelBridge()).addModel("Plate", new ModelToolPlate());
         TRACK_REMOVER.addModel("Remover", new ModelTrackRemover()).setModelMult(0.6f);
-//        ModuleData.moduleList.get((byte) 14).addModel("Farmer", new ModelFarmer(ResourceHelper.getResource("/models/farmerModelDiamond.png"))).setModelMult(0.45f);
-//        ModuleData.moduleList.get((byte) 84).addModel("Farmer", new ModelFarmer(ResourceHelper.getResource("/models/farmerModelGalgadorian.png"))).setModelMult(0.45f);
+        BASIC_FARMER.addModel("Farmer", new ModelFarmer(ResourceHelper.getResource("/models/farmerModelDiamond.png"))).setModelMult(0.45f);
+        GALGADORIAN_FARMER.addModel("Farmer", new ModelFarmer(ResourceHelper.getResource("/models/farmerModelGalgadorian.png"))).setModelMult(0.45f);
 //        ModuleData.moduleList.get((byte) 15).addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodCutterModelDiamond.png"))).addModel("Plate", new ModelToolPlate());
 //        ModuleData.moduleList.get((byte) 79).addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodCutterModelHardened.png"))).addModel("Plate", new ModelToolPlate());
 //        ModuleData.moduleList.get((byte) 80).addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodCutterModelGalgadorian.png"))).addModel("Plate", new ModelToolPlate());

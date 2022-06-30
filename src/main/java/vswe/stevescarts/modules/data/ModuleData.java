@@ -58,11 +58,10 @@ import java.util.*;
 
 public class ModuleData
 {
-    private ResourceLocation id;
-    private Class<? extends ModuleBase> moduleClass;
-    private String name;
-    private int modularCost;
-    private int groupID;
+    private final ResourceLocation id;
+    private final Class<? extends ModuleBase> moduleClass;
+    private final String name;
+    private final int modularCost;
     private ArrayList<SIDE> renderingSides;
     private boolean allowDuplicate;
     private ArrayList<ModuleData> nemesis;
@@ -85,22 +84,9 @@ public class ModuleData
     {
 //        final ModuleDataGroup engineGroup = new ModuleDataGroup(Localization.MODULE_INFO.ENGINE_GROUP);
 //        final ModuleDataGroup drillGroup = new ModuleDataGroup(Localization.MODULE_INFO.DRILL_GROUP);
-//        drillGroup.add(drill);
-//        drillGroup.add(ironDrill);
-//        drillGroup.add(hardeneddrill);
-//        drillGroup.add(galgdrill);
-//
-//        addNemesis(railer, largerailer);
-//
-//        addNemesis(remover, railer);
-//        addNemesis(remover, largerailer);
-//
 //        final ModuleDataGroup farmerGroup = new ModuleDataGroup(Localization.MODULE_INFO.FARMER_GROUP);
-//        final ModuleData farmerbasic = new ModuleDataTool(14, "Basic Farmer", ModuleFarmerDiamond.class, 36, false).addSide(SIDE.FRONT);
-//        final ModuleData farmergalg = new ModuleDataTool(84, "Galgadorian Farmer", ModuleFarmerGalgadorian.class, 55, true).addSide(SIDE.FRONT);
-//        farmerGroup.add(farmerbasic);
-//        farmerGroup.add(farmergalg);
-//
+
+
 //        final ModuleDataGroup woodcutterGroup = new ModuleDataGroup(Localization.MODULE_INFO.CUTTER_GROUP);
 //        final ModuleData woodcutter = new ModuleDataTool(15, "Basic Wood Cutter", ModuleWoodcutterDiamond.class, 34, false).addSide(SIDE.FRONT);
 //        final ModuleData woodcutterHardened = new ModuleDataTool(79, "Hardened Wood Cutter", ModuleWoodcutterHardened.class, 65, false).addSide(SIDE.FRONT);
@@ -538,11 +524,6 @@ public class ModuleData
     public String getName()
     {
         return "module_" + getRawName();
-    }
-
-    public String getUnlocalizedName()
-    {
-        return "item.SC2." + getRawName() + ".name";
     }
 
     public ResourceLocation getID()
@@ -1009,7 +990,7 @@ public class ModuleData
     {
         NONE(Localization.MODULE_INFO.SIDE_NONE), TOP(Localization.MODULE_INFO.SIDE_TOP), CENTER(Localization.MODULE_INFO.SIDE_CENTER), BOTTOM(Localization.MODULE_INFO.SIDE_BOTTOM), BACK(Localization.MODULE_INFO.SIDE_BACK), LEFT(Localization.MODULE_INFO.SIDE_LEFT), RIGHT(Localization.MODULE_INFO.SIDE_RIGHT), FRONT(Localization.MODULE_INFO.SIDE_FRONT);
 
-        private Localization.MODULE_INFO name;
+        private final Localization.MODULE_INFO name;
 
         SIDE(final Localization.MODULE_INFO name)
         {

@@ -146,13 +146,13 @@ public class ModelFarmer extends ModelCartbase
     public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
     {
 
-        mainAnchor.zRot = ((module == null) ? 3.926991f : (-((ModuleFarmer) module).getRigAngle()));
-        final float farmAngle = (module == null) ? 0.0f : ((ModuleFarmer) module).getFarmAngle();
-        anchor.zRot = -farmAngle;
-        for (int i = 0; i < 6; ++i)
-        {
-            outers[i].xRot = farmAngle + nailRot(i);
-        }
+//        mainAnchor.zRot = ((module == null) ? 3.926991f : (-((ModuleFarmer) module).getRigAngle()));
+//        final float farmAngle = (module == null) ? 0.0f : ((ModuleFarmer) module).getFarmAngle();
+//        anchor.zRot = -farmAngle;
+//        for (int i = 0; i < 6; ++i)
+//        {
+//            outers[i].xRot = farmAngle + nailRot(i);
+//        }
     }
 
     @Override
