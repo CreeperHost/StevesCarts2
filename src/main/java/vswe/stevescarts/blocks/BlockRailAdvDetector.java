@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.material.Material;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 import vswe.stevescarts.blocks.tileentities.TileEntityManager;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -32,7 +33,7 @@ public class BlockRailAdvDetector extends BaseRailBlock
     private BlockRailAdvDetector(Properties builder)
     {
         super(true, builder);
-        this.registerDefaultState(this.stateDefinition.any().setValue(SHAPE, RailShape.NORTH_SOUTH).setValue(WATERLOGGED, Boolean.valueOf(false)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(SHAPE, RailShape.NORTH_SOUTH).setValue(WATERLOGGED, Boolean.FALSE));
     }
 
     @Override
@@ -42,7 +43,7 @@ public class BlockRailAdvDetector extends BaseRailBlock
     }
 
     @Override
-    public Property<RailShape> getShapeProperty()
+    public @NotNull Property<RailShape> getShapeProperty()
     {
         return SHAPE;
     }
@@ -85,9 +86,8 @@ public class BlockRailAdvDetector extends BaseRailBlock
                     if (block == ModBlocks.CARGO_MANAGER.get() || block == ModBlocks.LIQUID_MANAGER.get())
                     {
                         BlockEntity tileentity = world.getBlockEntity(offset);
-                        if (tileentity instanceof TileEntityManager)
+                        if (tileentity instanceof TileEntityManager manager)
                         {
-                            TileEntityManager manager = (TileEntityManager) tileentity;
                             if (manager.getCart() == null)
                             {
                                 manager.setCart(cart);
@@ -99,9 +99,8 @@ public class BlockRailAdvDetector extends BaseRailBlock
                     if (block == ModBlocks.MODULE_TOGGLER.get())
                     {
                         BlockEntity tileentity = world.getBlockEntity(offset);
-                        if (tileentity instanceof TileEntityActivator)
+                        if (tileentity instanceof TileEntityActivator activator)
                         {
-                            TileEntityActivator activator = (TileEntityActivator) tileentity;
                             boolean isOrange = false;
                             if (cart.temppushX == 0.0 == (cart.temppushZ == 0.0))
                             {

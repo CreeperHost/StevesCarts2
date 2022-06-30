@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.helpers.Pair;
@@ -30,7 +31,7 @@ public class BlockCartAssembler extends BlockContainerBase
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level world, BlockPos blockPos, Player playerEntity, InteractionHand hand, BlockHitResult rayTraceResult)
+    public @NotNull InteractionResult use(@NotNull BlockState blockState, Level world, @NotNull BlockPos blockPos, @NotNull Player playerEntity, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult)
     {
         if (!world.isClientSide)
         {
@@ -126,9 +127,8 @@ public class BlockCartAssembler extends BlockContainerBase
     private TileEntityCartAssembler getMaster(final Level world, final BlockPos pos)
     {
         final BlockEntity tile = world.getBlockEntity(pos);
-        if (tile != null && tile instanceof TileEntityCartAssembler)
+        if (tile != null && tile instanceof final TileEntityCartAssembler master)
         {
-            final TileEntityCartAssembler master = (TileEntityCartAssembler) tile;
             if (!master.isDead)
             {
                 return master;
@@ -156,7 +156,7 @@ public class BlockCartAssembler extends BlockContainerBase
     }
 
     @Override
-    public void neighborChanged(BlockState blockState, Level world, BlockPos blockPos, Block block, BlockPos blockPos1, boolean p_220069_6_)
+    public void neighborChanged(@NotNull BlockState blockState, @NotNull Level world, @NotNull BlockPos blockPos, @NotNull Block block, @NotNull BlockPos blockPos1, boolean p_220069_6_)
     {
         super.neighborChanged(blockState, world, blockPos, block, blockPos, p_220069_6_);
         updateMultiBlock(world, blockPos);
@@ -165,7 +165,7 @@ public class BlockCartAssembler extends BlockContainerBase
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState)
+    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState)
     {
         return new TileEntityCartAssembler(blockPos, blockState);
     }

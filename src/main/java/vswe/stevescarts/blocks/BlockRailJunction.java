@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.material.Material;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 
 import javax.annotation.Nullable;
@@ -29,7 +30,7 @@ public class BlockRailJunction extends BaseRailBlock
     private BlockRailJunction(Properties builder)
     {
         super(true, builder);
-        this.registerDefaultState(this.stateDefinition.any().setValue(SHAPE, RailShape.NORTH_SOUTH).setValue(WATERLOGGED, Boolean.valueOf(false)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(SHAPE, RailShape.NORTH_SOUTH).setValue(WATERLOGGED, Boolean.FALSE));
     }
 
     @Override
@@ -39,7 +40,7 @@ public class BlockRailJunction extends BaseRailBlock
     }
 
     @Override
-    public Property<RailShape> getShapeProperty()
+    public @NotNull Property<RailShape> getShapeProperty()
     {
         return SHAPE;
     }
@@ -51,11 +52,10 @@ public class BlockRailJunction extends BaseRailBlock
     }
 
     @Override
-    public RailShape getRailDirection(BlockState state, BlockGetter world, BlockPos pos, @Nullable AbstractMinecart cart)
+    public @NotNull RailShape getRailDirection(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @Nullable AbstractMinecart cart)
     {
-        if (cart instanceof EntityMinecartModular)
+        if (cart instanceof final EntityMinecartModular entityMinecartModular)
         {
-            final EntityMinecartModular entityMinecartModular = (EntityMinecartModular) cart;
             RailShape railShape = entityMinecartModular.getRailDirection(pos);
             if (railShape != null) return railShape;
         }

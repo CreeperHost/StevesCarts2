@@ -29,6 +29,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
@@ -42,8 +43,8 @@ public class BlockUpgrade extends BlockContainerBase
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty CONNECTED = BooleanProperty.create("connected");
 
-    private static VoxelShape[] BBS = new VoxelShape[6];
-    private AssemblerUpgrade assemblerUpgrade;
+    private static final VoxelShape[] BBS = new VoxelShape[6];
+    private final AssemblerUpgrade assemblerUpgrade;
 
     static
     {
@@ -70,7 +71,7 @@ public class BlockUpgrade extends BlockContainerBase
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter blockReader, BlockPos blockPos, CollisionContext selectionContext)
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter blockReader, @NotNull BlockPos blockPos, @NotNull CollisionContext selectionContext)
     {
         return BBS[state.getValue(FACING).getOpposite().ordinal()];
     }
@@ -84,13 +85,13 @@ public class BlockUpgrade extends BlockContainerBase
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState)
+    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState)
     {
         return new TileEntityUpgrade(assemblerUpgrade, blockPos, blockState);
     }
 
     @Override
-    public boolean canSurvive(BlockState blockState, LevelReader iWorldReader, BlockPos blockPos)
+    public boolean canSurvive(@NotNull BlockState blockState, LevelReader iWorldReader, BlockPos blockPos)
     {
         BlockPos offset = blockPos.relative(getFacing(blockState));
         return iWorldReader.getBlockEntity(offset) != null && iWorldReader.getBlockEntity(offset) instanceof TileEntityCartAssembler;
@@ -102,7 +103,7 @@ public class BlockUpgrade extends BlockContainerBase
     }
 
     @Override
-    public void randomTick(BlockState blockState, ServerLevel serverWorld, BlockPos blockPos, RandomSource p_225542_4_)
+    public void randomTick(@NotNull BlockState blockState, @NotNull ServerLevel serverWorld, @NotNull BlockPos blockPos, @NotNull RandomSource p_225542_4_)
     {
         if (!canSurvive(blockState, serverWorld, blockPos))
         {
@@ -116,7 +117,7 @@ public class BlockUpgrade extends BlockContainerBase
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level world, BlockPos blockPos, Player playerEntity, InteractionHand hand, BlockHitResult rayTraceResult)
+    public @NotNull InteractionResult use(@NotNull BlockState blockState, Level world, @NotNull BlockPos blockPos, @NotNull Player playerEntity, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult)
     {
         if (!world.isClientSide)
         {
@@ -130,7 +131,7 @@ public class BlockUpgrade extends BlockContainerBase
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter iBlockReader, List<Component> tooltip, TooltipFlag iTooltipFlag)
+    public void appendHoverText(@NotNull ItemStack itemStack, @Nullable BlockGetter iBlockReader, @NotNull List<Component> tooltip, @NotNull TooltipFlag iTooltipFlag)
     {
         if (assemblerUpgrade != null)
         {
