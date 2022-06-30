@@ -14,44 +14,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.client.models.*;
-import vswe.stevescarts.client.models.engines.*;
-import vswe.stevescarts.client.models.pig.ModelPigHead;
-import vswe.stevescarts.client.models.pig.ModelPigTail;
-import vswe.stevescarts.client.models.realtimers.ModelGun;
-import vswe.stevescarts.client.models.storages.chests.ModelExtractingChests;
-import vswe.stevescarts.client.models.storages.chests.ModelFrontChest;
-import vswe.stevescarts.client.models.storages.chests.ModelSideChests;
-import vswe.stevescarts.client.models.storages.chests.ModelTopChest;
-import vswe.stevescarts.client.models.storages.tanks.ModelAdvancedTank;
-import vswe.stevescarts.client.models.storages.tanks.ModelFrontTank;
-import vswe.stevescarts.client.models.storages.tanks.ModelSideTanks;
-import vswe.stevescarts.client.models.storages.tanks.ModelTopTank;
-import vswe.stevescarts.client.models.workers.ModelLiquidDrainer;
-import vswe.stevescarts.client.models.workers.ModelRailer;
-import vswe.stevescarts.client.models.workers.ModelTorchplacer;
-import vswe.stevescarts.client.models.workers.ModelTrackRemover;
-import vswe.stevescarts.client.models.workers.tools.ModelDrill;
-import vswe.stevescarts.client.models.workers.tools.ModelFarmer;
-import vswe.stevescarts.client.models.workers.tools.ModelWoodCutter;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
-import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.items.ItemCartModule;
 import vswe.stevescarts.modules.ModuleBase;
-import vswe.stevescarts.modules.addons.*;
-import vswe.stevescarts.modules.addons.mobdetectors.*;
-import vswe.stevescarts.modules.addons.plants.ModuleNetherwart;
-import vswe.stevescarts.modules.addons.plants.ModulePlantSize;
-import vswe.stevescarts.modules.addons.projectiles.*;
-import vswe.stevescarts.modules.engines.*;
-import vswe.stevescarts.modules.hull.*;
-import vswe.stevescarts.modules.realtimers.*;
-import vswe.stevescarts.modules.storages.ModuleStorage;
-import vswe.stevescarts.modules.storages.chests.*;
-import vswe.stevescarts.modules.storages.tanks.*;
-import vswe.stevescarts.modules.workers.*;
-import vswe.stevescarts.modules.workers.tools.*;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -86,18 +53,10 @@ public class ModuleData
 //        final ModuleDataGroup drillGroup = new ModuleDataGroup(Localization.MODULE_INFO.DRILL_GROUP);
 //        final ModuleDataGroup farmerGroup = new ModuleDataGroup(Localization.MODULE_INFO.FARMER_GROUP);
 //        final ModuleDataGroup woodcutterGroup = new ModuleDataGroup(Localization.MODULE_INFO.CUTTER_GROUP);
-
 //        final ModuleDataGroup tankGroup = new ModuleDataGroup(Localization.MODULE_INFO.TANK_GROUP);
-//        new ModuleData(16, "Hydrator", ModuleHydrater.class, 6).addRequirement(tankGroup);
-//        new ModuleData(18, "Fertilizer", ModuleFertilizer.class, 10);
-//        new ModuleData(19, "Height Controller", ModuleHeightControl.class, 20);
-//        final ModuleData liquidsensors = new ModuleData(20, "Liquid Sensors", ModuleLiquidSensors.class, 27).addRequirement(drillGroup);
-//        final ModuleData seat = new ModuleData(25, "Seat", ModuleSeat.class, 3).addSides(new SIDE[]{SIDE.CENTER, SIDE.TOP});
-//        new ModuleData(26, "Brake Handle", ModuleBrake.class, 12).addSide(SIDE.RIGHT).addParent(seat);
-//        new ModuleData(27, "Advanced Control System", ModuleAdvControl.class, 38).addSide(SIDE.RIGHT).addParent(seat);
-//
 //        final ModuleDataGroup detectorGroup = new ModuleDataGroup(Localization.MODULE_INFO.ENTITY_GROUP);
 //        final ModuleDataGroup shooterGroup = new ModuleDataGroup(Localization.MODULE_INFO.SHOOTER_GROUP);
+
 //        final ModuleData shooter = new ModuleData(28, "Shooter", ModuleShooter.class, 15).addSide(SIDE.TOP);
 //        final ModuleData advshooter = new ModuleData(29, "Advanced Shooter", ModuleShooterAdv.class, 50).addSide(SIDE.TOP).addRequirement(detectorGroup);
 //        shooterGroup.add(shooter);
@@ -318,7 +277,7 @@ public class ModuleData
         return this;
     }
 
-    protected ModuleData addParent(final ModuleData parent)
+    public ModuleData addParent(final ModuleData parent)
     {
         this.parent = parent;
         return this;
@@ -343,7 +302,7 @@ public class ModuleData
         this.nemesis.add(nemesis);
     }
 
-    protected ModuleData addRequirement(final ModuleDataGroup requirement)
+    public ModuleData addRequirement(final ModuleDataGroup requirement)
     {
         if (this.requirement == null)
         {

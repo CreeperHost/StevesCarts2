@@ -26,10 +26,15 @@ import vswe.stevescarts.client.models.workers.tools.ModelFarmer;
 import vswe.stevescarts.client.models.workers.tools.ModelWoodCutter;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.modules.addons.ModuleBrake;
+import vswe.stevescarts.modules.addons.ModuleHeightControl;
+import vswe.stevescarts.modules.addons.ModuleLiquidSensors;
 import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.modules.data.ModuleDataHull;
 import vswe.stevescarts.modules.engines.*;
 import vswe.stevescarts.modules.hull.*;
+import vswe.stevescarts.modules.realtimers.ModuleAdvControl;
+import vswe.stevescarts.modules.realtimers.ModuleSeat;
 import vswe.stevescarts.modules.storages.chests.ModuleFrontChest;
 import vswe.stevescarts.modules.storages.chests.ModuleInternalStorage;
 import vswe.stevescarts.modules.storages.chests.ModuleSideChests;
@@ -84,6 +89,14 @@ public class StevesCartsModules
     public static ModuleData HARDENED_WOOD_CUTTER;
     public static ModuleData GALGADORIAN_WOOD_CUTTER;
     public static ModuleData NETHERITE_WOOD_CUTTER;
+
+    public static ModuleData HYDRATER;
+    public static ModuleData FERTILIZER;
+    public static ModuleData HEIGHT_CONTROLLER;
+    public static ModuleData LIQUID_SENSORS;
+    public static ModuleData SEAT;
+    public static ModuleData BRAKE;
+    public static ModuleData ADVANCED_CONTROL_SYSTEM;
 
     public static void init()
     {
@@ -188,6 +201,29 @@ public class StevesCartsModules
 
         NETHERITE_WOOD_CUTTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "netherite_wood_cutter"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "netherite_wood_cutter"), "Netherite Wood Cutter", ModuleWoodcutterNetherite.class, ModuleType.TOOL, 120).addSide(ModuleData.SIDE.FRONT));
+
+
+        HYDRATER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "hydrator"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "hydrator"), "Hydrator", ModuleHydrater.class, ModuleType.ADDON, 6));//.addRequirement(tankGroup);
+
+        FERTILIZER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "fertilizer"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "fertilizer"), "Fertilizer", ModuleFertilizer.class, ModuleType.ADDON, 10));
+
+        HEIGHT_CONTROLLER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "height_controller"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "height_controller"), "Height Controller", ModuleHeightControl.class, ModuleType.ADDON, 20));
+
+        LIQUID_SENSORS = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "liquid_sensors"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "liquid_sensors"), "Liquid Sensors", ModuleLiquidSensors.class, ModuleType.ADDON, 27));//.addRequirement(drillGroup);
+
+        SEAT = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "seat"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "seat"), "Seat", ModuleSeat.class, ModuleType.ADDON, 3).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.CENTER, ModuleData.SIDE.TOP}));
+
+        BRAKE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "brake_handle"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "brake_handle"), "Brake Handle", ModuleBrake.class, ModuleType.ADDON, 12).addParent(SEAT));
+
+        ADVANCED_CONTROL_SYSTEM = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_control_system"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_control_system"), "Advanced Control System", ModuleAdvControl.class, ModuleType.ADDON, 38).addSide(ModuleData.SIDE.RIGHT).addParent(SEAT));
+
     }
 
     public static void initModels()
@@ -228,11 +264,11 @@ public class StevesCartsModules
         HARDENED_WOOD_CUTTER.addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodCutterModelHardened.png"))).addModel("Plate", new ModelToolPlate());
         GALGADORIAN_WOOD_CUTTER.addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodCutterModelGalgadorian.png"))).addModel("Plate", new ModelToolPlate());
         NETHERITE_WOOD_CUTTER.addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodcuttermodelnetherite.png"))).addModel("Plate", new ModelToolPlate());
-//
-//        ModuleData.moduleList.get((byte) 20).addModel("Sensor", new ModelLiquidSensors());
-//        ModuleData.moduleList.get((byte) 25).removeModel("Top").addModel("Chair", new ModelSeat());
-//        ModuleData.moduleList.get((byte) 26).addModel("Lever", new ModelLever(ResourceHelper.getResource("/models/leverModel.png")));
-//        ModuleData.moduleList.get((byte) 27).addModel("Lever", new ModelLever(ResourceHelper.getResource("/models/leverModel2.png"))).addModel("Wheel", new ModelWheel());
+
+        LIQUID_SENSORS.addModel("Sensor", new ModelLiquidSensors());
+        SEAT.removeModel("Top").addModel("Chair", new ModelSeat());
+        BRAKE.addModel("Lever", new ModelLever(ResourceHelper.getResource("/models/leverModel.png")));
+        ADVANCED_CONTROL_SYSTEM.addModel("Lever", new ModelLever(ResourceHelper.getResource("/models/leverModel2.png"))).addModel("Wheel", new ModelWheel());
 //        final ArrayList<Integer> pipes = new ArrayList<>();
 //        for (int i = 0; i < 9; ++i)
 //        {
@@ -253,7 +289,6 @@ public class StevesCartsModules
 //        ModuleData.moduleList.get((byte) 66).addModel("LargeTank", new ModelAdvancedTank()).removeModel("Top");
 //        ModuleData.moduleList.get((byte) 67).setModelMult(0.68f).addModel("FrontTank", new ModelFrontTank());
 //        ModuleData.moduleList.get((byte) 71).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelLiquidDrainer());
-//        ModuleData.moduleList.get((byte) 74).addModel("TopChest", new ModelEggBasket());
 //        ModuleData.moduleList.get((byte) 85).addModel("LawnMower", new ModelLawnMower()).setModelMult(0.4f);
 //        ModuleData.moduleList.get((byte) 99).addModel("Cake", new ModelCake());
 //        ModuleData.moduleList.get((byte) 100).addModel("Cake", new ModelCake());
