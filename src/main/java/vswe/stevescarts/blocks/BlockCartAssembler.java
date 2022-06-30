@@ -17,7 +17,7 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
-import vswe.stevescarts.helpers.Pair;
+import vswe.stevescarts.polylib.Pair;
 
 import java.util.ArrayList;
 

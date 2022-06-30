@@ -1,4 +1,4 @@
-package vswe.stevescarts.helpers;
+package vswe.stevescarts.polylib;
 
 public class Pair<A, B>
 {
