@@ -456,7 +456,7 @@ public class ModuleData
         return allowDuplicate;
     }
 
-    protected ModuleData addSide(final SIDE side)
+    public ModuleData addSide(final SIDE side)
     {
         if (renderingSides == null)
         {
@@ -507,7 +507,7 @@ public class ModuleData
         return this;
     }
 
-    protected ModuleData addMessage(final Localization.MODULE_INFO s)
+    public ModuleData addMessage(final Localization.MODULE_INFO s)
     {
         if (message == null)
         {
