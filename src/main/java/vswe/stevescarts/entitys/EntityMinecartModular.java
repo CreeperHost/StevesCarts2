@@ -1,6 +1,7 @@
 package vswe.stevescarts.entitys;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import dev.architectury.platform.Platform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -157,15 +158,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         engineFlag = false;
         random = world.random;
         loadModules(info);
-        //TODO
-//        this.name = name;
-//        for (int i = 0; i < modules.size(); ++i)
-//        {
-//            if (modules.get(i).hasExtraData() && info.contains("Data" + i))
-//            {
-//                modules.get(i).setExtraData(info.getByte("Data" + i));
-//            }
-//        }
     }
 
     public EntityMinecartModular(Level world)
@@ -278,7 +270,10 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         {
             for (ResourceLocation datum : data)
             {
-                doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(datum));
+                if(!datum.toString().isEmpty())
+                {
+                    doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(datum));
+                }
             }
         }
         initModules();
@@ -949,14 +944,14 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public boolean save(@NotNull CompoundTag tagCompound)
     {
         super.save(tagCompound);
-        tagCompound.putString("cartName", name.getString());
+        if(name != null) tagCompound.putString("cartName", name.getString());
         tagCompound.putBoolean("engineFlag", engineFlag);
         tagCompound.putDouble("pushX", getDeltaMovement().x);
         tagCompound.putDouble("pushZ", getDeltaMovement().z);
         tagCompound.putDouble("temppushX", temppushX);
         tagCompound.putDouble("temppushZ", temppushZ);
         tagCompound.putShort("workingTime", (short) workingTime);
-//        tagCompound.putByteArray("Modules", moduleLoadingData);
+        writeModulesToNbt(tagCompound);
         if (modules != null)
         {
             for (int i = 0; i < modules.size(); ++i)
@@ -966,6 +961,21 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             }
         }
         return true;
+    }
+
+    public void writeModulesToNbt(CompoundTag compoundTag)
+    {
+        ListTag listTag = new ListTag();
+        if(modules != null)
+        {
+            for (int i = 0; i < modules.size(); i++)
+            {
+                CompoundTag compoundTag1 = new CompoundTag();
+                compoundTag1.putString(String.valueOf(i), modules.get(i).getModuleId().toString());
+                listTag.add(i, compoundTag1);
+            }
+            compoundTag.put("modules", listTag);
+        }
     }
 
     @Override
@@ -990,6 +1000,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             }
         }
     }
+
 
     public boolean isDisabled()
     {
@@ -1352,32 +1363,29 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     @Override
     public void writeSpawnData(final FriendlyByteBuf data)
     {
-        //TODO
-//        if (moduleLoadingData == null) return;
-//        data.writeByte(moduleLoadingData.length);
-//        for (final byte b : moduleLoadingData)
-//        {
-//            data.writeByte(b);
-//        }
-//        data.writeByte(name.toString().getBytes().length);
-//        for (final byte b : name.toString().getBytes())
-//        {
-//            data.writeByte(b);
-//        }
+        if (moduleLoadingData == null) return;
+        data.writeByte(moduleLoadingData.size());
+        for (final ResourceLocation b : moduleLoadingData)
+        {
+            data.writeResourceLocation(b);
+        }
     }
 
     @Override
     public void readSpawnData(final FriendlyByteBuf data)
     {
         //TODO
-//        final byte length = data.readByte();
-//        final byte[] bytes = new byte[length];
-//        data.readBytes(bytes);
-//        loadModules(bytes);
-//        if (getDataManager() instanceof EntityDataManagerLockable)
-//        {
-//            ((EntityDataManagerLockable) getDataManager()).release();
-//        }
+        final byte length = data.readByte();
+        List<ResourceLocation> list = new ArrayList<>();
+        for (int i = 0; i < length; i++)
+        {
+            list.add(data.readResourceLocation());
+        }
+        loadModules(list);
+        if (getDataManager() instanceof EntityDataManagerLockable)
+        {
+            ((EntityDataManagerLockable) getDataManager()).release();
+        }
     }
 
     public void setScrollY(final int val)
