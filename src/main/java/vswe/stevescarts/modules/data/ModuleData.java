@@ -208,29 +208,6 @@ public class ModuleData
 
         new ModuleData(49, "Chunk Loader", ModuleChunkLoader.class, 84);
 
-        final ModuleData gift = new ModuleData(50, "Gift Storage", ModuleGiftStorage.class, 12)
-        {
-            @Override
-            public String getModuleInfoText(final byte b)
-            {
-                if (b == 0)
-                {
-                    return Localization.MODULE_INFO.STORAGE_EMPTY.translate();
-                }
-                return Localization.MODULE_INFO.GIFT_STORAGE_FULL.translate();
-            }
-
-            @Override
-            public String getCartInfoText(final String name, final byte b)
-            {
-                if (b == 0)
-                {
-                    return Localization.MODULE_INFO.STORAGE_EMPTY.translate() + " " + name;
-                }
-                return Localization.MODULE_INFO.STORAGE_FULL.translate() + " " + name;
-            }
-        }.addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT}).useExtraData((byte) 1);
-
         new ModuleData(51, "Projectile: Potion", ModulePotion.class, 10).addRequirement(shooterGroup);
         new ModuleData(52, "Projectile: Fire Charge", ModuleFireball.class, 10).lockByDefault().addRequirement(shooterGroup);
         new ModuleData(53, "Projectile: Egg", ModuleEgg.class, 10).addRequirement(shooterGroup);

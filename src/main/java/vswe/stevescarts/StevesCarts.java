@@ -21,7 +21,6 @@ import vswe.stevescarts.client.renders.RenderModulerCart;
 import vswe.stevescarts.entitys.CartDataSerializers;
 import vswe.stevescarts.handlers.EventHandler;
 import vswe.stevescarts.helpers.EventHelper;
-import vswe.stevescarts.helpers.GiftItem;
 import vswe.stevescarts.init.*;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
@@ -63,7 +62,6 @@ public class StevesCarts
 
         MinecraftForge.EVENT_BUS.register(new EventHandler());
 
-        GiftItem.init();
         TileEntityCargo.loadSelectionSettings();
         CartDataSerializers.init();
     }
