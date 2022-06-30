@@ -80,6 +80,10 @@ public class StevesCartsModules
     public static ModuleData BASIC_FARMER;
     public static ModuleData GALGADORIAN_FARMER;
 
+    public static ModuleData BASIC_WOOD_CUTTER;
+    public static ModuleData HARDENED_WOOD_CUTTER;
+    public static ModuleData GALGADORIAN_WOOD_CUTTER;
+    public static ModuleData NETHERITE_WOOD_CUTTER;
 
     public static void init()
     {
@@ -171,6 +175,19 @@ public class StevesCartsModules
 
         GALGADORIAN_FARMER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "galgadorian_farmer"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "galgadorian_farmer"), "Galgadorian Farmer", ModuleFarmerGalgadorian.class, ModuleType.TOOL, 55).addSide(ModuleData.SIDE.FRONT));
+
+
+        BASIC_WOOD_CUTTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "basic_wood_cutter"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "basic_wood_cutter"), "Basic Wood Cutter", ModuleWoodcutterDiamond.class, ModuleType.TOOL, 34).addSide(ModuleData.SIDE.FRONT));
+
+        HARDENED_WOOD_CUTTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "hardened_wood_cutter"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "hardened_wood_cutter"), "Hardened Wood Cutter", ModuleWoodcutterHardened.class, ModuleType.TOOL, 65).addSide(ModuleData.SIDE.FRONT));
+
+        GALGADORIAN_WOOD_CUTTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "galgadorian_wood_cutter"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "galgadorian_wood_cutter"), "Galgadorian Wood Cutter", ModuleWoodcutterGalgadorian.class, ModuleType.TOOL, 120).addSide(ModuleData.SIDE.FRONT));
+
+        NETHERITE_WOOD_CUTTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "netherite_wood_cutter"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "netherite_wood_cutter"), "Netherite Wood Cutter", ModuleWoodcutterNetherite.class, ModuleType.TOOL, 120).addSide(ModuleData.SIDE.FRONT));
     }
 
     public static void initModels()
@@ -206,10 +223,11 @@ public class StevesCartsModules
         TRACK_REMOVER.addModel("Remover", new ModelTrackRemover()).setModelMult(0.6f);
         BASIC_FARMER.addModel("Farmer", new ModelFarmer(ResourceHelper.getResource("/models/farmerModelDiamond.png"))).setModelMult(0.45f);
         GALGADORIAN_FARMER.addModel("Farmer", new ModelFarmer(ResourceHelper.getResource("/models/farmerModelGalgadorian.png"))).setModelMult(0.45f);
-//        ModuleData.moduleList.get((byte) 15).addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodCutterModelDiamond.png"))).addModel("Plate", new ModelToolPlate());
-//        ModuleData.moduleList.get((byte) 79).addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodCutterModelHardened.png"))).addModel("Plate", new ModelToolPlate());
-//        ModuleData.moduleList.get((byte) 80).addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodCutterModelGalgadorian.png"))).addModel("Plate", new ModelToolPlate());
-//        ModuleData.moduleList.get((byte) 102).addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodcuttermodelnetherite.png"))).addModel("Plate", new ModelToolPlate());
+
+        BASIC_WOOD_CUTTER.addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodCutterModelDiamond.png"))).addModel("Plate", new ModelToolPlate());
+        HARDENED_WOOD_CUTTER.addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodCutterModelHardened.png"))).addModel("Plate", new ModelToolPlate());
+        GALGADORIAN_WOOD_CUTTER.addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodCutterModelGalgadorian.png"))).addModel("Plate", new ModelToolPlate());
+        NETHERITE_WOOD_CUTTER.addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodcuttermodelnetherite.png"))).addModel("Plate", new ModelToolPlate());
 //
 //        ModuleData.moduleList.get((byte) 20).addModel("Sensor", new ModelLiquidSensors());
 //        ModuleData.moduleList.get((byte) 25).removeModel("Top").addModel("Chair", new ModelSeat());

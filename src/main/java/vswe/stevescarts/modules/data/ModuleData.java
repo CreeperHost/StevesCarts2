@@ -85,18 +85,8 @@ public class ModuleData
 //        final ModuleDataGroup engineGroup = new ModuleDataGroup(Localization.MODULE_INFO.ENGINE_GROUP);
 //        final ModuleDataGroup drillGroup = new ModuleDataGroup(Localization.MODULE_INFO.DRILL_GROUP);
 //        final ModuleDataGroup farmerGroup = new ModuleDataGroup(Localization.MODULE_INFO.FARMER_GROUP);
-
-
 //        final ModuleDataGroup woodcutterGroup = new ModuleDataGroup(Localization.MODULE_INFO.CUTTER_GROUP);
-//        final ModuleData woodcutter = new ModuleDataTool(15, "Basic Wood Cutter", ModuleWoodcutterDiamond.class, 34, false).addSide(SIDE.FRONT);
-//        final ModuleData woodcutterHardened = new ModuleDataTool(79, "Hardened Wood Cutter", ModuleWoodcutterHardened.class, 65, false).addSide(SIDE.FRONT);
-//        final ModuleData woodcutterGalgadorian = new ModuleDataTool(80, "Galgadorian Wood Cutter", ModuleWoodcutterGalgadorian.class, 120, true).addSide(SIDE.FRONT);
-//        final ModuleData woodCutterNetherite = new ModuleDataTool(102, "Netherite Wood Cutter", ModuleWoodcutterNetherite.class, 120, false).addSide(SIDE.FRONT);
-//        woodcutterGroup.add(woodcutter);
-//        woodcutterGroup.add(woodcutterHardened);
-//        woodcutterGroup.add(woodcutterGalgadorian);
-//        woodcutterGroup.add(woodCutterNetherite);
-//
+
 //        final ModuleDataGroup tankGroup = new ModuleDataGroup(Localization.MODULE_INFO.TANK_GROUP);
 //        new ModuleData(16, "Hydrator", ModuleHydrater.class, 6).addRequirement(tankGroup);
 //        new ModuleData(18, "Fertilizer", ModuleFertilizer.class, 10);
