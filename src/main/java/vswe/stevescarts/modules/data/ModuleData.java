@@ -84,186 +84,178 @@ public class ModuleData
 
     public static void init()
     {
-        final ModuleDataGroup engineGroup = new ModuleDataGroup(Localization.MODULE_INFO.ENGINE_GROUP);
-
-        final ModuleData solar1 = new ModuleData(1, "Solar Engine", ModuleSolarStandard.class, 20).addSides(new SIDE[]{SIDE.CENTER, SIDE.TOP});
-        final ModuleData solar2 = new ModuleData(45, "Basic Solar Engine", ModuleSolarBasic.class, 12).addSides(new SIDE[]{SIDE.CENTER, SIDE.TOP});
-        final ModuleData compactsolar = new ModuleData(56, "Compact Solar Engine", ModuleSolarCompact.class, 32).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
-
-
-        new ModuleData(2, "Side Chests", ModuleSideChests.class, 3).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
-        new ModuleData(3, "Top Chest", ModuleTopChest.class, 6).addSide(SIDE.TOP);
-        final ModuleData frontChest = new ModuleData(4, "Front Chest", ModuleFrontChest.class, 5).addSide(SIDE.FRONT);
-        new ModuleData(5, "Internal Storage", ModuleInternalStorage.class, 25).setAllowDuplicate();
-        new ModuleData(6, "Extracting Chests", ModuleExtractingChests.class, 75).addSides(new SIDE[]{SIDE.CENTER, SIDE.RIGHT, SIDE.LEFT});
-
-        new ModuleData(7, "Torch Placer", ModuleTorch.class, 14).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
-
-        final ModuleData drill = new ModuleDataTool(8, "Basic Drill", ModuleDrillDiamond.class, 10, false).addSide(SIDE.FRONT);
-        final ModuleData ironDrill = new ModuleDataTool(42, "Iron Drill", ModuleDrillIron.class, 3, false).addSide(SIDE.FRONT);
-        final ModuleData hardeneddrill = new ModuleDataTool(43, "Hardened Drill", ModuleDrillHardened.class, 45, false).addSide(SIDE.FRONT);
-        final ModuleData galgdrill = new ModuleDataTool(9, "Galgadorian Drill", ModuleDrillGalgadorian.class, 150, true).addSide(SIDE.FRONT);
-        final ModuleDataGroup drillGroup = new ModuleDataGroup(Localization.MODULE_INFO.DRILL_GROUP);
-        drillGroup.add(drill);
-        drillGroup.add(ironDrill);
-        drillGroup.add(hardeneddrill);
-        drillGroup.add(galgdrill);
-
-        final ModuleData railer = new ModuleData(10, "Railer", ModuleRailer.class, 3);
-        final ModuleData largerailer = new ModuleData(11, "Large Railer", ModuleRailerLarge.class, 17);
-        addNemesis(railer, largerailer);
-
-        new ModuleData(12, "Bridge Builder", ModuleBridge.class, 14);
-        final ModuleData remover = new ModuleData(13, "Track Remover", ModuleRemover.class, 8).addSides(new SIDE[]{SIDE.TOP, SIDE.BACK});
-        addNemesis(remover, railer);
-        addNemesis(remover, largerailer);
-
-        final ModuleDataGroup farmerGroup = new ModuleDataGroup(Localization.MODULE_INFO.FARMER_GROUP);
-        final ModuleData farmerbasic = new ModuleDataTool(14, "Basic Farmer", ModuleFarmerDiamond.class, 36, false).addSide(SIDE.FRONT);
-        final ModuleData farmergalg = new ModuleDataTool(84, "Galgadorian Farmer", ModuleFarmerGalgadorian.class, 55, true).addSide(SIDE.FRONT);
-        farmerGroup.add(farmerbasic);
-        farmerGroup.add(farmergalg);
-
-        final ModuleDataGroup woodcutterGroup = new ModuleDataGroup(Localization.MODULE_INFO.CUTTER_GROUP);
-        final ModuleData woodcutter = new ModuleDataTool(15, "Basic Wood Cutter", ModuleWoodcutterDiamond.class, 34, false).addSide(SIDE.FRONT);
-        final ModuleData woodcutterHardened = new ModuleDataTool(79, "Hardened Wood Cutter", ModuleWoodcutterHardened.class, 65, false).addSide(SIDE.FRONT);
-        final ModuleData woodcutterGalgadorian = new ModuleDataTool(80, "Galgadorian Wood Cutter", ModuleWoodcutterGalgadorian.class, 120, true).addSide(SIDE.FRONT);
-        final ModuleData woodCutterNetherite = new ModuleDataTool(102, "Netherite Wood Cutter", ModuleWoodcutterNetherite.class, 120, false).addSide(SIDE.FRONT);
-        woodcutterGroup.add(woodcutter);
-        woodcutterGroup.add(woodcutterHardened);
-        woodcutterGroup.add(woodcutterGalgadorian);
-        woodcutterGroup.add(woodCutterNetherite);
-
-        final ModuleDataGroup tankGroup = new ModuleDataGroup(Localization.MODULE_INFO.TANK_GROUP);
-        new ModuleData(16, "Hydrator", ModuleHydrater.class, 6).addRequirement(tankGroup);
-        new ModuleData(18, "Fertilizer", ModuleFertilizer.class, 10);
-        new ModuleData(19, "Height Controller", ModuleHeightControl.class, 20);
-        final ModuleData liquidsensors = new ModuleData(20, "Liquid Sensors", ModuleLiquidSensors.class, 27).addRequirement(drillGroup);
-        final ModuleData seat = new ModuleData(25, "Seat", ModuleSeat.class, 3).addSides(new SIDE[]{SIDE.CENTER, SIDE.TOP});
-        new ModuleData(26, "Brake Handle", ModuleBrake.class, 12).addSide(SIDE.RIGHT).addParent(seat);
-        new ModuleData(27, "Advanced Control System", ModuleAdvControl.class, 38).addSide(SIDE.RIGHT).addParent(seat);
-
-        final ModuleDataGroup detectorGroup = new ModuleDataGroup(Localization.MODULE_INFO.ENTITY_GROUP);
-        final ModuleDataGroup shooterGroup = new ModuleDataGroup(Localization.MODULE_INFO.SHOOTER_GROUP);
-        final ModuleData shooter = new ModuleData(28, "Shooter", ModuleShooter.class, 15).addSide(SIDE.TOP);
-        final ModuleData advshooter = new ModuleData(29, "Advanced Shooter", ModuleShooterAdv.class, 50).addSide(SIDE.TOP).addRequirement(detectorGroup);
-        shooterGroup.add(shooter);
-        shooterGroup.add(advshooter);
-
-        final ModuleData animal = new ModuleData(21, "Entity Detector: Animal", ModuleAnimal.class, 1).addParent(advshooter);
-        final ModuleData player = new ModuleData(22, "Entity Detector: Player", ModulePlayer.class, 7).addParent(advshooter);
-        final ModuleData villager = new ModuleData(23, "Entity Detector: Villager", ModuleVillager.class, 1).addParent(advshooter);
-        final ModuleData monster = new ModuleData(24, "Entity Detector: Monster", ModuleMonster.class, 1).addParent(advshooter);
-        final ModuleData bats = new ModuleData(48, "Entity Detector: Bat", ModuleBat.class, 1).addParent(advshooter);
-        detectorGroup.add(animal);
-        detectorGroup.add(player);
-        detectorGroup.add(villager);
-        detectorGroup.add(monster);
-        detectorGroup.add(bats);
-
-        final ModuleData cleaner = new ModuleData(30, "Cleaning Machine", ModuleCleaner.class, 23).addSide(SIDE.CENTER);
-        addNemesis(frontChest, cleaner);
-        new ModuleData(31, "Dynamite Carrier", ModuleDynamite.class, 3).addSide(SIDE.TOP);
-        new ModuleData(32, "Divine Shield", ModuleShield.class, 60);
-        final ModuleData melter = new ModuleData(33, "Melter", ModuleMelter.class, 10);
-        final ModuleData extrememelter = new ModuleData(34, "Extreme Melter", ModuleMelterExtreme.class, 19);
-        addNemesis(melter, extrememelter);
-        new ModuleData(36, "Invisibility Core", ModuleInvisible.class, 21);
-
-        new ModuleData(40, "Note Sequencer", ModuleNote.class, 30).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
-        final ModuleData colorizer = new ModuleData(41, "Colorizer", ModuleColorizer.class, 15);
-
-        final ModuleData colorRandomizer = new ModuleData(101, "Color Randomizer", ModuleColorRandomizer.class, 20);
-        addNemesis(colorizer, colorRandomizer);
-
-        new ModuleData(49, "Chunk Loader", ModuleChunkLoader.class, 84);
-
-        new ModuleData(51, "Projectile: Potion", ModulePotion.class, 10).addRequirement(shooterGroup);
-        new ModuleData(52, "Projectile: Fire Charge", ModuleFireball.class, 10).lockByDefault().addRequirement(shooterGroup);
-        new ModuleData(53, "Projectile: Egg", ModuleEgg.class, 10).addRequirement(shooterGroup);
-        final ModuleData snowballshooter = new ModuleData(54, "Projectile: Snowball", ModuleSnowball.class, 10).addRequirement(shooterGroup);
-        final ModuleData cake = new ModuleData(90, "Projectile: Cake", ModuleCake.class, 10).addRequirement(shooterGroup).lock();
-
-        final ModuleData snowgenerator = new ModuleData(55, "Freezer", ModuleSnowCannon.class, 24);
-        addNemesis(snowgenerator, melter);
-        addNemesis(snowgenerator, extrememelter);
-
-        final ModuleData cage = new ModuleData(57, "Cage", ModuleCage.class, 7).addSides(new SIDE[]{SIDE.TOP, SIDE.CENTER});
-        new ModuleData(58, "Crop: Nether Wart", ModuleNetherwart.class, 20).addRequirement(farmerGroup);
-        new ModuleData(59, "Firework display", ModuleFirework.class, 45);
-        final ModuleData cheatengine = new ModuleData(61, "Creative Engine", ModuleCheatEngine.class, 1);
-        final ModuleData internalTank = new ModuleData(63, "Internal SCTank", ModuleInternalTank.class, 37).setAllowDuplicate();
-        final ModuleData sideTank = new ModuleData(64, "Side Tanks", ModuleSideTanks.class, 10).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
-        final ModuleData topTank = new ModuleData(65, "Top SCTank", ModuleTopTank.class, 22).addSide(SIDE.TOP);
-        final ModuleData advancedTank = new ModuleData(66, "Advanced SCTank", ModuleAdvancedTank.class, 54).addSides(new SIDE[]{SIDE.CENTER, SIDE.TOP});
-        final ModuleData frontTank = new ModuleData(67, "Front SCTank", ModuleFrontTank.class, 15).addSide(SIDE.FRONT);
-        final ModuleData creativeTank = new ModuleData(72, "Creative SCTank", ModuleCheatTank.class, 1).setAllowDuplicate().addMessage(Localization.MODULE_INFO.OCEAN_MESSAGE);
-        final ModuleData topTankOpen = new ModuleData(73, "Open SCTank", ModuleOpenTank.class, 31).addSide(SIDE.TOP).addMessage(Localization.MODULE_INFO.OPEN_TANK);
-        addNemesis(frontTank, cleaner);
-        tankGroup.add(internalTank).add(sideTank).add(topTank).add(advancedTank).add(frontTank).add(creativeTank).add(topTankOpen);
-
-        new ModuleData(68, "Incinerator", ModuleIncinerator.class, 23).addRequirement(tankGroup).addRequirement(drillGroup);
-
-        final ModuleData thermal0 = new ModuleData(69, "Thermal Engine", ModuleThermalStandard.class, 28).addRequirement(tankGroup);
-        final ModuleData thermal2 = new ModuleData(70, "Advanced Thermal Engine", ModuleThermalAdvanced.class, 58).addRequirement(tankGroup.copy(2));
-        addNemesis(thermal0, thermal2);
-
-        final ModuleData cleanerliquid = new ModuleData(71, "Liquid Cleaner", ModuleLiquidDrainer.class, 30).addSide(SIDE.CENTER).addParent(liquidsensors).addRequirement(tankGroup);
-        addNemesis(frontTank, cleanerliquid);
-        addNemesis(frontChest, cleanerliquid);
-
-        final ModuleData eggBasket = new ModuleData(74, "Egg Basket", ModuleEggBasket.class, 14)
-        {
-            @Override
-            public String getModuleInfoText(final byte b)
-            {
-                if (b == 0)
-                {
-                    return Localization.MODULE_INFO.STORAGE_EMPTY.translate();
-                }
-                return Localization.MODULE_INFO.EGG_STORAGE_FULL.translate();
-            }
-
-            @Override
-            public String getCartInfoText(final String name, final byte b)
-            {
-                if (b == 0)
-                {
-                    return Localization.MODULE_INFO.STORAGE_EMPTY.translate() + " " + name;
-                }
-                return Localization.MODULE_INFO.STORAGE_FULL.translate() + " " + name;
-            }
-        }.addSide(SIDE.TOP).useExtraData((byte) 1);
-
-        new ModuleData(75, "Drill Intelligence", ModuleDrillIntelligence.class, 21).addRequirement(drillGroup);
-        new ModuleData(77, "Power Observer", ModulePowerObserver.class, 12).addRequirement(engineGroup);
-        engineGroup.add(solar2);
-        engineGroup.add(solar1);
-        engineGroup.add(thermal0);
-        engineGroup.add(thermal2);
-        engineGroup.add(compactsolar);
-        engineGroup.add(cheatengine);
-
-        new ModuleData(78, "Steve's Arcade", ModuleArcade.class, 10).addParent(seat);
-
-        final ModuleDataGroup toolGroup = ModuleDataGroup.getCombinedGroup(Localization.MODULE_INFO.TOOL_GROUP, drillGroup, woodcutterGroup);
-        toolGroup.add(farmerGroup);
-        final ModuleDataGroup enchantableGroup = ModuleDataGroup.getCombinedGroup(Localization.MODULE_INFO.TOOL_OR_SHOOTER_GROUP, toolGroup, shooterGroup);
-        new ModuleData(82, "Enchanter", ModuleEnchants.class, 72).addRequirement(enchantableGroup);
-        new ModuleData(83, "Ore Extractor", ModuleOreTracker.class, 80).addRequirement(drillGroup);
-        new ModuleData(85, "Lawn Mower", ModuleFlowerRemover.class, 38).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
-        new ModuleData(86, "Milker", ModuleMilker.class, 26).addParent(cage);
-        new ModuleData(87, "Crafter", ModuleCrafter.class, 22).setAllowDuplicate();
-        new ModuleData(89, "Planter Range Extender", ModulePlantSize.class, 20).addRequirement(woodcutterGroup);
-        new ModuleData(91, "Smelter", ModuleSmelter.class, 22).setAllowDuplicate();
-        new ModuleData(92, "Advanced Crafter", ModuleCrafterAdv.class, 42).setAllowDuplicate();
-        new ModuleData(93, "Advanced Smelter", ModuleSmelterAdv.class, 42).setAllowDuplicate();
-        new ModuleData(94, "Information Provider", ModuleLabel.class, 12);
-        new ModuleData(95, "Experience Bank", ModuleExperience.class, 36);
-        new ModuleData(96, "Creative Incinerator", ModuleCreativeIncinerator.class, 1).addRequirement(drillGroup);
-        new ModuleData(97, "Creative Supplies", ModuleCreativeSupplies.class, 1);
-        new ModuleData(99, "Cake Server", ModuleCakeServer.class, 10).addSide(SIDE.TOP).addMessage(Localization.MODULE_INFO.ALPHA_MESSAGE);
-        final ModuleData trickOrTreat = new ModuleData(100, "Trick-or-Treat Cake Server", ModuleCakeServerDynamite.class, 15).addSide(SIDE.TOP);
+//        final ModuleDataGroup engineGroup = new ModuleDataGroup(Localization.MODULE_INFO.ENGINE_GROUP);
+//
+//
+//
+//
+//        new ModuleData(2, "Side Chests", ModuleSideChests.class, 3).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
+//        new ModuleData(3, "Top Chest", ModuleTopChest.class, 6).addSide(SIDE.TOP);
+//        final ModuleData frontChest = new ModuleData(4, "Front Chest", ModuleFrontChest.class, 5).addSide(SIDE.FRONT);
+//        new ModuleData(5, "Internal Storage", ModuleInternalStorage.class, 25).setAllowDuplicate();
+//        new ModuleData(6, "Extracting Chests", ModuleExtractingChests.class, 75).addSides(new SIDE[]{SIDE.CENTER, SIDE.RIGHT, SIDE.LEFT});
+//
+//        new ModuleData(7, "Torch Placer", ModuleTorch.class, 14).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
+//
+//        final ModuleData drill = new ModuleDataTool(8, "Basic Drill", ModuleDrillDiamond.class, 10, false).addSide(SIDE.FRONT);
+//        final ModuleData ironDrill = new ModuleDataTool(42, "Iron Drill", ModuleDrillIron.class, 3, false).addSide(SIDE.FRONT);
+//        final ModuleData hardeneddrill = new ModuleDataTool(43, "Hardened Drill", ModuleDrillHardened.class, 45, false).addSide(SIDE.FRONT);
+//        final ModuleData galgdrill = new ModuleDataTool(9, "Galgadorian Drill", ModuleDrillGalgadorian.class, 150, true).addSide(SIDE.FRONT);
+//        final ModuleDataGroup drillGroup = new ModuleDataGroup(Localization.MODULE_INFO.DRILL_GROUP);
+//        drillGroup.add(drill);
+//        drillGroup.add(ironDrill);
+//        drillGroup.add(hardeneddrill);
+//        drillGroup.add(galgdrill);
+//
+//        final ModuleData railer = new ModuleData(10, "Railer", ModuleRailer.class, 3);
+//        final ModuleData largerailer = new ModuleData(11, "Large Railer", ModuleRailerLarge.class, 17);
+//        addNemesis(railer, largerailer);
+//
+//        new ModuleData(12, "Bridge Builder", ModuleBridge.class, 14);
+//        final ModuleData remover = new ModuleData(13, "Track Remover", ModuleRemover.class, 8).addSides(new SIDE[]{SIDE.TOP, SIDE.BACK});
+//        addNemesis(remover, railer);
+//        addNemesis(remover, largerailer);
+//
+//        final ModuleDataGroup farmerGroup = new ModuleDataGroup(Localization.MODULE_INFO.FARMER_GROUP);
+//        final ModuleData farmerbasic = new ModuleDataTool(14, "Basic Farmer", ModuleFarmerDiamond.class, 36, false).addSide(SIDE.FRONT);
+//        final ModuleData farmergalg = new ModuleDataTool(84, "Galgadorian Farmer", ModuleFarmerGalgadorian.class, 55, true).addSide(SIDE.FRONT);
+//        farmerGroup.add(farmerbasic);
+//        farmerGroup.add(farmergalg);
+//
+//        final ModuleDataGroup woodcutterGroup = new ModuleDataGroup(Localization.MODULE_INFO.CUTTER_GROUP);
+//        final ModuleData woodcutter = new ModuleDataTool(15, "Basic Wood Cutter", ModuleWoodcutterDiamond.class, 34, false).addSide(SIDE.FRONT);
+//        final ModuleData woodcutterHardened = new ModuleDataTool(79, "Hardened Wood Cutter", ModuleWoodcutterHardened.class, 65, false).addSide(SIDE.FRONT);
+//        final ModuleData woodcutterGalgadorian = new ModuleDataTool(80, "Galgadorian Wood Cutter", ModuleWoodcutterGalgadorian.class, 120, true).addSide(SIDE.FRONT);
+//        final ModuleData woodCutterNetherite = new ModuleDataTool(102, "Netherite Wood Cutter", ModuleWoodcutterNetherite.class, 120, false).addSide(SIDE.FRONT);
+//        woodcutterGroup.add(woodcutter);
+//        woodcutterGroup.add(woodcutterHardened);
+//        woodcutterGroup.add(woodcutterGalgadorian);
+//        woodcutterGroup.add(woodCutterNetherite);
+//
+//        final ModuleDataGroup tankGroup = new ModuleDataGroup(Localization.MODULE_INFO.TANK_GROUP);
+//        new ModuleData(16, "Hydrator", ModuleHydrater.class, 6).addRequirement(tankGroup);
+//        new ModuleData(18, "Fertilizer", ModuleFertilizer.class, 10);
+//        new ModuleData(19, "Height Controller", ModuleHeightControl.class, 20);
+//        final ModuleData liquidsensors = new ModuleData(20, "Liquid Sensors", ModuleLiquidSensors.class, 27).addRequirement(drillGroup);
+//        final ModuleData seat = new ModuleData(25, "Seat", ModuleSeat.class, 3).addSides(new SIDE[]{SIDE.CENTER, SIDE.TOP});
+//        new ModuleData(26, "Brake Handle", ModuleBrake.class, 12).addSide(SIDE.RIGHT).addParent(seat);
+//        new ModuleData(27, "Advanced Control System", ModuleAdvControl.class, 38).addSide(SIDE.RIGHT).addParent(seat);
+//
+//        final ModuleDataGroup detectorGroup = new ModuleDataGroup(Localization.MODULE_INFO.ENTITY_GROUP);
+//        final ModuleDataGroup shooterGroup = new ModuleDataGroup(Localization.MODULE_INFO.SHOOTER_GROUP);
+//        final ModuleData shooter = new ModuleData(28, "Shooter", ModuleShooter.class, 15).addSide(SIDE.TOP);
+//        final ModuleData advshooter = new ModuleData(29, "Advanced Shooter", ModuleShooterAdv.class, 50).addSide(SIDE.TOP).addRequirement(detectorGroup);
+//        shooterGroup.add(shooter);
+//        shooterGroup.add(advshooter);
+//
+//        final ModuleData animal = new ModuleData(21, "Entity Detector: Animal", ModuleAnimal.class, 1).addParent(advshooter);
+//        final ModuleData player = new ModuleData(22, "Entity Detector: Player", ModulePlayer.class, 7).addParent(advshooter);
+//        final ModuleData villager = new ModuleData(23, "Entity Detector: Villager", ModuleVillager.class, 1).addParent(advshooter);
+//        final ModuleData monster = new ModuleData(24, "Entity Detector: Monster", ModuleMonster.class, 1).addParent(advshooter);
+//        final ModuleData bats = new ModuleData(48, "Entity Detector: Bat", ModuleBat.class, 1).addParent(advshooter);
+//        detectorGroup.add(animal);
+//        detectorGroup.add(player);
+//        detectorGroup.add(villager);
+//        detectorGroup.add(monster);
+//        detectorGroup.add(bats);
+//
+//        final ModuleData cleaner = new ModuleData(30, "Cleaning Machine", ModuleCleaner.class, 23).addSide(SIDE.CENTER);
+//        addNemesis(frontChest, cleaner);
+//        new ModuleData(31, "Dynamite Carrier", ModuleDynamite.class, 3).addSide(SIDE.TOP);
+//        new ModuleData(32, "Divine Shield", ModuleShield.class, 60);
+//        final ModuleData melter = new ModuleData(33, "Melter", ModuleMelter.class, 10);
+//        final ModuleData extrememelter = new ModuleData(34, "Extreme Melter", ModuleMelterExtreme.class, 19);
+//        addNemesis(melter, extrememelter);
+//        new ModuleData(36, "Invisibility Core", ModuleInvisible.class, 21);
+//
+//        new ModuleData(40, "Note Sequencer", ModuleNote.class, 30).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
+//        final ModuleData colorizer = new ModuleData(41, "Colorizer", ModuleColorizer.class, 15);
+//
+//        final ModuleData colorRandomizer = new ModuleData(101, "Color Randomizer", ModuleColorRandomizer.class, 20);
+//        addNemesis(colorizer, colorRandomizer);
+//
+//        new ModuleData(49, "Chunk Loader", ModuleChunkLoader.class, 84);
+//
+//        new ModuleData(51, "Projectile: Potion", ModulePotion.class, 10).addRequirement(shooterGroup);
+//        new ModuleData(52, "Projectile: Fire Charge", ModuleFireball.class, 10).lockByDefault().addRequirement(shooterGroup);
+//        new ModuleData(53, "Projectile: Egg", ModuleEgg.class, 10).addRequirement(shooterGroup);
+//        final ModuleData snowballshooter = new ModuleData(54, "Projectile: Snowball", ModuleSnowball.class, 10).addRequirement(shooterGroup);
+//        final ModuleData cake = new ModuleData(90, "Projectile: Cake", ModuleCake.class, 10).addRequirement(shooterGroup).lock();
+//
+//        final ModuleData snowgenerator = new ModuleData(55, "Freezer", ModuleSnowCannon.class, 24);
+//        addNemesis(snowgenerator, melter);
+//        addNemesis(snowgenerator, extrememelter);
+//
+//        final ModuleData cage = new ModuleData(57, "Cage", ModuleCage.class, 7).addSides(new SIDE[]{SIDE.TOP, SIDE.CENTER});
+//        new ModuleData(58, "Crop: Nether Wart", ModuleNetherwart.class, 20).addRequirement(farmerGroup);
+//        new ModuleData(59, "Firework display", ModuleFirework.class, 45);
+//        final ModuleData cheatengine = new ModuleData(61, "Creative Engine", ModuleCheatEngine.class, 1);
+//        final ModuleData internalTank = new ModuleData(63, "Internal SCTank", ModuleInternalTank.class, 37).setAllowDuplicate();
+//        final ModuleData sideTank = new ModuleData(64, "Side Tanks", ModuleSideTanks.class, 10).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
+//        final ModuleData topTank = new ModuleData(65, "Top SCTank", ModuleTopTank.class, 22).addSide(SIDE.TOP);
+//        final ModuleData advancedTank = new ModuleData(66, "Advanced SCTank", ModuleAdvancedTank.class, 54).addSides(new SIDE[]{SIDE.CENTER, SIDE.TOP});
+//        final ModuleData frontTank = new ModuleData(67, "Front SCTank", ModuleFrontTank.class, 15).addSide(SIDE.FRONT);
+//        final ModuleData creativeTank = new ModuleData(72, "Creative SCTank", ModuleCheatTank.class, 1).setAllowDuplicate().addMessage(Localization.MODULE_INFO.OCEAN_MESSAGE);
+//        final ModuleData topTankOpen = new ModuleData(73, "Open SCTank", ModuleOpenTank.class, 31).addSide(SIDE.TOP).addMessage(Localization.MODULE_INFO.OPEN_TANK);
+//        addNemesis(frontTank, cleaner);
+//        tankGroup.add(internalTank).add(sideTank).add(topTank).add(advancedTank).add(frontTank).add(creativeTank).add(topTankOpen);
+//
+//        new ModuleData(68, "Incinerator", ModuleIncinerator.class, 23).addRequirement(tankGroup).addRequirement(drillGroup);
+//
+//        final ModuleData thermal0 = new ModuleData(69, "Thermal Engine", ModuleThermalStandard.class, 28).addRequirement(tankGroup);
+//        final ModuleData thermal2 = new ModuleData(70, "Advanced Thermal Engine", ModuleThermalAdvanced.class, 58).addRequirement(tankGroup.copy(2));
+//        addNemesis(thermal0, thermal2);
+//
+//        final ModuleData cleanerliquid = new ModuleData(71, "Liquid Cleaner", ModuleLiquidDrainer.class, 30).addSide(SIDE.CENTER).addParent(liquidsensors).addRequirement(tankGroup);
+//        addNemesis(frontTank, cleanerliquid);
+//        addNemesis(frontChest, cleanerliquid);
+//
+//        final ModuleData eggBasket = new ModuleData(74, "Egg Basket", ModuleEggBasket.class, 14)
+//        {
+//            @Override
+//            public String getModuleInfoText(final byte b)
+//            {
+//                if (b == 0)
+//                {
+//                    return Localization.MODULE_INFO.STORAGE_EMPTY.translate();
+//                }
+//                return Localization.MODULE_INFO.EGG_STORAGE_FULL.translate();
+//            }
+//
+//            @Override
+//            public String getCartInfoText(final String name, final byte b)
+//            {
+//                if (b == 0)
+//                {
+//                    return Localization.MODULE_INFO.STORAGE_EMPTY.translate() + " " + name;
+//                }
+//                return Localization.MODULE_INFO.STORAGE_FULL.translate() + " " + name;
+//            }
+//        }.addSide(SIDE.TOP).useExtraData((byte) 1);
+//
+//        new ModuleData(75, "Drill Intelligence", ModuleDrillIntelligence.class, 21).addRequirement(drillGroup);
+//        new ModuleData(77, "Power Observer", ModulePowerObserver.class, 12).addRequirement(engineGroup);
+//
+//        new ModuleData(78, "Steve's Arcade", ModuleArcade.class, 10).addParent(seat);
+//
+//        final ModuleDataGroup toolGroup = ModuleDataGroup.getCombinedGroup(Localization.MODULE_INFO.TOOL_GROUP, drillGroup, woodcutterGroup);
+//        toolGroup.add(farmerGroup);
+//        final ModuleDataGroup enchantableGroup = ModuleDataGroup.getCombinedGroup(Localization.MODULE_INFO.TOOL_OR_SHOOTER_GROUP, toolGroup, shooterGroup);
+//        new ModuleData(82, "Enchanter", ModuleEnchants.class, 72).addRequirement(enchantableGroup);
+//        new ModuleData(83, "Ore Extractor", ModuleOreTracker.class, 80).addRequirement(drillGroup);
+//        new ModuleData(85, "Lawn Mower", ModuleFlowerRemover.class, 38).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
+//        new ModuleData(86, "Milker", ModuleMilker.class, 26).addParent(cage);
+//        new ModuleData(87, "Crafter", ModuleCrafter.class, 22).setAllowDuplicate();
+//        new ModuleData(89, "Planter Range Extender", ModulePlantSize.class, 20).addRequirement(woodcutterGroup);
+//        new ModuleData(91, "Smelter", ModuleSmelter.class, 22).setAllowDuplicate();
+//        new ModuleData(92, "Advanced Crafter", ModuleCrafterAdv.class, 42).setAllowDuplicate();
+//        new ModuleData(93, "Advanced Smelter", ModuleSmelterAdv.class, 42).setAllowDuplicate();
+//        new ModuleData(94, "Information Provider", ModuleLabel.class, 12);
+//        new ModuleData(95, "Experience Bank", ModuleExperience.class, 36);
+//        new ModuleData(96, "Creative Incinerator", ModuleCreativeIncinerator.class, 1).addRequirement(drillGroup);
+//        new ModuleData(97, "Creative Supplies", ModuleCreativeSupplies.class, 1);
+//        new ModuleData(99, "Cake Server", ModuleCakeServer.class, 10).addSide(SIDE.TOP).addMessage(Localization.MODULE_INFO.ALPHA_MESSAGE);
+//        final ModuleData trickOrTreat = new ModuleData(100, "Trick-or-Treat Cake Server", ModuleCakeServerDynamite.class, 15).addSide(SIDE.TOP);
     }
 
     @Deprecated(forRemoval = true)
@@ -330,36 +322,6 @@ public class ModuleData
 //        ModuleData.moduleList.get((byte) 85).addModel("LawnMower", new ModelLawnMower()).setModelMult(0.4f);
 //        ModuleData.moduleList.get((byte) 99).addModel("Cake", new ModelCake());
 //        ModuleData.moduleList.get((byte) 100).addModel("Cake", new ModelCake());
-    }
-
-    @Deprecated(forRemoval = true)
-    public ModuleData(final int id, final String name, final Class<? extends ModuleBase> moduleClass, final int modularCost)
-    {
-//        nemesis = null;
-//        requirement = null;
-//        parent = null;
-//        modelMult = 0.75f;
-//        this.id = id;
-//        this.moduleClass = moduleClass;
-//        this.name = name;
-//        this.modularCost = modularCost;
-//        groupID = ModuleData.moduleGroups.length;
-//        for (int i = 0; i < ModuleData.moduleGroups.length; ++i)
-//        {
-//            if (ModuleData.moduleGroups[i].isAssignableFrom(moduleClass))
-//            {
-//                groupID = i;
-//                break;
-//            }
-//        }
-//        if (ModuleData.moduleList.containsKey(this.id))
-//        {
-//            throw new Error("WARNING! " + name + " can't be added with ID " + id + " since that ID is already occupied by " + ModuleData.moduleList.get(this.id).getName());
-//        }
-//        else
-//        {
-//            ModuleData.moduleList.put(this.id, this);
-//        }
     }
 
     ModuleType moduleType;
@@ -458,7 +420,7 @@ public class ModuleData
         return renderingSides;
     }
 
-    protected ModuleData addSides(final SIDE[] sides)
+    public ModuleData addSides(final SIDE[] sides)
     {
         for (int i = 0; i < sides.length; ++i)
         {
@@ -571,7 +533,7 @@ public class ModuleData
         return models != null;
     }
 
-    protected ModuleData removeModel(final String tag)
+    public ModuleData removeModel(final String tag)
     {
         if (removedModels == null)
         {
@@ -639,7 +601,7 @@ public class ModuleData
         return name;
     }
 
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public static NonNullList<ItemStack> getModularItems(@Nonnull ItemStack cart)
     {
         final NonNullList<ItemStack> modules = NonNullList.create();
@@ -663,6 +625,7 @@ public class ModuleData
         return modules;
     }
 
+    @Deprecated(forRemoval = true)
     public static ItemStack createModularCart(final EntityMinecartModular parentcart)
     {
         @Nonnull ItemStack cart = new ItemStack(ModItems.CARTS.get(), 1);
@@ -737,11 +700,12 @@ public class ModuleData
         return false;
     }
 
-    //TODO
+    //TODO rewrite all of this
     public static boolean isValidModuleItem(final int validGroup, final ModuleData module)
     {
-//        if (module != null)
-//        {
+        if (module != null)
+        {
+            return true;
 //            if (validGroup < 0)
 //            {
 //                for (int i = 0; i < ModuleData.moduleGroups.length; ++i)
@@ -757,12 +721,15 @@ public class ModuleData
 //            {
 //                return true;
 //            }
-//        }
+        }
         return false;
     }
 
     public static boolean isValidModuleCombo(final ModuleDataHull hull, final ArrayList<ModuleData> modules)
     {
+        //TODO rewrite all of this
+        if(true) return true;
+
         final int[] max = {1, hull.getEngineMax(), 1, 4, hull.getAddonMax(), 6};
         final int[] current = new int[max.length];
         for (final ModuleData module : modules)

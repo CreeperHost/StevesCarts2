@@ -28,8 +28,7 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.modules.data.ModuleDataHull;
-import vswe.stevescarts.modules.engines.ModuleCoalStandard;
-import vswe.stevescarts.modules.engines.ModuleCoalTiny;
+import vswe.stevescarts.modules.engines.*;
 import vswe.stevescarts.modules.hull.*;
 
 import java.util.ArrayList;
@@ -49,9 +48,14 @@ public class StevesCartsModules
     public static ModuleData COAL_ENGINE;
     public static ModuleData TINY_COAL_ENGINE;
 
+    public static ModuleData SOLAR_ENGINE;
+    public static ModuleData BASIC_SOLAR_ENGINE;
+    public static ModuleData COMPACT_SOLAR_ENGINE;
+
 
     public static void init()
     {
+        //Hulls
         WOODEN_HULL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "wooden_hull"),
                 new ModuleDataHull(new ResourceLocation(Constants.MOD_ID, "wooden_hull"), "Wooden Hull", ModuleWood.class, ModuleType.HULL).setCapacity(50).setEngineMax(1).setAddonMax(0).setComplexityMax(15));
 
@@ -74,11 +78,23 @@ public class StevesCartsModules
                 new ModuleDataHull(new ResourceLocation(Constants.MOD_ID, "galgadorian_hull"), "Galgadorian Hull", ModuleGalgadorian.class, ModuleType.HULL).setCapacity(1000).setEngineMax(5).setAddonMax(12).setComplexityMax(150));
 
 
+        //Engines
         COAL_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "coal_engine"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "coal_engine"), "Coal Engine", ModuleCoalStandard.class, ModuleType.ENGINE, 15));
 
         TINY_COAL_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "tiny_coal_engine"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "tiny_coal_engine"), "Tiny Coal Engine", ModuleCoalTiny.class, ModuleType.ENGINE, 2));
+
+
+        //Solar engine
+        SOLAR_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "solar_engine"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "solar_engine"), "Solar Engine", ModuleSolarStandard.class, ModuleType.ENGINE, 20).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.CENTER, ModuleData.SIDE.TOP}));
+
+        BASIC_SOLAR_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "basic_solar_engine"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "basic_solar_engine"), "Basic Solar Engine", ModuleSolarBasic.class, ModuleType.ENGINE, 12).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.CENTER, ModuleData.SIDE.TOP}));
+
+        COMPACT_SOLAR_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "compact_solar_engine"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "compact_solar_engine"), "Compact Solar Engine", ModuleSolarCompact.class, ModuleType.ENGINE, 32).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT}));
 
     }
 
@@ -92,13 +108,14 @@ public class StevesCartsModules
         CREATIVE_HULL.addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelCreative.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelCreativeTop.png")));
         GALGADORIAN_HULL.addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelGalgadorian.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelGalgadorianTop.png")));
 
-
         COAL_ENGINE.addModel("Engine", new ModelEngineFrame()).addModel("Fire", new ModelEngineInside());
         TINY_COAL_ENGINE.addModel("Engine", new ModelEngineFrame()).addModel("Fire", new ModelEngineInside());
 
-//        ModuleData.moduleList.get((byte) 1).addModel("SolarPanelBase", new ModelSolarPanelBase()).addModel("SolarPanels", new ModelSolarPanelHeads(4)).removeModel("Top");
-//        ModuleData.moduleList.get((byte) 45).addModel("SolarPanelBase", new ModelSolarPanelBase()).addModel("SolarPanels", new ModelSolarPanelHeads(2)).removeModel("Top");
-//        ModuleData.moduleList.get((byte) 56).addModel("SolarPanelSide", new ModelCompactSolarPanel());
+        SOLAR_ENGINE.addModel("SolarPanelBase", new ModelSolarPanelBase()).addModel("SolarPanels", new ModelSolarPanelHeads(4)).removeModel("Top");
+        BASIC_SOLAR_ENGINE.addModel("SolarPanelBase", new ModelSolarPanelBase()).addModel("SolarPanels", new ModelSolarPanelHeads(2)).removeModel("Top");
+        COMPACT_SOLAR_ENGINE.addModel("SolarPanelSide", new ModelCompactSolarPanel());
+
+
 //        ModuleData.moduleList.get((byte) 2).addModel("SideChest", new ModelSideChests());
 //        ModuleData.moduleList.get((byte) 3).removeModel("Top").addModel("TopChest", new ModelTopChest());
 //        ModuleData.moduleList.get((byte) 4).addModel("FrontChest", new ModelFrontChest()).setModelMult(0.68f);
