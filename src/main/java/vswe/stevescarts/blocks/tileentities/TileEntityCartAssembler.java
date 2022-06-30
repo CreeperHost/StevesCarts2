@@ -39,6 +39,7 @@ import vswe.stevescarts.items.ItemCartModule;
 import vswe.stevescarts.items.ItemCarts;
 import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.modules.data.ModuleDataHull;
+import vswe.stevescarts.polylib.NBTHelper;
 import vswe.stevescarts.upgrades.*;
 
 import javax.annotation.Nonnull;

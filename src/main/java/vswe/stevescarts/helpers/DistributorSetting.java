@@ -8,10 +8,10 @@ import java.util.ArrayList;
 public class DistributorSetting
 {
     public static ArrayList<DistributorSetting> settings;
-    private int id;
-    private int imageId;
-    private boolean top;
-    private Localization.GUI.DISTRIBUTOR name;
+    private final int id;
+    private final int imageId;
+    private final boolean top;
+    private final Localization.GUI.DISTRIBUTOR name;
 
     public DistributorSetting(final int id, final boolean top, final Localization.GUI.DISTRIBUTOR name)
     {

@@ -12,9 +12,9 @@ import java.util.ArrayList;
 
 public class EnchantmentInfo
 {
-    private Enchantment enchantment;
-    private int rank1Value;
-    private ENCHANTMENT_TYPE type;
+    private final Enchantment enchantment;
+    private final int rank1Value;
+    private final ENCHANTMENT_TYPE type;
     public static ArrayList<EnchantmentInfo> enchants;
     public static EnchantmentInfo fortune;
     public static EnchantmentInfo efficiency;

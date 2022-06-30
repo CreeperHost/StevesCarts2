@@ -23,27 +23,27 @@ import java.util.ArrayList;
 
 public class SimulationInfo
 {
-    private ArrayList<DropDownMenuItem> items;
-    private DropDownMenuItem itemBOOLChest;
-    private DropDownMenuItem itemBOOLInvis;
-    private DropDownMenuItem itemBOOLBrake;
-    private DropDownMenuItem itemBOOLDrill;
-    private DropDownMenuItem itemBOOLLight;
-    private DropDownMenuItem itemBOOLBridge;
-    private DropDownMenuItem itemBOOLFarm;
-    private DropDownMenuItem itemBOOLCut;
-    private DropDownMenuItem itemBOOLExplode;
-    private DropDownMenuItem itemBOOLShield;
-    private DropDownMenuItem itemINTLiquid;
-    private DropDownMenuItem itemINTWater;
-    private DropDownMenuItem itemINTFuse;
-    private DropDownMenuItem itemINTRail;
-    private DropDownMenuItem itemINTExplosion;
-    private DropDownMenuItem itemMULTIBOOLTorch;
-    private DropDownMenuItem itemMULTIBOOLPipes1;
-    private DropDownMenuItem itemMULTIBOOLPipes2;
-    private DropDownMenuItem itemBOOLPipe;
-    private DropDownMenuItem itemINTBackground;
+    private final ArrayList<DropDownMenuItem> items;
+    private final DropDownMenuItem itemBOOLChest;
+    private final DropDownMenuItem itemBOOLInvis;
+    private final DropDownMenuItem itemBOOLBrake;
+    private final DropDownMenuItem itemBOOLDrill;
+    private final DropDownMenuItem itemBOOLLight;
+    private final DropDownMenuItem itemBOOLBridge;
+    private final DropDownMenuItem itemBOOLFarm;
+    private final DropDownMenuItem itemBOOLCut;
+    private final DropDownMenuItem itemBOOLExplode;
+    private final DropDownMenuItem itemBOOLShield;
+    private final DropDownMenuItem itemINTLiquid;
+    private final DropDownMenuItem itemINTWater;
+    private final DropDownMenuItem itemINTFuse;
+    private final DropDownMenuItem itemINTRail;
+    private final DropDownMenuItem itemINTExplosion;
+    private final DropDownMenuItem itemMULTIBOOLTorch;
+    private final DropDownMenuItem itemMULTIBOOLPipes1;
+    private final DropDownMenuItem itemMULTIBOOLPipes2;
+    private final DropDownMenuItem itemBOOLPipe;
+    private final DropDownMenuItem itemINTBackground;
     public int fuse;
 
     public boolean getShieldActive()

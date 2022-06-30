@@ -5,9 +5,9 @@ import vswe.stevescarts.blocks.tileentities.TileEntityDistributor;
 
 public class DistributorSide
 {
-    private int id;
-    private Localization.GUI.DISTRIBUTOR name;
-    private Direction side;
+    private final int id;
+    private final Localization.GUI.DISTRIBUTOR name;
+    private final Direction side;
     private int data;
 
     public DistributorSide(final int id, final Localization.GUI.DISTRIBUTOR name, final Direction side)

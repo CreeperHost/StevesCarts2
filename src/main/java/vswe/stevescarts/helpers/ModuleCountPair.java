@@ -5,7 +5,7 @@ import vswe.stevescarts.modules.data.ModuleData;
 
 public class ModuleCountPair
 {
-    private ModuleData data;
+    private final ModuleData data;
     private int count;
     private String name;
     private byte extraData;

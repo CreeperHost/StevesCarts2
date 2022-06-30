@@ -16,8 +16,8 @@ import java.text.NumberFormat;
 
 public class SCTank extends FluidTank
 {
-    private ITankHolder owner;
-    private int tankid;
+    private final ITankHolder owner;
+    private final int tankid;
     private boolean isLocked;
 
     public SCTank(final ITankHolder owner, final int tankSize, final int tankid)

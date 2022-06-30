@@ -5,9 +5,9 @@ import vswe.stevescarts.modules.ModuleBase;
 
 public class ActivatorOption
 {
-    private Class<? extends ModuleBase> module;
-    private int id;
-    private Localization.GUI.TOGGLER name;
+    private final Class<? extends ModuleBase> module;
+    private final int id;
+    private final Localization.GUI.TOGGLER name;
     private int option;
 
     public ActivatorOption(final Localization.GUI.TOGGLER name, final Class<? extends ModuleBase> module, final int id)

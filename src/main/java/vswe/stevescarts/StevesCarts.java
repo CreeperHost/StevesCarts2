@@ -20,7 +20,6 @@ import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.client.renders.RenderModulerCart;
 import vswe.stevescarts.entitys.CartDataSerializers;
 import vswe.stevescarts.handlers.EventHandler;
-import vswe.stevescarts.helpers.EventHelper;
 import vswe.stevescarts.init.*;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
@@ -54,7 +53,6 @@ public class StevesCarts
 
     public void commonSetup(final FMLCommonSetupEvent event)
     {
-        EventHelper.setupEvents();
         PacketHandler.register();
 
         AssemblerUpgrade.init();

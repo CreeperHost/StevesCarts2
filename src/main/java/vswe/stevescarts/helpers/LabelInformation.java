@@ -2,7 +2,7 @@ package vswe.stevescarts.helpers;
 
 public abstract class LabelInformation
 {
-    private Localization.MODULES.ADDONS name;
+    private final Localization.MODULES.ADDONS name;
 
     public LabelInformation(final Localization.MODULES.ADDONS name)
     {

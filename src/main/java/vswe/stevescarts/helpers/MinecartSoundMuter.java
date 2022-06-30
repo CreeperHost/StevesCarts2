@@ -2,6 +2,7 @@ package vswe.stevescarts.helpers;
 
 import net.minecraftforge.common.MinecraftForge;
 
+@Deprecated(forRemoval = true)
 public class MinecartSoundMuter
 {
     public MinecartSoundMuter()

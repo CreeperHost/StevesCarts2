@@ -6,10 +6,10 @@ import javax.annotation.Nonnull;
 
 public class CargoItemSelection
 {
-    private Class validSlot;
+    private final Class validSlot;
     @Nonnull
-    private ItemStack icon;
-    private Localization.GUI.CARGO name;
+    private final ItemStack icon;
+    private final Localization.GUI.CARGO name;
 
     public CargoItemSelection(final Localization.GUI.CARGO name, final Class validSlot, @Nonnull ItemStack icon)
     {

@@ -2,10 +2,10 @@ package vswe.stevescarts.helpers;
 
 public class TitleBox
 {
-    private int id;
-    private int x;
-    private int y;
-    private int color;
+    private final int id;
+    private final int x;
+    private final int y;
+    private final int color;
 
     public TitleBox(final int id, final int y, final int color)
     {

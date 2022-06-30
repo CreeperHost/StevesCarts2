@@ -36,7 +36,7 @@ import vswe.stevescarts.client.models.ModelCartbase;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.ButtonComparator;
-import vswe.stevescarts.helpers.NBTHelper;
+import vswe.stevescarts.polylib.NBTHelper;
 import vswe.stevescarts.helpers.SimulationInfo;
 import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.network.PacketHandler;

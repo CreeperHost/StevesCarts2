@@ -13,9 +13,8 @@ public class TransferHandler
 {
     public static boolean isSlotOfType(final Slot slot, final Class slotType)
     {
-        if (slot instanceof ISpecialSlotValidator)
+        if (slot instanceof final ISpecialSlotValidator specSlot)
         {
-            final ISpecialSlotValidator specSlot = (ISpecialSlotValidator) slot;
             return specSlot.isSlotValid();
         }
         return slotType.isInstance(slot);
@@ -23,9 +22,8 @@ public class TransferHandler
 
     public static boolean isItemValidForTransfer(final Slot slot, @Nonnull ItemStack item, final TRANSFER_TYPE type)
     {
-        if (slot instanceof ISpecialItemTransferValidator)
+        if (slot instanceof final ISpecialItemTransferValidator specSlot)
         {
-            final ISpecialItemTransferValidator specSlot = (ISpecialItemTransferValidator) slot;
             return specSlot.isItemValidForTransfer(item, type);
         }
         return slot.mayPlace(item);

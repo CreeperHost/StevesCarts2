@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class AnimationRig
 {
-    private ArrayList<AnimationRigVal> rigs;
+    private final ArrayList<AnimationRigVal> rigs;
 
     public AnimationRig()
     {
