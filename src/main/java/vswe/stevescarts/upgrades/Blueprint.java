@@ -50,19 +50,20 @@ public class Blueprint extends SimpleInventoryEffect
         }
         final byte[] IDs = moduleIDTag.getAsByteArray();
         final ArrayList<ModuleData> missing = new ArrayList<>();
-        for (final byte id : IDs)
-        {
-            final ModuleData blueprintModule = ModuleData.getList().get(id);
-            final int index = modules.indexOf(blueprintModule);
-            if (index != -1)
-            {
-                modules.remove(index);
-            }
-            else
-            {
-                missing.add(blueprintModule);
-            }
-        }
+        //TODO
+//        for (final byte id : IDs)
+//        {
+//            final ModuleData blueprintModule = ModuleData.getList().get(id);
+//            final int index = modules.indexOf(blueprintModule);
+//            if (index != -1)
+//            {
+//                modules.remove(index);
+//            }
+//            else
+//            {
+//                missing.add(blueprintModule);
+//            }
+//        }
         return missing.contains(module);
     }
 }
