@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import org.jetbrains.annotations.NotNull;
 
 public class CartDataSerializers
 {
@@ -15,25 +16,25 @@ public class CartDataSerializers
     public static final EntityDataSerializer<int[]> VARINT = new EntityDataSerializer<int[]>()
     {
         @Override
-        public void write(FriendlyByteBuf buf, int[] value)
+        public void write(FriendlyByteBuf buf, int @NotNull [] value)
         {
             buf.writeVarIntArray(value);
         }
 
         @Override
-        public int[] read(FriendlyByteBuf buf)
+        public int @NotNull [] read(FriendlyByteBuf buf)
         {
             return buf.readVarIntArray();
         }
 
         @Override
-        public int[] copy(int[] p_192717_1_)
+        public int @NotNull [] copy(int @NotNull [] p_192717_1_)
         {
             return p_192717_1_;
         }
 
         @Override
-        public EntityDataAccessor<int[]> createAccessor(int id)
+        public @NotNull EntityDataAccessor<int[]> createAccessor(int id)
         {
             return new EntityDataAccessor<>(id, this);
         }

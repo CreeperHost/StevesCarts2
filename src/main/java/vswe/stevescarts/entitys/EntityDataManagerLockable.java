@@ -5,6 +5,7 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.List;
 
+@Deprecated(forRemoval = true)
 public class EntityDataManagerLockable extends SynchedEntityData
 {
     private boolean isLocked;

@@ -1,7 +1,6 @@
 package vswe.stevescarts.entitys;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.architectury.platform.Platform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -57,7 +56,7 @@ import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModEntities;
-import vswe.stevescarts.modules.IActivatorModule;
+import vswe.stevescarts.api.modules.IActivatorModule;
 import vswe.stevescarts.modules.ModuleBase;
 import vswe.stevescarts.modules.addons.ModuleCreativeSupplies;
 import vswe.stevescarts.modules.data.ModuleData;
@@ -65,7 +64,6 @@ import vswe.stevescarts.modules.engines.ModuleEngine;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.modules.workers.CompWorkModule;
 import vswe.stevescarts.modules.workers.ModuleWorker;
-import vswe.stevescarts.modules.workers.tools.ModuleTool;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
