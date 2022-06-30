@@ -30,35 +30,59 @@ import vswe.stevescarts.modules.data.ModuleDataHull;
 import vswe.stevescarts.modules.engines.ModuleCoalStandard;
 import vswe.stevescarts.modules.engines.ModuleCoalTiny;
 import vswe.stevescarts.modules.hull.ModuleReinforced;
+import vswe.stevescarts.modules.hull.ModuleStandard;
+import vswe.stevescarts.modules.hull.ModuleWood;
 
 import java.util.ArrayList;
 
 public class StevesCartsModules
 {
+    //HULLS
+    public static ModuleData WOODEN_HULL;
+    public static ModuleData STANDARD_HULL;
+    public static ModuleData REINFORCED_HULL;
+
+    //ENGINES
     public static ModuleData COAL_ENGINE;
     public static ModuleData TINY_COAL_ENGINE;
-    public static ModuleData REINFORCED_HULL;
 
 
     public static void init()
     {
+        WOODEN_HULL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "wooden_hull"),
+                new ModuleDataHull(new ResourceLocation(Constants.MOD_ID, "wooden_hull"), "Wooden Hull", ModuleWood.class, ModuleType.HULL).setCapacity(50).setEngineMax(1).setAddonMax(0).setComplexityMax(15));
+
+        STANDARD_HULL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "standard_hull"),
+                new ModuleDataHull(new ResourceLocation(Constants.MOD_ID, "standard_hull"), "Standard Hull", ModuleStandard.class, ModuleType.HULL).setCapacity(200).setEngineMax(3).setAddonMax(6).setComplexityMax(50));
+
+        REINFORCED_HULL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "reinforced_hull"),
+                new ModuleDataHull(new ResourceLocation(Constants.MOD_ID, "reinforced_hull"), "Reinforced Hull", ModuleReinforced.class, ModuleType.HULL).setCapacity(500).setEngineMax(5).setAddonMax(12).setComplexityMax(150));
+
+
+
+
+        //        final ModuleData pumpkinhull = new ModuleDataHull(47, "Pumpkin chariot", ModulePumpkin.class).setCapacity(40).setEngineMax(1).setAddonMax(0).setComplexityMax(15);
+        //        new ModuleDataHull(62, "Mechanical Pig", ModulePig.class).setCapacity(150).setEngineMax(2).setAddonMax(4).setComplexityMax(50).addSide(SIDE.FRONT).addMessage(Localization.MODULE_INFO.PIG_MESSAGE);
+        //        new ModuleDataHull(76, "Creative Hull", ModuleCheatHull.class).setCapacity(10000).setEngineMax(5).setAddonMax(12).setComplexityMax(150);
+        //        new ModuleDataHull(81, "Galgadorian Hull", ModuleGalgadorian.class).setCapacity(1000).setEngineMax(5).setAddonMax(12).setComplexityMax(150);
+
         COAL_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "coal_engine"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "coal_engine"), "Coal Engine", ModuleCoalStandard.class, ModuleType.ENGINE, 15));
 
         TINY_COAL_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "tiny_coal_engine"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "tiny_coal_engine"), "Tiny Coal Engine", ModuleCoalTiny.class, ModuleType.ENGINE, 2));
 
-        REINFORCED_HULL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "reinforced_hull"),
-                new ModuleDataHull(new ResourceLocation(Constants.MOD_ID, "reinforced_hull"), "Reinforced Hull", ModuleReinforced.class, ModuleType.HULL).setCapacity(500).setEngineMax(5).setAddonMax(12).setComplexityMax(150));
-
     }
 
     public static void initModels()
     {
+        WOODEN_HULL.addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelWooden.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelWoodenTop.png")));
+        STANDARD_HULL.addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelStandard.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelStandardTop.png")));
+        REINFORCED_HULL.addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelLarge.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelLargeTop.png")));
+
         COAL_ENGINE.addModel("Engine", new ModelEngineFrame()).addModel("Fire", new ModelEngineInside());
         TINY_COAL_ENGINE.addModel("Engine", new ModelEngineFrame()).addModel("Fire", new ModelEngineInside());
 
-        REINFORCED_HULL.addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelLarge.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelLargeTop.png")));
 
 //        ModuleData.moduleList.get((byte) 0).addModel("Engine", new ModelEngineFrame()).addModel("Fire", new ModelEngineInside());
 //        ModuleData.moduleList.get((byte) 44).addModel("Engine", new ModelEngineFrame()).addModel("Fire", new ModelEngineInside());
@@ -104,7 +128,6 @@ public class StevesCartsModules
 //        ModuleData.moduleList.get((byte) 32).addModel("Shield", new ModelShield()).setModelMult(0.68f);
 //        ModuleData.moduleList.get((byte) 37).addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelWooden.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelWoodenTop.png")));
 //        ModuleData.moduleList.get((byte) 38).addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelStandard.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelStandardTop.png")));
-//        ModuleData.moduleList.get((byte) 39).addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelLarge.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelLargeTop.png")));
 //        ModuleData.moduleList.get((byte) 47).addModel("Hull", new ModelPumpkinHull(ResourceHelper.getResource("/models/hullModelPumpkin.png"), ResourceHelper.getResource("/models/hullModelWooden.png"))).addModel("Top", new ModelPumpkinHullTop(ResourceHelper.getResource("/models/hullModelPumpkinTop.png"), ResourceHelper.getResource("/models/hullModelWoodenTop.png")));
 //        ModuleData.moduleList.get((byte) 62).addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelPig.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelPigTop.png"))).addModel("Head", new ModelPigHead()).addModel("Tail", new ModelPigTail());
 //        ModuleData.moduleList.get((byte) 76).addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelCreative.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelCreativeTop.png")));

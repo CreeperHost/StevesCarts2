@@ -109,6 +109,9 @@ public class ModuleData
         final ModuleData coalStandard = new ModuleData(0, "Coal Engine", ModuleCoalStandard.class, 15);
         final ModuleData coalTiny = new ModuleData(44, "Tiny Coal Engine", ModuleCoalTiny.class, 2);
         addNemesis(coalTiny, coalStandard);
+
+
+
         final ModuleData solar1 = new ModuleData(1, "Solar Engine", ModuleSolarStandard.class, 20).addSides(new SIDE[]{SIDE.CENTER, SIDE.TOP});
         final ModuleData solar2 = new ModuleData(45, "Basic Solar Engine", ModuleSolarBasic.class, 12).addSides(new SIDE[]{SIDE.CENTER, SIDE.TOP});
         final ModuleData compactsolar = new ModuleData(56, "Compact Solar Engine", ModuleSolarCompact.class, 32).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
