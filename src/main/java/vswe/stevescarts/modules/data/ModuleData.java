@@ -90,12 +90,8 @@ public class ModuleData
 //        drillGroup.add(hardeneddrill);
 //        drillGroup.add(galgdrill);
 //
-//        final ModuleData railer = new ModuleData(10, "Railer", ModuleRailer.class, 3);
-//        final ModuleData largerailer = new ModuleData(11, "Large Railer", ModuleRailerLarge.class, 17);
 //        addNemesis(railer, largerailer);
 //
-//        new ModuleData(12, "Bridge Builder", ModuleBridge.class, 14);
-//        final ModuleData remover = new ModuleData(13, "Track Remover", ModuleRemover.class, 8).addSides(new SIDE[]{SIDE.TOP, SIDE.BACK});
 //        addNemesis(remover, railer);
 //        addNemesis(remover, largerailer);
 //

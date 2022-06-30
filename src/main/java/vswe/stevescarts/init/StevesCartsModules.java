@@ -34,7 +34,7 @@ import vswe.stevescarts.modules.storages.chests.ModuleFrontChest;
 import vswe.stevescarts.modules.storages.chests.ModuleInternalStorage;
 import vswe.stevescarts.modules.storages.chests.ModuleSideChests;
 import vswe.stevescarts.modules.storages.chests.ModuleTopChest;
-import vswe.stevescarts.modules.workers.ModuleTorch;
+import vswe.stevescarts.modules.workers.*;
 import vswe.stevescarts.modules.workers.tools.ModuleDrillDiamond;
 import vswe.stevescarts.modules.workers.tools.ModuleDrillGalgadorian;
 import vswe.stevescarts.modules.workers.tools.ModuleDrillHardened;
@@ -73,6 +73,12 @@ public class StevesCartsModules
     public static ModuleData IRON_DRILL;
     public static ModuleData HARDENED_DRILL;
     public static ModuleData GALGADORIAN_DRILL;
+
+    public static ModuleData RAILER;
+    public static ModuleData LARGE_RAILER;
+
+    public static ModuleData BRIDGE_BUILDER;
+    public static ModuleData TRACK_REMOVER;
 
 
     public static void init()
@@ -148,6 +154,17 @@ public class StevesCartsModules
         GALGADORIAN_DRILL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "galgadorian_drill"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "galgadorian_drill"), "Galgadorian Drill", ModuleDrillGalgadorian.class, ModuleType.TOOL, 45)).addSide(ModuleData.SIDE.FRONT);
 
+        RAILER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "railer"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "railer"), "Railer", ModuleRailer.class, ModuleType.TOOL, 3));
+
+        LARGE_RAILER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "large_railer"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "large_railer"), "Large Railer", ModuleRailerLarge.class, ModuleType.TOOL, 17));
+
+        BRIDGE_BUILDER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "bridge_builder"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "bridge_builder"), "Bridge Builder", ModuleBridge.class, ModuleType.TOOL, 14));
+
+        TRACK_REMOVER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "track_remover"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "track_remover"), "Track Remover", ModuleRemover.class, ModuleType.TOOL, 8).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.TOP, ModuleData.SIDE.BACK}));
     }
 
     public static void initModels()
@@ -176,10 +193,11 @@ public class StevesCartsModules
         IRON_DRILL.addModel("Drill", new ModelDrill(ResourceHelper.getResource("/models/drillModelIron.png"))).addModel("Plate", new ModelToolPlate());
         HARDENED_DRILL.addModel("Drill", new ModelDrill(ResourceHelper.getResource("/models/drillModelHardened.png"))).addModel("Plate", new ModelToolPlate());
         GALGADORIAN_DRILL.addModel("Drill", new ModelDrill(ResourceHelper.getResource("/models/drillModelMagic.png"))).addModel("Plate", new ModelToolPlate());
-//        ModuleData.moduleList.get((byte) 10).addModel("Rails", new ModelRailer(3));
-//        ModuleData.moduleList.get((byte) 11).addModel("Rails", new ModelRailer(6));
-//        ModuleData.moduleList.get((byte) 12).addModel("Bridge", new ModelBridge()).addModel("Plate", new ModelToolPlate());
-//        ModuleData.moduleList.get((byte) 13).addModel("Remover", new ModelTrackRemover()).setModelMult(0.6f);
+
+        RAILER.addModel("Rails", new ModelRailer(3));
+        LARGE_RAILER.addModel("Rails", new ModelRailer(6));
+        BRIDGE_BUILDER.addModel("Bridge", new ModelBridge()).addModel("Plate", new ModelToolPlate());
+        TRACK_REMOVER.addModel("Remover", new ModelTrackRemover()).setModelMult(0.6f);
 //        ModuleData.moduleList.get((byte) 14).addModel("Farmer", new ModelFarmer(ResourceHelper.getResource("/models/farmerModelDiamond.png"))).setModelMult(0.45f);
 //        ModuleData.moduleList.get((byte) 84).addModel("Farmer", new ModelFarmer(ResourceHelper.getResource("/models/farmerModelGalgadorian.png"))).setModelMult(0.45f);
 //        ModuleData.moduleList.get((byte) 15).addModel("WoodCutter", new ModelWoodCutter(ResourceHelper.getResource("/models/woodCutterModelDiamond.png"))).addModel("Plate", new ModelToolPlate());

@@ -86,12 +86,12 @@ public class ModelRailer extends ModelCartbase
     @Override
     public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
     {
-        final int valid = (module == null) ? 1 : ((ModuleRailer) module).getRails();
-        for (int i = 0; i < rails.length; ++i)
-        {
-            rails[i].yRot = ((module == null) ? 0.0f : ((ModuleRailer) module).getRailAngle(i));
-            //			rails[i].isHidden = (i >= valid);
-        }
+//        final int valid = (module == null) ? 1 : ((ModuleRailer) module).getRails();
+//        for (int i = 0; i < rails.length; ++i)
+//        {
+//            rails[i].yRot = ((module == null) ? 0.0f : ((ModuleRailer) module).getRailAngle(i));
+//            //			rails[i].isHidden = (i >= valid);
+//        }
     }
 
     static
