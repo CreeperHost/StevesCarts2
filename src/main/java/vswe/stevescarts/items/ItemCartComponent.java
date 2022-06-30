@@ -34,21 +34,4 @@ public class ItemCartComponent extends Item
         String name = componentType.getName().trim().replace(" ", "_").replace("'", "_").toLowerCase(Locale.ROOT);
         return Component.translatable("item.stevescarts." + name);
     }
-
-    @Override
-    public int getEntityLifespan(ItemStack itemStack, Level world)
-    {
-        return super.getEntityLifespan(itemStack, world);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level p_77624_2_, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag)
-    {
-        if (!stack.isEmpty())
-        {
-            ItemCartComponent itemCartComponent = (ItemCartComponent) stack.getItem();
-            int id = itemCartComponent.componentType.getId();
-            tooltip.add(Component.literal("Component id " + id));
-        }
-    }
 }
