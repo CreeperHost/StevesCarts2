@@ -18,6 +18,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.common.IPlantable;
 import vswe.stevescarts.Constants;
+import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.farms.ICropModule;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
@@ -26,7 +27,6 @@ import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.api.modules.ISuppliesModule;
 import vswe.stevescarts.modules.ModuleBase;
-import vswe.stevescarts.plugins.APIHelper;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -65,10 +65,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
                 plantModules.add((ICropModule) module);
             }
         }
-        for (ICropModule cropModule : APIHelper.cropModules)
-        {
-            plantModules.add(cropModule);
-        }
+        plantModules.addAll(StevesCartsAPI.CROP_MODULES);
     }
 
     @Override
