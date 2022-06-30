@@ -81,26 +81,9 @@ public class ModuleData
     private byte extraDataDefaultValue;
     private static final int MAX_MESSAGE_ROW_LENGTH = 30;
 
-
     public static void init()
     {
 //        final ModuleDataGroup engineGroup = new ModuleDataGroup(Localization.MODULE_INFO.ENGINE_GROUP);
-//
-//
-//
-//
-//        new ModuleData(2, "Side Chests", ModuleSideChests.class, 3).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
-//        new ModuleData(3, "Top Chest", ModuleTopChest.class, 6).addSide(SIDE.TOP);
-//        final ModuleData frontChest = new ModuleData(4, "Front Chest", ModuleFrontChest.class, 5).addSide(SIDE.FRONT);
-//        new ModuleData(5, "Internal Storage", ModuleInternalStorage.class, 25).setAllowDuplicate();
-//        new ModuleData(6, "Extracting Chests", ModuleExtractingChests.class, 75).addSides(new SIDE[]{SIDE.CENTER, SIDE.RIGHT, SIDE.LEFT});
-//
-//        new ModuleData(7, "Torch Placer", ModuleTorch.class, 14).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
-//
-//        final ModuleData drill = new ModuleDataTool(8, "Basic Drill", ModuleDrillDiamond.class, 10, false).addSide(SIDE.FRONT);
-//        final ModuleData ironDrill = new ModuleDataTool(42, "Iron Drill", ModuleDrillIron.class, 3, false).addSide(SIDE.FRONT);
-//        final ModuleData hardeneddrill = new ModuleDataTool(43, "Hardened Drill", ModuleDrillHardened.class, 45, false).addSide(SIDE.FRONT);
-//        final ModuleData galgdrill = new ModuleDataTool(9, "Galgadorian Drill", ModuleDrillGalgadorian.class, 150, true).addSide(SIDE.FRONT);
 //        final ModuleDataGroup drillGroup = new ModuleDataGroup(Localization.MODULE_INFO.DRILL_GROUP);
 //        drillGroup.add(drill);
 //        drillGroup.add(ironDrill);
@@ -477,7 +460,7 @@ public class ModuleData
     }
 
     @OnlyIn(Dist.CLIENT)
-    protected ModuleData setModelMult(final float val)
+    public ModuleData setModelMult(final float val)
     {
         modelMult = val;
         return this;

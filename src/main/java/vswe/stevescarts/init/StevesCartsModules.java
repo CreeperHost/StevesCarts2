@@ -30,6 +30,15 @@ import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.modules.data.ModuleDataHull;
 import vswe.stevescarts.modules.engines.*;
 import vswe.stevescarts.modules.hull.*;
+import vswe.stevescarts.modules.storages.chests.ModuleFrontChest;
+import vswe.stevescarts.modules.storages.chests.ModuleInternalStorage;
+import vswe.stevescarts.modules.storages.chests.ModuleSideChests;
+import vswe.stevescarts.modules.storages.chests.ModuleTopChest;
+import vswe.stevescarts.modules.workers.ModuleTorch;
+import vswe.stevescarts.modules.workers.tools.ModuleDrillDiamond;
+import vswe.stevescarts.modules.workers.tools.ModuleDrillGalgadorian;
+import vswe.stevescarts.modules.workers.tools.ModuleDrillHardened;
+import vswe.stevescarts.modules.workers.tools.ModuleDrillIron;
 
 import java.util.ArrayList;
 
@@ -51,6 +60,19 @@ public class StevesCartsModules
     public static ModuleData SOLAR_ENGINE;
     public static ModuleData BASIC_SOLAR_ENGINE;
     public static ModuleData COMPACT_SOLAR_ENGINE;
+
+    //Chest
+    public static ModuleData SIDE_CHESTS;
+    public static ModuleData TOP_CHEST;
+    public static ModuleData FRONT_CHEST;
+    public static ModuleData INTERNAL_STORAGE;
+
+    //Tools
+    public static ModuleData TORCH_PLACER;
+    public static ModuleData BASIC_DRILL;
+    public static ModuleData IRON_DRILL;
+    public static ModuleData HARDENED_DRILL;
+    public static ModuleData GALGADORIAN_DRILL;
 
 
     public static void init()
@@ -96,6 +118,36 @@ public class StevesCartsModules
         COMPACT_SOLAR_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "compact_solar_engine"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "compact_solar_engine"), "Compact Solar Engine", ModuleSolarCompact.class, ModuleType.ENGINE, 32).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT}));
 
+
+        //Chest
+        SIDE_CHESTS = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "side_chests"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "side_chests"), "Side Chests", ModuleSideChests.class, ModuleType.STORAGE, 3).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT}));
+
+        TOP_CHEST = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "top_chest"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "top_chest"), "Top Chest", ModuleTopChest.class, ModuleType.STORAGE, 6).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.TOP}));
+
+        FRONT_CHEST = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "front_chest"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "front_chest"), "Front Chest", ModuleFrontChest.class, ModuleType.STORAGE, 6).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.FRONT}));
+
+        INTERNAL_STORAGE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "internal_storage"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "internal_storage"), "Internal Storage", ModuleInternalStorage.class, ModuleType.STORAGE, 6));
+
+
+        TORCH_PLACER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "torch_placer"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "torch_placer"), "Torch Placer", ModuleTorch.class, ModuleType.TOOL, 10)).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT});
+
+        BASIC_DRILL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "basic_drill"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "basic_drill"), "Basic Drill", ModuleDrillDiamond.class, ModuleType.TOOL, 10)).addSide(ModuleData.SIDE.FRONT);
+
+        IRON_DRILL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "iron_drill"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "iron_drill"), "Iron Drill", ModuleDrillIron.class, ModuleType.TOOL, 10)).addSide(ModuleData.SIDE.FRONT);
+
+        HARDENED_DRILL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "hardened_drill"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "hardened_drill"), "Hardened Drill", ModuleDrillHardened.class, ModuleType.TOOL, 45)).addSide(ModuleData.SIDE.FRONT);
+
+        GALGADORIAN_DRILL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "galgadorian_drill"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "galgadorian_drill"), "Galgadorian Drill", ModuleDrillGalgadorian.class, ModuleType.TOOL, 45)).addSide(ModuleData.SIDE.FRONT);
+
     }
 
     public static void initModels()
@@ -115,16 +167,15 @@ public class StevesCartsModules
         BASIC_SOLAR_ENGINE.addModel("SolarPanelBase", new ModelSolarPanelBase()).addModel("SolarPanels", new ModelSolarPanelHeads(2)).removeModel("Top");
         COMPACT_SOLAR_ENGINE.addModel("SolarPanelSide", new ModelCompactSolarPanel());
 
+        SIDE_CHESTS.addModel("SideChest", new ModelSideChests());
+        TOP_CHEST.removeModel("Top").addModel("TopChest", new ModelTopChest());
+        FRONT_CHEST.addModel("FrontChest", new ModelFrontChest()).setModelMult(0.68f);
 
-//        ModuleData.moduleList.get((byte) 2).addModel("SideChest", new ModelSideChests());
-//        ModuleData.moduleList.get((byte) 3).removeModel("Top").addModel("TopChest", new ModelTopChest());
-//        ModuleData.moduleList.get((byte) 4).addModel("FrontChest", new ModelFrontChest()).setModelMult(0.68f);
-//        ModuleData.moduleList.get((byte) 6).addModel("SideChest", new ModelExtractingChests());
-//        ModuleData.moduleList.get((byte) 7).addModel("Torch", new ModelTorchplacer());
-//        ModuleData.moduleList.get((byte) 8).addModel("Drill", new ModelDrill(ResourceHelper.getResource("/models/drillModelDiamond.png"))).addModel("Plate", new ModelToolPlate());
-//        ModuleData.moduleList.get((byte) 42).addModel("Drill", new ModelDrill(ResourceHelper.getResource("/models/drillModelIron.png"))).addModel("Plate", new ModelToolPlate());
-//        ModuleData.moduleList.get((byte) 43).addModel("Drill", new ModelDrill(ResourceHelper.getResource("/models/drillModelHardened.png"))).addModel("Plate", new ModelToolPlate());
-//        ModuleData.moduleList.get((byte) 9).addModel("Drill", new ModelDrill(ResourceHelper.getResource("/models/drillModelMagic.png"))).addModel("Plate", new ModelToolPlate());
+        TORCH_PLACER.addModel("Torch", new ModelTorchplacer());
+        BASIC_DRILL.addModel("Drill", new ModelDrill(ResourceHelper.getResource("/models/drillModelDiamond.png"))).addModel("Plate", new ModelToolPlate());
+        IRON_DRILL.addModel("Drill", new ModelDrill(ResourceHelper.getResource("/models/drillModelIron.png"))).addModel("Plate", new ModelToolPlate());
+        HARDENED_DRILL.addModel("Drill", new ModelDrill(ResourceHelper.getResource("/models/drillModelHardened.png"))).addModel("Plate", new ModelToolPlate());
+        GALGADORIAN_DRILL.addModel("Drill", new ModelDrill(ResourceHelper.getResource("/models/drillModelMagic.png"))).addModel("Plate", new ModelToolPlate());
 //        ModuleData.moduleList.get((byte) 10).addModel("Rails", new ModelRailer(3));
 //        ModuleData.moduleList.get((byte) 11).addModel("Rails", new ModelRailer(6));
 //        ModuleData.moduleList.get((byte) 12).addModel("Bridge", new ModelBridge()).addModel("Plate", new ModelToolPlate());
