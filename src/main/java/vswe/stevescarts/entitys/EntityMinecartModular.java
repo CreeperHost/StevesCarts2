@@ -101,8 +101,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     private ModuleCreativeSupplies creativeSupplies;
     public RandomSource random;
     protected Component name;
-    @Deprecated(forRemoval = true)
-    public byte cartVersion;
     private int scrollY;
     @Deprecated(forRemoval = true)
     private int keepSilent;
@@ -158,7 +156,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         super(ModEntities.MODULAR_CART.get(), world, x, y, z);
         engineFlag = false;
         random = world.random;
-        cartVersion = info.getByte("CartVersion");
         loadModules(info);
         //TODO
 //        this.name = name;
@@ -960,7 +957,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         tagCompound.putDouble("temppushZ", temppushZ);
         tagCompound.putShort("workingTime", (short) workingTime);
 //        tagCompound.putByteArray("Modules", moduleLoadingData);
-        tagCompound.putByte("CartVersion", cartVersion);
         if (modules != null)
         {
             for (int i = 0; i < modules.size(); ++i)
@@ -984,9 +980,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         temppushX = tagCompound.getDouble("temppushX");
         temppushZ = tagCompound.getDouble("temppushZ");
         workingTime = tagCompound.getShort("workingTime");
-        cartVersion = tagCompound.getByte("CartVersion");
-
-        final int oldVersion = cartVersion;
         loadModules(tagCompound);
         if (modules != null)
         {
@@ -994,30 +987,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             {
                 final ModuleBase module = modules.get(i);
                 module.readFromNBT(tagCompound, i);
-            }
-        }
-        if (oldVersion < 2)
-        {
-            int newSlot = -1;
-            int slotCount = 0;
-            for (final ModuleBase module2 : modules)
-            {
-                if (module2 instanceof ModuleTool)
-                {
-                    newSlot = slotCount;
-                    break;
-                }
-                slotCount += module2.getInventorySize();
-            }
-            if (newSlot != -1)
-            {
-                @Nonnull ItemStack lastitem = ItemStack.EMPTY;
-                for (int j = newSlot; j < getContainerSize(); ++j)
-                {
-                    @Nonnull ItemStack thisitem = getItem(j);
-                    setItem(j, lastitem);
-                    lastitem = thisitem;
-                }
             }
         }
     }

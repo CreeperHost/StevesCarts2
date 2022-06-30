@@ -11,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import vswe.stevescarts.Constants;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.client.models.*;
 import vswe.stevescarts.client.models.engines.*;
@@ -34,7 +33,6 @@ import vswe.stevescarts.client.models.workers.tools.ModelDrill;
 import vswe.stevescarts.client.models.workers.tools.ModelFarmer;
 import vswe.stevescarts.client.models.workers.tools.ModelWoodCutter;
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.helpers.CartVersion;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModItems;
@@ -741,7 +739,6 @@ public class ModuleData
         }
         save.putByteArray("Modules", moduleIDs);
         cart.setTag(save);
-        CartVersion.addVersion(cart);
         return cart;
     }
 
@@ -757,7 +754,6 @@ public class ModuleData
             modulesTag.add(i, moduleTag);
         }
         cart.getOrCreateTag().put("modules", modulesTag);
-        CartVersion.addVersion(cart);
         return cart;
     }
 

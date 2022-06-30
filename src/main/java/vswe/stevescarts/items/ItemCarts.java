@@ -25,13 +25,10 @@ import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.helpers.CartVersion;
-import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.modules.ModuleBase;
 import vswe.stevescarts.modules.data.ModuleData;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -54,7 +51,6 @@ public class ItemCarts extends MinecartItem
         Level world = itemUseContext.getLevel();
         ItemStack stack = player.getItemInHand(itemUseContext.getHand());
         BlockPos pos = itemUseContext.getClickedPos();
-        CartVersion.updateItemStack(stack);
         if (!world.isClientSide)
         {
             BlockState blockstate = world.getBlockState(pos);
