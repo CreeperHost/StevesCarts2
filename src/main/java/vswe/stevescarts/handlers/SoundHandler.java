@@ -9,6 +9,7 @@ import vswe.stevescarts.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID)
 public class SoundHandler
 {
