@@ -1,4 +1,4 @@
-package vswe.stevescarts.api.modules;
+package vswe.stevescarts.api.modules.interfaces;
 
 public interface ISuppliesModule
 {

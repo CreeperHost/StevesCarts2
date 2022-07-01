@@ -1,4 +1,4 @@
-package vswe.stevescarts.modules.data;
+package vswe.stevescarts.api.modules.data;
 
 import vswe.stevescarts.helpers.Localization;
 

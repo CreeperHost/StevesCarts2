@@ -1,4 +1,4 @@
-package vswe.stevescarts.modules.storages;
+package vswe.stevescarts.api.modules.template;
 
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.api.modules.ModuleBase;

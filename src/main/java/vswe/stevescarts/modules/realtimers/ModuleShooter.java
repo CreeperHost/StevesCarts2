@@ -19,7 +19,7 @@ import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.EnchantmentInfo;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.api.modules.ISuppliesModule;
+import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.addons.ModuleEnchants;
 import vswe.stevescarts.modules.addons.projectiles.ModuleProjectile;

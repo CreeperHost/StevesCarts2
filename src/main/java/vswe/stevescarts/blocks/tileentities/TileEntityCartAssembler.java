@@ -38,8 +38,8 @@ import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.items.ItemCarts;
-import vswe.stevescarts.modules.data.ModuleData;
-import vswe.stevescarts.modules.data.ModuleDataHull;
+import vswe.stevescarts.api.modules.data.ModuleData;
+import vswe.stevescarts.api.modules.data.ModuleDataHull;
 import vswe.stevescarts.polylib.NBTHelper;
 import vswe.stevescarts.upgrades.*;
 

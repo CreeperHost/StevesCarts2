@@ -13,7 +13,7 @@ import vswe.stevescarts.containers.slots.SlotModule;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModItems;
-import vswe.stevescarts.modules.data.ModuleData;
+import vswe.stevescarts.api.modules.data.ModuleData;
 
 import javax.annotation.Nonnull;
 

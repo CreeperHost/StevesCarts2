@@ -28,6 +28,10 @@ public abstract class ModelCartbase extends Model
         this(RenderType::entityCutoutNoCull, texture, root);
     }
 
+    /**
+     * Do not use, This is only still hear to prevent crashes from old modules
+     * This will be removed very soon
+     */
     @Deprecated(forRemoval = true)
     public ModelCartbase()
     {

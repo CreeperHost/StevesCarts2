@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.hull;
 
+import vswe.stevescarts.api.modules.template.ModuleHull;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 
 public class ModuleStandard extends ModuleHull

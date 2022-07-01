@@ -1,4 +1,4 @@
-package vswe.stevescarts.modules.storages.chests;
+package vswe.stevescarts.api.modules.template;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -9,7 +9,6 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotChest;
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.modules.storages.ModuleStorage;
 
 public abstract class ModuleChest extends ModuleStorage
 {

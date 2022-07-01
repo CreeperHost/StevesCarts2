@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.slots.SlotCart;
 import vswe.stevescarts.helpers.Localization;
-import vswe.stevescarts.modules.data.ModuleData;
+import vswe.stevescarts.api.modules.data.ModuleData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

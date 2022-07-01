@@ -1,9 +1,12 @@
 package vswe.stevescarts.api.modules;
 
-import vswe.stevescarts.modules.data.ModuleDataGroup;
+import vswe.stevescarts.api.modules.data.ModuleDataGroup;
 
 public class DefaultModuleGroups
 {
+    /**
+     * Default modules used by StevesCarts, Feel free to create your own using ModuleDataGroup
+     */
     public static ModuleDataGroup ENGINE_GROUP;
     public static ModuleDataGroup DRILL_GROUP;
     public static ModuleDataGroup FARMER_GROUP;

@@ -2,7 +2,7 @@ package vswe.stevescarts.api;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import vswe.stevescarts.modules.data.ModuleData;
+import vswe.stevescarts.api.modules.data.ModuleData;
 
 import javax.annotation.Nonnull;
 

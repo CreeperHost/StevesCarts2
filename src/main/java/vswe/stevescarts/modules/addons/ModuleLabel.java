@@ -13,7 +13,7 @@ import vswe.stevescarts.helpers.LabelInformation;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.ModuleBase;
-import vswe.stevescarts.modules.engines.ModuleEngine;
+import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.modules.workers.tools.ModuleTool;
 
 import java.util.ArrayList;

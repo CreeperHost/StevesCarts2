@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.storages.chests;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.modules.template.ModuleChest;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.ComponentTypes;
 

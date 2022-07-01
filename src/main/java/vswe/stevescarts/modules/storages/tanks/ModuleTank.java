@@ -27,7 +27,7 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.helpers.storages.ITankHolder;
 import vswe.stevescarts.helpers.storages.SCTank;
-import vswe.stevescarts.modules.storages.ModuleStorage;
+import vswe.stevescarts.api.modules.template.ModuleStorage;
 
 import javax.annotation.Nonnull;
 import java.util.Locale;

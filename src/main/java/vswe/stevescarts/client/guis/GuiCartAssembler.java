@@ -24,8 +24,8 @@ import vswe.stevescarts.helpers.DropDownMenuItem;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.helpers.TitleBox;
-import vswe.stevescarts.modules.data.ModuleData;
-import vswe.stevescarts.modules.data.ModuleDataHull;
+import vswe.stevescarts.api.modules.data.ModuleData;
+import vswe.stevescarts.api.modules.data.ModuleDataHull;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketCreateCart;
 

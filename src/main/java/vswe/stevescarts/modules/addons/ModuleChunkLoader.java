@@ -8,7 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.api.modules.IActivatorModule;
+import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 
 public class ModuleChunkLoader extends ModuleAddon implements IActivatorModule
 {

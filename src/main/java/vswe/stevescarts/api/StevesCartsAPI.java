@@ -4,7 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.farms.ICropModule;
 import vswe.stevescarts.api.farms.ITreeModule;
-import vswe.stevescarts.modules.data.ModuleData;
+import vswe.stevescarts.api.modules.data.ModuleData;
 
 import java.util.ArrayList;
 import java.util.HashMap;

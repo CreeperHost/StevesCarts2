@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.client.StevesCartsCreativeTabs;
-import vswe.stevescarts.modules.data.ModuleData;
+import vswe.stevescarts.api.modules.data.ModuleData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

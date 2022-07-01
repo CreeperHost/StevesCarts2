@@ -1,4 +1,4 @@
-package vswe.stevescarts.modules.data;
+package vswe.stevescarts.api.modules.data;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;

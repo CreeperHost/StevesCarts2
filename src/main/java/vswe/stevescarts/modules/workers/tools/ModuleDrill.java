@@ -29,10 +29,10 @@ import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModBlocks;
-import vswe.stevescarts.api.modules.IActivatorModule;
+import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.addons.*;
-import vswe.stevescarts.modules.storages.chests.ModuleChest;
+import vswe.stevescarts.api.modules.template.ModuleChest;
 
 import javax.annotation.Nonnull;
 import java.util.List;

@@ -20,7 +20,7 @@ import vswe.stevescarts.containers.slots.SlotFertilizer;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.api.modules.ISuppliesModule;
+import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.workers.tools.ModuleFarmer;
 

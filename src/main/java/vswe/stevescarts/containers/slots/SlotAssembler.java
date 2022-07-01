@@ -6,8 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.items.ItemCarts;
-import vswe.stevescarts.modules.data.ModuleData;
-import vswe.stevescarts.modules.data.ModuleDataGroup;
+import vswe.stevescarts.api.modules.data.ModuleData;
 
 import javax.annotation.Nonnull;
 

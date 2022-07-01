@@ -12,8 +12,8 @@ import vswe.stevescarts.containers.slots.SlotAssemblerFuel;
 import vswe.stevescarts.containers.slots.SlotModule;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.storages.TransferHandler;
-import vswe.stevescarts.modules.data.ModuleData;
-import vswe.stevescarts.modules.data.ModuleDataHull;
+import vswe.stevescarts.api.modules.data.ModuleData;
+import vswe.stevescarts.api.modules.data.ModuleDataHull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
