@@ -11,13 +11,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.init.ModItems;
-import vswe.stevescarts.items.ItemCartModule;
 import vswe.stevescarts.api.modules.ModuleBase;
 
 import javax.annotation.Nonnull;
@@ -381,7 +381,7 @@ public class ModuleData
         for (int i = 0; i < modules.size(); i++)
         {
             CompoundTag moduleTag = new CompoundTag();
-            ItemCartModule cartModule = (ItemCartModule) modules.get(i).getItem();
+            IModuleItem cartModule = (IModuleItem) modules.get(i).getItem();
             moduleTag.putString(String.valueOf(i), cartModule.getModuleData().getID().toString());
             modulesTag.add(i, moduleTag);
         }
@@ -415,7 +415,7 @@ public class ModuleData
 
     public static boolean isValidModuleItem(final ModuleType moduleType, @Nonnull ItemStack itemstack)
     {
-        if (itemstack.getItem() instanceof ItemCartModule itemCartModule)
+        if (itemstack.getItem() instanceof IModuleItem itemCartModule)
         {
             final ModuleData module = itemCartModule.getModuleData();
             return isValidModuleItem(moduleType, module);

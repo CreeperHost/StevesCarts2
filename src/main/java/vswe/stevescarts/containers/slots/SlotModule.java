@@ -3,7 +3,7 @@ package vswe.stevescarts.containers.slots;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import vswe.stevescarts.items.ItemCartModule;
+import vswe.stevescarts.api.IModuleItem;
 
 import javax.annotation.Nonnull;
 
@@ -17,6 +17,6 @@ public class SlotModule extends Slot
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return itemstack.getItem() instanceof ItemCartModule;
+        return itemstack.getItem() instanceof IModuleItem;
     }
 }

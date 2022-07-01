@@ -78,11 +78,6 @@ public class ModItems
 
     public static final Map<ModuleData, Supplier<Item>> MODULES = Util.make(new LinkedHashMap<>(), map ->
     {
-//        for (ModuleData value : ModuleData.getList().values())
-//        {
-//            map.put(value, ITEMS.register(value.getName(), () -> new ItemCartModule(value)));
-//        }
-
         for (ModuleData value : StevesCartsAPI.MODULE_REGISTRY.values())
         {
             map.put(value, ITEMS.register(value.getName(), () -> new ItemCartModule(value)));

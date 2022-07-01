@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.SCConfig;
+import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.blocks.BlockCartAssembler;
 import vswe.stevescarts.containers.ContainerCartAssembler;
@@ -36,7 +37,6 @@ import vswe.stevescarts.helpers.*;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItems;
-import vswe.stevescarts.items.ItemCartModule;
 import vswe.stevescarts.items.ItemCarts;
 import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.modules.data.ModuleDataHull;
@@ -512,7 +512,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                 }
                 if (validSize)
                 {
-                    if (item.getItem() instanceof ItemCartModule itemCartModule)
+                    if (item.getItem() instanceof IModuleItem itemCartModule)
                     {
                         final ModuleData module = itemCartModule.getModuleData();
                         if (module != null)
@@ -531,7 +531,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         if (!getItem(0).isEmpty())
         {
             ItemStack stack = getItem(0);
-            if (stack.getItem() instanceof ItemCartModule itemCartModule)
+            if (stack.getItem() instanceof IModuleItem itemCartModule)
             {
                 final ModuleData hulldata = itemCartModule.getModuleData();
                 if (hulldata instanceof ModuleDataHull)
@@ -557,7 +557,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         }
         else
         {
-            ItemCartModule itemCartModule = (ItemCartModule) getItem(0).getItem();
+            IModuleItem itemCartModule = (IModuleItem) getItem(0).getItem();
             final ModuleData hulldata = itemCartModule.getModuleData();
             if (hulldata == null || !(hulldata instanceof ModuleDataHull))
             {
@@ -578,7 +578,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                 {
                     if (!getItem(i).isEmpty())
                     {
-                        ItemCartModule itemCartModule1 = (ItemCartModule) getItem(i).getItem();
+                        IModuleItem itemCartModule1 = (IModuleItem) getItem(i).getItem();
                         final ModuleData data = itemCartModule1.getModuleData();
                         if (data != null)
                         {
@@ -601,7 +601,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         final ArrayList<ModuleData> modules = new ArrayList<>();
         for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i)
         {
-            if (!getItem(i).isEmpty() && getItem(i).getItem() instanceof ItemCartModule itemCartModule)
+            if (!getItem(i).isEmpty() && getItem(i).getItem() instanceof IModuleItem itemCartModule)
             {
                 final ModuleData data = itemCartModule.getModuleData();
                 if (data != null)
@@ -654,7 +654,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     {
         if (!hullitem.isEmpty())
         {
-            if (hullitem.getItem() instanceof ItemCartModule itemCartModule)
+            if (hullitem.getItem() instanceof IModuleItem itemCartModule)
             {
                 ModuleData moduleData = itemCartModule.getModuleData();
                 if (moduleData != null && moduleData instanceof ModuleDataHull moduleDataHull)
@@ -1122,7 +1122,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         {
             if (!getItem(i).isEmpty())
             {
-                if (getItem(i).getItem() instanceof ItemCartModule itemCartModule)
+                if (getItem(i).getItem() instanceof IModuleItem itemCartModule)
                 {
                     final ModuleData data = itemCartModule.getModuleData();
                     if (data != null)

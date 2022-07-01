@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.containers.ContainerCartAssembler;
 import vswe.stevescarts.containers.slots.SlotAssembler;
@@ -23,7 +24,6 @@ import vswe.stevescarts.helpers.DropDownMenuItem;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.helpers.TitleBox;
-import vswe.stevescarts.items.ItemCartModule;
 import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.modules.data.ModuleDataHull;
 import vswe.stevescarts.network.PacketHandler;
@@ -81,7 +81,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         }
         else
         {
-            ItemCartModule cartModule = (ItemCartModule) this.assembler.getItem(0).getItem();
+            IModuleItem cartModule = (IModuleItem) this.assembler.getItem(0).getItem();
             final ModuleData hulldata = cartModule.getModuleData();
             if (hulldata == null || !(hulldata instanceof final ModuleDataHull hull))
             {

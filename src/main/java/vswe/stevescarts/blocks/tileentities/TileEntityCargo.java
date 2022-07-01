@@ -29,7 +29,6 @@ import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.helpers.storages.TransferManager;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItems;
-import vswe.stevescarts.items.ItemCartModule;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

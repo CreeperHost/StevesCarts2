@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerCartAssembler;
@@ -11,7 +12,6 @@ import vswe.stevescarts.containers.slots.SlotAssemblerFuel;
 import vswe.stevescarts.containers.slots.SlotModule;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.storages.TransferHandler;
-import vswe.stevescarts.items.ItemCartModule;
 import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.modules.data.ModuleDataHull;
 
@@ -61,7 +61,7 @@ public class InputChest extends SimpleInventoryEffect
                     @Nonnull ItemStack itemstack = upgrade.getItem(slotId);
                     if (!itemstack.isEmpty())
                     {
-                        ItemCartModule itemCartModule = (ItemCartModule) itemstack.getItem();
+                        IModuleItem itemCartModule = (IModuleItem) itemstack.getItem();
                         final ModuleData module = itemCartModule.getModuleData();
                         if (module != null)
                         {
