@@ -5,7 +5,6 @@ import vswe.stevescarts.helpers.Localization;
 
 public class Solar extends RechargerBase
 {
-
     @Override
     protected int getAmount(final TileEntityUpgrade upgrade)
     {
@@ -19,6 +18,8 @@ public class Solar extends RechargerBase
     @Override
     protected boolean canGenerate(final TileEntityUpgrade upgrade)
     {
+        if(upgrade.getLevel() == null) return false;
+
         return upgrade.getLevel().canSeeSky(upgrade.getBlockPos()) && upgrade.getLevel().isDay();
     }
 

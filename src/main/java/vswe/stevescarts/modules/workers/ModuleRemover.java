@@ -5,7 +5,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.level.Level;
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.modules.IActivatorModule;
+import vswe.stevescarts.api.modules.IActivatorModule;
 
 import javax.annotation.Nonnull;
 

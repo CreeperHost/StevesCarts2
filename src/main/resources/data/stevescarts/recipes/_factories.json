@@ -1,6 +1,0 @@
-{
-  "conditions": {
-    "is_event": "vswe.stevescarts.StevesCarts$IsEvent",
-    "module_enabled": "vswe.stevescarts.StevesCarts$ModuleEnabled"
-  }
-}

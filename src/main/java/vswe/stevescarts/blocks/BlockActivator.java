@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 
 public class BlockActivator extends BlockContainerBase
@@ -22,7 +23,7 @@ public class BlockActivator extends BlockContainerBase
     }
 
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player playerEntity, InteractionHand hand, BlockHitResult blockRayTraceResult)
+    public @NotNull InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player playerEntity, @NotNull InteractionHand hand, @NotNull BlockHitResult blockRayTraceResult)
     {
         if (!level.isClientSide)
         {
@@ -34,7 +35,7 @@ public class BlockActivator extends BlockContainerBase
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState)
+    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState)
     {
         return new TileEntityActivator(blockPos, blockState);
     }

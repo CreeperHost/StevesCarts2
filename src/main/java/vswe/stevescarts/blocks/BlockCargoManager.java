@@ -12,19 +12,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 
 public class BlockCargoManager extends BlockContainerBase
 {
-
     public BlockCargoManager()
     {
         super(Properties.of(Material.STONE).strength(2.0F));
     }
 
-
     @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player playerEntity, InteractionHand hand, BlockHitResult blockRayTraceResult)
+    public @NotNull InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player playerEntity, @NotNull InteractionHand hand, @NotNull BlockHitResult blockRayTraceResult)
     {
         if (!level.isClientSide)
         {
@@ -35,7 +34,7 @@ public class BlockCargoManager extends BlockContainerBase
     }
 
     @Override
-    public void onRemove(BlockState blockState1, Level world, BlockPos blockPos, BlockState blockState, boolean p_196243_5_)
+    public void onRemove(@NotNull BlockState blockState1, Level world, @NotNull BlockPos blockPos, @NotNull BlockState blockState, boolean p_196243_5_)
     {
         final TileEntityCargo tile = (TileEntityCargo) world.getBlockEntity(blockPos);
         if (tile != null)
@@ -47,7 +46,7 @@ public class BlockCargoManager extends BlockContainerBase
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState)
+    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState)
     {
         return new TileEntityCargo(blockPos, blockState);
     }

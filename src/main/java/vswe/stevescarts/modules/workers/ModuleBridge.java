@@ -14,7 +14,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotBridge;
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.modules.ISuppliesModule;
+import vswe.stevescarts.api.modules.ISuppliesModule;
 
 import javax.annotation.Nonnull;
 

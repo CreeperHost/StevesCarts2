@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.common.util.FakePlayer;
+import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.farms.ITreeModule;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
@@ -25,10 +26,9 @@ import vswe.stevescarts.containers.slots.SlotSapling;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.BlockPosHelpers;
 import vswe.stevescarts.helpers.Localization;
-import vswe.stevescarts.modules.ISuppliesModule;
+import vswe.stevescarts.api.modules.ISuppliesModule;
 import vswe.stevescarts.modules.ModuleBase;
 import vswe.stevescarts.modules.addons.plants.ModulePlantSize;
-import vswe.stevescarts.plugins.APIHelper;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -109,7 +109,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
                 plantSize = (ModulePlantSize) module;
             }
         }
-        treeModules.addAll(APIHelper.treeModules);
+        treeModules.addAll(StevesCartsAPI.TREE_MODULES);
     }
 
     public abstract int getPercentageDropChance();

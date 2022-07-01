@@ -14,7 +14,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.helpers.NBTHelper;
+import vswe.stevescarts.polylib.NBTHelper;
 import vswe.stevescarts.helpers.storages.TransferManager;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketCargpManager;

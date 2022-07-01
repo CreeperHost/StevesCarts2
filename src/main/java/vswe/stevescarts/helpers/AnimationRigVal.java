@@ -3,8 +3,8 @@ package vswe.stevescarts.helpers;
 public class AnimationRigVal
 {
     private float val;
-    private float min;
-    private float max;
+    private final float min;
+    private final float max;
     private float speed;
     private AnimationRigVal down;
     private AnimationRigVal up;

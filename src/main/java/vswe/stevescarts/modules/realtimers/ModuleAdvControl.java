@@ -16,7 +16,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.modules.ILeverModule;
+import vswe.stevescarts.api.modules.ILeverModule;
 import vswe.stevescarts.modules.ModuleBase;
 import vswe.stevescarts.modules.engines.ModuleEngine;
 

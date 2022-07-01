@@ -18,7 +18,7 @@ import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotBuilder;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
-import vswe.stevescarts.modules.ISuppliesModule;
+import vswe.stevescarts.api.modules.ISuppliesModule;
 
 import java.util.ArrayList;
 

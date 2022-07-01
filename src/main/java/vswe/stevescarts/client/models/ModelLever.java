@@ -9,7 +9,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
-import vswe.stevescarts.modules.ILeverModule;
+import vswe.stevescarts.api.modules.ILeverModule;
 import vswe.stevescarts.modules.ModuleBase;
 
 public class ModelLever extends ModelCartbase

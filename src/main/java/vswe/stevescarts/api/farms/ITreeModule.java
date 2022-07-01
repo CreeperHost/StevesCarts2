@@ -7,7 +7,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.FakePlayer;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 
-@Deprecated
 public interface ITreeModule
 {
 

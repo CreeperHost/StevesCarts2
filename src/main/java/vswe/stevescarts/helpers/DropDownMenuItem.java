@@ -4,14 +4,14 @@ import vswe.stevescarts.modules.ModuleBase;
 
 public class DropDownMenuItem
 {
-    private String name;
-    private int imageID;
-    private VALUETYPE type;
+    private final String name;
+    private final int imageID;
+    private final VALUETYPE type;
     private boolean isLarge;
     private boolean subOpen;
     private byte value;
-    private Class<? extends ModuleBase> moduleClass;
-    private Class<? extends ModuleBase> excludedClass;
+    private final Class<? extends ModuleBase> moduleClass;
+    private final Class<? extends ModuleBase> excludedClass;
     private int multiCount;
     private int intMinValue;
     private int intMaxValue;

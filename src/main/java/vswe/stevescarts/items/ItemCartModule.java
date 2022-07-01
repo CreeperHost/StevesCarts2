@@ -2,12 +2,13 @@ package vswe.stevescarts.items;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import vswe.stevescarts.client.creativetabs.CreativeTabSC2Modules;
+import vswe.stevescarts.client.StevesCartsCreativeTabs;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.modules.data.ModuleData;
 
@@ -22,7 +23,7 @@ public class ItemCartModule extends Item
 
     public ItemCartModule(ModuleData moduleData)
     {
-        super(new Item.Properties().tab(CreativeTabSC2Modules.INSTANCE));
+        super(new Item.Properties().tab(StevesCartsCreativeTabs.MODULES));
         this.moduleData = moduleData;
     }
 
@@ -56,7 +57,7 @@ public class ItemCartModule extends Item
         return moduleData;
     }
 
-    public static ItemStack createModuleStack(int id)
+    public static ItemStack createModuleStack(ResourceLocation id)
     {
         AtomicReference<ItemStack> stack = new AtomicReference<>(ItemStack.EMPTY);
         ModItems.MODULES.forEach((moduleData1, itemSupplier) ->

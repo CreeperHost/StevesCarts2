@@ -20,10 +20,7 @@ import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.client.renders.RenderModulerCart;
 import vswe.stevescarts.entitys.CartDataSerializers;
 import vswe.stevescarts.handlers.EventHandler;
-import vswe.stevescarts.helpers.EventHelper;
-import vswe.stevescarts.helpers.GiftItem;
 import vswe.stevescarts.init.*;
-import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
 
@@ -39,7 +36,8 @@ public class StevesCarts
         instance = this;
         IEventBus iEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         iEventBus.addListener(this::commonSetup);
-        ModuleData.init();
+        StevesCartsModules.init();
+
         AssemblerUpgrade.init();
         ModItems.ITEMS.register(iEventBus);
         ModBlocks.BLOCKS.register(iEventBus);
@@ -55,16 +53,13 @@ public class StevesCarts
 
     public void commonSetup(final FMLCommonSetupEvent event)
     {
-        EventHelper.setupEvents();
         PacketHandler.register();
 
-        ModuleData.init();
         AssemblerUpgrade.init();
         MinecraftForge.EVENT_BUS.register(this);
 
         MinecraftForge.EVENT_BUS.register(new EventHandler());
 
-        GiftItem.init();
         TileEntityCargo.loadSelectionSettings();
         CartDataSerializers.init();
     }
@@ -72,7 +67,7 @@ public class StevesCarts
     public void clientInit(final FMLClientSetupEvent event)
     {
         ModScreens.init();
-        ModuleData.initModels();
+        StevesCartsModules.initModels();
 
         ItemProperties.register(ModItems.CARTS.get(), new ResourceLocation(Constants.MOD_ID, ""), ItemStackRenderer.getInstance());
 

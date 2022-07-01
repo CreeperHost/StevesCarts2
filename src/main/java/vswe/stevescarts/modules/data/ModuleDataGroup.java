@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class ModuleDataGroup
 {
     private Localization.MODULE_INFO name;
-    private ArrayList<ModuleData> modules;
+    private final ArrayList<ModuleData> modules;
     private int count;
 
     public ModuleDataGroup(final Localization.MODULE_INFO name)
@@ -68,20 +68,16 @@ public class ModuleDataGroup
     {
         switch (count)
         {
-            case 1:
-            {
+            case 1 -> {
                 return Localization.MODULE_INFO.MODULE_COUNT_1.translate();
             }
-            case 2:
-            {
+            case 2 -> {
                 return Localization.MODULE_INFO.MODULE_COUNT_2.translate();
             }
-            case 3:
-            {
+            case 3 -> {
                 return Localization.MODULE_INFO.MODULE_COUNT_3.translate();
             }
-            default:
-            {
+            default -> {
                 return "???";
             }
         }

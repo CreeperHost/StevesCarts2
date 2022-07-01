@@ -2,6 +2,7 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.init.ModItems;
 
@@ -11,7 +12,7 @@ public class SlotOutput extends SlotAssembler
 {
     public SlotOutput(final TileEntityCartAssembler assembler, final int i, final int j, final int k)
     {
-        super(assembler, i, j, k, 0, true, 0);
+        super(assembler, i, j, k, ModuleType.NONE, true, 0);
     }
 
     @Override

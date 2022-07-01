@@ -44,7 +44,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implement
         matrixStack.pushPose();
         matrixStack.scale(-1.0f, -1.0f, 1.0f);
         CompoundTag info = itemStack.getTag();
-        if (info != null && info.contains("Modules"))
+        if (info != null && info.contains("modules"))
         {
             float lowestMult = 1.0f;
             VertexConsumer ivertexbuilder = iRenderTypeBuffer.getBuffer(RenderType.solid());
@@ -63,14 +63,17 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implement
             matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180));
             matrixStack.mulPose(Vector3f.XP.rotationDegrees(180));
 
-            for (ModuleBase module : cart.getModules())
+            if (cart.getModules() != null)
             {
-                if (module.getModels() != null)
+                for (ModuleBase module : cart.getModules())
                 {
-                    for (ModelCartbase model : module.getModels())
+                    if (module.getModels() != null)
                     {
-                        iRenderTypeBuffer.getBuffer(model.getRenderType(module));
-                        model.renderToBuffer(matrixStack, ivertexbuilder, p_239207_5_, p_239207_6_, 1.0F, 1.0F, 1.0F, 1.0F);
+                        for (ModelCartbase model : module.getModels())
+                        {
+                            iRenderTypeBuffer.getBuffer(model.getRenderType(module));
+                            model.renderToBuffer(matrixStack, ivertexbuilder, p_239207_5_, p_239207_6_, 1.0F, 1.0F, 1.0F, 1.0F);
+                        }
                     }
                 }
             }

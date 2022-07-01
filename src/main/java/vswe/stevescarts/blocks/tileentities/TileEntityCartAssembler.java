@@ -8,6 +8,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.SCConfig;
+import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.blocks.BlockCartAssembler;
 import vswe.stevescarts.containers.ContainerCartAssembler;
 import vswe.stevescarts.containers.ContainerUpgrade;
@@ -38,6 +40,7 @@ import vswe.stevescarts.items.ItemCartModule;
 import vswe.stevescarts.items.ItemCarts;
 import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.modules.data.ModuleDataHull;
+import vswe.stevescarts.polylib.NBTHelper;
 import vswe.stevescarts.upgrades.*;
 
 import javax.annotation.Nonnull;
@@ -152,31 +155,31 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         titleBoxes.add(infoBox);
         for (int i = 0; i < 5; ++i)
         {
-            final SlotAssembler slot = new SlotAssembler(this, slotID++, engineBox.getX() + 2 + 18 * i, engineBox.getY(), 1, false, i);
+            final SlotAssembler slot = new SlotAssembler(this, slotID++, engineBox.getX() + 2 + 18 * i, engineBox.getY(), ModuleType.ENGINE, false, i);
             slot.invalidate();
             slots.add(slot);
             engineSlots.add(slot);
         }
-        toolSlot = new SlotAssembler(this, slotID++, toolBox.getX() + 2, toolBox.getY(), 2, false, 0);
+        toolSlot = new SlotAssembler(this, slotID++, toolBox.getX() + 2, toolBox.getY(), ModuleType.TOOL, false, 0);
         slots.add(toolSlot);
         toolSlot.invalidate();
         for (int i = 0; i < 6; ++i)
         {
-            final SlotAssembler slot = new SlotAssembler(this, slotID++, attachBox.getX() + 2 + 18 * i, attachBox.getY(), -1, false, i);
+            final SlotAssembler slot = new SlotAssembler(this, slotID++, attachBox.getX() + 2 + 18 * i, attachBox.getY(), ModuleType.ATTACHMENT, false, i);
             slot.invalidate();
             slots.add(slot);
             funcSlots.add(slot);
         }
         for (int i = 0; i < 4; ++i)
         {
-            final SlotAssembler slot = new SlotAssembler(this, slotID++, storageBox.getX() + 2 + 18 * i, storageBox.getY(), 3, false, i);
+            final SlotAssembler slot = new SlotAssembler(this, slotID++, storageBox.getX() + 2 + 18 * i, storageBox.getY(), ModuleType.STORAGE, false, i);
             slot.invalidate();
             slots.add(slot);
             chestSlots.add(slot);
         }
         for (int i = 0; i < 12; ++i)
         {
-            final SlotAssembler slot = new SlotAssembler(this, slotID++, addonBox.getX() + 2 + 18 * (i % 6), addonBox.getY() + 18 * (i / 6), 4, false, i);
+            final SlotAssembler slot = new SlotAssembler(this, slotID++, addonBox.getX() + 2 + 18 * (i % 6), addonBox.getY() + 18 * (i / 6), ModuleType.ADDON, false, i);
             slot.invalidate();
             slots.add(slot);
             addonSlots.add(slot);
@@ -1072,7 +1075,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     {
         if (placeholder == null)
         {
-            placeholder = new EntityMinecartModular(level, this, getModularInfoBytes());
+            placeholder = new EntityMinecartModular(level, this, getModularInfo());
             updateRenderMenu();
             isErrorListOutdated = true;
         }
@@ -1082,7 +1085,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     {
         if (placeholder != null)
         {
-            placeholder.updateSimulationModules(getModularInfoBytes());
+            placeholder.updateSimulationModules(getModularInfo());
             updateRenderMenu();
             isErrorListOutdated = true;
         }
@@ -1112,9 +1115,9 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         }
     }
 
-    private byte[] getModularInfoBytes()
+    private ArrayList<ResourceLocation> getModularInfo()
     {
-        final ArrayList<Byte> datalist = new ArrayList<>();
+        final ArrayList<ResourceLocation> datalist = new ArrayList<>();
         for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i)
         {
             if (!getItem(i).isEmpty())
@@ -1124,17 +1127,12 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                     final ModuleData data = itemCartModule.getModuleData();
                     if (data != null)
                     {
-                        datalist.add((byte) data.getID());
+                        datalist.add(data.getID());
                     }
                 }
             }
         }
-        final byte[] bytes = new byte[datalist.size()];
-        for (int j = 0; j < datalist.size(); ++j)
-        {
-            bytes[j] = datalist.get(j);
-        }
-        return bytes;
+        return datalist;
     }
 
     public boolean getIsDisassembling()

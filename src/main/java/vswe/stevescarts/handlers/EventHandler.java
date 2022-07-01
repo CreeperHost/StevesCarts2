@@ -1,5 +1,6 @@
 package vswe.stevescarts.handlers;
 
+@Deprecated
 public class EventHandler
 {
     public EventHandler()
