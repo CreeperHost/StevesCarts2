@@ -25,3 +25,10 @@ description='''
     versionRange="[1.19, )"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.stevescarts]]
+    modId="polylib"
+    mandatory=true
+    versionRange = "[1900.0.2,)"
+    ordering="NONE"
+    side="BOTH"
