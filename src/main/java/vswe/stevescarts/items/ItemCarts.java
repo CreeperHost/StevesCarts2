@@ -69,22 +69,22 @@ public class ItemCarts extends MinecartItem
                         {
                             e.printStackTrace();
                             player.displayClientMessage(Component.literal("The cart failed to be placed into the world, this is due to an issue with one or more modules. " + "Please post your log on the issue tracker here: " + ChatFormatting.BLUE + " https://github.com/modmuss50/SC2/issues"), false);
-                            StevesCarts.logger.error(" --------------- Broken cart info --------------- ");
-                            StevesCarts.logger.error(info);
+                            StevesCarts.LOGGER.error(" --------------- Broken cart info --------------- ");
+                            StevesCarts.LOGGER.error(info);
                             ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
                             for (final byte id : moduleIDTag.getAsByteArray())
                             {
                                 try
                                 {
                                     final Class<? extends ModuleBase> moduleClass = StevesCartsAPI.MODULE_REGISTRY.get(id).getModuleClass();
-                                    StevesCarts.logger.error("--- " + moduleClass.getCanonicalName());
+                                    StevesCarts.LOGGER.error("--- " + moduleClass.getCanonicalName());
                                 } catch (Exception ex)
                                 {
-                                    StevesCarts.logger.error("Failed to load module with ID " + id + "! More info below.");
+                                    StevesCarts.LOGGER.error("Failed to load module with ID " + id + "! More info below.");
                                     e.printStackTrace();
                                 }
                             }
-                            StevesCarts.logger.error(" --------------- Broken cart info --------------- ");
+                            StevesCarts.LOGGER.error(" --------------- Broken cart info --------------- ");
                             return InteractionResult.FAIL;
                         }
                     }

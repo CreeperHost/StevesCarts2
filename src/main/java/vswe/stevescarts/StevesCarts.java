@@ -19,7 +19,6 @@ import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.client.renders.RenderModulerCart;
 import vswe.stevescarts.entitys.CartDataSerializers;
-import vswe.stevescarts.handlers.EventHandler;
 import vswe.stevescarts.init.*;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
@@ -27,13 +26,13 @@ import vswe.stevescarts.upgrades.AssemblerUpgrade;
 @Mod(Constants.MOD_ID)
 public class StevesCarts
 {
-    public static StevesCarts instance;
+    public static StevesCarts INSTANCE;
 
-    public static Logger logger = LogManager.getLogger();
+    public static Logger LOGGER = LogManager.getLogger();
 
     public StevesCarts()
     {
-        instance = this;
+        INSTANCE = this;
         IEventBus iEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         iEventBus.addListener(this::commonSetup);
         StevesCartsModules.init();
@@ -57,8 +56,6 @@ public class StevesCarts
 
         AssemblerUpgrade.init();
         MinecraftForge.EVENT_BUS.register(this);
-
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
 
         TileEntityCargo.loadSelectionSettings();
         CartDataSerializers.init();

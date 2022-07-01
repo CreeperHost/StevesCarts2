@@ -3,15 +3,14 @@ package vswe.stevescarts.arcade.tracks;
 import com.mojang.blaze3d.vertex.PoseStack;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.handlers.SoundHandler;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
 import java.util.ArrayList;
 
 public class Track
 {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
     private int v;
     private GuiMinecart.RENDER_ROTATION rotation;
     private TrackOrientation orientation;
@@ -88,7 +87,8 @@ public class Track
     {
         if (orientation.getOpposite() != null)
         {
-            ArcadeGame.playSound(SoundHandler.GEAR_SWITCH, 1.0f, 1.0f);
+            //TODO bring back sounds
+//            ArcadeGame.playSound(SoundHandler.GEAR_SWITCH, 1.0f, 1.0f);
             setOrientation(orientation.getOpposite());
         }
     }

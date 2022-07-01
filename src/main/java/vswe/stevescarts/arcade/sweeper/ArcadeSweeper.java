@@ -9,7 +9,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.arcade.tracks.TrackStory;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.handlers.SoundHandler;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
@@ -72,7 +71,8 @@ public class ArcadeSweeper extends ArcadeGame
             if (highscoreTicks == 78)
             {
                 highscoreTicks = 0;
-                ArcadeGame.playSound(SoundHandler.HIGH_SCORE, 1.0f, 1.0f);
+                //TODO bring back sounds
+//                ArcadeGame.playSound(SoundHandler.HIGH_SCORE, 1.0f, 1.0f);
             }
         }
     }
@@ -174,12 +174,14 @@ public class ArcadeSweeper extends ArcadeGame
         else if (button == 1 && isValidCoordinate(xc, yc))
         {
             hasStarted = true;
-            ArcadeGame.playSound(SoundHandler.FLAG_CLICK, 1.0f, 1.0f);
+            //TODO bring back sounds
+//            ArcadeGame.playSound(SoundHandler.FLAG_CLICK, 1.0f, 1.0f);
             tiles[xc][yc].mark();
         }
         else if (button == 2 && isValidCoordinate(xc, yc) && tiles[xc][yc].getState() == Tile.TILE_STATE.OPENED)
         {
-            ArcadeGame.playSound(SoundHandler.CLICK, 1.0f, 1.0f);
+            //TODO bring back sounds
+//            ArcadeGame.playSound(SoundHandler.CLICK, 1.0f, 1.0f);
             int nearby = tiles[xc][yc].getNearbyCreepers();
             if (nearby != 0)
             {
@@ -225,7 +227,8 @@ public class ArcadeSweeper extends ArcadeGame
             {
                 hasFinished = true;
                 isPlaying = false;
-                ArcadeGame.playSound(SoundHandler.GOOD_JOB, 1.0f, 1.0f);
+                //TODO bring back sounds
+//                ArcadeGame.playSound(SoundHandler.GOOD_JOB, 1.0f, 1.0f);
                 if (highscore[currentGameType] > ticks / 20)
                 {
                     highscoreTicks = 1;
@@ -239,7 +242,8 @@ public class ArcadeSweeper extends ArcadeGame
             {
                 if (first)
                 {
-                    ArcadeGame.playSound(SoundHandler.BLOB_CLICK, 1.0f, 1.0f);
+                    //TODO bring back sounds
+//                    ArcadeGame.playSound(SoundHandler.BLOB_CLICK, 1.0f, 1.0f);
                 }
                 for (int i = -1; i <= 1; ++i)
                 {
@@ -256,7 +260,8 @@ public class ArcadeSweeper extends ArcadeGame
             }
             else if (result == Tile.TILE_OPEN_RESULT.OK && first)
             {
-                ArcadeGame.playSound(SoundHandler.CLICK, 1.0f, 1.0f);
+                //TODO bring back sounds
+//                ArcadeGame.playSound(SoundHandler.CLICK, 1.0f, 1.0f);
             }
         }
     }

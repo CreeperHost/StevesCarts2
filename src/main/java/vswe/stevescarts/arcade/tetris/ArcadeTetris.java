@@ -9,7 +9,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.arcade.tracks.TrackStory;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.handlers.SoundHandler;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
@@ -131,7 +130,8 @@ public class ArcadeTetris extends ArcadeGame
                         quickMove = false;
                         gameOverTicks = 0;
                         newHighScore();
-                        ArcadeGame.playSound(SoundHandler.GAME_OVER, 1.0f, 1.0f);
+                        //TODO bring back sounds
+//                        ArcadeGame.playSound(SoundHandler.GAME_OVER, 1.0f, 1.0f);
                     }
                 }
                 else
@@ -151,7 +151,8 @@ public class ArcadeTetris extends ArcadeGame
         }
         else if (newHighScore)
         {
-            ArcadeGame.playSound(SoundHandler.HIGH_SCORE, 1.0f, 1.0f);
+            //TODO bring back sounds
+//            ArcadeGame.playSound(SoundHandler.HIGH_SCORE, 1.0f, 1.0f);
             newHighScore = false;
         }
     }
@@ -305,7 +306,8 @@ public class ArcadeTetris extends ArcadeGame
 
     static
     {
-        ArcadeTetris.removalSounds = new SoundEvent[]{SoundHandler.LINES_1, SoundHandler.LINES_2, SoundHandler.LINES_3, SoundHandler.LINES_4};
+        //TODO bring back sounds
+        //        ArcadeTetris.removalSounds = new SoundEvent[]{SoundHandler.LINES_1, SoundHandler.LINES_2, SoundHandler.LINES_3, SoundHandler.LINES_4};
         ArcadeTetris.texture = "/gui/tetris.png";
     }
 }

@@ -6,7 +6,6 @@ import net.minecraft.sounds.SoundEvents;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.handlers.SoundHandler;
 
 public class TetrisPiece
 {
@@ -182,7 +181,8 @@ public class TetrisPiece
                     }
                     else
                     {
-                        ArcadeGame.playSound(SoundHandler.BOOP, 1.0f, 1.0f);
+                        //TODO bring back sounds
+//                        ArcadeGame.playSound(SoundHandler.BOOP, 1.0f, 1.0f);
                     }
                 }
                 return isGameOver ? MOVE_RESULT.GAME_OVER : MOVE_RESULT.FAIL;

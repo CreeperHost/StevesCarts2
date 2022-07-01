@@ -25,7 +25,7 @@ public class StevesCartsAPI
         }
         else
         {
-            StevesCarts.logger.error("Unable to register Module " + resourceLocation + " key already in use");
+            StevesCarts.LOGGER.error("Unable to register Module " + resourceLocation + " key already in use");
         }
         return moduleData;
     }

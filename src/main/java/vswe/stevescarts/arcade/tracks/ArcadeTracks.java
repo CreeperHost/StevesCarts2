@@ -8,7 +8,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.handlers.SoundHandler;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
@@ -75,7 +74,8 @@ public class ArcadeTracks extends ArcadeGame
             public void onItemPickUp()
             {
                 completeLevel();
-                ArcadeGame.playSound(SoundHandler.WIN, 1.0f, 1.0f);
+                //TODO bring back sounds
+//                ArcadeGame.playSound(SoundHandler.WIN, 1.0f, 1.0f);
             }
 
             @Override

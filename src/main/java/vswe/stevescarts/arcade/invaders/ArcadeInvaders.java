@@ -8,7 +8,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.arcade.tracks.TrackStory;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.handlers.SoundHandler;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
@@ -18,8 +17,8 @@ import java.util.ArrayList;
 public class ArcadeInvaders extends ArcadeGame
 {
     protected ArrayList<Unit> invaders;
-    private ArrayList<Player> lives;
-    private ArrayList<Unit> buildings;
+    private final ArrayList<Player> lives;
+    private final ArrayList<Unit> buildings;
     protected ArrayList<Projectile> projectiles;
     private Player player;
     protected int moveDirection;
@@ -157,8 +156,6 @@ public class ArcadeInvaders extends ArcadeGame
                         projectiles.remove(i);
                     }
                 }
-                //TODO
-
                 //30
                 if (isKeyDown(65))
                 {
@@ -182,7 +179,6 @@ public class ArcadeInvaders extends ArcadeGame
             if (player.update() == Unit.UPDATE_RESULT.DEAD)
             {
                 projectiles.clear();
-                ArcadeGame.playSound(SoundHandler.HIT, 1.0f, 1.0f);
                 if (lives.size() != 0)
                 {
                     lives.get(0).setTarget(player.x, player.y);
@@ -217,7 +213,8 @@ public class ArcadeInvaders extends ArcadeGame
             ++gameoverCounter;
             if (gameoverCounter == 5)
             {
-                ArcadeGame.playSound(SoundHandler.HIGH_SCORE, 1.0f, 1.0f);
+                //TODO reimplement sound
+//                ArcadeGame.playSound(SoundHandler.HIGH_SCORE, 1.0f, 1.0f);
             }
         }
     }

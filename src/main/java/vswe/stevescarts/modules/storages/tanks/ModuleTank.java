@@ -133,8 +133,8 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
                         }
                     } catch (Exception e)
                     {
-                        StevesCarts.logger.error("Failed to load fluid from dw");
-                        StevesCarts.logger.error(e);
+                        StevesCarts.LOGGER.error("Failed to load fluid from dw");
+                        StevesCarts.LOGGER.error(e);
                     }
                 }
             }
