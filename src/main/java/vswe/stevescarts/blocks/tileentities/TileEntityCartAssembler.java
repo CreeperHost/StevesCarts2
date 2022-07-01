@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.SCConfig;
+import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.blocks.BlockCartAssembler;
 import vswe.stevescarts.containers.ContainerCartAssembler;
 import vswe.stevescarts.containers.ContainerUpgrade;
@@ -154,31 +155,31 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         titleBoxes.add(infoBox);
         for (int i = 0; i < 5; ++i)
         {
-            final SlotAssembler slot = new SlotAssembler(this, slotID++, engineBox.getX() + 2 + 18 * i, engineBox.getY(), 1, false, i);
+            final SlotAssembler slot = new SlotAssembler(this, slotID++, engineBox.getX() + 2 + 18 * i, engineBox.getY(), ModuleType.ENGINE, false, i);
             slot.invalidate();
             slots.add(slot);
             engineSlots.add(slot);
         }
-        toolSlot = new SlotAssembler(this, slotID++, toolBox.getX() + 2, toolBox.getY(), 2, false, 0);
+        toolSlot = new SlotAssembler(this, slotID++, toolBox.getX() + 2, toolBox.getY(), ModuleType.TOOL, false, 0);
         slots.add(toolSlot);
         toolSlot.invalidate();
         for (int i = 0; i < 6; ++i)
         {
-            final SlotAssembler slot = new SlotAssembler(this, slotID++, attachBox.getX() + 2 + 18 * i, attachBox.getY(), -1, false, i);
+            final SlotAssembler slot = new SlotAssembler(this, slotID++, attachBox.getX() + 2 + 18 * i, attachBox.getY(), ModuleType.ATTACHMENT, false, i);
             slot.invalidate();
             slots.add(slot);
             funcSlots.add(slot);
         }
         for (int i = 0; i < 4; ++i)
         {
-            final SlotAssembler slot = new SlotAssembler(this, slotID++, storageBox.getX() + 2 + 18 * i, storageBox.getY(), 3, false, i);
+            final SlotAssembler slot = new SlotAssembler(this, slotID++, storageBox.getX() + 2 + 18 * i, storageBox.getY(), ModuleType.STORAGE, false, i);
             slot.invalidate();
             slots.add(slot);
             chestSlots.add(slot);
         }
         for (int i = 0; i < 12; ++i)
         {
-            final SlotAssembler slot = new SlotAssembler(this, slotID++, addonBox.getX() + 2 + 18 * (i % 6), addonBox.getY() + 18 * (i / 6), 4, false, i);
+            final SlotAssembler slot = new SlotAssembler(this, slotID++, addonBox.getX() + 2 + 18 * (i % 6), addonBox.getY() + 18 * (i / 6), ModuleType.ADDON, false, i);
             slot.invalidate();
             slots.add(slot);
             addonSlots.add(slot);

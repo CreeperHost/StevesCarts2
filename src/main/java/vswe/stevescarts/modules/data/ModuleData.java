@@ -12,6 +12,7 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.StevesCartsAPI;
+import vswe.stevescarts.api.modules.DefaultModuleGroups;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.client.models.*;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -65,6 +66,11 @@ public class ModuleData
     public Class<? extends ModuleBase> getModuleClass()
     {
         return moduleClass;
+    }
+
+    public ModuleType getModuleType()
+    {
+        return moduleType;
     }
 
     @Deprecated(forRemoval = true)
@@ -408,37 +414,22 @@ public class ModuleData
         return stack;
     }
 
-    public static boolean isValidModuleItem(final int validGroup, @Nonnull ItemStack itemstack)
+    public static boolean isValidModuleItem(final ModuleType moduleType, @Nonnull ItemStack itemstack)
     {
         if (itemstack.getItem() instanceof ItemCartModule itemCartModule)
         {
             final ModuleData module = itemCartModule.getModuleData();
-            return isValidModuleItem(validGroup, module);
+            return isValidModuleItem(moduleType, module);
         }
         return false;
     }
 
     //TODO rewrite all of this
-    public static boolean isValidModuleItem(final int validGroup, final ModuleData module)
+    public static boolean isValidModuleItem(final ModuleType moduleType, final ModuleData module)
     {
         if (module != null)
         {
-            return true;
-//            if (validGroup < 0)
-//            {
-//                for (int i = 0; i < ModuleData.moduleGroups.length; ++i)
-//                {
-//                    if (ModuleData.moduleGroups[i].isAssignableFrom(module.moduleClass))
-//                    {
-//                        return false;
-//                    }
-//                }
-//                return true;
-//            }
-//            if (ModuleData.moduleGroups[validGroup].isAssignableFrom(module.moduleClass))
-//            {
-//                return true;
-//            }
+            return module.getModuleType() == moduleType;
         }
         return false;
     }
@@ -448,27 +439,27 @@ public class ModuleData
         //TODO rewrite all of this
         if(true) return true;
 
-        final int[] max = {1, hull.getEngineMax(), 1, 4, hull.getAddonMax(), 6};
-        final int[] current = new int[max.length];
-        for (final ModuleData module : modules)
-        {
-            int id = 5;
-            for (int i = 0; i < 5; ++i)
-            {
-                if (isValidModuleItem(i, module))
-                {
-                    id = i;
-                    break;
-                }
-            }
-            final int[] array = current;
-            final int n = id;
-            ++array[n];
-            if (current[id] > max[id])
-            {
-                return false;
-            }
-        }
+//        final int[] max = {1, hull.getEngineMax(), 1, 4, hull.getAddonMax(), 6};
+//        final int[] current = new int[max.length];
+//        for (final ModuleData module : modules)
+//        {
+//            int id = 5;
+//            for (int i = 0; i < 5; ++i)
+//            {
+//                if (isValidModuleItem(i, module))
+//                {
+//                    id = i;
+//                    break;
+//                }
+//            }
+//            final int[] array = current;
+//            final int n = id;
+//            ++array[n];
+//            if (current[id] > max[id])
+//            {
+//                return false;
+//            }
+//        }
         return true;
     }
 

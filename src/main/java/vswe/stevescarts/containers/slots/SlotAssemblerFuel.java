@@ -3,6 +3,7 @@ package vswe.stevescarts.containers.slots;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.ForgeHooks;
+import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.polylib.FuelHelper;
 
@@ -12,7 +13,7 @@ public class SlotAssemblerFuel extends SlotAssembler
 {
     public SlotAssemblerFuel(final TileEntityCartAssembler assembler, final int i, final int j, final int k)
     {
-        super(assembler, i, j, k, 0, true, 0);
+        super(assembler, i, j, k, ModuleType.NONE, true, 0);
     }
 
     @Override

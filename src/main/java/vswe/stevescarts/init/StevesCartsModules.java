@@ -220,7 +220,7 @@ public class StevesCartsModules
 
         //TOOLS
         TORCH_PLACER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "torch_placer"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "torch_placer"), "Torch Placer", ModuleTorch.class, ModuleType.TOOL, 10)).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT});
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "torch_placer"), "Torch Placer", ModuleTorch.class, ModuleType.ATTACHMENT, 10)).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT});
 
         BASIC_DRILL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "basic_drill"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "basic_drill"), "Basic Drill", ModuleDrillDiamond.class, ModuleType.TOOL, 10)).addSide(ModuleData.SIDE.FRONT);
@@ -239,13 +239,13 @@ public class StevesCartsModules
         DefaultModuleGroups.DRILL_GROUP.add(GALGADORIAN_DRILL);
 
         RAILER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "railer"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "railer"), "Railer", ModuleRailer.class, ModuleType.TOOL, 3));
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "railer"), "Railer", ModuleRailer.class, ModuleType.ATTACHMENT, 3));
 
         LARGE_RAILER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "large_railer"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "large_railer"), "Large Railer", ModuleRailerLarge.class, ModuleType.TOOL, 17));
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "large_railer"), "Large Railer", ModuleRailerLarge.class, ModuleType.ATTACHMENT, 17));
 
         BRIDGE_BUILDER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "bridge_builder"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "bridge_builder"), "Bridge Builder", ModuleBridge.class, ModuleType.TOOL, 14));
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "bridge_builder"), "Bridge Builder", ModuleBridge.class, ModuleType.ATTACHMENT, 14));
 
         TRACK_REMOVER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "track_remover"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "track_remover"), "Track Remover", ModuleRemover.class, ModuleType.TOOL, 8).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.TOP, ModuleData.SIDE.BACK}));
@@ -291,10 +291,10 @@ public class StevesCartsModules
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "seat"), "Seat", ModuleSeat.class, ModuleType.ADDON, 3).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.CENTER, ModuleData.SIDE.TOP}));
 
         BRAKE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "brake_handle"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "brake_handle"), "Brake Handle", ModuleBrake.class, ModuleType.ADDON, 12).addParent(SEAT));
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "brake_handle"), "Brake Handle", ModuleBrake.class, ModuleType.ATTACHMENT, 12).addParent(SEAT));
 
         ADVANCED_CONTROL_SYSTEM = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_control_system"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_control_system"), "Advanced Control System", ModuleAdvControl.class, ModuleType.ADDON, 38).addSide(ModuleData.SIDE.RIGHT).addParent(SEAT));
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_control_system"), "Advanced Control System", ModuleAdvControl.class, ModuleType.ATTACHMENT, 38).addSide(ModuleData.SIDE.RIGHT).addParent(SEAT));
 
         ENTITY_DETECTOR_ANIMAL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "entity_detector_animal"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "entity_detector_animal"), "Entity Detector: Animal", ModuleAnimal.class, ModuleType.ADDON, 1));

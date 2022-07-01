@@ -3,15 +3,17 @@ package vswe.stevescarts.containers.slots;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.items.ItemCarts;
 import vswe.stevescarts.modules.data.ModuleData;
+import vswe.stevescarts.modules.data.ModuleDataGroup;
 
 import javax.annotation.Nonnull;
 
 public class SlotAssembler extends Slot
 {
-    private int groupID;
+    private ModuleType moduleType;
     private int xPos;
     private int yPos;
     private TileEntityCartAssembler assembler;
@@ -21,12 +23,12 @@ public class SlotAssembler extends Slot
     private boolean useLarge;
     private boolean reloadOnUpdate;
 
-    public SlotAssembler(final TileEntityCartAssembler assembler, final int i, final int j, final int k, final int groupID, final boolean useLarge, final int id)
+    public SlotAssembler(final TileEntityCartAssembler assembler, final int i, final int j, final int k, final ModuleType moduleType, final boolean useLarge, final int id)
     {
         super(assembler, i, j, k);
         this.assembler = assembler;
         this.useLarge = useLarge;
-        this.groupID = groupID;
+        this.moduleType = moduleType;
         xPos = j;
         yPos = k;
         isValid = true;
@@ -98,7 +100,7 @@ public class SlotAssembler extends Slot
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return isValid && ModuleData.isValidModuleItem(groupID, itemstack);
+        return isValid && ModuleData.isValidModuleItem(moduleType, itemstack);
     }
 
     public void invalidate()
