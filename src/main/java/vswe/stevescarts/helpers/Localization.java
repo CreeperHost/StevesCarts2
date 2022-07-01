@@ -363,7 +363,7 @@ public final class Localization
             RAILER("railerTitle"),
             CONTROL_SYSTEM("controlSystemTitle"),
             DISTANCES("controlSystemDistanceUnits"),
-            ODO("controlSystemOdoMeter"), 
+            ODO("controlSystemOdoMeter"),
             TRIP("controlSystemTripMeter"),
             CAGE_AUTO("cageAutoPickUp"),
             CAGE("cagePickUp"), CAKE_SERVER("cakeServerTitle"), CAKES("cakesLabel"), SLICES("slicesLabel"), EXPLOSIVES("explosivesTitle"), EXPERIENCE("experienceTitle"), EXPERIENCE_LEVEL("experienceLevel"), EXPERIENCE_EXTRACT("experienceExtract"), EXPERIENCE_PLAYER_LEVEL("experiencePlayerLevel"), SHOOTER("shooterTitle"), FREQUENCY("shooterFrequency"), SECONDS("shooterSeconds"), DELAY("shooterDelay"), PIANO("notePiano"), BASS_DRUM("noteBassDrum"), SNARE_DRUM("noteSnareDrum"), STICKS("noteSticks"), BASS_GUITAR("noteBassGuitar"), CREATE_TRACK("noteCreateTrack"), REMOVE_TRACK("noteRemoveTrack"), ACTIVATE_INSTRUMENT("noteActivateInstrument"), DEACTIVATE_INSTRUMENT("noteDeactivateInstrument"), NOTE_DELAY("noteDelay"), ADD_NOTE("noteAdd"), REMOVE_NOTE("noteRemove"), VOLUME("noteVolume"), SEAT_MESSAGE("seatStateMessage"), CONTROL_RESET("controlSystemReset");

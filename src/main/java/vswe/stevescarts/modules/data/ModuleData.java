@@ -62,11 +62,7 @@ public class ModuleData
 //        shooterGroup.add(shooter);
 //        shooterGroup.add(advshooter);
 //
-//        final ModuleData animal = new ModuleData(21, "Entity Detector: Animal", ModuleAnimal.class, 1).addParent(advshooter);
-//        final ModuleData player = new ModuleData(22, "Entity Detector: Player", ModulePlayer.class, 7).addParent(advshooter);
-//        final ModuleData villager = new ModuleData(23, "Entity Detector: Villager", ModuleVillager.class, 1).addParent(advshooter);
-//        final ModuleData monster = new ModuleData(24, "Entity Detector: Monster", ModuleMonster.class, 1).addParent(advshooter);
-//        final ModuleData bats = new ModuleData(48, "Entity Detector: Bat", ModuleBat.class, 1).addParent(advshooter);
+
 //        detectorGroup.add(animal);
 //        detectorGroup.add(player);
 //        detectorGroup.add(villager);

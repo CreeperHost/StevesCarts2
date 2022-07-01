@@ -22,6 +22,7 @@ import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.addons.ModuleBrake;
 import vswe.stevescarts.modules.addons.ModuleHeightControl;
 import vswe.stevescarts.modules.addons.ModuleLiquidSensors;
+import vswe.stevescarts.modules.addons.mobdetectors.*;
 import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.modules.data.ModuleDataHull;
 import vswe.stevescarts.modules.engines.*;
@@ -91,6 +92,14 @@ public class StevesCartsModules
     public static ModuleData SEAT;
     public static ModuleData BRAKE;
     public static ModuleData ADVANCED_CONTROL_SYSTEM;
+
+    //Detectors
+    public static ModuleData ENTITY_DETECTOR_ANIMAL;
+    public static ModuleData ENTITY_DETECTOR_PLAYER;
+    public static ModuleData ENTITY_DETECTOR_VILLAGER;
+    public static ModuleData ENTITY_DETECTOR_MONSTER;
+    public static ModuleData ENTITY_DETECTOR_BAT;
+
 
     public static void init()
     {
@@ -229,6 +238,20 @@ public class StevesCartsModules
         ADVANCED_CONTROL_SYSTEM = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_control_system"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_control_system"), "Advanced Control System", ModuleAdvControl.class, ModuleType.ADDON, 38).addSide(ModuleData.SIDE.RIGHT).addParent(SEAT));
 
+        ENTITY_DETECTOR_ANIMAL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "entity_detector_animal"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "entity_detector_animal"), "Entity Detector: Animal", ModuleAnimal.class, ModuleType.ADDON, 1));
+
+        ENTITY_DETECTOR_PLAYER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "entity_detector_player"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "entity_detector_player"), "Entity Detector: Player", ModulePlayer.class, ModuleType.ADDON, 7));
+
+        ENTITY_DETECTOR_VILLAGER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "entity_detector_villager"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "entity_detector_villager"), "Entity Detector: Villager", ModuleVillager.class, ModuleType.ADDON, 1));
+
+        ENTITY_DETECTOR_MONSTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "entity_detector_monster"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "entity_detector_monster"), "Entity Detector: Monster", ModuleMonster.class, ModuleType.ADDON, 1));
+
+        ENTITY_DETECTOR_BAT = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "entity_detector_bat"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "entity_detector_bat"), "Entity Detector: Bat", ModuleBat.class, ModuleType.ADDON, 1));
 
     }
 
@@ -275,16 +298,8 @@ public class StevesCartsModules
         SEAT.removeModel("Top").addModel("Chair", new ModelSeat());
         BRAKE.addModel("Lever", new ModelLever(ResourceHelper.getResource("/models/leverModel.png")));
         ADVANCED_CONTROL_SYSTEM.addModel("Lever", new ModelLever(ResourceHelper.getResource("/models/leverModel2.png"))).addModel("Wheel", new ModelWheel());
-//        final ArrayList<Integer> pipes = new ArrayList<>();
-//        for (int i = 0; i < 9; ++i)
-//        {
-//            if (i != 4)
-//            {
-//                pipes.add(i);
-//            }
-//        }
-//        ModuleData.moduleList.get((byte) 28).addModel("Rig", new ModelShootingRig()).addModel("Pipes", new ModelGun(pipes));
-//        ModuleData.moduleList.get((byte) 29).addModel("Rig", new ModelShootingRig()).addModel("MobDetector", new ModelMobDetector()).addModel("Pipes", new ModelSniperRifle());
+
+
 //        ModuleData.moduleList.get((byte) 30).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelCleaner());
 //        ModuleData.moduleList.get((byte) 31).addModel("Tnt", new ModelDynamite());
 //        ModuleData.moduleList.get((byte) 32).addModel("Shield", new ModelShield()).setModelMult(0.68f);
