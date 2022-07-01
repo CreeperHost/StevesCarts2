@@ -11,6 +11,10 @@ import vswe.stevescarts.client.models.pig.ModelPigTail;
 import vswe.stevescarts.client.models.storages.chests.ModelFrontChest;
 import vswe.stevescarts.client.models.storages.chests.ModelSideChests;
 import vswe.stevescarts.client.models.storages.chests.ModelTopChest;
+import vswe.stevescarts.client.models.storages.tanks.ModelAdvancedTank;
+import vswe.stevescarts.client.models.storages.tanks.ModelFrontTank;
+import vswe.stevescarts.client.models.storages.tanks.ModelSideTanks;
+import vswe.stevescarts.client.models.storages.tanks.ModelTopTank;
 import vswe.stevescarts.client.models.workers.ModelRailer;
 import vswe.stevescarts.client.models.workers.ModelTorchplacer;
 import vswe.stevescarts.client.models.workers.ModelTrackRemover;
@@ -19,20 +23,19 @@ import vswe.stevescarts.client.models.workers.tools.ModelFarmer;
 import vswe.stevescarts.client.models.workers.tools.ModelWoodCutter;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.modules.addons.ModuleBrake;
-import vswe.stevescarts.modules.addons.ModuleHeightControl;
-import vswe.stevescarts.modules.addons.ModuleLiquidSensors;
+import vswe.stevescarts.modules.addons.*;
 import vswe.stevescarts.modules.addons.mobdetectors.*;
+import vswe.stevescarts.modules.addons.plants.ModuleNetherwart;
 import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.modules.data.ModuleDataHull;
 import vswe.stevescarts.modules.engines.*;
 import vswe.stevescarts.modules.hull.*;
-import vswe.stevescarts.modules.realtimers.ModuleAdvControl;
-import vswe.stevescarts.modules.realtimers.ModuleSeat;
+import vswe.stevescarts.modules.realtimers.*;
 import vswe.stevescarts.modules.storages.chests.ModuleFrontChest;
 import vswe.stevescarts.modules.storages.chests.ModuleInternalStorage;
 import vswe.stevescarts.modules.storages.chests.ModuleSideChests;
 import vswe.stevescarts.modules.storages.chests.ModuleTopChest;
+import vswe.stevescarts.modules.storages.tanks.*;
 import vswe.stevescarts.modules.workers.*;
 import vswe.stevescarts.modules.workers.tools.*;
 
@@ -92,6 +95,16 @@ public class StevesCartsModules
     public static ModuleData SEAT;
     public static ModuleData BRAKE;
     public static ModuleData ADVANCED_CONTROL_SYSTEM;
+    public static ModuleData CLEANER;
+    public static ModuleData DYNAMITE_CARRIER;
+    public static ModuleData DIVINE_SHIELD;
+    public static ModuleData MELTER;
+    public static ModuleData EXTREME_MELTER;
+    public static ModuleData INVISIBILITY_CORE;
+    public static ModuleData NOTE_SEQUENCER;
+    public static ModuleData FREEZER;
+    public static ModuleData CAGE;
+    public static ModuleData FIREWORK_DISPLAY;
 
     //Detectors
     public static ModuleData ENTITY_DETECTOR_ANIMAL;
@@ -100,6 +113,14 @@ public class StevesCartsModules
     public static ModuleData ENTITY_DETECTOR_MONSTER;
     public static ModuleData ENTITY_DETECTOR_BAT;
 
+    public static ModuleData CROP_NETHER_WART;
+
+    public static ModuleData INTERNAL_TANK;
+    public static ModuleData SIDE_TANKS;
+    public static ModuleData TOP_TANK;
+    public static ModuleData ADVANCED_TANK;
+    public static ModuleData FRONT_TANK;
+    public static ModuleData OPEN_TANK;
 
     public static void init()
     {
@@ -253,6 +274,58 @@ public class StevesCartsModules
         ENTITY_DETECTOR_BAT = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "entity_detector_bat"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "entity_detector_bat"), "Entity Detector: Bat", ModuleBat.class, ModuleType.ADDON, 1));
 
+        CLEANER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "cleaning_machine"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "cleaning_machine"), "Cleaning Machine", ModuleCleaner.class, ModuleType.ADDON, 23).addSide(ModuleData.SIDE.CENTER));
+
+        DYNAMITE_CARRIER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "dynamite_carrier"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "dynamite_carrier"), "Dynamite Carrier", ModuleDynamite.class, ModuleType.ADDON, 3).addSide(ModuleData.SIDE.TOP));
+
+        DIVINE_SHIELD = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "divine_shield"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "divine_shield"), "Divine Shield", ModuleShield.class, ModuleType.ADDON, 60));
+
+        MELTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "melter"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "melter"), "Melter", ModuleMelter.class, ModuleType.ADDON, 10));
+
+        EXTREME_MELTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "extreme_melter"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "extreme_melter"), "Extreme Melter", ModuleMelterExtreme.class, ModuleType.ADDON, 19));
+
+        INVISIBILITY_CORE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "invisibility_core"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "invisibility_core"), "Invisibility Core", ModuleInvisible.class, ModuleType.ADDON, 21));
+
+        NOTE_SEQUENCER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "note_sequencer"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "note_sequencer"), "Note Sequencer", ModuleNote.class, ModuleType.ADDON, 30)).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT});
+
+        FREEZER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "freezer"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "freezer"), "Freezer", ModuleSnowCannon.class, ModuleType.ADDON, 24));
+
+        CAGE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "cage"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "cage"), "Cage", ModuleCage.class, ModuleType.ADDON, 7).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.TOP, ModuleData.SIDE.CENTER}));
+
+        CROP_NETHER_WART = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "crop_nether_wart"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "crop_nether_wart"), "Crop: Nether Wart", ModuleNetherwart.class, ModuleType.ADDON, 20));//.addRequirement(BASIC_FARMER));
+
+        FIREWORK_DISPLAY = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "firework_display"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "firework_display"), "Firework display", ModuleFirework.class, ModuleType.ADDON, 45));
+
+
+        INTERNAL_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "internal_sctank"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "internal_sctank"), "Internal SCTank", ModuleInternalTank.class, ModuleType.STORAGE, 37).setAllowDuplicate());
+
+        SIDE_TANKS = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "side_tanks"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "side_tanks"), "Side Tanks", ModuleSideTanks.class, ModuleType.STORAGE, 10).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT}));
+
+        TOP_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "top_sctank"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "top_sctank"), "Top SCTank", ModuleTopTank.class, ModuleType.STORAGE, 22).addSide(ModuleData.SIDE.TOP));
+
+        ADVANCED_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_sctank"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_sctank"), "Advanced SCTank", ModuleAdvancedTank.class, ModuleType.STORAGE, 54).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.CENTER, ModuleData.SIDE.TOP}));
+
+        FRONT_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "front_sctank"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "front_sctank"), "Front SCTank", ModuleFrontTank.class, ModuleType.STORAGE, 15).addSide(ModuleData.SIDE.FRONT));
+
+        OPEN_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "open_sctank"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "open_sctank"), "Open SCTank", ModuleOpenTank.class, ModuleType.STORAGE, 31).addSide(ModuleData.SIDE.TOP).addMessage(Localization.MODULE_INFO.OPEN_TANK));
+
     }
 
     public static void initModels()
@@ -300,15 +373,15 @@ public class StevesCartsModules
         ADVANCED_CONTROL_SYSTEM.addModel("Lever", new ModelLever(ResourceHelper.getResource("/models/leverModel2.png"))).addModel("Wheel", new ModelWheel());
 
 
-//        ModuleData.moduleList.get((byte) 30).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelCleaner());
-//        ModuleData.moduleList.get((byte) 31).addModel("Tnt", new ModelDynamite());
-//        ModuleData.moduleList.get((byte) 32).addModel("Shield", new ModelShield()).setModelMult(0.68f);
-//        ModuleData.moduleList.get((byte) 40).setModelMult(0.65f).addModel("Speakers", new ModelNote());
-//        ModuleData.moduleList.get((byte) 57).removeModel("Top").addModel("Cage", new ModelCage(), false).addModel("Cage", new ModelCage(), true).setModelMult(0.65f);
-//        ModuleData.moduleList.get((byte) 64).addModel("SideTanks", new ModelSideTanks());
-//        ModuleData.moduleList.get((byte) 65).addModel("TopTank", new ModelTopTank());
-//        ModuleData.moduleList.get((byte) 66).addModel("LargeTank", new ModelAdvancedTank()).removeModel("Top");
-//        ModuleData.moduleList.get((byte) 67).setModelMult(0.68f).addModel("FrontTank", new ModelFrontTank());
+        CLEANER.addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelCleaner());
+        DYNAMITE_CARRIER.addModel("Tnt", new ModelDynamite());
+        DIVINE_SHIELD.addModel("Shield", new ModelShield()).setModelMult(0.68f);
+        NOTE_SEQUENCER.setModelMult(0.65f).addModel("Speakers", new ModelNote());
+        CAGE.removeModel("Top").addModel("Cage", new ModelCage(), false).addModel("Cage", new ModelCage(), true).setModelMult(0.65f);
+        SIDE_TANKS.addModel("SideTanks", new ModelSideTanks());
+        TOP_TANK.addModel("TopTank", new ModelTopTank());
+        ADVANCED_TANK.addModel("LargeTank", new ModelAdvancedTank()).removeModel("Top");
+        FRONT_TANK.setModelMult(0.68f).addModel("FrontTank", new ModelFrontTank());
 //        ModuleData.moduleList.get((byte) 71).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelLiquidDrainer());
 //        ModuleData.moduleList.get((byte) 85).addModel("LawnMower", new ModelLawnMower()).setModelMult(0.4f);
 //        ModuleData.moduleList.get((byte) 99).addModel("Cake", new ModelCake());

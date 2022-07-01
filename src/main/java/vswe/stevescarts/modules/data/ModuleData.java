@@ -50,64 +50,12 @@ public class ModuleData
     public static void init()
     {
 //        final ModuleDataGroup engineGroup = new ModuleDataGroup(Localization.MODULE_INFO.ENGINE_GROUP);
-        final ModuleDataGroup drillGroup = new ModuleDataGroup(Localization.MODULE_INFO.DRILL_GROUP);
+//        final ModuleDataGroup drillGroup = new ModuleDataGroup(Localization.MODULE_INFO.DRILL_GROUP);
 //        final ModuleDataGroup farmerGroup = new ModuleDataGroup(Localization.MODULE_INFO.FARMER_GROUP);
 //        final ModuleDataGroup woodcutterGroup = new ModuleDataGroup(Localization.MODULE_INFO.CUTTER_GROUP);
 //        final ModuleDataGroup tankGroup = new ModuleDataGroup(Localization.MODULE_INFO.TANK_GROUP);
 //        final ModuleDataGroup detectorGroup = new ModuleDataGroup(Localization.MODULE_INFO.ENTITY_GROUP);
 //        final ModuleDataGroup shooterGroup = new ModuleDataGroup(Localization.MODULE_INFO.SHOOTER_GROUP);
-
-//        final ModuleData shooter = new ModuleData(28, "Shooter", ModuleShooter.class, 15).addSide(SIDE.TOP);
-//        final ModuleData advshooter = new ModuleData(29, "Advanced Shooter", ModuleShooterAdv.class, 50).addSide(SIDE.TOP).addRequirement(detectorGroup);
-//        shooterGroup.add(shooter);
-//        shooterGroup.add(advshooter);
-//
-
-//        detectorGroup.add(animal);
-//        detectorGroup.add(player);
-//        detectorGroup.add(villager);
-//        detectorGroup.add(monster);
-//        detectorGroup.add(bats);
-//
-//        final ModuleData cleaner = new ModuleData(30, "Cleaning Machine", ModuleCleaner.class, 23).addSide(SIDE.CENTER);
-//        addNemesis(frontChest, cleaner);
-//        new ModuleData(31, "Dynamite Carrier", ModuleDynamite.class, 3).addSide(SIDE.TOP);
-//        new ModuleData(32, "Divine Shield", ModuleShield.class, 60);
-//        final ModuleData melter = new ModuleData(33, "Melter", ModuleMelter.class, 10);
-//        final ModuleData extrememelter = new ModuleData(34, "Extreme Melter", ModuleMelterExtreme.class, 19);
-//        addNemesis(melter, extrememelter);
-//        new ModuleData(36, "Invisibility Core", ModuleInvisible.class, 21);
-//
-//        new ModuleData(40, "Note Sequencer", ModuleNote.class, 30).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
-//        final ModuleData colorizer = new ModuleData(41, "Colorizer", ModuleColorizer.class, 15);
-//
-//        final ModuleData colorRandomizer = new ModuleData(101, "Color Randomizer", ModuleColorRandomizer.class, 20);
-//        addNemesis(colorizer, colorRandomizer);
-//
-//        new ModuleData(49, "Chunk Loader", ModuleChunkLoader.class, 84);
-//
-//        new ModuleData(51, "Projectile: Potion", ModulePotion.class, 10).addRequirement(shooterGroup);
-//        new ModuleData(52, "Projectile: Fire Charge", ModuleFireball.class, 10).lockByDefault().addRequirement(shooterGroup);
-//        new ModuleData(53, "Projectile: Egg", ModuleEgg.class, 10).addRequirement(shooterGroup);
-//        final ModuleData snowballshooter = new ModuleData(54, "Projectile: Snowball", ModuleSnowball.class, 10).addRequirement(shooterGroup);
-//        final ModuleData cake = new ModuleData(90, "Projectile: Cake", ModuleCake.class, 10).addRequirement(shooterGroup).lock();
-//
-//        final ModuleData snowgenerator = new ModuleData(55, "Freezer", ModuleSnowCannon.class, 24);
-//        addNemesis(snowgenerator, melter);
-//        addNemesis(snowgenerator, extrememelter);
-//
-//        final ModuleData cage = new ModuleData(57, "Cage", ModuleCage.class, 7).addSides(new SIDE[]{SIDE.TOP, SIDE.CENTER});
-//        new ModuleData(58, "Crop: Nether Wart", ModuleNetherwart.class, 20).addRequirement(farmerGroup);
-//        new ModuleData(59, "Firework display", ModuleFirework.class, 45);
-//        final ModuleData internalTank = new ModuleData(63, "Internal SCTank", ModuleInternalTank.class, 37).setAllowDuplicate();
-//        final ModuleData sideTank = new ModuleData(64, "Side Tanks", ModuleSideTanks.class, 10).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
-//        final ModuleData topTank = new ModuleData(65, "Top SCTank", ModuleTopTank.class, 22).addSide(SIDE.TOP);
-//        final ModuleData advancedTank = new ModuleData(66, "Advanced SCTank", ModuleAdvancedTank.class, 54).addSides(new SIDE[]{SIDE.CENTER, SIDE.TOP});
-//        final ModuleData frontTank = new ModuleData(67, "Front SCTank", ModuleFrontTank.class, 15).addSide(SIDE.FRONT);
-//        final ModuleData creativeTank = new ModuleData(72, "Creative SCTank", ModuleCheatTank.class, 1).setAllowDuplicate().addMessage(Localization.MODULE_INFO.OCEAN_MESSAGE);
-//        final ModuleData topTankOpen = new ModuleData(73, "Open SCTank", ModuleOpenTank.class, 31).addSide(SIDE.TOP).addMessage(Localization.MODULE_INFO.OPEN_TANK);
-//        addNemesis(frontTank, cleaner);
-//        tankGroup.add(internalTank).add(sideTank).add(topTank).add(advancedTank).add(frontTank).add(creativeTank).add(topTankOpen);
 //
 //        new ModuleData(68, "Incinerator", ModuleIncinerator.class, 23).addRequirement(tankGroup).addRequirement(drillGroup);
 //
@@ -191,7 +139,7 @@ public class ModuleData
         return this;
     }
 
-    protected ModuleData setAllowDuplicate()
+    public ModuleData setAllowDuplicate()
     {
         allowDuplicate = true;
         return this;
@@ -310,7 +258,7 @@ public class ModuleData
     }
 
     @OnlyIn(Dist.CLIENT)
-    protected ModuleData addModel(final String tag, final ModelCartbase model, final boolean placeholder)
+    public ModuleData addModel(final String tag, final ModelCartbase model, final boolean placeholder)
     {
         if (placeholder)
         {
