@@ -56,38 +56,8 @@ public class ModuleData
 //        final ModuleDataGroup tankGroup = new ModuleDataGroup(Localization.MODULE_INFO.TANK_GROUP);
 //        final ModuleDataGroup detectorGroup = new ModuleDataGroup(Localization.MODULE_INFO.ENTITY_GROUP);
 //        final ModuleDataGroup shooterGroup = new ModuleDataGroup(Localization.MODULE_INFO.SHOOTER_GROUP);
-//
-//        new ModuleData(68, "Incinerator", ModuleIncinerator.class, 23).addRequirement(tankGroup).addRequirement(drillGroup);
-//
-//        addNemesis(thermal0, thermal2);
-//
-//        final ModuleData cleanerliquid = new ModuleData(71, "Liquid Cleaner", ModuleLiquidDrainer.class, 30).addSide(SIDE.CENTER).addParent(liquidsensors).addRequirement(tankGroup);
-//        addNemesis(frontTank, cleanerliquid);
-//        addNemesis(frontChest, cleanerliquid);
-//
-//        new ModuleData(75, "Drill Intelligence", ModuleDrillIntelligence.class, 21).addRequirement(drillGroup);
-//        new ModuleData(77, "Power Observer", ModulePowerObserver.class, 12).addRequirement(engineGroup);
-//
-//        new ModuleData(78, "Steve's Arcade", ModuleArcade.class, 10).addParent(seat);
-//
 //        final ModuleDataGroup toolGroup = ModuleDataGroup.getCombinedGroup(Localization.MODULE_INFO.TOOL_GROUP, drillGroup, woodcutterGroup);
-//        toolGroup.add(farmerGroup);
 //        final ModuleDataGroup enchantableGroup = ModuleDataGroup.getCombinedGroup(Localization.MODULE_INFO.TOOL_OR_SHOOTER_GROUP, toolGroup, shooterGroup);
-//        new ModuleData(82, "Enchanter", ModuleEnchants.class, 72).addRequirement(enchantableGroup);
-//        new ModuleData(83, "Ore Extractor", ModuleOreTracker.class, 80).addRequirement(drillGroup);
-//        new ModuleData(85, "Lawn Mower", ModuleFlowerRemover.class, 38).addSides(new SIDE[]{SIDE.RIGHT, SIDE.LEFT});
-//        new ModuleData(86, "Milker", ModuleMilker.class, 26).addParent(cage);
-//        new ModuleData(87, "Crafter", ModuleCrafter.class, 22).setAllowDuplicate();
-//        new ModuleData(89, "Planter Range Extender", ModulePlantSize.class, 20).addRequirement(woodcutterGroup);
-//        new ModuleData(91, "Smelter", ModuleSmelter.class, 22).setAllowDuplicate();
-//        new ModuleData(92, "Advanced Crafter", ModuleCrafterAdv.class, 42).setAllowDuplicate();
-//        new ModuleData(93, "Advanced Smelter", ModuleSmelterAdv.class, 42).setAllowDuplicate();
-//        new ModuleData(94, "Information Provider", ModuleLabel.class, 12);
-//        new ModuleData(95, "Experience Bank", ModuleExperience.class, 36);
-//        new ModuleData(96, "Creative Incinerator", ModuleCreativeIncinerator.class, 1).addRequirement(drillGroup);
-//        new ModuleData(97, "Creative Supplies", ModuleCreativeSupplies.class, 1);
-//        new ModuleData(99, "Cake Server", ModuleCakeServer.class, 10).addSide(SIDE.TOP).addMessage(Localization.MODULE_INFO.ALPHA_MESSAGE);
-//        final ModuleData trickOrTreat = new ModuleData(100, "Trick-or-Treat Cake Server", ModuleCakeServerDynamite.class, 15).addSide(SIDE.TOP);
     }
 
     ModuleType moduleType;

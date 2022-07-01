@@ -15,6 +15,7 @@ import vswe.stevescarts.client.models.storages.tanks.ModelAdvancedTank;
 import vswe.stevescarts.client.models.storages.tanks.ModelFrontTank;
 import vswe.stevescarts.client.models.storages.tanks.ModelSideTanks;
 import vswe.stevescarts.client.models.storages.tanks.ModelTopTank;
+import vswe.stevescarts.client.models.workers.ModelLiquidDrainer;
 import vswe.stevescarts.client.models.workers.ModelRailer;
 import vswe.stevescarts.client.models.workers.ModelTorchplacer;
 import vswe.stevescarts.client.models.workers.ModelTrackRemover;
@@ -26,6 +27,7 @@ import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.addons.*;
 import vswe.stevescarts.modules.addons.mobdetectors.*;
 import vswe.stevescarts.modules.addons.plants.ModuleNetherwart;
+import vswe.stevescarts.modules.addons.plants.ModulePlantSize;
 import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.modules.data.ModuleDataHull;
 import vswe.stevescarts.modules.engines.*;
@@ -114,7 +116,25 @@ public class StevesCartsModules
     public static ModuleData ENTITY_DETECTOR_BAT;
 
     public static ModuleData CROP_NETHER_WART;
+    public static ModuleData INCINERATOR;
+    public static ModuleData CLEANER_LIQUID;
+    public static ModuleData DRILL_INTELLIGENCE;
+    public static ModuleData POWER_OBSERVER;
+    public static ModuleData ARCADE;
+    public static ModuleData ENCHANTER;
+    public static ModuleData ORE_EXTRACTOR;
+    public static ModuleData LAWN_MOWER;
+    public static ModuleData MILKER;
+    public static ModuleData CRAFTER;
+    public static ModuleData PLANTER_RANGE_EXTENDER;
+    public static ModuleData SMELTER;
+    public static ModuleData ADVANCED_CRAFTER;
+    public static ModuleData ADVANCED_SMELTER;
+    public static ModuleData INFORMATION_PROVIDER;
+    public static ModuleData EXPERIENCE_BANK;
+    public static ModuleData CAKE_SERVER;
 
+    //TANKS
     public static ModuleData INTERNAL_TANK;
     public static ModuleData SIDE_TANKS;
     public static ModuleData TOP_TANK;
@@ -326,6 +346,56 @@ public class StevesCartsModules
         OPEN_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "open_sctank"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "open_sctank"), "Open SCTank", ModuleOpenTank.class, ModuleType.STORAGE, 31).addSide(ModuleData.SIDE.TOP).addMessage(Localization.MODULE_INFO.OPEN_TANK));
 
+        INCINERATOR = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "incinerator"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "incinerator"), "Incinerator", ModuleIncinerator.class, ModuleType.ADDON, 23));//.addRequirement(tankGroup).addRequirement(drillGroup);
+
+        CLEANER_LIQUID = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "liquid_cleaner"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "liquid_cleaner"), "Liquid Cleaner", ModuleLiquidDrainer.class, ModuleType.ADDON, 30).addSide(ModuleData.SIDE.CENTER).addParent(LIQUID_SENSORS));//.addRequirement(tankGroup);
+
+        DRILL_INTELLIGENCE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "drill_intelligence"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "drill_intelligence"), "Drill Intelligence", ModuleDrillIntelligence.class, ModuleType.ADDON, 21));//.addRequirement(drillGroup);;
+
+        POWER_OBSERVER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "power_observer"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "power_observer"), "Power Observer", ModulePowerObserver.class, ModuleType.ADDON, 12));//.addRequirement(engineGroup);;
+
+        ARCADE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "steves_arcade"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "steves_arcade"), "Steve's Arcade", ModuleArcade.class, ModuleType.ADDON, 10).addParent(SEAT));
+
+        ENCHANTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "enchanter"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "enchanter"), "Enchanter", ModuleEnchants.class, ModuleType.ADDON, 72));//.addRequirement(enchantableGroup);
+
+        ORE_EXTRACTOR = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "ore_extractor"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "ore_extractor"), "Ore Extractor", ModuleOreTracker.class, ModuleType.ADDON, 80));//.addRequirement(drillGroup);
+
+        LAWN_MOWER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "lawn_mower"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "lawn_mower"), "Lawn Mower", ModuleFlowerRemover.class, ModuleType.ADDON, 38).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT}));
+
+        MILKER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "milker"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "milker"), "Milker", ModuleMilker.class, ModuleType.ADDON, 26).addParent(CAGE));
+
+        CRAFTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "crafter"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "crafter"), "Crafter", ModuleCrafter.class, ModuleType.ADDON, 22).setAllowDuplicate());
+
+        PLANTER_RANGE_EXTENDER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "planter_range_extender"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "planter_range_extender"), "Planter Range Extender", ModulePlantSize.class, ModuleType.ADDON, 20));//.addRequirement(woodcutterGroup);
+
+        SMELTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "smelter"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "smelter"), "Smelter", ModuleSmelter.class, ModuleType.ADDON, 22).setAllowDuplicate());
+
+        ADVANCED_CRAFTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_crafter"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_crafter"), "Advanced Crafter", ModuleCrafterAdv.class, ModuleType.ADDON, 42).setAllowDuplicate());
+
+        ADVANCED_SMELTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_smelter"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_smelter"), "Advanced Smelter", ModuleSmelterAdv.class, ModuleType.ADDON, 42).setAllowDuplicate());
+
+        INFORMATION_PROVIDER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "information_provider"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "information_provider"), "Information Provider", ModuleLabel.class, ModuleType.ADDON, 12));
+
+        EXPERIENCE_BANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "experience_bank"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "experience_bank"), "Experience Bank", ModuleExperience.class, ModuleType.ADDON, 36));
+
+        CAKE_SERVER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "cake_server"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "cake_server"), "Cake Server", ModuleCakeServer.class, ModuleType.ADDON, 10).addSide(ModuleData.SIDE.TOP).addMessage(Localization.MODULE_INFO.ALPHA_MESSAGE));
     }
 
     public static void initModels()
@@ -382,9 +452,8 @@ public class StevesCartsModules
         TOP_TANK.addModel("TopTank", new ModelTopTank());
         ADVANCED_TANK.addModel("LargeTank", new ModelAdvancedTank()).removeModel("Top");
         FRONT_TANK.setModelMult(0.68f).addModel("FrontTank", new ModelFrontTank());
-//        ModuleData.moduleList.get((byte) 71).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelLiquidDrainer());
-//        ModuleData.moduleList.get((byte) 85).addModel("LawnMower", new ModelLawnMower()).setModelMult(0.4f);
-//        ModuleData.moduleList.get((byte) 99).addModel("Cake", new ModelCake());
-//        ModuleData.moduleList.get((byte) 100).addModel("Cake", new ModelCake());
+        CLEANER_LIQUID.addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelLiquidDrainer());
+        LAWN_MOWER.addModel("LawnMower", new ModelLawnMower()).setModelMult(0.4f);
+        CAKE_SERVER.addModel("Cake", new ModelCake());
     }
 }
