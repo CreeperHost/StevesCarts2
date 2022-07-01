@@ -47,20 +47,7 @@ public class ModuleData
     private byte extraDataDefaultValue;
     private static final int MAX_MESSAGE_ROW_LENGTH = 30;
 
-    public static void init()
-    {
-//        final ModuleDataGroup engineGroup = new ModuleDataGroup(Localization.MODULE_INFO.ENGINE_GROUP);
-//        final ModuleDataGroup drillGroup = new ModuleDataGroup(Localization.MODULE_INFO.DRILL_GROUP);
-//        final ModuleDataGroup farmerGroup = new ModuleDataGroup(Localization.MODULE_INFO.FARMER_GROUP);
-//        final ModuleDataGroup woodcutterGroup = new ModuleDataGroup(Localization.MODULE_INFO.CUTTER_GROUP);
-//        final ModuleDataGroup tankGroup = new ModuleDataGroup(Localization.MODULE_INFO.TANK_GROUP);
-//        final ModuleDataGroup detectorGroup = new ModuleDataGroup(Localization.MODULE_INFO.ENTITY_GROUP);
-//        final ModuleDataGroup shooterGroup = new ModuleDataGroup(Localization.MODULE_INFO.SHOOTER_GROUP);
-//        final ModuleDataGroup toolGroup = ModuleDataGroup.getCombinedGroup(Localization.MODULE_INFO.TOOL_GROUP, drillGroup, woodcutterGroup);
-//        final ModuleDataGroup enchantableGroup = ModuleDataGroup.getCombinedGroup(Localization.MODULE_INFO.TOOL_OR_SHOOTER_GROUP, toolGroup, shooterGroup);
-    }
-
-    ModuleType moduleType;
+    private final ModuleType moduleType;
 
     public ModuleData(final ResourceLocation id, final String name, final Class<? extends ModuleBase> moduleClass, ModuleType moduleType, final int modularCost)
     {
@@ -158,9 +145,9 @@ public class ModuleData
 
     public ModuleData addSides(final SIDE[] sides)
     {
-        for (int i = 0; i < sides.length; ++i)
+        for (SIDE side : sides)
         {
-            addSide(sides[i]);
+            addSide(side);
         }
         return this;
     }

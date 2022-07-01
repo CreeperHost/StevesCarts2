@@ -3,6 +3,7 @@ package vswe.stevescarts.init;
 import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.api.StevesCartsAPI;
+import vswe.stevescarts.api.modules.DefaultModuleGroups;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.client.models.*;
 import vswe.stevescarts.client.models.engines.*;
@@ -29,6 +30,7 @@ import vswe.stevescarts.modules.addons.mobdetectors.*;
 import vswe.stevescarts.modules.addons.plants.ModuleNetherwart;
 import vswe.stevescarts.modules.addons.plants.ModulePlantSize;
 import vswe.stevescarts.modules.data.ModuleData;
+import vswe.stevescarts.modules.data.ModuleDataGroup;
 import vswe.stevescarts.modules.data.ModuleDataHull;
 import vswe.stevescarts.modules.engines.*;
 import vswe.stevescarts.modules.hull.*;
@@ -144,6 +146,8 @@ public class StevesCartsModules
 
     public static void init()
     {
+        setupDefaultGroups();
+
         //Hulls
         WOODEN_HULL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "wooden_hull"),
                 new ModuleDataHull(new ResourceLocation(Constants.MOD_ID, "wooden_hull"), "Wooden Hull", ModuleWood.class, ModuleType.HULL).setCapacity(50).setEngineMax(1).setAddonMax(0).setComplexityMax(15));
@@ -170,18 +174,23 @@ public class StevesCartsModules
         //Engines
         COAL_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "coal_engine"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "coal_engine"), "Coal Engine", ModuleCoalStandard.class, ModuleType.ENGINE, 15));
+        DefaultModuleGroups.ENGINE_GROUP.add(COAL_ENGINE);
 
         TINY_COAL_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "tiny_coal_engine"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "tiny_coal_engine"), "Tiny Coal Engine", ModuleCoalTiny.class, ModuleType.ENGINE, 2));
+        DefaultModuleGroups.ENGINE_GROUP.add(TINY_COAL_ENGINE);
 
         CREATIVE_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "creative_engine"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "creative_engine"), "Creative Engine", ModuleCheatEngine.class, ModuleType.ENGINE, 1));
+        DefaultModuleGroups.ENGINE_GROUP.add(CREATIVE_ENGINE);
 
         THERMAL_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "thermal_engine"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "thermal_engine"), "Thermal Engine", ModuleThermalStandard.class, ModuleType.ENGINE, 28));//.addRequirement(tankGroup);
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "thermal_engine"), "Thermal Engine", ModuleThermalStandard.class, ModuleType.ENGINE, 28).addRequirement(DefaultModuleGroups.TANK_GROUP));
+        DefaultModuleGroups.ENGINE_GROUP.add(THERMAL_ENGINE);
 
         ADVANCED_THERMAL_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_thermal_engine"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_thermal_engine"), "Advanced Thermal Engine", ModuleThermalAdvanced.class, ModuleType.ENGINE, 58));//.addRequirement(tankGroup);
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_thermal_engine"), "Advanced Thermal Engine", ModuleThermalAdvanced.class, ModuleType.ENGINE, 58).addRequirement(DefaultModuleGroups.TANK_GROUP));
+        DefaultModuleGroups.ENGINE_GROUP.add(ADVANCED_THERMAL_ENGINE);
 
 
         //Solar engine
@@ -215,15 +224,19 @@ public class StevesCartsModules
 
         BASIC_DRILL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "basic_drill"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "basic_drill"), "Basic Drill", ModuleDrillDiamond.class, ModuleType.TOOL, 10)).addSide(ModuleData.SIDE.FRONT);
+        DefaultModuleGroups.DRILL_GROUP.add(BASIC_DRILL);
 
         IRON_DRILL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "iron_drill"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "iron_drill"), "Iron Drill", ModuleDrillIron.class, ModuleType.TOOL, 10)).addSide(ModuleData.SIDE.FRONT);
+        DefaultModuleGroups.DRILL_GROUP.add(IRON_DRILL);
 
         HARDENED_DRILL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "hardened_drill"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "hardened_drill"), "Hardened Drill", ModuleDrillHardened.class, ModuleType.TOOL, 45)).addSide(ModuleData.SIDE.FRONT);
+        DefaultModuleGroups.DRILL_GROUP.add(HARDENED_DRILL);
 
         GALGADORIAN_DRILL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "galgadorian_drill"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "galgadorian_drill"), "Galgadorian Drill", ModuleDrillGalgadorian.class, ModuleType.TOOL, 45)).addSide(ModuleData.SIDE.FRONT);
+        DefaultModuleGroups.DRILL_GROUP.add(GALGADORIAN_DRILL);
 
         RAILER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "railer"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "railer"), "Railer", ModuleRailer.class, ModuleType.TOOL, 3));
@@ -239,27 +252,31 @@ public class StevesCartsModules
 
         BASIC_FARMER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "basic_farmer"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "basic_farmer"), "Basic Farmer", ModuleFarmerDiamond.class, ModuleType.TOOL, 36).addSide(ModuleData.SIDE.FRONT));
+        DefaultModuleGroups.FARMER_GROUP.add(BASIC_FARMER);
 
         GALGADORIAN_FARMER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "galgadorian_farmer"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "galgadorian_farmer"), "Galgadorian Farmer", ModuleFarmerGalgadorian.class, ModuleType.TOOL, 55).addSide(ModuleData.SIDE.FRONT));
-
+        DefaultModuleGroups.FARMER_GROUP.add(GALGADORIAN_DRILL);
 
         BASIC_WOOD_CUTTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "basic_wood_cutter"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "basic_wood_cutter"), "Basic Wood Cutter", ModuleWoodcutterDiamond.class, ModuleType.TOOL, 34).addSide(ModuleData.SIDE.FRONT));
+        DefaultModuleGroups.WOODCUTTER_GROUP.add(BASIC_WOOD_CUTTER);
 
         HARDENED_WOOD_CUTTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "hardened_wood_cutter"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "hardened_wood_cutter"), "Hardened Wood Cutter", ModuleWoodcutterHardened.class, ModuleType.TOOL, 65).addSide(ModuleData.SIDE.FRONT));
+        DefaultModuleGroups.WOODCUTTER_GROUP.add(HARDENED_WOOD_CUTTER);
 
         GALGADORIAN_WOOD_CUTTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "galgadorian_wood_cutter"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "galgadorian_wood_cutter"), "Galgadorian Wood Cutter", ModuleWoodcutterGalgadorian.class, ModuleType.TOOL, 120).addSide(ModuleData.SIDE.FRONT));
+        DefaultModuleGroups.WOODCUTTER_GROUP.add(GALGADORIAN_WOOD_CUTTER);
 
         NETHERITE_WOOD_CUTTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "netherite_wood_cutter"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "netherite_wood_cutter"), "Netherite Wood Cutter", ModuleWoodcutterNetherite.class, ModuleType.TOOL, 120).addSide(ModuleData.SIDE.FRONT));
-
+        DefaultModuleGroups.WOODCUTTER_GROUP.add(NETHERITE_WOOD_CUTTER);
 
         //ADDONS
         HYDRATER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "hydrator"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "hydrator"), "Hydrator", ModuleHydrater.class, ModuleType.ADDON, 6));//.addRequirement(tankGroup);
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "hydrator"), "Hydrator", ModuleHydrater.class, ModuleType.ADDON, 6).addRequirement(DefaultModuleGroups.TANK_GROUP));
 
         FERTILIZER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "fertilizer"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "fertilizer"), "Fertilizer", ModuleFertilizer.class, ModuleType.ADDON, 10));
@@ -268,7 +285,7 @@ public class StevesCartsModules
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "height_controller"), "Height Controller", ModuleHeightControl.class, ModuleType.ADDON, 20));
 
         LIQUID_SENSORS = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "liquid_sensors"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "liquid_sensors"), "Liquid Sensors", ModuleLiquidSensors.class, ModuleType.ADDON, 27));//.addRequirement(drillGroup);
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "liquid_sensors"), "Liquid Sensors", ModuleLiquidSensors.class, ModuleType.ADDON, 27).addRequirement(DefaultModuleGroups.DRILL_GROUP));
 
         SEAT = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "seat"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "seat"), "Seat", ModuleSeat.class, ModuleType.ADDON, 3).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.CENTER, ModuleData.SIDE.TOP}));
@@ -322,7 +339,7 @@ public class StevesCartsModules
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "cage"), "Cage", ModuleCage.class, ModuleType.ADDON, 7).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.TOP, ModuleData.SIDE.CENTER}));
 
         CROP_NETHER_WART = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "crop_nether_wart"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "crop_nether_wart"), "Crop: Nether Wart", ModuleNetherwart.class, ModuleType.ADDON, 20));//.addRequirement(BASIC_FARMER));
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "crop_nether_wart"), "Crop: Nether Wart", ModuleNetherwart.class, ModuleType.ADDON, 20).addRequirement(DefaultModuleGroups.FARMER_GROUP));
 
         FIREWORK_DISPLAY = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "firework_display"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "firework_display"), "Firework display", ModuleFirework.class, ModuleType.ADDON, 45));
@@ -330,42 +347,48 @@ public class StevesCartsModules
 
         INTERNAL_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "internal_sctank"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "internal_sctank"), "Internal SCTank", ModuleInternalTank.class, ModuleType.STORAGE, 37).setAllowDuplicate());
+        DefaultModuleGroups.TANK_GROUP.add(INTERNAL_TANK);
 
         SIDE_TANKS = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "side_tanks"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "side_tanks"), "Side Tanks", ModuleSideTanks.class, ModuleType.STORAGE, 10).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT}));
+        DefaultModuleGroups.TANK_GROUP.add(SIDE_TANKS);
 
         TOP_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "top_sctank"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "top_sctank"), "Top SCTank", ModuleTopTank.class, ModuleType.STORAGE, 22).addSide(ModuleData.SIDE.TOP));
+        DefaultModuleGroups.TANK_GROUP.add(TOP_TANK);
 
         ADVANCED_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_sctank"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_sctank"), "Advanced SCTank", ModuleAdvancedTank.class, ModuleType.STORAGE, 54).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.CENTER, ModuleData.SIDE.TOP}));
+        DefaultModuleGroups.TANK_GROUP.add(ADVANCED_TANK);
 
         FRONT_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "front_sctank"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "front_sctank"), "Front SCTank", ModuleFrontTank.class, ModuleType.STORAGE, 15).addSide(ModuleData.SIDE.FRONT));
+        DefaultModuleGroups.TANK_GROUP.add(FRONT_TANK);
 
         OPEN_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "open_sctank"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "open_sctank"), "Open SCTank", ModuleOpenTank.class, ModuleType.STORAGE, 31).addSide(ModuleData.SIDE.TOP).addMessage(Localization.MODULE_INFO.OPEN_TANK));
+        DefaultModuleGroups.TANK_GROUP.add(OPEN_TANK);
 
         INCINERATOR = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "incinerator"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "incinerator"), "Incinerator", ModuleIncinerator.class, ModuleType.ADDON, 23));//.addRequirement(tankGroup).addRequirement(drillGroup);
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "incinerator"), "Incinerator", ModuleIncinerator.class, ModuleType.ADDON, 23).addRequirement(DefaultModuleGroups.TANK_GROUP).addRequirement(DefaultModuleGroups.DRILL_GROUP));
 
         CLEANER_LIQUID = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "liquid_cleaner"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "liquid_cleaner"), "Liquid Cleaner", ModuleLiquidDrainer.class, ModuleType.ADDON, 30).addSide(ModuleData.SIDE.CENTER).addParent(LIQUID_SENSORS));//.addRequirement(tankGroup);
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "liquid_cleaner"), "Liquid Cleaner", ModuleLiquidDrainer.class, ModuleType.ADDON, 30).addSide(ModuleData.SIDE.CENTER).addParent(LIQUID_SENSORS).addRequirement(DefaultModuleGroups.TANK_GROUP));
 
         DRILL_INTELLIGENCE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "drill_intelligence"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "drill_intelligence"), "Drill Intelligence", ModuleDrillIntelligence.class, ModuleType.ADDON, 21));//.addRequirement(drillGroup);;
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "drill_intelligence"), "Drill Intelligence", ModuleDrillIntelligence.class, ModuleType.ADDON, 21).addRequirement(DefaultModuleGroups.DRILL_GROUP));
 
         POWER_OBSERVER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "power_observer"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "power_observer"), "Power Observer", ModulePowerObserver.class, ModuleType.ADDON, 12));//.addRequirement(engineGroup);;
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "power_observer"), "Power Observer", ModulePowerObserver.class, ModuleType.ADDON, 12).addRequirement(DefaultModuleGroups.ENGINE_GROUP));
 
         ARCADE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "steves_arcade"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "steves_arcade"), "Steve's Arcade", ModuleArcade.class, ModuleType.ADDON, 10).addParent(SEAT));
 
         ENCHANTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "enchanter"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "enchanter"), "Enchanter", ModuleEnchants.class, ModuleType.ADDON, 72));//.addRequirement(enchantableGroup);
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "enchanter"), "Enchanter", ModuleEnchants.class, ModuleType.ADDON, 72).addRequirement(DefaultModuleGroups.ENGINE_GROUP));
 
         ORE_EXTRACTOR = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "ore_extractor"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "ore_extractor"), "Ore Extractor", ModuleOreTracker.class, ModuleType.ADDON, 80));//.addRequirement(drillGroup);
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "ore_extractor"), "Ore Extractor", ModuleOreTracker.class, ModuleType.ADDON, 80).addRequirement(DefaultModuleGroups.DRILL_GROUP));
 
         LAWN_MOWER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "lawn_mower"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "lawn_mower"), "Lawn Mower", ModuleFlowerRemover.class, ModuleType.ADDON, 38).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT}));
@@ -377,7 +400,7 @@ public class StevesCartsModules
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "crafter"), "Crafter", ModuleCrafter.class, ModuleType.ADDON, 22).setAllowDuplicate());
 
         PLANTER_RANGE_EXTENDER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "planter_range_extender"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "planter_range_extender"), "Planter Range Extender", ModulePlantSize.class, ModuleType.ADDON, 20));//.addRequirement(woodcutterGroup);
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "planter_range_extender"), "Planter Range Extender", ModulePlantSize.class, ModuleType.ADDON, 20).addRequirement(DefaultModuleGroups.WOODCUTTER_GROUP));
 
         SMELTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "smelter"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "smelter"), "Smelter", ModuleSmelter.class, ModuleType.ADDON, 22).setAllowDuplicate());
@@ -455,5 +478,15 @@ public class StevesCartsModules
         CLEANER_LIQUID.addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelLiquidDrainer());
         LAWN_MOWER.addModel("LawnMower", new ModelLawnMower()).setModelMult(0.4f);
         CAKE_SERVER.addModel("Cake", new ModelCake());
+    }
+
+    public static void setupDefaultGroups()
+    {
+        DefaultModuleGroups.ENGINE_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.ENGINE_GROUP);
+        DefaultModuleGroups.DRILL_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.DRILL_GROUP);
+        DefaultModuleGroups.FARMER_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.FARMER_GROUP);
+        DefaultModuleGroups.WOODCUTTER_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.CUTTER_GROUP);
+        DefaultModuleGroups.TANK_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.TANK_GROUP);
+        DefaultModuleGroups.TOOL_GROUP = ModuleDataGroup.getCombinedGroup(Localization.MODULE_INFO.TOOL_GROUP, DefaultModuleGroups.DRILL_GROUP, DefaultModuleGroups.WOODCUTTER_GROUP);
     }
 }
