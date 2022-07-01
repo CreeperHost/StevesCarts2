@@ -1,83 +1,33 @@
 package vswe.stevescarts.client.models;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.api.modules.ModuleBase;
-import vswe.stevescarts.modules.addons.ModuleShield;
 
 public class ModelShield extends ModelCartbase
 {
-    private static ResourceLocation texture;
-    private ModelPart[][] shieldAnchors;
-    private ModelPart[][] shields;
-
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
-    {
-        return ModelShield.texture;
-    }
-
-    @Override
-    protected int getTextureWidth()
-    {
-        return 8;
-    }
-
-    @Override
-    protected int getTextureHeight()
-    {
-        return 4;
-    }
-
     public ModelShield()
     {
-        //TODO
-        //        shields = new ModelRenderer[4][5];
-        //        shieldAnchors = new ModelRenderer[shields.length][shields[0].length];
-        //        for (int i = 0; i < shields.length; ++i)
-        //        {
-        //            for (int j = 0; j < shields[i].length; ++j)
-        //            {
-        //                AddRenderer(shieldAnchors[i][j] = new ModelRenderer(this));
-        //                fixSize(shields[i][j] = new ModelRenderer(this, 0, 0));
-        //                shieldAnchors[i][j].addChild(shields[i][j]);
-        //                shields[i][j].addBox(-1.0f, -1.0f, -1.0f, 2, 2, 2, 0.0f);
-        //                shields[i][j].setPos(0.0f, 0.0f, 0.0f);
-        //            }
-        //        }
+        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/shieldModel.png"));
     }
 
-    //	@Override
-    //	public void render(final Render render, final ModuleBase module, final float yaw, final float pitch, final float roll, final float mult, final float partialtime) {
-    //		if (render == null || module == null || ((ModuleShield) module).hasShield()) {
-    //			super.render(render, module, yaw, pitch, roll, mult, partialtime);
-    //		}
-    //	}
-
-    @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
+    public static LayerDefinition getTexturedModelData()
     {
-        final float shieldAngle = (module == null) ? 0.0f : ((ModuleShield) module).getShieldAngle();
-        final float shieldDistance = (module == null) ? 18.0f : ((ModuleShield) module).getShieldDistance();
-        for (int i = 0; i < shields.length; ++i)
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+
+        for (int i = 0; i < 4; i++)
         {
-            for (int j = 0; j < shields[i].length; ++j)
-            {
-                float a = shieldAngle + 6.2831855f * (j / (float) shields[i].length + i / (float) shields.length);
-                a %= 314.1592653589793;
-                shieldAnchors[i][j].yRot = a;
-                shields[i][j].yRot = ((float) Math.sin(a / 5.0f) * 3.0f + (i - (shields.length - 1) / 2.0f) * 5.0f - 5.0f) * shieldDistance / 18.0f;
-                shields[i][j].zRot = shieldDistance;
-            }
+            modelPartData.addOrReplaceChild("shieldAnchor" + i, CubeListBuilder.create().texOffs(0, 0)
+                            .addBox(-1.0f, -1.0f, -1.0f, 2, 2, 2),
+                    PartPose.offset(0.0f, 0.0f, 0.0f));
         }
-    }
 
-    static
-    {
-        ModelShield.texture = ResourceHelper.getResource("/models/shieldModel.png");
+
+        return LayerDefinition.create(modelData, 8, 4);
     }
 }

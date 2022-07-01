@@ -23,9 +23,6 @@ public class ModelPumpkinHullTop extends ModelHullTop
 
     private boolean isActive(final ModuleBase module)
     {
-        //TODO
-        //		final long time = module.getCart().world.getWorldInfo().getWorldTime() % 24000L;
-        //		return time >= 12000L && time <= 18000L;
         return false;
     }
 }

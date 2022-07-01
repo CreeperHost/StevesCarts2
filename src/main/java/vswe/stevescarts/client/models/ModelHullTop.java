@@ -10,8 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 
-;
-
 public class ModelHullTop extends ModelCartbase
 {
     public ModelHullTop(ResourceLocation resourceLocation)
