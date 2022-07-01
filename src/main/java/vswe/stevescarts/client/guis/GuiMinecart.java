@@ -19,7 +19,7 @@ import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.data.ModuleData;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketMinecartTurn;

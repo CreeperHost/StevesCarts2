@@ -1,7 +1,7 @@
 package vswe.stevescarts.client.models;
 
 import net.minecraft.resources.ResourceLocation;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 
 public class ModelPumpkinHull extends ModelHull
 {

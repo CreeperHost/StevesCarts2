@@ -14,7 +14,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.IForgeShearable;
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 
 import javax.annotation.Nonnull;
 import java.util.List;

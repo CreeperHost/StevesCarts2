@@ -14,7 +14,7 @@ import vswe.stevescarts.arcade.tracks.TrackStory;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 
 import java.util.ArrayList;
 

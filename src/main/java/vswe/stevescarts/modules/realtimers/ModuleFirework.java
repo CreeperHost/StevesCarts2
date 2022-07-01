@@ -12,7 +12,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotFirework;
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

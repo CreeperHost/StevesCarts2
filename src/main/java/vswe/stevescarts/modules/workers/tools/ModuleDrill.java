@@ -30,7 +30,7 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.api.modules.IActivatorModule;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.addons.*;
 import vswe.stevescarts.modules.storages.chests.ModuleChest;
 

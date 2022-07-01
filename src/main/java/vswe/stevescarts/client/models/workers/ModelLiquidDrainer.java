@@ -1,7 +1,7 @@
 package vswe.stevescarts.client.models.workers;
 
 import vswe.stevescarts.client.models.ModelCleaner;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 
 public class ModelLiquidDrainer extends ModelCleaner
 {

@@ -5,9 +5,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import vswe.stevescarts.client.models.ModelCartbase;
-import vswe.stevescarts.modules.ModuleBase;
-import vswe.stevescarts.modules.workers.tools.ModuleFarmer;
+import vswe.stevescarts.api.client.ModelCartbase;
+import vswe.stevescarts.api.modules.ModuleBase;
 
 public class ModelFarmer extends ModelCartbase
 {

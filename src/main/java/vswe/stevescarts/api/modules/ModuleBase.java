@@ -1,4 +1,4 @@
-package vswe.stevescarts.modules;
+package vswe.stevescarts.api.modules;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
@@ -32,7 +32,7 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.client.guis.buttons.ButtonBase;
-import vswe.stevescarts.client.models.ModelCartbase;
+import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.ButtonComparator;
@@ -54,9 +54,9 @@ import java.util.List;
  */
 public abstract class ModuleBase
 {
-    private EntityMinecartModular cart;
+    private final EntityMinecartModular cart;
     @Nonnull
-    private NonNullList<ItemStack> cargo;
+    private final NonNullList<ItemStack> cargo;
     private int offSetX;
     private int offSetY;
     private int guiDataOffset;

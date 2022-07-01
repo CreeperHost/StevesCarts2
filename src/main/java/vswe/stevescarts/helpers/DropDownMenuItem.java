@@ -1,6 +1,6 @@
 package vswe.stevescarts.helpers;
 
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 
 public class DropDownMenuItem
 {

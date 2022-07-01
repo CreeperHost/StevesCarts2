@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import vswe.stevescarts.client.models.realtimers.ModelGun;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.realtimers.ModuleShooterAdv;
 
 public class ModelSniperRifle extends ModelGun

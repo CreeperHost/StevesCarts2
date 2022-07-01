@@ -9,7 +9,7 @@ import net.minecraft.world.inventory.Slot;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.init.ModContainers;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 
 import java.util.ArrayList;
 import java.util.HashMap;

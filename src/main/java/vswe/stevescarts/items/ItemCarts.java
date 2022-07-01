@@ -25,7 +25,7 @@ import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.data.ModuleData;
 
 import javax.annotation.Nullable;

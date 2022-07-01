@@ -12,14 +12,13 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.StevesCartsAPI;
-import vswe.stevescarts.api.modules.DefaultModuleGroups;
+import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleType;
-import vswe.stevescarts.client.models.*;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.items.ItemCartModule;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 
 import javax.annotation.Nonnull;
 import java.util.*;

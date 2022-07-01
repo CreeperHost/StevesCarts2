@@ -15,7 +15,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.addons.mobdetectors.ModuleMobdetector;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.workers.tools;
 
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 
 /**
  * Created by modmuss50 on 08/05/2017.

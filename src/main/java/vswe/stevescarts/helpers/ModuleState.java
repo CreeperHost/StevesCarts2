@@ -10,7 +10,7 @@ import vswe.stevescarts.arcade.monopoly.Villager;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.api.modules.IActivatorModule;
 import vswe.stevescarts.api.modules.ISuppliesModule;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.addons.ModuleChunkLoader;
 import vswe.stevescarts.modules.addons.ModuleInvisible;
 import vswe.stevescarts.modules.addons.ModulePowerObserver;

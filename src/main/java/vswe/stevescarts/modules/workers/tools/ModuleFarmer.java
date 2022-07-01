@@ -26,7 +26,7 @@ import vswe.stevescarts.containers.slots.SlotSeed;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.api.modules.ISuppliesModule;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

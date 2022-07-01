@@ -1,7 +1,7 @@
 package vswe.stevescarts.helpers;
 
 import net.minecraft.ChatFormatting;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 
 public class ActivatorOption
 {

@@ -1,12 +1,12 @@
 package vswe.stevescarts.client.models;
 
-import net.minecraft.client.model.MinecartModel;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
+import vswe.stevescarts.api.client.ModelCartbase;
 
 public class ModelHull extends ModelCartbase
 {

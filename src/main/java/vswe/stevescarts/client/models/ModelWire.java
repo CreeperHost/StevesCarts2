@@ -1,8 +1,9 @@
 package vswe.stevescarts.client.models;
 
 import net.minecraft.resources.ResourceLocation;
+import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleBase;
 
 @Deprecated(forRemoval = true)
 public abstract class ModelWire extends ModelCartbase
