@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.helpers.ComponentTypes;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItems;
+import vswe.stevescarts.init.StevesCartsModules;
 
 public class StevesCartsCreativeTabs
 {
@@ -29,7 +30,7 @@ public class StevesCartsCreativeTabs
     {
         public @NotNull ItemStack makeIcon()
         {
-            return new ItemStack(ModItems.COMPONENTS.get(ComponentTypes.WOODEN_WHEELS).get());
+            return new ItemStack(ModItems.MODULES.get(StevesCartsModules.COAL_ENGINE).get());
         }
     });
 }
