@@ -72,7 +72,7 @@ public abstract class ModuleEngine extends ModuleBase
         return temp;
     }
 
-    private void setPriority(int data)
+    public void setPriority(int data)
     {
         if (data < 0)
         {

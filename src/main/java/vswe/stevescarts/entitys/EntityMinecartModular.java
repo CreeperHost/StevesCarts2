@@ -136,7 +136,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public boolean hasModule(ModuleData moduleData)
     {
         if(moduleData == null) return false;
-        
+
         for (ModuleBase module : getModules())
         {
             if(module.getModuleId() == moduleData.getID())
@@ -798,7 +798,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         }
 
         //If the cart is not disabled and there is not a track in front of the cart make it turn back
-        if(!isDisabled() && !RailBlock.isRail(level, pos.relative(getMotionDirection())))
+        if(!isDisabled() && !RailBlock.isRail(level, pos.relative(getMotionDirection())) && !RailBlock.isRail(level, pos.relative(getMotionDirection()).below()))
         {
             //TODO make sure the Module can work before doing turning around...
             if(!hasModule(ModuleRailer.class))
