@@ -2,6 +2,7 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import javax.annotation.Nonnull;
 
@@ -15,6 +16,6 @@ public class SlotTorch extends SlotBase
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return true;
+        return itemstack.sameItem(new ItemStack(Items.TORCH));
     }
 }
