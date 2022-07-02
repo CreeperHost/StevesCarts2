@@ -35,6 +35,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.RailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.material.Fluid;
@@ -64,6 +65,7 @@ import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.modules.workers.CompWorkModule;
+import vswe.stevescarts.modules.workers.ModuleRailer;
 import vswe.stevescarts.modules.workers.ModuleWorker;
 
 import javax.annotation.Nonnull;
@@ -780,6 +782,16 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             temppushX = getDeltaMovement().x;
             temppushZ = getDeltaMovement().z;
         }
+
+        //If the cart is not disabled and there is not a track in front of the cart make it turn back
+        if(!isDisabled() && !RailBlock.isRail(level, pos.relative(getMotionDirection())))
+        {
+            //TODO make sure the Module can work before doing turning around...
+            if(!hasModule(ModuleRailer.class))
+            {
+                turnback();
+            }
+        }
     }
 
     public RailShape getRailDirection(final BlockPos pos)
@@ -795,6 +807,11 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     {
         double x = getDeltaMovement().x;
         double z = getDeltaMovement().z;
+        if(x == 0 || z == 0)
+        {
+            x = getMaxCartSpeedOnRail();
+            z = getMaxCartSpeedOnRail();
+        }
         setDeltaMovement(x *= -1.0, 0, z *= -1.0);
         temppushX *= -1.0;
         temppushZ *= -1.0;
