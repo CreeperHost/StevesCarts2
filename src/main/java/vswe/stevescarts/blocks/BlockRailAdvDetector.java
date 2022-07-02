@@ -174,47 +174,7 @@ public class BlockRailAdvDetector extends BaseRailBlock
                 }
             }
         }
-        //		int power = world.getRedstonePowerFromNeighbors(pos);
-        //		if (power > 0) {
-        //			cart.releaseCart();
-        //		}
     }
-
-    //	@Override
-    //	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-    //		IBlockState blockState = world.getBlockState(pos.down());
-    //		if (world.getBlockState(pos.down()) == ModBlocks.DETECTOR_UNIT.getBlock() && DetectorType.getTypeFromSate(blockState).canInteractWithCart()) {
-    //			return false;
-    //		}
-    //		for (EnumFacing facing: EnumFacing.HORIZONTALS) {
-    //			BlockPos posOther = pos.offset(facing);
-    //			Block block = world.getBlockState(posOther).getBlock();
-    //			if (block == ModBlocks.CARGO_MANAGER.getBlock() || block == ModBlocks.LIQUID_MANAGER.getBlock() || block == ModBlocks.MODULE_TOGGLER.getBlock()) {
-    //				return false;
-    //			}
-    //			if (block == ModBlocks.UPGRADE.getBlock()) {
-    //				TileEntity tileentity = world.getTileEntity(posOther);
-    //				TileEntityUpgrade upgrade = (TileEntityUpgrade) tileentity;
-    //				if (upgrade != null && upgrade.getUpgrade() != null) {
-    //					for (BaseEffect effect : upgrade.getUpgrade().getEffects()) {
-    //						if (effect instanceof Transposer && upgrade.getMaster() != null) {
-    //							for (TileEntityUpgrade tile : upgrade.getMaster().getUpgradeTiles()) {
-    //								if (tile.getUpgrade() != null) {
-    //									for (BaseEffect effect2 : tile.getUpgrade().getEffects()) {
-    //										if (effect2 instanceof Disassemble) {
-    //											return false;
-    //										}
-    //									}
-    //								}
-    //							}
-    //						}
-    //					}
-    //				}
-    //			}
-    //		}
-    //		return true;
-    //	}
-    //
     private boolean isCartReadyForAction(EntityMinecartModular cart, BlockPos pos)
     {
         return cart.disabledPos != null && cart.disabledPos.equals(pos) && cart.isDisabled();
