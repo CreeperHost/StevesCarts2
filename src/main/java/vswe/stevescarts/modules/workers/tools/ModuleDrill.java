@@ -347,7 +347,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         }
         if(!world.getFluidState(pos).isEmpty())
         {
-            return false;
+            return null;
         }
         if ((holeX != 0 || holeY > 0) && (block == Blocks.TORCH || block == Blocks.REDSTONE_WIRE || block == Blocks.REDSTONE_TORCH || block == Blocks.REPEATER || block == Blocks.COMPARATOR || block == ModBlocks.MODULE_TOGGLER.get()))
         {
