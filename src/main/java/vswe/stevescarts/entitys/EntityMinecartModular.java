@@ -133,6 +133,20 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         return false;
     }
 
+    public boolean hasModule(ModuleData moduleData)
+    {
+        if(moduleData == null) return false;
+        
+        for (ModuleBase module : getModules())
+        {
+            if(module.getModuleId() == moduleData.getID())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public ArrayList<ModuleWorker> getWorkers()
     {
         return workModules;
