@@ -1,10 +1,5 @@
 package vswe.stevescarts;
 
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -16,8 +11,6 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
-import vswe.stevescarts.client.renders.ItemStackRenderer;
-import vswe.stevescarts.client.renders.RenderModulerCart;
 import vswe.stevescarts.entitys.CartDataSerializers;
 import vswe.stevescarts.init.*;
 import vswe.stevescarts.network.PacketHandler;
@@ -43,11 +36,17 @@ public class StevesCarts
         ModEntities.ENTITIES.register(iEventBus);
         ModBlocks.TILES_ENTITIES.register(iEventBus);
         ModContainers.CONTAINERS.register(iEventBus);
+
         iEventBus.addListener(this::clientInit);
 
         SCConfig.loadConfig(SCConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Constants.MOD_ID + "-client.toml"));
         SCConfig.loadConfig(SCConfig.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Constants.MOD_ID + "-common.toml"));
         ForgeMod.enableMilkFluid();
+    }
+
+    public void clientInit(final FMLClientSetupEvent event)
+    {
+        StevesCartsClient.clientInit(event);
     }
 
     public void commonSetup(final FMLCommonSetupEvent event)
@@ -59,18 +58,5 @@ public class StevesCarts
 
         TileEntityCargo.loadSelectionSettings();
         CartDataSerializers.init();
-    }
-
-    public void clientInit(final FMLClientSetupEvent event)
-    {
-        ModScreens.init();
-        StevesCartsModules.initModels();
-
-        ItemProperties.register(ModItems.CARTS.get(), new ResourceLocation(Constants.MOD_ID, ""), ItemStackRenderer.getInstance());
-
-        EntityRenderers.register(ModEntities.MODULAR_CART.get(), RenderModulerCart::new);
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ADVANCED_DETECTOR.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.JUNCTION.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.BATTERIES.get(), RenderType.cutout());
     }
 }
