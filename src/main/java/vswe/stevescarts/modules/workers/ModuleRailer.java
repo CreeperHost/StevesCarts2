@@ -21,6 +21,7 @@ import vswe.stevescarts.containers.slots.SlotBuilder;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
+import vswe.stevescarts.polylib.WorldHelper;
 
 import java.util.ArrayList;
 
@@ -113,7 +114,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule
     {
         BlockPos blockPos = new BlockPos(i, j, k);
         FakePlayer fakePlayer = getFakePlayer();
-        if(RailBlock.canSupportRigidBlock(getCart().getLevel(), blockPos) && (!RailBlock.isRail(getCart().level, blockPos.above()) && getCart().level.getBlockState(blockPos.above()).isAir()))
+        if(RailBlock.canSupportRigidBlock(getCart().getLevel(), blockPos) && (!RailBlock.isRail(getCart().level, blockPos.above()) && WorldHelper.isAir(getCart().level, blockPos.above())))
         {
             for (int l = 0; l < getInventorySize(); l++)
             {
