@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.workers.tools;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -117,7 +118,11 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
             {
                 if (isMiningSpotAllowed(next, holeX, holeY, range))
                 {
-                    BlockPos mine = next.offset(((getCart().z() != next.getZ()) ? holeX : 0), holeY, ((getCart().x() != next.getX()) ? holeX : 0));
+                    int x = ((getCart().getDeltaMovement().z > 0) ? holeX : 0);
+                    int y = holeY;
+                    int z = ((getCart().getDeltaMovement().x > 0) ? holeX : 0);
+
+                    BlockPos mine = next.offset(x, y, z);
                     if (mineBlockAndRevive(world, mine, next, holeX, holeY))
                     {
                         return true;
