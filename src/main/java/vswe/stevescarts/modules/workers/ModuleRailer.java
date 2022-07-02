@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.workers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -9,10 +10,11 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RailBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.FakePlayer;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotBuilder;
@@ -71,9 +73,9 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule
         if (doPreWork())
         {
             boolean valid = false;
-            for (int i = 0; i < pos.size(); ++i)
+            for (Integer[] po : pos)
             {
-                if (tryPlaceTrack(pos.get(i)[0], pos.get(i)[1], pos.get(i)[2], false))
+                if (tryPlaceTrack(po[0], po[1], po[2]))
                 {
                     valid = true;
                     break;
@@ -83,28 +85,9 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule
             {
                 startWorking(12);
             }
-            else
-            {
-                boolean front = false;
-                for (int j = 0; j < pos.size(); ++j)
-                {
-                    if (BaseRailBlock.isRail(world, new BlockPos(pos.get(j)[0], pos.get(j)[1], pos.get(j)[2])))
-                    {
-                        front = true;
-                        break;
-                    }
-                }
-                if (!front)
-                {
-                    turnback();
-                }
-            }
             return true;
         }
         stopWorking();
-        for (int k = 0; k < pos.size() && !tryPlaceTrack(pos.get(k)[0], pos.get(k)[1], pos.get(k)[2], true); ++k)
-        {
-        }
         return false;
     }
 
@@ -126,36 +109,33 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule
         return stack.is(ItemTags.RAILS);
     }
 
-    private boolean tryPlaceTrack(int i, int j, int k, boolean flag)
+    private boolean tryPlaceTrack(int i, int j, int k)
     {
         BlockPos blockPos = new BlockPos(i, j, k);
-        if (isValidForTrack(blockPos, true))
+        FakePlayer fakePlayer = getFakePlayer();
+        if(RailBlock.canSupportRigidBlock(getCart().getLevel(), blockPos) && (!RailBlock.isRail(getCart().level, blockPos.above()) && getCart().level.getBlockState(blockPos.above()).isAir()))
         {
-            for (int l = 0; l < getInventorySize(); ++l)
+            for (int l = 0; l < getInventorySize(); l++)
             {
-                if (!getStack(l).isEmpty() && validRail(getStack(l).getItem()))
+                if(!getStack(l).isEmpty() && validRail(getStack(l).getItem()))
                 {
                     ItemStack stack = getStack(l);
-                    if (flag)
+                    if(fakePlayer.mayUseItemAt(blockPos, Direction.DOWN, stack))
                     {
-                        if (getCart().level.setBlock(new BlockPos(i, j, k), Block.byItem(stack.getItem()).defaultBlockState(), 3))
+                        Block block = Block.byItem(stack.getItem());
+                        boolean placed = getCart().level.setBlock(blockPos.above(), block.defaultBlockState(), 3);
+                        if(placed)
                         {
                             if (!getCart().hasCreativeSupplies())
                             {
                                 stack.shrink(1);
-                                if (getStack(l).getCount() == 0)
-                                {
-                                    setStack(l, ItemStack.EMPTY);
-                                }
                                 getCart().setChanged();
                             }
+                            return true;
                         }
                     }
-                    return true;
                 }
             }
-            turnback();
-            return true;
         }
         return false;
     }

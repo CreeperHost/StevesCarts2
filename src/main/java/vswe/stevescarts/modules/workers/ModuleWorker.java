@@ -1,10 +1,12 @@
 package vswe.stevescarts.modules.workers;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.vehicle.DismountHelper;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraftforge.fluids.IFluidBlock;
@@ -117,7 +119,7 @@ public abstract class ModuleWorker extends ModuleBase
 
     protected boolean isValidForTrack(BlockPos pos, boolean flag)
     {
-        boolean result = countsAsAir(pos) && !countsAsAir(pos.below()) && !(getCart().level.getBlockState(pos.below()).getBlock() instanceof BaseRailBlock);//!getCart().level.getBlockState(pos).canSurvive(getCart().level, pos));
+        boolean result = RailBlock.canSupportCenter(getCart().level, pos.below(), Direction.NORTH);
         if (result)
         {
             int coordX = pos.getX() - (getCart().x() - pos.getX());
