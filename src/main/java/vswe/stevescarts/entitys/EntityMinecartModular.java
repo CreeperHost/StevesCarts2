@@ -843,6 +843,12 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
+    public ItemStack getPickResult()
+    {
+        return getCartItem();
+    }
+
+    @Override
     public int getContainerSize()
     {
         int slotCount = 0;
