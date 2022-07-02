@@ -29,6 +29,7 @@ import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.helpers.storages.TransferManager;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItems;
+import vswe.stevescarts.init.StevesCartsModules;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -89,9 +90,8 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     public static void loadSelectionSettings()
     {
         (TileEntityCargo.itemSelections = new ArrayList<>()).add(new CargoItemSelection(Localization.GUI.CARGO.AREA_ALL, Slot.class, new ItemStack(ModItems.CARTS.get(), 1)));
-        //TODO API CHANGE
-//        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_ENGINE, SlotFuel.class, ItemCartModule.createModuleStack(0)));
-//        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_RAILER, SlotBuilder.class, ItemCartModule.createModuleStack(12)));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_ENGINE, SlotFuel.class, new ItemStack(ModItems.MODULES.get(StevesCartsModules.COAL_ENGINE).get())));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_RAILER, SlotBuilder.class, new ItemStack(Items.RAIL)));
         TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_STORAGE, SlotChest.class, new ItemStack(Blocks.CHEST, 1)));
         TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_TORCHES, SlotTorch.class, new ItemStack(Blocks.TORCH, 1)));
         TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_EXPLOSIVES, ISlotExplosions.class, ComponentTypes.DYNAMITE.getItemStack()));

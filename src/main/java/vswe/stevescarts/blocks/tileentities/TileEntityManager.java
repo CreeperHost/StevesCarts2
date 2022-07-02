@@ -201,6 +201,8 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
     @Override
     public void tick()
     {
+        if(level == null) return;
+
         if (level.isClientSide)
         {
             updateLayout();
@@ -217,11 +219,8 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
             moveTime = 0;
             if (!exchangeItems(standardTransferHandler))
             {
-                getCart().releaseCart();
-                if (doReturn[getSide()])
-                {
-                    getCart().turnback();
-                }
+                getCart().releaseCart(doReturn[getSide()]);
+
                 standardTransferHandler.reset();
             }
         }

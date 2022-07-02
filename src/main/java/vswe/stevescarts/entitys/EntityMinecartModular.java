@@ -78,7 +78,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
 {
     public BlockPos disabledPos;
     protected boolean wasDisabled;
-    ;
     public double temppushX;
     public double temppushZ;
     protected boolean engineFlag;
@@ -481,11 +480,11 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 {
                     if (temppushX != 0.0 && temppushZ != 0.0)
                     {
-                        setDeltaMovement(temppushX, 0, temppushZ);
+//                        setDeltaMovement(temppushX, 0, temppushZ);
                     }
                     else
                     {
-                        this.setDeltaMovement(getMaxCartSpeedOnRail(), 0, getMaxCartSpeedOnRail());
+//                        this.setDeltaMovement(getMaxCartSpeedOnRail(), 0, getMaxCartSpeedOnRail());
                     }
                     engineFlag = true;
                 }
@@ -769,7 +768,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
 
         if (blockState.getBlock() != ModBlocks.ADVANCED_DETECTOR.get() && isDisabled())
         {
-            releaseCart();
+            releaseCart(false);
         }
         boolean canBeDisabled = blockState.getBlock() == ModBlocks.ADVANCED_DETECTOR.get();
         final boolean forceUnDisable = wasDisabled && disabledPos != null && disabledPos.equals(pos);
@@ -827,14 +826,19 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             z = getMaxCartSpeedOnRail();
         }
         setDeltaMovement(x *= -1.0, 0, z *= -1.0);
-        temppushX *= -1.0;
-        temppushZ *= -1.0;
+        temppushX = x *= -1.0;
+        temppushZ  = z *= -1.0;
     }
 
-    public void releaseCart()
+    public void releaseCart(boolean turnback)
     {
         wasDisabled = true;
         setIsDisabled(false);
+        if(turnback)
+        {
+            turnback();
+            return;
+        }
         setDeltaMovement(temppushX, 0, temppushZ);
     }
 
@@ -1410,7 +1414,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     @Override
     public void readSpawnData(final FriendlyByteBuf data)
     {
-        //TODO
         final byte length = data.readByte();
         List<ResourceLocation> list = new ArrayList<>();
         for (int i = 0; i < length; i++)

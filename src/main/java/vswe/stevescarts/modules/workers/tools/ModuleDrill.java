@@ -126,7 +126,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
             }
         }
         BlockPos pos = next.offset(0, range[0], 0);
-        if (WorldHelper.isAir(getCart().level, pos) && !isValidForTrack(pos, true) && mineBlockAndRevive(world, pos.below(), next, 0, range[0] - 1))
+        if (!WorldHelper.isAir(getCart().level, pos) && !isValidForTrack(pos, true) && mineBlockAndRevive(world, pos.below(), next, 0, range[0] - 1))
         {
             return true;
         }
