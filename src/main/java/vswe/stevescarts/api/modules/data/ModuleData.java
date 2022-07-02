@@ -348,29 +348,18 @@ public class ModuleData
         return modules;
     }
 
-    @Deprecated(forRemoval = true)
     public static ItemStack createModularCart(final EntityMinecartModular parentcart)
     {
-        @Nonnull ItemStack cart = new ItemStack(ModItems.CARTS.get(), 1);
-        final CompoundTag save = new CompoundTag();
-        final byte[] moduleIDs = new byte[parentcart.getModules().size()];
-        for (int i = 0; i < parentcart.getModules().size(); ++i)
+        ItemStack cart = new ItemStack(ModItems.CARTS.get(), 1);
+        ListTag modulesTag = new ListTag();
+        for (int i = 0; i < parentcart.getModules().size(); i++)
         {
-            final ModuleBase module = parentcart.getModules().get(i);
-            for (final ModuleData moduledata : StevesCartsAPI.MODULE_REGISTRY.values())
-            {
-                if (module.getClass() == moduledata.moduleClass)
-                {
-                    //TODO API CHANGE, NO MORE BYTES
-//                    moduleIDs[i] = moduledata.getID();
-                    break;
-                }
-            }
-            //TODO
-            //			ModItems.MODULES.addExtraDataToModule(save, module, i);
+            CompoundTag moduleTag = new CompoundTag();
+            ModuleBase moduleData = parentcart.getModules().get(i);
+            moduleTag.putString(String.valueOf(i), moduleData.getModuleId().toString());
+            modulesTag.add(i, moduleTag);
         }
-        save.putByteArray("Modules", moduleIDs);
-        cart.setTag(save);
+        cart.getOrCreateTag().put("modules", modulesTag);
         return cart;
     }
 
