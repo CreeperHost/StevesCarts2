@@ -33,6 +33,7 @@ import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.addons.*;
 import vswe.stevescarts.api.modules.template.ModuleChest;
+import vswe.stevescarts.polylib.WorldHelper;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -125,7 +126,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
             }
         }
         BlockPos pos = next.offset(0, range[0], 0);
-        if (countsAsAir(pos) && !isValidForTrack(pos, true) && mineBlockAndRevive(world, pos.below(), next, 0, range[0] - 1))
+        if (WorldHelper.isAir(getCart().level, pos) && !isValidForTrack(pos, true) && mineBlockAndRevive(world, pos.below(), next, 0, range[0] - 1))
         {
             return true;
         }
@@ -343,6 +344,10 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         if (blockState.getDestroySpeed(world, pos) < 0.0f)
         {
             return null;
+        }
+        if(!world.getFluidState(pos).isEmpty())
+        {
+            return false;
         }
         if ((holeX != 0 || holeY > 0) && (block == Blocks.TORCH || block == Blocks.REDSTONE_WIRE || block == Blocks.REDSTONE_TORCH || block == Blocks.REPEATER || block == Blocks.COMPARATOR || block == ModBlocks.MODULE_TOGGLER.get()))
         {
