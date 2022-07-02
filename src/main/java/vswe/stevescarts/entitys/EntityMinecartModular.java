@@ -38,6 +38,7 @@ import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -557,7 +558,13 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     @Override
     public Type getMinecartType()
     {
-        return null;
+        return Type.RIDEABLE;
+    }
+
+    @Override
+    public HitResult pick(double p_19908_, float p_19909_, boolean p_19910_)
+    {
+        return super.pick(p_19908_, p_19909_, p_19910_);
     }
 
     @Override
