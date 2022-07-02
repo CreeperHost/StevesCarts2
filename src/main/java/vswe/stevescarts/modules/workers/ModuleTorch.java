@@ -30,6 +30,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule
     private int[] boxRect;
     boolean markerMoving;
     private EntityDataAccessor<Integer> TORCHES;
+    private EntityDataAccessor<Integer> LIGHT_LEVEL;
 
     public ModuleTorch(final EntityMinecartModular cart)
     {
@@ -277,13 +278,14 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule
     public void initDw()
     {
         TORCHES = createDw(EntityDataSerializers.INT);
+        LIGHT_LEVEL = createDw(EntityDataSerializers.INT);
         registerDw(TORCHES, 0);
     }
 
     @Override
     public int numberOfDataWatchers()
     {
-        return 1;
+        return 2;
     }
 
     @Override
