@@ -66,9 +66,14 @@ public class BlockRailAdvDetector extends BaseRailBlock
     @Override
     public void onMinecartPass(BlockState state, Level world, BlockPos pos, AbstractMinecart entityMinecart)
     {
-        if (world.isClientSide || !(entityMinecart instanceof EntityMinecartModular cart)) return;
-        if (!isCartReadyForAction(cart, pos)) return;
-
+        if (world.isClientSide || !(entityMinecart instanceof EntityMinecartModular cart))
+        {
+            return;
+        }
+        if (!isCartReadyForAction(cart, pos))
+        {
+            return;
+        }
         int side = 0;
         for (int i = -1; i <= 1; ++i)
         {
@@ -106,31 +111,110 @@ public class BlockRailAdvDetector extends BaseRailBlock
                                 if (j == -1)
                                 {
                                     isOrange = (cart.temppushX < 0.0);
-                                } else
+                                }
+                                else
                                 {
                                     isOrange = (cart.temppushX > 0.0);
                                 }
-                            } else if (j == 0)
+                            }
+                            else if (j == 0)
                             {
                                 if (i == -1)
                                 {
                                     isOrange = (cart.temppushZ > 0.0);
-                                } else
+                                }
+                                else
                                 {
                                     isOrange = (cart.temppushZ < 0.0);
                                 }
                             }
+                            boolean isBlueBerry = false;
                             activator.handleCart(cart, isOrange);
                             cart.releaseCart(false);
                         }
                         return;
                     }
-
+                    if (block instanceof BlockUpgrade) {
+                        BlockEntity tileentity = world.getBlockEntity(offset);
+                        TileEntityUpgrade upgrade = (TileEntityUpgrade) tileentity;
+                        if (upgrade != null && upgrade.getUpgrade() != null) {
+                            for (BaseEffect effect : upgrade.getUpgrade().getEffects()) {
+                                if (effect instanceof Transposer) {
+                                    Transposer transposer = (Transposer) effect;
+                                    if (upgrade.getMaster() == null) {
+                                        continue;
+                                    }
+                                    for (TileEntityUpgrade tile : upgrade.getMaster().getUpgradeTiles()) {
+                                        if (tile.getUpgrade() != null) {
+                                            for (BaseEffect effect2 : tile.getUpgrade().getEffects()) {
+                                                if (effect2 instanceof Disassemble) {
+                                                    Disassemble disassembler = (Disassemble) effect2;
+                                                    if (tile.getItem(0).isEmpty()) {
+                                                        tile.setItem(0, ModuleData.createModularCart(cart));
+//                                                        upgrade.getMaster().managerInteract(cart, false);
+                                                        for (int p = 0; p < cart.getContainerSize(); ++p) {
+                                                            @Nonnull ItemStack item = cart.removeItem(p, 64);
+                                                            if (!item.isEmpty()) {
+                                                                upgrade.getMaster().puke(item);
+                                                            }
+                                                        }
+                                                        cart.remove(Entity.RemovalReason.DISCARDED);
+                                                        return;
+                                                    }
+                                                    continue;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    ++side;
                 }
             }
         }
+        //		int power = world.getRedstonePowerFromNeighbors(pos);
+        //		if (power > 0) {
+        //			cart.releaseCart();
+        //		}
     }
 
+    //	@Override
+    //	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    //		IBlockState blockState = world.getBlockState(pos.down());
+    //		if (world.getBlockState(pos.down()) == ModBlocks.DETECTOR_UNIT.getBlock() && DetectorType.getTypeFromSate(blockState).canInteractWithCart()) {
+    //			return false;
+    //		}
+    //		for (EnumFacing facing: EnumFacing.HORIZONTALS) {
+    //			BlockPos posOther = pos.offset(facing);
+    //			Block block = world.getBlockState(posOther).getBlock();
+    //			if (block == ModBlocks.CARGO_MANAGER.getBlock() || block == ModBlocks.LIQUID_MANAGER.getBlock() || block == ModBlocks.MODULE_TOGGLER.getBlock()) {
+    //				return false;
+    //			}
+    //			if (block == ModBlocks.UPGRADE.getBlock()) {
+    //				TileEntity tileentity = world.getTileEntity(posOther);
+    //				TileEntityUpgrade upgrade = (TileEntityUpgrade) tileentity;
+    //				if (upgrade != null && upgrade.getUpgrade() != null) {
+    //					for (BaseEffect effect : upgrade.getUpgrade().getEffects()) {
+    //						if (effect instanceof Transposer && upgrade.getMaster() != null) {
+    //							for (TileEntityUpgrade tile : upgrade.getMaster().getUpgradeTiles()) {
+    //								if (tile.getUpgrade() != null) {
+    //									for (BaseEffect effect2 : tile.getUpgrade().getEffects()) {
+    //										if (effect2 instanceof Disassemble) {
+    //											return false;
+    //										}
+    //									}
+    //								}
+    //							}
+    //						}
+    //					}
+    //				}
+    //			}
+    //		}
+    //		return true;
+    //	}
+    //
     private boolean isCartReadyForAction(EntityMinecartModular cart, BlockPos pos)
     {
         return cart.disabledPos != null && cart.disabledPos.equals(pos) && cart.isDisabled();
