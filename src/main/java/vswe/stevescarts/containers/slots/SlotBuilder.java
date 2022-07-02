@@ -1,5 +1,6 @@
 package vswe.stevescarts.containers.slots;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 
@@ -13,8 +14,6 @@ public class SlotBuilder extends SlotBase
     @Override
     public boolean mayPlace(ItemStack itemstack)
     {
-        //TODO
-        return true;
-        //		return Block.getBlockFromItem(itemstack.getItem()) instanceof BlockRailBase;
+        return itemstack.is(ItemTags.RAILS);
     }
 }
