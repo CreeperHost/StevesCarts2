@@ -26,14 +26,16 @@ public class ThermalFuel extends TankEffect
     public void update(final TileEntityUpgrade upgrade)
     {
         super.update(upgrade);
-        if (!upgrade.getLevel().isClientSide && upgrade.getMaster() != null && upgrade.tank.getFluid() != null)
+        if(upgrade.getLevel() == null) return;
+
+        if (!upgrade.getLevel().isClientSide && upgrade.getMaster() != null && !upgrade.tank.getFluid().isEmpty())
         {
             final int fuelspace = upgrade.getMaster().getMaxFuelLevel() - upgrade.getMaster().getFuelLevel();
             final int unitspace = Math.min(fuelspace / LAVA_EFFICIENCY, 200);
             if (unitspace > 100 && upgrade.tank.getFluid().getFluid().equals(Fluids.LAVA))
             {
                 final FluidStack drain = upgrade.tank.drain(unitspace, IFluidHandler.FluidAction.SIMULATE);
-                if (drain != null && drain.getAmount() > 0)
+                if (!drain.isEmpty() && drain.getAmount() > 0)
                 {
                     upgrade.getMaster().setFuelLevel(upgrade.getMaster().getFuelLevel() + drain.getAmount() * LAVA_EFFICIENCY);
                     upgrade.tank.drain(unitspace, IFluidHandler.FluidAction.EXECUTE);

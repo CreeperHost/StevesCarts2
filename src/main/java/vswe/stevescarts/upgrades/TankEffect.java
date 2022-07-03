@@ -87,6 +87,7 @@ public abstract class TankEffect extends InventoryEffect
     public void update(final TileEntityUpgrade upgrade)
     {
         super.update(upgrade);
+        if(upgrade.getLevel() == null) return;
         upgrade.getCompound().putByte("Tick", (byte) (upgrade.getCompound().getByte("Tick") - 1));
         if (upgrade.getCompound().getByte("Tick") <= 0)
         {

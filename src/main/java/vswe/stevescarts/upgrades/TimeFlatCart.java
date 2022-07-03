@@ -4,7 +4,7 @@ import vswe.stevescarts.helpers.Localization;
 
 public class TimeFlatCart extends BaseEffect
 {
-    private int ticks;
+    private final int ticks;
 
     public TimeFlatCart(final int ticks)
     {

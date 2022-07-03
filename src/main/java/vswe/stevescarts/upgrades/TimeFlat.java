@@ -4,7 +4,7 @@ import vswe.stevescarts.helpers.Localization;
 
 public class TimeFlat extends BaseEffect
 {
-    private int ticks;
+    private final int ticks;
 
     public TimeFlat(final int ticks)
     {

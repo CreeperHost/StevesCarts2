@@ -8,6 +8,8 @@ public abstract class RechargerBase extends BaseEffect
     @Override
     public void update(final TileEntityUpgrade upgrade)
     {
+        if(upgrade.getLevel() == null) return;
+
         if (!upgrade.getLevel().isClientSide && canGenerate(upgrade))
         {
             final CompoundTag comp = upgrade.getCompound();

@@ -4,7 +4,7 @@ import vswe.stevescarts.helpers.Localization;
 
 public class FuelCost extends BaseEffect
 {
-    private float cost;
+    private final float cost;
 
     public FuelCost(final float cost)
     {

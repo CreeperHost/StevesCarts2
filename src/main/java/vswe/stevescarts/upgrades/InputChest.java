@@ -46,6 +46,8 @@ public class InputChest extends SimpleInventoryEffect
     @Override
     public void update(final TileEntityUpgrade upgrade)
     {
+        if(upgrade.getLevel() == null) return;
+
         if (!upgrade.getLevel().isClientSide && upgrade.getMaster() != null)
         {
             final CompoundTag comp = upgrade.getCompound();

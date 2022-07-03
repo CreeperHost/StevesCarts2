@@ -2,8 +2,8 @@ package vswe.stevescarts.upgrades;
 
 public abstract class SimpleInventoryEffect extends InventoryEffect
 {
-    private int inventoryWidth;
-    private int inventoryHeight;
+    private final int inventoryWidth;
+    private final int inventoryHeight;
 
     public SimpleInventoryEffect(final int inventoryWidth, final int inventoryHeight)
     {

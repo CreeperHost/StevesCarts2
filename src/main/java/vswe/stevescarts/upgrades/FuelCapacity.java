@@ -4,7 +4,7 @@ import vswe.stevescarts.helpers.Localization;
 
 public class FuelCapacity extends BaseEffect
 {
-    private int capacity;
+    private final int capacity;
 
     public FuelCapacity(final int capacity)
     {

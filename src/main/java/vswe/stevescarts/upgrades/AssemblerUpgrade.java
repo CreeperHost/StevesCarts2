@@ -13,10 +13,9 @@ import java.util.HashMap;
 public class AssemblerUpgrade
 {
     private static HashMap<Byte, AssemblerUpgrade> upgrades;
-    private byte id;
-    private int sideTexture;
-    private String name;
-    private ArrayList<BaseEffect> effects;
+    private final byte id;
+    private final String name;
+    private final ArrayList<BaseEffect> effects;
     private String icon;
 
     public static HashMap<Byte, AssemblerUpgrade> getUpgrades()
@@ -66,7 +65,6 @@ public class AssemblerUpgrade
     public AssemblerUpgrade(final int id, final String name, final int sideTexture)
     {
         this.id = (byte) id;
-        this.sideTexture = sideTexture;
         this.name = name;
         effects = new ArrayList<>();
         AssemblerUpgrade.upgrades.put(this.id, this);
@@ -88,26 +86,9 @@ public class AssemblerUpgrade
         return this;
     }
 
-    @Nonnull
-    protected ItemStack getItemStack()
-    {
-        return getItemStack(1);
-    }
-
-    @Nonnull
-    protected ItemStack getItemStack(final int count)
-    {
-        return ItemStack.EMPTY; //new ItemStack(ModBlocks.UPGRADE.get().getBlock(), count);
-    }
-
     public ArrayList<BaseEffect> getEffects()
     {
         return effects;
-    }
-
-    public boolean useStandardInterface()
-    {
-        return getInterfaceEffect() == null;
     }
 
     public int getInventorySize()
