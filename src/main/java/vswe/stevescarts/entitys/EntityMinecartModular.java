@@ -633,7 +633,14 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             if (this.hasCustomName()) {
                 itemstack.setHoverName(this.getCustomName());
             }
-
+            for (int i = 0; i < getContainerSize(); i++)
+            {
+                ItemStack stack = getItem(i);
+                if(!stack.isEmpty())
+                {
+                    this.spawnAtLocation(stack);
+                }
+            }
             this.spawnAtLocation(itemstack);
         }
     }
