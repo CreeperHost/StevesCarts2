@@ -11,6 +11,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -21,29 +22,6 @@ public class FluidUtils
 {
     public static final FluidRenderMap<Int2ObjectMap<Model3D>> CACHED_FLUIDS = new FluidRenderMap<>();
     public static final int STAGES = 1400;
-
-    /**
-     * Thank you Mekanism which is MIT License https://github.com/mekanism/Mekanism
-     *
-     * @param fluid
-     * @param type
-     * @return
-     */
-    public static TextureAtlasSprite getBaseFluidTexture(Fluid fluid, FluidRenderMap.FluidType type)
-    {
-        ResourceLocation spriteLocation;
-        //TODO Fluid Render
-        if (type == FluidRenderMap.FluidType.STILL)
-        {
-            //            spriteLocation = fluid.getAttributes().getStillTexture();
-        }
-        else
-        {
-            //            spriteLocation = fluid.getAttributes().getFlowingTexture();
-        }
-        //        return getSprite(spriteLocation);
-        return null;
-    }
 
     public static TextureAtlasSprite getSprite(ResourceLocation spriteLocation)
     {
@@ -58,28 +36,18 @@ public class FluidUtils
         }
         Model3D model = new Model3D();
         model.setTexture(FluidRenderMap.getFluidTexture(fluid, FluidRenderMap.FluidType.STILL));
-        //TODO
-        //        if (fluid.getFluid().getAttributes().getStillTexture(fluid) != null) {
-        //            double sideSpacing = 0.00625;
-        //            double belowSpacing = 0.0625 / 4;
-        //            double topSpacing = belowSpacing;
-        //            model.minX = sideSpacing;
-        //            model.minY = belowSpacing;
-        //            model.minZ = sideSpacing;
-        //            model.maxX = 1 - sideSpacing;
-        //            model.maxY = 1 - topSpacing;
-        //            model.maxZ = 1 - sideSpacing;
-        //        }
-        if (CACHED_FLUIDS.containsKey(fluid))
+
+        if (RenderProperties.get(fluid.getFluid()).getStillTexture() != null)
         {
-            CACHED_FLUIDS.get(fluid).put(stage, model);
+            model.minX = 0.135F;//0.125 + .01;
+            model.minY = 0.0725F;//0.0625 + .01;
+            model.minZ = 0.135F;//0.125 + .01;
+
+            model.maxX = 0.865F;//0.875 - .01;
+            model.maxY = 0.0525F + 0.875F * (stage / (float) 1_400);//0.0625 - .01 + 0.875 * (stage / (float) stages);
+            model.maxZ = 0.865F;//0.875 - .01;
         }
-        else
-        {
-            Int2ObjectMap<Model3D> map = new Int2ObjectOpenHashMap<>();
-            map.put(stage, model);
-            CACHED_FLUIDS.put(fluid, map);
-        }
+        CACHED_FLUIDS.computeIfAbsent(fluid, f -> new Int2ObjectOpenHashMap<>()).put(stage, model);
         return model;
     }
 
@@ -90,8 +58,7 @@ public class FluidUtils
 
     public static float getScale(int stored, int capacity, boolean empty)
     {
-        float targetScale = (float) stored / capacity;
-        return targetScale;
+        return (float) stored / capacity;
     }
 
     public static IFluidHandler getTank(Level world, BlockPos pos, Direction side)

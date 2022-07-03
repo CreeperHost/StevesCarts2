@@ -2,6 +2,7 @@ package vswe.stevescarts.client.renders.fluid;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.fluids.FluidStack;
 
 public class RenderUtils
@@ -16,9 +17,7 @@ public class RenderUtils
 
     public static int calculateGlowLight(int light, FluidStack fluid)
     {
-        //TODO fluid render
-        //        return fluid.isEmpty() ? light : calculateGlowLight(light, fluid.getFluid().getAttributes().getLuminosity(fluid));
-        return 0;
+        return fluid.isEmpty() ? light : calculateGlowLight(light, fluid.getFluid().getFluidType().getLightLevel());
     }
 
     public static final int FULL_LIGHT = 0xF000F0;
@@ -40,10 +39,7 @@ public class RenderUtils
 
     private static int getColorARGB(FluidStack fluidStack)
     {
-        //TODO fluid render
-
-        //        return fluidStack.getFluid().getAttributes().getColor(fluidStack);
-        return 0;
+        return RenderProperties.get(fluidStack.getFluid()).getColorTint();
     }
 
     public static float getRed(int color)

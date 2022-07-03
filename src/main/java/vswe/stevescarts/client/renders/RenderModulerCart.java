@@ -103,7 +103,8 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular>
                         if (model.getRenderType(module) != null)
                         {
                             model.renderToBuffer(matrices, vertexConsumers.getBuffer(model.getRenderType(module)), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-                            model.applyEffects(module, matrices, vertexConsumers.getBuffer(model.getRenderType(module)), yaw, pitch, 0);
+                            model.applyEffects(module, matrices, vertexConsumers, yaw, pitch, 0);
+
                         }
                     }
                 }

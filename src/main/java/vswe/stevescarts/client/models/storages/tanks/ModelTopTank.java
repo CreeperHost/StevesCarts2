@@ -1,14 +1,23 @@
 package vswe.stevescarts.client.models.storages.tanks;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraftforge.fluids.FluidStack;
 import vswe.stevescarts.api.client.ModelCartbase;
+import vswe.stevescarts.client.renders.fluid.FluidTankRenderType;
+import vswe.stevescarts.client.renders.fluid.FluidUtils;
+import vswe.stevescarts.client.renders.fluid.RenderUtils;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 
 public class ModelTopTank extends ModelCartbase
 {
@@ -34,5 +43,28 @@ public class ModelTopTank extends ModelCartbase
     public RenderType getRenderType(ModuleBase moduleBase)
     {
         return RenderType.entityCutout(getTexture());
+    }
+
+    @Override
+    public void applyEffects(ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, float yaw, float pitch, float roll)
+    {
+        super.applyEffects(module, matrixStack, rtb, yaw, pitch, roll);
+        ModuleTank moduleTank = (ModuleTank) module;
+        FluidStack fluidStack = moduleTank.getFluid();
+        int light = 15;
+        if(fluidStack != null && !fluidStack.isEmpty())
+        {
+            matrixStack.pushPose();
+            VertexConsumer vertexConsumer = rtb.getBuffer(FluidTankRenderType.RESIZABLE);
+            matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
+            matrixStack.translate(-0.5, 0.3, -0.35);
+            matrixStack.scale(0.95F, (FluidUtils.getScale(moduleTank.getFluidAmount(), moduleTank.getCapacity(), fluidStack.isEmpty()) / 2.2F), 0.7F);
+
+            RenderUtils.renderObject(FluidUtils.getFluidModel(fluidStack, FluidUtils.STAGES + 1), matrixStack, vertexConsumer,
+                    RenderUtils.getColorARGB(fluidStack, 0.2F),
+                    RenderUtils.calculateGlowLight(light, fluidStack));
+
+            matrixStack.popPose();
+        }
     }
 }
