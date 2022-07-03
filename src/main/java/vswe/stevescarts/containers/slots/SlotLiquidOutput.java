@@ -22,11 +22,6 @@ public class SlotLiquidOutput extends SlotBase implements ISpecialItemTransferVa
     @Override
     public boolean isItemValidForTransfer(@Nonnull ItemStack item, final TransferHandler.TRANSFER_TYPE type)
     {
-        return type == TransferHandler.TRANSFER_TYPE.OTHER;
-    }
-
-    public static boolean isItemStackValid(@Nonnull ItemStack itemstack)
-    {
         return false;
     }
 }
