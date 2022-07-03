@@ -349,6 +349,9 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
 
     public void renderEntityInInventory(int p_98851_, int p_98852_, int p_98853_)
     {
+        if(assembler.getHullModule() == null){
+            return;
+        }
         assembler.createPlaceholder();
 
         PoseStack posestack = RenderSystem.getModelViewStack();
