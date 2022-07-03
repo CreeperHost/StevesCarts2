@@ -284,6 +284,11 @@ public class ModuleData
         return removedModels != null;
     }
 
+    public String getDisplayName()
+    {
+        return name;
+    }
+
     public String getName()
     {
         return "module_" + getRawName();

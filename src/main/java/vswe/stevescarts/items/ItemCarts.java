@@ -12,10 +12,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.MinecartItem;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,7 +33,7 @@ public class ItemCarts extends MinecartItem
 {
     public ItemCarts()
     {
-        super(AbstractMinecart.Type.RIDEABLE, new Item.Properties().stacksTo(1));
+        super(AbstractMinecart.Type.RIDEABLE, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
     }
 
     public String getName()
@@ -116,7 +113,7 @@ public class ItemCarts extends MinecartItem
                         CompoundTag moduleTag = (CompoundTag) moduleListTag.get(i);
                         ResourceLocation resourceLocation = new ResourceLocation(moduleTag.getString(String.valueOf(i)));
                         ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(resourceLocation);
-                        if(moduleData != null) list.add(Component.literal(ChatFormatting.GOLD + moduleData.getName()));
+                        if(moduleData != null) list.add(Component.literal(ChatFormatting.GOLD + moduleData.getDisplayName()));
                     }
                 }
                 else
@@ -127,6 +124,7 @@ public class ItemCarts extends MinecartItem
         }
     }
 
+    @Deprecated(forRemoval = true)
     private String formatTime(int ticks)
     {
         int seconds = ticks / 20;
