@@ -25,10 +25,7 @@ public class ModuleIncinerator extends ModuleAddon
             if (getIncinerationCost() != 0)
             {
                 int amount = item.getCount() * getIncinerationCost();
-                amount = getCart().drain(Fluids.LAVA, amount, IFluidHandler.FluidAction.SIMULATE);
-                final int incinerated = amount / getIncinerationCost();
-                getCart().drain(Fluids.LAVA, incinerated * getIncinerationCost(), IFluidHandler.FluidAction.EXECUTE);
-                item.shrink(incinerated);
+                item.shrink(amount);
             }
             else
             {
