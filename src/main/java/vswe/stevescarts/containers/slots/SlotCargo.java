@@ -5,9 +5,9 @@ import vswe.stevescarts.containers.ContainerCargo;
 
 public class SlotCargo extends SlotBase implements ISpecialSlotValidator
 {
-    private TileEntityCargo cargo;
-    private ContainerCargo containerCargo;
-    private int id;
+    private final TileEntityCargo cargo;
+    private final ContainerCargo containerCargo;
+    private final int id;
 
     public SlotCargo(final TileEntityCargo cargo, ContainerCargo containerCargo, final int id)
     {
@@ -20,25 +20,24 @@ public class SlotCargo extends SlotBase implements ISpecialSlotValidator
     @Override
     public boolean isSlotValid()
     {
-        return true;
-        //		if (cargo.layoutType == 0)
-        //		{
-        //			return true;
-        //		}
-        //		int type;
-        //		if (cargo.layoutType == 1)
-        //		{
-        //			type = cargo.getCurrentTransferForSlots().getSetting();
-        //		} else
-        //		{
-        //			type = cargo.getCurrentTransferForSlots().getSide();
-        //		}
-        //		int slotType = id / 15;
-        //		if (cargo.layoutType == 2)
-        //		{
-        //			slotType = cargo.color[slotType] - 1;
-        //		}
-        //		return slotType == type;
+        if (cargo.layoutType == 0)
+        {
+            return true;
+        }
+        int type;
+        if (cargo.layoutType == 1)
+        {
+            type = cargo.getCurrentTransferForSlots().getSetting();
+        } else
+        {
+            type = cargo.getCurrentTransferForSlots().getSide();
+        }
+        int slotType = id / 15;
+        if (cargo.layoutType == 2)
+        {
+            slotType = cargo.color[slotType] - 1;
+        }
+        return slotType == type;
     }
 
     public void updatePosition()

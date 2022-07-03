@@ -17,16 +17,6 @@ public class SlotAssemblerFuel extends SlotAssembler
     }
 
     @Override
-    public void validate()
-    {
-    }
-
-    @Override
-    public void invalidate()
-    {
-    }
-
-    @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
         return FuelHelper.isItemFuel(itemstack);

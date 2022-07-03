@@ -3,6 +3,7 @@ package vswe.stevescarts.containers.slots;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 
 import javax.annotation.Nonnull;
@@ -21,13 +22,13 @@ public class SlotCartCrafterResult extends SlotBase implements ISpecialItemTrans
     }
 
     @Override
-    public boolean mayPickup(Player p_82869_1_)
+    public boolean mayPickup(@NotNull Player player)
     {
         return false;
     }
 
     @Override
-    public boolean mayPlace(ItemStack p_75214_1_)
+    public boolean mayPlace(@NotNull ItemStack itemStack)
     {
         return false;
     }

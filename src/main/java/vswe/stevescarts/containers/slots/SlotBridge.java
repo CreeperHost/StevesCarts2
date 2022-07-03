@@ -1,5 +1,6 @@
 package vswe.stevescarts.containers.slots;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.helpers.storages.TransferHandler;
@@ -16,23 +17,17 @@ public class SlotBridge extends SlotBase implements ISpecialItemTransferValidato
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        //        		return isBridgeMaterial(itemstack);
-        return true;
+        return isBridgeMaterial(itemstack);
+    }
+
+    public static boolean isBridgeMaterial(@Nonnull ItemStack itemstack)
+    {
+        return itemstack.is(ItemTags.PLANKS) || itemstack.is(ItemTags.STONE_BRICKS);
     }
 
     @Override
-    public boolean isItemValidForTransfer(@Nonnull ItemStack p0, TransferHandler.TRANSFER_TYPE p1)
+    public boolean isItemValidForTransfer(@Nonnull ItemStack item, final TransferHandler.TRANSFER_TYPE type)
     {
-        return false;
+        return mayPlace(item) && type != TransferHandler.TRANSFER_TYPE.OTHER;
     }
-
-    //	public static boolean isBridgeMaterial(@Nonnull ItemStack itemstack) {
-    //		final Block b = Block.getBlockFromItem(itemstack.getItem());
-    //		return b == Blocks.PLANKS || b == Blocks.BRICK_BLOCK || b == Blocks.STONE || (b == Blocks.STONEBRICK && itemstack.getItemDamage() == 0);
-    //	}
-
-    //	@Override
-    //	public boolean isItemValidForTransfer(@Nonnull ItemStack item, final TransferHandler.TRANSFER_TYPE type) {
-    //		return isItemValid(item) && type != TransferHandler.TRANSFER_TYPE.OTHER;
-    //	}
 }

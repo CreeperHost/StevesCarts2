@@ -12,15 +12,14 @@ import javax.annotation.Nonnull;
 
 public class SlotAssembler extends Slot
 {
-    private ModuleType moduleType;
-    private int xPos;
-    private int yPos;
-    private TileEntityCartAssembler assembler;
+    private final ModuleType moduleType;
+    private final int xPos;
+    private final int yPos;
+    private final TileEntityCartAssembler assembler;
     private int openingAnimation;
-    private int id;
+    private final int id;
     private boolean isValid;
-    private boolean useLarge;
-    private boolean reloadOnUpdate;
+    private final boolean useLarge;
 
     public SlotAssembler(final TileEntityCartAssembler assembler, final int i, final int j, final int k, final ModuleType moduleType, final boolean useLarge, final int id)
     {
@@ -46,6 +45,8 @@ public class SlotAssembler extends Slot
 
     public void update()
     {
+        if(assembler.getLevel() == null) return;
+
         if (!assembler.getLevel().isClientSide)
         {
             if (!isValid() && hasItem())

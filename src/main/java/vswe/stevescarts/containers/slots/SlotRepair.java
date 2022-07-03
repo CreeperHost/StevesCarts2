@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 
 public class SlotRepair extends SlotBase implements ISpecialItemTransferValidator
 {
-    private ModuleTool tool;
+    private final ModuleTool tool;
 
     public SlotRepair(final ModuleTool tool, final Container iinventory, final int i, final int j, final int k)
     {

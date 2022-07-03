@@ -3,6 +3,7 @@ package vswe.stevescarts.containers.slots;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidUtil;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.helpers.storages.SCTank;
 
 public class SlotLiquidInput extends SlotBase
@@ -18,7 +19,7 @@ public class SlotLiquidInput extends SlotBase
     }
 
     @Override
-    public boolean mayPlace(ItemStack itemStack)
+    public boolean mayPlace(@NotNull ItemStack itemStack)
     {
         return FluidUtil.getFluidHandler(itemStack).isPresent();
     }

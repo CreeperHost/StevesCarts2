@@ -1,6 +1,8 @@
 package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -15,7 +17,14 @@ public class SlotHelmet extends SlotBase
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return true;
-        //		return itemstack.getItem() instanceof ArmorItem && ((ArmorItem) itemstack.getItem()).typez == EntityEquipmentSlot.HEAD;
+        if(itemstack.getItem() instanceof ArmorItem armorItem)
+        {
+            EquipmentSlot equipmentSlot = armorItem.getEquipmentSlot(itemstack);
+            if(equipmentSlot == EquipmentSlot.HEAD)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

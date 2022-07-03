@@ -7,6 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 import vswe.stevescarts.containers.slots.SlotLiquidFilter;
 import vswe.stevescarts.containers.slots.SlotLiquidManagerInput;
@@ -19,8 +20,7 @@ public class ContainerLiquid extends ContainerBase
 {
     public FluidStack[] oldLiquids;
     public SimpleContainerData data;
-    private TileEntityLiquid tileEntityLiquid;
-    private Player playerEntity;
+    private final TileEntityLiquid tileEntityLiquid;
 
     public ContainerLiquid(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
@@ -30,7 +30,6 @@ public class ContainerLiquid extends ContainerBase
     public ContainerLiquid(int id, Inventory playerInventory, TileEntityLiquid tileEntityLiquid, SimpleContainerData data)
     {
         super(ModContainers.CONTAINER_LIQUID.get(), id);
-        this.playerEntity = playerInventory.player;
         oldLiquids = new FluidStack[4];
         this.tileEntityLiquid = tileEntityLiquid;
         this.data = data;
@@ -88,7 +87,7 @@ public class ContainerLiquid extends ContainerBase
     }
 
     @Override
-    public boolean stillValid(Player playerEntity)
+    public boolean stillValid(@NotNull Player playerEntity)
     {
         return true;
     }
