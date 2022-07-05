@@ -26,7 +26,7 @@ public abstract class ModuleTool extends ModuleWorker
     private int remainingRepairUnits;
     private int maximumRepairUnits;
     protected ModuleEnchants enchanter;
-    private int[] durabilityRect;
+    private final int[] durabilityRect;
 
     public ModuleTool(final EntityMinecartModular cart)
     {
@@ -276,7 +276,7 @@ public abstract class ModuleTool extends ModuleWorker
     @Override
     protected void Save(final CompoundTag tagCompound, final int id)
     {
-        tagCompound.putShort(generateNBTName("Durability", id), (short) getCurrentDurability());
+        tagCompound.putInt(generateNBTName("Durability", id), getCurrentDurability());
         tagCompound.putShort(generateNBTName("Repair", id), (short) remainingRepairUnits);
         tagCompound.putShort(generateNBTName("MaxRepair", id), (short) maximumRepairUnits);
     }
