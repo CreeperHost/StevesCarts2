@@ -1,11 +1,9 @@
 package vswe.stevescarts.containers.slots;
 
+import net.creeperhost.polylib.helpers.FuelHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.common.ForgeHooks;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
-import vswe.stevescarts.polylib.FuelHelper;
 
 import javax.annotation.Nonnull;
 

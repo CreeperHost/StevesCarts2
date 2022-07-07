@@ -3,6 +3,9 @@ package vswe.stevescarts.client.models.storages.tanks;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
+import net.creeperhost.polylib.client.render.RenderUtils;
+import net.creeperhost.polylib.client.render.fluid.FluidRenderHelper;
+import net.creeperhost.polylib.client.render.rendertypes.FluidTankRenderType;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
@@ -12,9 +15,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.fluids.FluidStack;
 import vswe.stevescarts.api.client.ModelCartbase;
-import vswe.stevescarts.client.renders.fluid.FluidTankRenderType;
-import vswe.stevescarts.client.renders.fluid.FluidUtils;
-import vswe.stevescarts.client.renders.fluid.RenderUtils;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
@@ -58,9 +58,11 @@ public class ModelFrontTank extends ModelCartbase
             VertexConsumer buffer = rtb.getBuffer(FluidTankRenderType.RESIZABLE);
             matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
             matrixStack.translate(-1.1, -0.25D, -0.4);
-            matrixStack.scale(0.5F, FluidUtils.getScale(moduleTank.getFluidAmount(), moduleTank.getCapacity(), fluidStack.isEmpty()) / 2, 0.8F);
-            RenderUtils.renderObject(FluidUtils.getFluidModel(fluidStack, FluidUtils.STAGES + 1), matrixStack, buffer, RenderUtils.getColorARGB(fluidStack, 0.2F),
-                    RenderUtils.calculateGlowLight(light, fluidStack));
+            matrixStack.scale(0.5F, FluidRenderHelper.getScale(moduleTank.getFluidAmount(), moduleTank.getCapacity(), fluidStack.isEmpty()) / 2, 0.8F);
+            dev.architectury.fluid.FluidStack fluidStackA = dev.architectury.fluid.FluidStack.create(fluidStack.getFluid(), fluidStack.getAmount());
+
+            RenderUtils.renderObject(FluidRenderHelper.getFluidModel(fluidStackA, FluidRenderHelper.STAGES + 1), matrixStack, buffer, RenderUtils.getColorARGB(fluidStackA, 0.2F),
+                    RenderUtils.calculateGlowLight(light, fluidStackA));
 
             matrixStack.popPose();
         }

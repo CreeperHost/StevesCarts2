@@ -1,6 +1,8 @@
 package vswe.stevescarts.helpers.storages;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import dev.architectury.hooks.fluid.FluidStackHooks;
+import net.creeperhost.polylib.client.fluid.ScreenFluidRenderer;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -9,7 +11,6 @@ import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import vswe.stevescarts.polylib.FluidRenderer;
 import vswe.stevescarts.helpers.Localization;
 
 import java.text.NumberFormat;
@@ -117,8 +118,9 @@ public class SCTank extends FluidTank
     public void drawFluid(PoseStack matrixStack, AbstractContainerScreen gui, final int startX, final int startY)
     {
         matrixStack.pushPose();
-        FluidRenderer fluidRenderer = new FluidRenderer(capacity, 32, 47, 0);
-        fluidRenderer.render(startX + 2, startY + 2, fluid);
+        ScreenFluidRenderer fluidRenderer = new ScreenFluidRenderer(capacity, 32, 47, 0);
+        //TODO this might work? Maybe adding a way to the lib to convert between fluidstack types would be a good idea
+        fluidRenderer.render(startX + 2, startY + 2, dev.architectury.fluid.FluidStack.create(fluid.getFluid(), fluid.getAmount()));
         matrixStack.popPose();
     }
 }

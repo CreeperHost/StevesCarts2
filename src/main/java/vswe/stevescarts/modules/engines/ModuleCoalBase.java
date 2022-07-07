@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.engines;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.creeperhost.polylib.helpers.FuelHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -14,7 +15,6 @@ import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotFuel;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
-import vswe.stevescarts.polylib.FuelHelper;
 
 import javax.annotation.Nonnull;
 

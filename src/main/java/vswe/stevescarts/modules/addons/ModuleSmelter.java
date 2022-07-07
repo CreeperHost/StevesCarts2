@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.creeperhost.polylib.helpers.RecipeHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +19,6 @@ import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotCartCrafterResult;
 import vswe.stevescarts.containers.slots.SlotFurnaceInput;
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.polylib.RecipeHelpers;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -114,7 +114,7 @@ public class ModuleSmelter extends ModuleRecipe
     @Nullable
     public SmeltingRecipe getRecipeSmelting()
     {
-        Set<Recipe<?>> recipes = RecipeHelpers.findRecipesByType(RecipeType.SMELTING, getCart().level);
+        Set<Recipe<?>> recipes = RecipeHelper.findRecipesByType(RecipeType.SMELTING, getCart().level);
         for (Recipe<?> iRecipe : recipes)
         {
             SmeltingRecipe recipe = (SmeltingRecipe) iRecipe;

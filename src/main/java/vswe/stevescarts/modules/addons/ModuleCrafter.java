@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.creeperhost.polylib.helpers.RecipeHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +14,6 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotCartCrafter;
 import vswe.stevescarts.containers.slots.SlotCartCrafterResult;
 import vswe.stevescarts.entitys.EntityMinecartModular;
-import vswe.stevescarts.polylib.RecipeHelpers;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -136,7 +136,7 @@ public class ModuleCrafter extends ModuleRecipe
     @Nullable
     public CraftingRecipe getRecipe()
     {
-        Set<Recipe<?>> recipes = RecipeHelpers.findRecipesByType(RecipeType.CRAFTING, getCart().level);
+        Set<Recipe<?>> recipes = RecipeHelper.findRecipesByType(RecipeType.CRAFTING, getCart().level);
         for (Recipe<?> iRecipe : recipes)
         {
             CraftingRecipe recipe = (CraftingRecipe) iRecipe;

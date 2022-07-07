@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.workers.tools;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.creeperhost.polylib.helpers.LevelHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -34,7 +35,6 @@ import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.addons.*;
 import vswe.stevescarts.api.modules.template.ModuleChest;
-import vswe.stevescarts.polylib.WorldHelper;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -131,7 +131,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
             }
         }
         BlockPos pos = next.offset(0, range[0], 0);
-        if (!WorldHelper.isAir(getCart().level, pos) && !isValidForTrack(pos, true) && mineBlockAndRevive(world, pos.below(), next, 0, range[0] - 1))
+        if (!LevelHelper.isAir(getCart().level, pos) && !isValidForTrack(pos, true) && mineBlockAndRevive(world, pos.below(), next, 0, range[0] - 1))
         {
             return true;
         }
