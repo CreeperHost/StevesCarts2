@@ -59,7 +59,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
                     {
                         break;
                     }
-                    if (getStack(i).getItem().hasContainerItem(getStack(i)))
+                    if (getStack(i).hasCraftingRemainingItem())
                     {
                         setStack(i, new ItemStack(getStack(i).getItem().getCraftingRemainingItem()));
                     }

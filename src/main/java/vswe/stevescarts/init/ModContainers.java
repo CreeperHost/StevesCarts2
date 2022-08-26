@@ -10,7 +10,7 @@ import vswe.stevescarts.containers.*;
 
 public class ModContainers
 {
-    public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MOD_ID);
+    public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Constants.MOD_ID);
 
     public static final RegistryObject<MenuType<ContainerCartAssembler>> CONTAINER_CART_ASSEMBLER = CONTAINERS.register("cart_assembler", () -> IForgeMenuType.create(ContainerCartAssembler::new));
 

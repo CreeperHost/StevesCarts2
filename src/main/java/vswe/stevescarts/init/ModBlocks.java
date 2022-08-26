@@ -13,7 +13,7 @@ import vswe.stevescarts.upgrades.AssemblerUpgrade;
 public class ModBlocks
 {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MOD_ID);
-    public static final DeferredRegister<BlockEntityType<?>> TILES_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Constants.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> TILES_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Constants.MOD_ID);
 
     public static final RegistryObject<Block> CART_ASSEMBLER = BLOCKS.register("blockcartassembler", BlockCartAssembler::new);
     public static final RegistryObject<BlockEntityType<TileEntityCartAssembler>> CART_ASSEMBLER_TILE = TILES_ENTITIES.register("blockcartassembler", () -> BlockEntityType.Builder.of(TileEntityCartAssembler::new, ModBlocks.CART_ASSEMBLER.get()).build(null));

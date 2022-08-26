@@ -1183,7 +1183,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         }
         if (!level.isClientSide)
         {
-            NetworkHooks.openGui((ServerPlayer) entityplayer, (MenuProvider) this, packetBuffer -> packetBuffer.writeInt(getId()));
+            NetworkHooks.openScreen((ServerPlayer) entityplayer, (MenuProvider) this, packetBuffer -> packetBuffer.writeInt(getId()));
         }
         return InteractionResult.SUCCESS;
     }

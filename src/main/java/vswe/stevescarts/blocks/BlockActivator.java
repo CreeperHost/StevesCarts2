@@ -27,7 +27,7 @@ public class BlockActivator extends BlockContainerBase
     {
         if (!level.isClientSide)
         {
-            NetworkHooks.openGui((ServerPlayer) playerEntity, (MenuProvider) level.getBlockEntity(blockPos), blockPos);
+            NetworkHooks.openScreen((ServerPlayer) playerEntity, (MenuProvider) level.getBlockEntity(blockPos), blockPos);
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.SUCCESS;

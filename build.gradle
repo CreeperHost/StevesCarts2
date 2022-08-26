@@ -17,7 +17,7 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.0.22'
+version = "${project.mc_version}-${project.mod_version}"
 group = 'net.creeperhost.stevescarts' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'stevescarts'
 
@@ -108,13 +108,12 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
 
-    implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}"))
-    implementation fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rootProject.rei_version}")
+//    implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}"))
+//    implementation fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rootProject.rei_version}")
     implementation fg.deobf("dev.architectury:architectury-forge:${rootProject.architectury_version}")
     implementation fg.deobf("net.creeperhost:polylib-forge:${rootProject.polylib_version}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8:processor'
-
 }
 
 jar {

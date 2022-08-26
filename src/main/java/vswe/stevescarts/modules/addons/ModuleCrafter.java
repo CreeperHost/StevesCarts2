@@ -70,9 +70,9 @@ public class ModuleCrafter extends ModuleRecipe
                                     if (!item2.isEmpty() && item2.sameItem(recipe) && ItemStack.isSameIgnoreDurability(item2, recipe))
                                     {
                                         edited = true;
-                                        if (item2.getItem().hasContainerItem(item2))
+                                        if (item2.hasCraftingRemainingItem())
                                         {
-                                            containers.add(item2.getItem().getContainerItem(item2));
+                                            containers.add(item2.getItem().getCraftingRemainingItem(item2));
                                         }
                                         @Nonnull ItemStack itemStack = item2;
                                         itemStack.shrink(1);

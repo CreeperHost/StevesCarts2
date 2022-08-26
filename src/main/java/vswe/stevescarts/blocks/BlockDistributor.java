@@ -29,7 +29,7 @@ public class BlockDistributor extends BlockContainerBase
         {
             if (!playerEntity.isCrouching())
             {
-                NetworkHooks.openGui((ServerPlayer) playerEntity, (MenuProvider) world.getBlockEntity(blockPos), blockPos);
+                NetworkHooks.openScreen((ServerPlayer) playerEntity, (MenuProvider) world.getBlockEntity(blockPos), blockPos);
                 return InteractionResult.SUCCESS;
             }
         }
