@@ -2,6 +2,7 @@ package vswe.stevescarts;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
+import net.creeperhost.polylib.helpers.RegistryNameHelper;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.BlockLoot;
@@ -105,10 +106,10 @@ public class StevesCartsDataGenerators
         @Override
         protected void registerModels()
         {
-            ModItems.MODULES.forEach((moduleData, itemSupplier) -> singleTexture(getResourceLocation(itemSupplier.get()).getPath(),
+            ModItems.MODULES.forEach((moduleData, itemSupplier) -> singleTexture(RegistryNameHelper.getRegistryName(itemSupplier.get()).get().getPath(),
                     mcLoc("item/generated"), "layer0", modLoc("items/" + moduleData.getRawName() + "_icon")));
 
-            ModItems.COMPONENTS.forEach((moduleData, itemSupplier) -> singleTexture(getResourceLocation(itemSupplier.get()).getPath(),
+            ModItems.COMPONENTS.forEach((moduleData, itemSupplier) -> singleTexture(RegistryNameHelper.getRegistryName(itemSupplier.get()).get().getPath(),
                     mcLoc("item/generated"), "layer0", modLoc("items/" + moduleData.getRawName() + "_icon")));
 
 //            ModBlocks.CHARGERS.forEach((chargerTypes, blockSupplier) -> registerDefaultItemBlockModel(blockSupplier.get()));
@@ -126,18 +127,8 @@ public class StevesCartsDataGenerators
 
         public void registerDefaultItemBlockModel(Block block)
         {
-            String path = getResourceLocation(block).getPath();
+            String path = RegistryNameHelper.getRegistryName(block).get().getPath();
             getBuilder(path).parent(new ModelFile.UncheckedModelFile(modLoc("block/" + path)));
-        }
-
-        public ResourceLocation getResourceLocation(Item item)
-        {
-            return Registry.ITEM.getKey(item);
-        }
-
-        public ResourceLocation getResourceLocation(Block block)
-        {
-            return Registry.BLOCK.getKey(block);
         }
 
         @Override
@@ -224,16 +215,11 @@ public class StevesCartsDataGenerators
 
             public LootPool.Builder create(Block block)
             {
-                return LootPool.lootPool().name(getResourceLocation(block).toString())
+                return LootPool.lootPool().name(RegistryNameHelper.getRegistryName(block).get().toString())
                         .setRolls(ConstantValue.exactly(1)).when(ExplosionCondition.survivesExplosion())
                         .add(LootItem.lootTableItem(block)
                                 .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY)));
 
-            }
-
-            public ResourceLocation getResourceLocation(Block block)
-            {
-                return Registry.BLOCK.getKey(block);
             }
 
             @Override
