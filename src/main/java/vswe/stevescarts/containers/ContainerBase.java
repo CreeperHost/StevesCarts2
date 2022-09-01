@@ -136,31 +136,4 @@ public abstract class ContainerBase extends AbstractContainerMenu
         if (!ItemStack.tagMatches(stack1, stack2)) return false;
         return true;
     }
-
-    //	@Override
-    //	public void addListener(final IContainerListener par1ICrafting) {
-    //		super.addListener(par1ICrafting);
-    //		if (getTileEntity() != null) {
-    //			getTileEntity().initGuiData(this, par1ICrafting);
-    //		}
-    //	}
-    //
-    //	@Override
-    //	@SideOnly(Side.CLIENT)
-    //	public void updateProgressBar(final int par1, int par2) {
-    //		par2 &= 0xFFFF;
-    //		if (getTileEntity() != null) {
-    //			getTileEntity().receiveGuiData(par1, (short) par2);
-    //		}
-    //	}
-    //
-    //	@Override
-    //	public void detectAndSendChanges() {
-    //		super.detectAndSendChanges();
-    //		if (getTileEntity() != null) {
-    //			for (final IContainerListener var2 : listeners) {
-    //				getTileEntity().checkGuiData(this, var2);
-    //			}
-    //		}
-    //	}
 }

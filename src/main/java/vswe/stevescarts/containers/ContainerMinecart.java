@@ -92,19 +92,6 @@ public class ContainerMinecart extends ContainerBase
     }
 
     @Override
-    public void addSlotListener(final @NotNull ContainerListener containerListener)
-    {
-        super.addSlotListener(containerListener);
-        if (cart.getModules() != null)
-        {
-            for (ModuleBase module : cart.getModules())
-            {
-
-            }
-        }
-    }
-
-    @Override
     public boolean stillValid(@NotNull Player playerEntity)
     {
         return true;

@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public class ContainerActivator extends ContainerBase
 {
-    private TileEntityActivator activator;
+    private final TileEntityActivator activator;
     public ArrayList<Integer> lastOptions;
 
     public ContainerActivator(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)

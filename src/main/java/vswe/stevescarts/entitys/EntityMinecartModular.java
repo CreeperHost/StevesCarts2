@@ -1434,10 +1434,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             list.add(data.readResourceLocation());
         }
         loadModules(list);
-        if (getDataManager() instanceof EntityDataManagerLockable)
-        {
-            ((EntityDataManagerLockable) getDataManager()).release();
-        }
     }
 
     public void setScrollY(final int val)

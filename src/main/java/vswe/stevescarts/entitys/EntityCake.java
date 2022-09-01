@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.init.ModEntities;
 
 public class EntityCake extends ThrownEgg
@@ -39,9 +40,8 @@ public class EntityCake extends ThrownEgg
     {
         if (data.getEntity() != null)
         {
-            if (data.getEntity() instanceof Player)
+            if (data.getEntity() instanceof Player player)
             {
-                final Player player = (Player) data.getEntity();
                 player.getFoodData().eat(14, 0.7f);
             }
         }
@@ -52,7 +52,7 @@ public class EntityCake extends ThrownEgg
     }
 
     @Override
-    protected void onHitBlock(BlockHitResult p_230299_1_)
+    protected void onHitBlock(@NotNull BlockHitResult blockHitResult)
     {
         BlockPos pos = blockPosition();
 
