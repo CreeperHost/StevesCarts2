@@ -3,6 +3,7 @@ package vswe.stevescarts.blocks.tileentities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -72,7 +73,7 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider
         }
     }
 
-    public void receivePacket(final int id, final byte[] data)
+    public void receivePacket(final int id, final byte[] data, @org.jetbrains.annotations.Nullable ServerPlayer sender)
     {
         if (id == 0)
         {
