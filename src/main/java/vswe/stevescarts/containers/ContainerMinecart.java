@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.init.ModContainers;
@@ -19,7 +20,7 @@ public class ContainerMinecart extends ContainerBase
     private Inventory playerInventory;
     public HashMap<Short, Short> cache;
     public EntityMinecartModular cart;
-    private SimpleContainerData data;
+    private final SimpleContainerData data;
 
     public ContainerMinecart(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
@@ -91,9 +92,9 @@ public class ContainerMinecart extends ContainerBase
     }
 
     @Override
-    public void addSlotListener(final ContainerListener par1ICrafting)
+    public void addSlotListener(final @NotNull ContainerListener containerListener)
     {
-        super.addSlotListener(par1ICrafting);
+        super.addSlotListener(containerListener);
         if (cart.getModules() != null)
         {
             for (ModuleBase module : cart.getModules())
@@ -104,7 +105,7 @@ public class ContainerMinecart extends ContainerBase
     }
 
     @Override
-    public boolean stillValid(Player playerEntity)
+    public boolean stillValid(@NotNull Player playerEntity)
     {
         return true;
     }

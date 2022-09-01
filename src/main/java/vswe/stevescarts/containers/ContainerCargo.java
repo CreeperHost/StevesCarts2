@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 import vswe.stevescarts.containers.slots.SlotCargo;
 import vswe.stevescarts.init.ModContainers;
@@ -84,7 +85,7 @@ public class ContainerCargo extends ContainerBase
     }
 
     @Override
-    public boolean stillValid(Player playerEntity)
+    public boolean stillValid(@NotNull Player player)
     {
         return true;
     }

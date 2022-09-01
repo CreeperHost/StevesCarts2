@@ -4,7 +4,6 @@ import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.api.modules.ModuleBase;
 
-
 public class ModuleDataHull extends ModuleData
 {
     private int modularCapacity;

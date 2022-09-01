@@ -29,14 +29,4 @@ public class StevesCartsAPI
         }
         return moduleData;
     }
-
-    public static void registerTree(ITreeModule treeModule)
-    {
-        TREE_MODULES.add(treeModule);
-    }
-
-    public static void registerCrop(ICropModule cropModule)
-    {
-        CROP_MODULES.add(cropModule);
-    }
 }

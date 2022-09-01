@@ -5,6 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SimpleContainerData;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 import vswe.stevescarts.helpers.ActivatorOption;
 import vswe.stevescarts.init.ModContainers;
@@ -39,7 +40,7 @@ public class ContainerActivator extends ContainerBase
     }
 
     @Override
-    public boolean stillValid(Player playerEntity)
+    public boolean stillValid(@NotNull Player player)
     {
         return true;
     }

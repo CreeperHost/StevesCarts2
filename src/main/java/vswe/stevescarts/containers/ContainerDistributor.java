@@ -5,6 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SimpleContainerData;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityDistributor;
 import vswe.stevescarts.helpers.DistributorSide;
 import vswe.stevescarts.init.ModContainers;
@@ -40,7 +41,7 @@ public class ContainerDistributor extends ContainerBase
     }
 
     @Override
-    public boolean stillValid(Player p_75145_1_)
+    public boolean stillValid(@NotNull Player player)
     {
         return true;
     }

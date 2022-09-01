@@ -11,11 +11,6 @@ import java.util.Locale;
 
 public class ItemCartComponent extends Item
 {
-    public static int size()
-    {
-        return ComponentTypes.values().length;
-    }
-
     public ComponentTypes componentType;
 
     public ItemCartComponent(ComponentTypes componentType)
