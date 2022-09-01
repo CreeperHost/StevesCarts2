@@ -33,6 +33,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.init.ModBlocks;
+import vswe.stevescarts.init.ModItems;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -104,6 +105,12 @@ public class StevesCartsDataGenerators
         @Override
         protected void registerModels()
         {
+            ModItems.MODULES.forEach((moduleData, itemSupplier) -> singleTexture(getResourceLocation(itemSupplier.get()).getPath(),
+                    mcLoc("item/generated"), "layer0", modLoc("items/" + moduleData.getRawName() + "_icon")));
+
+            ModItems.COMPONENTS.forEach((moduleData, itemSupplier) -> singleTexture(getResourceLocation(itemSupplier.get()).getPath(),
+                    mcLoc("item/generated"), "layer0", modLoc("items/" + moduleData.getRawName() + "_icon")));
+
 //            ModBlocks.CHARGERS.forEach((chargerTypes, blockSupplier) -> registerDefaultItemBlockModel(blockSupplier.get()));
 //            ModBlocks.POWER_CELLS.forEach((chargerTypes, blockSupplier) -> registerDefaultItemBlockModel(blockSupplier.get()));
 //

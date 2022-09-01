@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "stevescarts:items/galgadorian_wood_cutter_icon"
+  }
+}

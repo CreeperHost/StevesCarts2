@@ -1,6 +1,0 @@
-{ 
-  "parent": "item/generated", 
-  "textures": { 
-    "layer0": "stevescarts:items/large_lump_of_galgador_icon" 
-  }
-}

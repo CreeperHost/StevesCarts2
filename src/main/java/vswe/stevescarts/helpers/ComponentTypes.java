@@ -24,6 +24,11 @@ public enum ComponentTypes
         return name;
     }
 
+    public String getRawName()
+    {
+        return name.replace(":", "").replace("'", "").replace(" ", "_").replace("-", "_").toLowerCase();
+    }
+
     @Nonnull
     public ItemStack getItemStack(final int count)
     {

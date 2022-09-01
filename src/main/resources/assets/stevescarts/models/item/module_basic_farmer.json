@@ -1,6 +1,0 @@
-{ 
-  "parent": "item/generated", 
-  "textures": { 
-    "layer0": "stevescarts:items/basic_farmer_icon" 
-  }
-}

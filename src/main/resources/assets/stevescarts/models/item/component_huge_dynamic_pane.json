@@ -1,6 +1,0 @@
-{ 
-  "parent": "item/generated", 
-  "textures": { 
-    "layer0": "stevescarts:items/huge_dynamic_pane_icon" 
-  }
-}

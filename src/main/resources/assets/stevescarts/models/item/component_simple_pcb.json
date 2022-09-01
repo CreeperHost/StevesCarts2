@@ -1,6 +1,0 @@
-{ 
-  "parent": "item/generated", 
-  "textures": { 
-    "layer0": "stevescarts:items/simple_pcb_icon" 
-  }
-}
