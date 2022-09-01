@@ -19,6 +19,7 @@ import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.items.ItemCartModule;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -84,17 +85,20 @@ public class ModuleData
         return isLocked;
     }
 
+    @SuppressWarnings("unused")
     protected ModuleData lock()
     {
         isLocked = true;
         return this;
     }
 
+    @SuppressWarnings("unused")
     public boolean getEnabledByDefault()
     {
         return !defaultLock;
     }
 
+    @SuppressWarnings("unused")
     protected ModuleData lockByDefault()
     {
         defaultLock = true;
@@ -126,6 +130,7 @@ public class ModuleData
         return this;
     }
 
+    @SuppressWarnings("unused")
     public ModuleData useExtraData(final byte defaultValue)
     {
         extraDataDefaultValue = defaultValue;
@@ -192,12 +197,14 @@ public class ModuleData
         return this;
     }
 
+    @SuppressWarnings("unused")
     protected static void addNemesis(final ModuleData m1, final ModuleData m2)
     {
         m2.addNemesis(m1);
         m1.addNemesis(m2);
     }
 
+    @SuppressWarnings("unused")
     @OnlyIn(Dist.CLIENT)
     public float getModelMult()
     {
@@ -382,16 +389,13 @@ public class ModuleData
         return cart;
     }
 
-    @Deprecated(forRemoval = true)
     public static boolean isItemOfModularType(@Nonnull ItemStack itemstack, final Class<? extends ModuleBase> validClass)
     {
-        //		if (itemstack.getItem() == ModItems.MODULES.get()) {
-        //TODO
-        //			final ModuleData module = ModItems.MODULES.getModuleData(itemstack);
-        //			if (module != null && validClass.isAssignableFrom(module.moduleClass)) {
-        //				return true;
-        //			}
-        //		}
+        if(itemstack.getItem() instanceof ItemCartModule itemCartModule)
+        {
+            final ModuleData moduleData = itemCartModule.getModuleData();
+            return moduleData != null && validClass.isAssignableFrom(moduleData.moduleClass);
+        }
         return false;
     }
 
@@ -429,7 +433,6 @@ public class ModuleData
     public static boolean isValidModuleCombo(final ModuleDataHull hull, final ArrayList<ModuleData> modules)
     {
         //TODO rewrite all of this
-        if(true) return true;
 
 //        final int[] max = {1, hull.getEngineMax(), 1, 4, hull.getAddonMax(), 6};
 //        final int[] current = new int[max.length];
@@ -517,24 +520,24 @@ public class ModuleData
             }
             else
             {
-                String sides = "";
+                StringBuilder sides = new StringBuilder();
                 for (int i = 0; i < getRenderingSides().size(); ++i)
                 {
                     final SIDE side = getRenderingSides().get(i);
                     if (i == 0)
                     {
-                        sides += side.toString();
+                        sides.append(side.toString());
                     }
                     else if (i == getRenderingSides().size() - 1)
                     {
-                        sides = sides + " " + Localization.MODULE_INFO.AND.translate() + " " + side.toString();
+                        sides.append(" ").append(Localization.MODULE_INFO.AND.translate()).append(" ").append(side.toString());
                     }
                     else
                     {
-                        sides = sides + ", " + side.toString();
+                        sides.append(", ").append(side.toString());
                     }
                 }
-                list.add(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.OCCUPIED_SIDES.translate(sides, String.valueOf(getRenderingSides().size()))));
+                list.add(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.OCCUPIED_SIDES.translate(sides.toString(), String.valueOf(getRenderingSides().size()))));
             }
             if (getNemesis() != null && getNemesis().size() != 0)
             {
