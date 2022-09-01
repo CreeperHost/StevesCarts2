@@ -15,10 +15,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.BlockCargoManager;
 import vswe.stevescarts.containers.ContainerCargo;
 import vswe.stevescarts.containers.slots.*;
@@ -207,24 +209,24 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     }
 
     @Override
-    public void load(CompoundTag nbttagcompound)
+    public void load(@NotNull CompoundTag compoundTag)
     {
-        super.load(nbttagcompound);
-        setWorkload(nbttagcompound.getByte("workload"));
+        super.load(compoundTag);
+        setWorkload(compoundTag.getByte("workload"));
         for (int i = 0; i < 4; ++i)
         {
-            target[i] = nbttagcompound.getByte("target" + i);
+            target[i] = compoundTag.getByte("target" + i);
         }
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbttagcompound)
+    public void saveAdditional(@NotNull CompoundTag compoundTag)
     {
-        super.saveAdditional(nbttagcompound);
-        nbttagcompound.putByte("workload", (byte) getWorkload());
+        super.saveAdditional(compoundTag);
+        compoundTag.putByte("workload", (byte) getWorkload());
         for (int i = 0; i < 4; ++i)
         {
-            nbttagcompound.putByte("target" + i, (byte) target[i]);
+            compoundTag.putByte("target" + i, (byte) target[i]);
         }
     }
 
@@ -421,24 +423,21 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability)
     {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        if (capability == ForgeCapabilities.ITEM_HANDLER)
         {
-            if (createHandler() != null)
-            {
-                return LazyOptional.of(this::createHandler).cast();
-            }
+            return LazyOptional.of(this::createHandler).cast();
         }
         return super.getCapability(capability);
     }
 
-    private IItemHandlerModifiable createHandler()
+    private @NotNull IItemHandlerModifiable createHandler()
     {
         BlockState state = this.getBlockState();
         if (!(state.getBlock() instanceof BlockCargoManager))
         {
             return new InvWrapper(this);
         }
-        return null;
+        return new ItemStackHandler(0);
     }
 
     @Override
@@ -448,20 +447,20 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     }
 
     @Override
-    public boolean stillValid(Player playerEntity)
+    public boolean stillValid(@NotNull Player playerEntity)
     {
         return true;
     }
 
     @Override
-    public Component getDisplayName()
+    public @NotNull Component getDisplayName()
     {
         return Component.translatable("screen.cargo.manager");
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity)
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity)
     {
         return new ContainerCargo(id, playerInventory, this, this.dataAccess);
     }

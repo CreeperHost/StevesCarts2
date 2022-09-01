@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.containers.ContainerActivator;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.helpers.ActivatorOption;
@@ -51,18 +52,18 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider
     }
 
     @Override
-    public void load(CompoundTag nbttagcompound)
+    public void load(@NotNull CompoundTag compoundTag)
     {
-        super.load(nbttagcompound);
+        super.load(compoundTag);
         for (final ActivatorOption option : options)
         {
-            option.setOption(nbttagcompound.getByte(option.getName()));
+            option.setOption(compoundTag.getByte(option.getName()));
         }
     }
 
 
     @Override
-    public void saveAdditional(CompoundTag compoundNBT)
+    public void saveAdditional(@NotNull CompoundTag compoundNBT)
     {
         super.saveAdditional(compoundNBT);
         for (final ActivatorOption option : options)
@@ -71,7 +72,7 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider
         }
     }
 
-    public void receivePacket(final int id, final byte[] data, final Player player)
+    public void receivePacket(final int id, final byte[] data)
     {
         if (id == 0)
         {
@@ -96,14 +97,14 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider
     }
 
     @Override
-    public Component getDisplayName()
+    public @NotNull Component getDisplayName()
     {
         return Component.translatable("container.activator");
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity)
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity)
     {
         return new ContainerActivator(id, playerInventory, this, new SimpleContainerData(0));
     }

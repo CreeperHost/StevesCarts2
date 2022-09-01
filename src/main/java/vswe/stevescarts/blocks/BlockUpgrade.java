@@ -90,6 +90,8 @@ public class BlockUpgrade extends BlockContainerBase
         return new TileEntityUpgrade(assemblerUpgrade, blockPos, blockState);
     }
 
+
+    @SuppressWarnings("deprication")
     @Override
     public boolean canSurvive(@NotNull BlockState blockState, LevelReader iWorldReader, BlockPos blockPos)
     {

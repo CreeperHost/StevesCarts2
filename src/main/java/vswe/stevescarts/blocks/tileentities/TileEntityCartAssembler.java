@@ -9,7 +9,6 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.WorldlyContainer;
@@ -337,7 +336,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         }
     }
 
-    public void receivePacket(final int id, final byte[] data, final ServerPlayer player)
+    public void receivePacket(final int id, final byte[] data)
     {
         if (id == 0)
         {

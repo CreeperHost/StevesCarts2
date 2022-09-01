@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.client.guis.GuiBase;
 import vswe.stevescarts.containers.ContainerLiquid;
 import vswe.stevescarts.entitys.EntityMinecartModular;
@@ -40,44 +41,33 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
 {
     public SCTank[] tanks;
     private int tick;
+    @SuppressWarnings("unused")
     private static final int[] topSlots;
+    @SuppressWarnings("unused")
     private static final int[] botSlots;
+    @SuppressWarnings("unused")
     private static final int[] sideSlots;
     protected final SimpleContainerData dataAccess = new SimpleContainerData(12)
     {
         public int get(int id)
         {
-            switch (id)
+            return switch (id)
             {
-                case 0:
-                    return layoutType;
-                case 1:
-                    return color[0];
-                case 2:
-                    return color[1];
-                case 3:
-                    return color[2];
-                case 4:
-                    return color[3];
-                case 5:
-                    return toCart[0] ? 1 : 0;
-                case 6:
-                    return toCart[1] ? 1 : 0;
-                case 7:
-                    return toCart[2] ? 1 : 0;
-                case 8:
-                    return toCart[3] ? 1 : 0;
-                case 9:
-                    return doReturn[0] ? 1 : 0;
-                case 10:
-                    return doReturn[1] ? 1 : 0;
-                case 11:
-                    return doReturn[2] ? 1 : 0;
-                case 12:
-                    return doReturn[3] ? 1 : 0;
-                default:
-                    throw new IllegalArgumentException("Invalid index: " + id);
-            }
+                case 0 -> layoutType;
+                case 1 -> color[0];
+                case 2 -> color[1];
+                case 3 -> color[2];
+                case 4 -> color[3];
+                case 5 -> toCart[0] ? 1 : 0;
+                case 6 -> toCart[1] ? 1 : 0;
+                case 7 -> toCart[2] ? 1 : 0;
+                case 8 -> toCart[3] ? 1 : 0;
+                case 9 -> doReturn[0] ? 1 : 0;
+                case 10 -> doReturn[1] ? 1 : 0;
+                case 11 -> doReturn[2] ? 1 : 0;
+                case 12 -> doReturn[3] ? 1 : 0;
+                default -> throw new IllegalArgumentException("Invalid index: " + id);
+            };
         }
 
         public void set(int p_221477_1_, int p_221477_2_)
@@ -111,6 +101,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     public void tick()
     {
         super.tick();
+        if(level == null) return;
         if (tick-- <= 0)
         {
             tick = 5;
@@ -126,6 +117,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
 
     public void syncTanks()
     {
+        if(level == null) return;
         if (!level.isClientSide)
         {
             if (getTanks() != null)
@@ -299,21 +291,15 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
 
     private boolean isTankValid(final int tankId, Direction facing)
     {
-        if (facing == null)
+        if (facing == null) return false;
+
+        return switch (layoutType)
         {
-            return false;
-        }
-        switch (layoutType)
-        {
-            case 0:
-                return true;
-            case 1:
-                return tankId == facingToTankId(facing);
-            case 2:
-                return color[tankId] == facingToColorId(facing);
-            default:
-                return false;
-        }
+            case 0 -> true;
+            case 1 -> tankId == facingToTankId(facing);
+            case 2 -> color[tankId] == facingToColorId(facing);
+            default -> false;
+        };
     }
 
     private boolean isFluidValid(final int sideId, final FluidStack fluid)
@@ -330,31 +316,20 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
 
     public float getMaxAmountBuckets(final int id)
     {
-        switch (getAmountId(id))
+        return switch (getAmountId(id))
         {
-            case 1:
-                return 0.25f;
-            case 2:
-                return 0.5f;
-            case 3:
-                return 0.75f;
-            case 4:
-                return 1.0f;
-            case 5:
-                return 2.0f;
-            case 6:
-                return 3.0f;
-            case 7:
-                return 5.0f;
-            case 8:
-                return 7.5f;
-            case 9:
-                return 10.0f;
-            case 10:
-                return 15.0f;
-            default:
-                return 0.0f;
-        }
+            case 1 -> 0.25f;
+            case 2 -> 0.5f;
+            case 3 -> 0.75f;
+            case 4 -> 1.0f;
+            case 5 -> 2.0f;
+            case 6 -> 3.0f;
+            case 7 -> 5.0f;
+            case 8 -> 7.5f;
+            case 9 -> 10.0f;
+            case 10 -> 15.0f;
+            default -> 0.0f;
+        };
     }
 
     public boolean hasMaxAmount(final int id)
@@ -369,43 +344,46 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     }
 
     @Override
-    public void load(CompoundTag nbttagcompound)
+    public void load(@NotNull CompoundTag compoundTag)
     {
-        super.load(nbttagcompound);
+        super.load(compoundTag);
         for (int i = 0; i < 4; ++i)
         {
-            tanks[i].setFluid(FluidStack.loadFluidStackFromNBT(nbttagcompound.getCompound("Fluid" + i)));
+            tanks[i].setFluid(FluidStack.loadFluidStackFromNBT(compoundTag.getCompound("Fluid" + i)));
         }
-        setWorkload(nbttagcompound.getShort("workload"));
+        setWorkload(compoundTag.getShort("workload"));
     }
 
 
     @Override
-    public void saveAdditional(CompoundTag nbttagcompound)
+    public void saveAdditional(@NotNull CompoundTag compoundTag)
     {
-        super.saveAdditional(nbttagcompound);
+        super.saveAdditional(compoundTag);
         for (int i = 0; i < 4; ++i)
         {
             if (tanks[i].getFluid() != null)
             {
                 final CompoundTag compound = new CompoundTag();
                 tanks[i].getFluid().writeToNBT(compound);
-                nbttagcompound.put("Fluid" + i, compound);
+                compoundTag.put("Fluid" + i, compound);
             }
         }
-        nbttagcompound.putShort("workload", (short) getWorkload());
+        compoundTag.putShort("workload", (short) getWorkload());
     }
 
+    @SuppressWarnings("unused")
     private boolean isInput(final int id)
     {
         return id % 3 == 0;
     }
 
+    @SuppressWarnings("unused")
     private boolean isOutput(final int id)
     {
         return id % 3 == 1;
     }
 
+    @SuppressWarnings("unused")
     public SCTank getValidTank(Direction facing)
     {
         for (int i = 0; i < getTanks().length; i++)
@@ -420,36 +398,26 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
 
     private int facingToColorId(Direction facing)
     {
-        switch (facing.ordinal())
+        return switch (facing.ordinal())
         {
-            case 2:
-                return 3; // north, yellow
-            case 3:
-                return 2; // south, blue
-            case 4:
-                return 4; // west, green
-            case 5:
-                return 1; // east, red
-            default:
-                return 1;
-        }
+            case 2 -> 3; // north, yellow
+            case 3 -> 2; // south, blue
+            case 4 -> 4; // west, green
+            case 5 -> 1; // east, red
+            default -> 1;
+        };
     }
 
     private int facingToTankId(Direction facing)
     {
-        switch (facing.ordinal())
+        return switch (facing.ordinal())
         {
-            case 2:
-                return 2; // north, yellow
-            case 3:
-                return 1; // south, blue
-            case 4:
-                return 3; // west, green
-            case 5:
-                return 0; // east, red
-            default:
-                return 0;
-        }
+            case 2 -> 2; // north, yellow
+            case 3 -> 1; // south, blue
+            case 4 -> 3; // west, green
+            case 5 -> 0; // east, red
+            default -> 0;
+        };
     }
 
     static
@@ -460,16 +428,16 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     }
 
     @Override
-    public Component getDisplayName()
+    public @NotNull Component getDisplayName()
     {
         return Component.translatable("container.liquidmanager");
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player)
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player)
     {
-        if (!level.isClientSide)
+        if (level != null && !level.isClientSide)
         {
             syncTanks();
         }
@@ -477,7 +445,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     }
 
     @Override
-    public boolean stillValid(Player playerEntity)
+    public boolean stillValid(@NotNull Player playerEntity)
     {
         return true;
     }

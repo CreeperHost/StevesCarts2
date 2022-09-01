@@ -17,12 +17,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.containers.ContainerDistributor;
 import vswe.stevescarts.helpers.DistributorSetting;
 import vswe.stevescarts.helpers.DistributorSide;
@@ -38,14 +39,14 @@ import java.util.*;
 
 public class TileEntityDistributor extends TileEntityBase implements WorldlyContainer, MenuProvider
 {
-    private ArrayList<DistributorSide> sides;
+    private final ArrayList<DistributorSide> sides;
     private boolean dirty;
 
     private TileEntityManager[] inventories;
     public boolean hasTop;
     public boolean hasBot;
 
-    private Map<Direction, IFluidHandler> fluidHandlerMap;
+    private final Map<Direction, IFluidHandler> fluidHandlerMap;
 
     public TileEntityDistributor(BlockPos blockPos, BlockState blockState)
     {
@@ -60,7 +61,6 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
         fluidHandlerMap = new HashMap<>();
         for (Direction facing : Direction.values())
         {
-            //TODO fluids
             fluidHandlerMap.put(facing, new IFluidHandler()
             {
                 @Override
@@ -126,7 +126,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public void load(CompoundTag compoundNBT)
+    public void load(@NotNull CompoundTag compoundNBT)
     {
         super.load(compoundNBT);
         for (final DistributorSide side : getSides())
@@ -136,7 +136,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public void saveAdditional(CompoundTag compoundNBT)
+    public void saveAdditional(@NotNull CompoundTag compoundNBT)
     {
         super.saveAdditional(compoundNBT);
         for (final DistributorSide side : getSides())
@@ -183,25 +183,8 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
                     getSides().get(sideId).reset(settingId);
                 }
             }
-            BlockState state = level.getBlockState(getBlockPos());
         }
     }
-
-    //TODO
-    //    @Nullable
-    //    @Override
-    //    public SUpdateTileEntityPacket getUpdatePacket()
-    //    {
-    //        return new SUpdateTileEntityPacket(getBlockPos(), -1, getUpdateTag());
-    //    }
-
-    //TODO
-    //    @Override
-    //    public CompoundTag getUpdateTag()
-    //    {
-    //        return save(new CompoundTag());
-    //    }
-
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
     {
@@ -261,6 +244,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
 
     private TileEntityManager generateManager(final int y)
     {
+        if(level == null) return null;
         final BlockEntity te = level.getBlockEntity(getBlockPos().offset(0, y, 0));
         if (te != null && te instanceof TileEntityManager)
         {
@@ -308,7 +292,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public ItemStack getItem(int slot)
+    public @NotNull ItemStack getItem(int slot)
     {
         final TileEntityManager manager = getManagerFromSlotId(slot);
         if (manager != null)
@@ -319,7 +303,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public ItemStack removeItem(int slot, int amount)
+    public @NotNull ItemStack removeItem(int slot, int amount)
     {
         final TileEntityManager manager = getManagerFromSlotId(slot);
         if (manager != null)
@@ -330,7 +314,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int slot)
+    public @NotNull ItemStack removeItemNoUpdate(int slot)
     {
         final TileEntityManager manager = getManagerFromSlotId(slot);
         if (manager != null)
@@ -341,7 +325,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public void setItem(int slot, ItemStack stack)
+    public void setItem(int slot, @NotNull ItemStack stack)
     {
         final TileEntityManager manager = getManagerFromSlotId(slot);
         if (manager != null)
@@ -351,7 +335,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public boolean stillValid(Player player)
+    public boolean stillValid(@NotNull Player player)
     {
         return true;
     }
@@ -442,9 +426,8 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
 
     private void populateTanks(final ArrayList<SCTank> tanks, final DistributorSide side, final TileEntityManager manager, final boolean top)
     {
-        if (manager != null && manager instanceof TileEntityLiquid)
+        if (manager instanceof final TileEntityLiquid fluid)
         {
-            final TileEntityLiquid fluid = (TileEntityLiquid) manager;
             final SCTank[] managerTanks = fluid.getTanks();
             for (int i = 0; i < 4; ++i)
             {
@@ -458,7 +441,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
 
     private void populateSlots(final ArrayList<Integer> slotchunks, final DistributorSide side, final TileEntityManager manager, final boolean top)
     {
-        if (manager != null && manager instanceof TileEntityCargo)
+        if (manager instanceof TileEntityCargo)
         {
             for (int i = 0; i < 4; ++i)
             {
@@ -475,7 +458,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public int[] getSlotsForFace(Direction direction)
+    public int[] getSlotsForFace(@NotNull Direction direction)
     {
         final TileEntityManager[] invs = getInventories();
         if (invs.length > 0)
@@ -516,13 +499,13 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int p_180462_1_, ItemStack p_180462_2_, @Nullable Direction p_180462_3_)
+    public boolean canPlaceItemThroughFace(int id, @NotNull ItemStack itemStack, @Nullable Direction direction)
     {
         return true;
     }
 
     @Override
-    public boolean canTakeItemThroughFace(int p_180461_1_, ItemStack p_180461_2_, Direction p_180461_3_)
+    public boolean canTakeItemThroughFace(int id, @NotNull ItemStack itemStack, @NotNull Direction direction)
     {
         return true;
     }
@@ -540,23 +523,17 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     {
         if (!this.remove && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
         {
-            switch (facing)
-            {
-                case UP:
-                    return handlers[0].cast();
-                case DOWN:
-                    return handlers[1].cast();
-                case NORTH:
-                    return handlers[2].cast();
-                case EAST:
-                    return handlers[3].cast();
-                case SOUTH:
-                    return handlers[4].cast();
-                case WEST:
-                    return handlers[5].cast();
-            }
+            return switch (facing)
+                    {
+                        case UP -> handlers[0].cast();
+                        case DOWN -> handlers[1].cast();
+                        case NORTH -> handlers[2].cast();
+                        case EAST -> handlers[3].cast();
+                        case SOUTH -> handlers[4].cast();
+                        case WEST -> handlers[5].cast();
+                    };
         }
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && hasAnyTank(facing))
+        if (capability == ForgeCapabilities.FLUID_HANDLER && hasAnyTank(facing))
         {
             return (LazyOptional<T>) LazyOptional.of(() -> fluidHandlerMap.get(facing));
         }
@@ -564,7 +541,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public Component getDisplayName()
+    public @NotNull Component getDisplayName()
     {
         return Component.literal("container.distributor");
     }
@@ -572,7 +549,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity)
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity)
     {
         return new ContainerDistributor(id, playerInventory, this, new SimpleContainerData(0));
     }

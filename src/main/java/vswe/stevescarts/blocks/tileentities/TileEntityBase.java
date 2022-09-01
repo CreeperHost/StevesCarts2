@@ -15,6 +15,7 @@ public abstract class TileEntityBase extends BlockEntity
 
     public boolean isUsableByPlayer(final Player player)
     {
+        if(level == null) return false;
         return level.getBlockEntity(getBlockPos()) == this;
     }
 
@@ -27,6 +28,7 @@ public abstract class TileEntityBase extends BlockEntity
         return (short) (val >> 16 & 0xFFFF);
     }
 
+    @SuppressWarnings("unused")
     public int getIntFromShort(final boolean first, int oldVal, final short val)
     {
         if (first)

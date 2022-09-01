@@ -11,8 +11,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.polylib.NBTHelper;
 import vswe.stevescarts.helpers.storages.TransferManager;
@@ -23,7 +25,7 @@ import javax.annotation.Nonnull;
 
 public abstract class TileEntityManager extends TileEntityBase implements Container
 {
-    private TransferManager standardTransferHandler;
+    private final TransferManager standardTransferHandler;
     private NonNullList<ItemStack> cargoItemStacks;
     public int layoutType;
     public int moveTime;
@@ -45,13 +47,13 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
     }
 
     @Override
-    public ItemStack getItem(int i)
+    public @NotNull ItemStack getItem(int i)
     {
         return cargoItemStacks.get(i);
     }
 
     @Override
-    public void setItem(int i, ItemStack itemstack)
+    public void setItem(int i, @NotNull ItemStack itemstack)
     {
         cargoItemStacks.set(i, itemstack);
         if (!itemstack.isEmpty() && itemstack.getCount() > getMaxStackSize())
@@ -68,10 +70,10 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
     }
 
     @Override
-    public void load(CompoundTag nbttagcompound)
+    public void load(@NotNull CompoundTag compoundTag)
     {
-        super.load(nbttagcompound);
-        final ListTag nbttaglist = nbttagcompound.getList("Items", NBTHelper.COMPOUND.getId());
+        super.load(compoundTag);
+        final ListTag nbttaglist = compoundTag.getList("Items", NBTHelper.COMPOUND.getId());
         cargoItemStacks = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
         for (int i = 0; i < nbttaglist.size(); ++i)
         {
@@ -82,15 +84,15 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
                 cargoItemStacks.set(byte0, ItemStack.of(nbttagcompound2));
             }
         }
-        moveTime = nbttagcompound.getByte("movetime");
-        setLowestSetting(nbttagcompound.getByte("lowestNumber"));
-        layoutType = nbttagcompound.getByte("layout");
-        final byte temp = nbttagcompound.getByte("tocart");
-        final byte temp2 = nbttagcompound.getByte("doReturn");
+        moveTime = compoundTag.getByte("movetime");
+        setLowestSetting(compoundTag.getByte("lowestNumber"));
+        layoutType = compoundTag.getByte("layout");
+        final byte temp = compoundTag.getByte("tocart");
+        final byte temp2 = compoundTag.getByte("doReturn");
         for (int j = 0; j < 4; ++j)
         {
-            amount[j] = nbttagcompound.getByte("amount" + j);
-            color[j] = nbttagcompound.getByte("color" + j);
+            amount[j] = compoundTag.getByte("amount" + j);
+            color[j] = compoundTag.getByte("color" + j);
             if (color[j] == 0)
             {
                 color[j] = j + 1;
@@ -101,18 +103,18 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbttagcompound)
+    public void saveAdditional(@NotNull CompoundTag compoundTag)
     {
-        super.saveAdditional(nbttagcompound);
-        nbttagcompound.putByte("movetime", (byte) moveTime);
-        nbttagcompound.putByte("lowestNumber", (byte) getLowestSetting());
-        nbttagcompound.putByte("layout", (byte) layoutType);
+        super.saveAdditional(compoundTag);
+        compoundTag.putByte("movetime", (byte) moveTime);
+        compoundTag.putByte("lowestNumber", (byte) getLowestSetting());
+        compoundTag.putByte("layout", (byte) layoutType);
         byte temp = 0;
         byte temp2 = 0;
         for (int i = 0; i < 4; ++i)
         {
-            nbttagcompound.putByte("amount" + i, (byte) amount[i]);
-            nbttagcompound.putByte("color" + i, (byte) color[i]);
+            compoundTag.putByte("amount" + i, (byte) amount[i]);
+            compoundTag.putByte("color" + i, (byte) color[i]);
             if (toCart[i])
             {
                 temp |= (byte) (1 << i);
@@ -122,8 +124,8 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
                 temp2 |= (byte) (1 << i);
             }
         }
-        nbttagcompound.putByte("tocart", temp);
-        nbttagcompound.putByte("doReturn", temp2);
+        compoundTag.putByte("tocart", temp);
+        compoundTag.putByte("doReturn", temp2);
         final ListTag nbttaglist = new ListTag();
         for (int j = 0; j < cargoItemStacks.size(); ++j)
         {
@@ -135,7 +137,7 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
                 nbttaglist.add(nbttagcompound2);
             }
         }
-        nbttagcompound.put("Items", nbttaglist);
+        compoundTag.put("Items", nbttaglist);
     }
 
     public EntityMinecartModular getCart()
@@ -153,6 +155,7 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
         return standardTransferHandler.getSetting();
     }
 
+    @SuppressWarnings("unused")
     public void setSetting(final int val)
     {
         standardTransferHandler.setSetting(val);
@@ -173,6 +176,7 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
         return standardTransferHandler.getLastSetting();
     }
 
+    @SuppressWarnings("unused")
     public void setLastSetting(final int val)
     {
         standardTransferHandler.setLastSetting(val);
@@ -384,6 +388,7 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
         return moveTime * i / 24;
     }
 
+    @SuppressWarnings("unused")
     @Nonnull
     public ItemStack getStackInSlotOnClosing(final int par1)
     {
@@ -427,13 +432,13 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
     }
 
     @Override
-    public ItemStack removeItem(int p_70298_1_, int p_70298_2_)
+    public @NotNull ItemStack removeItem(int id, int amount)
     {
-        return ContainerHelper.removeItem(cargoItemStacks, p_70298_1_, p_70298_2_);
+        return ContainerHelper.removeItem(cargoItemStacks, id, amount);
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int id)
+    public @NotNull ItemStack removeItemNoUpdate(int id)
     {
         return ItemStack.EMPTY;
     }
@@ -456,10 +461,10 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap)
     {
         //TODO
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-        {
-            //			return LazyOptional.of(new InvWrapper(this));
-        }
+//        if (cap == ForgeCapabilities.ITEM_HANDLER)
+//        {
+//            return LazyOptional.of(new InvWrapper(this));
+//        }
         return super.getCapability(cap);
     }
 }
