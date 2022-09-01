@@ -114,15 +114,6 @@ public class StevesCartsDataGenerators
 
 //            ModBlocks.CHARGERS.forEach((chargerTypes, blockSupplier) -> registerDefaultItemBlockModel(blockSupplier.get()));
 //            ModBlocks.POWER_CELLS.forEach((chargerTypes, blockSupplier) -> registerDefaultItemBlockModel(blockSupplier.get()));
-//
-//            ModItems.BATTERIES.forEach((batteryTypes, itemSupplier) -> singleTexture(getResourceLocation(itemSupplier.get()).getPath(),
-//                    mcLoc("item/generated"), "layer0", modLoc("item/" + batteryTypes.getName())));
-//
-//            ModItems.DRILL_BIT_TYPES.forEach((batteryTypes, itemSupplier) -> singleTexture(getResourceLocation(itemSupplier.get()).getPath(),
-//                    mcLoc("item/generated"), "layer0", modLoc("item/" + batteryTypes.getName())));
-//
-//            ModItems.DRILL_HANDLE_TYPES.forEach((batteryTypes, itemSupplier) -> singleTexture(getResourceLocation(itemSupplier.get()).getPath(),
-//                    mcLoc("item/generated"), "layer0", modLoc("item/drill_handle")));
         }
 
         public void registerDefaultItemBlockModel(Block block)
@@ -148,46 +139,9 @@ public class StevesCartsDataGenerators
         @Override
         protected void addTranslations()
         {
-//            addBlock(ModBlocks.CHARGERS.get(ChargerTypes.BASIC), "Basic Charger");
-//            addBlock(ModBlocks.CHARGERS.get(ChargerTypes.ADVANCED), "Advanced Charger");
-//            addBlock(ModBlocks.CHARGERS.get(ChargerTypes.ULTIMATE), "Ultimate Charger");
-//            addBlock(ModBlocks.CHARGERS.get(ChargerTypes.CREATIVE), "Creative Charger");
-//
-//            addBlock(ModBlocks.POWER_CELLS.get(PowerCellTypes.BASIC), "Basic Energy cell");
-//            addBlock(ModBlocks.POWER_CELLS.get(PowerCellTypes.ADVANCED), "Advanced Energy cell");
-//            addBlock(ModBlocks.POWER_CELLS.get(PowerCellTypes.ULTIMATE), "Ultimate Energy cell");
-//            addBlock(ModBlocks.POWER_CELLS.get(PowerCellTypes.CREATIVE), "Creative Energy cell");
-//
-//            addItem(ModItems.DRILL_BIT_TYPES.get(DrillBitTypes.IRON), "Iron Drill bit");
-//            addItem(ModItems.DRILL_BIT_TYPES.get(DrillBitTypes.GOLD), "Gold Drill bit");
-//            addItem(ModItems.DRILL_BIT_TYPES.get(DrillBitTypes.DIAMOND), "Diamond Drill bit");
-//            addItem(ModItems.DRILL_BIT_TYPES.get(DrillBitTypes.NETHERITE), "Netherite Drill bit");
-//
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.WHITE), "White Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.ORANGE), "Orange Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.MAGENTA), "Magenta Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.LIGHT_BLUE), "Light Blue Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.YELLOW), "Yellow Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.LIME), "Lime Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.PINK), "Pink Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.GRAY), "Gray Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.LIGHT_GRAY), "Light Gray Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.CYAN), "Cyan Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.PURPLE), "Purple Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.BLUE), "Blue Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.BROWN), "Brown Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.GREEN), "Green Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.RED), "Red Drill handle");
-//            addItem(ModItems.DRILL_HANDLE_TYPES.get(DyeColor.BLACK), "Black Drill handle");
-//
-//
-//            add("itemGroup.techmod", "Tech-Mod");
-//            add("screen.techmod.energy", "Energy: %s/%s FE");
-//            add("screen.techmod.no_fuel", "Fuel source empty");
-//            add("screen.techmod.burn_time", "Burn time left: %ss");
-//            add("item.techmod.basic_battery", "Basic Battery");
-//            add("item.techmod.advanced_battery", "Advanced Battery");
-//            add("item.techmod.ultimate_battery", "Ultimate Battery");
+            add("itemGroup.SC2Modules", "Steve's Carts 2 Modules");
+            add("itemGroup.SC2Items", "Steve's Carts 2 Components");
+            add("itemGroup.SC2Blocks", "Steve's Carts 2 Blocks");
         }
     }
 
@@ -218,7 +172,7 @@ public class StevesCartsDataGenerators
                 return LootPool.lootPool().name(RegistryNameHelper.getRegistryName(block).get().toString())
                         .setRolls(ConstantValue.exactly(1)).when(ExplosionCondition.survivesExplosion())
                         .add(LootItem.lootTableItem(block)
-                                .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY)));
+                        .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY)));
 
             }
 
@@ -248,16 +202,6 @@ public class StevesCartsDataGenerators
         @Override
         protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> consumer)
         {
-//            Block block = ModBlocks.CHARGERS.get(ChargerTypes.BASIC).get();
-//            ShapedRecipeBuilder.shaped(block)
-//                    .define('i', Tags.Items.INGOTS_IRON)
-//                    .define('r', Tags.Items.DUSTS_REDSTONE)
-//                    .define('l', Tags.Items.STORAGE_BLOCKS_COAL)
-//                    .define('d', Tags.Items.GEMS_LAPIS)
-//                    .pattern("iri")
-//                    .pattern("drd")
-//                    .pattern("ili")
-//                    .unlockedBy("has_diamonds", has(Tags.Items.GEMS_DIAMOND)).save(consumer);
         }
     }
 

@@ -3,7 +3,6 @@
     "itemGroup.SC2Items": "Steve's Carts 2 Components",
     "itemGroup.SC2Blocks": "Steve's Carts 2 Blocks",
     "entity.stevescarts.modular_cart":"Modular Cart",
-    "entity.Villager.sc_santa": "Santa",
     "gui.stevescarts.cartAssembler": "Cart Assembler",
     "gui.stevescarts.basicAssembleInstruction": "To start making a cart, please add a Cart Hull of your choice to the Hull Slot.",
     "gui.stevescarts.invalidHullError": "The Cart Hull added to the Hull Slot is not a valid Hull. This should not be possible so you've probably done something strange.",
