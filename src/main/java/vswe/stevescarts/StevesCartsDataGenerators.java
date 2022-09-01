@@ -77,8 +77,9 @@ public class StevesCartsDataGenerators
         @Override
         protected void registerStatesAndModels()
         {
-//            ModBlocks.CHARGERS.forEach((chargerTypes, blockSupplier) -> registerSidedBlock(blockSupplier.get(), "charger"));
-//            ModBlocks.POWER_CELLS.forEach((chargerTypes, blockSupplier) -> registerSidedBlock(blockSupplier.get(), "power_cell"));
+            simpleBlock(ModBlocks.ENHANCED_GALGADORIAN_METAL.get(), new ModelFile.UncheckedModelFile(modLoc("block/enhanced_galgadorian_block")));
+            simpleBlock(ModBlocks.REINFORCED_METAL.get(), new ModelFile.UncheckedModelFile(modLoc("block/reinforced_metal_block")));
+            simpleBlock(ModBlocks.GALGADORIAN_METAL.get(), new ModelFile.UncheckedModelFile(modLoc("block/galgadorian_block")));
         }
 
         public void registerSidedBlock(Block block, String folder)
@@ -139,9 +140,9 @@ public class StevesCartsDataGenerators
         @Override
         protected void addTranslations()
         {
-            add("itemGroup.SC2Modules", "Steve's Carts 2 Modules");
-            add("itemGroup.SC2Items", "Steve's Carts 2 Components");
-            add("itemGroup.SC2Blocks", "Steve's Carts 2 Blocks");
+//            add("itemGroup.SC2Modules", "Steve's Carts 2 Modules");
+//            add("itemGroup.SC2Items", "Steve's Carts 2 Components");
+//            add("itemGroup.SC2Blocks", "Steve's Carts 2 Blocks");
         }
     }
 
