@@ -1,0 +1,4 @@
+// 1.19.2	2022-09-01T11:41:37.1541525	Tags for minecraft:block
+57edb3284d24cccd89bcf3ed9807f3e2f040c905 data/minecraft/tags/blocks/beacon_base_blocks.json
+bebf41cd5d946db912a298674673c849d38e8032 data/minecraft/tags/blocks/mineable/pickaxe.json
+69c73d785bf2cc28f49437e29c483b3e803729e2 data/minecraft/tags/blocks/rails.json

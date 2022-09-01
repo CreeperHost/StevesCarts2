@@ -329,7 +329,6 @@ public class ModuleData
         return name;
     }
 
-    @Deprecated(forRemoval = true)
     public static NonNullList<ItemStack> getModularItems(@Nonnull ItemStack cart)
     {
         final NonNullList<ItemStack> modules = NonNullList.create();
