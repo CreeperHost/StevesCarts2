@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "stevescarts:block/reinforced_metal_block"
+      "model": "stevescarts:block/storage_reinforced_metal"
     }
   }
 }

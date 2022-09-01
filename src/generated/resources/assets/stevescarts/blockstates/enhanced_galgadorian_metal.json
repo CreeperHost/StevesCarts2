@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "stevescarts:block/enhanced_galgadorian_block"
+      "model": "stevescarts:block/storage_enhanced_galgadorian"
     }
   }
 }

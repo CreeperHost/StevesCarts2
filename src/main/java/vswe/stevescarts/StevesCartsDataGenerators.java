@@ -77,9 +77,9 @@ public class StevesCartsDataGenerators
         @Override
         protected void registerStatesAndModels()
         {
-            simpleBlock(ModBlocks.ENHANCED_GALGADORIAN_METAL.get(), new ModelFile.UncheckedModelFile(modLoc("block/enhanced_galgadorian_block")));
-            simpleBlock(ModBlocks.REINFORCED_METAL.get(), new ModelFile.UncheckedModelFile(modLoc("block/reinforced_metal_block")));
-            simpleBlock(ModBlocks.GALGADORIAN_METAL.get(), new ModelFile.UncheckedModelFile(modLoc("block/galgadorian_block")));
+            simpleBlock(ModBlocks.ENHANCED_GALGADORIAN_METAL.get(), new ModelFile.UncheckedModelFile(modLoc("block/storage_enhanced_galgadorian")));
+            simpleBlock(ModBlocks.REINFORCED_METAL.get(), new ModelFile.UncheckedModelFile(modLoc("block/storage_reinforced_metal")));
+            simpleBlock(ModBlocks.GALGADORIAN_METAL.get(), new ModelFile.UncheckedModelFile(modLoc("block/storage_galgadorian")));
         }
 
         public void registerSidedBlock(Block block, String folder)
