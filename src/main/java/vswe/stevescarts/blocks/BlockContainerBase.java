@@ -1,5 +1,8 @@
 package vswe.stevescarts.blocks;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -35,5 +38,18 @@ public abstract class BlockContainerBase extends BaseEntityBlock
                 tile.tick();
             }
         };
+    }
+
+    @Override
+    public void onRemove(@NotNull BlockState blockState, @NotNull Level level, @NotNull BlockPos blockPos, @NotNull BlockState blockState2, boolean b)
+    {
+        if(blockState != blockState2)
+        {
+            if (level.getBlockEntity(blockPos) != null && level.getBlockEntity(blockPos) instanceof Container container)
+            {
+                Containers.dropContents(level, blockPos, container);
+            }
+        }
+        super.onRemove(blockState, level, blockPos, blockState2, b);
     }
 }

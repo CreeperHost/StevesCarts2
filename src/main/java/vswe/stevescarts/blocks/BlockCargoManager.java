@@ -34,7 +34,7 @@ public class BlockCargoManager extends BlockContainerBase
     }
 
     @Override
-    public void onRemove(@NotNull BlockState blockState1, Level world, @NotNull BlockPos blockPos, @NotNull BlockState blockState, boolean p_196243_5_)
+    public void onRemove(@NotNull BlockState blockState1, @NotNull Level world, @NotNull BlockPos blockPos, @NotNull BlockState blockState, boolean p_196243_5_)
     {
         final TileEntityCargo tile = (TileEntityCargo) world.getBlockEntity(blockPos);
         if (tile != null)
