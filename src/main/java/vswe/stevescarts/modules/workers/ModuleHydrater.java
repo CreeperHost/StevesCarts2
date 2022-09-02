@@ -33,9 +33,9 @@ public class ModuleHydrater extends ModuleWorker
         super.init();
         for (final ModuleBase module : getCart().getModules())
         {
-            if (module instanceof ModuleFarmer)
+            if (module instanceof ModuleFarmer moduleFarmer)
             {
-                range = ((ModuleFarmer) module).getExternalRange();
+                range = moduleFarmer.getExternalRange();
                 break;
             }
         }

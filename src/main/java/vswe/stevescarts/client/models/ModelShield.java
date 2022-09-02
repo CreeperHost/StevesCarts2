@@ -22,11 +22,13 @@ public class ModelShield extends ModelCartbase
 
         for (int i = 0; i < 4; i++)
         {
-            modelPartData.addOrReplaceChild("shieldAnchor" + i, CubeListBuilder.create().texOffs(0, 0)
-                            .addBox(-1.0f, -1.0f, -1.0f, 2, 2, 2),
-                    PartPose.offset(0.0f, 0.0f, 0.0f));
+            for (int j = 0; j < 5; j++)
+            {
+                modelPartData.addOrReplaceChild("shield" + i + j, CubeListBuilder.create().texOffs(0, 0)
+                        .addBox(-1.0f, -1.0f, -1.0f, 2, 2, 2),
+                        PartPose.offset(0.0f, 0.0f, 0.0f));
+            }
         }
-
 
         return LayerDefinition.create(modelData, 8, 4);
     }
