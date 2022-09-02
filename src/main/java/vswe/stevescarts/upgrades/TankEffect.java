@@ -115,7 +115,7 @@ public abstract class TankEffect extends InventoryEffect
     @Override
     public void save(final TileEntityUpgrade upgrade, final CompoundTag compound)
     {
-        if (upgrade.tank.getFluid() == null)
+        if (upgrade.tank.getFluid().isEmpty())
         {
             compound.putByte("Exists", (byte) 0);
         }
