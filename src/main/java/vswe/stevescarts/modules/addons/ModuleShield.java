@@ -75,12 +75,14 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
             shieldDistance -= 0.25f;
             if (shieldDistance <= 0.0f)
             {
+                setShieldStatus(false);
                 shield = false;
             }
         }
         else if (getShieldStatus() && shieldDistance < 18.0f)
         {
             shieldDistance += 0.25f;
+            setShieldStatus(true);
             shield = true;
         }
         if (shield)
