@@ -2,6 +2,7 @@ package vswe.stevescarts.client.models.workers.tools;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -120,6 +121,7 @@ public class ModelFarmer extends ModelCartbase
     {
         poseStack.pushPose();
         poseStack.scale(0.5F, 0.5F, 0.5F);
+        poseStack.mulPose(Quaternion.fromXYZ(0, 15.7f, 0));
         super.renderToBuffer(poseStack, vertexConsumers, light, overlay, red, green, blue, alpha);
         poseStack.popPose();
     }
