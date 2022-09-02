@@ -35,8 +35,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RailBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.HitResult;
@@ -48,6 +50,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -234,14 +237,13 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         {
             final Class<? extends ModuleBase> moduleClass = moduleData.getModuleClass();
             final Constructor<? extends ModuleBase> moduleConstructor = moduleClass.getConstructor(EntityMinecartModular.class);
-            final Object moduleObject = moduleConstructor.newInstance(this);
-            final ModuleBase module = (ModuleBase) moduleObject;
+            final ModuleBase module = moduleConstructor.newInstance(this);
             module.setModuleId(moduleData.getID());
             modules.add(module);
         }
         catch (Exception e)
         {
-            System.out.println("Failed to load module with ID " + moduleData.getID() + "! More info below.");
+            StevesCarts.LOGGER.error("Failed to load module with ID " + moduleData.getID() + "! More info below.");
             e.printStackTrace();
         }
     }
@@ -269,7 +271,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     {
         if (!isPlaceholder)
         {
-            System.out.println("You're stupid! This is not a placeholder cart.");
+            StevesCarts.LOGGER.error("You're stupid! This is not a placeholder cart.");
         }
         else
         {
@@ -372,8 +374,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                         if (line.width + module3.guiWidth() <= MODULAR_SPACE_WIDTH)
                         {
                             module3.setX(line.width);
-                            final GuiAllocationHelper guiAllocationHelper = line;
-                            guiAllocationHelper.width += module3.guiWidth();
+                            line.width += module3.guiWidth();
                             line.maxHeight = Math.max(line.maxHeight, module3.guiHeight());
                             line.modules.add(module3);
                             foundLine = true;
@@ -571,13 +572,13 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public Type getMinecartType()
+    public @NotNull Type getMinecartType()
     {
         return Type.RIDEABLE;
     }
 
     @Override
-    public HitResult pick(double p_19908_, float p_19909_, boolean p_19910_)
+    public @NotNull HitResult pick(double p_19908_, float p_19909_, boolean p_19910_)
     {
         return super.pick(p_19908_, p_19909_, p_19910_);
     }
@@ -804,7 +805,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         }
 
         //If the cart is not disabled and there is not a track in front of the cart make it turn back
-        if(!isDisabled() && !RailBlock.isRail(level, pos.relative(getMotionDirection())) && !RailBlock.isRail(level, pos.relative(getMotionDirection()).below()))
+        if(!isDisabled() && !isCorner(pos) && !RailBlock.isRail(level, pos.relative(getMotionDirection())) && !RailBlock.isRail(level, pos.relative(getMotionDirection()).below()))
         {
             //TODO make sure the Module can work before doing turning around...
             if(!hasModule(ModuleRailer.class))
@@ -812,6 +813,17 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 turnback();
             }
         }
+    }
+
+    public boolean isCorner(BlockPos blockPos)
+    {
+        if(level.getBlockState(blockPos).getBlock() == Blocks.RAIL)
+        {
+            RailShape value = level.getBlockState(blockPos).getValue(RailBlock.SHAPE);
+            return value == RailShape.NORTH_EAST || value == RailShape.NORTH_WEST || value == RailShape.SOUTH_WEST || value == RailShape.SOUTH_EAST;
+        }
+
+        return false;
     }
 
     public RailShape getRailDirection(final BlockPos pos)
@@ -1083,7 +1095,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         if (blockState.getBlock() instanceof BaseRailBlock)
         {
             RailShape railshape = ((BaseRailBlock) blockState.getBlock()).getRailDirection(blockState, this.level, getExactPosition().below(), this);
-            if (railshape != null && blockState.getBlock() != ModBlocks.JUNCTION.get())
+            if (blockState.getBlock() != ModBlocks.JUNCTION.get())
             {
                 lastRailShape = railshape;
             }
@@ -1160,18 +1172,18 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public @NotNull InteractionResult interactAt(@NotNull Player entityplayer, @NotNull Vec3 vec, @NotNull InteractionHand hand)
+    public @NotNull InteractionResult interactAt(@NotNull Player player, @NotNull Vec3 vec, @NotNull InteractionHand hand)
     {
         if (isPlaceholder)
         {
             return InteractionResult.FAIL;
         }
-        if (modules != null && !entityplayer.isCrouching())
+        if (modules != null && !player.isCrouching())
         {
             boolean interupt = false;
             for (final ModuleBase module : modules)
             {
-                if (module.onInteractFirst(entityplayer))
+                if (module.onInteractFirst(player))
                 {
                     interupt = true;
                 }
@@ -1183,7 +1195,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         }
         if (!level.isClientSide)
         {
-            NetworkHooks.openScreen((ServerPlayer) entityplayer, (MenuProvider) this, packetBuffer -> packetBuffer.writeInt(getId()));
+            NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) this, packetBuffer -> packetBuffer.writeInt(getId()));
         }
         return InteractionResult.SUCCESS;
     }
@@ -1194,10 +1206,12 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         return Component.translatable("entity.minecart");
     }
 
+    @SuppressWarnings("unused")
     public void loadChunks()
     {
     }
 
+    @SuppressWarnings("unused")
     public void loadChunks(final int chunkX, final int chunkZ)
     {
     }
@@ -1278,15 +1292,15 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     {
         for (final ModuleBase module : modules)
         {
-            if (module instanceof final IActivatorModule iactivator && option.getModule().isAssignableFrom(module.getClass()))
+            if (module instanceof final IActivatorModule activator && option.getModule().isAssignableFrom(module.getClass()))
             {
                 if (option.shouldActivate(isOrange))
                 {
-                    iactivator.doActivate(option.getId());
+                    activator.doActivate(option.getId());
                 }
                 else if (option.shouldDeactivate(isOrange))
                 {
-                    iactivator.doDeActivate(option.getId());
+                    activator.doDeActivate(option.getId());
                 }
                 else
                 {
@@ -1294,19 +1308,20 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                     {
                         continue;
                     }
-                    if (iactivator.isActive(option.getId()))
+                    if (activator.isActive(option.getId()))
                     {
-                        iactivator.doDeActivate(option.getId());
+                        activator.doDeActivate(option.getId());
                     }
                     else
                     {
-                        iactivator.doActivate(option.getId());
+                        activator.doActivate(option.getId());
                     }
                 }
             }
         }
     }
 
+    @SuppressWarnings("unused")
     public ArrayList<String> getLabel()
     {
         final ArrayList<String> label = new ArrayList<>();
@@ -1382,10 +1397,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 final ModuleData data = module.getData();
                 if (data.haveRemovedModels())
                 {
-                    for (final String remove : data.getRemovedModels())
-                    {
-                        invalid.add(remove);
-                    }
+                    invalid.addAll(data.getRemovedModels());
                 }
             }
             for (int i = modules.size() - 1; i >= 0; --i)
@@ -1547,8 +1559,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             {
                 final int tempAmount = tankModules.get(i).fill(fluid, action);
                 amount += tempAmount;
-                final FluidStack fluidStack = fluid;
-                fluidStack.shrink(tempAmount);
+                fluid.shrink(tempAmount);
                 if (fluid.getAmount() <= 0)
                 {
                     break;
@@ -1578,8 +1589,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 }
                 else
                 {
-                    final FluidStack fluidStack = ret;
-                    fluidStack.grow(temp.getAmount());
+                    ret.grow(temp.getAmount());
                 }
                 maxDrain -= temp.getAmount();
                 if (maxDrain <= 0)
@@ -1615,7 +1625,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                     {
                         break;
                     }
-                    continue;
                 }
             }
         }
@@ -1654,11 +1663,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     {
         public int get(int id)
         {
-            switch (id)
-            {
-                default:
-                    throw new IllegalArgumentException("Invalid index: " + id);
-            }
+            throw new IllegalArgumentException("Invalid index: " + id);
         }
 
         public void set(int p_221477_1_, int p_221477_2_)

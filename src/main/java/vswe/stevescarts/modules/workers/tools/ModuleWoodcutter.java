@@ -129,13 +129,11 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
 
     private void dropItemByMultiplierChance(List<ItemStack> items, @Nonnull ItemStack item, int percentage)
     {
-        int drop = 0;
         while (percentage > 0)
         {
             if (getCart().random.nextInt(100) < percentage)
             {
                 items.add(item.copy());
-                ++drop;
             }
             percentage -= 100;
         }
@@ -198,14 +196,12 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         {
             return false;
         }
-        int saplingSlotId = -1;
         @Nonnull ItemStack sapling = ItemStack.EMPTY;
         for (int i = 0; i < getInventorySize(); ++i)
         {
             final SlotBase slot = getSlots().get(i);
             if (slot.containsValidItem())
             {
-                saplingSlotId = i;
                 sapling = getStack(i);
                 break;
             }
