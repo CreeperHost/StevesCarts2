@@ -118,7 +118,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public Packet<?> getAddEntityPacket()
+    public @NotNull Packet<?> getAddEntityPacket()
     {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
@@ -477,18 +477,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         {
             if (!isDisabled())
             {
-                if (!engineFlag)
-                {
-                    if (temppushX != 0.0 && temppushZ != 0.0)
-                    {
-//                        setDeltaMovement(temppushX, 0, temppushZ);
-                    }
-                    else
-                    {
-//                        this.setDeltaMovement(getMaxCartSpeedOnRail(), 0, getMaxCartSpeedOnRail());
-                    }
-                    engineFlag = true;
-                }
                 if (getDeltaMovement().x == 0 && getDeltaMovement().z == 0)
                 {
                     this.setDeltaMovement(getMaxCartSpeedOnRail(), 0, getMaxCartSpeedOnRail());
@@ -805,12 +793,12 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         }
 
         //If the cart is not disabled and there is not a track in front of the cart make it turn back
-        if(!isDisabled() && !isCorner(pos) && !RailBlock.isRail(level, pos.relative(getMotionDirection())) && !RailBlock.isRail(level, pos.relative(getMotionDirection()).below()))
+        if(!isDisabled() && !isCorner(pos.below()) && !RailBlock.isRail(level, pos.relative(getMotionDirection())) && !RailBlock.isRail(level, pos.relative(getMotionDirection()).below()))
         {
             //TODO make sure the Module can work before doing turning around...
             if(!hasModule(ModuleRailer.class))
             {
-                turnback();
+//                turnback();
             }
         }
     }
@@ -820,7 +808,10 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         if(level.getBlockState(blockPos).getBlock() == Blocks.RAIL)
         {
             RailShape value = level.getBlockState(blockPos).getValue(RailBlock.SHAPE);
-            return value == RailShape.NORTH_EAST || value == RailShape.NORTH_WEST || value == RailShape.SOUTH_WEST || value == RailShape.SOUTH_EAST;
+            if(value == RailShape.NORTH_EAST) return true;
+            if(value == RailShape.NORTH_WEST) return true;
+            if(value == RailShape.SOUTH_WEST) return true;
+            if(value == RailShape.SOUTH_EAST) return true;
         }
 
         return false;
