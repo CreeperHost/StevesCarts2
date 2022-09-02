@@ -13,8 +13,4 @@ public class Constants
     public static boolean hasGreenScreen = false;
     public static boolean freezeCartSimulation = false;
     public static boolean arcadeDevOperator = false;
-
-    public static final TagKey<Block> ORE = BlockTags.create(new ResourceLocation("forge:ores"));
-    public static final TagKey<Item> SEEDS = ItemTags.create(new ResourceLocation("forge:seeds"));
-
 }

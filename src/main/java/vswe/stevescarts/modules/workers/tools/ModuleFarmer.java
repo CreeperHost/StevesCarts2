@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.common.IPlantable;
-import vswe.stevescarts.Constants;
+import net.minecraftforge.common.Tags;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.farms.ICropModule;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -100,7 +100,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
             return super.getSlot(slotId, x, y);
         }
         --x;
-        return new SlotSeed(getCart(), this, slotId, 8 + x * 18, 28 + y * 18);
+        return new SlotSeed(getCart(), slotId, 8 + x * 18, 28 + y * 18);
     }
 
     @Override
@@ -156,7 +156,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
             {
                 if (!getStack(i).isEmpty() && isSeedValidHandler(getStack(i)))
                 {
-                    BlockState cropblock = getCropFromSeedHandler(getStack(i), world, pos);
+                    BlockState cropblock = getCropFromSeedHandler(getStack(i));
                     if (cropblock != null && cropblock.getBlock() instanceof IPlantable && world.getBlockState(pos.above()).isAir() && soilblock.canSustainPlant(soilState, world, pos, Direction.UP, (IPlantable) cropblock.getBlock()))
                     {
                         hasSeeds = i;
@@ -172,7 +172,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
                     return true;
                 }
                 stopWorking();
-                BlockState cropblock2 = getCropFromSeedHandler(getStack(hasSeeds), world, pos);
+                BlockState cropblock2 = getCropFromSeedHandler(getStack(hasSeeds));
                 world.setBlock(pos.above(), cropblock2, 3);
                 ItemStack stack = getStack(hasSeeds);
                 stack.shrink(1);
@@ -231,27 +231,24 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
 
     public boolean isSeedValidHandler(@Nonnull ItemStack seed)
     {
-        return seed.is(Constants.SEEDS);
+        return seed.is(Tags.Items.SEEDS) || seed.is(Tags.Items.CROPS);
     }
 
-    protected BlockState getCropFromSeedHandler(@Nonnull ItemStack seed, Level world, BlockPos pos)
+    protected BlockState getCropFromSeedHandler(@Nonnull ItemStack seed)
     {
         Block cropBlock = Block.byItem(seed.getItem());
         if (cropBlock == null) return null;
-        if (cropBlock instanceof CropBlock)
+        if (cropBlock instanceof CropBlock cropsBlock)
         {
-            CropBlock cropsBlock = (CropBlock) cropBlock;
             return cropsBlock.defaultBlockState();
-
         }
         return null;
     }
 
     protected boolean isReadyToHarvestHandler(Level world, BlockPos pos)
     {
-        if (world.getBlockState(pos) != null && world.getBlockState(pos).getBlock() instanceof CropBlock)
+        if (world.getBlockState(pos).getBlock() instanceof CropBlock cropsBlock)
         {
-            CropBlock cropsBlock = (CropBlock) world.getBlockState(pos).getBlock();
             return cropsBlock.isMaxAge(world.getBlockState(pos));
         }
         return false;

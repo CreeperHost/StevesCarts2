@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.Tags;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.entitys.EntityMinecartModular;
 import vswe.stevescarts.modules.workers.tools.ModuleDrill;
@@ -68,6 +69,6 @@ public class ModuleOreTracker extends ModuleAddon
         {
             return false;
         }
-        return state.is(Constants.ORE);
+        return state.is(Tags.Blocks.ORES);
     }
 }
