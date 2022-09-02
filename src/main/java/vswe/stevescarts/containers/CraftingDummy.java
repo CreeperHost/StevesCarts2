@@ -2,11 +2,12 @@ package vswe.stevescarts.containers;
 
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.modules.addons.ModuleCrafter;
 
 public class CraftingDummy extends CraftingContainer
 {
-    private ModuleCrafter module;
+    private final ModuleCrafter module;
 
     public CraftingDummy(final ModuleCrafter module)
     {
@@ -21,13 +22,13 @@ public class CraftingDummy extends CraftingContainer
     }
 
     @Override
-    public ItemStack getItem(int id)
+    public @NotNull ItemStack getItem(int id)
     {
         return (id >= getContainerSize()) ? ItemStack.EMPTY : module.getStack(id);
     }
 
     @Override
-    public void setItem(int id, ItemStack itemStack)
+    public void setItem(int id, @NotNull ItemStack itemStack)
     {
     }
 }
