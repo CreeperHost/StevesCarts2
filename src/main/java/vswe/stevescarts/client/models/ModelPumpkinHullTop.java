@@ -5,8 +5,8 @@ import vswe.stevescarts.api.modules.ModuleBase;
 
 public class ModelPumpkinHullTop extends ModelHullTop
 {
-    private ResourceLocation resourceactive;
-    private ResourceLocation resourceidle;
+    private final ResourceLocation resourceactive;
+    private final ResourceLocation resourceidle;
 
     @Override
     public ResourceLocation getResource(final ModuleBase module)

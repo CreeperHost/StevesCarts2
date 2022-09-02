@@ -5,8 +5,8 @@ import vswe.stevescarts.api.modules.ModuleBase;
 
 public class ModelPumpkinHull extends ModelHull
 {
-    private ResourceLocation resourceactive;
-    private ResourceLocation resourceidle;
+    private final ResourceLocation resourceactive;
+    private final ResourceLocation resourceidle;
 
     @Override
     public ResourceLocation getResource(final ModuleBase module)
@@ -23,9 +23,7 @@ public class ModelPumpkinHull extends ModelHull
 
     private boolean isActive(final ModuleBase module)
     {
-        //TODO
-        //		final long time = module.getCart().level.getWorldInfo().getWorldTime() % 24000L;
-        //		return time >= 12000L && time <= 18000L;
-        return false;
+        final long time = module.getCart().level.getLevelData().getGameTime() % 24000L;
+        return time >= 12000L && time <= 18000L;
     }
 }
