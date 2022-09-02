@@ -1,7 +1,8 @@
-package vswe.stevescarts.modules.addons;
+package vswe.stevescarts.containers;
 
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.modules.addons.ModuleCrafter;
 
 public class CraftingDummy extends CraftingContainer
 {

@@ -50,9 +50,8 @@ public class PacketFluidSync
                     ClientLevel clientWorld = Minecraft.getInstance().level;
                     if (clientWorld != null)
                     {
-                        if (clientWorld.getBlockEntity(msg.pos) != null && clientWorld.getBlockEntity(msg.pos) instanceof TileEntityLiquid)
+                        if (clientWorld.getBlockEntity(msg.pos) != null && clientWorld.getBlockEntity(msg.pos) instanceof TileEntityLiquid tileEntity)
                         {
-                            TileEntityLiquid tileEntity = (TileEntityLiquid) clientWorld.getBlockEntity(msg.pos);
                             tileEntity.tanks[msg.tankID].setFluid(msg.fluidStack);
                         }
                     }

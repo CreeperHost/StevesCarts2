@@ -34,9 +34,8 @@ public class PacketMinecartTurn
             {
                 Level world = ctx.get().getSender().getLevel();
                 if (world.getEntity(msg.cartID) == null) return;
-                if (world.getEntity(msg.cartID) instanceof EntityMinecartModular)
+                if (world.getEntity(msg.cartID) instanceof EntityMinecartModular entityMinecartModular)
                 {
-                    EntityMinecartModular entityMinecartModular = (EntityMinecartModular) world.getEntity(msg.cartID);
                     entityMinecartModular.turnback();
                 }
             });

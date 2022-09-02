@@ -43,9 +43,8 @@ public class PacketCreateCart
                 if (msg.blockPos != null && world.getBlockEntity(msg.blockPos) != null)
                 {
                     BlockPos blockPos = msg.blockPos;
-                    if (world.isLoaded(blockPos) && world.getBlockEntity(blockPos) instanceof TileEntityCartAssembler)
+                    if (world.isLoaded(blockPos) && world.getBlockEntity(blockPos) instanceof TileEntityCartAssembler tileEntityCartAssembler)
                     {
-                        TileEntityCartAssembler tileEntityCartAssembler = (TileEntityCartAssembler) world.getBlockEntity(blockPos);
                         tileEntityCartAssembler.receivePacket(msg.id, msg.data, ctx.get().getSender());
                     }
                 }

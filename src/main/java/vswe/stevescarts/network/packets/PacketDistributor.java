@@ -43,9 +43,8 @@ public class PacketDistributor
                 if (msg.blockPos != null)
                 {
                     BlockPos blockPos = msg.blockPos;
-                    if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof TileEntityDistributor)
+                    if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof TileEntityDistributor tileEntityDistributor)
                     {
-                        TileEntityDistributor tileEntityDistributor = (TileEntityDistributor) world.getBlockEntity(blockPos);
                         tileEntityDistributor.receivePacket(msg.id, msg.array, ctx.get().getSender());
                     }
                 }

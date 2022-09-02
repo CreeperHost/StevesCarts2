@@ -11,6 +11,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
+import vswe.stevescarts.containers.CraftingDummy;
 import vswe.stevescarts.containers.slots.SlotCartCrafter;
 import vswe.stevescarts.containers.slots.SlotCartCrafterResult;
 import vswe.stevescarts.entitys.EntityMinecartModular;

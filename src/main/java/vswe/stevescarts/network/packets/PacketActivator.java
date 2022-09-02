@@ -43,9 +43,8 @@ public class PacketActivator
                 if (msg.blockPos != null)
                 {
                     BlockPos blockPos = msg.blockPos;
-                    if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof TileEntityActivator)
+                    if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof TileEntityActivator tileEntityActivator)
                     {
-                        TileEntityActivator tileEntityActivator = (TileEntityActivator) world.getBlockEntity(blockPos);
                         tileEntityActivator.receivePacket(msg.id, msg.array, ctx.get().getSender());
                     }
                 }

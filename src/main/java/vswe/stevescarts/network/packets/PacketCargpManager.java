@@ -43,9 +43,8 @@ public class PacketCargpManager
                 if (msg.blockPos != null)
                 {
                     BlockPos blockPos = msg.blockPos;
-                    if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof TileEntityManager)
+                    if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof TileEntityManager manager)
                     {
-                        TileEntityManager manager = (TileEntityManager) world.getBlockEntity(blockPos);
                         manager.receivePacket(msg.id, msg.array, ctx.get().getSender());
                     }
                 }
