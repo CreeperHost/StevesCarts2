@@ -92,7 +92,9 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     @Override
     public boolean receiveDamage(DamageSource source, float val)
     {
-        return !hasShield();
+        if(hasShield()) return false;
+
+        return super.receiveDamage(source, val);
     }
 
     @Override
