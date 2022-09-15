@@ -7,7 +7,7 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.arcade.monopoly.Villager;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.ModuleBase;

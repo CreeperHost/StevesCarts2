@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 import javax.annotation.Nullable;
 

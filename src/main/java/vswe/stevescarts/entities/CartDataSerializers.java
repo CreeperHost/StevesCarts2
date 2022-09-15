@@ -1,4 +1,4 @@
-package vswe.stevescarts.entitys;
+package vswe.stevescarts.entities;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;

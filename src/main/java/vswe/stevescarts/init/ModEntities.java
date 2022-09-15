@@ -6,8 +6,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import vswe.stevescarts.Constants;
-import vswe.stevescarts.entitys.EntityCake;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityCake;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 public class ModEntities
 {

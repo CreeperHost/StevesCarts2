@@ -3,7 +3,7 @@ package vswe.stevescarts.modules.addons.mobdetectors;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Animal;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 
 public class ModuleAnimal extends ModuleMobdetector

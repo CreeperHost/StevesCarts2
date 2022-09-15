@@ -22,7 +22,7 @@ import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 import vswe.stevescarts.blocks.tileentities.TileEntityManager;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.upgrades.BaseEffect;
 import vswe.stevescarts.upgrades.Disassemble;

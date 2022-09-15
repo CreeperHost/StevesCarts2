@@ -1,4 +1,4 @@
-package vswe.stevescarts.entitys;
+package vswe.stevescarts.entities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;

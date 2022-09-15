@@ -34,7 +34,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.client.guis.buttons.ButtonBase;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.containers.slots.SlotBase;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.ButtonComparator;
 import vswe.stevescarts.polylib.NBTHelper;
 import vswe.stevescarts.helpers.SimulationInfo;

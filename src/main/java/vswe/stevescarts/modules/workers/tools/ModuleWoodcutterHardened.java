@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.workers.tools;
 
 import net.minecraft.world.item.ItemStack;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.items.ItemCartComponent;
 
 import javax.annotation.Nonnull;

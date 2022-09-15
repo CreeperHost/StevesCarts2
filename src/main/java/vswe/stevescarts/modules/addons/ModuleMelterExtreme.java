@@ -3,7 +3,7 @@ package vswe.stevescarts.modules.addons;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 public class ModuleMelterExtreme extends ModuleMelter
 {

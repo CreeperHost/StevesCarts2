@@ -1,6 +1,6 @@
 package vswe.stevescarts.modules.realtimers;
 
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.AnimationRig;
 import vswe.stevescarts.helpers.AnimationRigVal;
 

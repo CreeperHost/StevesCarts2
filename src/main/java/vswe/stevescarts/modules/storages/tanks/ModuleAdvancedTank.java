@@ -1,6 +1,6 @@
 package vswe.stevescarts.modules.storages.tanks;
 
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 public class ModuleAdvancedTank extends ModuleTank
 {

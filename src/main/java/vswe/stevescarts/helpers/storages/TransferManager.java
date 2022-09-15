@@ -1,6 +1,6 @@
 package vswe.stevescarts.helpers.storages;
 
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 public class TransferManager
 {

@@ -11,7 +11,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
-import vswe.stevescarts.entitys.CartDataSerializers;
+import vswe.stevescarts.entities.CartDataSerializers;
 import vswe.stevescarts.init.*;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;

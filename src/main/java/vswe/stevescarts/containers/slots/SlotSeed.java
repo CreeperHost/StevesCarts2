@@ -1,11 +1,8 @@
 package vswe.stevescarts.containers.slots;
 
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.Tags;
-import vswe.stevescarts.Constants;
-import vswe.stevescarts.modules.workers.tools.ModuleFarmer;
 
 import javax.annotation.Nonnull;
 

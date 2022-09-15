@@ -32,7 +32,7 @@ import vswe.stevescarts.containers.slots.SlotAssembler;
 import vswe.stevescarts.containers.slots.SlotAssemblerFuel;
 import vswe.stevescarts.containers.slots.SlotHull;
 import vswe.stevescarts.containers.slots.SlotOutput;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.*;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModBlocks;

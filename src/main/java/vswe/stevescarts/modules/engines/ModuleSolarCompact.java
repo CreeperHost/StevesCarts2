@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.engines;
 
 import vswe.stevescarts.SCConfig;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.AnimationRig;
 import vswe.stevescarts.helpers.AnimationRigVal;
 

@@ -2,7 +2,7 @@ package vswe.stevescarts.modules.workers.tools;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 import javax.annotation.Nonnull;
 

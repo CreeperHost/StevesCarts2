@@ -2,7 +2,7 @@ package vswe.stevescarts.modules.addons.projectiles;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.modules.addons.ModuleAddon;
 
 import javax.annotation.Nonnull;

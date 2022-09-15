@@ -3,12 +3,11 @@ package vswe.stevescarts.containers;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.containers.slots.SlotBase;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.init.ModContainers;
 import vswe.stevescarts.api.modules.ModuleBase;
 

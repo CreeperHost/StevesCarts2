@@ -15,7 +15,7 @@ import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleType;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.api.modules.ModuleBase;

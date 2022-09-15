@@ -1,6 +1,6 @@
 package vswe.stevescarts.modules.engines;
 
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 public abstract class ModuleSolarTop extends ModuleSolarBase
 {

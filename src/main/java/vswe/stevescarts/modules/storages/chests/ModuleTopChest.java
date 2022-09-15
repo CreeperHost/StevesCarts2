@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.storages.chests;
 
 import vswe.stevescarts.api.modules.template.ModuleChest;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 public class ModuleTopChest extends ModuleChest
 {

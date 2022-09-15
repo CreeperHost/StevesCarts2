@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import net.minecraft.core.BlockPos;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 public class ModuleSnowCannon extends ModuleAddon
 {

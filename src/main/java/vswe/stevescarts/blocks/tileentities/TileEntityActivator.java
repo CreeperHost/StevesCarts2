@@ -12,7 +12,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.containers.ContainerActivator;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.ActivatorOption;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.init.ModBlocks;

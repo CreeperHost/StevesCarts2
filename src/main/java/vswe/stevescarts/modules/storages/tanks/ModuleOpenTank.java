@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.storages.tanks;
 
 import net.minecraft.core.BlockPos;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 public class ModuleOpenTank extends ModuleTank
 {

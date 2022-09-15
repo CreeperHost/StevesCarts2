@@ -7,7 +7,7 @@ import net.minecraft.world.level.Explosion;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotCakeDynamite;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 import javax.annotation.Nonnull;
 

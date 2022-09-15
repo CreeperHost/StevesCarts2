@@ -2,7 +2,7 @@ package vswe.stevescarts.modules.addons.mobdetectors;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ambient.Bat;
-import vswe.stevescarts.entitys.EntityMinecartModular;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 
 public class ModuleBat extends ModuleMobdetector
