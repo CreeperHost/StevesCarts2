@@ -107,14 +107,14 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
                 @Override
                 public FluidStack drain(FluidStack resource, FluidAction action)
                 {
-                    return Objects.requireNonNull(TileEntityDistributor.this.drain(facing, resource, (resource == null) ? 0 : resource.getAmount(), action));
+                    return TileEntityDistributor.this.drain(facing, resource, resource.getAmount(), action);
                 }
 
                 @Nonnull
                 @Override
                 public FluidStack drain(int maxDrain, FluidAction action)
                 {
-                    return Objects.requireNonNull(TileEntityDistributor.this.drain(facing, null, maxDrain, action));
+                    return TileEntityDistributor.this.drain(facing, FluidStack.EMPTY, maxDrain, action);
                 }
             });
         }
@@ -244,11 +244,9 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
 
     private TileEntityManager generateManager(final int y)
     {
-        if(level == null) return null;
-        final BlockEntity te = level.getBlockEntity(getBlockPos().offset(0, y, 0));
-        if (te != null && te instanceof TileEntityManager)
+        if (level.getBlockEntity(getBlockPos().offset(0, y, 0)) instanceof TileEntityManager tile)
         {
-            return (TileEntityManager) te;
+            return tile;
         }
         return null;
     }
@@ -352,41 +350,39 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
         return false;
     }
 
-    private FluidStack drain(final Direction from, final FluidStack resource, int maxDrain, final IFluidHandler.FluidAction doDrain)
+    //Drain target or if target is empty drain whatever is available.
+    private FluidStack drain(final Direction from, @Nonnull FluidStack target, int maxDrain, final IFluidHandler.FluidAction doDrain)
     {
-        FluidStack ret = resource;
-        if (ret != null)
-        {
-            ret = ret.copy();
-            ret.setAmount(0);
-        }
+        FluidStack totalDrained = FluidStack.EMPTY;
+
         final IFluidTank[] tanks = getTanks(from);
-        for (final IFluidTank tank : tanks)
-        {
-            FluidStack temp = tank.drain(maxDrain, doDrain);
-            if (temp != null && (ret == null || ret.isFluidEqual(temp)))
-            {
-                if (ret == null)
-                {
-                    ret = temp;
-                }
-                else
-                {
-                    final FluidStack fluidStack = ret;
-                    fluidStack.grow(temp.getAmount());
-                }
-                maxDrain -= temp.getAmount();
-                if (maxDrain <= 0)
-                {
-                    break;
-                }
+        for (IFluidTank tank : tanks) {
+            FluidStack contents = tank.getFluid();
+            if (contents.isEmpty() || (!target.isEmpty() && !contents.isFluidEqual(target))) {
+                continue;
             }
+
+            FluidStack drained = tank.drain(maxDrain, doDrain);
+            if (drained.isEmpty()) {
+                continue;
+            }
+
+            maxDrain -= drained.getAmount();
+            if (totalDrained.isEmpty()) {
+                totalDrained = drained;
+            } else {
+                totalDrained.grow(drained.getAmount());
+            }
+
+            //Now that we have started to extract "some fluid" we can not accept any other fluid we may find.
+            if (target.isEmpty()) {
+                target = drained;
+            }
+
+            if (maxDrain <= 0) return totalDrained;
         }
-        if (ret != null && ret.getAmount() == 0)
-        {
-            return null;
-        }
-        return ret;
+
+        return totalDrained;
     }
 
     private boolean hasAnyTank(Direction facing)

@@ -233,7 +233,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
         if (isTankValid(tankId, sideId))
         {
             final FluidStack fluidToFill = tanks[tankId].drain(fillAmount, doFill);
-            if (fluidToFill == null)
+            if (fluidToFill.isEmpty())
             {
                 return 0;
             }
@@ -259,7 +259,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     private int drainTank(final IFluidTank cartTank, final int sideId, int drainAmount, final IFluidHandler.FluidAction doDrain)
     {
         final FluidStack drainedFluid = cartTank.drain(drainAmount, doDrain);
-        if (drainedFluid == null)
+        if (drainedFluid.isEmpty())
         {
             return 0;
         }
@@ -271,8 +271,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
                 final SCTank tank = tanks[i];
                 if (isTankValid(i, sideId))
                 {
-                    final FluidStack fluidStack = drainedFluid;
-                    fluidStack.shrink(tank.fill(drainedFluid, doDrain));
+                    drainedFluid.shrink(tank.fill(drainedFluid, doDrain));
                     if (drainedFluid.getAmount() <= 0)
                     {
                         return drainAmount;
@@ -305,8 +304,8 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     private boolean isFluidValid(final int sideId, final FluidStack fluid)
     {
         @Nonnull ItemStack filter = getItem(sideId * 3 + 2);
-        final FluidStack filterFluid = FluidUtil.getFluidContained(filter).get();
-        return filterFluid == null || filterFluid.isFluidEqual(fluid);
+        final FluidStack filterFluid = FluidUtil.getFluidContained(filter).orElse(FluidStack.EMPTY);
+        return filterFluid.isEmpty() || filterFluid.isFluidEqual(fluid);
     }
 
     public int getMaxAmount(final int id)
@@ -361,7 +360,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
         super.saveAdditional(compoundTag);
         for (int i = 0; i < 4; ++i)
         {
-            if (tanks[i].getFluid() != null)
+            if (!tanks[i].getFluid().isEmpty())
             {
                 final CompoundTag compound = new CompoundTag();
                 tanks[i].getFluid().writeToNBT(compound);
