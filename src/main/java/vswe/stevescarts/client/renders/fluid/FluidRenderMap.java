@@ -44,7 +44,7 @@ public class FluidRenderMap<V> extends Object2ObjectOpenCustomHashMap<FluidStack
 
         @Override
         public int hashCode(FluidStack stack) {
-            if (stack == null || stack.isEmpty()) {
+            if (stack.isEmpty() || stack.isEmpty()) {
                 return 0;
             }
             int code = 1;
