@@ -52,7 +52,7 @@ public class ItemStackRenderer extends ItemStackTileEntityRenderer
             }
             else
             {
-                matrixStack.translate(0.25, -0.25, 0.25);
+                matrixStack.translate(-0.5, -0.5, 0.5);
             }
             matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180));
             matrixStack.mulPose(Vector3f.XP.rotationDegrees(180));
