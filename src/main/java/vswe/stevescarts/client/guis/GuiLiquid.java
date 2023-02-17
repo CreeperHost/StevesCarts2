@@ -17,6 +17,10 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModBlocks;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class GuiLiquid extends ContainerScreen<ContainerLiquid>
 {
     private static ResourceLocation texture;
@@ -128,7 +132,8 @@ public class GuiLiquid extends ContainerScreen<ContainerLiquid>
     {
         if (inRect(x - getGuiLeft(), y - getGuiTop(), rect))
         {
-            renderTooltip(matrixStack, new StringTextComponent(str), x, y);
+            List<ITextComponent> toolTip = Arrays.stream(str.split("\n")).map(StringTextComponent::new).collect(Collectors.toList());
+            renderComponentTooltip(matrixStack, toolTip, x, y);
         }
     }
 
