@@ -67,17 +67,17 @@ public class ContainerCartAssembler extends ContainerBase
 
     public int getFuel()
     {
-        return data.get(5);
+        return assembler.getIntFromShorts((short)data.get(5), (short)data.get(6));
     }
 
     public int getAssemblingTime()
     {
-        return data.get(2);
+        return assembler.getIntFromShorts((short)data.get(2), (short)data.get(3));
     }
 
     public int getMaxAssemblingTime()
     {
-        return data.get(0);
+        return assembler.getIntFromShorts((short)data.get(0), (short)data.get(1));
     }
 
     public boolean getIsAssembling()
