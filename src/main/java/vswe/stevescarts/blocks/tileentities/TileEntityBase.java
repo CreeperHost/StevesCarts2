@@ -42,5 +42,10 @@ public abstract class TileEntityBase extends BlockEntity
         return oldVal;
     }
 
+    public int getIntFromShorts(short first, short last)
+    {
+        return (first & 0xFFFF) | ((last << 16) & 0xFFFF0000);
+    }
+
     public void tick() {}
 }
