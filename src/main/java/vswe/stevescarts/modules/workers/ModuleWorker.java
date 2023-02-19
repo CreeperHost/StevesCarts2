@@ -81,7 +81,7 @@ public abstract class ModuleWorker extends ModuleBase
 
     private BlockPos getNextblock(final boolean flag)
     {
-        BlockPos pos = getCart().getOnPos();
+        BlockPos pos = getCart().blockPosition();
         if (BaseRailBlock.isRail(getCart().level, pos.below()))
         {
             pos = pos.below();
@@ -103,7 +103,7 @@ public abstract class ModuleWorker extends ModuleBase
             int dir = ((xDir && zDir) != flag) ? 1 : 0;
             return pos.offset(logic[dir][0], logic[dir][1], logic[dir][2]);
         }
-        return getCart().blockPosition();
+        return pos;
     }
 
     @Override
@@ -116,9 +116,9 @@ public abstract class ModuleWorker extends ModuleBase
         return super.getMaxSpeed();
     }
 
-    protected boolean isValidForTrack(BlockPos pos, boolean flag)
+    protected boolean isValidForTrack(BlockPos pos, boolean checkBellow)
     {
-        boolean result = countsAsAir(pos) && Block.canSupportRigidBlock(getCart().level, pos.below());
+        boolean result = countsAsAir(pos) && (!checkBellow || Block.canSupportRigidBlock(getCart().level, pos.below()));
         if (result)
         {
             int coordX = pos.getX() - (getCart().x() - pos.getX());
