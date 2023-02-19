@@ -117,20 +117,16 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
             {
                 if (isMiningSpotAllowed(next, holeX, holeY, range))
                 {
-                    int x = ((getCart().getDeltaMovement().z > 0) ? holeX : 0);
-                    int y = holeY;
-                    int z = ((getCart().getDeltaMovement().x > 0) ? holeX : 0);
-
-                    BlockPos mine = next.offset(x, y, z);
-                    if (mineBlockAndRevive(world, mine, next, holeX, holeY))
-                    {
+                    BlockPos mine = next.offset(((getCart().z() != next.getZ()) ? holeX : 0), holeY, ((getCart().x() != next.getX()) ? holeX : 0));
+                    if (mineBlockAndRevive(world, mine, next, holeX, holeY)) {
                         return true;
                     }
                 }
             }
         }
+
         BlockPos pos = next.offset(0, range[0], 0);
-        if (!LevelHelper.isAir(getCart().level, pos) && !isValidForTrack(pos, true) && mineBlockAndRevive(world, pos.below(), next, 0, range[0] - 1))
+        if (LevelHelper.isAir(getCart().level, pos) && !isValidForTrack(pos, true) && mineBlockAndRevive(world, pos.below(), next, 0, range[0] - 1))
         {
             return true;
         }

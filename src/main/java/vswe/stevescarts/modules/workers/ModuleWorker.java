@@ -95,14 +95,13 @@ public abstract class ModuleWorker extends ModuleBase
                 pos = pos.above();
             }
 
-            int[][] aint = DismountHelper.offsetsForDirection(getCart().getMotionDirection());
-            BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
-            for (int[] aint1 : aint)
-            {
-                blockpos$mutable.set(pos.getX() + aint1[0], pos.getY() - 1, pos.getZ() + aint1[1]);
-            }
-
-            return blockpos$mutable;
+            int[][] logic = EntityMinecartModular.railDirectionCoordinates[direction.ordinal()];
+            double pX = getCart().temppushX;
+            double pZ = getCart().temppushZ;
+            boolean xDir = (pX > 0.0 && logic[0][0] > 0) || pX == 0.0 || logic[0][0] == 0 || (pX < 0.0 && logic[0][0] < 0);
+            boolean zDir = (pZ > 0.0 && logic[0][2] > 0) || pZ == 0.0 || logic[0][2] == 0 || (pZ < 0.0 && logic[0][2] < 0);
+            int dir = ((xDir && zDir) != flag) ? 1 : 0;
+            return pos.offset(logic[dir][0], logic[dir][1], logic[dir][2]);
         }
         return getCart().blockPosition();
     }
@@ -119,7 +118,7 @@ public abstract class ModuleWorker extends ModuleBase
 
     protected boolean isValidForTrack(BlockPos pos, boolean flag)
     {
-        boolean result = RailBlock.canSupportCenter(getCart().level, pos.below(), Direction.NORTH);
+        boolean result = countsAsAir(pos) && Block.canSupportRigidBlock(getCart().level, pos.below());
         if (result)
         {
             int coordX = pos.getX() - (getCart().x() - pos.getX());

@@ -1337,7 +1337,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
 
     public int z()
     {
-        return Mth.floor(position().x);
+        return Mth.floor(position().z);
     }
 
     public BlockPos getExactPosition()
@@ -1482,7 +1482,17 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
 
     static
     {
-        railDirectionCoordinates = new int[][][]{{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
+        railDirectionCoordinates = new int[][][]{
+                {{0, 0, -1}, {0, 0, 1}},
+                {{-1, 0, 0}, {1, 0, 0}},
+                {{-1, -1, 0}, {1, 0, 0}},
+                {{-1, 0, 0}, {1, -1, 0}},
+                {{0, 0, -1}, {0, -1, 1}},
+                {{0, -1, -1}, {0, 0, 1}},
+                {{0, 0, 1}, {1, 0, 0}},
+                {{0, 0, 1}, {-1, 0, 0}},
+                {{0, 0, -1}, {-1, 0, 0}},
+                {{0, 0, -1}, {1, 0, 0}}};
     }
 
     public Entity getCartRider()
