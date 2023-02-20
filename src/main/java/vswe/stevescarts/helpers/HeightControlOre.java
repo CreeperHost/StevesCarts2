@@ -15,13 +15,13 @@ public class HeightControlOre
     public final int bestLowest;
     public static final ArrayList<HeightControlOre> ores;
 
-    public HeightControlOre(final String name, final int textureid, final int spanHighest, final int bestHighest, final int bestLowest)
+    public HeightControlOre(final String name, final int textureid, final int spanLowest, final int spanHighest, final int bestLowest, final int bestHighest)
     {
         this.name = name;
         useDefaultTexture = true;
         specialTexture = "";
         this.spanHighest = spanHighest;
-        spanLowest = 1;
+        this.spanLowest = spanLowest;
         this.bestHighest = bestHighest;
         this.bestLowest = bestLowest;
         srcX = 0;
@@ -45,13 +45,15 @@ public class HeightControlOre
 
     static
     {
+        //TODO the "Optimal" ranges need some work.
         ores = new ArrayList<>();
-        new HeightControlOre("Diamond", 0, 15, 12, 5);
-        new HeightControlOre("Redstone", 1, 16, 13, 5);
-        new HeightControlOre("Gold", 2, 33, 30, 5);
-        new HeightControlOre("Lapis Lazuli", 3, 32, 18, 11);
-        new HeightControlOre("Iron", 4, 67, 41, 5);
-        new HeightControlOre("Coal", 5, 131, 40, 5);
-        new HeightControlOre("Emerald", 6, 32, 29, 5);
+        new HeightControlOre("Diamond", 0, -64, 16, -60, -58);
+        new HeightControlOre("Redstone", 1, -64, 16, -60, -58);
+        new HeightControlOre("Gold", 2, -64, 32, -17, -15);
+        new HeightControlOre("Lapis Lazuli", 3, -64, 64, -2, 0);
+        new HeightControlOre("Iron", 4, -64, 320, 0, 40);
+        new HeightControlOre("Coal", 5, 0, 320, 44, 95);
+        new HeightControlOre("Emerald", 6, -16, 320, 235, 236);
+        new HeightControlOre("Copper", 7, -16, 112, 47, 49);
     }
 }

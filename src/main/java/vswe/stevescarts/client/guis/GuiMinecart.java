@@ -387,7 +387,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
                 final boolean drawAll = rect[3] == 16;
                 if (drawAll)
                 {
-                    slot.x = slot.getX() + module.getX();
+                    slot.x = slot.getX() + module.getX() + 1;
                     slot.y = slot.getY() + module.getY();
                 }
                 else
