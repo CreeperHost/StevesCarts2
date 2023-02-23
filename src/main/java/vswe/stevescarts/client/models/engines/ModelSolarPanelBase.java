@@ -8,6 +8,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.MultiBufferSource;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -36,7 +37,7 @@ public class ModelSolarPanelBase extends ModelCartbase
     }
 
     @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, float yaw, float pitch, float roll)
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll)
     {
         super.applyEffects(module, matrixStack, rtb, yaw, pitch, roll);
         moving.y = ((module == null) ? -4.0f : ((ModuleSolarTop) module).getMovingLevel());

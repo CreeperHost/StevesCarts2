@@ -15,7 +15,7 @@ import java.util.function.Function;
 public abstract class ModelCartbase extends Model
 {
     protected final ResourceLocation texture;
-    protected final ModelPart root;
+    protected ModelPart root;
 
     public ModelCartbase(Function<ResourceLocation, RenderType> layerFactory, ResourceLocation texture, ModelPart root)
     {

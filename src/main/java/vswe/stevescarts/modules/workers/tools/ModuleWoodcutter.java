@@ -156,7 +156,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
                 {
                     i2 = -size - i2 - 1;
                 }
-                BlockPos plant = next.offset(((getCart().getX() != next.getZ()) ? i2 : 0), 0, ((getCart().getX() != next.getX()) ? i2 : 0));
+                BlockPos plant = next.offset(((getCart().z() != next.getZ()) ? i2 : 0), -1, ((getCart().x() != next.getX()) ? i2 : 0));
                 if (plant(size, plant, next.getX(), next.getZ()))
                 {
                     setCutting(false);
@@ -170,7 +170,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
             {
                 for (int j = -1; j <= 1; ++j)
                 {
-                    BlockPos farm = next.offset(i, 0, j);
+                    BlockPos farm = next.offset(i, -1, j);
                     if (farm(world, farm))
                     {
                         setCutting(true);
@@ -261,7 +261,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         {
             pos = pos.above();
             BlockState state = world.getBlockState(pos);
-            if (state != null && isWoodHandler(state, pos))
+            if (isWoodHandler(state, pos))
             {
                 final ArrayList<BlockPos> checked = new ArrayList<>();
                 if (removeAt(world, pos, checked))
@@ -279,7 +279,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         checked.add(here);
         BlockState blockState = world.getBlockState(here);
         final Block block = blockState.getBlock();
-        if (block == null)
+        if (world.isEmptyBlock(here))
         {
             return false;
         }
@@ -304,7 +304,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
                         {
                             BlockPos pos = here.offset(x, y, z);
                             BlockState currentState = world.getBlockState(pos);
-                            if (currentState != null)
+                            if (!currentState.isAir())
                             {
                                 if (hitWood)
                                 {
@@ -475,7 +475,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
     private void destroyLeaveBlockOnTrack(Level world, BlockPos pos)
     {
         BlockState state = world.getBlockState(pos);
-        if (state != null && isLeavesHandler(state, pos))
+        if (isLeavesHandler(state, pos))
         {
             world.removeBlock(pos, false);
         }

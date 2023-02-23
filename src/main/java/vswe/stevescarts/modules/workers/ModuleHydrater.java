@@ -50,7 +50,7 @@ public class ModuleHydrater extends ModuleWorker
         {
             for (int j = -range; j <= range; ++j)
             {
-                if (hydrate(world, next.offset(i, 0, j)))
+                if (hydrate(world, next.offset(i, -1, j)))
                 {
                     return true;
                 }

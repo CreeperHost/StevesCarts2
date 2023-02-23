@@ -112,7 +112,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
         {
             for (int j = -getRange(); j <= getRange(); ++j)
             {
-                BlockPos coord = next.offset(i, 0, j);
+                BlockPos coord = next.offset(i, -1, j);
                 if (farm(world, coord))
                 {
                     return true;
