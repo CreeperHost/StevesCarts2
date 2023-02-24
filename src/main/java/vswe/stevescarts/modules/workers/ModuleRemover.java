@@ -77,38 +77,35 @@ public class ModuleRemover extends ModuleWorker implements IActivatorModule {
     }
 
     private boolean removeRail(Level world, BlockPos pos, final boolean flag) {
-//        if (flag) {
-//            BlockState blockState = world.getBlockState(pos);
-//            if (RailBlock.isRail(blockState)) {
-//                if (isRemovingEnabled()) {
-//                    if (doPreWork()) {
-//                        startWorking(12);
-//                        return true;
-//                    }
-//                    @Nonnull
-//                    ItemStack iStack = new ItemStack(blockState.getBlock(), 1, 0);
-//                    getCart().addItemToChest(iStack);
-//                    if (iStack.getCount() == 0) {
-//                        world.setBlockToAir(pos);
-//                    }
-//                }
-//                remove = new BlockPos(pos.getX(), -1, pos.getZ());
-//            } else {
-//                remove = new BlockPos(pos.getX(), -1, pos.getZ());
-//            }
-//        } else if (BlockRailBase.isRailBlock(world, pos.down())) {
-//            remove = pos.down();
-//        } else if (BlockRailBase.isRailBlock(world, pos)) {
-//            remove = pos;
-//        } else if (BlockRailBase.isRailBlock(world, pos.up())) {
-//            remove = pos.up();
-//        }
-//        stopWorking();
-//
-//
-//    }
+        if (flag) {
+            BlockState blockState = world.getBlockState(pos);
+            if (RailBlock.isRail(blockState)) {
+                if (isRemovingEnabled()) {
+                    if (doPreWork()) {
+                        startWorking(12);
+                        return true;
+                    }
+                    @Nonnull
+                    ItemStack iStack = new ItemStack(blockState.getBlock(), 1);
+                    getCart().addItemToChest(iStack);
+                    if (iStack.getCount() == 0) {
+                        world.removeBlock(pos, false);
+                    }
+                }
+                remove = new BlockPos(pos.getX(), -1, pos.getZ());
+            } else {
+                remove = new BlockPos(pos.getX(), -1, pos.getZ());
+            }
+        } else if (RailBlock.isRail(world, pos.below())) {
+            remove = pos.below();
+        } else if (RailBlock.isRail(world, pos)) {
+            remove = pos;
+        } else if (RailBlock.isRail(world, pos.above())) {
+            remove = pos.above();
+        }
+        stopWorking();
         return false;
-}
+    }
 
     private void enableRemoving(final boolean remove) {
         if (!isPlaceholder()) {
