@@ -407,7 +407,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
             byte data = sensorLight;
             if (isDrillSpinning())
             {
-                data |= 0x4;
+                data |= 0b100;
             }
             liquidsensors.getInfoFromDrill(data);
             sensorLight = 1;
