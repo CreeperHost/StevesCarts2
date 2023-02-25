@@ -1,5 +1,8 @@
 package vswe.stevescarts.blocks.tileentities;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -7,6 +10,8 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
@@ -20,7 +25,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.blocks.BlockUpgrade;
 import vswe.stevescarts.client.guis.GuiBase;
 import vswe.stevescarts.containers.ContainerUpgrade;
@@ -30,9 +37,6 @@ import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
 import vswe.stevescarts.upgrades.InventoryEffect;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class TileEntityUpgrade extends TileEntityBase implements WorldlyContainer, ITankHolder, MenuProvider
 {
@@ -119,6 +123,17 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
     {
         if(pkt.getTag() != null) load(pkt.getTag());
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        return saveWithoutMetadata();
+    }
+
+    @Nullable
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     public AssemblerUpgrade getUpgrade()
@@ -289,7 +304,7 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     }
 
     @Override
-    @Nonnull
+    @NotNull
     public ItemStack getInputContainer(final int tankid)
     {
         return getItem(0);
@@ -302,7 +317,7 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     }
 
     @Override
-    public void addToOutputContainer(final int tankid, @Nonnull ItemStack item)
+    public void addToOutputContainer(final int tankid, @NotNull ItemStack item)
     {
         TransferHandler.TransferItem(item, this, 1, 1, new ContainerUpgrade(0, null, this, new SimpleContainerData(0)), Slot.class, null, -1);
     }
@@ -314,8 +329,9 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawImage(int tankid, GuiBase gui, TextureAtlasSprite sprite, int targetX, int targetY, int srcX, int srcY, int width, int height)
+    public void drawImage(int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height)
     {
+        GuiComponent.blit(new PoseStack(), gui.getGuiLeft() + targetX, gui.getGuiTop() + targetY, 0, width, height, sprite);
     }
 
     public void setCreativeBroken()

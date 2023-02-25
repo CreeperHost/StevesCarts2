@@ -119,7 +119,7 @@ public class ModuleCheatTank extends ModuleTank
                 tank.getFluid().setAmount(0);
                 if (!tank.isLocked())
                 {
-                    tank.setFluid(null);
+                    tank.setFluid(FluidStack.EMPTY);
                 }
             }
             else if (mode == 3)

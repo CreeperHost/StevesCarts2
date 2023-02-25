@@ -33,7 +33,7 @@ public abstract class InterfaceEffect extends BaseEffect
     {
         if (gui.inRect(x - gui.getGuiLeft(), y - gui.getGuiTop(), rect))
         {
-            gui.renderTooltip(matrixStack, Component.literal(str), x - gui.getGuiLeft(), y - gui.getGuiTop());
+            gui.renderTooltip(matrixStack, Component.literal(str), x, y);
         }
     }
 }

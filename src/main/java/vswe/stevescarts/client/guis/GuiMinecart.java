@@ -118,16 +118,20 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
             }
             else if (cart.getModules() != null)
             {
+                //Draw Scroll Bar
                 blit(poseStack, j + scrollBox[0], k + scrollBox[1], 222, 24, scrollBox[2], scrollBox[3]);
                 blit(poseStack, j + scrollBox[0] + 2, k + scrollBox[1] + 2 + cart.getScrollY(), 240, 26 + (cart.canScrollModules ? 0 : 25), 14, 25);
+
                 for (final ModuleBase module : cart.getModules())
                 {
                     drawModuleSlots(poseStack, module);
                 }
+
                 for (final ModuleBase module : cart.getModules())
                 {
                     drawModuleBackground(poseStack, module, mouseX, mouseY);
                 }
+
                 renderModuleList(mouseX, mouseY);
                 renderReturnButton(poseStack, mouseX, mouseY);
                 for (final ModuleBase module : cart.getModules())
@@ -388,7 +392,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
                 if (drawAll)
                 {
                     slot.x = slot.getX() + module.getX() + 1;
-                    slot.y = slot.getY() + module.getY();
+                    slot.y = slot.getY() + module.getY() - cart.getRealScrollY();
                 }
                 else
                 {
@@ -397,7 +401,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
                 module.drawImage(matrixStack, this, slot.getX(), slot.getY() - 1, getXSize() - 256, 0, 18, 18);
                 if (!drawAll)
                 {
-                    module.drawImage(matrixStack, this, slot.getX() - 1, slot.getY() - 1, getXSize() - 256 + 18, 1, 16, 16);
+                    module.drawImage(matrixStack, this, slot.getX() + 1, slot.getY(), getXSize() - 256 + 18, 1, 16, 16);
                 }
             }
         }
@@ -405,8 +409,8 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 
     private void resetSlot(final SlotBase slot)
     {
-        slot.setX(-9001);
-        slot.setY(-9001);
+        slot.x = -9001;
+        slot.y = -9001;
     }
 
     private void drawModuleBackground(PoseStack matrixStack, final ModuleBase module, final int x, final int y)

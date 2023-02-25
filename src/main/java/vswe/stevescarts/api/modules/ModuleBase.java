@@ -1,8 +1,11 @@
 package vswe.stevescarts.api.modules;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
+import net.creeperhost.polylib.client.fluid.ScreenFluidRenderer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.language.I18n;
@@ -20,6 +23,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerBlock;
@@ -29,6 +33,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.fluids.FluidStack;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.client.guis.buttons.ButtonBase;
@@ -659,9 +664,8 @@ public abstract class ModuleBase
      * @param sizeY   The height of the image
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(final GuiMinecart gui, final TextureAtlasSprite icon, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY)
-    {
-        this.drawImage(gui, icon, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY);
+    public void drawImage(final GuiMinecart gui, final TextureAtlasSprite icon, final int targetX, final int targetY, final int sizeX, final int sizeY) {
+        this.drawImage(gui, icon, new int[]{targetX, targetY, sizeX, sizeY});
     }
 
     /**
@@ -673,21 +677,14 @@ public abstract class ModuleBase
      * @param srcY They y coordinate in the source file
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect, final int srcX, int srcY)
-    {
-        if (rect.length < 4)
-        {
-            return;
-        }
+    public void drawImage(final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect) {
+        if (rect.length < 4) return;
         rect = this.cloneRect(rect);
-        if (!this.doStealInterface())
-        {
-            srcY -= this.handleScroll(rect);
+        if (!this.doStealInterface()) {
+            this.handleScroll(rect);
         }
-        if (rect[3] > 0)
-        {
-            //TODO
-            //			gui.blit(icon, gui.getGuiLeft() + rect[0] + this.getX(), gui.getGuiTop() + rect[1] + this.getY(), rect[2] / 16.0f, rect[3] / 16.0f, srcX / 16.0f, srcY / 16.0f);
+        if (rect[3] > 0) {
+            GuiComponent.blit(new PoseStack(), gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), 0, rect[2], rect[3], icon);
         }
     }
 

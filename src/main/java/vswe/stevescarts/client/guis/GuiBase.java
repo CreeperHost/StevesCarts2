@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Deprecated //THis is not used anywhere
 public abstract class GuiBase extends AbstractContainerScreen
 {
     public GuiBase(AbstractContainerMenu abstractContainerMenu, Inventory inventory, Component component)
