@@ -59,20 +59,23 @@ public class TransferHandler
         do
         {
             pos = -1;
-            for (int i = startEmpty; i <= end; ++i)
-            {
-                if (isSlotOfType(cont.getSlot(i), validSlot) && (invalidSlot == null) && cont.getSlot(i).mayPlace(iStack))
-                {
-                    if (inv.getItem(i).isEmpty() || inv.getItem(i).sameItem(iStack) && cont.getSlot(i).getItem().getCount() != inv.getItem(i).getMaxStackSize())
-                    {
-                        pos = i;
-                        startEmpty = pos + 1;
-                        break;
-                    }
+            for (int i = startEmpty; i <= end; ++i) {
+                if (isSlotOfType(cont.getSlot(i), validSlot) &&
+                        (invalidSlot == null || !isSlotOfType(cont.getSlot(i), invalidSlot)) &&
+                        !inv.getItem(i).isEmpty() &&
+                        inv.getItem(i).getItem() == iStack.getItem() &&
+                        inv.getItem(i).isStackable() &&
+                        inv.getItem(i).getCount() < inv.getItem(i).getMaxStackSize() &&
+                        inv.getItem(i).getCount() < cont.getSlot(i).getMaxStackSize() &&
+                        inv.getItem(i).getCount() > 0 && iStack.getCount() > 0 &&
+                        (inv.getItem(i).getTag() == null || inv.getItem(i).getTag().equals(iStack.getTag()))) {
+
+                    pos = i;
+                    startEmpty = pos + 1;
+                    break;
                 }
             }
-            if (pos == -1)
-            {
+            if (pos == -1) {
                 for (int i = startOccupied; i <= end; ++i)
                 {
                     if (isSlotOfType(cont.getSlot(i), validSlot) && (invalidSlot == null || !isSlotOfType(cont.getSlot(i), invalidSlot)))

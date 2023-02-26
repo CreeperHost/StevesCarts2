@@ -6,14 +6,25 @@ import dev.architectury.hooks.fluid.FluidStackHooks;
 import net.creeperhost.polylib.client.fluid.ScreenFluidRenderer;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.SoundActions;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.items.ItemHandlerHelper;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.client.guis.GuiBase;
 import vswe.stevescarts.helpers.Localization;
 
@@ -40,17 +51,84 @@ public class SCTank extends FluidTank {
 
     public void containerTransfer() {
         ItemStack itemStack = owner.getInputContainer(tankid);
-        if (!itemStack.isEmpty()) {
-            FluidUtil.getFluidHandler(itemStack).ifPresent(iFluidHandlerItem ->
-            {
-                FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainer(itemStack, this, 1000, null, true);
-                if ((fluidActionResult.isSuccess())) {
-                    ItemStack containerStack = fluidActionResult.getResult();
-                    owner.setInputContainer(tankid, containerStack);
-                    onContentsChanged();
+        if (itemStack.isEmpty()) return;
+
+        FluidUtil.getFluidHandler(itemStack).ifPresent(itemHandler -> {
+            FluidStack fluidStack = itemHandler.drain(Integer.MAX_VALUE, FluidAction.SIMULATE);
+            FluidActionResult result;
+            if (!fluidStack.isEmpty()) {
+                //Simulate Bucket Empty
+                result = FluidUtil.tryEmptyContainer(itemStack, this, FluidType.BUCKET_VOLUME, null, false);
+                if (result.isSuccess()) {
+                    ItemStack container = result.getResult();
+                    LazyOptional<IFluidHandlerItem> opt = FluidUtil.getFluidHandler(container);
+                    if (opt.isPresent()) {
+                        IFluidHandlerItem handler = opt.orElseThrow(RuntimeException::new);
+                        fluidStack = handler.drain(FluidType.BUCKET_VOLUME, FluidAction.SIMULATE);
+                        //I believe this is for things like creative fluid containers.
+                        if (!fluidStack.isEmpty() && fluidStack.getAmount() == FluidType.BUCKET_VOLUME) {
+                            FluidUtil.tryEmptyContainer(itemStack, this, FluidType.BUCKET_VOLUME, null, true);
+                            owner.setInputContainer(tankid, container);
+                            return;
+                        }
+                    }
+                    if (!container.isEmpty()) {
+                        owner.addToOutputContainer(tankid, container);
+                    }
+                    //Only 'Actually' do the transfer if we were able to insert the resulting container.
+                    if (container.getCount() == 0) {
+                        FluidUtil.tryEmptyContainer(itemStack, this, FluidType.BUCKET_VOLUME, null, true);
+
+                        itemStack.shrink(1);
+                        if (itemStack.isEmpty()){
+                            owner.setInputContainer(tankid, ItemStack.EMPTY);
+                        }
+                    }
                 }
-            });
-        }
+            } else {
+                result = tryFillContainer(itemStack, this, Integer.MAX_VALUE, null, false);
+                if (result.isSuccess()) {
+                    ItemStack container = result.getResult();
+                    if (!container.isEmpty()) {
+                        owner.addToOutputContainer(tankid, container);
+                        //Only 'Actually' do the transfer if we were able to insert the resulting container.
+                        if (container.getCount() == 0) {
+                            FluidUtil.tryFillContainer(itemStack, this, FluidType.BUCKET_VOLUME, null, true);
+
+                            itemStack.shrink(1);
+                            if (itemStack.isEmpty()){
+                                owner.setInputContainer(tankid, ItemStack.EMPTY);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    @Deprecated //This is only needed until forge accepts my PR to fix this 4 year old bug
+    public static FluidActionResult tryFillContainer(@NotNull ItemStack container, IFluidHandler fluidSource, int maxAmount, @Nullable Player player, boolean doFill) {
+        ItemStack containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // do not modify the input
+        return FluidUtil.getFluidHandler(containerCopy)
+                .map(containerFluidHandler -> {
+                    FluidStack simulatedTransfer = FluidUtil.tryFluidTransfer(containerFluidHandler, fluidSource, maxAmount, false);
+                    if (!simulatedTransfer.isEmpty()) {
+                        if (doFill) {
+                            FluidUtil.tryFluidTransfer(containerFluidHandler, fluidSource, maxAmount, true);
+                            if (player != null) {
+                                SoundEvent soundevent = simulatedTransfer.getFluid().getFluidType().getSound(simulatedTransfer, SoundActions.BUCKET_FILL);
+                                player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), soundevent, SoundSource.BLOCKS, 1.0F, 1.0F);
+                            }
+                        } else {
+                            containerFluidHandler.fill(simulatedTransfer, FluidAction.EXECUTE);
+                        }
+
+                        ItemStack resultContainer = containerFluidHandler.getContainer();
+                        return new FluidActionResult(resultContainer);
+                    }
+                    return FluidActionResult.FAILURE;
+                })
+                .orElse(FluidActionResult.FAILURE);
     }
 
     @Override

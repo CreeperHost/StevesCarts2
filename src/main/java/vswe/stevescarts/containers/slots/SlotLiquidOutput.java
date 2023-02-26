@@ -2,6 +2,7 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fluids.FluidUtil;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 
 import javax.annotation.Nonnull;
@@ -22,6 +23,6 @@ public class SlotLiquidOutput extends SlotBase implements ISpecialItemTransferVa
     @Override
     public boolean isItemValidForTransfer(@Nonnull ItemStack item, final TransferHandler.TRANSFER_TYPE type)
     {
-        return false;
+        return type == TransferHandler.TRANSFER_TYPE.OTHER && FluidUtil.getFluidHandler(item).isPresent();
     }
 }
