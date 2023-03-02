@@ -1,6 +1,7 @@
 package vswe.stevescarts.client.guis;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
@@ -90,12 +91,12 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     @Override
     protected void renderBg(@NotNull PoseStack poseStack, float p_230450_2_, int mouseX, int mouseY)
     {
-        final int j = getGuiLeft();
-        final int k = getGuiTop();
+        final int left = getGuiLeft();
+        final int top = getGuiTop();
         ResourceHelper.bindResource(GuiMinecart.textureLeft);
-        blit(poseStack, j, k, 0, 0, 256, 256);
+        blit(poseStack, left, top, 0, 0, 256, 256);
         ResourceHelper.bindResource(GuiMinecart.textureRight);
-        blit(poseStack, j + 256, k, 0, 0, imageWidth - 256, imageHeight);
+        blit(poseStack, left + 256, top, 0, 0, imageWidth - 256, imageHeight);
         if (cart != null)
         {
             final ModuleBase thief = cart.getInterfaceThief();
@@ -119,8 +120,8 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
             else if (cart.getModules() != null)
             {
                 //Draw Scroll Bar
-                blit(poseStack, j + scrollBox[0], k + scrollBox[1], 222, 24, scrollBox[2], scrollBox[3]);
-                blit(poseStack, j + scrollBox[0] + 2, k + scrollBox[1] + 2 + cart.getScrollY(), 240, 26 + (cart.canScrollModules ? 0 : 25), 14, 25);
+                blit(poseStack, left + scrollBox[0], top + scrollBox[1], 222, 24, scrollBox[2], scrollBox[3]);
+                blit(poseStack, left + scrollBox[0] + 2, top + scrollBox[1] + 2 + cart.getScrollY(), 240, 26 + (cart.canScrollModules ? 0 : 25), 14, 25);
 
                 for (final ModuleBase module : cart.getModules())
                 {
@@ -180,7 +181,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         x -= getGuiLeft();
         y -= getGuiTop();
         ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
-        font.draw(matrixStack, cart.getName(), getGuiLeft() + 5, 172, 4210752);
+        font.draw(matrixStack, cart.getName(), getGuiLeft() + 5, getGuiTop() + 172, 4210752);
         GlStateManager._enableBlend();
         for (int i = 0; i < moduleCounts.size(); ++i)
         {
@@ -485,39 +486,20 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         if (this.inRect((int) mouseX - getGuiLeft(), (int) mouseY - getGuiTop(), 0, 0, imageWidth, imageHeight))
         {
             int moduleSize = this.cart.modularSpaceHeight;
-            int scroll = cart.getScrollY() + ((int) -amount * 7500) / (moduleSize - EntityMinecartModular.MODULAR_SPACE_HEIGHT);
+            int scroll = cart.getScrollY() + ((int) -amount * 4000) / (moduleSize - EntityMinecartModular.MODULAR_SPACE_HEIGHT);
             scroll = Mth.clamp(scroll, 0, 198);
             cart.setScrollY(scroll);
         }
         return true;
     }
 
-    //	@Override
-    //	public void handleMouseInput() throws IOException {
-    //		super.handleMouseInput();
-    //		//TODO
-    ////		int d = Mouse.getDWheel();
-    ////		if (d != -1) {
-    ////			int x = Mouse.getEventX() * width / mc.displayWidth;
-    ////			int y = height - Mouse.getEventY() * height / mc.displayHeight - 1;
-    ////
-    ////			if (d < 0) {
-    ////				d = -1;
-    ////			}
-    ////			if(d > 0)
-    ////			{
-    ////				d = 1;
-    ////			}
-    ////
-    ////			if (this.inRect(x - getGuiLeft(), y - getGuiTop(),  0, 0, xSize, ySize))
-    ////			{
-    ////				int moduleSize = this.cart.modularSpaceHeight;
-    ////				int scroll = cart.getScrollY() + (-d * 7500) / (moduleSize - EntityMinecartModular.MODULAR_SPACE_HEIGHT);
-    ////				scroll = MathHelper.clamp(scroll, 0, 198);
-    ////				cart.setScrollY(scroll);
-    ////			}
-    ////		}
-    //	}
+    public void pushScissor() {
+        GuiHelper.pushGuiScissor(minecraft, getGuiLeft() + 5, getGuiTop() + 4, 438, 164, width, height);
+    }
+
+    public void popScissor() {
+        GuiHelper.popScissor();
+    }
 
     public void drawTexturedModalRect(PoseStack matrixStack, final int x, final int y, final int u, final int v, final int w, final int h, final RENDER_ROTATION rotation)
     {

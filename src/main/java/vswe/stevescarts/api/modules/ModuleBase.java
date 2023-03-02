@@ -35,6 +35,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fluids.FluidStack;
 import vswe.stevescarts.api.StevesCartsAPI;
+import vswe.stevescarts.client.guis.GuiHelper;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.client.guis.buttons.ButtonBase;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -503,19 +504,24 @@ public abstract class ModuleBase
         final int j = gui.getGuiLeft();
         final int k = gui.getGuiTop();
         final int[] rect = {x, y, w, 8};
-        if (!doStealInterface())
+        boolean stealInterface = doStealInterface();
+        int dif = 0;
+        if (!stealInterface)
         {
-            handleScroll(rect);
+            dif = handleScroll(rect);
         }
-        if (rect[3] == 8)
+        if (rect[3] > 0)
         {
-            if (center)
-            {
-                Minecraft.getInstance().font.draw(matrixStack, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX(), rect[1] + getY(), c);
+            if (!stealInterface) {
+                gui.pushScissor();
             }
-            else
-            {
+            if (center) {
+                Minecraft.getInstance().font.draw(matrixStack, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX(), rect[1] + getY(), c);
+            } else {
                 Minecraft.getInstance().font.draw(matrixStack, str, rect[0] + getX(), rect[1] + getY(), c);
+            }
+            if (!stealInterface) {
+                gui.popScissor();
             }
         }
     }
