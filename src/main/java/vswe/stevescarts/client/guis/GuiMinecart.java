@@ -267,6 +267,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         {
             if (inRect((int) x - getGuiLeft(), (int) y - getGuiTop(), scrollBox[0], scrollBox[1], scrollBox[2], scrollBox[3]))
             {
+                scrollToMouse(y);
                 isScrolling = true;
                 return true;
             }
@@ -282,6 +283,12 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         return super.mouseClicked(x, y, button);
     }
 
+    @Override
+    public boolean mouseReleased(double p_97812_, double p_97813_, int p_97814_) {
+        isScrolling = false;
+        return super.mouseReleased(p_97812_, p_97813_, p_97814_);
+    }
+
     protected boolean inRect(final int x, final int y, final int x1, final int y1, final int sizeX, final int sizeY)
     {
         return x >= x1 && x <= x1 + sizeX && y >= y1 && y <= y1 + sizeY;
@@ -293,26 +300,24 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     }
 
     @Override
+    public boolean mouseDragged(double x, double y, int button, double moveX, double moveY) {
+        if (super.mouseDragged(x, y, button, moveX, moveY)) return true;
+        if (isScrolling)
+        {
+            scrollToMouse(y);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public void mouseMoved(final double x, final double y)
     {
         super.mouseMoved(x, y);
         int button = 0;
         if (isScrolling)
         {
-            int temp = (int) y - getGuiTop() - 12 - (scrollBox[1] + 2);
-            if (temp < 0)
-            {
-                temp = 0;
-            }
-            else if (temp > 198)
-            {
-                temp = 198;
-            }
-            cart.setScrollY(temp);
-        }
-        if (button != -1)
-        {
-            isScrolling = false;
+            scrollToMouse(y);
         }
         if (cart.getModules() != null)
         {
@@ -329,6 +334,19 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
                 }
             }
         }
+    }
+
+    private void scrollToMouse(double mouseY) {
+        int temp = (int) mouseY - getGuiTop() - 12 - (scrollBox[1] + 2);
+        if (temp < 0)
+        {
+            temp = 0;
+        }
+        else if (temp > 198)
+        {
+            temp = 198;
+        }
+        cart.setScrollY(temp);
     }
 
     @Override
