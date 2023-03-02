@@ -2,7 +2,10 @@ package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
@@ -10,14 +13,16 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.workers.tools.ModuleDrill;
+import vswe.stevescarts.network.DataSerializers;
+import vswe.stevescarts.network.DataSerializers.BoolArray;
 
 public class ModuleDrillIntelligence extends ModuleAddon
 {
+    private final EntityDataAccessor<BoolArray> DISABLED_ARRAY = createDw(DataSerializers.BOOL_ARRAY);
     private ModuleDrill drill;
     private boolean hasHeightController;
     private int guiW;
     private int guiH;
-    private short[] isDisabled;
     private boolean clickedState;
     private boolean clicked;
     private int lastId;
@@ -27,6 +32,19 @@ public class ModuleDrillIntelligence extends ModuleAddon
         super(cart);
         guiW = -1;
         guiH = -1;
+    }
+
+    @Override
+    public void initDw() {
+        registerDw(DISABLED_ARRAY, new BoolArray(getDrillWidth() * getDrillHeight()));
+    }
+
+    public BoolArray getDisabledArray() {
+        return isPlaceholder() ? new BoolArray(16*16) : getDw(DISABLED_ARRAY);
+    }
+
+    public void setDisabledArray(BoolArray array) {
+        updateDw(DISABLED_ARRAY, array);
     }
 
     @Override
@@ -63,6 +81,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
     {
         drawString(matrixStack, gui, getModuleName(), 8, 6, 0x404040);
@@ -107,6 +126,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/intelligence.png");
@@ -141,13 +161,6 @@ public class ModuleDrillIntelligence extends ModuleAddon
         }
     }
 
-    private void initDisabledData()
-    {
-        if (isDisabled == null)
-        {
-            isDisabled = new short[(int) Math.ceil(getDrillWidth() * getDrillHeight() / 16.0f)];
-        }
-    }
 
     public boolean isActive(int x, int y, final int offset, final boolean direction)
     {
@@ -165,8 +178,8 @@ public class ModuleDrillIntelligence extends ModuleAddon
 
     private boolean isActive(int id)
     {
-        initDisabledData();
-        return !isRestricted(id) && (isLocked(id) || (isDisabled[id / 16] & 1 << id % 16) == 0x0);
+        BoolArray array = getDisabledArray();
+        return !isRestricted(id) && (isLocked(id) || !array.get(id));
     }
 
     private boolean isLocked(int id)
@@ -192,10 +205,11 @@ public class ModuleDrillIntelligence extends ModuleAddon
 
     private void swapActiveness(final int id)
     {
-        initDisabledData();
         if (!isRestricted(id) && !isLocked(id))
         {
-            isDisabled[id / 16] ^= (short) (1 << id % 16);
+            BoolArray array = getDisabledArray();
+            array.set(id, !array.get(id));
+            setDisabledArray(array);
         }
     }
 
@@ -228,27 +242,28 @@ public class ModuleDrillIntelligence extends ModuleAddon
         return (int) Math.ceil(maxDrillWidth * (maxDrillHeight + 2) / 16.0f);
     }
 
-    @Override
-    protected void checkGuiData(final Object[] info)
-    {
-        if (isDisabled != null)
-        {
-            for (int i = 0; i < isDisabled.length; ++i)
-            {
-                updateGuiData(info, i, isDisabled[i]);
-            }
-        }
-    }
+    //TODO If we are using EntityDataAccessor do we even need this?
+//    @Override
+//    protected void checkGuiData(final Object[] info)
+//    {
+//        if (isDisabled != null)
+//        {
+//            for (int i = 0; i < isDisabled.length; ++i)
+//            {
+//                updateGuiData(info, i, isDisabled[i]);
+//            }
+//        }
+//    }
 
-    @Override
-    public void receiveGuiData(final int id, final short data)
-    {
-        initDisabledData();
-        if (id >= 0 && id < isDisabled.length)
-        {
-            isDisabled[id] = data;
-        }
-    }
+//    @Override
+//    public void receiveGuiData(final int id, final short data)
+//    {
+////        updateDw(enabledArray, getDw(enabledArray).set(id));
+////        if (id >= 0 && id < isDisabled.length)
+////        {
+////            isDisabled[id] = data;
+////        }
+//    }
 
     @Override
     public int numberOfPackets()
@@ -268,20 +283,16 @@ public class ModuleDrillIntelligence extends ModuleAddon
     @Override
     protected void Save(final CompoundTag tagCompound, final int id)
     {
-        initDisabledData();
-        for (int i = 0; i < isDisabled.length; ++i)
-        {
-            tagCompound.putShort(generateNBTName("isDisabled" + i, id), isDisabled[i]);
-        }
+        tagCompound.putByteArray(generateNBTName("enabled_data", id), getDisabledArray().getBytes());
     }
 
     @Override
     protected void Load(final CompoundTag tagCompound, final int id)
     {
-        initDisabledData();
-        for (int i = 0; i < isDisabled.length; ++i)
-        {
-            isDisabled[i] = tagCompound.getShort(generateNBTName("isDisabled" + i, id));
+        int baseSize = getDrillHeight() * getDrillHeight();
+        BoolArray loaded = BoolArray.fromBytes(tagCompound.getByteArray(generateNBTName("enabled_data", id)));
+        if (loaded.getBytes().length >= baseSize) {
+            setDisabledArray(loaded);
         }
     }
 
@@ -341,5 +352,10 @@ public class ModuleDrillIntelligence extends ModuleAddon
                 }
             }
         }
+    }
+
+    @Override
+    public int numberOfDataWatchers() {
+        return 1;
     }
 }
