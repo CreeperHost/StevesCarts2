@@ -1047,7 +1047,7 @@ public abstract class ModuleBase
         {
             handleScroll(rect);
         }
-        return x >= rect[0] && x <= rect[0] + rect[2] && y >= rect[1] && y <= rect[1] + rect[3];
+        return rect[3] > 0 && x >= rect[0] && x <= rect[0] + rect[2] && y >= rect[1] && y <= rect[1] + rect[3];
     }
 
     /**
@@ -1539,6 +1539,7 @@ public abstract class ModuleBase
         }
         x += getX();
         y += getY();
+        System.out.println("TT");
         gui.drawMouseOver(matrixStack, str, x, y);
     }
 
