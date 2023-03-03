@@ -1539,7 +1539,6 @@ public abstract class ModuleBase
         }
         x += getX();
         y += getY();
-        System.out.println("TT");
         gui.drawMouseOver(matrixStack, str, x, y);
     }
 

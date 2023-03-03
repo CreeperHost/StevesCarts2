@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 public abstract class ModuleRecipe extends ModuleAddon
 {
-    //    private int target;
     private EntityDataAccessor<Byte> TARGET;
     private EntityDataAccessor<Byte> MAX_ITEM_COUNT;
     private EntityDataAccessor<Byte> MODE;
@@ -33,14 +32,11 @@ public abstract class ModuleRecipe extends ModuleAddon
     protected ArrayList<SlotBase> inputSlots;
     protected ArrayList<SlotBase> outputSlots;
     protected ArrayList<SlotBase> allTheSlots;
-    //    private int maxItemCount;
-    //    private int mode;
+
 
     public ModuleRecipe(final EntityMinecartModular cart)
     {
         super(cart);
-        //        maxItemCount = 1;
-        //        target = 3;
         dirty = true;
         allTheSlots = new ArrayList<>();
         outputSlots = new ArrayList<>();
@@ -200,36 +196,37 @@ public abstract class ModuleRecipe extends ModuleAddon
         return canUseAdvancedFeatures() ? 3 : 0;
     }
 
-    @Override
-    protected void checkGuiData(final Object[] info)
-    {
-        if (canUseAdvancedFeatures())
-        {
-            updateGuiData(info, 0, (short) getDw(TARGET));
-            updateGuiData(info, 1, (short) getDw(MODE));
-            updateGuiData(info, 2, (short) getDw(MAX_ITEM_COUNT));
-        }
-    }
-
-    @Override
-    public void receiveGuiData(final int id, final short data)
-    {
-        if (canUseAdvancedFeatures())
-        {
-            if (id == 0)
-            {
-                updateDw(TARGET, (byte) data);
-            }
-            else if (id == 1)
-            {
-                updateDw(MODE, (byte) data);
-            }
-            else if (id == 2)
-            {
-                updateDw(MAX_ITEM_COUNT, (byte) data);
-            }
-        }
-    }
+//  I dont think these are needed with EntityDataAccessor
+//    @Override
+//    protected void checkGuiData(final Object[] info)
+//    {
+//        if (canUseAdvancedFeatures())
+//        {
+//            updateGuiData(info, 0, (short) getDw(TARGET));
+//            updateGuiData(info, 1, (short) getDw(MODE));
+//            updateGuiData(info, 2, (short) getDw(MAX_ITEM_COUNT));
+//        }
+//    }
+//
+//    @Override
+//    public void receiveGuiData(final int id, final short data)
+//    {
+//        if (canUseAdvancedFeatures())
+//        {
+//            if (id == 0)
+//            {
+//                updateDw(TARGET, (byte) data);
+//            }
+//            else if (id == 1)
+//            {
+//                updateDw(MODE, (byte) data);
+//            }
+//            else if (id == 2)
+//            {
+//                updateDw(MAX_ITEM_COUNT, (byte) data);
+//            }
+//        }
+//    }
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
@@ -294,14 +291,13 @@ public abstract class ModuleRecipe extends ModuleAddon
                     if (++mode > 2)
                     {
                         mode = 0;
-                        updateDw(MODE, (byte) mode);
                     }
                 }
                 else if (--mode < 0)
                 {
                     mode = 2;
-                    updateDw(MODE, (byte) mode);
                 }
+                updateDw(MODE, (byte) mode);
             }
             else if (id == 2)
             {
