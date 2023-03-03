@@ -1,11 +1,11 @@
 package vswe.stevescarts.client.guis;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -570,6 +570,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
             }
         }
 
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder buff = tessellator.getBuilder();
         buff.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
