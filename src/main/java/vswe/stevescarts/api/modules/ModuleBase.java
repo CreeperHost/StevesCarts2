@@ -495,14 +495,14 @@ public abstract class ModuleBase
     @OnlyIn(Dist.CLIENT)
     public void drawString(PoseStack matrixStack, final GuiMinecart gui, final String str, final int x, final int y, final int c)
     {
-        drawString(matrixStack, gui, str, gui.getGuiLeft() + x, gui.getGuiTop() + y, -1, false, c);
+        drawString(matrixStack, gui, str, x, y, -1, false, c);
     }
 
     @OnlyIn(Dist.CLIENT)
     public void drawString(PoseStack matrixStack, GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c)
     {
-        final int j = gui.getGuiLeft();
-        final int k = gui.getGuiTop();
+        final int left = gui.getGuiLeft();
+        final int top = gui.getGuiTop();
         final int[] rect = {x, y, w, 8};
         boolean stealInterface = doStealInterface();
         int dif = 0;
@@ -516,9 +516,9 @@ public abstract class ModuleBase
                 gui.pushScissor();
             }
             if (center) {
-                Minecraft.getInstance().font.draw(matrixStack, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX(), rect[1] + getY(), c);
+                Minecraft.getInstance().font.draw(matrixStack, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX() + left, rect[1] + getY() + dif + top, c);
             } else {
-                Minecraft.getInstance().font.draw(matrixStack, str, rect[0] + getX(), rect[1] + getY(), c);
+                Minecraft.getInstance().font.draw(matrixStack, str, rect[0] + getX() + left, rect[1] + getY() + dif + top, c);
             }
             if (!stealInterface) {
                 gui.popScissor();
