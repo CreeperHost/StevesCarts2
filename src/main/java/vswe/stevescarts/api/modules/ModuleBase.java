@@ -996,8 +996,34 @@ public abstract class ModuleBase
      * @param y      The y coordinate of the mouse
      * @param button The button that was released, or -1 if the cursor is just being moved
      */
+    @Deprecated //This is dumb. Use mouseMoved and/or mouseReleased
     @OnlyIn(Dist.CLIENT)
     public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button)
+    {
+    }
+
+    /**
+     * Used to handle mouse button release in the module's interface
+     *
+     * @param gui    The gui that was clicked
+     * @param x      The x coordinate of the mouse
+     * @param y      The y coordinate of the mouse
+     * @param button The button that was pressed on the mouse
+     */
+    @OnlyIn(Dist.CLIENT)
+    public void mouseReleased(final GuiMinecart gui, final int x, final int y, final int button)
+    {
+    }
+
+    /**
+     * Used to handle mouse movement in the module's interface
+     *
+     * @param gui    The gui that is being used
+     * @param x      The x coordinate of the mouse
+     * @param y      The y coordinate of the mouse
+     */
+    @OnlyIn(Dist.CLIENT)
+    public void mouseMoved(final GuiMinecart gui, final int x, final int y)
     {
     }
 

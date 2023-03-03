@@ -174,12 +174,13 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     {
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         itemRenderer.renderGuiItem(icon.getItemStack(), targetX, targetY);
+        RenderSystem.disableDepthTest();
     }
 
-    private void renderModuleListText(PoseStack matrixStack, int x, int y)
+    private void renderModuleListText(PoseStack matrixStack, int mouseX, int mouseY)
     {
-        x -= getGuiLeft();
-        y -= getGuiTop();
+        mouseX -= getGuiLeft();
+        mouseY -= getGuiTop();
         ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
         font.draw(matrixStack, cart.getName(), getGuiLeft() + 5, getGuiTop() + 172, 4210752);
         GlStateManager._enableBlend();
@@ -188,9 +189,9 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
             ModuleCountPair count = moduleCounts.get(i);
             if (count.getCount() != 1)
             {
-                int alpha = (int) ((inRect(x, y, getModuleDisplayX(i), getModuleDisplayY(i), 16, 16) ? 1.0f : 0.75f) * 256.0f);
+                int alpha = (int) ((inRect(mouseX, mouseY, getModuleDisplayX(i), getModuleDisplayY(i), 16, 16) ? 1.0f : 0.75f) * 256.0f);
                 String str = String.valueOf(count.getCount());
-                font.drawShadow(matrixStack, str, getModuleDisplayX(i) + 16 - font.width(str), getModuleDisplayY(i) + 8, 0xFFFFFF | alpha << 24);
+                font.drawShadow(matrixStack, str, getGuiLeft() + getModuleDisplayX(i) + 16 - font.width(str), getModuleDisplayY(i) + 8, 0xFFFFFF | alpha << 24);
             }
         }
         GlStateManager._disableBlend();
@@ -285,9 +286,18 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     }
 
     @Override
-    public boolean mouseReleased(double p_97812_, double p_97813_, int p_97814_) {
+    public boolean mouseReleased(double x, double y, int button) {
+        ModuleBase thief = cart.getInterfaceThief();
+        if (thief != null) {
+            handleModuleMouseReleased(thief, (int) x, (int) y, button);
+        } else if (cart.getModules() != null) {
+            for (ModuleBase module : cart.getModules()) {
+                handleModuleMouseReleased(module, (int) x, (int) y, button);
+            }
+        }
+
         isScrolling = false;
-        return super.mouseReleased(p_97812_, p_97813_, p_97814_);
+        return super.mouseReleased(x, y, button);
     }
 
     protected boolean inRect(final int x, final int y, final int x1, final int y1, final int sizeX, final int sizeY)
@@ -312,26 +322,18 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     }
 
     @Override
-    public void mouseMoved(final double x, final double y)
-    {
+    public void mouseMoved(final double x, final double y) {
         super.mouseMoved(x, y);
-        int button = 0;
-        if (isScrolling)
-        {
+        if (isScrolling) {
             scrollToMouse(y);
         }
-        if (cart.getModules() != null)
-        {
+        if (cart.getModules() != null) {
             final ModuleBase thief = cart.getInterfaceThief();
-            if (thief != null)
-            {
-                handleModuleMouseMoved(thief, (int) x, (int) y, button);
-            }
-            else
-            {
-                for (final ModuleBase module : cart.getModules())
-                {
-                    handleModuleMouseMoved(module, (int) x, (int) y, button);
+            if (thief != null) {
+                handleModuleMouseMoved(thief, (int) x, (int) y);
+            } else {
+                for (final ModuleBase module : cart.getModules()) {
+                    handleModuleMouseMoved(module, (int) x, (int) y);
                 }
             }
         }
@@ -461,9 +463,17 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         }
     }
 
-    private void handleModuleMouseMoved(final ModuleBase module, final int x, final int y, final int button)
+    private void handleModuleMouseReleased(final ModuleBase module, final int x, final int y, final int button)
     {
         module.mouseMovedOrUp(this, x - getGuiLeft() - module.getX(), y - getGuiTop() - module.getY(), button);
+        module.mouseReleased(this, x - getGuiLeft() - module.getX(), y - getGuiTop() - module.getY(), button);
+    }
+
+
+    private void handleModuleMouseMoved(ModuleBase module, int x, int y)
+    {
+        module.mouseMovedOrUp(this, x - getGuiLeft() - module.getX(), y - getGuiTop() - module.getY(), -1);
+        module.mouseMoved(this, x - getGuiLeft() - module.getX(), y - getGuiTop() - module.getY());
     }
 
     private void handleModuleKeyPress(final ModuleBase module, final int id, final int extraInformation)
