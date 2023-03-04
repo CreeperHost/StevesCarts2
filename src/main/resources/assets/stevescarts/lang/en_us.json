@@ -577,6 +577,7 @@
     "modules.attachments.stevescarts.experienceTitle": "Experience",
     "modules.attachments.stevescarts.experienceLevel": "Experience level: [%1] / [%2]",
     "modules.attachments.stevescarts.experienceExtract": "Click to extract 50xp",
+    "modules.attachments.stevescarts.experienceExtractAll": "Shift-Click to extract all",
     "modules.attachments.stevescarts.experiencePlayerLevel": "Your current level is [%1]",
     "modules.attachments.stevescarts.shooterTitle": "Shooter",
     "modules.attachments.stevescarts.shooterSeconds": "s",
