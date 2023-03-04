@@ -170,6 +170,31 @@ public class StevesCartsModules
         GALGADORIAN_HULL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "galgadorian_hull"),
                 new ModuleDataHull(new ResourceLocation(Constants.MOD_ID, "galgadorian_hull"), "Galgadorian Hull", ModuleGalgadorian.class, ModuleType.HULL).setCapacity(1000).setEngineMax(5).setAddonMax(12).setComplexityMax(150));
 
+        //Tanks (Need to be before engines so the TANK_GROUP is populated when we copy it for the ADVANCED_THERMAL_ENGINE)
+        INTERNAL_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "internal_sctank"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "internal_sctank"), "Internal SCTank", ModuleInternalTank.class, ModuleType.STORAGE, 37).setAllowDuplicate());
+        DefaultModuleGroups.TANK_GROUP.add(INTERNAL_TANK);
+
+        SIDE_TANKS = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "side_tanks"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "side_tanks"), "Side Tanks", ModuleSideTanks.class, ModuleType.STORAGE, 10).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT}));
+        DefaultModuleGroups.TANK_GROUP.add(SIDE_TANKS);
+
+        TOP_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "top_sctank"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "top_sctank"), "Top SCTank", ModuleTopTank.class, ModuleType.STORAGE, 22).addSide(ModuleData.SIDE.TOP));
+        DefaultModuleGroups.TANK_GROUP.add(TOP_TANK);
+
+        ADVANCED_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_sctank"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_sctank"), "Advanced SCTank", ModuleAdvancedTank.class, ModuleType.STORAGE, 54).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.CENTER, ModuleData.SIDE.TOP}));
+        DefaultModuleGroups.TANK_GROUP.add(ADVANCED_TANK);
+
+        FRONT_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "front_sctank"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "front_sctank"), "Front SCTank", ModuleFrontTank.class, ModuleType.STORAGE, 15).addSide(ModuleData.SIDE.FRONT));
+        DefaultModuleGroups.TANK_GROUP.add(FRONT_TANK);
+
+        OPEN_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "open_sctank"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "open_sctank"), "Open SCTank", ModuleOpenTank.class, ModuleType.STORAGE, 31).addSide(ModuleData.SIDE.TOP).addMessage(Localization.MODULE_INFO.OPEN_TANK));
+        DefaultModuleGroups.TANK_GROUP.add(OPEN_TANK);
+
 
         //Engines
         COAL_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "coal_engine"),
@@ -189,7 +214,7 @@ public class StevesCartsModules
         DefaultModuleGroups.ENGINE_GROUP.add(THERMAL_ENGINE);
 
         ADVANCED_THERMAL_ENGINE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_thermal_engine"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_thermal_engine"), "Advanced Thermal Engine", ModuleThermalAdvanced.class, ModuleType.ENGINE, 58).addRequirement(DefaultModuleGroups.TANK_GROUP));
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_thermal_engine"), "Advanced Thermal Engine", ModuleThermalAdvanced.class, ModuleType.ENGINE, 58).addRequirement(DefaultModuleGroups.TANK_GROUP.copy(2)));
         DefaultModuleGroups.ENGINE_GROUP.add(ADVANCED_THERMAL_ENGINE);
 
 
@@ -343,31 +368,6 @@ public class StevesCartsModules
 
         FIREWORK_DISPLAY = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "firework_display"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "firework_display"), "Firework display", ModuleFirework.class, ModuleType.ADDON, 45));
-
-
-        INTERNAL_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "internal_sctank"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "internal_sctank"), "Internal SCTank", ModuleInternalTank.class, ModuleType.STORAGE, 37).setAllowDuplicate());
-        DefaultModuleGroups.TANK_GROUP.add(INTERNAL_TANK);
-
-        SIDE_TANKS = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "side_tanks"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "side_tanks"), "Side Tanks", ModuleSideTanks.class, ModuleType.STORAGE, 10).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.RIGHT, ModuleData.SIDE.LEFT}));
-        DefaultModuleGroups.TANK_GROUP.add(SIDE_TANKS);
-
-        TOP_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "top_sctank"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "top_sctank"), "Top SCTank", ModuleTopTank.class, ModuleType.STORAGE, 22).addSide(ModuleData.SIDE.TOP));
-        DefaultModuleGroups.TANK_GROUP.add(TOP_TANK);
-
-        ADVANCED_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_sctank"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_sctank"), "Advanced SCTank", ModuleAdvancedTank.class, ModuleType.STORAGE, 54).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.CENTER, ModuleData.SIDE.TOP}));
-        DefaultModuleGroups.TANK_GROUP.add(ADVANCED_TANK);
-
-        FRONT_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "front_sctank"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "front_sctank"), "Front SCTank", ModuleFrontTank.class, ModuleType.STORAGE, 15).addSide(ModuleData.SIDE.FRONT));
-        DefaultModuleGroups.TANK_GROUP.add(FRONT_TANK);
-
-        OPEN_TANK = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "open_sctank"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "open_sctank"), "Open SCTank", ModuleOpenTank.class, ModuleType.STORAGE, 31).addSide(ModuleData.SIDE.TOP).addMessage(Localization.MODULE_INFO.OPEN_TANK));
-        DefaultModuleGroups.TANK_GROUP.add(OPEN_TANK);
 
         INCINERATOR = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "incinerator"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "incinerator"), "Incinerator", ModuleIncinerator.class, ModuleType.ADDON, 23).addRequirement(DefaultModuleGroups.TANK_GROUP).addRequirement(DefaultModuleGroups.DRILL_GROUP));
