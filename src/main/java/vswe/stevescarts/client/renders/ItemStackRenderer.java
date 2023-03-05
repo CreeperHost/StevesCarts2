@@ -71,6 +71,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implement
                         for (ModelCartbase model : module.getModels())
                         {
                             iRenderTypeBuffer.getBuffer(model.getRenderType(module));
+                            model.applyEffects(module, matrixStack, iRenderTypeBuffer, 0, 0, 0);
                             model.renderToBuffer(matrixStack, ivertexbuilder, p_239207_5_, p_239207_6_, 1.0F, 1.0F, 1.0F, 1.0F);
                         }
                     }

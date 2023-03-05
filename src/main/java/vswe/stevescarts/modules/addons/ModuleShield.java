@@ -6,6 +6,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
+import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
@@ -17,6 +18,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     private boolean shield;
     private float shieldDistance;
     private float shieldAngle;
+    private float lastShieldAngle;
     private int[] buttonRect;
     private EntityDataAccessor<Boolean> STATUS;
     private boolean setup;
@@ -44,49 +46,42 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
         return shieldAngle;
     }
 
+    public float getLastShieldAngle() {
+        return lastShieldAngle;
+    }
+
     public boolean hasShield()
     {
         return shield;
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (getCart().level.isClientSide && !setup)
-        {
-            if (isPlaceholder() || !getDw(STATUS))
-            {
+        if (getCart().getLevel().isClientSide && !setup) {
+            if (isPlaceholder() || !getDw(STATUS)) {
                 shieldDistance = 0;
                 shield = false;
             }
             setup = true;
         }
-        if (hasShield() && !getCart().hasFuelForModule() && !getCart().level.isClientSide)
-        {
+        if (hasShield() && !getCart().hasFuelForModule() && !getCart().getLevel().isClientSide) {
             setShieldStatus(false);
         }
-        if (hasShield())
-        {
+        if (hasShield()) {
             getCart().clearFire();
         }
-        if (!getShieldStatus() && shieldDistance > 0.0f)
-        {
+        if (!getShieldStatus() && shieldDistance > 0.0f) {
             shieldDistance -= 0.25f;
-            if (shieldDistance <= 0.0f)
-            {
-                setShieldStatus(false);
+            if (shieldDistance <= 0.0f) {
                 shield = false;
             }
-        }
-        else if (getShieldStatus() && shieldDistance < 18.0f)
-        {
+        } else if (getShieldStatus() && shieldDistance < 18.0f) {
             shieldDistance += 0.25f;
-            setShieldStatus(true);
             shield = true;
         }
-        if (shield)
-        {
+        if (shield) {
+            lastShieldAngle = shieldAngle;
             shieldAngle = (float) ((shieldAngle + 0.125f) % 314.1592653589793);
         }
     }
