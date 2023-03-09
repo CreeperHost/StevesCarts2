@@ -130,7 +130,7 @@ public class BlockRailAdvDetector extends BaseRailBlock
                             }
                             boolean isBlueBerry = false;
                             activator.handleCart(cart, isOrange);
-                            cart.releaseCart(false);
+                            cart.releaseCart();
                         }
                         return;
                     }

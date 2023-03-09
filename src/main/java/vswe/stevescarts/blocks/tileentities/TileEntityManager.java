@@ -221,8 +221,10 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
             moveTime = 0;
             if (!exchangeItems(standardTransferHandler))
             {
-                getCart().releaseCart(doReturn[getSide()]);
-
+                getCart().releaseCart();
+                if (doReturn[getSide()]) {
+                    getCart().turnback();
+                }
                 standardTransferHandler.reset();
             }
         }

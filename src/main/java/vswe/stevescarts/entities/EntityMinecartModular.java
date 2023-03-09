@@ -80,6 +80,8 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
 {
     public BlockPos disabledPos;
     protected boolean wasDisabled;
+    public double pushX;
+    public double pushZ;
     public double temppushX;
     public double temppushZ;
     protected boolean engineFlag;
@@ -457,37 +459,30 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         }
     }
 
-    public void updateFuel()
-    {
+    public void updateFuel() {
         final int consumption = getConsumption();
-        if (consumption > 0)
-        {
+        if (consumption > 0) {
             final ModuleEngine engine = getCurrentEngine();
-            if (engine != null)
-            {
+            if (engine != null) {
                 engine.consumeFuel(consumption);
-                if (!isPlaceholder && level.isClientSide && hasFuel() && !isDisabled())
-                {
+                if (!isPlaceholder && level.isClientSide && hasFuel() && !isDisabled()) {
                     engine.smoke();
                 }
             }
         }
-        if (hasFuel())
-        {
-            if (!isDisabled())
-            {
-                if (getDeltaMovement().x == 0 && getDeltaMovement().z == 0)
-                {
-                    this.setDeltaMovement(getMaxCartSpeedOnRail(), 0, getMaxCartSpeedOnRail());
-                }
+        if (hasFuel()) {
+            if (!engineFlag) {
+                pushX = temppushX;
+                pushZ = temppushZ;
             }
-            setEngineBurning(hasFuel() && !isDisabled());
+        } else if (engineFlag) {
+            temppushX = pushX;
+            temppushZ = pushZ;
+            final double n = 0.0;
+            pushZ = n;
+            pushX = n;
         }
-        else
-        {
-            engineFlag = false;
-            this.setDeltaMovement(0, 0, 0);
-        }
+        setEngineBurning(hasFuel() && !isDisabled());
     }
 
     public boolean isEngineBurning()
@@ -748,57 +743,34 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public void moveMinecartOnRail(@NotNull BlockPos pos)
-    {
+    public void moveMinecartOnRail(@NotNull BlockPos pos) {
         super.moveMinecartOnRail(pos);
-        if (modules != null)
-        {
-            for (final ModuleBase module : modules)
-            {
+        if (modules != null) {
+            for (final ModuleBase module : modules) {
                 module.moveMinecartOnRail(pos);
             }
         }
         BlockState blockState = level.getBlockState(pos);
-        RailShape railDirection = ((BaseRailBlock) blockState.getBlock()).getRailDirection(blockState, level, pos, this);
-
-        if (blockState.getBlock() != ModBlocks.ADVANCED_DETECTOR.get() && isDisabled())
-        {
-            releaseCart(false);
+//        BlockState stateBelow = level.getBlockState(pos.below());
+        if (blockState.getBlock() != ModBlocks.ADVANCED_DETECTOR.get() && isDisabled()) {
+            releaseCart();
         }
-        boolean canBeDisabled = blockState.getBlock() == ModBlocks.ADVANCED_DETECTOR.get();
-        final boolean forceUnDisable = wasDisabled && disabledPos != null && disabledPos.equals(pos);
-        if (!forceUnDisable && wasDisabled)
-        {
+        boolean canBeDisabled = blockState.getBlock() == ModBlocks.ADVANCED_DETECTOR.get();// && (stateBelow.getBlock() != ModBlocks.DETECTOR_UNIT.getBlock() || !DetectorType.getTypeFromSate(stateBelow).canInteractWithCart() || DetectorType.getTypeFromSate(stateBelow).shouldStopCart());
+        boolean forceUnDisable = wasDisabled && disabledPos != null && disabledPos.equals(pos);
+        if (!forceUnDisable && wasDisabled) {
             wasDisabled = false;
         }
         canBeDisabled = (!forceUnDisable && canBeDisabled);
-        if (canBeDisabled && !isDisabled())
-        {
+        if (canBeDisabled && !isDisabled()) {
             setIsDisabled(true);
-            if (getDeltaMovement().x != 0.0 || getDeltaMovement().z != 0.0)
-            {
-                temppushX = getDeltaMovement().x;
-                temppushZ = getDeltaMovement().z;
+            if (pushX != 0.0 || pushZ != 0.0) {
+                temppushX = pushX;
+                temppushZ = pushZ;
                 final double n = 0.0;
-                setDeltaMovement(n, n, n);
+                pushZ = n;
+                pushX = n;
             }
             disabledPos = new BlockPos(pos);
-        }
-
-        if (!isDisabled())
-        {
-            temppushX = getDeltaMovement().x;
-            temppushZ = getDeltaMovement().z;
-        }
-
-        //If the cart is not disabled and there is not a track in front of the cart make it turn back
-        if(!isDisabled() && !isCorner(pos.below()) && !RailBlock.isRail(level, pos.relative(getMotionDirection())) && !RailBlock.isRail(level, pos.relative(getMotionDirection()).below()))
-        {
-            //TODO make sure the Module can work before doing turning around...
-            if(!hasModule(ModuleRailer.class))
-            {
-//                turnback();
-            }
         }
     }
 
@@ -825,30 +797,20 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         return null;
     }
 
-    public void turnback()
-    {
-        double x = getDeltaMovement().x;
-        double z = getDeltaMovement().z;
-        if(x == 0 || z == 0)
-        {
-            x = getMaxCartSpeedOnRail();
-            z = getMaxCartSpeedOnRail();
-        }
-        setDeltaMovement(x *= -1.0, 0, z *= -1.0);
-        temppushX = x *= -1.0;
-        temppushZ  = z *= -1.0;
+    public void turnback() {
+        pushX *= -1.0;
+        pushZ *= -1.0;
+        temppushX *= -1.0;
+        temppushZ *= -1.0;
+        setDeltaMovement(getDeltaMovement().multiply(-1, -1, -1));
     }
 
-    public void releaseCart(boolean turnback)
+    public void releaseCart()
     {
         wasDisabled = true;
         setIsDisabled(false);
-        if(turnback)
-        {
-            turnback();
-            return;
-        }
-        setDeltaMovement(temppushX, 0, temppushZ);
+        pushX = temppushX;
+        pushZ = temppushZ;
     }
 
     @Override
@@ -950,44 +912,65 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     RailShape lastRailShape;
 
     @Override
-    protected void moveAlongTrack(@NotNull BlockPos pos, @NotNull BlockState state)
-    {
-        if (!getPassengers().isEmpty())
-        {
+    protected void moveAlongTrack(@NotNull BlockPos pos, @NotNull BlockState state) {
+        if (!getPassengers().isEmpty()) {
             Entity riddenByEntity = getPassengers().get(0);
-            if (riddenByEntity instanceof LivingEntity)
-            {
+            if (riddenByEntity instanceof LivingEntity) {
                 final float move = riddenByEntity.moveDist;
                 riddenByEntity.moveDist = 0.0f;
                 super.moveAlongTrack(pos, state);
                 riddenByEntity.moveDist = move;
-            }
-            else
-            {
+            } else {
                 super.moveAlongTrack(pos, state);
             }
-        }
-        else
-        {
+        } else {
             super.moveAlongTrack(pos, state);
+        }
+        double d2 = pushX * pushX + pushZ * pushZ;
+        Vec3 motion = getDeltaMovement();
+        if (d2 > 1.0E-4 && motion.x * motion.x + motion.z * motion.z > 0.001) {
+            d2 = Math.sqrt(d2);
+            pushX /= d2;
+            pushZ /= d2;
+            if (pushX * motion.x + pushZ * motion.z < 0.0) {
+                pushX = 0.0;
+                pushZ = 0.0;
+            } else {
+                pushX = motion.x;
+                pushZ = motion.z;
+            }
         }
     }
 
     @Override
-    protected void applyNaturalSlowdown()
-    {
-        if (!hasFuel()) super.applyNaturalSlowdown();
+    protected void applyNaturalSlowdown() {
+        double d0 = pushX * pushX + pushZ * pushZ;
+        engineFlag = (d0 > 1.0E-4);
+
+        if (isDisabled()) {
+            setDeltaMovement(0, 0, 0);
+        } else if (engineFlag) {
+            d0 = Math.sqrt(d0);
+            this.pushX /= d0;
+            this.pushZ /= d0;
+            final double d2 = getPushFactor();
+            Vec3 vec3 = this.getDeltaMovement().multiply(0.8D, 0.0D, 0.8D).add(this.pushX * d2, 0.0D, this.pushZ * d2);
+            if (this.isInWater()) {
+                vec3 = vec3.scale(0.1D);
+            }
+            this.setDeltaMovement(vec3);
+        } else {
+            this.setDeltaMovement(this.getDeltaMovement().multiply(0.98D, 0.0D, 0.98D));
+        }
+        super.applyNaturalSlowdown();
     }
 
-    protected double getPushFactor()
-    {
-        if (modules != null)
-        {
-            for (final ModuleBase module : modules)
-            {
+
+    protected double getPushFactor() {
+        if (modules != null) {
+            for (final ModuleBase module : modules) {
                 final double factor = module.getPushFactor();
-                if (factor >= 0.0)
-                {
+                if (factor >= 0.0) {
                     return factor;
                 }
             }
@@ -1001,8 +984,8 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         super.save(tagCompound);
         if(name != null) tagCompound.putString("cartName", name.getString());
         tagCompound.putBoolean("engineFlag", engineFlag);
-        tagCompound.putDouble("pushX", getDeltaMovement().x);
-        tagCompound.putDouble("pushZ", getDeltaMovement().z);
+        tagCompound.putDouble("pushX", pushX);
+        tagCompound.putDouble("pushZ", pushZ);
         tagCompound.putDouble("temppushX", temppushX);
         tagCompound.putDouble("temppushZ", temppushZ);
         tagCompound.putShort("workingTime", (short) workingTime);
@@ -1039,9 +1022,8 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         super.load(tagCompound);
         name = Component.translatable(tagCompound.getString("cartName"));
         engineFlag = tagCompound.getBoolean("engineFlag");
-        double pushX = tagCompound.getDouble("pushX");
-        double pushZ = tagCompound.getDouble("pushZ");
-        setDeltaMovement(pushX, 0, pushZ);
+        pushX = tagCompound.getDouble("pushX");
+        pushZ = tagCompound.getDouble("pushZ");
         temppushX = tagCompound.getDouble("temppushX");
         temppushZ = tagCompound.getDouble("temppushZ");
         workingTime = tagCompound.getShort("workingTime");
@@ -1162,30 +1144,31 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public @NotNull InteractionResult interactAt(@NotNull Player player, @NotNull Vec3 vec, @NotNull InteractionHand hand)
-    {
-        if (isPlaceholder)
-        {
+    public @NotNull InteractionResult interactAt(@NotNull Player player, @NotNull Vec3 vec, @NotNull InteractionHand hand) {
+        if (isPlaceholder) {
             return InteractionResult.FAIL;
         }
-        if (modules != null && !player.isCrouching())
-        {
+        if (modules != null && !player.isCrouching()) {
             boolean interupt = false;
-            for (final ModuleBase module : modules)
-            {
-                if (module.onInteractFirst(player))
-                {
+            for (final ModuleBase module : modules) {
+                if (module.onInteractFirst(player)) {
                     interupt = true;
                 }
             }
-            if (interupt)
-            {
+            if (interupt) {
                 return InteractionResult.SUCCESS;
             }
         }
-        if (!level.isClientSide)
-        {
-            NetworkHooks.openScreen((ServerPlayer) player, (MenuProvider) this, packetBuffer -> packetBuffer.writeInt(getId()));
+        if (!level.isClientSide) {
+            if (!isDisabled() && !hasPassenger(player)) {
+                temppushX = getX() - player.getX();
+                temppushZ = getZ() - player.getZ();
+            }
+            if (!isDisabled() && hasFuel() && pushX == 0.0 && pushZ == 0.0) {
+                pushX = temppushX;
+                pushZ = temppushZ;
+            }
+            NetworkHooks.openScreen((ServerPlayer) player, this, packetBuffer -> packetBuffer.writeInt(getId()));
         }
         return InteractionResult.SUCCESS;
     }
