@@ -2,16 +2,16 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import vswe.stevescarts.helpers.EnchantmentInfo;
+import vswe.stevescarts.helpers.ModularEnchantments;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 public class SlotEnchantment extends SlotBase
 {
-    private ArrayList<EnchantmentInfo.ENCHANTMENT_TYPE> enabledTypes;
+    private ArrayList<ModularEnchantments.EnchantmentType> enabledTypes;
 
-    public SlotEnchantment(final Container iinventory, final ArrayList<EnchantmentInfo.ENCHANTMENT_TYPE> enabledTypes, final int i, final int j, final int k)
+    public SlotEnchantment(final Container iinventory, final ArrayList<ModularEnchantments.EnchantmentType> enabledTypes, final int i, final int j, final int k)
     {
         super(iinventory, i, j, k);
         this.enabledTypes = enabledTypes;
@@ -20,6 +20,6 @@ public class SlotEnchantment extends SlotBase
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return EnchantmentInfo.isItemValid(enabledTypes, itemstack);
+        return ModularEnchantments.isValidBook(itemstack, enabledTypes);
     }
 }

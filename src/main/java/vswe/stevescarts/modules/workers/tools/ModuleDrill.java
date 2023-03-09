@@ -12,6 +12,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.BaseRailBlock;
@@ -234,14 +235,19 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
                 }
             }
         }
-        final int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
-        if (block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, new ItemStack(Items.DIAMOND_PICKAXE)).withParameter(LootContextParams.ORIGIN, getCart().position())).size() != 0)
+        int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
+        ItemStack tool = new ItemStack(Items.DIAMOND_PICKAXE);
+        if (fortune > 0) {
+            tool.enchant(Enchantments.BLOCK_FORTUNE, fortune);
+        }
+        List<ItemStack> drops = block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, tool).withParameter(LootContextParams.ORIGIN, getCart().position()));
+
+        if (!drops.isEmpty())
         {
-            List<ItemStack> stacks = block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, new ItemStack(Items.DIAMOND_PICKAXE)).withParameter(LootContextParams.ORIGIN, getCart().position()));
             boolean shouldRemove = false;
-            for (int j = 0; j < stacks.size(); ++j)
+            for (int j = 0; j < drops.size(); ++j)
             {
-                if (!minedItem(world, stacks.get(j), next))
+                if (!minedItem(world, drops.get(j), next))
                 {
                     return false;
                 }

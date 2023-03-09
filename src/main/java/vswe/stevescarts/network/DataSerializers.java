@@ -5,14 +5,16 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import vswe.stevescarts.helpers.EnchantmentData;
 
 /**
  * Created by brandon3055 on 27/02/2023
  */
 public class DataSerializers {
 
-    public static final EntityDataSerializer<BoolArray> BOOL_ARRAY = EntityDataSerializer.simple((friendlyByteBuf, boolArray) -> boolArray.write(friendlyByteBuf), BoolArray::read);
-    public static final EntityDataSerializer<ShortArray> SHORT_ARRAY = EntityDataSerializer.simple((friendlyByteBuf, shortArray) -> shortArray.write(friendlyByteBuf), ShortArray::read);
+    public static final EntityDataSerializer<BoolArray> BOOL_ARRAY = EntityDataSerializer.simple((buf, boolArray) -> boolArray.write(buf), BoolArray::read);
+    public static final EntityDataSerializer<ShortArray> SHORT_ARRAY = EntityDataSerializer.simple((buf, shortArray) -> shortArray.write(buf), ShortArray::read);
+    public static final EntityDataSerializer<EnchantmentData> ENCHANT_DATA = EntityDataSerializer.simple((buf, data) -> data.write(buf), EnchantmentData::read);
 
     public static class BoolArray {
         private final byte[] storage;
@@ -101,5 +103,6 @@ public class DataSerializers {
     static {
         EntityDataSerializers.registerSerializer(BOOL_ARRAY);
         EntityDataSerializers.registerSerializer(SHORT_ARRAY);
+        EntityDataSerializers.registerSerializer(ENCHANT_DATA);
     }
 }

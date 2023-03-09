@@ -11,7 +11,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotRepair;
 import vswe.stevescarts.entities.EntityMinecartModular;
-import vswe.stevescarts.helpers.EnchantmentInfo;
+import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -53,7 +53,7 @@ public abstract class ModuleTool extends ModuleWorker
         {
             if (module instanceof ModuleEnchants)
             {
-                (enchanter = (ModuleEnchants) module).addType(EnchantmentInfo.ENCHANTMENT_TYPE.TOOL);
+                (enchanter = (ModuleEnchants) module).addType(ModularEnchantments.EnchantmentType.TOOL);
                 break;
             }
         }
@@ -243,7 +243,7 @@ public abstract class ModuleTool extends ModuleWorker
         }
         if (enchanter != null)
         {
-            enchanter.damageEnchant(EnchantmentInfo.ENCHANTMENT_TYPE.TOOL, val);
+            enchanter.damageEnchant(ModularEnchantments.EnchantmentType.TOOL, val);
         }
     }
 

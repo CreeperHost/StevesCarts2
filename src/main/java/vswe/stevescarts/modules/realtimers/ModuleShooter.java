@@ -16,7 +16,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotArrow;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
-import vswe.stevescarts.helpers.EnchantmentInfo;
+import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
@@ -71,7 +71,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
             else if (module instanceof ModuleEnchants)
             {
                 enchanter = (ModuleEnchants) module;
-                enchanter.addType(EnchantmentInfo.ENCHANTMENT_TYPE.SHOOTER);
+                enchanter.addType(ModularEnchantments.EnchantmentType.SHOOTER);
             }
         }
     }
@@ -414,7 +414,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     {
         if (enchanter != null)
         {
-            enchanter.damageEnchant(EnchantmentInfo.ENCHANTMENT_TYPE.SHOOTER, 1);
+            enchanter.damageEnchant(ModularEnchantments.EnchantmentType.SHOOTER, 1);
         }
     }
 
