@@ -86,8 +86,15 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public double temppushZ;
     protected boolean engineFlag;
     private int motorRotation;
+    public boolean cornerFlip;
     private List<ResourceLocation> moduleLoadingData;
-
+    private RailShape fixedRailDirection;
+    private BlockPos fixedRailPos;
+    private int wrongRender;
+    private boolean oldRender;
+    private float lastRenderYaw;
+    private double lastMotionX;
+    private double lastMotionZ;
     private int workingTime;
     private ModuleWorker workingComponent;
     public TileEntityCartAssembler placeholderAsssembler;
@@ -174,6 +181,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     {
         super(ModEntities.MODULAR_CART.get(), world, x, y, z);
         engineFlag = false;
+        fixedRailDirection = null;
         random = world.random;
         loadModules(info);
     }
@@ -182,6 +190,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     {
         super(ModEntities.MODULAR_CART.get(), world);
         engineFlag = false;
+        fixedRailDirection = null;
         random = world.random;
     }
 
@@ -189,6 +198,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     {
         super(entityType, world);
         engineFlag = false;
+        fixedRailDirection = null;
         random = RandomSource.create();
     }
 
@@ -752,6 +762,9 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         }
         BlockState blockState = level.getBlockState(pos);
 //        BlockState stateBelow = level.getBlockState(pos.below());
+        RailShape railDirection = ((BaseRailBlock) blockState.getBlock()).getRailDirection(blockState, level, pos, this);
+        cornerFlip = ((railDirection == RailShape.SOUTH_EAST || railDirection == RailShape.SOUTH_WEST) && getDeltaMovement().x < 0.0) || ((railDirection == RailShape.NORTH_EAST || railDirection == RailShape.NORTH_WEST) && getDeltaMovement().x > 0.0);
+
         if (blockState.getBlock() != ModBlocks.ADVANCED_DETECTOR.get() && isDisabled()) {
             releaseCart();
         }
@@ -772,6 +785,10 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             }
             disabledPos = new BlockPos(pos);
         }
+        if (fixedRailPos != null && !fixedRailPos.equals(pos)) {
+            fixedRailDirection = null;
+            fixedRailPos = new BlockPos(fixedRailPos.getX(), -1, fixedRailPos.getZ());
+        }
     }
 
     public boolean isCorner(BlockPos blockPos)
@@ -788,14 +805,107 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         return false;
     }
 
-    public RailShape getRailDirection(final BlockPos pos)
-    {
-        if (this.lastRailShape != null)
-        {
-            return this.lastRailShape;
+    public RailShape getRailDirection(BlockPos pos) {
+        ModuleBase.RAILDIRECTION dir = ModuleBase.RAILDIRECTION.DEFAULT;
+        for (ModuleBase module : getModules()) {
+            dir = module.getSpecialRailDirection(pos);
+            if (dir != ModuleBase.RAILDIRECTION.DEFAULT) {
+                break;
+            }
         }
-        return null;
+        if (dir == ModuleBase.RAILDIRECTION.DEFAULT) {
+            return null;
+        }
+        int Yaw = (int) (getYRot() % 180.0f); //TODO Is this the correct rotation?
+        if (Yaw < 0) {
+            Yaw += 180;
+        }
+        boolean flag = Yaw >= 45 && Yaw <= 135;
+        Vec3 motion = getDeltaMovement();
+        if (fixedRailDirection == null) {
+            switch (dir) {
+                case FORWARD -> {
+                    if (flag) {
+                        fixedRailDirection = RailShape.NORTH_SOUTH;
+                        break;
+                    }
+                    fixedRailDirection = RailShape.EAST_WEST;
+                }
+                case LEFT -> {
+                    if (flag) {
+                        if (motion.z > 0.0) {
+                            fixedRailDirection = RailShape.NORTH_EAST;
+                            break;
+                        }
+                        if (motion.z <= 0.0) {
+                            fixedRailDirection = RailShape.SOUTH_WEST;
+                        }
+                    } else {
+                        if (motion.x > 0.0) {
+                            fixedRailDirection = RailShape.NORTH_WEST;
+                            break;
+                        }
+                        if (motion.x < 0.0) {
+                            fixedRailDirection = RailShape.SOUTH_EAST;
+                        }
+                    }
+                }
+                case RIGHT -> {
+                    if (flag) {
+                        if (motion.z > 0.0) {
+                            fixedRailDirection = RailShape.NORTH_WEST;
+                            break;
+                        }
+                        if (motion.z <= 0.0) {
+                            fixedRailDirection = RailShape.SOUTH_EAST;
+                        }
+                    } else {
+                        if (motion.x > 0.0) {
+                            fixedRailDirection = RailShape.SOUTH_WEST;
+                            break;
+                        }
+                        if (motion.x < 0.0) {
+                            fixedRailDirection = RailShape.NORTH_EAST;
+                        }
+                    }
+                }
+                case NORTH -> {
+                    if (flag) {
+                        if (motion.z > 0.0) {
+                            fixedRailDirection = RailShape.NORTH_SOUTH;
+                        }
+                    } else {
+                        if (motion.x > 0.0) {
+                            fixedRailDirection = RailShape.SOUTH_WEST;
+                            break;
+                        }
+                        if (motion.x < 0.0) {
+                            fixedRailDirection = RailShape.SOUTH_EAST;
+                        }
+                    }
+                }
+                default -> {}
+            }
+            if (fixedRailDirection == null) {
+                return null;
+            }
+            fixedRailPos = new BlockPos(pos);
+        }
+        return fixedRailDirection;
     }
+
+    public void resetRailDirection() {
+        fixedRailDirection = null;
+    }
+
+//    public RailShape getRailDirection(final BlockPos pos)
+//    {
+//        if (this.lastRailShape != null)
+//        {
+//            return this.lastRailShape;
+//        }
+//        return null;
+//    }
 
     public void turnback() {
         pushX *= -1.0;
@@ -908,8 +1018,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     {
         return true;
     }
-
-    RailShape lastRailShape;
 
     @Override
     protected void moveAlongTrack(@NotNull BlockPos pos, @NotNull BlockState state) {
@@ -1053,25 +1161,25 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public void tick()
     {
         flipped = true;
-        int i = Mth.floor(this.getX());
-        int j = Mth.floor(this.getY());
-        int k = Mth.floor(this.getZ());
-        if (this.level.getBlockState(new BlockPos(i, j - 1, k)).is(BlockTags.RAILS))
-        {
-            --j;
-        }
+//        int i = Mth.floor(this.getX());
+//        int j = Mth.floor(this.getY());
+//        int k = Mth.floor(this.getZ());
+//        if (this.level.getBlockState(new BlockPos(i, j - 1, k)).is(BlockTags.RAILS))
+//        {
+//            --j;
+//        }
 
-        BlockPos blockpos = new BlockPos(i, j, k);
-        BlockState blockState = this.level.getBlockState(blockpos);
+//        BlockPos blockpos = new BlockPos(i, j, k);
+//        BlockState blockState = this.level.getBlockState(blockpos);
 
-        if (blockState.getBlock() instanceof BaseRailBlock)
-        {
-            RailShape railshape = ((BaseRailBlock) blockState.getBlock()).getRailDirection(blockState, this.level, getExactPosition().below(), this);
-            if (blockState.getBlock() != ModBlocks.JUNCTION.get())
-            {
-                lastRailShape = railshape;
-            }
-        }
+//        if (blockState.getBlock() instanceof BaseRailBlock)
+//        {
+//            RailShape railshape = ((BaseRailBlock) blockState.getBlock()).getRailDirection(blockState, this.level, getExactPosition().below(), this);
+//            if (blockState.getBlock() != ModBlocks.JUNCTION.get())
+//            {
+//                lastRailShape = railshape;
+//            }
+//        }
 
         onCartUpdate();
         if (level.isClientSide)
@@ -1292,6 +1400,25 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 }
             }
         }
+    }
+
+    public boolean getRenderFlippedYaw(float yaw) {
+        yaw %= 360.0f;
+        if (yaw < 0.0f) {
+            yaw += 360.0f;
+        }
+        Vec3 motion = getDeltaMovement();
+        if (!oldRender || Math.abs(yaw - lastRenderYaw) < 90.0f || Math.abs(yaw - lastRenderYaw) > 270.0f || (motion.x > 0.0 && lastMotionX < 0.0) || (motion.z > 0.0 && lastMotionZ < 0.0)
+                || (motion.x < 0.0 && lastMotionX > 0.0) || (motion.z < 0.0 && lastMotionZ > 0.0) || wrongRender >= 50) {
+            lastMotionX = motion.x;
+            lastMotionZ = motion.z;
+            lastRenderYaw = yaw;
+            oldRender = true;
+            wrongRender = 0;
+            return false;
+        }
+        ++wrongRender;
+        return true;
     }
 
     @SuppressWarnings("unused")

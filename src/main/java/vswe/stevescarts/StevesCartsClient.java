@@ -26,6 +26,7 @@ import vswe.stevescarts.client.models.workers.tools.ModelFarmer;
 import vswe.stevescarts.client.models.workers.tools.ModelWoodCutter;
 import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.client.renders.RenderModulerCart;
+import vswe.stevescarts.events.OverlayEventHandler;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.*;
 import static vswe.stevescarts.init.StevesCartsModules.*;
@@ -43,6 +44,8 @@ public class StevesCartsClient
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.ADVANCED_DETECTOR.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.JUNCTION.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.BATTERIES.get(), RenderType.cutout());
+
+        OverlayEventHandler.init();
     }
 
     public static void initModels()
