@@ -553,10 +553,10 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         return consumption;
     }
 
+    //TODO Forge PR for making Type an extensible enum
     @Override
-    public @NotNull Type getMinecartType()
-    {
-        return Type.RIDEABLE;
+    public @NotNull Type getMinecartType() {
+        return Type.FURNACE;
     }
 
     @Override

@@ -7,6 +7,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
@@ -165,6 +167,7 @@ public class ModuleEnchants extends ModuleAddon {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
         ResourceHelper.bindResource("/gui/enchant.png");
         for (int i = 0; i < 3; ++i) {
