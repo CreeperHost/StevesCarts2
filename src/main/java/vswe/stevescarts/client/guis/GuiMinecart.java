@@ -413,16 +413,16 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
                 if (drawAll)
                 {
                     slot.x = slot.getX() + module.getX() + 1;
-                    slot.y = slot.getY() + module.getY() - cart.getRealScrollY();
+                    slot.y = slot.getY() + module.getY() + 1 - cart.getRealScrollY();
                 }
                 else
                 {
                     resetSlot(slot);
                 }
-                module.drawImage(matrixStack, this, slot.getX(), slot.getY() - 1, getXSize() - 256, 0, 18, 18);
+                module.drawImage(matrixStack, this, slot.getX(), slot.getY(), getXSize() - 256, 0, 18, 18);
                 if (!drawAll)
                 {
-                    module.drawImage(matrixStack, this, slot.getX() + 1, slot.getY(), getXSize() - 256 + 18, 1, 16, 16);
+                    module.drawImage(matrixStack, this, slot.getX() + 1, slot.getY() + 1, getXSize() - 256 + 18, 1, 16, 16);
                 }
             }
         }
