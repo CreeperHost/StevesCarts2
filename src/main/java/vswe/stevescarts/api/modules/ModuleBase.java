@@ -17,6 +17,7 @@ import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -31,6 +32,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.network.PacketDistributor;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.client.guis.buttons.ButtonBase;
@@ -1213,8 +1215,9 @@ public abstract class ModuleBase
      */
     protected void sendPacket(int id, byte[] data, Player player)
     {
-        //TODO
-        //		PacketStevesCarts.sendPacketToPlayer(getPacketStart() + id, data, player, getCart());
+        if (player instanceof ServerPlayer){
+            PacketHandler.sendTo(new PacketMinecartButton(cart.getId(), getPacketStart() + id, data), (ServerPlayer) player);
+        }
     }
 
     /**
