@@ -6,9 +6,13 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.init.ModContainers;
+import vswe.stevescarts.network.PacketHandler;
+import vswe.stevescarts.network.packets.PacketFluidSync;
 import vswe.stevescarts.upgrades.InventoryEffect;
 
 import java.util.Objects;
@@ -17,6 +21,7 @@ public class ContainerUpgrade extends ContainerBase
 {
     private TileEntityUpgrade upgrade;
     private SimpleContainerData data;
+    private FluidStack lastFluid = FluidStack.EMPTY;
 
     public ContainerUpgrade(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
@@ -56,6 +61,16 @@ public class ContainerUpgrade extends ContainerBase
         for (int j = 0; j < 9; ++j)
         {
             addSlot(new Slot(invPlayer, j, offsetX() + j * 18, 58 + offsetY()));
+        }
+    }
+
+    @Override
+    public void broadcastChanges() {
+        super.broadcastChanges();
+
+        if (!lastFluid.equals(upgrade.tank.getFluid()) || lastFluid.getAmount() != upgrade.tank.getFluid().getAmount()) {
+            lastFluid = upgrade.tank.getFluid().copy();
+            PacketHandler.send(PacketDistributor.TRACKING_CHUNK.with(() -> upgrade.getLevel().getChunkAt(upgrade.getBlockPos())), new PacketFluidSync(lastFluid, upgrade.getBlockPos(), 0));
         }
     }
 

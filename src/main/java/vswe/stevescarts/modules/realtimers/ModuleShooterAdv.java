@@ -8,7 +8,12 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -136,51 +141,39 @@ public class ModuleShooterAdv extends ModuleShooter
     }
 
     @Override
-    protected void Shoot()
-    {
+    protected void shoot() {
         setTimeToNext(15);
-        if (!getCart().hasFuel())
-        {
+        if (!getCart().hasFuel()) {
             return;
         }
         final Entity target = getTarget();
-        if (target != null)
-        {
-            if (hasProjectileItem())
-            {
+        if (target != null) {
+            if (hasProjectileItem()) {
                 shootAtTarget(target);
-            }
-            else
-            {
+            } else {
                 getCart().level.levelEvent(1001, getCart().blockPosition(), 0);
             }
         }
     }
 
-    private void shootAtTarget(final Entity target)
-    {
-        final Entity projectile = getProjectile(target, getProjectileItem(true));
+    private void shootAtTarget(Entity target) {
+        Entity projectile = getProjectile(target, getProjectileItem(true));
         double posY = getCart().getY() + (double) getCart().getEyeHeight() - 0.10000000149011612D;
 
-        double disX = target.blockPosition().getY() - getCart().getX();
-        double disY = target.blockPosition().getX() + (double) target.getEyeHeight() - 0.699999988079071D - posY;
-        double disZ = target.blockPosition().getZ() - getCart().getZ();
+        double disX = target.getX() - getCart().getX();
+        double disY = target.getY() + (double) target.getEyeHeight() - 0.699999988079071D - posY;
+        double disZ = target.getZ() - getCart().getZ();
 
-        final double dis = Math.sqrt(disX * disX + disZ * disZ);
+        double dis = Math.sqrt(disX * disX + disZ * disZ);
 
-        if (dis >= 1.0E-7)
-        {
-            final float theta = (float) (Math.atan2(disZ, disX) * 180.0D / Math.PI) - 90.0f;
-            final float phi = (float) (-(Math.atan2(disY, dis) * 180.0D / Math.PI));
+        if (dis >= 1.0E-7) {
+            float theta = (float) (Math.atan2(disZ, disX) * 180.0D / Math.PI) - 90.0f;
+            float phi = (float) (-(Math.atan2(disY, dis) * 180.0D / Math.PI));
 
             setRifleDirection((float) Math.atan2(disZ, disX));
 
-            final double disPX = disX / dis;
-            final double disPZ = disZ / dis;
+            projectile.moveTo(getCart().getX(), posY, getCart().getZ(), theta, phi);
 
-            projectile.setPos(getCart().getX() + disPX * 1.5, projectile.getY(), getCart().getZ() + disPZ * 1.5);
-
-            //projectile.setRenderYawOffset(0.0f);
             float disD5 = (float) dis * 0.2f;
             setHeading(projectile, disX, disY + (double) disD5, disZ, 1.6f, 0.0f);
         }
@@ -201,37 +194,28 @@ public class ModuleShooterAdv extends ModuleShooter
         return 16;
     }
 
-    private Entity getTarget()
-    {
-        final List<Entity> entities = getCart().level.getEntitiesOfClass(Entity.class, getCart().getBoundingBox().inflate(getTargetDistance(), 4.0, getTargetDistance()));
+    private Entity getTarget() {
+        List<LivingEntity> entities = getCart().level.getEntitiesOfClass(LivingEntity.class, getCart().getBoundingBox().inflate(getTargetDistance(), 4.0, getTargetDistance()));
         entities.sort(sorter);
 
-        for (final Entity target : entities)
-        {
-            if (target != getCart() && canSee(target))
-            {
-                for (int i = 0; i < detectors.size(); ++i)
-                {
-                    if (isOptionActive(i))
-                    {
-                        final ModuleMobdetector detector = detectors.get(i);
-                        if (detector.isValidTarget(target))
-                        {
-                            return target;
-                        }
-                    }
+        for (LivingEntity target : entities) {
+            if (target.isDeadOrDying() || !hasLineOfSight(target)) continue;
+            for (int i = 0; i < detectors.size(); ++i) {
+                if (!isOptionActive(i)) continue;
+                ModuleMobdetector detector = detectors.get(i);
+                if (detector.isValidTarget(target)) {
+                    return target;
                 }
             }
         }
         return null;
     }
 
-    private boolean canSee(final Entity target)
-    {
-        return false;
-        //TODO
-        //		return target != null && getCart().level.raryTraceBlocks(new Vec3d(getCart().posX, getCart().posY + getCart().getEyeHeight(), getCart().posZ),
-        //				new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ)) == null;
+    public boolean hasLineOfSight(Entity target) {
+        Entity cart = getCart();
+        Vec3 vec3 = new Vec3(cart.getX(), cart.getEyeY(), cart.getZ());
+        Vec3 vec31 = new Vec3(target.getX(), target.getEyeY(), target.getZ());
+        return cart.level.clip(new ClipContext(vec3, vec31, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, cart)).getType() == HitResult.Type.MISS;
     }
 
     @Override

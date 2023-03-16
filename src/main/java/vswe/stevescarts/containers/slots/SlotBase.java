@@ -5,34 +5,24 @@ import net.minecraft.world.inventory.Slot;
 
 public class SlotBase extends Slot
 {
-    private int ourX;
-    private int ourY;
+    private int defaultX;
+    private int defaultY;
 
     public SlotBase(final Container inventory, final int id, final int x, final int y)
     {
         super(inventory, id, x, y);
-        this.ourX = x;
-        this.ourY = y;
-    }
-
-    public void setX(int x)
-    {
-        this.ourX = x;
-    }
-
-    public void setY(int y)
-    {
-        this.ourY = y;
+        this.defaultX = x;
+        this.defaultY = y;
     }
 
     public int getX()
     {
-        return ourX;
+        return defaultX;
     }
 
     public int getY()
     {
-        return ourY;
+        return defaultY;
     }
 
     public boolean containsValidItem()

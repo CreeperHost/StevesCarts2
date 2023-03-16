@@ -26,6 +26,7 @@ import vswe.stevescarts.client.models.workers.tools.ModelFarmer;
 import vswe.stevescarts.client.models.workers.tools.ModelWoodCutter;
 import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.client.renders.RenderModulerCart;
+import vswe.stevescarts.events.OverlayEventHandler;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.*;
 import static vswe.stevescarts.init.StevesCartsModules.*;
@@ -43,6 +44,8 @@ public class StevesCartsClient
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.ADVANCED_DETECTOR.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.JUNCTION.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.BATTERIES.get(), RenderType.cutout());
+
+        OverlayEventHandler.init();
     }
 
     public static void initModels()
@@ -89,6 +92,8 @@ public class StevesCartsClient
         BRAKE.addModel("Lever", new ModelLever(ResourceHelper.getResource("/models/leverModel.png")));
         ADVANCED_CONTROL_SYSTEM.addModel("Lever", new ModelLever(ResourceHelper.getResource("/models/leverModel2.png"))).addModel("Wheel", new ModelWheel());
 
+        SHOOTER.removeModel("Top").addModel("Rig", new ModelShootingRig()).addModel("Pipes", new ModelGun());
+        ADVANCED_SHOOTER.removeModel("Top").addModel("Rig", new ModelShootingRig()).addModel("MobDetector", new ModelMobDetector()).addModel("Pipes", new ModelSniperRifle());
 
         CLEANER.addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelCleaner());
         DYNAMITE_CARRIER.addModel("Tnt", new ModelDynamite());

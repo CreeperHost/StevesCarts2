@@ -13,4 +13,5 @@ public class DefaultModuleGroups
     public static ModuleDataGroup WOODCUTTER_GROUP;
     public static ModuleDataGroup TANK_GROUP;
     public static ModuleDataGroup TOOL_GROUP;
+    public static ModuleDataGroup ENTITY_DETECTOR_GROUP;
 }

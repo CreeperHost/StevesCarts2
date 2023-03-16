@@ -1,55 +1,53 @@
 package vswe.stevescarts.helpers;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
-public class EnchantmentData
-{
-    private EnchantmentInfo type;
+import java.util.Objects;
+
+public class EnchantmentData {
+    @Nullable
+    private Enchantment enchant;
     private int value;
 
-    public EnchantmentData(final EnchantmentInfo type)
-    {
-        this.type = type;
+    public EnchantmentData(Enchantment enchant) {
+        this.enchant = enchant;
         value = 0;
     }
 
-    public int getValue()
-    {
+    public int getValue() {
         return value;
     }
 
-    public void setValue(final int val)
-    {
+    public void setValue(final int val) {
         value = val;
     }
 
-    public EnchantmentInfo getEnchantment()
-    {
-        return type;
+    public void setEnchantment(Enchantment enchant) {
+        this.enchant = enchant;
     }
 
-    public void setEnchantment(final EnchantmentInfo info)
-    {
-        type = info;
+    public Enchantment getEnchant() {
+        return enchant;
     }
 
-    public void damageEnchant(final int dmg)
-    {
+    public void damageEnchant(int dmg) {
         damageEnchantLevel(dmg, getValue(), 1);
+        if (getValue() <= 0) setEnchantment(null);
     }
 
-    private boolean damageEnchantLevel(final int dmg, final int value, final int level)
-    {
-        if (level > type.getEnchantment().getMaxLevel() || value <= 0)
-        {
+    private boolean damageEnchantLevel(int dmg, int value, int level) {
+        if (enchant == null) return false;
+        if (level > enchant.getMaxLevel() || value <= 0) {
             return false;
         }
-        final int levelvalue = getEnchantment().getValue(level);
-        if (!damageEnchantLevel(dmg, value - levelvalue, level + 1))
-        {
+        int levelvalue = ModularEnchantments.getValue(enchant, level);
+        if (!damageEnchantLevel(dmg, value - levelvalue, level + 1)) {
             int dmgdealt = dmg * (int) Math.pow(2.0, level - 1);
-            if (dmgdealt > value)
-            {
+            if (dmgdealt > value) {
                 dmgdealt = value;
             }
             setValue(getValue() - dmgdealt);
@@ -57,38 +55,48 @@ public class EnchantmentData
         return true;
     }
 
-    public int getLevel()
-    {
+    //Effective enchantment level
+    public int getLevel() {
+        if (enchant == null) return 0;
         int value = getValue();
-        for (int i = 0; i < type.getEnchantment().getMaxLevel(); ++i)
-        {
-            if (value <= 0)
-            {
+        for (int i = 0; i < enchant.getMaxLevel(); ++i) {
+            if (value <= 0) {
                 return i;
             }
-            value -= getEnchantment().getValue(i + 1);
+            value -= ModularEnchantments.getValue(enchant, i + 1);
         }
-        return type.getEnchantment().getMaxLevel();
+        return enchant.getMaxLevel();
     }
 
-    public String getInfoText()
-    {
+    public String getInfoText() {
+        if (enchant == null) return "";
         int value = getValue();
         int level = 0;
         int percentage = 0;
-        for (level = 1; level <= type.getEnchantment().getMaxLevel(); ++level)
-        {
-            if (value > 0)
-            {
-                final int levelvalue = getEnchantment().getValue(level);
+        for (level = 1; level <= enchant.getMaxLevel(); ++level) {
+            if (value > 0) {
+                final int levelvalue = ModularEnchantments.getValue(enchant, level);
                 percentage = 100 * value / levelvalue;
                 value -= levelvalue;
-                if (value < 0)
-                {
+                if (value < 0) {
                     break;
                 }
             }
         }
-        return ChatFormatting.YELLOW + "TODO";//TODO //getEnchantment().getEnchantment().getTranslatedName(getLevel()) + "\n" + percentage + "% left of this tier";
+        return ChatFormatting.YELLOW + enchant.getFullname(getLevel()).getString() + "\n" + percentage + "% left of this tier";
+    }
+
+    public void write(FriendlyByteBuf buf) {
+        buf.writeVarInt(enchant == null ? -1 : value);
+        if (enchant != null){
+            buf.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.ENCHANTMENTS.getKey(enchant)));
+        }
+    }
+
+    public static EnchantmentData read(FriendlyByteBuf buf) {
+        int value = buf.readVarInt();
+        EnchantmentData data = new EnchantmentData(value == -1 ? null : ForgeRegistries.ENCHANTMENTS.getValue(buf.readResourceLocation()));
+        data.setValue(value);
+        return data;
     }
 }

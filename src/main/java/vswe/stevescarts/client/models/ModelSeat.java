@@ -7,10 +7,12 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.Entity;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.modules.realtimers.ModuleSeat;
 
 public class ModelSeat extends ModelCartbase
 {
@@ -29,17 +31,7 @@ public class ModelSeat extends ModelCartbase
     }
 
     @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
-    {
-        Entity firstPassenger = module.getCart().getFirstPassenger();
-        this.root.yRot = 3.1415926F;
-        if (firstPassenger != null)
-        {
-            this.root.yRot += (float) Math.toRadians(firstPassenger.getYRot());
-        }
-        else
-        {
-            this.root.yRot /= 2.0f;
-        }
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll) {
+        this.root.yRot = ((module == null) ? 1.5707964f : (((ModuleSeat) module).getChairAngle() + (((ModuleSeat) module).useRelativeRender() ? 0.0f : ((yaw + 180) * -0.0174532F))));
     }
 }

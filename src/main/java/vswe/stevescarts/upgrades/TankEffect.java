@@ -3,16 +3,19 @@ package vswe.stevescarts.upgrades;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.client.guis.GuiUpgrade;
+import vswe.stevescarts.containers.ContainerUpgrade;
 import vswe.stevescarts.containers.slots.SlotLiquidOutput;
 import vswe.stevescarts.containers.slots.SlotLiquidUpgradeInput;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.helpers.storages.SCTank;
+import vswe.stevescarts.network.packets.PacketFluidSync;
 
 public abstract class TankEffect extends InventoryEffect
 {
@@ -108,7 +111,7 @@ public abstract class TankEffect extends InventoryEffect
         }
         else
         {
-            upgrade.tank.setFluid(null);
+            upgrade.tank.setFluid(FluidStack.EMPTY);
         }
     }
 

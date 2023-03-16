@@ -69,13 +69,12 @@ public class ModuleHeightControl extends ModuleAddon
         {
             x -= 4;
         }
+        else if (getYTarget() < 0) {
+            x -= 4;
+        }
         else if (getYTarget() < 10)
         {
             x += 3;
-            if (getYTarget() < 5)
-            {
-                color = 16711680;
-            }
         }
         drawString(matrixStack, gui, s, x, levelNumberBoxY + 5, color);
     }
@@ -199,13 +198,15 @@ public class ModuleHeightControl extends ModuleAddon
                 }
                 int targetY = getYTarget();
                 targetY += mult * dif;
-                if (targetY < 0)
+                int min = getCart().level.getMinBuildHeight();
+                int max = getCart().level.getMaxBuildHeight();
+                if (targetY < min)
                 {
-                    targetY = 0;
+                    targetY = min;
                 }
-                else if (targetY > 255)
+                else if (targetY > max)
                 {
-                    targetY = 255;
+                    targetY = max;
                 }
                 setYTarget(targetY);
             }
@@ -244,10 +245,10 @@ public class ModuleHeightControl extends ModuleAddon
             return 64;
         }
         int data = getDw(Y_TARGET);
-        if (data < 0)
-        {
-            data += 256;
-        }
+//        if (data < 0)
+//        {
+//            data += 256;
+//        }
         return data;
     }
 

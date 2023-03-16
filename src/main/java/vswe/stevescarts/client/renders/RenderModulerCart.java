@@ -82,6 +82,14 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular>
             pitch = -pitch;
         }
 
+        boolean flip = entity.getDeltaMovement().x > 0.0 != entity.getDeltaMovement().z > 0.0;
+        if (entity.cornerFlip) {
+            flip = !flip;
+        }
+        if (entity.getRenderFlippedYaw(yaw + (flip ? 0.0f : 180.0f))) {
+            flip = !flip;
+        }
+
         matrices.translate(0.0, 0.375, 0.0);
         matrices.mulPose(Vector3f.YP.rotationDegrees(180.0F - yaw));
         matrices.mulPose(Vector3f.ZP.rotationDegrees(-pitch));
@@ -91,6 +99,10 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular>
         {
             matrices.mulPose(Vector3f.XP.rotationDegrees(Mth.sin(damageWobbleTicks) * damageWobbleTicks * damageWobbleStrength / 10.0f * entity.getHurtDir()));
         }
+
+        yaw += (flip ? 0.0f : 180.0f);
+        matrices.mulPose(Vector3f.YP.rotationDegrees(flip ? 0.0f : 180.0f));
+
         matrices.scale(-1.0f, -1.0f, 1.0f);
         if(entity.getModules() != null)
         {
@@ -102,8 +114,10 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular>
                     {
                         if (model.getRenderType(module) != null)
                         {
-                            model.renderToBuffer(matrices, vertexConsumers.getBuffer(model.getRenderType(module)), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                            //TODO Yaw is supposed to be radians. May want to change this at some point.
+                            // Why do we even need applyEffects? It seems it was added so that Model#renderToBuffer can be used. But SC uses its own ModelCartbase so we can just add out own render method.
                             model.applyEffects(module, matrices, vertexConsumers, yaw, pitch, 0);
+                            model.renderToBuffer(matrices, vertexConsumers.getBuffer(model.getRenderType(module)), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
                         }
                     }

@@ -1,7 +1,9 @@
 package vswe.stevescarts.helpers.storages;
 
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 import vswe.stevescarts.client.guis.GuiBase;
 
 import javax.annotation.Nonnull;
@@ -17,6 +19,5 @@ public interface ITankHolder
 
     void onFluidUpdated(final int p0);
 
-    void drawImage(int tankid, GuiBase gui, TextureAtlasSprite sprite, int targetX, int targetY, int srcX, int srcY, int width, int height);
-
+    void drawImage(int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height);
 }

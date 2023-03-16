@@ -29,6 +29,7 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
     public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float p_230430_4_)
     {
         this.renderBackground(poseStack);
+        super.render(poseStack, mouseX, mouseY, p_230430_4_);
         if (upgrade.getUpgrade() != null)
         {
             final InterfaceEffect gui = upgrade.getUpgrade().getInterfaceEffect();
@@ -38,7 +39,6 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
                 gui.drawMouseOver(poseStack, upgrade, this, mouseX, mouseY);
             }
         }
-        super.render(poseStack, mouseX, mouseY, p_230430_4_);
         renderTooltip(poseStack, mouseX, mouseY);
     }
 

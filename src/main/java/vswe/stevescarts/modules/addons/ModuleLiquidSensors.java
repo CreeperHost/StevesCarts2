@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.IFluidBlock;
+import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.workers.ModuleLiquidDrainer;
@@ -102,7 +103,7 @@ public class ModuleLiquidSensors extends ModuleAddon
         {
             activateLight(light);
         }
-        data &= 0xFFFFFFFC;
+        data &= 0b11111111111111111111111111111100;
         data |= (byte) getLight();
         setSensorInfo(data);
     }
@@ -125,7 +126,7 @@ public class ModuleLiquidSensors extends ModuleAddon
         {
             return;
         }
-        registerDw(SENSOR_INFO, val);
+        updateDw(SENSOR_INFO, val);
     }
 
     public int getLight()
@@ -134,7 +135,7 @@ public class ModuleLiquidSensors extends ModuleAddon
         {
             return getSimInfo().getLiquidLight();
         }
-        return getDw(SENSOR_INFO) & 0x3;
+        return getDw(SENSOR_INFO) & 0b11;
     }
 
     protected boolean isDrillSpinning()

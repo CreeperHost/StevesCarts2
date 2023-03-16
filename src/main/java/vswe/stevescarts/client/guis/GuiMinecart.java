@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -90,12 +91,12 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     @Override
     protected void renderBg(@NotNull PoseStack poseStack, float p_230450_2_, int mouseX, int mouseY)
     {
-        final int j = getGuiLeft();
-        final int k = getGuiTop();
+        final int left = getGuiLeft();
+        final int top = getGuiTop();
         ResourceHelper.bindResource(GuiMinecart.textureLeft);
-        blit(poseStack, j, k, 0, 0, 256, 256);
+        blit(poseStack, left, top, 0, 0, 256, 256);
         ResourceHelper.bindResource(GuiMinecart.textureRight);
-        blit(poseStack, j + 256, k, 0, 0, imageWidth - 256, imageHeight);
+        blit(poseStack, left + 256, top, 0, 0, imageWidth - 256, imageHeight);
         if (cart != null)
         {
             final ModuleBase thief = cart.getInterfaceThief();
@@ -118,16 +119,20 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
             }
             else if (cart.getModules() != null)
             {
-                blit(poseStack, j + scrollBox[0], k + scrollBox[1], 222, 24, scrollBox[2], scrollBox[3]);
-                blit(poseStack, j + scrollBox[0] + 2, k + scrollBox[1] + 2 + cart.getScrollY(), 240, 26 + (cart.canScrollModules ? 0 : 25), 14, 25);
+                //Draw Scroll Bar
+                blit(poseStack, left + scrollBox[0], top + scrollBox[1], 222, 24, scrollBox[2], scrollBox[3]);
+                blit(poseStack, left + scrollBox[0] + 2, top + scrollBox[1] + 2 + cart.getScrollY(), 240, 26 + (cart.canScrollModules ? 0 : 25), 14, 25);
+
                 for (final ModuleBase module : cart.getModules())
                 {
                     drawModuleSlots(poseStack, module);
                 }
+
                 for (final ModuleBase module : cart.getModules())
                 {
                     drawModuleBackground(poseStack, module, mouseX, mouseY);
                 }
+
                 renderModuleList(mouseX, mouseY);
                 renderReturnButton(poseStack, mouseX, mouseY);
                 for (final ModuleBase module : cart.getModules())
@@ -169,23 +174,24 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     {
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         itemRenderer.renderGuiItem(icon.getItemStack(), targetX, targetY);
+        RenderSystem.disableDepthTest();
     }
 
-    private void renderModuleListText(PoseStack matrixStack, int x, int y)
+    private void renderModuleListText(PoseStack matrixStack, int mouseX, int mouseY)
     {
-        x -= getGuiLeft();
-        y -= getGuiTop();
+        mouseX -= getGuiLeft();
+        mouseY -= getGuiTop();
         ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
-        font.draw(matrixStack, cart.getName(), getGuiLeft() + 5, 172, 4210752);
+        font.draw(matrixStack, cart.getName(), getGuiLeft() + 5, getGuiTop() + 172, 4210752);
         GlStateManager._enableBlend();
         for (int i = 0; i < moduleCounts.size(); ++i)
         {
             ModuleCountPair count = moduleCounts.get(i);
             if (count.getCount() != 1)
             {
-                int alpha = (int) ((inRect(x, y, getModuleDisplayX(i), getModuleDisplayY(i), 16, 16) ? 1.0f : 0.75f) * 256.0f);
+                int alpha = (int) ((inRect(mouseX, mouseY, getModuleDisplayX(i), getModuleDisplayY(i), 16, 16) ? 1.0f : 0.75f) * 256.0f);
                 String str = String.valueOf(count.getCount());
-                font.drawShadow(matrixStack, str, getModuleDisplayX(i) + 16 - font.width(str), getModuleDisplayY(i) + 8, 0xFFFFFF | alpha << 24);
+                font.drawShadow(matrixStack, str, getGuiLeft() + getModuleDisplayX(i) + 16 - font.width(str), getModuleDisplayY(i) + 8, 0xFFFFFF | alpha << 24);
             }
         }
         GlStateManager._disableBlend();
@@ -263,6 +269,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         {
             if (inRect((int) x - getGuiLeft(), (int) y - getGuiTop(), scrollBox[0], scrollBox[1], scrollBox[2], scrollBox[3]))
             {
+                scrollToMouse(y);
                 isScrolling = true;
                 return true;
             }
@@ -278,6 +285,21 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         return super.mouseClicked(x, y, button);
     }
 
+    @Override
+    public boolean mouseReleased(double x, double y, int button) {
+        ModuleBase thief = cart.getInterfaceThief();
+        if (thief != null) {
+            handleModuleMouseReleased(thief, (int) x, (int) y, button);
+        } else if (cart.getModules() != null) {
+            for (ModuleBase module : cart.getModules()) {
+                handleModuleMouseReleased(module, (int) x, (int) y, button);
+            }
+        }
+
+        isScrolling = false;
+        return super.mouseReleased(x, y, button);
+    }
+
     protected boolean inRect(final int x, final int y, final int x1, final int y1, final int sizeX, final int sizeY)
     {
         return x >= x1 && x <= x1 + sizeX && y >= y1 && y <= y1 + sizeY;
@@ -289,42 +311,45 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     }
 
     @Override
-    public void mouseMoved(final double x, final double y)
-    {
-        super.mouseMoved(x, y);
-        int button = 0;
+    public boolean mouseDragged(double x, double y, int button, double moveX, double moveY) {
+        if (super.mouseDragged(x, y, button, moveX, moveY)) return true;
         if (isScrolling)
         {
-            int temp = (int) y - getGuiTop() - 12 - (scrollBox[1] + 2);
-            if (temp < 0)
-            {
-                temp = 0;
-            }
-            else if (temp > 198)
-            {
-                temp = 198;
-            }
-            cart.setScrollY(temp);
+            scrollToMouse(y);
+            return true;
         }
-        if (button != -1)
-        {
-            isScrolling = false;
+        return false;
+    }
+
+    @Override
+    public void mouseMoved(final double x, final double y) {
+        super.mouseMoved(x, y);
+        if (isScrolling) {
+            scrollToMouse(y);
         }
-        if (cart.getModules() != null)
-        {
+        if (cart.getModules() != null) {
             final ModuleBase thief = cart.getInterfaceThief();
-            if (thief != null)
-            {
-                handleModuleMouseMoved(thief, (int) x, (int) y, button);
-            }
-            else
-            {
-                for (final ModuleBase module : cart.getModules())
-                {
-                    handleModuleMouseMoved(module, (int) x, (int) y, button);
+            if (thief != null) {
+                handleModuleMouseMoved(thief, (int) x, (int) y);
+            } else {
+                for (final ModuleBase module : cart.getModules()) {
+                    handleModuleMouseMoved(module, (int) x, (int) y);
                 }
             }
         }
+    }
+
+    private void scrollToMouse(double mouseY) {
+        int temp = (int) mouseY - getGuiTop() - 12 - (scrollBox[1] + 2);
+        if (temp < 0)
+        {
+            temp = 0;
+        }
+        else if (temp > 198)
+        {
+            temp = 198;
+        }
+        cart.setScrollY(temp);
     }
 
     @Override
@@ -387,17 +412,17 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
                 final boolean drawAll = rect[3] == 16;
                 if (drawAll)
                 {
-                    slot.x = slot.getX() + module.getX();
-                    slot.y = slot.getY() + module.getY();
+                    slot.x = slot.getX() + module.getX() + 1;
+                    slot.y = slot.getY() + module.getY() + 1 - cart.getRealScrollY();
                 }
                 else
                 {
                     resetSlot(slot);
                 }
-                module.drawImage(matrixStack, this, slot.getX(), slot.getY() - 1, getXSize() - 256, 0, 18, 18);
+                module.drawImage(matrixStack, this, slot.getX(), slot.getY(), getXSize() - 256, 0, 18, 18);
                 if (!drawAll)
                 {
-                    module.drawImage(matrixStack, this, slot.getX() - 1, slot.getY() - 1, getXSize() - 256 + 18, 1, 16, 16);
+                    module.drawImage(matrixStack, this, slot.getX() + 1, slot.getY() + 1, getXSize() - 256 + 18, 1, 16, 16);
                 }
             }
         }
@@ -405,8 +430,8 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 
     private void resetSlot(final SlotBase slot)
     {
-        slot.setX(-9001);
-        slot.setY(-9001);
+        slot.x = -9001;
+        slot.y = -9001;
     }
 
     private void drawModuleBackground(PoseStack matrixStack, final ModuleBase module, final int x, final int y)
@@ -438,9 +463,17 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         }
     }
 
-    private void handleModuleMouseMoved(final ModuleBase module, final int x, final int y, final int button)
+    private void handleModuleMouseReleased(final ModuleBase module, final int x, final int y, final int button)
     {
         module.mouseMovedOrUp(this, x - getGuiLeft() - module.getX(), y - getGuiTop() - module.getY(), button);
+        module.mouseReleased(this, x - getGuiLeft() - module.getX(), y - getGuiTop() - module.getY(), button);
+    }
+
+
+    private void handleModuleMouseMoved(ModuleBase module, int x, int y)
+    {
+        module.mouseMovedOrUp(this, x - getGuiLeft() - module.getX(), y - getGuiTop() - module.getY(), -1);
+        module.mouseMoved(this, x - getGuiLeft() - module.getX(), y - getGuiTop() - module.getY());
     }
 
     private void handleModuleKeyPress(final ModuleBase module, final int id, final int extraInformation)
@@ -463,39 +496,20 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         if (this.inRect((int) mouseX - getGuiLeft(), (int) mouseY - getGuiTop(), 0, 0, imageWidth, imageHeight))
         {
             int moduleSize = this.cart.modularSpaceHeight;
-            int scroll = cart.getScrollY() + ((int) -amount * 7500) / (moduleSize - EntityMinecartModular.MODULAR_SPACE_HEIGHT);
+            int scroll = cart.getScrollY() + ((int) -amount * 4000) / (moduleSize - EntityMinecartModular.MODULAR_SPACE_HEIGHT);
             scroll = Mth.clamp(scroll, 0, 198);
             cart.setScrollY(scroll);
         }
         return true;
     }
 
-    //	@Override
-    //	public void handleMouseInput() throws IOException {
-    //		super.handleMouseInput();
-    //		//TODO
-    ////		int d = Mouse.getDWheel();
-    ////		if (d != -1) {
-    ////			int x = Mouse.getEventX() * width / mc.displayWidth;
-    ////			int y = height - Mouse.getEventY() * height / mc.displayHeight - 1;
-    ////
-    ////			if (d < 0) {
-    ////				d = -1;
-    ////			}
-    ////			if(d > 0)
-    ////			{
-    ////				d = 1;
-    ////			}
-    ////
-    ////			if (this.inRect(x - getGuiLeft(), y - getGuiTop(),  0, 0, xSize, ySize))
-    ////			{
-    ////				int moduleSize = this.cart.modularSpaceHeight;
-    ////				int scroll = cart.getScrollY() + (-d * 7500) / (moduleSize - EntityMinecartModular.MODULAR_SPACE_HEIGHT);
-    ////				scroll = MathHelper.clamp(scroll, 0, 198);
-    ////				cart.setScrollY(scroll);
-    ////			}
-    ////		}
-    //	}
+    public void pushScissor() {
+        GuiHelper.pushGuiScissor(minecraft, getGuiLeft() + 5, getGuiTop() + 4, 438, 164, width, height);
+    }
+
+    public void popScissor() {
+        GuiHelper.popScissor();
+    }
 
     public void drawTexturedModalRect(PoseStack matrixStack, final int x, final int y, final int u, final int v, final int w, final int h, final RENDER_ROTATION rotation)
     {
@@ -566,6 +580,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
             }
         }
 
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder buff = tessellator.getBuilder();
         buff.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);

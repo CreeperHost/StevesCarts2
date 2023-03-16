@@ -140,7 +140,7 @@ public class ModuleSeat extends ModuleBase
         if (getCart().getCartRider() != null)
         {
             relative = false;
-            chairAngle = (float) (3.141592653589793 + 3.141592653589793 * getCart().getCartRider().getRotationVector().y / 180.0);
+            chairAngle = (float) (3.141592653589793 + 3.141592653589793 * getCart().getCartRider().getYRot() / 180.0);
         }
         else
         {

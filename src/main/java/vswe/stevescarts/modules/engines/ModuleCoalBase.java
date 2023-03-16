@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.engines;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.creeperhost.polylib.helpers.FuelHelper;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -106,23 +107,16 @@ public abstract class ModuleCoalBase extends ModuleEngine
     @Override
     public void smoke()
     {
-        double oX = 0.0;
-        double oZ = 0.0;
-        if (getCart().getDeltaMovement().x != 0.0)
-        {
-            oX = ((getCart().getDeltaMovement().x > 0.0) ? -1 : 1);
-        }
-        if (getCart().getDeltaMovement().z != 0.0)
-        {
-            oZ = ((getCart().getDeltaMovement().z > 0.0) ? -1 : 1);
-        }
+        Direction smokeSide = getCart().getMotionDirection().getOpposite();
+        double oX = smokeSide.getStepX();
+        double oZ = smokeSide.getStepZ();
         if (getCart().random.nextInt(2) == 0)
         {
-            getCart().level.addParticle(ParticleTypes.SMOKE, getCart().getExactPosition().getX() + oX * 0.85, getCart().getExactPosition().getY() + 0.12, getCart().getExactPosition().getZ() + oZ * 0.85, 0.0, 0.0, 0.0);
+            getCart().level.addParticle(ParticleTypes.SMOKE, getCart().getX() + oX * 0.85, getCart().getY() + 0.12, getCart().getZ() + oZ * 0.85, 0.0, 0.0, 0.0);
         }
         if (getCart().random.nextInt(30) == 0)
         {
-            getCart().level.addParticle(ParticleTypes.FLAME, getCart().getExactPosition().getX() + oX * 0.75, getCart().getExactPosition().getY() + 0.15, getCart().getExactPosition().getZ() + oZ * 0.75, 0, 0, 0);
+            getCart().level.addParticle(ParticleTypes.FLAME, getCart().getX() + oX * 0.75, getCart().getY() + 0.15, getCart().getZ() + oZ * 0.75, 0, 0, 0);
         }
     }
 
@@ -140,7 +134,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
         String strfuel = Localization.MODULES.ENGINES.NO_FUEL.translate();
         if (getFuelLevel() > 0)
         {
-            strfuel = "Fuel: " + getFuelLevel();//Localization.MODULES.ENGINES.FUEL.translate(String.valueOf(getFuelLevel()));
+            strfuel = "Fuel: " + getFuelLevel();//TODO Why? Localization.MODULES.ENGINES.FUEL.translate(String.valueOf(getFuelLevel()));
         }
         drawString(matrixStack, gui, strfuel, 8, 48, 4210752);
     }

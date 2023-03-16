@@ -2,204 +2,194 @@ package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotEnchantment;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.EnchantmentData;
-import vswe.stevescarts.helpers.EnchantmentInfo;
+import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.network.DataSerializers;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-public class ModuleEnchants extends ModuleAddon
-{
-    private EnchantmentData[] enchants;
-    private ArrayList<EnchantmentInfo.ENCHANTMENT_TYPE> enabledTypes;
+public class ModuleEnchants extends ModuleAddon {
+    private final EntityDataAccessor<EnchantmentData> ENCHANT_0 = createDw(DataSerializers.ENCHANT_DATA);
+    private final EntityDataAccessor<EnchantmentData> ENCHANT_1 = createDw(DataSerializers.ENCHANT_DATA);
+    private final EntityDataAccessor<EnchantmentData> ENCHANT_2 = createDw(DataSerializers.ENCHANT_DATA);
+    private final ArrayList<ModularEnchantments.EnchantmentType> enabledTypes;
 
-    public ModuleEnchants(final EntityMinecartModular cart)
-    {
+    public ModuleEnchants(EntityMinecartModular cart) {
         super(cart);
-        enchants = new EnchantmentData[3];
         enabledTypes = new ArrayList<>();
     }
 
-    public int getFortuneLevel()
-    {
-        if (useSilkTouch())
-        {
-            return 0;
-        }
-        return getEnchantLevel(EnchantmentInfo.fortune);
-    }
-
-    public boolean useSilkTouch()
-    {
-        return false;
-    }
-
-    public int getUnbreakingLevel()
-    {
-        return getEnchantLevel(EnchantmentInfo.unbreaking);
-    }
-
-    public int getEfficiencyLevel()
-    {
-        return getEnchantLevel(EnchantmentInfo.efficiency);
-    }
-
-    public int getPowerLevel()
-    {
-        return getEnchantLevel(EnchantmentInfo.power);
-    }
-
-    public int getPunchLevel()
-    {
-        return getEnchantLevel(EnchantmentInfo.punch);
-    }
-
-    public boolean useFlame()
-    {
-        return getEnchantLevel(EnchantmentInfo.flame) > 0;
-    }
-
-    public boolean useInfinity()
-    {
-        return getEnchantLevel(EnchantmentInfo.infinity) > 0;
+    @Override
+    public void initDw() {
+        registerDw(ENCHANT_0, new EnchantmentData(null));
+        registerDw(ENCHANT_1, new EnchantmentData(null));
+        registerDw(ENCHANT_2, new EnchantmentData(null));
     }
 
     @Override
-    public boolean hasGui()
-    {
-        return true;
-    }
-
-    @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
-    {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
-    }
-
-    @Override
-    protected int getInventoryWidth()
-    {
-        return 1;
-    }
-
-    @Override
-    protected int getInventoryHeight()
-    {
+    public int numberOfDataWatchers() {
         return 3;
     }
 
-    @Override
-    protected SlotBase getSlot(final int slotId, final int x, final int y)
-    {
-        return new SlotEnchantment(getCart(), enabledTypes, slotId, 8, 14 + y * 20);
+    public EnchantmentData getEnchant(int index) {
+        return getDw(index == 0 ? ENCHANT_0 : index == 1 ? ENCHANT_1 : ENCHANT_2);
     }
 
-    @Override
-    public void update()
-    {
-        super.update();
-        if (!getCart().level.isClientSide)
-        {
-            for (int i = 0; i < 3; ++i)
-            {
-                if (!getStack(i).isEmpty() && getStack(i).getCount() > 0)
-                {
-                    final int stacksize = getStack(i).getCount();
-                    enchants[i] = EnchantmentInfo.addBook(enabledTypes, enchants[i], getStack(i));
-                    if (getStack(i).getCount() != stacksize)
-                    {
-                        boolean valid = true;
-                        for (int j = 0; j < 3; ++j)
-                        {
-                            if (i != j && enchants[i] != null && enchants[j] != null && enchants[i].getEnchantment() == enchants[j].getEnchantment())
-                            {
-                                enchants[i] = null;
-                                @Nonnull ItemStack stack = getStack(i);
-                                stack.grow(1);
-                                valid = false;
-                                break;
-                            }
-                        }
-                        if (valid && getStack(i).getCount() <= 0)
-                        {
-                            setStack(i, ItemStack.EMPTY);
-                        }
-                    }
-                }
-            }
+    public void setEnchant(int index, EnchantmentData data) {
+        updateDw(index == 0 ? ENCHANT_0 : index == 1 ? ENCHANT_1 : ENCHANT_2, data);
+    }
+
+
+    public int getFortuneLevel() {
+        if (useSilkTouch()) {
+            return 0;
         }
+        return getEnchantLevel(Enchantments.BLOCK_FORTUNE);
     }
 
-    public void damageEnchant(final EnchantmentInfo.ENCHANTMENT_TYPE type, final int dmg)
-    {
-        for (int i = 0; i < 3; ++i)
-        {
-            if (enchants[i] != null && enchants[i].getEnchantment().getType() == type)
-            {
-                enchants[i].damageEnchant(dmg);
-                if (enchants[i].getValue() <= 0)
-                {
-                    enchants[i] = null;
-                }
-            }
-        }
+    public boolean useSilkTouch() {
+        return false;
     }
 
-    private int getEnchantLevel(final EnchantmentInfo info)
-    {
-        if (info != null)
-        {
-            for (int i = 0; i < 3; ++i)
-            {
-                if (enchants[i] != null && enchants[i].getEnchantment() == info)
-                {
-                    return enchants[i].getLevel();
-                }
+    public int getUnbreakingLevel() {
+        return getEnchantLevel(Enchantments.UNBREAKING);
+    }
+
+    public int getEfficiencyLevel() {
+        return getEnchantLevel(Enchantments.BLOCK_EFFICIENCY);
+    }
+
+    public int getPowerLevel() {
+        return getEnchantLevel(Enchantments.POWER_ARROWS);
+    }
+
+    public int getPunchLevel() {
+        return getEnchantLevel(Enchantments.PUNCH_ARROWS);
+    }
+
+    public boolean useFlame() {
+        return getEnchantLevel(Enchantments.FLAMING_ARROWS) > 0;
+    }
+
+    public boolean useInfinity() {
+        return getEnchantLevel(Enchantments.INFINITY_ARROWS) > 0;
+    }
+
+    private int getEnchantLevel(Enchantment enchant) {
+        for (int i = 0; i < 3; ++i) {
+            EnchantmentData test = getEnchant(i);
+            if (test.getEnchant() != null && test.getEnchant() == enchant) {
+                return test.getLevel();
             }
         }
         return 0;
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
-    {
-        ResourceHelper.bindResource("/gui/enchant.png");
-        for (int i = 0; i < 3; ++i)
-        {
-            final int[] box = getBoxRect(i);
-            if (inRect(x, y, box))
-            {
-                drawImage(matrixStack, gui, box, 65, 0);
+    public boolean hasGui() {
+        return true;
+    }
+
+    @Override
+    public void drawForeground(PoseStack matrixStack, GuiMinecart gui) {
+        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+    }
+
+    @Override
+    protected int getInventoryWidth() {
+        return 1;
+    }
+
+    @Override
+    protected int getInventoryHeight() {
+        return 3;
+    }
+
+    @Override
+    protected SlotBase getSlot(int slotId, final int x, final int y) {
+        return new SlotEnchantment(getCart(), enabledTypes, slotId, 8, 14 + y * 20);
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if (getCart().level.isClientSide) return;
+
+        for (int i = 0; i < 3; ++i) {
+            if (!getStack(i).isEmpty() && getStack(i).getCount() > 0) {
+                int count = getStack(i).getCount();
+                EnchantmentData data = ModularEnchantments.addBook(enabledTypes, getEnchant(i), getStack(i));
+
+                if (getStack(i).getCount() != count) {
+                    boolean valid = true;
+                    for (int j = 0; j < 3; ++j) {
+                        if (i == j) continue;
+                        EnchantmentData data2 = getEnchant(j);
+                        if (data.getEnchant() != null && data2.getEnchant() != null && data.getEnchant() == data2.getEnchant()) {
+                            data.setEnchantment(null);
+                            @Nonnull ItemStack stack = getStack(i);
+                            stack.grow(1);
+                            valid = false;
+                            break;
+                        }
+                    }
+                    if (valid && getStack(i).getCount() <= 0) {
+                        setStack(i, ItemStack.EMPTY);
+                    }
+                    setEnchant(i, data);
+                }
             }
-            else
-            {
+        }
+    }
+
+    public void damageEnchant(final ModularEnchantments.EnchantmentType type, int dmg) {
+        for (int i = 0; i < 3; ++i) {
+            EnchantmentData data = getEnchant(i);
+            if (data.getEnchant() != null && ModularEnchantments.getType(data.getEnchant()) == type) {
+                data.damageEnchant(dmg);
+            }
+        }
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
+        ResourceHelper.bindResource("/gui/enchant.png");
+        for (int i = 0; i < 3; ++i) {
+            int[] box = getBoxRect(i);
+            if (inRect(x, y, box)) {
+                drawImage(matrixStack, gui, box, 65, 0);
+            } else {
                 drawImage(matrixStack, gui, box, 0, 0);
             }
-            final EnchantmentData data = enchants[i];
-            if (data != null)
-            {
-                final int maxlevel = data.getEnchantment().getEnchantment().getMaxLevel();
+            EnchantmentData data = getEnchant(i);
+            if (data.getEnchant() != null) {
+                int maxlevel = data.getEnchant().getMaxLevel();
                 int value = data.getValue();
-                for (int j = 0; j < maxlevel; ++j)
-                {
-                    final int[] bar = getBarRect(i, j, maxlevel);
-                    if (j != maxlevel - 1)
-                    {
+                for (int j = 0; j < maxlevel; ++j) {
+                    int[] bar = getBarRect(i, j, maxlevel);
+                    if (j != maxlevel - 1) {
                         drawImage(matrixStack, gui, bar[0] + bar[2], bar[1], 61 + j, 1, 1, bar[3]);
                     }
-                    int levelmaxvalue = data.getEnchantment().getValue(j + 1);
-                    if (value > 0)
-                    {
+                    int levelmaxvalue = ModularEnchantments.getValue(data.getEnchant(), j + 1);
+                    if (value > 0) {
                         float mult = (float) value / (float) levelmaxvalue;
-                        if (mult > 1.0f)
-                        {
+                        if (mult > 1.0f) {
                             mult = 1.0f;
                         }
                         bar[2] *= mult;
@@ -212,140 +202,62 @@ public class ModuleEnchants extends ModuleAddon
     }
 
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
-    {
-        for (int i = 0; i < 3; ++i)
-        {
-            final EnchantmentData data = enchants[i];
+    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
+        for (int i = 0; i < 3; ++i) {
+            EnchantmentData data = getEnchant(i);
             String str;
-            if (data != null)
-            {
+            if (data.getEnchant() != null) {
                 str = data.getInfoText();
-            }
-            else
-            {
+            } else {
                 str = Localization.MODULES.ADDONS.ENCHANT_INSTRUCTION.translate();
             }
             drawStringOnMouseOver(matrixStack, gui, str, x, y, getBoxRect(i));
         }
     }
 
-    private int[] getBoxRect(final int id)
-    {
+    private int[] getBoxRect(final int id) {
         return new int[]{40, 17 + id * 20, 61, 12};
     }
 
-    private int[] getBarRect(final int id, final int barid, final int maxlevel)
-    {
+    private int[] getBarRect(final int id, final int barid, final int maxlevel) {
         final int width = (59 - (maxlevel - 1)) / maxlevel;
         return new int[]{41 + (width + 1) * barid, 18 + id * 20, width, 10};
     }
 
     @Override
-    public int numberOfGuiData()
-    {
+    public int numberOfGuiData() {
         return 9;
     }
 
     @Override
-    protected void checkGuiData(final Object[] info)
-    {
-        for (int i = 0; i < 3; ++i)
-        {
-            final EnchantmentData data = enchants[i];
-            if (data == null)
-            {
-                updateGuiData(info, i * 3 + 0, (short) (-1));
-            }
-            else
-            {
-                updateGuiData(info, i * 3 + 1, (short) (data.getValue() & 0xFFFF));
-                updateGuiData(info, i * 3 + 2, (short) (data.getValue() >> 16 & 0xFFFF));
-            }
+    protected void Save(CompoundTag nbt, int id) {
+        super.Save(nbt, id);
+        for (int i = 0; i < 3; ++i) {
+            EnchantmentData data = getEnchant(i);
+            if (data.getEnchant() == null) continue;
+
+            nbt.putString(generateNBTName("EffectId" + i, id), ForgeRegistries.ENCHANTMENTS.getKey(data.getEnchant()).toString());
+            nbt.putInt(generateNBTName("Value" + i, id), data.getValue());
         }
     }
 
     @Override
-    public void receiveGuiData(int id, final short data)
-    {
-        int dataint = data;
-        if (dataint < 0)
-        {
-            dataint += 65536;
-        }
-        final int enchantId = id / 3;
-        id %= 3;
-        if (id == 0)
-        {
-            if (data == -1)
-            {
-                enchants[enchantId] = null;
-            }
-            else
-            {
-                enchants[enchantId] = EnchantmentInfo.createDataFromEffectId(enchants[enchantId], data);
-            }
-        }
-        else if (enchants[enchantId] != null)
-        {
-            if (id == 1)
-            {
-                enchants[enchantId].setValue((enchants[enchantId].getValue() & 0xFFFF0000) | dataint);
-            }
-            else if (id == 2)
-            {
-                enchants[enchantId].setValue((enchants[enchantId].getValue() & 0xFFFF) | dataint << 16);
-            }
+    protected void Load(CompoundTag nbt, int id) {
+        super.Load(nbt, id);
+        for (int i = 0; i < 3; ++i) {
+            if (!nbt.contains(generateNBTName("EffectId" + i, id))) continue;
+            EnchantmentData data = new EnchantmentData(ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(nbt.getString(generateNBTName("EffectId" + i, id)))));
+            data.setValue(nbt.getInt(generateNBTName("Value" + i, id)));
+            setEnchant(i, data);
         }
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
-    {
-        super.Save(tagCompound, id);
-        for (int i = 0; i < 3; ++i)
-        {
-            if (enchants[i] == null)
-            {
-                tagCompound.putShort(generateNBTName("EffectId" + i, id), (short) (-1));
-            }
-            else
-            {
-                tagCompound.putInt(generateNBTName("Value" + i, id), enchants[i].getValue());
-            }
-        }
-    }
-
-    @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
-    {
-        super.Load(tagCompound, id);
-        for (int i = 0; i < 3; ++i)
-        {
-            final short effect = tagCompound.getShort(generateNBTName("EffectId" + i, id));
-            if (effect == -1)
-            {
-                enchants[i] = null;
-            }
-            else
-            {
-                enchants[i] = EnchantmentInfo.createDataFromEffectId(enchants[i], effect);
-                if (enchants[i] != null)
-                {
-                    enchants[i].setValue(tagCompound.getInt(generateNBTName("Value" + i, id)));
-                }
-            }
-        }
-    }
-
-    @Override
-    public int guiWidth()
-    {
+    public int guiWidth() {
         return 110;
     }
 
-    public void addType(final EnchantmentInfo.ENCHANTMENT_TYPE type)
-    {
+    public void addType(final ModularEnchantments.EnchantmentType type) {
         enabledTypes.add(type);
     }
 }

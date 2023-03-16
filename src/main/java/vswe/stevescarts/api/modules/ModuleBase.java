@@ -1,8 +1,10 @@
 package vswe.stevescarts.api.modules;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.language.I18n;
@@ -15,6 +17,7 @@ import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -29,6 +32,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.network.PacketDistributor;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.client.guis.buttons.ButtonBase;
@@ -489,28 +493,33 @@ public abstract class ModuleBase
     @OnlyIn(Dist.CLIENT)
     public void drawString(PoseStack matrixStack, final GuiMinecart gui, final String str, final int x, final int y, final int c)
     {
-        drawString(matrixStack, gui, str, gui.getGuiLeft() + x, gui.getGuiTop() + y, -1, false, c);
+        drawString(matrixStack, gui, str, x, y, -1, false, c);
     }
 
     @OnlyIn(Dist.CLIENT)
     public void drawString(PoseStack matrixStack, GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c)
     {
-        final int j = gui.getGuiLeft();
-        final int k = gui.getGuiTop();
+        final int left = gui.getGuiLeft();
+        final int top = gui.getGuiTop();
         final int[] rect = {x, y, w, 8};
-        if (!doStealInterface())
+        boolean stealInterface = doStealInterface();
+        int dif = 0;
+        if (!stealInterface)
         {
-            handleScroll(rect);
+            dif = handleScroll(rect);
         }
-        if (rect[3] == 8)
+        if (rect[3] > 0)
         {
-            if (center)
-            {
-                Minecraft.getInstance().font.draw(matrixStack, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX(), rect[1] + getY(), c);
+            if (!stealInterface) {
+                gui.pushScissor();
             }
-            else
-            {
-                Minecraft.getInstance().font.draw(matrixStack, str, rect[0] + getX(), rect[1] + getY(), c);
+            if (center) {
+                Minecraft.getInstance().font.draw(matrixStack, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX() + left, rect[1] + getY() + dif + top, c);
+            } else {
+                Minecraft.getInstance().font.draw(matrixStack, str, rect[0] + getX() + left, rect[1] + getY() + dif + top, c);
+            }
+            if (!stealInterface) {
+                gui.popScissor();
             }
         }
     }
@@ -659,9 +668,8 @@ public abstract class ModuleBase
      * @param sizeY   The height of the image
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(final GuiMinecart gui, final TextureAtlasSprite icon, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY)
-    {
-        this.drawImage(gui, icon, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY);
+    public void drawImage(final GuiMinecart gui, final TextureAtlasSprite icon, final int targetX, final int targetY, final int sizeX, final int sizeY) {
+        this.drawImage(gui, icon, new int[]{targetX, targetY, sizeX, sizeY});
     }
 
     /**
@@ -673,21 +681,14 @@ public abstract class ModuleBase
      * @param srcY They y coordinate in the source file
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect, final int srcX, int srcY)
-    {
-        if (rect.length < 4)
-        {
-            return;
-        }
+    public void drawImage(final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect) {
+        if (rect.length < 4) return;
         rect = this.cloneRect(rect);
-        if (!this.doStealInterface())
-        {
-            srcY -= this.handleScroll(rect);
+        if (!this.doStealInterface()) {
+            this.handleScroll(rect);
         }
-        if (rect[3] > 0)
-        {
-            //TODO
-            //			gui.blit(icon, gui.getGuiLeft() + rect[0] + this.getX(), gui.getGuiTop() + rect[1] + this.getY(), rect[2] / 16.0f, rect[3] / 16.0f, srcX / 16.0f, srcY / 16.0f);
+        if (rect[3] > 0) {
+            GuiComponent.blit(new PoseStack(), gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), 0, rect[2], rect[3], icon);
         }
     }
 
@@ -993,8 +994,34 @@ public abstract class ModuleBase
      * @param y      The y coordinate of the mouse
      * @param button The button that was released, or -1 if the cursor is just being moved
      */
+    @Deprecated //This is dumb. Use mouseMoved and/or mouseReleased
     @OnlyIn(Dist.CLIENT)
     public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button)
+    {
+    }
+
+    /**
+     * Used to handle mouse button release in the module's interface
+     *
+     * @param gui    The gui that was clicked
+     * @param x      The x coordinate of the mouse
+     * @param y      The y coordinate of the mouse
+     * @param button The button that was pressed on the mouse
+     */
+    @OnlyIn(Dist.CLIENT)
+    public void mouseReleased(final GuiMinecart gui, final int x, final int y, final int button)
+    {
+    }
+
+    /**
+     * Used to handle mouse movement in the module's interface
+     *
+     * @param gui    The gui that is being used
+     * @param x      The x coordinate of the mouse
+     * @param y      The y coordinate of the mouse
+     */
+    @OnlyIn(Dist.CLIENT)
+    public void mouseMoved(final GuiMinecart gui, final int x, final int y)
     {
     }
 
@@ -1044,7 +1071,7 @@ public abstract class ModuleBase
         {
             handleScroll(rect);
         }
-        return x >= rect[0] && x <= rect[0] + rect[2] && y >= rect[1] && y <= rect[1] + rect[3];
+        return rect[3] > 0 && x >= rect[0] && x <= rect[0] + rect[2] && y >= rect[1] && y <= rect[1] + rect[3];
     }
 
     /**
@@ -1188,8 +1215,9 @@ public abstract class ModuleBase
      */
     protected void sendPacket(int id, byte[] data, Player player)
     {
-        //TODO
-        //		PacketStevesCarts.sendPacketToPlayer(getPacketStart() + id, data, player, getCart());
+        if (player instanceof ServerPlayer){
+            PacketHandler.sendTo(new PacketMinecartButton(cart.getId(), getPacketStart() + id, data), (ServerPlayer) player);
+        }
     }
 
     /**
@@ -1565,15 +1593,17 @@ public abstract class ModuleBase
     {
         final float var7 = 0.00390625f;
         final float var8 = 0.00390625f;
-        final Tesselator tess = Tesselator.getInstance();
-        //TODO this is a later problem
-        //		BufferBuilder buff = tess.getBuffer();
-        //		buff.begin(7, DefaultVertexFormats.POSITION_TEX);
-        //		buff.pos((double)(targetX + 0), 	(double)(targetY + height), 	-90D).tex((double)((float)(sourceX + 0) * var7), 		(double)((float)(sourceY + height) * var8)).endVertex();
-        //		buff.pos((double)(targetX + width),	(double)(targetY + height), 	-90D).tex((double)((float)(sourceX + width) * var7), 	(double)((float)(sourceY + height) * var8)).endVertex();
-        //		buff.pos((double)(targetX + width),	(double)(targetY + 0), 			-90D).tex((double)((float)(sourceX + width) * var7), 	(double)((float)(sourceY + 0) * var8)).endVertex();
-        //		buff.pos((double)(targetX + 0), 	(double)(targetY + 0), 			-90D).tex((double)((float)(sourceX + 0) * var7), 		(double)((float)(sourceY + 0) * var8)).endVertex();
-        //		tess.draw();
+
+        //formatter:off
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.vertex(targetX,           targetY + height, 	-90D).uv((float) sourceX * var7,            (float)(sourceY + height) * var8).endVertex();
+        bufferbuilder.vertex(targetX + width,   targetY + height, 	-90D).uv((float)(sourceX + width) * var7,   (float)(sourceY + height) * var8).endVertex();
+        bufferbuilder.vertex(targetX + width,   targetY, 			-90D).uv((float)(sourceX + width) * var7,   (float) sourceY * var8).endVertex();
+        bufferbuilder.vertex(targetX,           targetY, 			-90D).uv((float) sourceX * var7,            (float) sourceY * var8).endVertex();
+        BufferUploader.drawWithShader(bufferbuilder.end());
+        //formatter:on
     }
 
     @OnlyIn(Dist.CLIENT)
