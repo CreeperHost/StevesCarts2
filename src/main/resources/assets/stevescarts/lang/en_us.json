@@ -580,6 +580,7 @@
     "modules.attachments.stevescarts.experienceExtractAll": "Shift-Click to extract all",
     "modules.attachments.stevescarts.experiencePlayerLevel": "Your current level is [%1]",
     "modules.attachments.stevescarts.shooterTitle": "Shooter",
+    "modules.attachments.stevescarts.shooterFrequency": "#/s",
     "modules.attachments.stevescarts.shooterSeconds": "s",
     "modules.attachments.stevescarts.shooterDelay": "Delay",
     "modules.attachments.stevescarts.notePiano": "Piano",

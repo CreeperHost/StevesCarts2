@@ -99,6 +99,8 @@ public class StevesCartsModules
     public static ModuleData SEAT;
     public static ModuleData BRAKE;
     public static ModuleData ADVANCED_CONTROL_SYSTEM;
+    public static ModuleData SHOOTER;
+    public static ModuleData ADVANCED_SHOOTER;
     public static ModuleData CLEANER;
     public static ModuleData DYNAMITE_CARRIER;
     public static ModuleData DIVINE_SHIELD;
@@ -321,20 +323,31 @@ public class StevesCartsModules
         ADVANCED_CONTROL_SYSTEM = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_control_system"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_control_system"), "Advanced Control System", ModuleAdvControl.class, ModuleType.ATTACHMENT, 38).addSide(ModuleData.SIDE.RIGHT).addParent(SEAT));
 
+        SHOOTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "shooter"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "shooter"), "Shooter", ModuleShooter.class, ModuleType.ATTACHMENT, 15).addSide(ModuleData.SIDE.TOP));
+
+        ADVANCED_SHOOTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_shooter"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_shooter"), "Advanced Shooter", ModuleShooterAdv.class, ModuleType.ATTACHMENT, 50).addSide(ModuleData.SIDE.TOP).addRequirement(DefaultModuleGroups.ENTITY_DETECTOR_GROUP));
+
         ENTITY_DETECTOR_ANIMAL = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "entity_detector_animal"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "entity_detector_animal"), "Entity Detector: Animal", ModuleAnimal.class, ModuleType.ADDON, 1));
+        DefaultModuleGroups.ENTITY_DETECTOR_GROUP.add(ENTITY_DETECTOR_ANIMAL);
 
         ENTITY_DETECTOR_PLAYER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "entity_detector_player"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "entity_detector_player"), "Entity Detector: Player", ModulePlayer.class, ModuleType.ADDON, 7));
+        DefaultModuleGroups.ENTITY_DETECTOR_GROUP.add(ENTITY_DETECTOR_PLAYER);
 
         ENTITY_DETECTOR_VILLAGER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "entity_detector_villager"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "entity_detector_villager"), "Entity Detector: Villager", ModuleVillager.class, ModuleType.ADDON, 1));
+        DefaultModuleGroups.ENTITY_DETECTOR_GROUP.add(ENTITY_DETECTOR_VILLAGER);
 
         ENTITY_DETECTOR_MONSTER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "entity_detector_monster"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "entity_detector_monster"), "Entity Detector: Monster", ModuleMonster.class, ModuleType.ADDON, 1));
+        DefaultModuleGroups.ENTITY_DETECTOR_GROUP.add(ENTITY_DETECTOR_MONSTER);
 
         ENTITY_DETECTOR_BAT = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "entity_detector_bat"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "entity_detector_bat"), "Entity Detector: Bat", ModuleBat.class, ModuleType.ADDON, 1));
+        DefaultModuleGroups.ENTITY_DETECTOR_GROUP.add(ENTITY_DETECTOR_BAT);
 
         CLEANER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "cleaning_machine"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "cleaning_machine"), "Cleaning Machine", ModuleCleaner.class, ModuleType.ADDON, 23).addSide(ModuleData.SIDE.CENTER));
@@ -429,5 +442,6 @@ public class StevesCartsModules
         DefaultModuleGroups.WOODCUTTER_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.CUTTER_GROUP);
         DefaultModuleGroups.TANK_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.TANK_GROUP);
         DefaultModuleGroups.TOOL_GROUP = ModuleDataGroup.getCombinedGroup(Localization.MODULE_INFO.TOOL_GROUP, DefaultModuleGroups.DRILL_GROUP, DefaultModuleGroups.WOODCUTTER_GROUP);
+        DefaultModuleGroups.ENTITY_DETECTOR_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.ENTITY_GROUP);
     }
 }

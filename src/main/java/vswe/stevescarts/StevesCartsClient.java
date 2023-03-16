@@ -92,6 +92,8 @@ public class StevesCartsClient
         BRAKE.addModel("Lever", new ModelLever(ResourceHelper.getResource("/models/leverModel.png")));
         ADVANCED_CONTROL_SYSTEM.addModel("Lever", new ModelLever(ResourceHelper.getResource("/models/leverModel2.png"))).addModel("Wheel", new ModelWheel());
 
+        SHOOTER.removeModel("Top").addModel("Rig", new ModelShootingRig()).addModel("Pipes", new ModelGun());
+        ADVANCED_SHOOTER.removeModel("Top").addModel("Rig", new ModelShootingRig()).addModel("MobDetector", new ModelMobDetector()).addModel("Pipes", new ModelSniperRifle());
 
         CLEANER.addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelCleaner());
         DYNAMITE_CARRIER.addModel("Tnt", new ModelDynamite());
