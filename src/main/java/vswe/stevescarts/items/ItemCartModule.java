@@ -63,7 +63,7 @@ public class ItemCartModule extends Item implements IModuleItem
         }
         else
         {
-            ItemCartModule itemCartModule = (ItemCartModule) module.getItem();
+            IModuleItem itemCartModule = (IModuleItem) module.getItem();
             final ModuleData data = itemCartModule.getModuleData();
             if (data.isUsingExtraData())
             {
