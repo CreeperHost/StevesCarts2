@@ -80,7 +80,7 @@ public class ModItems
     {
         for (ModuleData value : StevesCartsAPI.MODULE_REGISTRY.values())
         {
-            if(value.getID().getPath().equalsIgnoreCase(Constants.MOD_ID))
+            if(value.getID().getNamespace().equalsIgnoreCase(Constants.MOD_ID))
                 map.put(value, ITEMS.register(value.getName(), () -> new ItemCartModule(value)));
         }
     });
