@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 import vswe.stevescarts.entities.EntityMinecartModular;
@@ -45,6 +47,7 @@ public class PacketMinecartButton {
             ctx.get().setPacketHandled(true);
         }
 
+        @OnlyIn(Dist.CLIENT)
         private static void handleClientSide(PacketMinecartButton msg, Supplier<NetworkEvent.Context> ctx) {
             Minecraft mc = Minecraft.getInstance();
             Level level = mc.level;
