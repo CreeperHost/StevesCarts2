@@ -78,7 +78,6 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular>
 
         if (Math.abs(yaw - rotationYaw) > 90)
         {
-            yaw += 180;
             pitch = -pitch;
         }
 
