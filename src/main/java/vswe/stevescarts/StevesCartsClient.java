@@ -96,7 +96,7 @@ public class StevesCartsClient
         ADVANCED_SHOOTER.removeModel("Top").addModel("Rig", new ModelShootingRig()).addModel("MobDetector", new ModelMobDetector()).addModel("Pipes", new ModelSniperRifle());
 
         CLEANER.addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelCleaner());
-        DYNAMITE_CARRIER.addModel("Tnt", new ModelDynamite());
+        DYNAMITE_CARRIER.addModel("Tnt", new ModelDynamite(ResourceHelper.getResource("/models/tntModel.png")));
         DIVINE_SHIELD.addModel("Shield", new ModelShield()).setModelMult(0.68f);
         NOTE_SEQUENCER.setModelMult(0.65f).addModel("Speakers", new ModelNote());
         CAGE.removeModel("Top").addModel("Cage", new ModelCage(), false).addModel("Cage", new ModelCage(), true).setModelMult(0.65f);

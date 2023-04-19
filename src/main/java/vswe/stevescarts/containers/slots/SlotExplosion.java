@@ -2,6 +2,7 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.helpers.ComponentTypes;
 
 import javax.annotation.Nonnull;
@@ -17,5 +18,10 @@ public class SlotExplosion extends SlotBase implements ISlotExplosions
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
         return ComponentTypes.DYNAMITE.isStackOfType(itemstack);
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return SCConfig.maxDynamites.get();
     }
 }

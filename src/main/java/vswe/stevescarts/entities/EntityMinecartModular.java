@@ -621,7 +621,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public void destroy(@NotNull DamageSource damageSource)
     {
         this.kill();
-        if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+        if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS) && dropOnDeath()) {
             ItemStack itemstack = getCartItem();
             if (this.hasCustomName()) {
                 itemstack.setHoverName(this.getCustomName());
@@ -636,6 +636,20 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             }
             this.spawnAtLocation(itemstack);
         }
+    }
+
+    public boolean dropOnDeath() {
+        if (isPlaceholder) {
+            return false;
+        }
+        if (modules != null) {
+            for (final ModuleBase module : modules) {
+                if (!module.dropOnDeath()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     @Override

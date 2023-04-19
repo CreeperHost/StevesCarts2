@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotExplosion;
@@ -164,6 +165,8 @@ public class ModuleDynamite extends ModuleBase
 
     private void explode()
     {
+        if (getCart().level.isClientSide) return;
+
         if (isPlaceholder())
         {
             setFuse(1);
@@ -244,7 +247,7 @@ public class ModuleDynamite extends ModuleBase
         {
             return getSimInfo().fuse;
         }
-        final int val = getDw(FUSE);
+        int val = getDw(FUSE);
         if (val < 0)
         {
             return val + 256;
@@ -266,9 +269,9 @@ public class ModuleDynamite extends ModuleBase
 
     public void setFuseLength(int val)
     {
-        if (val > 150)
+        if (val > getMaxFuse())
         {
-            val = 150;
+            val = getMaxFuse();
         }
         updateDw(FUSE_LENGTH, (byte) val);
     }
@@ -279,7 +282,7 @@ public class ModuleDynamite extends ModuleBase
         {
             return getSimInfo().getFuseLength();
         }
-        final int val = getDw(FUSE_LENGTH);
+        int val = getDw(FUSE_LENGTH);
         if (val < 0)
         {
             return val + 256;
