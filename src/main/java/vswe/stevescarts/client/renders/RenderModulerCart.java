@@ -1,7 +1,7 @@
 package vswe.stevescarts.client.renders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -90,17 +90,17 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular>
         }
 
         matrices.translate(0.0, 0.375, 0.0);
-        matrices.mulPose(Vector3f.YP.rotationDegrees(180.0F - yaw));
-        matrices.mulPose(Vector3f.ZP.rotationDegrees(-pitch));
+        matrices.mulPose(Axis.YP.rotationDegrees(180.0F - yaw));
+        matrices.mulPose(Axis.ZP.rotationDegrees(-pitch));
         float damageWobbleTicks = (float) entity.getHurtTime() - tickDelta;
         float damageWobbleStrength = Mth.clamp(entity.getDamage() - tickDelta, 0, Float.MAX_VALUE);
         if (damageWobbleTicks > 0.0f)
         {
-            matrices.mulPose(Vector3f.XP.rotationDegrees(Mth.sin(damageWobbleTicks) * damageWobbleTicks * damageWobbleStrength / 10.0f * entity.getHurtDir()));
+            matrices.mulPose(Axis.XP.rotationDegrees(Mth.sin(damageWobbleTicks) * damageWobbleTicks * damageWobbleStrength / 10.0f * entity.getHurtDir()));
         }
 
         yaw += (flip ? 0.0f : 180.0f);
-        matrices.mulPose(Vector3f.YP.rotationDegrees(flip ? 0.0f : 180.0f));
+        matrices.mulPose(Axis.YP.rotationDegrees(flip ? 0.0f : 180.0f));
 
         matrices.scale(-1.0f, -1.0f, 1.0f);
         if(entity.getModules() != null)

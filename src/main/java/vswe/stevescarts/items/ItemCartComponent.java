@@ -15,7 +15,7 @@ public class ItemCartComponent extends Item
 
     public ItemCartComponent(ComponentTypes componentType)
     {
-        super(new Item.Properties().tab(StevesCartsCreativeTabs.ITEMS));
+        super(new Item.Properties());
         this.componentType = componentType;
     }
 

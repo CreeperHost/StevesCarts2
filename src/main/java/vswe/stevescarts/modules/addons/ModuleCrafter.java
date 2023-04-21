@@ -68,7 +68,7 @@ public class ModuleCrafter extends ModuleRecipe
                                 for (int k = 0; k < inputSlots.size(); ++k)
                                 {
                                     @Nonnull ItemStack item2 = inputSlots.get(k).getItem();
-                                    if (!item2.isEmpty() && item2.sameItem(recipe) && ItemStack.isSameIgnoreDurability(item2, recipe))
+                                    if (!item2.isEmpty() && item2.sameItem(recipe) && ItemStack.isSame(item2, recipe))
                                     {
                                         edited = true;
                                         if (item2.hasCraftingRemainingItem())

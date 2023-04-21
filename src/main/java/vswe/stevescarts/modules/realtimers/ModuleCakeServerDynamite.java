@@ -4,6 +4,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotCakeDynamite;
@@ -48,7 +49,8 @@ public class ModuleCakeServerDynamite extends ModuleCakeServer
 
     private void explode()
     {
-        getCart().level.explode(null, getCart().getExactPosition().getX(), getCart().getExactPosition().getY(), getCart().getExactPosition().getZ(), dynamiteCount * .08f, Explosion.BlockInteraction.NONE);
+        getCart().level.explode(null, getCart().getExactPosition().getX(),
+                getCart().getExactPosition().getY(), getCart().getExactPosition().getZ(), dynamiteCount * .08f, Level.ExplosionInteraction.NONE);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package vswe.stevescarts.init;
 
+import dev.architectury.registry.CreativeTabRegistry;
 import net.minecraft.Util;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -22,7 +23,7 @@ import java.util.function.Supplier;
 
 public class ModItems
 {
-    public static final Item.Properties ITEM_GROUP = new Item.Properties().tab(StevesCartsCreativeTabs.BLOCKS);
+    public static final Item.Properties ITEM_GROUP = new Item.Properties();
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
 
     public static final RegistryObject<Item> CART_ASSEMBLER = ITEMS.register("blockcartassembler", () -> new BlockItem(ModBlocks.CART_ASSEMBLER.get(), ITEM_GROUP));
@@ -84,4 +85,14 @@ public class ModItems
                 map.put(value, ITEMS.register(value.getName(), () -> new ItemCartModule(value)));
         }
     });
+
+    static
+    {
+        CreativeTabRegistry.append(StevesCartsCreativeTabs.BLOCKS, CART_ASSEMBLER, CARGO_MANAGER, LIQUID_MANAGER, EXTERNAL_DISTRIBUTOR, MODULE_TOGGLER, JUNCTION, ADVANCED_DETECTOR, REINFORCED_METAL, GALGADORIAN_METAL, ENHANCED_GALGADORIAN_METAL,
+                BATTERIES, POWER_CRYSTAL, KNOWLEDGE, INDUSTRIAL_ESPIONAGE, EXPERIENCED_ASSEMBLER, NEW_ERA, COTWO_FRIENDLY, GENERIC_ENGINE, MODULE_INPUT, PRODUCTION_LINE, CART_DEPLOYER, CART_MODIFIER, CART_CRANE,
+                REDSTONE_CONTROL, CREATIVE_MODE, QUICK_DEMOLISHER, ENTROPY, MANAGER_BRIDGE, THERMAL_ENGINE, SOLAR_PANEL);
+
+        COMPONENTS.forEach((componentTypes, itemSupplier) -> CreativeTabRegistry.append(StevesCartsCreativeTabs.ITEMS, itemSupplier));
+        MODULES.forEach((moduleData, itemSupplier) -> CreativeTabRegistry.append(StevesCartsCreativeTabs.MODULES, itemSupplier));
+    }
 }

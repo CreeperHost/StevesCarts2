@@ -662,8 +662,6 @@ public abstract class ModuleBase
      * @param icon    The Icon to draw
      * @param targetX The local x coordinate to draw it on
      * @param targetY The local y coordinate to draw it on
-     * @param srcX    The x coordinate in the source file
-     * @param srcY    The y coordinate in the source file
      * @param sizeX   The width of the image
      * @param sizeY   The height of the image
      */
@@ -677,8 +675,6 @@ public abstract class ModuleBase
      *
      * @param gui  The gui to draw it on
      * @param rect The rectangle indicating where to draw it {targetX, targetY, sizeX, sizeY}
-     * @param srcX The x coordinate in the source file
-     * @param srcY They y coordinate in the source file
      */
     @OnlyIn(Dist.CLIENT)
     public void drawImage(final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect) {
@@ -1332,13 +1328,6 @@ public abstract class ModuleBase
      */
     protected final <T> void registerDw(EntityDataAccessor<T> key, T value)
     {
-        for (SynchedEntityData.DataItem<?> entry : getCart().getDataManager().getAll())
-        {
-            if (entry.getAccessor() == key)
-            {
-                return;
-            }
-        }
         getCart().getDataManager().define(key, value);
     }
 

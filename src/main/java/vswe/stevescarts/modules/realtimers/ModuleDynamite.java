@@ -8,6 +8,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.StevesCarts;
@@ -175,7 +176,8 @@ public class ModuleDynamite extends ModuleBase
         {
             final float f = explosionSize();
             setStack(0, ItemStack.EMPTY);
-            getCart().level.explode(null, getCart().blockPosition().getX(), getCart().blockPosition().getY(), getCart().blockPosition().getZ(), f, Explosion.BlockInteraction.BREAK);
+            getCart().level.explode(null, getCart().blockPosition().getX(),
+                    getCart().blockPosition().getY(), getCart().blockPosition().getZ(), f, Level.ExplosionInteraction.BLOCK);
         }
     }
 

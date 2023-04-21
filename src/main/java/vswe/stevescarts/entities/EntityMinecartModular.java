@@ -8,6 +8,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -126,7 +127,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public @NotNull Packet<?> getAddEntityPacket()
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket()
     {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
@@ -1641,7 +1642,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public int getNextDataWatcher()
     {
         base++;
-        return getDataManager().getAll().size() + base + 1;
+        return getDataManager().itemsById.size() + base + 1;
     }
 
     @Override

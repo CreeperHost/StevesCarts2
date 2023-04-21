@@ -3,8 +3,8 @@ package vswe.stevescarts.client.guis;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+//import com.mojang.math.Quaternion;
+//import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -15,6 +15,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.containers.ContainerCartAssembler;
@@ -363,8 +365,12 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         posestack1.translate(0.0D, 0.0D, 1000.0D);
         posestack1.scale((float) p_98853_, (float) p_98853_, (float) p_98853_);
 
-        Quaternion quaternion = Vector3f.YN.rotationDegrees(assembler.getRoll() * 10F);
-        Quaternion quaternion1 = Vector3f.XP.rotationDegrees(180);
+
+        Quaternionf quaternion = new Quaternionf().rotateY(assembler.getRoll() * 10F);//Vector3f.YN.rotationDegrees(assembler.getRoll() * 10F);
+        Quaternionf quaternion1 = new Quaternionf().rotateX(180);//Vector3f.XP.rotationDegrees(180);
+
+//        Quaternion quaternion = Vector3f.YN.rotationDegrees(assembler.getRoll() * 10F);
+//        Quaternion quaternion1 = Vector3f.XP.rotationDegrees(180);
         if (spin)
         {
             posestack1.mulPose(quaternion);
@@ -376,7 +382,8 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
 
         Lighting.setupForEntityInInventory();
         EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-        quaternion1.conj();
+        //TODO
+//        quaternion1.conj();
         entityrenderdispatcher.overrideCameraOrientation(quaternion1);
         entityrenderdispatcher.setRenderShadow(false);
         MultiBufferSource.BufferSource multibuffersource$buffersource = Minecraft.getInstance().renderBuffers().bufferSource();

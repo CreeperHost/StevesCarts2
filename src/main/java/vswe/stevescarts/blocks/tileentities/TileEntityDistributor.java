@@ -517,7 +517,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing)
     {
-        if (!this.remove && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        if (!this.remove && facing != null && capability == ForgeCapabilities.ITEM_HANDLER)
         {
             return switch (facing)
                     {

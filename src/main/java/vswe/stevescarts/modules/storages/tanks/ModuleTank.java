@@ -290,7 +290,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
 
     public String getFluidName(Fluid fluid)
     {
-        return Registry.FLUID.getKey(fluid).toString();
+        return ForgeRegistries.FLUIDS.getKey(fluid).toString();
     }
 
     public float getFluidRenderHeight()

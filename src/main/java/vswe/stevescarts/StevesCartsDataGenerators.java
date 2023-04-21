@@ -1,48 +1,32 @@
 package vswe.stevescarts;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.datafixers.util.Pair;
 import net.creeperhost.polylib.helpers.RegistryNameHelper;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.loot.BlockLoot;
-import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.LootTables;
-import net.minecraft.world.level.storage.loot.ValidationContext;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItems;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
+
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class StevesCartsDataGenerators
@@ -54,24 +38,24 @@ public class StevesCartsDataGenerators
 
         if (event.includeServer())
         {
-            generator.addProvider(true, new GeneratorRecipes(generator));
-            generator.addProvider(true, new GeneratorLoots(generator));
+            generator.addProvider(true, new GeneratorRecipes(generator.getPackOutput()));
+//            generator.addProvider(true, new GeneratorLoots(generator.getPackOutput()));
         }
 
         if (event.includeClient())
         {
-            generator.addProvider(true, new GeneratorBlockTags(generator, event.getExistingFileHelper()));
-            generator.addProvider(true, new GeneratorLanguage(generator));
-            generator.addProvider(true, new GeneratorBlockStates(generator, event.getExistingFileHelper()));
-            generator.addProvider(true, new GeneratorItemModels(generator, event.getExistingFileHelper()));
+//            generator.addProvider(true, new GeneratorBlockTags(generator.getPackOutput(), event.getExistingFileHelper()));
+//            generator.addProvider(true, new GeneratorLanguage(generator.getPackOutput(), event.getExistingFileHelper()));
+            generator.addProvider(true, new GeneratorBlockStates(generator.getPackOutput(), event.getExistingFileHelper()));
+            generator.addProvider(true, new GeneratorItemModels(generator.getPackOutput(), event.getExistingFileHelper()));
         }
     }
 
     static class GeneratorBlockStates extends BlockStateProvider
     {
-        public GeneratorBlockStates(DataGenerator gen, ExistingFileHelper exFileHelper)
+        public GeneratorBlockStates(PackOutput output, ExistingFileHelper exFileHelper)
         {
-            super(gen, Constants.MOD_ID, exFileHelper);
+            super(output, Constants.MOD_ID, exFileHelper);
         }
 
         @Override
@@ -93,15 +77,15 @@ public class StevesCartsDataGenerators
 
         public ResourceLocation getResourceLocation(Block block)
         {
-            return Registry.BLOCK.getKey(block);
+            return ForgeRegistries.BLOCKS.getKey(block);
         }
     }
 
     static class GeneratorItemModels extends ItemModelProvider
     {
-        public GeneratorItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper)
+        public GeneratorItemModels(PackOutput output, ExistingFileHelper existingFileHelper)
         {
-            super(generator, Constants.MOD_ID, existingFileHelper);
+            super(output, Constants.MOD_ID, existingFileHelper);
         }
 
         @Override
@@ -132,9 +116,9 @@ public class StevesCartsDataGenerators
 
     static class GeneratorLanguage extends LanguageProvider
     {
-        public GeneratorLanguage(DataGenerator gen)
+        public GeneratorLanguage(PackOutput output, String locale)
         {
-            super(gen, Constants.MOD_ID, "en_us");
+            super(output, Constants.MOD_ID, locale);
         }
 
         @Override
@@ -147,74 +131,71 @@ public class StevesCartsDataGenerators
     }
 
 
-    static class GeneratorLoots extends LootTableProvider
-    {
-        public GeneratorLoots(DataGenerator dataGeneratorIn)
-        {
-            super(dataGeneratorIn);
-        }
-
-        @Override
-        protected @NotNull List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables()
-        {
-            return ImmutableList.of(Pair.of(Blocks::new, LootContextParamSets.BLOCK));
-        }
-
-        private static class Blocks extends BlockLoot
-        {
-            @Override
-            protected void addTables()
-            {
-                ModBlocks.BLOCKS.getEntries().forEach(blockRegistryObject -> this.add(blockRegistryObject.get(), LootTable.lootTable().withPool(create(blockRegistryObject.get()))));
-            }
-
-            public LootPool.Builder create(Block block)
-            {
-                return LootPool.lootPool().name(RegistryNameHelper.getRegistryName(block).get().toString())
-                        .setRolls(ConstantValue.exactly(1)).when(ExplosionCondition.survivesExplosion())
-                        .add(LootItem.lootTableItem(block)
-                        .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY)));
-
-            }
-
-            @Override
-            protected @NotNull Iterable<Block> getKnownBlocks()
-            {
-                List<Block> list = new ArrayList<>();
-                ModBlocks.BLOCKS.getEntries().forEach(blockRegistryObject -> list.add(blockRegistryObject.get()));
-                return ImmutableList.copyOf(list);
-            }
-        }
-
-        @Override
-        protected void validate(Map<ResourceLocation, LootTable> map, @NotNull ValidationContext validationtracker)
-        {
-            map.forEach((name, table) -> LootTables.validate(validationtracker, name, table));
-        }
-    }
+//    static class GeneratorLoots extends LootTableProvider
+//    {
+//        public GeneratorLoots(PackOutput p_254123_, Set<ResourceLocation> p_254481_, List<SubProviderEntry> p_253798_)
+//        {
+//            super(p_254123_, p_254481_, p_253798_);
+//        }
+//
+//
+//
+//        private static class Blocks extends BlockLoot
+//        {
+//            @Override
+//            protected void addTables()
+//            {
+//                ModBlocks.BLOCKS.getEntries().forEach(blockRegistryObject -> this.add(blockRegistryObject.get(), LootTable.lootTable().withPool(create(blockRegistryObject.get()))));
+//            }
+//
+//            public LootPool.Builder create(Block block)
+//            {
+//                return LootPool.lootPool().name(RegistryNameHelper.getRegistryName(block).get().toString())
+//                        .setRolls(ConstantValue.exactly(1)).when(ExplosionCondition.survivesExplosion())
+//                        .add(LootItem.lootTableItem(block)
+//                        .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY)));
+//
+//            }
+//
+//            @Override
+//            protected @NotNull Iterable<Block> getKnownBlocks()
+//            {
+//                List<Block> list = new ArrayList<>();
+//                ModBlocks.BLOCKS.getEntries().forEach(blockRegistryObject -> list.add(blockRegistryObject.get()));
+//                return ImmutableList.copyOf(list);
+//            }
+//        }
+//
+//        @Override
+//        protected void validate(Map<ResourceLocation, LootTable> map, @NotNull ValidationContext validationtracker)
+//        {
+//            map.forEach((name, table) -> LootTables.validate(validationtracker, name, table));
+//        }
+//    }
 
     static class GeneratorRecipes extends RecipeProvider
     {
-        public GeneratorRecipes(DataGenerator generator)
+        public GeneratorRecipes(PackOutput p_248933_)
         {
-            super(generator);
+            super(p_248933_);
         }
 
         @Override
-        protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> consumer)
+        protected void buildRecipes(Consumer<FinishedRecipe> consumer)
         {
+
         }
     }
 
     static class GeneratorBlockTags extends BlockTagsProvider
     {
-        public GeneratorBlockTags(DataGenerator generator, @Nullable ExistingFileHelper existingFileHelper)
+        public GeneratorBlockTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
         {
-            super(generator, Constants.MOD_ID, existingFileHelper);
+            super(output, lookupProvider, Constants.MOD_ID, existingFileHelper);
         }
 
         @Override
-        protected void addTags()
+        protected void addTags(HolderLookup.Provider provider)
         {
             ModBlocks.BLOCKS.getEntries().forEach(blockRegistryObject -> tag(BlockTags.MINEABLE_WITH_PICKAXE).add(blockRegistryObject.get()));
             tag(BlockTags.RAILS).add(ModBlocks.ADVANCED_DETECTOR.get()).add(ModBlocks.JUNCTION.get());
