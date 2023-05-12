@@ -30,6 +30,7 @@ public class PacketHandler
         registerMessage(PacketActivator.class, PacketActivator::encode, PacketActivator::decode, PacketActivator.Handler::handle);
         registerMessage(PacketFluidSync.class, PacketFluidSync::encode, PacketFluidSync::decode, PacketFluidSync.Handler::handle);
         registerMessage(PacketMinecartTurn.class, PacketMinecartTurn::encode, PacketMinecartTurn::decode, PacketMinecartTurn.Handler::handle);
+        registerMessage(PacketGuiData.class, PacketGuiData::encode, PacketGuiData::decode, PacketGuiData.Handler::handle);
     }
 
     private static <MSG> void registerMessage(Class<MSG> type, BiConsumer<MSG, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> consumer)

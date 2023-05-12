@@ -12,6 +12,7 @@ import vswe.stevescarts.init.ModContainers;
 import vswe.stevescarts.api.modules.ModuleBase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class ContainerMinecart extends ContainerBase
@@ -94,5 +95,31 @@ public class ContainerMinecart extends ContainerBase
     public boolean stillValid(@NotNull Player playerEntity)
     {
         return true;
+    }
+
+    
+    @Override //Detect and send
+    public void broadcastChanges() {
+        super.broadcastChanges();
+        Player player = playerInventory.player;
+        
+        if (cart.getModules() != null) {
+            for (final ModuleBase module : cart.getModules()) {
+                module.checkGuiData(this, Collections.singletonList(player), false);
+            }
+        }
+    }
+
+    @Override
+    public void receiveGuiData(int id, int data) {
+        data &= 0xFFFF;
+        if (cart.getModules() != null) {
+            for (final ModuleBase module : cart.getModules()) {
+                if (id >= module.getGuiDataStart() && id < module.getGuiDataStart() + module.numberOfGuiData()) {
+                    module.receiveGuiData(id - module.getGuiDataStart(), (short) data);
+                    break;
+                }
+            }
+        }
     }
 }

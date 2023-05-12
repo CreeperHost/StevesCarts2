@@ -22,6 +22,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -37,9 +38,11 @@ import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.client.guis.buttons.ButtonBase;
 import vswe.stevescarts.api.client.ModelCartbase;
+import vswe.stevescarts.containers.ContainerMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.ButtonComparator;
+import vswe.stevescarts.network.packets.PacketGuiData;
 import vswe.stevescarts.polylib.NBTHelper;
 import vswe.stevescarts.helpers.SimulationInfo;
 import vswe.stevescarts.api.modules.data.ModuleData;
@@ -48,6 +51,7 @@ import vswe.stevescarts.network.packets.PacketMinecartButton;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -1395,8 +1399,7 @@ public abstract class ModuleBase
      *
      * @param val
      */
-    public void setGuiDataStart(final int val)
-    {
+    public void setGuiDataStart(final int val) {
         guiDataOffset = val;
     }
 
@@ -1409,12 +1412,10 @@ public abstract class ModuleBase
      * @param id      The global gui data id
      * @param data    The data to update to
      */
-    private final void updateGuiData(Container con, List<ContainerListener> players, final int id, final short data)
-    {
-        for (final ContainerListener player : players)
-        {
-            //TODO
-            //			player.sendWindowProperty(con, id, data);
+    private void updateGuiData(AbstractContainerMenu con, List<Player> players, int id, short data) {
+        for (Player player : players) {
+            if (!(player instanceof ServerPlayer serverPlayer)) continue;
+            PacketHandler.sendTo(new PacketGuiData(con.containerId, id, data), serverPlayer);
         }
     }
 
@@ -1426,32 +1427,33 @@ public abstract class ModuleBase
      * @param id   The local gui data id
      * @param data The data to update to
      */
-    public final void updateGuiData(final Object[] info, final int id, final short data)
-    {
-        //TODO ContainerMinecart
-        //		final ContainerMinecart con = (ContainerMinecart) info[0];
-        //		if (con == null) {
-        //			return;
-        //		}
-        //		final int globalId = id + getGuiDataStart();
-        //		final List players = (List) info[1];
-        //		boolean flag;
-        //		boolean isNew = (boolean) info[2];
-        //		if (!isNew) {
-        //			if (con.cache != null) {
-        //				final Short val = con.cache.get((short) globalId);
-        //				isNew = (val == null || val != data);
-        //			} else {
-        //				isNew = true;
-        //			}
-        //		}
-        //		if (isNew) {
-        //			if (con.cache == null) {
-        //				con.cache = new HashMap<>();
-        //			}
-        //			updateGuiData(con, players, globalId, data);
-        //			con.cache.put((short) globalId, data);
-        //		}
+    @Deprecated
+    public final void updateGuiData(final Object[] info, final int id, final short data) {
+        updateGuiData((AbstractContainerMenu) info[0], (List<Player>) info[1], (Boolean) info[2], id, data);
+    }
+
+    public final void updateGuiData(AbstractContainerMenu containerMenu, List<Player> players, boolean isNew, final int id, final short data) {
+        if (!(containerMenu instanceof ContainerMinecart con)) {
+            return;
+        }
+        int globalId = id + getGuiDataStart();
+
+        boolean flag;
+        if (!isNew) {
+            if (con.cache != null) {
+                final Short val = con.cache.get((short) globalId);
+                isNew = (val == null || val != data);
+            } else {
+                isNew = true;
+            }
+        }
+        if (isNew) {
+            if (con.cache == null) {
+                con.cache = new HashMap<>();
+            }
+            updateGuiData(con, players, globalId, data);
+            con.cache.put((short) globalId, data);
+        }
     }
 
     /**
@@ -1460,8 +1462,7 @@ public abstract class ModuleBase
      * @param con    The container used by the interface
      * @param player The player that opened it
      */
-    public final void initGuiData(final Container con, final ContainerListener player)
-    {
+    public final void initGuiData(AbstractContainerMenu con, ContainerListener player) {
         final ArrayList players = new ArrayList();
         players.add(player);
         checkGuiData(con, players, true);
@@ -1472,8 +1473,19 @@ public abstract class ModuleBase
      *
      * @param info The information that should be sent as the first parameter to updateGuiData
      */
-    protected void checkGuiData(final Object[] info)
-    {
+    @Deprecated //Use doGuiDataCheck
+    protected void checkGuiData(final Object[] info) {
+    }
+
+    /**
+     * Used to send gui data information
+     *
+     * @param con     The container to be used
+     * @param players The players that should be receive the information
+     * @param isNew   If this data is new or not
+     */
+    protected void doGuiDataCheck(AbstractContainerMenu con, List<Player> players, boolean isNew) {
+        checkGuiData(new Object[]{con, players, isNew});
     }
 
     /**
@@ -1483,13 +1495,11 @@ public abstract class ModuleBase
      * @param players The players that should be receive the information
      * @param isNew   If this data is new or not
      */
-    public final void checkGuiData(final Container con, final List players, final boolean isNew)
-    {
-        if (con == null)
-        {
+    public final void checkGuiData(AbstractContainerMenu con, List<Player> players, boolean isNew) {
+        if (con == null) {
             return;
         }
-        checkGuiData(new Object[]{con, players, isNew});
+        doGuiDataCheck(con, players, isNew);
     }
 
     /**
@@ -1498,8 +1508,7 @@ public abstract class ModuleBase
      * @param id   The local gui data id
      * @param data The value of the gui data
      */
-    public void receiveGuiData(final int id, final short data)
-    {
+    public void receiveGuiData(final int id, final short data) {
     }
 
     /**

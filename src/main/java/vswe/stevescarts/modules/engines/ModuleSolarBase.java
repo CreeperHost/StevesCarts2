@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
@@ -11,6 +13,8 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+
+import java.util.List;
 
 public abstract class ModuleSolarBase extends ModuleEngine
 {
@@ -217,10 +221,9 @@ public abstract class ModuleSolarBase extends ModuleEngine
     }
 
     @Override
-    protected void checkGuiData(final Object[] info)
-    {
-        updateGuiData(info, 0, (short) (getFuelLevel() & 0xFFFF));
-        updateGuiData(info, 1, (short) (getFuelLevel() >> 16 & 0xFFFF));
+    protected void doGuiDataCheck(AbstractContainerMenu con, List<Player> players, boolean isNew) {
+        updateGuiData(con, players, isNew, 0, (short) (getFuelLevel() & 0xFFFF));
+        updateGuiData(con, players, isNew, 1, (short) (getFuelLevel() >> 16 & 0xFFFF));
     }
 
     @Override

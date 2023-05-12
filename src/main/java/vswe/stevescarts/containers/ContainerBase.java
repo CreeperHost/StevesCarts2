@@ -136,4 +136,8 @@ public abstract class ContainerBase extends AbstractContainerMenu
         if (!ItemStack.tagMatches(stack1, stack2)) return false;
         return true;
     }
+
+    public void receiveGuiData(int id, int data) {
+
+    }
 }
