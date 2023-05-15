@@ -76,12 +76,11 @@ public class ModItems
         }
     });
 
-    public static final Map<ModuleData, Supplier<Item>> MODULES = Util.make(new LinkedHashMap<>(), map ->
-    {
-        for (ModuleData value : StevesCartsAPI.MODULE_REGISTRY.values())
-        {
-            if(value.getID().getNamespace().equalsIgnoreCase(Constants.MOD_ID))
+    public static final Map<ModuleData, Supplier<Item>> MODULES = Util.make(new LinkedHashMap<>(), map -> {
+        for (ModuleData value : StevesCartsAPI.MODULE_REGISTRY.values()) {
+            if (value.getID().getNamespace().equalsIgnoreCase(Constants.MOD_ID)){
                 map.put(value, ITEMS.register(value.getName(), () -> new ItemCartModule(value)));
+            }
         }
     });
 }

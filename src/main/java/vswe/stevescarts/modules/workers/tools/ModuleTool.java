@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 
 public abstract class ModuleTool extends ModuleWorker
 {
+    private int initialDurability = -1;
     private EntityDataAccessor<Integer> DURABILITY;
     private int remainingRepairUnits;
     private int maximumRepairUnits;
@@ -178,6 +179,11 @@ public abstract class ModuleTool extends ModuleWorker
     public void update()
     {
         super.update();
+        if (initialDurability != -1 && !getCart().level.isClientSide) {
+            setDurability(initialDurability);
+            initialDurability = -1;
+        }
+
         if (!getCart().level.isClientSide && useDurability())
         {
             if (isActuallyRepairing())
@@ -302,5 +308,26 @@ public abstract class ModuleTool extends ModuleWorker
     public int getRepairPercentage()
     {
         return 100 - 100 * remainingRepairUnits / maximumRepairUnits;
+    }
+
+    @Override
+    public boolean hasExtraData() {
+        return true;
+    }
+
+    @Override
+    public CompoundTag writeExtraData() {
+        CompoundTag tag = super.writeExtraData();
+        tag.putInt("durability", getCurrentDurability());
+        tag.putShort("repair", (short) remainingRepairUnits);
+        tag.putShort("max_repair", (short) maximumRepairUnits);
+        return tag;
+    }
+
+    @Override
+    public void readExtraData(CompoundTag nbt) {
+        initialDurability = nbt.getInt("durability");
+        remainingRepairUnits = nbt.getShort("repair");
+        maximumRepairUnits = nbt.getShort("max_repair");
     }
 }

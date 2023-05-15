@@ -1,6 +1,7 @@
 package vswe.stevescarts.helpers;
 
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.nbt.CompoundTag;
 import vswe.stevescarts.api.modules.data.ModuleData;
 
 public class ModuleCountPair
@@ -8,7 +9,7 @@ public class ModuleCountPair
     private final ModuleData data;
     private int count;
     private String name;
-    private byte extraData;
+    private CompoundTag extraData;
 
     public ModuleCountPair(final ModuleData data)
     {
@@ -42,9 +43,9 @@ public class ModuleCountPair
         return data;
     }
 
-    public void setExtraData(final byte b)
+    public void setExtraData(CompoundTag data)
     {
-        extraData = b;
+        extraData = data;
     }
 
     @Override

@@ -214,7 +214,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
                     {
                         if (module.hasExtraData())
                         {
-                            count.setExtraData(module.getExtraData());
+                            count.setExtraData(module.writeExtraData());
                         }
                         break;
                     }

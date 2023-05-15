@@ -1,117 +1,85 @@
 package vswe.stevescarts.modules.realtimers;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.IForgeShearable;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.api.modules.ModuleBase;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
-public class ModuleFlowerRemover extends ModuleBase
-{
+public class ModuleFlowerRemover extends ModuleBase {
     private int tick;
     private float bladeangle;
     private float bladespeed;
 
-    public ModuleFlowerRemover(final EntityMinecartModular cart)
-    {
+    public ModuleFlowerRemover(final EntityMinecartModular cart) {
         super(cart);
         bladespeed = 0.0f;
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (getCart().level.isClientSide)
-        {
-            bladeangle += getBladeSpindSpeed();
-            if (getCart().hasFuel())
-            {
+        if (getCart().level.isClientSide) {
+            bladeangle += getBladeSpeed();
+            if (getCart().hasFuel()) {
                 bladespeed = Math.min(1.0f, bladespeed + 0.005f);
-            }
-            else
-            {
+            } else {
                 bladespeed = Math.max(0.0f, bladespeed - 0.005f);
             }
             return;
         }
-        if (getCart().hasFuel())
-        {
-            if (tick >= getInterval())
-            {
+        if (getCart().hasFuel()) {
+            if (tick >= getInterval()) {
                 tick = 0;
                 mownTheLawn();
                 shearEntities();
-            }
-            else
-            {
+            } else {
                 ++tick;
             }
         }
     }
 
-    protected int getInterval()
-    {
+    protected int getInterval() {
         return 70;
     }
 
-    protected int getBlocksOnSide()
-    {
+    protected int getBlocksOnSide() {
         return 7;
     }
 
-    protected int getBlocksFromLevel()
-    {
+    protected int getBlocksFromLevel() {
         return 1;
     }
 
-    private void mownTheLawn()
-    {
+    private void mownTheLawn() {
         BlockPos cartPos = getCart().getExactPosition();
-        for (Direction direction : Direction.values())
-        {
-            if (direction == Direction.DOWN || direction == Direction.UP) continue;
-            for (int i = 0; i < getBlocksOnSide(); i++)
-            {
-                BlockPos relative = cartPos.relative(direction, i);
-                if (isFlower(relative))
-                {
-                    BlockState blockState = getCart().level.getBlockState(relative);
-                    ServerLevel serverWorld = (ServerLevel) getCart().level;
-                    LootContext.Builder lootcontext$builder = (new LootContext.Builder(serverWorld)).withRandom(serverWorld.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(relative)).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withOptionalParameter(LootContextParams.THIS_ENTITY, getCart()).withOptionalParameter(LootContextParams.BLOCK_ENTITY, null);
+        BlockPos minPos = cartPos.offset(-getBlocksOnSide(), -getBlocksFromLevel(), -getBlocksOnSide());
+        BlockPos maxPos = cartPos.offset(getBlocksOnSide(), getBlocksFromLevel(), getBlocksOnSide());
+        ServerLevel serverLevel = (ServerLevel) getCart().level;
 
-                    List<ItemStack> drops = blockState.getDrops(lootcontext$builder);
-                    addStuff(drops);
-                    getCart().level.removeBlock(relative, true);
-                }
-            }
+        for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
+            if (!isMowable(pos)) continue;
+            BlockState state = getCart().level.getBlockState(pos);
+            List<ItemStack> drops = Block.getDrops(state, serverLevel, pos, serverLevel.getBlockEntity(pos));
+            addStuff(drops);
+            getCart().level.removeBlock(pos, true);
         }
     }
 
-    private void shearEntities()
-    {
+    private void shearEntities() {
         final List<LivingEntity> entities = getCart().level.getEntitiesOfClass(LivingEntity.class, getCart().getBoundingBox().inflate(getBlocksOnSide(), getBlocksFromLevel() + 2.0f, getBlocksOnSide()));
-        for (LivingEntity target : entities)
-        {
-            if (target instanceof IForgeShearable)
-            {
+        for (LivingEntity target : entities) {
+            if (target instanceof IForgeShearable shearable) {
                 BlockPos pos = target.blockPosition();
-                final IForgeShearable shearable = (IForgeShearable) target;
-                if (!shearable.isShearable(ItemStack.EMPTY, getCart().level, pos))
-                {
+                if (!shearable.isShearable(ItemStack.EMPTY, getCart().level, pos)) {
                     continue;
                 }
                 addStuff(shearable.onSheared(null, ItemStack.EMPTY, getCart().level, pos, 0));
@@ -119,35 +87,26 @@ public class ModuleFlowerRemover extends ModuleBase
         }
     }
 
-    private boolean isFlower(BlockPos pos)
-    {
+    private boolean isMowable(BlockPos pos) {
         BlockState blockState = getCart().level.getBlockState(pos);
-        if (blockState.getBlock() == Blocks.GRASS) return true;
-        if (blockState.getBlock() == Blocks.TALL_GRASS) return true;
-
-        return blockState.is(BlockTags.FLOWERS);
+        return blockState.is(BlockTags.FLOWERS) || blockState.is(BlockTags.REPLACEABLE_PLANTS);
     }
 
-    private void addStuff(final List<ItemStack> stuff)
-    {
-        for (@Nonnull ItemStack iStack : stuff)
-        {
-            getCart().addItemToChest(iStack);
-            if (iStack.getCount() != 0)
-            {
-                final ItemEntity entityitem = new ItemEntity(getCart().level, getCart().getExactPosition().getX(), getCart().getExactPosition().getY(), getCart().getExactPosition().getZ(), iStack);
+    private void addStuff(List<ItemStack> stuff) {
+        for (ItemStack stack : stuff) {
+            getCart().addItemToChest(stack);
+            if (stack.getCount() != 0) {
+                ItemEntity entityitem = new ItemEntity(getCart().level, getCart().getExactPosition().getX(), getCart().getExactPosition().getY(), getCart().getExactPosition().getZ(), stack);
                 getCart().level.addFreshEntity(entityitem);
             }
         }
     }
 
-    public float getBladeAngle()
-    {
+    public float getBladeAngle() {
         return bladeangle;
     }
 
-    public float getBladeSpindSpeed()
-    {
+    public float getBladeSpeed() {
         return bladespeed;
     }
 }

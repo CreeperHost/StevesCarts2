@@ -626,7 +626,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                 final int size = 18;
                 if (inRect(x, y, new int[]{targetX, targetY, size, size}) && !slot.getItem().isEmpty() && TileEntityCartAssembler.getSlotStatus(slot.getItem()) <= 0)
                 {
-                    //					PacketStevesCarts.sendPacket(1, new byte[] { (byte) i });
+                    PacketHandler.sendToServer(new PacketCreateCart(this.assembler.getBlockPos(), 1, new byte[] { (byte) i }));
                     return true;
                 }
             }

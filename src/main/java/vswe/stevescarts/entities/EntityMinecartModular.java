@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -225,7 +226,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             for (ResourceLocation moduleResourceLocation : data)
             {
                 ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(moduleResourceLocation);
-                doLoadModules(moduleData);
+                doLoadModules(moduleData, null);
             }
         }
         else
@@ -234,23 +235,33 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             for (ResourceLocation moduleResourceLocation : data)
             {
                 ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(moduleResourceLocation);
-                doLoadModules(moduleData);
+                doLoadModules(moduleData, null);
             }
         }
         initModules();
         moduleLoadingData = data;
+//        moduleLoadingData = new ArrayList<>();
+//        for (int i = 0; i < data.size(); i++) {
+//            ResourceLocation module = data.get(i);
+//            CompoundTag tag = new CompoundTag();
+//            tag.putString(String.valueOf(i), module.toString());
+//            moduleLoadingData.add(tag);
+//        }
     }
 
-    private void doLoadModules(ModuleData moduleData)
+    private void doLoadModules(ModuleData moduleData, @org.jetbrains.annotations.Nullable CompoundTag data)
     {
         if(moduleData == null) return;
         try
         {
-            final Class<? extends ModuleBase> moduleClass = moduleData.getModuleClass();
-            final Constructor<? extends ModuleBase> moduleConstructor = moduleClass.getConstructor(EntityMinecartModular.class);
-            final ModuleBase module = moduleConstructor.newInstance(this);
+            Class<? extends ModuleBase> moduleClass = moduleData.getModuleClass();
+            Constructor<? extends ModuleBase> moduleConstructor = moduleClass.getConstructor(EntityMinecartModular.class);
+            ModuleBase module = moduleConstructor.newInstance(this);
             module.setModuleId(moduleData.getID());
             modules.add(module);
+            if (data != null && data.contains("data")) {
+                module.readExtraData(data.getCompound("data"));
+            }
         }
         catch (Exception e)
         {
@@ -261,21 +272,21 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
 
     private void loadModules(final CompoundTag info)
     {
-        List<ResourceLocation> modules = new ArrayList<>();
+        List<CompoundTag> modules = new ArrayList<>();
         if(info == null) return;
 
+        List<ResourceLocation> names = new ArrayList<>();
         ListTag listTag = (ListTag) info.get("modules");
-        if(listTag != null && !listTag.isEmpty())
-        {
-            for (int i = 0; i < listTag.size(); i++)
-            {
-                CompoundTag moduleTag = (CompoundTag) listTag.get(i);
-                ResourceLocation resourceLocation = new ResourceLocation(moduleTag.getString(String.valueOf(i)));
-                modules.add(resourceLocation);
-            }
-            moduleLoadingData = modules;
+        for (int i = 0; i < listTag.size(); i++) {
+            Tag tag = listTag.get(i);
+            modules.add((CompoundTag) tag);
+            names.add(new ResourceLocation(((CompoundTag) tag).getString(String.valueOf(i))));
         }
-        loadModules(moduleLoadingData);
+
+        if (!names.isEmpty()){
+            moduleLoadingData = names;
+        }
+        loadModules(modules);
     }
 
     public void updateSimulationModules(final List<ResourceLocation> data)
@@ -290,17 +301,25 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         }
     }
 
-    protected void loadModules(final List<ResourceLocation> data)
+    protected void loadModules(List<CompoundTag> data)
     {
         modules = new ArrayList<>();
-        if(data != null)
-        {
-            for (ResourceLocation datum : data)
-            {
-                if(!datum.toString().isEmpty())
-                {
-                    doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(datum));
-                }
+        if(data != null) {
+            for (int i = 0; i < data.size(); i++) {
+                CompoundTag tag = data.get(i);
+                ResourceLocation name = new ResourceLocation(tag.getString(String.valueOf(i)));
+                doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(name), tag);
+            }
+        }
+        initModules();
+    }
+
+    protected void loadModulesFromNames(List<ResourceLocation> data)
+    {
+        modules = new ArrayList<>();
+        if(data != null) {
+            for (ResourceLocation name : data) {
+                doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(name), null);
             }
         }
         initModules();
@@ -1559,7 +1578,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         {
             list.add(data.readResourceLocation());
         }
-        loadModules(list);
+        loadModulesFromNames(list);
     }
 
     public void setScrollY(final int val)

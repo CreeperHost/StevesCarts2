@@ -1,16 +1,14 @@
 package vswe.stevescarts.network.packets;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
-import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 import vswe.stevescarts.containers.ContainerBase;
-import vswe.stevescarts.entities.EntityMinecartModular;
 
 import java.util.function.Supplier;
 
@@ -41,13 +39,16 @@ public class PacketGuiData {
                 return;
             }
 
-            ctx.get().enqueueWork(() -> {
-                Player player = Minecraft.getInstance().player;
-                if (player != null && player.containerMenu instanceof ContainerBase menu && menu.containerId == msg.containerId) {
-                    menu.receiveGuiData(msg.dataId, msg.data);
-                }
-            });
+            ctx.get().enqueueWork(() -> handleClientSide(msg, ctx));
             ctx.get().setPacketHandled(true);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static void handleClientSide(PacketGuiData msg, Supplier<NetworkEvent.Context> ctx) {
+        Player player = Minecraft.getInstance().player;
+        if (player != null && player.containerMenu instanceof ContainerBase menu && menu.containerId == msg.containerId) {
+            menu.receiveGuiData(msg.dataId, msg.data);
         }
     }
 }

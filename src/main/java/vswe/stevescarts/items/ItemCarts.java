@@ -20,10 +20,10 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
-import vswe.stevescarts.client.renders.ItemStackRenderer;
-import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
+import vswe.stevescarts.client.renders.ItemStackRenderer;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -98,26 +98,19 @@ public class ItemCarts extends MinecartItem
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack item, @Nullable Level p_77624_2_, @NotNull List<Component> list, @NotNull TooltipFlag p_77624_4_)
-    {
-        if(item.hasTag())
-        {
-            if(item.getTag().contains("modules"))
-            {
+    public void appendHoverText(@NotNull ItemStack item, @Nullable Level p_77624_2_, @NotNull List<Component> list, @NotNull TooltipFlag p_77624_4_) {
+        if (item.hasTag()) {
+            if (item.getTag().contains("modules")) {
                 list.add(Component.literal(ChatFormatting.BLUE + "Installed Modules:"));
                 ListTag moduleListTag = (ListTag) item.getTag().get("modules");
-                if (moduleListTag != null && !moduleListTag.isEmpty())
-                {
-                    for (int i = 0; i < moduleListTag.size(); i++)
-                    {
+                if (moduleListTag != null && !moduleListTag.isEmpty()) {
+                    for (int i = 0; i < moduleListTag.size(); i++) {
                         CompoundTag moduleTag = (CompoundTag) moduleListTag.get(i);
                         ResourceLocation resourceLocation = new ResourceLocation(moduleTag.getString(String.valueOf(i)));
                         ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(resourceLocation);
-                        if(moduleData != null) list.add(Component.literal(ChatFormatting.GOLD + moduleData.getDisplayName()));
+                        if (moduleData != null) list.add(Component.literal(ChatFormatting.GOLD + moduleData.getDisplayName()));
                     }
-                }
-                else
-                {
+                } else {
                     list.add(Component.literal(ChatFormatting.RED + "No modules loaded"));
                 }
             }

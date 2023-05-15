@@ -5,8 +5,10 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
@@ -331,58 +333,64 @@ public class ModuleData
         return null;
     }
 
-    public String getCartInfoText(final String name, final byte b)
+    public String getCartInfoText(final String name, CompoundTag extraData)
     {
         return name;
     }
 
-    public static NonNullList<ItemStack> getModularItems(@Nonnull ItemStack cart)
-    {
-        final NonNullList<ItemStack> modules = NonNullList.create();
-        if (!cart.isEmpty() && cart.getItem() == ModItems.CARTS.get() && cart.getTag() != null)
-        {
-            final CompoundTag info = cart.getTag();
-            if (info.contains("Modules"))
-            {
-                final byte[] IDs = info.getByteArray("Modules");
-                for (int i = 0; i < IDs.length; ++i)
-                {
-                    final byte id = IDs[i];
-                    //					@Nonnull
-                    //					ItemStack module = new ItemStack(ModItems.MODULES.get(), 1);
-                    //TODO
-                    //					ModItems.MODULES.get().addExtraDataToModule(module, info, i);
-                    //					modules.add(module);
+    public static NonNullList<ItemStack> getModularItems(@Nonnull ItemStack cart) {
+        NonNullList<ItemStack> modules = NonNullList.create();
+        if (!cart.isEmpty() && cart.getItem() == ModItems.CARTS.get() && cart.getTag() != null) {
+            CompoundTag info = cart.getTag();
+            if (info.contains("modules")) {
+                int i = 0;
+                for (Tag tag : info.getList("modules", 10)) {
+                    CompoundTag moduleTag = (CompoundTag) tag;
+                    //If this ever explodes, then someone please slap whoever decided to use the arbitrary index of the module used as the key for the id field. WTF...
+                    String regName = moduleTag.getString(String.valueOf(i));
+                    ModuleData data = StevesCartsAPI.MODULE_REGISTRY.get(new ResourceLocation(regName));
+                    ItemCartModule item = (ItemCartModule) ModItems.MODULES.get(data).get();
+                    ItemStack module = new ItemStack(item);
+                    if (moduleTag.contains("data")) {
+                        module.addTagElement("data", moduleTag.getCompound("data"));
+                    }
+                    modules.add(module);
+                    i++;
                 }
             }
         }
         return modules;
     }
 
-    public static ItemStack createModularCart(final EntityMinecartModular parentcart)
-    {
+    public static ItemStack createModularCart(final EntityMinecartModular parentcart) {
         ItemStack cart = new ItemStack(ModItems.CARTS.get(), 1);
         ListTag modulesTag = new ListTag();
-        for (int i = 0; i < parentcart.getModules().size(); i++)
-        {
+        for (int i = 0; i < parentcart.getModules().size(); i++) {
             CompoundTag moduleTag = new CompoundTag();
-            ModuleBase moduleData = parentcart.getModules().get(i);
-            moduleTag.putString(String.valueOf(i), moduleData.getModuleId().toString());
+            ModuleBase module = parentcart.getModules().get(i);
+            moduleTag.putString(String.valueOf(i), module.getModuleId().toString());
+            if (module.hasExtraData()) {
+                moduleTag.put("data", module.writeExtraData());
+            }
             modulesTag.add(i, moduleTag);
         }
         cart.getOrCreateTag().put("modules", modulesTag);
         return cart;
     }
 
-    public static ItemStack createModularCartFromItems(final NonNullList<ItemStack> modules)
-    {
+    public static ItemStack createModularCartFromItems(final NonNullList<ItemStack> modules) {
         ItemStack cart = new ItemStack(ModItems.CARTS.get(), 1);
         ListTag modulesTag = new ListTag();
-        for (int i = 0; i < modules.size(); i++)
-        {
+        for (int i = 0; i < modules.size(); i++) {
             CompoundTag moduleTag = new CompoundTag();
-            IModuleItem cartModule = (IModuleItem) modules.get(i).getItem();
+            ItemStack moduleStack = modules.get(i);
+            IModuleItem cartModule = (IModuleItem) moduleStack.getItem();
             moduleTag.putString(String.valueOf(i), cartModule.getModuleData().getID().toString());
+
+            if (moduleStack.hasTag() && moduleStack.getOrCreateTag().contains("data")) {
+                moduleTag.put("data", moduleStack.getOrCreateTag().getCompound("data"));
+            }
+
             modulesTag.add(i, moduleTag);
         }
         cart.getOrCreateTag().put("modules", modulesTag);

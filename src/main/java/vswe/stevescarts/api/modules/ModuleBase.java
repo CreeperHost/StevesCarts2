@@ -1737,17 +1737,26 @@ public abstract class ModuleBase
         return false;
     }
 
+    /**
+     * @return true to enable writing and reading of extra data via {@link #writeExtraData()} and {@link #readExtraData(CompoundTag)}
+     */
     public boolean hasExtraData()
     {
         return false;
     }
 
-    public byte getExtraData()
+    /**
+     * @return a tag that will be written to the Cart when picked up. Also saved to Module stack when module is removed from cart.
+     */
+    public CompoundTag writeExtraData()
     {
-        return 0;
+        return new CompoundTag();
     }
 
-    public void setExtraData(final byte b)
+    /**
+     * Read extra data that was written in {@link #writeExtraData()}
+     */
+    public void readExtraData(CompoundTag nbt)
     {
     }
 
