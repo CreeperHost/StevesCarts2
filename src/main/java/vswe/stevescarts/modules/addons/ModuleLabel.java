@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
@@ -29,6 +30,8 @@ public class ModuleLabel extends ModuleAddon
     private EntityDataAccessor<Integer> DATA;
     private EntityDataAccessor<Byte> ACTIVE;
 
+    //TODO Find a way to use translation components for all this.
+
     public ModuleLabel(final EntityMinecartModular cart)
     {
         super(cart);
@@ -36,55 +39,55 @@ public class ModuleLabel extends ModuleAddon
         (labels = new ArrayList<>()).add(new LabelInformation(Localization.MODULES.ADDONS.NAME)
         {
             @Override
-            public String getLabel()
+            public Component getLabel()
             {
-                return getCart().getName().toString();
+                return getCart().getName();
             }
         });
         labels.add(new LabelInformation(Localization.MODULES.ADDONS.DISTANCE)
         {
             @Override
-            public String getLabel()
+            public Component getLabel()
             {
-                return Localization.MODULES.ADDONS.DISTANCE_LONG.translate(String.valueOf((int) getCart().distanceTo(getClientPlayer())));
+                return Component.literal(Localization.MODULES.ADDONS.DISTANCE_LONG.translate(String.valueOf((int) getCart().distanceTo(getClientPlayer()))));
             }
         });
         labels.add(new LabelInformation(Localization.MODULES.ADDONS.POSITION)
         {
             @Override
-            public String getLabel()
+            public Component getLabel()
             {
-                return Localization.MODULES.ADDONS.POSITION_LONG.translate(String.valueOf(getCart().x()), String.valueOf(getCart().y()), String.valueOf(getCart().z()));
+                return Component.literal(Localization.MODULES.ADDONS.POSITION_LONG.translate(String.valueOf(getCart().x()), String.valueOf(getCart().y()), String.valueOf(getCart().z())));
             }
         });
         labels.add(new LabelInformation(Localization.MODULES.ADDONS.FUEL)
         {
             @Override
-            public String getLabel()
+            public Component getLabel()
             {
                 int seconds = getDw(SECONDS);
                 if (seconds == -1)
                 {
-                    return Localization.MODULES.ADDONS.FUEL_NO_CONSUMPTION.translate();
+                    return Component.literal(Localization.MODULES.ADDONS.FUEL_NO_CONSUMPTION.translate());
                 }
                 int minutes = seconds / 60;
                 seconds -= minutes * 60;
                 final int hours = minutes / 60;
                 minutes -= hours * 60;
-                return String.format(Localization.MODULES.ADDONS.FUEL_LONG.translate() + ": %02d:%02d:%02d", hours, minutes, seconds);
+                return Component.literal(String.format(Localization.MODULES.ADDONS.FUEL_LONG.translate() + ": %02d:%02d:%02d", hours, minutes, seconds));
             }
         });
         labels.add(new LabelInformation(Localization.MODULES.ADDONS.STORAGE)
         {
             @Override
-            public String getLabel()
+            public Component getLabel()
             {
                 int used = getDw(USED);
                 if (used < 0)
                 {
                     used += 256;
                 }
-                return (storageSlots == null) ? "" : (Localization.MODULES.ADDONS.STORAGE.translate() + ": " + used + "/" + storageSlots.size() + ((storageSlots.size() == 0) ? "" : ("[" + (int) (100.0f * used / storageSlots.size()) + "%]")));
+                return Component.literal((storageSlots == null) ? "" : (Localization.MODULES.ADDONS.STORAGE.translate() + ": " + used + "/" + storageSlots.size() + ((storageSlots.size() == 0) ? "" : ("[" + (int) (100.0f * used / storageSlots.size()) + "%]"))));
             }
         });
     }
@@ -102,30 +105,30 @@ public class ModuleLabel extends ModuleAddon
                     labels.add(new LabelInformation(Localization.MODULES.ADDONS.DURABILITY)
                     {
                         @Override
-                        public String getLabel()
+                        public Component getLabel()
                         {
                             if (!tool.useDurability())
                             {
-                                return Localization.MODULES.ADDONS.UNBREAKABLE.translate();
+                                return Component.literal(Localization.MODULES.ADDONS.UNBREAKABLE.translate());
                             }
                             final int data = getDw(DATA);
                             if (data == 0)
                             {
-                                return Localization.MODULES.ADDONS.BROKEN.translate();
+                                return Component.literal(Localization.MODULES.ADDONS.BROKEN.translate());
                             }
                             if (data > 0)
                             {
-                                return Localization.MODULES.ADDONS.DURABILITY.translate() + ": " + data + " / " + tool.getMaxDurability() + " [" + 100 * data / tool.getMaxDurability() + "%]";
+                                return Component.literal(Localization.MODULES.ADDONS.DURABILITY.translate() + ": " + data + " / " + tool.getMaxDurability() + " [" + 100 * data / tool.getMaxDurability() + "%]");
                             }
                             if (data == -1)
                             {
-                                return "";
+                                return Component.empty();
                             }
                             if (data == -2)
                             {
-                                return Localization.MODULES.ADDONS.NOT_BROKEN.translate();
+                                return Component.literal(Localization.MODULES.ADDONS.NOT_BROKEN.translate());
                             }
-                            return Localization.MODULES.ADDONS.REPAIR.translate() + " [" + -(data + 3) + "%]";
+                            return Component.literal(Localization.MODULES.ADDONS.REPAIR.translate() + " [" + -(data + 3) + "%]");
                         }
                     });
                     break;
@@ -164,7 +167,7 @@ public class ModuleLabel extends ModuleAddon
     }
 
     @Override
-    public void addToLabel(final ArrayList<String> label)
+    public void addToLabel(final ArrayList<Component> label)
     {
         for (int i = 0; i < labels.size(); ++i)
         {

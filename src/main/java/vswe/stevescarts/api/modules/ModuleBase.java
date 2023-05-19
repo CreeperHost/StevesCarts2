@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -1770,7 +1771,7 @@ public abstract class ModuleBase
         return false;
     }
 
-    public void addToLabel(final ArrayList<String> label)
+    public void addToLabel(final ArrayList<Component> label)
     {
     }
 

@@ -1455,9 +1455,9 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @SuppressWarnings("unused")
-    public ArrayList<String> getLabel()
+    public ArrayList<Component> getLabel()
     {
-        final ArrayList<String> label = new ArrayList<>();
+        final ArrayList<Component> label = new ArrayList<>();
         if (getModules() != null)
         {
             for (final ModuleBase module : getModules())

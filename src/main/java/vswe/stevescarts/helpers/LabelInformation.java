@@ -1,5 +1,7 @@
 package vswe.stevescarts.helpers;
 
+import net.minecraft.network.chat.Component;
+
 public abstract class LabelInformation
 {
     private final Localization.MODULES.ADDONS name;
@@ -14,5 +16,5 @@ public abstract class LabelInformation
         return name.translate();
     }
 
-    public abstract String getLabel();
+    public abstract Component getLabel();
 }
