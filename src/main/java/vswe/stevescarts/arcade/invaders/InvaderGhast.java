@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.invaders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import vswe.stevescarts.arcade.ArcadeGame;
@@ -28,17 +29,17 @@ public class InvaderGhast extends Unit
     }
 
     @Override
-    public void draw(PoseStack matrixStack, GuiMinecart gui)
+    public void draw(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         if (isPahighast)
         {
-            game.drawImageInArea(matrixStack, gui, x, y, 32, 32, 16, 16);
+            game.drawImageInArea(guiGraphics, gui, x, y, 32, 32, 16, 16);
         }
         else
         {
-            game.drawImageInArea(matrixStack, gui, x, y, (shooting > -10) ? 16 : 0, 0, 16, 16);
+            game.drawImageInArea(guiGraphics, gui, x, y, (shooting > -10) ? 16 : 0, 0, 16, 16);
         }
-        game.drawImageInArea(matrixStack, gui, x, y + 16, 0, 16 + 8 * tentacleTextureId, 16, 8);
+        game.drawImageInArea(guiGraphics, gui, x, y + 16, 0, 16 + 8 * tentacleTextureId, 16, 8);
     }
 
     @Override

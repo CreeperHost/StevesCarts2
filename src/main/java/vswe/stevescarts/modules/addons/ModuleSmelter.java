@@ -2,7 +2,9 @@ package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.creeperhost.polylib.helpers.RecipeHelper;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
@@ -38,7 +40,7 @@ public class ModuleSmelter extends ModuleRecipe
     @Override
     public void update()
     {
-        if (getCart().level.isClientSide)
+        if (getCart().level().isClientSide)
         {
             return;
         }
@@ -75,7 +77,7 @@ public class ModuleSmelter extends ModuleRecipe
                         while (i < inputSlots.size())
                         {
                             @Nonnull ItemStack item = inputSlots.get(i).getItem();
-                            if (!item.isEmpty() && item.sameItem(recipe) && ItemStack.isSame(item, recipe))
+                            if (!item.isEmpty() && ItemStack.isSameItem(item, recipe) && ItemStack.isSameItemSameTags(item, recipe))
                             {
                                 @Nonnull ItemStack itemStack = item;
                                 itemStack.shrink(1);
@@ -114,14 +116,14 @@ public class ModuleSmelter extends ModuleRecipe
     @Nullable
     public SmeltingRecipe getRecipeSmelting()
     {
-        Set<Recipe<?>> recipes = RecipeHelper.findRecipesByType(RecipeType.SMELTING, getCart().level);
+        Set<Recipe<?>> recipes = RecipeHelper.findRecipesByType(RecipeType.SMELTING, getCart().level());
         for (Recipe<?> iRecipe : recipes)
         {
             SmeltingRecipe recipe = (SmeltingRecipe) iRecipe;
             NonNullList<ItemStack> stacks = NonNullList.withSize(1, ItemStack.EMPTY);
             stacks.set(0, getStack(0));
             IItemHandlerModifiable iItemHandlerModifiable = new ItemStackHandler(stacks);
-            if (recipe.matches(new RecipeWrapper(iItemHandlerModifiable), getCart().level))
+            if (recipe.matches(new RecipeWrapper(iItemHandlerModifiable), getCart().level()))
             {
                 return recipe;
             }
@@ -135,7 +137,7 @@ public class ModuleSmelter extends ModuleRecipe
         AbstractCookingRecipe recipe = getRecipeSmelting();
         if (recipe != null)
         {
-            return recipe.getResultItem().copy();
+            return recipe.getResultItem(RegistryAccess.EMPTY).copy();
         }
         return ItemStack.EMPTY;
     }
@@ -205,7 +207,7 @@ public class ModuleSmelter extends ModuleRecipe
     public void onInventoryChanged()
     {
         super.onInventoryChanged();
-        if (getCart().level.isClientSide)
+        if (getCart().level().isClientSide)
         {
             if (!getStack(0).isEmpty() && !getSmeltingResult().isEmpty())
             {
@@ -220,10 +222,10 @@ public class ModuleSmelter extends ModuleRecipe
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        super.drawForeground(matrixStack, gui);
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        super.drawForeground(guiGraphics, gui);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override

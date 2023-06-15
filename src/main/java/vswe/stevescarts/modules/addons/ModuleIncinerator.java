@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
@@ -43,7 +44,7 @@ public class ModuleIncinerator extends ModuleAddon
         {
             for (int i = 0; i < getInventorySize(); ++i)
             {
-                if (!getStack(i).isEmpty() && item.sameItem(getStack(i)))
+                if (!getStack(i).isEmpty() && ItemStack.isSameItem(item, getStack(i)))
                 {
                     return true;
                 }
@@ -59,9 +60,9 @@ public class ModuleIncinerator extends ModuleAddon
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override

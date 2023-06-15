@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.tracks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class Cart
@@ -88,7 +89,7 @@ public class Cart
     {
     }
 
-    public void render(PoseStack matrixStack, ArcadeTracks game, final GuiMinecart gui, final int tick)
+    public void render(GuiGraphics guiGraphics, ArcadeTracks game, final GuiMinecart gui, final int tick)
     {
         if (!enabled)
         {
@@ -100,7 +101,7 @@ public class Cart
         final int v = 244;
         final int w = 12;
         final int h = 12;
-        game.drawImageInArea(matrixStack, gui, x, y, u, v, w, h);
+        game.drawImageInArea(guiGraphics, gui, x, y, u, v, w, h);
     }
 
     public boolean isAlive()

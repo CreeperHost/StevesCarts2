@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +18,7 @@ public class BlockCargoManager extends BlockContainerBase
 {
     public BlockCargoManager()
     {
-        super(Properties.of(Material.STONE).strength(2.0F));
+        super(Properties.of().strength(2.0F));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -67,39 +68,39 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, final GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/cage.png");
-        drawButton(matrixStack, gui, x, y, autoRect, disablePickup ? 2 : 3);
-        drawButton(matrixStack, gui, x, y, manualRect, isCageEmpty() ? 0 : 1);
+        drawButton(guiGraphics, gui, x, y, autoRect, disablePickup ? 2 : 3);
+        drawButton(guiGraphics, gui, x, y, manualRect, isCageEmpty() ? 0 : 1);
     }
 
-    private void drawButton(PoseStack matrixStack, GuiMinecart gui, final int x, final int y, final int[] coords, final int imageID)
+    private void drawButton(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y, final int[] coords, final int imageID)
     {
         if (inRect(x, y, coords))
         {
-            drawImage(matrixStack, gui, coords, 0, coords[3]);
+            drawImage(guiGraphics, gui, coords, 0, coords[3]);
         }
         else
         {
-            drawImage(matrixStack, gui, coords, 0, 0);
+            drawImage(guiGraphics, gui, coords, 0, 0);
         }
         final int srcY = coords[3] * 2 + imageID * (coords[3] - 2);
-        drawImage(matrixStack, gui, coords[0] + 1, coords[1] + 1, 0, srcY, coords[2] - 2, coords[3] - 2);
+        drawImage(guiGraphics, gui, coords[0] + 1, coords[1] + 1, 0, srcY, coords[2] - 2, coords[3] - 2);
     }
 
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        drawStringOnMouseOver(matrixStack, gui, Localization.MODULES.ATTACHMENTS.CAGE_AUTO.translate(disablePickup ? "0" : "1"), x, y, autoRect);
-        drawStringOnMouseOver(matrixStack, gui, Localization.MODULES.ATTACHMENTS.CAGE.translate(isCageEmpty() ? "0" : "1"), x, y, manualRect);
+        drawStringOnMouseOver(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.CAGE_AUTO.translate(disablePickup ? "0" : "1"), x, y, autoRect);
+        drawStringOnMouseOver(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.CAGE.translate(isCageEmpty() ? "0" : "1"), x, y, manualRect);
     }
 
     private boolean isCageEmpty()
@@ -180,11 +181,11 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
 
     private void pickUpCreature(final int searchDistance)
     {
-        if (getCart().level.isClientSide || !isCageEmpty())
+        if (getCart().level().isClientSide || !isCageEmpty())
         {
             return;
         }
-        final List<LivingEntity> entities = getCart().level.getEntitiesOfClass(LivingEntity.class, getCart().getBoundingBox().inflate(searchDistance, 4.0, searchDistance));
+        final List<LivingEntity> entities = getCart().level().getEntitiesOfClass(LivingEntity.class, getCart().getBoundingBox().inflate(searchDistance, 4.0, searchDistance));
         entities.sort(sorter);
         for (LivingEntity target : entities)
         {

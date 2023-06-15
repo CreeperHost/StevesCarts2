@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.tetris;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
@@ -159,10 +160,10 @@ public class ArcadeTetris extends ArcadeGame
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource(ArcadeTetris.texture);
-        getModule().drawImage(matrixStack, gui, 187, 7, 0, 40, 104, 154);
+        getModule().drawImage(guiGraphics, gui, 187, 7, 0, 40, 104, 154);
         for (int i = 0; i < board.length; ++i)
         {
             for (int j = 0; j < board[0].length; ++j)
@@ -170,21 +171,21 @@ public class ArcadeTetris extends ArcadeGame
                 final TetrisBlock b = board[i][j];
                 if (b != null)
                 {
-                    b.render(matrixStack, this, gui, i, j);
+                    b.render(guiGraphics, this, gui, i, j);
                 }
             }
         }
         if (piece != null)
         {
-            piece.render(matrixStack, this, gui);
+            piece.render(guiGraphics, this, gui);
         }
         if (!isPlaying)
         {
             final int graphicalValue = Math.min(gameOverTicks, 150);
-            getModule().drawImage(matrixStack, gui, 189, 159 - graphicalValue, 104, 40, 100, graphicalValue);
+            getModule().drawImage(guiGraphics, gui, 189, 159 - graphicalValue, 104, 40, 100, graphicalValue);
             if (graphicalValue == 150 && getModule().inRect(x, y, new int[]{189, 9, 100, 150}))
             {
-                getModule().drawImage(matrixStack, gui, 213, 107, 0, 194, 54, 34);
+                getModule().drawImage(guiGraphics, gui, 213, 107, 0, 194, 54, 34);
             }
         }
     }
@@ -230,20 +231,20 @@ public class ArcadeTetris extends ArcadeGame
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        getModule().drawString(matrixStack, gui, Localization.ARCADE.HIGH_SCORE.translate(String.valueOf(highscore)), 10, 20, 4210752);
-        getModule().drawString(matrixStack, gui, Localization.ARCADE.SCORE.translate(String.valueOf(score)), 10, 40, 4210752);
-        getModule().drawString(matrixStack, gui, Localization.ARCADE.REMOVED_LINES.translate(String.valueOf(removed)), 10, 60, 4210752);
+        getModule().drawString(guiGraphics, gui, Localization.ARCADE.HIGH_SCORE.translate(String.valueOf(highscore)), 10, 20, 4210752);
+        getModule().drawString(guiGraphics, gui, Localization.ARCADE.SCORE.translate(String.valueOf(score)), 10, 40, 4210752);
+        getModule().drawString(guiGraphics, gui, Localization.ARCADE.REMOVED_LINES.translate(String.valueOf(removed)), 10, 60, 4210752);
         for (int i = 0; i < 4; ++i)
         {
-            getModule().drawString(matrixStack, gui, Localization.ARCADE.REMOVED_LINES_COMBO.translate(String.valueOf(i), String.valueOf(removedByAmount[i])), 10, 80 + i * 10, 4210752);
+            getModule().drawString(guiGraphics, gui, Localization.ARCADE.REMOVED_LINES_COMBO.translate(String.valueOf(i), String.valueOf(removedByAmount[i])), 10, 80 + i * 10, 4210752);
         }
-        getModule().drawString(matrixStack, gui, "W - " + Localization.ARCADE.INSTRUCTION_ROTATE.translate(), 340, 20, 4210752);
-        getModule().drawString(matrixStack, gui, "A - " + Localization.ARCADE.INSTRUCTION_LEFT.translate(), 340, 30, 4210752);
-        getModule().drawString(matrixStack, gui, "S - " + Localization.ARCADE.INSTRUCTION_DROP.translate(), 340, 40, 4210752);
-        getModule().drawString(matrixStack, gui, "D - " + Localization.ARCADE.INSTRUCTION_RIGHT.translate(), 340, 50, 4210752);
-        getModule().drawString(matrixStack, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 340, 70, 4210752);
+        getModule().drawString(guiGraphics, gui, "W - " + Localization.ARCADE.INSTRUCTION_ROTATE.translate(), 340, 20, 4210752);
+        getModule().drawString(guiGraphics, gui, "A - " + Localization.ARCADE.INSTRUCTION_LEFT.translate(), 340, 30, 4210752);
+        getModule().drawString(guiGraphics, gui, "S - " + Localization.ARCADE.INSTRUCTION_DROP.translate(), 340, 40, 4210752);
+        getModule().drawString(guiGraphics, gui, "D - " + Localization.ARCADE.INSTRUCTION_RIGHT.translate(), 340, 50, 4210752);
+        getModule().drawString(guiGraphics, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 340, 70, 4210752);
     }
 
     private void newHighScore()

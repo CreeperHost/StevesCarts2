@@ -2,7 +2,9 @@ package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.creeperhost.polylib.helpers.RecipeHelper;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
@@ -11,7 +13,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.containers.CraftingDummy;
 import vswe.stevescarts.containers.slots.SlotCartCrafter;
 import vswe.stevescarts.containers.slots.SlotCartCrafterResult;
 import vswe.stevescarts.entities.EntityMinecartModular;
@@ -30,7 +31,8 @@ public class ModuleCrafter extends ModuleRecipe
     {
         super(cart);
         cooldown = 0;
-        craftingDummy = new CraftingDummy(this);
+        //TODO
+//        craftingDummy = new CraftingDummy(this);
     }
 
     @Override
@@ -38,7 +40,7 @@ public class ModuleCrafter extends ModuleRecipe
     {
         if (cooldown <= 0)
         {
-            if (!getCart().level.isClientSide && getValidSlot() != null)
+            if (!getCart().level().isClientSide && getValidSlot() != null)
             {
                 @Nonnull ItemStack result = getResult();//dummy.getResult();
                 if (!result.isEmpty() && getCart().getModules() != null)
@@ -68,7 +70,7 @@ public class ModuleCrafter extends ModuleRecipe
                                 for (int k = 0; k < inputSlots.size(); ++k)
                                 {
                                     @Nonnull ItemStack item2 = inputSlots.get(k).getItem();
-                                    if (!item2.isEmpty() && item2.sameItem(recipe) && ItemStack.isSameIgnoreDurability(item2, recipe))
+                                    if (!item2.isEmpty() && ItemStack.isSameItem(item2, recipe) && ItemStack.isSameItemSameTags(item2, recipe))
                                     {
                                         edited = true;
                                         if (item2.hasCraftingRemainingItem())
@@ -137,11 +139,11 @@ public class ModuleCrafter extends ModuleRecipe
     @Nullable
     public CraftingRecipe getRecipe()
     {
-        Set<Recipe<?>> recipes = RecipeHelper.findRecipesByType(RecipeType.CRAFTING, getCart().level);
+        Set<Recipe<?>> recipes = RecipeHelper.findRecipesByType(RecipeType.CRAFTING, getCart().level());
         for (Recipe<?> iRecipe : recipes)
         {
             CraftingRecipe recipe = (CraftingRecipe) iRecipe;
-            if (recipe.matches(craftingDummy, getCart().level))
+            if (recipe.matches(craftingDummy, getCart().level()))
             {
                 return recipe;
             }
@@ -155,7 +157,7 @@ public class ModuleCrafter extends ModuleRecipe
         CraftingRecipe recipe = getRecipe();
         if (recipe != null)
         {
-            return recipe.getResultItem().copy();
+            return recipe.getResultItem(RegistryAccess.EMPTY).copy();
         }
         return ItemStack.EMPTY;
     }
@@ -197,7 +199,7 @@ public class ModuleCrafter extends ModuleRecipe
     @Override
     public void onInventoryChanged()
     {
-        if (getCart().level.isClientSide)
+        if (getCart().level().isClientSide)
         {
             setStack(9, getResult() == null ? ItemStack.EMPTY : getResult());
         }
@@ -205,10 +207,10 @@ public class ModuleCrafter extends ModuleRecipe
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        super.drawForeground(matrixStack, gui);
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        super.drawForeground(guiGraphics, gui);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override

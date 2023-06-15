@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.tracks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
@@ -112,13 +113,13 @@ public class TrackDetector extends Track
     }
 
     @Override
-    public void drawOverlay(PoseStack matrixStack, ModuleArcade module, final GuiMinecart gui, final int x, final int y, final boolean isRunning)
+    public void drawOverlay(GuiGraphics guiGraphics, ModuleArcade module, final GuiMinecart gui, final int x, final int y, final boolean isRunning)
     {
         if (!isRunning && module.inRect(x, y, ArcadeTracks.getTrackArea(getX(), getY())))
         {
             for (final TrackCoordinate target : targets)
             {
-                module.drawImage(matrixStack, gui, ArcadeTracks.getTrackArea(target.getX(), target.getY()), 0, 128);
+                module.drawImage(guiGraphics, gui, ArcadeTracks.getTrackArea(target.getX(), target.getY()), 0, 128);
             }
         }
     }

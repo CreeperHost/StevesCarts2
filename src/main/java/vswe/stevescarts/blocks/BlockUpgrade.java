@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -59,7 +58,7 @@ public class BlockUpgrade extends BlockContainerBase
 
     public BlockUpgrade(AssemblerUpgrade assemblerUpgrade)
     {
-        super(Properties.of(Material.STONE).noOcclusion().randomTicks().strength(2.0F));
+        super(Properties.of().noOcclusion().randomTicks().strength(2.0F));
         this.assemblerUpgrade = assemblerUpgrade;
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(CONNECTED, false));
     }

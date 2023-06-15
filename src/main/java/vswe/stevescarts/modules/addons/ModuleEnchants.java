@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.resources.ResourceLocation;
@@ -106,8 +107,8 @@ public class ModuleEnchants extends ModuleAddon {
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui) {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
@@ -128,7 +129,7 @@ public class ModuleEnchants extends ModuleAddon {
     @Override
     public void update() {
         super.update();
-        if (getCart().level.isClientSide) return;
+        if (getCart().level().isClientSide) return;
 
         for (int i = 0; i < 3; ++i) {
             if (!getStack(i).isEmpty() && getStack(i).getCount() > 0) {
@@ -168,14 +169,14 @@ public class ModuleEnchants extends ModuleAddon {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
         ResourceHelper.bindResource("/gui/enchant.png");
         for (int i = 0; i < 3; ++i) {
             int[] box = getBoxRect(i);
             if (inRect(x, y, box)) {
-                drawImage(matrixStack, gui, box, 65, 0);
+                drawImage(guiGraphics, gui, box, 65, 0);
             } else {
-                drawImage(matrixStack, gui, box, 0, 0);
+                drawImage(guiGraphics, gui, box, 0, 0);
             }
             EnchantmentData data = getEnchant(i);
             if (data.getEnchant() != null) {
@@ -184,7 +185,7 @@ public class ModuleEnchants extends ModuleAddon {
                 for (int j = 0; j < maxlevel; ++j) {
                     int[] bar = getBarRect(i, j, maxlevel);
                     if (j != maxlevel - 1) {
-                        drawImage(matrixStack, gui, bar[0] + bar[2], bar[1], 61 + j, 1, 1, bar[3]);
+                        drawImage(guiGraphics, gui, bar[0] + bar[2], bar[1], 61 + j, 1, 1, bar[3]);
                     }
                     int levelmaxvalue = ModularEnchantments.getValue(data.getEnchant(), j + 1);
                     if (value > 0) {
@@ -193,7 +194,7 @@ public class ModuleEnchants extends ModuleAddon {
                             mult = 1.0f;
                         }
                         bar[2] *= mult;
-                        drawImage(matrixStack, gui, bar, 1, 13 + 11 * j);
+                        drawImage(guiGraphics, gui, bar, 1, 13 + 11 * j);
                     }
                     value -= levelmaxvalue;
                 }
@@ -202,7 +203,7 @@ public class ModuleEnchants extends ModuleAddon {
     }
 
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
         for (int i = 0; i < 3; ++i) {
             EnchantmentData data = getEnchant(i);
             String str;
@@ -211,7 +212,7 @@ public class ModuleEnchants extends ModuleAddon {
             } else {
                 str = Localization.MODULES.ADDONS.ENCHANT_INSTRUCTION.translate();
             }
-            drawStringOnMouseOver(matrixStack, gui, str, x, y, getBoxRect(i));
+            drawStringOnMouseOver(guiGraphics, gui, str, x, y, getBoxRect(i));
         }
     }
 

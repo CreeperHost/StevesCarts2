@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.workers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -43,8 +44,8 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui) {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
 
     @Override
     public boolean work() {
-        Level world = getCart().level;
+        Level world = getCart().level();
         BlockPos next = getNextblock();
         if (getCart().getYTarget() < next.getY()) {
             next = next.below(2);
@@ -84,7 +85,7 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
                 if (stack.isEmpty() || !SlotBridge.isBridgeMaterial(stack)) continue;
                 if (doPlace) {
                     Block block = Block.byItem(stack.getItem());
-                    boolean placed = getCart().level.setBlock(pos, block.defaultBlockState(), 3);
+                    boolean placed = getCart().level().setBlock(pos, block.defaultBlockState(), 3);
                     if (!placed) return false;
                     if (!getCart().hasCreativeSupplies()) {
                         stack.shrink(1);

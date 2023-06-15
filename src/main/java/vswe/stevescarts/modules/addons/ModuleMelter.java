@@ -18,7 +18,7 @@ public class ModuleMelter extends ModuleAddon
     public void update()
     {
         super.update();
-        if (getCart().level.isClientSide)
+        if (getCart().level().isClientSide)
         {
             return;
         }
@@ -61,7 +61,7 @@ public class ModuleMelter extends ModuleAddon
                 for (int y = -getBlocksFromLevel(); y <= getBlocksFromLevel(); ++y)
                 {
                     BlockPos pos = cartPos.offset(x, y, z);
-                    final Block b = getCart().level.getBlockState(pos).getBlock();
+                    final Block b = getCart().level().getBlockState(pos).getBlock();
                     melt(b, pos);
                 }
             }
@@ -72,7 +72,7 @@ public class ModuleMelter extends ModuleAddon
     {
         if (b == Blocks.SNOW)
         {
-            getCart().level.removeBlock(pos, false);
+            getCart().level().removeBlock(pos, false);
             return true;
         }
         return false;

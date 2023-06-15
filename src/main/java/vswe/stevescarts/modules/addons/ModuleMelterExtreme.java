@@ -19,12 +19,12 @@ public class ModuleMelterExtreme extends ModuleMelter
         {
             if (b == Blocks.SNOW)
             {
-                getCart().level.removeBlock(pos, false);
+                getCart().level().removeBlock(pos, false);
                 return true;
             }
             if (b == Blocks.ICE)
             {
-                getCart().level.setBlock(pos, Blocks.WATER.defaultBlockState(), 4);
+                getCart().level().setBlock(pos, Blocks.WATER.defaultBlockState(), 4);
                 return true;
             }
         }

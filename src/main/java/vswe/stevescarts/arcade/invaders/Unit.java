@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.invaders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public abstract class Unit
@@ -19,7 +20,7 @@ public abstract class Unit
         health = 1;
     }
 
-    public abstract void draw(PoseStack matrixStack, GuiMinecart p0);
+    public abstract void draw(GuiGraphics guiGraphics, GuiMinecart p0);
 
     public UPDATE_RESULT update()
     {

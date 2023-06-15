@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -36,7 +37,7 @@ public class ModuleArcade extends ModuleBase
 
     private boolean isGameActive()
     {
-        return getCart().level.isClientSide && currentGame != null;
+        return getCart().level().isClientSide && currentGame != null;
     }
 
     @Override
@@ -80,21 +81,21 @@ public class ModuleArcade extends ModuleBase
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         if (isGameActive())
         {
-            currentGame.drawForeground(matrixStack, gui);
+            currentGame.drawForeground(guiGraphics, gui);
         }
         else
         {
-            drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+            drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
             for (int i = 0; i < games.size(); ++i)
             {
                 final int[] text = getButtonTextArea(i);
                 if (text[3] == 8)
                 {
-                    drawString(matrixStack, gui, games.get(i).getName(), text[0], text[1], 4210752);
+                    drawString(guiGraphics, gui, games.get(i).getName(), text[0], text[1], 4210752);
                 }
             }
         }
@@ -102,7 +103,7 @@ public class ModuleArcade extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/arcade.png");
         afkTimer = 0;
@@ -111,13 +112,13 @@ public class ModuleArcade extends ModuleBase
             final int[] rect = getExitArea();
             final int srcX = 0;
             final int srcY = 104 + (inRect(x, y, rect) ? 16 : 0);
-            drawImage(matrixStack, gui, rect, srcX, srcY);
-            currentGame.drawBackground(matrixStack, gui, x, y);
+            drawImage(guiGraphics, gui, rect, srcX, srcY);
+            currentGame.drawBackground(guiGraphics, gui, x, y);
         }
         else
         {
             final int[] rect = getListArea();
-            drawImage(matrixStack, gui, rect, 0, 0);
+            drawImage(guiGraphics, gui, rect, 0, 0);
             for (int i = 0; i < games.size(); ++i)
             {
                 final int[] button = getButtonGraphicArea(i);
@@ -125,9 +126,9 @@ public class ModuleArcade extends ModuleBase
                 final int srcY2 = 136 + (inRect(x, y, getButtonBoundsArea(i)) ? button[3] : 0);
                 if (button[3] > 0)
                 {
-                    drawImage(matrixStack, gui, button, srcX2, srcY2);
+                    drawImage(guiGraphics, gui, button, srcX2, srcY2);
                     final int[] icon = getButtonIconArea(i);
-                    drawImage(matrixStack, gui, icon, i * 16, rect[3]);
+                    drawImage(guiGraphics, gui, icon, i * 16, rect[3]);
                 }
             }
         }
@@ -135,12 +136,12 @@ public class ModuleArcade extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         if (isGameActive())
         {
-            drawStringOnMouseOver(matrixStack, gui, "Exit", x, y, getExitArea());
-            currentGame.drawMouseOver(matrixStack, gui, x, y);
+            drawStringOnMouseOver(guiGraphics, gui, "Exit", x, y, getExitArea());
+            currentGame.drawMouseOver(guiGraphics, gui, x, y);
         }
     }
 

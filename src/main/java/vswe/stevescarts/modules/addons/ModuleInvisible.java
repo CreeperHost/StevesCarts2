@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -47,13 +48,13 @@ public class ModuleInvisible extends ModuleAddon implements IActivatorModule
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/invis.png");
         final int imageID = isVisible() ? 1 : 0;
@@ -62,22 +63,22 @@ public class ModuleInvisible extends ModuleAddon implements IActivatorModule
         {
             borderID = 1;
         }
-        drawImage(matrixStack, gui, buttonRect, 0, buttonRect[3] * borderID);
+        drawImage(guiGraphics, gui, buttonRect, 0, buttonRect[3] * borderID);
         final int srcY = buttonRect[3] * 2 + imageID * (buttonRect[3] - 2);
-        drawImage(matrixStack, gui, buttonRect[0] + 1, buttonRect[1] + 1, 0, srcY, buttonRect[2] - 2, buttonRect[3] - 2);
+        drawImage(guiGraphics, gui, buttonRect[0] + 1, buttonRect[1] + 1, 0, srcY, buttonRect[2] - 2, buttonRect[3] - 2);
     }
 
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        drawStringOnMouseOver(matrixStack, gui, getStateName(), x, y, buttonRect);
+        drawStringOnMouseOver(guiGraphics, gui, getStateName(), x, y, buttonRect);
     }
 
     @Override
     public void update()
     {
         super.update();
-        if (!isVisible() && !getCart().hasFuelForModule() && !getCart().level.isClientSide)
+        if (!isVisible() && !getCart().hasFuelForModule() && !getCart().level().isClientSide)
         {
             setIsVisible(true);
         }

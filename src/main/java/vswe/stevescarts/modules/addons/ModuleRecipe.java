@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -47,32 +48,32 @@ public abstract class ModuleRecipe extends ModuleAddon
     protected abstract int getLimitStartY();
 
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         if (canUseAdvancedFeatures())
         {
             final int[] area = getArea();
             ResourceHelper.bindResource("/gui/recipe.png");
-            drawImage(matrixStack, gui, area[0] - 2, area[1] - 2, 0, 0, 20, 20);
+            drawImage(guiGraphics, gui, area[0] - 2, area[1] - 2, 0, 0, 20, 20);
             if (getDw(MODE) == 1)
             {
                 for (int i = 0; i < 3; ++i)
                 {
-                    drawControlRect(matrixStack, gui, x, y, i);
+                    drawControlRect(guiGraphics, gui, x, y, i);
                 }
             }
             else
             {
-                drawControlRect(matrixStack, gui, x, y, 1);
+                drawControlRect(guiGraphics, gui, x, y, 1);
             }
         }
     }
 
-    private void drawControlRect(PoseStack matrixStack, GuiMinecart gui, final int x, final int y, final int i)
+    private void drawControlRect(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y, final int i)
     {
         final int v = i * 11;
         final int[] rect = getControlRect(i);
-        drawImage(matrixStack, gui, rect, 20 + (inRect(x, y, rect) ? 22 : 0), v);
+        drawImage(guiGraphics, gui, rect, 20 + (inRect(x, y, rect) ? 22 : 0), v);
     }
 
     private int[] getControlRect(final int i)
@@ -82,7 +83,7 @@ public abstract class ModuleRecipe extends ModuleAddon
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         if (canUseAdvancedFeatures())
         {
@@ -105,12 +106,12 @@ public abstract class ModuleRecipe extends ModuleAddon
                     break;
                 }
             }
-            drawString(matrixStack, gui, str, getControlRect(1), 4210752);
+            drawString(guiGraphics, gui, str, getControlRect(1), 4210752);
         }
     }
 
     @Override
-    public void drawBackgroundItems(final GuiMinecart gui, final int x, final int y)
+    public void drawBackgroundItems(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
         if (canUseAdvancedFeatures())
         {
@@ -124,7 +125,7 @@ public abstract class ModuleRecipe extends ModuleAddon
                 icon = TileEntityCargo.itemSelections.get(getDw(TARGET)).getIcon();
             }
             final int[] area = getArea();
-            drawItemInInterface(gui, icon, area[0], area[1]);
+            drawItemInInterface(guiGraphics, gui, icon, area[0], area[1]);
         }
     }
 
@@ -134,7 +135,7 @@ public abstract class ModuleRecipe extends ModuleAddon
     }
 
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         if (canUseAdvancedFeatures())
         {
@@ -147,7 +148,7 @@ public abstract class ModuleRecipe extends ModuleAddon
             {
                 str += TileEntityCargo.itemSelections.get(getDw(TARGET)).getName();
             }
-            drawStringOnMouseOver(matrixStack, gui, str, x, y, getArea());
+            drawStringOnMouseOver(guiGraphics, gui, str, x, y, getArea());
             for (int i = 0; i < 3; ++i)
             {
                 if (i == 1)
@@ -182,7 +183,7 @@ public abstract class ModuleRecipe extends ModuleAddon
                 }
                 if (str != null)
                 {
-                    drawStringOnMouseOver(matrixStack, gui, str, x, y, getControlRect(i));
+                    drawStringOnMouseOver(guiGraphics, gui, str, x, y, getControlRect(i));
                 }
             }
         }
@@ -452,7 +453,7 @@ public abstract class ModuleRecipe extends ModuleAddon
         for (int i = 0; i < outputSlots.size(); ++i)
         {
             @Nonnull ItemStack item = outputSlots.get(i).getItem();
-            if (!item.isEmpty() && item.sameItem(result) && ItemStack.isSame(item, result))
+            if (!item.isEmpty() && ItemStack.isSameItem(item, result) && ItemStack.isSameItemSameTags(item, result))
             {
                 count += item.getCount();
                 if (count >= getDw(MAX_ITEM_COUNT))

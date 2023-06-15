@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.tracks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
@@ -112,7 +113,7 @@ public class Track
     {
     }
 
-    public void drawOverlay(PoseStack matrixStack, ModuleArcade module, final GuiMinecart gui, final int x, final int y, final boolean isRunning)
+    public void drawOverlay(GuiGraphics guiGraphics, ModuleArcade module, final GuiMinecart gui, final int x, final int y, final boolean isRunning)
     {
     }
 

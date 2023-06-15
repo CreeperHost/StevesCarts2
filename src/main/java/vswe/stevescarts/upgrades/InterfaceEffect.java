@@ -1,6 +1,8 @@
 package vswe.stevescarts.upgrades;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.ContainerListener;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
@@ -13,11 +15,11 @@ public abstract class InterfaceEffect extends BaseEffect
     {
     }
 
-    public void drawBackground(PoseStack matrixStack, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
     {
     }
 
-    public void drawMouseOver(PoseStack matrixStack, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
     {
     }
 
@@ -29,11 +31,11 @@ public abstract class InterfaceEffect extends BaseEffect
     {
     }
 
-    protected void drawMouseOver(PoseStack matrixStack, GuiUpgrade gui, final String str, final int x, final int y, final int[] rect)
+    protected void drawMouseOver(GuiGraphics guiGraphics, GuiUpgrade gui, final String str, final int x, final int y, final int[] rect)
     {
         if (gui.inRect(x - gui.getGuiLeft(), y - gui.getGuiTop(), rect))
         {
-            gui.renderTooltip(matrixStack, Component.literal(str), x, y);
+            guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.literal(str), x, y);
         }
     }
 }

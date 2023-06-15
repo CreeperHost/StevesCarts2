@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -85,13 +86,13 @@ public class ModulePowerObserver extends ModuleAddon
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
         for (int i = 0; i < 4; ++i)
         {
             final int[] rect = getPowerRect(i);
-            drawString(matrixStack, gui, getPowerLevel()[i] + Localization.MODULES.ADDONS.K.translate(new String[0]), rect, 4210752);
+            drawString(guiGraphics, gui, getPowerLevel()[i] + Localization.MODULES.ADDONS.K.translate(new String[0]), rect, 4210752);
         }
     }
 
@@ -101,43 +102,43 @@ public class ModulePowerObserver extends ModuleAddon
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
         for (int i = 0; i < getCart().getEngines().size(); ++i) {
             if (!removeOnPickup() || currentEngine != i) {
-                drawEngine(gui, i, getEngineRect(i));
+                drawEngine(guiGraphics, gui, i, getEngineRect(i));
             }
         }
         ResourceHelper.bindResource("/gui/observer.png");
         for (int i = 0; i < 4; ++i) {
             int[] rect = getAreaRect(i);
-            drawImage(matrixStack, gui, rect, 18, 22 * i);
+            drawImage(guiGraphics, gui, rect, 18, 22 * i);
             if (inRect(x, y, rect)) {
-                drawImage(matrixStack, gui, rect, 18, 22 * (i + 4));
+                drawImage(guiGraphics, gui, rect, 18, 22 * (i + 4));
             }
             int count = 0;
             for (int j = 0; j < getCart().getEngines().size(); ++j) {
                 if ((getAreaData()[i] & 1 << j) != 0x0) {
-                    drawEngine(gui, j, getEngineRectInArea(i, count));
+                    drawEngine(guiGraphics, gui, j, getEngineRectInArea(i, count));
                     ++count;
                 }
             }
             ResourceHelper.bindResource("/gui/observer.png");
             rect = getPowerRect(i);
             if (isAreaActive(i)) {
-                drawImage(matrixStack, gui, rect, 122, 0);
+                drawImage(guiGraphics, gui, rect, 122, 0);
             } else {
-                drawImage(matrixStack, gui, rect, 122 + rect[2], 0);
+                drawImage(guiGraphics, gui, rect, 122 + rect[2], 0);
             }
             if (inRect(x, y, rect)) {
-                drawImage(matrixStack, gui, rect, 122 + rect[2] * 2, 0);
+                drawImage(guiGraphics, gui, rect, 122 + rect[2] * 2, 0);
             }
         }
         if (currentEngine != -1) {
-            drawEngine(gui, currentEngine, getEngineRectMouse(x, y + getCart().getRealScrollY()));
+            drawEngine(guiGraphics, gui, currentEngine, getEngineRectMouse(x, y + getCart().getRealScrollY()));
         }
     }
 
-    private void drawEngine(GuiMinecart gui, int id, int[] rect)
+    private void drawEngine(GuiGraphics guiGraphics, GuiMinecart gui, int id, int[] rect)
     {
         ModuleEngine engine = getCart().getEngines().get(id);
         int initialHeight = rect[3];
@@ -151,7 +152,7 @@ public class ModulePowerObserver extends ModuleAddon
         if (initialHeight != rect[3]) {
             gui.pushScissor();
         }
-        gui.drawModuleIcon(engine.getData(), gui.getGuiLeft() + getX() + rect[0], gui.getGuiTop() + getY() + rect[1] + offset, 0, 0, 0, 0);
+        gui.drawModuleIcon(guiGraphics, engine.getData(), gui.getGuiLeft() + getX() + rect[0], gui.getGuiTop() + getY() + rect[1] + offset, 0, 0, 0, 0);
         if (initialHeight != rect[3]) {
             gui.popScissor();
         }
@@ -185,14 +186,14 @@ public class ModulePowerObserver extends ModuleAddon
     }
 
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         for (int i = 0; i < getCart().getEngines().size(); ++i)
         {
             if (!removeOnPickup() || currentEngine != i)
             {
                 final ModuleEngine engine = getCart().getEngines().get(i);
-                drawStringOnMouseOver(matrixStack, gui, engine.getData().getName() + "\n" + Localization.MODULES.ADDONS.OBSERVER_INSTRUCTION.translate(), x, y, getEngineRect(i));
+                drawStringOnMouseOver(guiGraphics, gui, engine.getData().getName() + "\n" + Localization.MODULES.ADDONS.OBSERVER_INSTRUCTION.translate(), x, y, getEngineRect(i));
             }
         }
         for (int i = 0; i < 4; ++i)
@@ -203,15 +204,15 @@ public class ModulePowerObserver extends ModuleAddon
                 if ((getAreaData()[i] & 1 << j) != 0x0)
                 {
                     final ModuleEngine engine2 = getCart().getEngines().get(j);
-                    drawStringOnMouseOver(matrixStack, gui, engine2.getData().getName() + "\n" + Localization.MODULES.ADDONS.OBSERVER_REMOVE.translate(), x, y, getEngineRectInArea(i, count));
+                    drawStringOnMouseOver(guiGraphics, gui, engine2.getData().getName() + "\n" + Localization.MODULES.ADDONS.OBSERVER_REMOVE.translate(), x, y, getEngineRectInArea(i, count));
                     ++count;
                 }
             }
             if (currentEngine != -1)
             {
-                drawStringOnMouseOver(matrixStack, gui, Localization.MODULES.ADDONS.OBSERVER_DROP.translate(), x, y, getAreaRect(i));
+                drawStringOnMouseOver(guiGraphics, gui, Localization.MODULES.ADDONS.OBSERVER_DROP.translate(), x, y, getAreaRect(i));
             }
-            drawStringOnMouseOver(matrixStack, gui, Localization.MODULES.ADDONS.OBSERVER_CHANGE.translate() + "\n" + Localization.MODULES.ADDONS.OBSERVER_CHANGE_10.translate(), x, y, getPowerRect(i));
+            drawStringOnMouseOver(guiGraphics, gui, Localization.MODULES.ADDONS.OBSERVER_CHANGE.translate() + "\n" + Localization.MODULES.ADDONS.OBSERVER_CHANGE_10.translate(), x, y, getPowerRect(i));
         }
     }
 

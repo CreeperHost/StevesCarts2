@@ -53,7 +53,7 @@ public class ModuleOreTracker extends ModuleAddon
         {
             return null;
         }
-        if (drill.isValidBlock(getCart().level, current, 0, 1, true) == null)
+        if (drill.isValidBlock(getCart().level(), current, 0, 1, true) == null)
         {
             return null;
         }
@@ -62,7 +62,7 @@ public class ModuleOreTracker extends ModuleAddon
 
     private boolean isOre(BlockPos pos)
     {
-        BlockState state = getCart().level.getBlockState(pos);
+        BlockState state = getCart().level().getBlockState(pos);
         Block b = state.getBlock();
         if (b == null || b == Blocks.AIR)
         {

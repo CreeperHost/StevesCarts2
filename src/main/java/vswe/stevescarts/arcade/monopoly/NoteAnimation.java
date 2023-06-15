@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.monopoly;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class NoteAnimation
@@ -16,17 +17,17 @@ public class NoteAnimation
         this.isNew = isNew;
     }
 
-    public boolean draw(PoseStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y)
+    public boolean draw(GuiGraphics guiGraphics, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y)
     {
         if (animation >= 0)
         {
             if (isNew)
             {
-                note.draw(matrixStack, game, gui, x, y - 10 + animation / 2);
+                note.draw(guiGraphics, game, gui, x, y - 10 + animation / 2);
             }
             else
             {
-                note.draw(matrixStack, game, gui, x, y + animation);
+                note.draw(guiGraphics, game, gui, x, y + animation);
             }
         }
         return ++animation > 20;

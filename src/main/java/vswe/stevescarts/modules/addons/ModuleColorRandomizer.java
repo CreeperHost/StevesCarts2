@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
@@ -40,9 +41,9 @@ public class ModuleColorRandomizer extends ModuleAddon
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
@@ -58,32 +59,29 @@ public class ModuleColorRandomizer extends ModuleAddon
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/color_randomizer.png");
-        final float[] color = getColor();
-        //TODO
-        //        GlStateManager._color4f(color[0], color[1], color[2], 1.0f);
-        drawImage(matrixStack, gui, 50, 20, 0, 16, 28, 28);
+        drawImage(guiGraphics, gui, 50, 20, 0, 16, 28, 28);
         //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         if (inRect(x, y, button))
         {
-            drawImage(matrixStack, gui, 10, 26, 32, 0, 16, 16);
+            drawImage(guiGraphics, gui, 10, 26, 32, 0, 16, 16);
         }
         else
         {
-            drawImage(matrixStack, gui, 10, 26, 16, 0, 16, 16);
+            drawImage(guiGraphics, gui, 10, 26, 16, 0, 16, 16);
         }
-        drawImage(matrixStack, gui, 10, 26, 0, 0, 16, 16);
+        drawImage(guiGraphics, gui, 10, 26, 0, 0, 16, 16);
     }
 
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         if (inRect(x, y, button))
         {
             final String randomizeString = Localization.MODULES.ADDONS.BUTTON_RANDOMIZE.translate();
-            drawStringOnMouseOver(matrixStack, gui, randomizeString, x, y, button);
+            drawStringOnMouseOver(guiGraphics, gui, randomizeString, x, y, button);
         }
     }
 

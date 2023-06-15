@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.tetris;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class TetrisBlock
@@ -16,11 +17,11 @@ public class TetrisBlock
         r = GuiMinecart.RENDER_ROTATION.NORMAL;
     }
 
-    public void render(PoseStack matrixStack, ArcadeTetris game, final GuiMinecart gui, final int x, final int y)
+    public void render(GuiGraphics guiGraphics, ArcadeTetris game, final GuiMinecart gui, final int x, final int y)
     {
         if (y >= 0)
         {
-            game.getModule().drawImage(matrixStack, gui, 189 + x * 10, 9 + y * 10, u, v, 10, 10, r);
+            game.getModule().drawImage(guiGraphics, gui, 189 + x * 10, 9 + y * 10, u, v, 10, 10, r);
         }
     }
 

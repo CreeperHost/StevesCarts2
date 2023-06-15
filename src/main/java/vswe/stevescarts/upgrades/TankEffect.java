@@ -1,6 +1,7 @@
 package vswe.stevescarts.upgrades;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.ContainerListener;
@@ -61,22 +62,21 @@ public abstract class TankEffect extends InventoryEffect
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
     {
         if (TankEffect.texture == null)
         {
             TankEffect.texture = ResourceHelper.getResource("/gui/tank.png");
         }
-        upgrade.tank.drawFluid(matrixStack, gui, tankInterfaceX, tankInterfaceY);
-        ResourceHelper.bindResource(TankEffect.texture);
-        gui.blit(matrixStack, gui.getGuiLeft() + tankInterfaceX, gui.getGuiTop() + tankInterfaceY, 0, 0, 36, 51);
+        upgrade.tank.drawFluid(guiGraphics, gui, tankInterfaceX, tankInterfaceY);
+        guiGraphics.blit(TankEffect.texture, gui.getGuiLeft() + tankInterfaceX, gui.getGuiTop() + tankInterfaceY, 0, 0, 36, 51);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(PoseStack matrixStack, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
     {
-        drawMouseOver(matrixStack, gui, upgrade.tank.getMouseOver(), x, y, new int[]{tankInterfaceX, tankInterfaceX, 36, 51});
+        drawMouseOver(guiGraphics, gui, upgrade.tank.getMouseOver(), x, y, new int[]{tankInterfaceX, tankInterfaceX, 36, 51});
     }
 
     @Override

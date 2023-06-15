@@ -37,7 +37,7 @@ public class ModuleLiquidDrainer extends ModuleWorker
     public void handleLiquid(final ModuleDrill drill, BlockPos pos)
     {
         final ArrayList<BlockPos> checked = new ArrayList<>();
-        final int result = drainAt(getCart().level, drill, checked, pos, 0);
+        final int result = drainAt(getCart().level(), drill, checked, pos, 0);
         if (result > 0 && doPreWork())
         {
             drill.kill();
@@ -134,7 +134,7 @@ public class ModuleLiquidDrainer extends ModuleWorker
         if (b instanceof IFluidBlock)
         {
             final IFluidBlock liquid = (IFluidBlock) b;
-            return liquid.drain(getCart().level, pos, IFluidHandler.FluidAction.EXECUTE);
+            return liquid.drain(getCart().level(), pos, IFluidHandler.FluidAction.EXECUTE);
         }
         return null;
     }

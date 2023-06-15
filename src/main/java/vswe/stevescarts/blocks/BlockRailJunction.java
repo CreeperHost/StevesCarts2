@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
@@ -24,7 +23,7 @@ public class BlockRailJunction extends BaseRailBlock
 
     public BlockRailJunction()
     {
-        this(Properties.of(Material.DECORATION).noCollission().strength(0.7F).sound(SoundType.METAL));
+        this(Properties.of().noCollission().strength(0.7F).sound(SoundType.METAL));
     }
 
     private BlockRailJunction(Properties builder)

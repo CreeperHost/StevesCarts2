@@ -32,7 +32,7 @@ public class PacketMinecartTurn
         {
             ctx.get().enqueueWork(() ->
             {
-                Level world = ctx.get().getSender().getLevel();
+                Level world = ctx.get().getSender().level();
                 if (world.getEntity(msg.cartID) == null) return;
                 if (world.getEntity(msg.cartID) instanceof EntityMinecartModular entityMinecartModular)
                 {

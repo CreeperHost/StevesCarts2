@@ -154,7 +154,7 @@ public class ModuleLiquidSensors extends ModuleAddon
 
     public boolean isDangerous(final ModuleDrill drill, BlockPos pos, boolean isUp)
     {
-        final Block block = getCart().level.getBlockState(pos).getBlock();
+        final Block block = getCart().level().getBlockState(pos).getBlock();
         if (block == Blocks.LAVA)
         {
             handleLiquid(drill, pos);
@@ -191,7 +191,7 @@ public class ModuleLiquidSensors extends ModuleAddon
             handleLiquid(drill, pos);
             return true;
         }
-        BlockState state = getCart().level.getBlockState(pos);
+        BlockState state = getCart().level().getBlockState(pos);
         //TODO
         //		int m = state.getBlock().getMetaFromState(state);
         //		if ((m & 0x8) == 0x8) {

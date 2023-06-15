@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -68,7 +69,7 @@ public class ModuleNote extends ModuleBase
         veryLongTrack = false;
         speedSetting = 5;
         tracks = new ArrayList<>();
-        if (getCart().level.isClientSide)
+        if (getCart().level().isClientSide)
         {
             buttons = new ArrayList<>();
             createTrack = new Button(notemapX - 60, notemapY - 20);
@@ -99,7 +100,7 @@ public class ModuleNote extends ModuleBase
 
     private void updateSpeedButton()
     {
-        if (getCart().level.isClientSide)
+        if (getCart().level().isClientSide)
         {
             speedButton.imageID = 14 - speedSetting;
             speedButton.text = Localization.MODULES.ATTACHMENTS.NOTE_DELAY.translate(String.valueOf(getTickDelay()));
@@ -108,16 +109,16 @@ public class ModuleNote extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
         for (int i = getScrollY(); i < Math.min(tracks.size(), getScrollY() + tracksInView); ++i)
         {
             final Track track = tracks.get(i);
             for (int j = getScrollX(); j < Math.min(track.notes.size(), getScrollX() + notesInView); ++j)
             {
                 final Note note = track.notes.get(j);
-                note.drawText(matrixStack, gui, i - getScrollY(), j - getScrollX());
+                note.drawText(guiGraphics, gui, i - getScrollY(), j - getScrollX());
             }
         }
     }
@@ -186,7 +187,7 @@ public class ModuleNote extends ModuleBase
     public void update()
     {
         super.update();
-        if (getCart().level.isClientSide)
+        if (getCart().level().isClientSide)
         {
             tooLongTrack = false;
             veryLongTrack = false;
@@ -315,7 +316,7 @@ public class ModuleNote extends ModuleBase
                 }
                 if (!found)
                 {
-                    if (!getCart().level.isClientSide)
+                    if (!getCart().level().isClientSide)
                     {
                         setPlaying(false);
                     }
@@ -348,7 +349,7 @@ public class ModuleNote extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/note.png");
         for (int i = getScrollY(); i < Math.min(tracks.size(), getScrollY() + tracksInView); ++i)
@@ -357,37 +358,37 @@ public class ModuleNote extends ModuleBase
             for (int j = getScrollX(); j < Math.min(track.notes.size(), getScrollX() + notesInView); ++j)
             {
                 final Note note = track.notes.get(j);
-                note.draw(matrixStack, gui, x, y, i - getScrollY(), j - getScrollX());
+                note.draw(guiGraphics, gui, x, y, i - getScrollY(), j - getScrollX());
             }
         }
         for (final Button button : buttons)
         {
-            button.draw(matrixStack, gui, x, y);
+            button.draw(guiGraphics, gui, x, y);
         }
         if (tooLongTrack)
         {
-            drawImage(matrixStack, gui, scrollXrect, 48, 0);
+            drawImage(guiGraphics, gui, scrollXrect, 48, 0);
             int[] marker = getMarkerX();
-            drawImage(matrixStack, gui, marker, 148, 1);
+            drawImage(guiGraphics, gui, marker, 148, 1);
             if (veryLongTrack)
             {
                 marker = getMarkerXTune();
-                drawImage(matrixStack, gui, marker, 153, 1);
+                drawImage(guiGraphics, gui, marker, 153, 1);
             }
         }
         else
         {
-            drawImage(matrixStack, gui, scrollXrect, 48, 16);
+            drawImage(guiGraphics, gui, scrollXrect, 48, 16);
         }
         if (tooTallModule)
         {
-            drawImage(matrixStack, gui, scrollYrect, 0, 48);
+            drawImage(guiGraphics, gui, scrollYrect, 0, 48);
             final int[] marker = getMarkerY();
-            drawImage(matrixStack, gui, marker, 1, 148);
+            drawImage(guiGraphics, gui, marker, 1, 148);
         }
         else
         {
-            drawImage(matrixStack, gui, scrollYrect, 16, 48);
+            drawImage(guiGraphics, gui, scrollYrect, 16, 48);
         }
     }
 
@@ -497,7 +498,7 @@ public class ModuleNote extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         for (int i = getScrollY(); i < Math.min(tracks.size(), getScrollY() + tracksInView); ++i)
         {
@@ -507,7 +508,7 @@ public class ModuleNote extends ModuleBase
                 final Note note = track.notes.get(j);
                 if (note.instrumentId != 0)
                 {
-                    drawStringOnMouseOver(matrixStack, gui, note.toString(), x, y, note.getBounds(i - getScrollY(), j - getScrollX()));
+                    drawStringOnMouseOver(guiGraphics, gui, note.toString(), x, y, note.getBounds(i - getScrollY(), j - getScrollX()));
                 }
             }
         }
@@ -515,7 +516,7 @@ public class ModuleNote extends ModuleBase
         {
             if (button.text != null && button.text.length() > 0)
             {
-                button.overlay(matrixStack, gui, x, y);
+                button.overlay(guiGraphics, gui, x, y);
             }
         }
     }
@@ -846,20 +847,20 @@ public class ModuleNote extends ModuleBase
         }
 
         @Override
-        public void draw(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+        public void draw(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
         {
             if (isValid())
             {
-                super.draw(matrixStack, gui, x, y);
+                super.draw(guiGraphics, gui, x, y);
             }
         }
 
         @Override
-        public void overlay(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+        public void overlay(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
         {
             if (isValid())
             {
-                super.overlay(matrixStack, gui, x, y);
+                super.overlay(guiGraphics, gui, x, y);
             }
         }
 
@@ -895,9 +896,9 @@ public class ModuleNote extends ModuleBase
             return rect;
         }
 
-        public void overlay(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+        public void overlay(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
         {
-            drawStringOnMouseOver(matrixStack, gui, text, x, y, getRect());
+            drawStringOnMouseOver(guiGraphics, gui, text, x, y, getRect());
         }
 
         public void clicked(final int x, final int y)
@@ -908,14 +909,14 @@ public class ModuleNote extends ModuleBase
             }
         }
 
-        public void draw(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+        public void draw(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
         {
             if (!inRect(x, y, getRect()))
             {
                 //TODO
                 //                GlStateManager._color4f((color >> 16) / 255.0f, (color >> 8 & 0xFF) / 255.0f, (color & 0xFF) / 255.0f, 1.0f);
             }
-            drawImage(matrixStack, gui, getRect(), 32, 0);
+            drawImage(guiGraphics, gui, getRect(), 32, 0);
             //TODO
             //            GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
             int srcX = 0;
@@ -924,10 +925,10 @@ public class ModuleNote extends ModuleBase
             {
                 srcX += 16;
             }
-            drawImage(matrixStack, gui, getRect(), srcX, srcY);
+            drawImage(guiGraphics, gui, getRect(), srcX, srcY);
             if (imageID != -1)
             {
-                drawImage(matrixStack, gui, getRect(), imageID * 16, 32);
+                drawImage(guiGraphics, gui, getRect(), imageID * 16, 32);
             }
         }
     }
@@ -942,7 +943,7 @@ public class ModuleNote extends ModuleBase
             track.notes.add(this);
         }
 
-        public void drawText(PoseStack matrixStack, GuiMinecart gui, final int trackID, final int noteID)
+        public void drawText(GuiGraphics guiGraphics, GuiMinecart gui, final int trackID, final int noteID)
         {
             if (instrumentId == 0)
             {
@@ -954,10 +955,10 @@ public class ModuleNote extends ModuleBase
             {
                 str = "0" + str;
             }
-            drawString(matrixStack, gui, str, rect[0] + 3, rect[1] + 6, instrumentColors[instrumentId]);
+            drawString(guiGraphics, gui, str, rect[0] + 3, rect[1] + 6, instrumentColors[instrumentId]);
         }
 
-        public void draw(PoseStack matrixStack, GuiMinecart gui, final int x, final int y, final int trackID, final int noteID)
+        public void draw(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y, final int trackID, final int noteID)
         {
             int srcX = 0;
             if (instrumentId == 0)
@@ -965,17 +966,11 @@ public class ModuleNote extends ModuleBase
                 srcX += 16;
             }
             final int[] rect = getBounds(trackID, noteID);
-            if (instrumentId != 0 && playProgress == noteID + getScrollX() && isPlaying())
-            {
-                //TODO
-                //                GlStateManager._color4f(0.3f, 0.3f, 0.3f, 1.0f);
-            }
-            drawImage(matrixStack, gui, rect, srcX, 0);
-            //TODO
-            //            GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+            drawImage(guiGraphics, gui, rect, srcX, 0);
             if (inRect(x, y, rect))
             {
-                drawImage(matrixStack, gui, rect, 32, 0);
+                drawImage(guiGraphics, gui, rect, 32, 0);
             }
         }
 
@@ -1004,7 +999,7 @@ public class ModuleNote extends ModuleBase
             {
                 return;
             }
-            if (!getCart().level.isClientSide)
+            if (!getCart().level().isClientSide)
             {
                 if (volume > 0.0f)
                 {
@@ -1062,7 +1057,7 @@ public class ModuleNote extends ModuleBase
         {
             notes = new ArrayList<>();
             volume = 3;
-            if (getCart().level.isClientSide)
+            if (getCart().level().isClientSide)
             {
                 final int ID = tracks.size() + 1;
                 addButton = new TrackButton(notemapX - 60, ID - 1);
@@ -1110,7 +1105,7 @@ public class ModuleNote extends ModuleBase
                 notes.remove(notes.size() - 1);
             }
             volume = (val & ~maximumNotesPerTrack) >> maximumNotesPerTrackBitCount;
-            if (getCart().level.isClientSide)
+            if (getCart().level().isClientSide)
             {
                 volumeButton.imageID = 4 + volume;
                 volumeButton.text = getVolumeText();

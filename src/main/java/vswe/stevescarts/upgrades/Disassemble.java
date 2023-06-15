@@ -163,7 +163,7 @@ public class Disassemble extends InventoryEffect
 
                 int result = this.canDisassemble(upgrade);
                 boolean reset = false;
-                if (result > 0 && !last.isEmpty() && !ItemStack.isSame(cart, last))
+                if (result > 0 && !last.isEmpty() && !ItemStack.isSameItem(cart, last))
                 {
                     result = 2;
                     reset = true;

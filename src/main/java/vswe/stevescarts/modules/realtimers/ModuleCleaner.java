@@ -22,7 +22,7 @@ public class ModuleCleaner extends ModuleBase
     public void update()
     {
         super.update();
-        if (getCart().level.isClientSide)
+        if (getCart().level().isClientSide)
         {
             return;
         }
@@ -45,7 +45,7 @@ public class ModuleCleaner extends ModuleBase
 
     private void suck()
     {
-        final List<ItemEntity> list = getCart().level.getEntitiesOfClass(ItemEntity.class, getCart().getBoundingBox().inflate(3.0, 1.0, 3.0));
+        final List<ItemEntity> list = getCart().level().getEntitiesOfClass(ItemEntity.class, getCart().getBoundingBox().inflate(3.0, 1.0, 3.0));
         for (ItemEntity eItem : list)
         {
             if (!eItem.isPickable())
@@ -63,7 +63,7 @@ public class ModuleCleaner extends ModuleBase
 
     private void clean()
     {
-        final List<ItemEntity> list = getCart().level.getEntitiesOfClass(ItemEntity.class, getCart().getBoundingBox().inflate(3.0, 1.0, 3.0));
+        final List<ItemEntity> list = getCart().level().getEntitiesOfClass(ItemEntity.class, getCart().getBoundingBox().inflate(3.0, 1.0, 3.0));
         for (ItemEntity eItem : list)
         {
             if (!eItem.isPickable() && !eItem.isRemoved())
@@ -72,7 +72,7 @@ public class ModuleCleaner extends ModuleBase
                 getCart().addItemToChest(eItem.getItem());
                 if (stackSize != eItem.getItem().getCount())
                 {
-                    getCart().level.playSound(null, getCart().blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.2f, ((this.getCart().random.nextFloat() - this.getCart().random.nextFloat()) * 0.7f + 1.0f) * 2.0f);
+                    getCart().level().playSound(null, getCart().blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.2f, ((this.getCart().random.nextFloat() - this.getCart().random.nextFloat()) * 0.7f + 1.0f) * 2.0f);
                     if (eItem.getItem().getCount() <= 0)
                     {
                         eItem.remove(Entity.RemovalReason.DISCARDED);
@@ -95,8 +95,8 @@ public class ModuleCleaner extends ModuleBase
             return false;
         }
 
-        ItemEntity entityitem = new ItemEntity(getCart().level, getCart().x(), getCart().y(), getCart().z(), item.copy());
-        getCart().level.addFreshEntity(entityitem);
+        ItemEntity entityitem = new ItemEntity(getCart().level(), getCart().x(), getCart().y(), getCart().z(), item.copy());
+        getCart().level().addFreshEntity(entityitem);
         return true;
     }
 

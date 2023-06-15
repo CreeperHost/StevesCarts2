@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.storages.tanks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.creeperhost.polylib.client.fluid.ScreenFluidRenderer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -75,9 +76,9 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, final GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, final GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
@@ -116,7 +117,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
         if (tick-- <= 0)
         {
             tick = 5;
-            if (!getCart().level.isClientSide)
+            if (!getCart().level().isClientSide)
             {
                 tank.containerTransfer();
             }
@@ -172,7 +173,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     @Override
     public void onFluidUpdated(final int tankid)
     {
-        if (getCart().level.isClientSide)
+        if (getCart().level().isClientSide)
         {
             return;
         }
@@ -181,18 +182,18 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, final GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
-        tank.drawFluid(matrixStack, gui, tankBounds[0], tankBounds[1]);
+        tank.drawFluid(guiGraphics, gui, tankBounds[0], tankBounds[1]);
         ResourceHelper.bindResource("/gui/tank.png");
-        drawImage(matrixStack, gui, tankBounds, 0, 0);
+        drawImage(guiGraphics, gui, tankBounds, 0, 0);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        drawStringOnMouseOver(matrixStack, gui, getTankInfo(), x, y, tankBounds);
+        drawStringOnMouseOver(guiGraphics, gui, getTankInfo(), x, y, tankBounds);
     }
 
     protected String getTankInfo()
@@ -290,7 +291,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
 
     public String getFluidName(Fluid fluid)
     {
-        return Registry.FLUID.getKey(fluid).toString();
+        return ForgeRegistries.FLUIDS.getKey(fluid).toString();
     }
 
     public float getFluidRenderHeight()
@@ -376,7 +377,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawImage(int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height) {
-        drawImage((GuiMinecart) gui, sprite, targetX, targetY, width, height);
+    public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height) {
+        drawImage(guiGraphics, (GuiMinecart) gui, sprite, targetX, targetY, width, height);
     }
 }

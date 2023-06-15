@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.invaders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class Building extends Unit
@@ -12,9 +13,9 @@ public class Building extends Unit
     }
 
     @Override
-    public void draw(PoseStack matrixStack, GuiMinecart gui)
+    public void draw(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        game.getModule().drawImage(matrixStack, gui, x, y, 32 + (10 - health) * 16, 16, 16, 16);
+        game.getModule().drawImage(guiGraphics, gui, x, y, 32 + (10 - health) * 16, 16, 16, 16);
     }
 
     @Override

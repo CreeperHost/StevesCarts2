@@ -1,6 +1,8 @@
 package vswe.stevescarts.client.guis;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -21,7 +23,7 @@ public abstract class GuiBase extends AbstractContainerScreen
         super(abstractContainerMenu, inventory, component);
     }
 
-    public void drawMouseOver(PoseStack matrixStack, final String str, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, final String str, final int x, final int y)
     {
         final String[] split = str.split("\n");
         final List<String> text = new ArrayList<>(Arrays.asList(split));
@@ -30,7 +32,7 @@ public abstract class GuiBase extends AbstractContainerScreen
         {
             list.add(FormattedCharSequence.forward(s, Style.EMPTY));
         }
-        renderTooltip(matrixStack, list, x, y);
+        guiGraphics.renderTooltip(Minecraft.getInstance().font, list, x, y);
     }
 
     public boolean inRect(final int x, final int y, final int[] coords)
@@ -40,14 +42,14 @@ public abstract class GuiBase extends AbstractContainerScreen
 
 
     @Override
-    public void renderBackground(@NotNull PoseStack poseStack)
+    public void renderBackground(GuiGraphics guiGraphics)
     {
-        super.renderBackground(poseStack);
+        super.renderBackground(guiGraphics);
     }
 
     @Override
-    public void render(@NotNull PoseStack poseStack, int x, int y, float f)
+    public void render(GuiGraphics guiGraphics, int x, int y, float f)
     {
-        super.render(poseStack, x, y, f);
+        super.render(guiGraphics, x, y, f);
     }
 }

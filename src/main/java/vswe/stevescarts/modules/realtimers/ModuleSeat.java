@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -49,14 +50,14 @@ public class ModuleSeat extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/chair.png");
         final int imageID = getState();
@@ -72,16 +73,16 @@ public class ModuleSeat extends ModuleBase
                 borderID = 1;
             }
         }
-        drawImage(matrixStack, gui, buttonRect, 0, buttonRect[3] * borderID);
+        drawImage(guiGraphics, gui, buttonRect, 0, buttonRect[3] * borderID);
         final int srcY = buttonRect[3] * 3 + imageID * (buttonRect[3] - 2);
-        drawImage(matrixStack, gui, buttonRect[0] + 1, buttonRect[1] + 1, 0, srcY, buttonRect[2] - 2, buttonRect[3] - 2);
+        drawImage(guiGraphics, gui, buttonRect[0] + 1, buttonRect[1] + 1, 0, srcY, buttonRect[2] - 2, buttonRect[3] - 2);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        drawStringOnMouseOver(matrixStack, gui, getStateName(), x, y, buttonRect);
+        drawStringOnMouseOver(guiGraphics, gui, getStateName(), x, y, buttonRect);
     }
 
     private int getState()

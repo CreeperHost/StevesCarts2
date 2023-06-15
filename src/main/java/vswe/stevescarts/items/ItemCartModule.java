@@ -21,7 +21,7 @@ public class ItemCartModule extends Item implements IModuleItem
 
     public ItemCartModule(ModuleData moduleData)
     {
-        super(new Item.Properties().tab(StevesCartsCreativeTabs.MODULES));
+        super(new Item.Properties());
         this.moduleData = moduleData;
     }
 

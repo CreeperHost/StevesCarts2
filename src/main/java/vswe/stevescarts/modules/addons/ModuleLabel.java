@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -184,14 +185,14 @@ public class ModuleLabel extends ModuleAddon
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/label.png");
         for (int i = 0; i < labels.size(); ++i)
         {
             final int[] rect = getBoxArea(i);
-            drawImage(matrixStack, gui, rect, isActive(i) ? 8 : 0, 0);
-            drawImage(matrixStack, gui, rect, inRect(x, y, rect) ? 8 : 0, 8);
+            drawImage(guiGraphics, gui, rect, isActive(i) ? 8 : 0, 0);
+            drawImage(guiGraphics, gui, rect, inRect(x, y, rect) ? 8 : 0, 8);
         }
     }
 
@@ -235,7 +236,7 @@ public class ModuleLabel extends ModuleAddon
     @Override
     public void update()
     {
-        if (!isPlaceholder() && !getCart().level.isClientSide)
+        if (!isPlaceholder() && !getCart().level().isClientSide)
         {
             if (delay <= 0)
             {
@@ -339,13 +340,13 @@ public class ModuleLabel extends ModuleAddon
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, Localization.MODULES.ADDONS.LABELS.translate(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, Localization.MODULES.ADDONS.LABELS.translate(), 8, 6, 4210752);
         for (int i = 0; i < labels.size(); ++i)
         {
             final int[] rect = getBoxArea(i);
-            drawString(matrixStack, gui, labels.get(i).getName(), rect[0] + 12, rect[1] + 1, 4210752);
+            drawString(guiGraphics, gui, labels.get(i).getName(), rect[0] + 12, rect[1] + 1, 4210752);
         }
     }
 

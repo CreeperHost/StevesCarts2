@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.workers.tools;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.creeperhost.polylib.helpers.LevelHelper;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -94,7 +96,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     @Override
     public boolean work()
     {
-        Level world = getCart().level;
+        Level world = getCart().level();
         if (!isDrillEnabled())
         {
             stopDrill();
@@ -127,7 +129,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         }
 
         BlockPos pos = next.offset(0, range[0], 0);
-        if (LevelHelper.isAir(getCart().level, pos) && !isValidForTrack(pos, true) && mineBlockAndRevive(world, pos.below(), next, 0, range[0] - 1))
+        if (LevelHelper.isAir(getCart().level(), pos) && !isValidForTrack(pos, true) && mineBlockAndRevive(world, pos.below(), next, 0, range[0] - 1))
         {
             return true;
         }
@@ -150,7 +152,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     {
         BlockPos next = getNextblock();
         int yTarget = getCart().getYTarget();
-        if (BaseRailBlock.isRail(getCart().level, next) || BaseRailBlock.isRail(getCart().level, next.below()))
+        if (BaseRailBlock.isRail(getCart().level(), next) || BaseRailBlock.isRail(getCart().level(), next.below()))
         {
             return new int[]{0, blocksOnTop() - 1, 1};
         }
@@ -240,7 +242,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         if (fortune > 0) {
             tool.enchant(Enchantments.BLOCK_FORTUNE, fortune);
         }
-        List<ItemStack> drops = block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, tool).withParameter(LootContextParams.ORIGIN, getCart().position()));
+        List<ItemStack> drops = block.getDrops(blockState, new LootParams.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, tool).withParameter(LootContextParams.ORIGIN, getCart().position()));
 
         if (!drops.isEmpty())
         {
@@ -387,7 +389,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     public void update()
     {
         super.update();
-        if (getCart().level.isClientSide && !setup)
+        if (getCart().level().isClientSide && !setup)
         {
             if (isPlaceholder() || !getDw(IS_MINING))
             {
@@ -408,7 +410,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
                 ++miningCoolDown;
             }
         }
-        if (!getCart().level.isClientSide && liquidsensors != null)
+        if (!getCart().level().isClientSide && liquidsensors != null)
         {
             byte data = sensorLight;
             if (isDrillSpinning())
@@ -504,16 +506,16 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, Localization.MODULES.TOOLS.DRILL.translate(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, Localization.MODULES.TOOLS.DRILL.translate(), 8, 6, 4210752);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        super.drawBackground(matrixStack, gui, x, y);
+        super.drawBackground(guiGraphics, gui, x, y);
         ResourceHelper.bindResource("/gui/drill.png");
         final int imageID = isDrillEnabled() ? 1 : 0;
         int borderID = 0;
@@ -521,16 +523,16 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         {
             borderID = 1;
         }
-        drawImage(matrixStack, gui, buttonRect, 0, buttonRect[3] * borderID);
+        drawImage(guiGraphics, gui, buttonRect, 0, buttonRect[3] * borderID);
         final int srcY = buttonRect[3] * 2 + imageID * (buttonRect[3] - 2);
-        drawImage(matrixStack, gui, buttonRect[0] + 1, buttonRect[1] + 1, 0, srcY, buttonRect[2] - 2, buttonRect[3] - 2);
+        drawImage(guiGraphics, gui, buttonRect[0] + 1, buttonRect[1] + 1, 0, srcY, buttonRect[2] - 2, buttonRect[3] - 2);
     }
 
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        super.drawMouseOver(matrixStack, gui, x, y);
-        drawStringOnMouseOver(matrixStack, gui, getStateName(), x, y, buttonRect);
+        super.drawMouseOver(guiGraphics, gui, x, y);
+        drawStringOnMouseOver(guiGraphics, gui, getStateName(), x, y, buttonRect);
     }
 
     private String getStateName()

@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.tracks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -118,7 +119,7 @@ public class ArcadeTracks extends ArcadeGame
             unlockedLevels[i] = -1;
         }
         loadStories();
-        if (getModule().getCart().level.isClientSide)
+        if (getModule().getCart().level().isClientSide)
         {
             loadUserMaps();
         }
@@ -275,26 +276,26 @@ public class ArcadeTracks extends ArcadeGame
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         if (isSaveMenuOpen)
         {
             final int[] menu = getSaveMenuArea();
             if (failedToSave)
             {
-                getModule().drawString(matrixStack, gui, Localization.ARCADE.SAVE_ERROR.translate(), menu[0] + 3, menu[1] + 3, 16711680);
+                getModule().drawString(guiGraphics, gui, Localization.ARCADE.SAVE_ERROR.translate(), menu[0] + 3, menu[1] + 3, 16711680);
             }
             else
             {
-                getModule().drawString(matrixStack, gui, Localization.ARCADE.SAVE.translate(), menu[0] + 3, menu[1] + 3, 4210752);
+                getModule().drawString(guiGraphics, gui, Localization.ARCADE.SAVE.translate(), menu[0] + 3, menu[1] + 3, 4210752);
             }
-            getModule().drawString(matrixStack, gui, saveName + ((saveName.length() < 15 && getModule().getCart().level.getGameTime() % 20L < 10L) ? "|" : ""), menu[0] + 5, menu[1] + 16, 16777215);
+            getModule().drawString(guiGraphics, gui, saveName + ((saveName.length() < 15 && getModule().getCart().level().getGameTime() % 20L < 10L) ? "|" : ""), menu[0] + 5, menu[1] + 16, 16777215);
         }
         else if (isMenuOpen)
         {
             for (final ScrollableList list : lists)
             {
-                list.drawForeground(matrixStack, gui);
+                list.drawForeground(guiGraphics, gui);
             }
             if (currentMenuTab == 0 || currentMenuTab == 1)
             {
@@ -312,12 +313,12 @@ public class ArcadeTracks extends ArcadeGame
                 {
                     str = Localization.ARCADE.STORIES.translate();
                 }
-                getModule().drawString(matrixStack, gui, str, menu[0] + 5, menu[1] + 32, 4210752);
+                getModule().drawString(guiGraphics, gui, str, menu[0] + 5, menu[1] + 32, 4210752);
             }
             else
             {
                 final int[] menu = getMenuArea();
-                getModule().drawSplitString(gui, Localization.ARCADE.HELP.translate(), menu[0] + 10, menu[1] + 20, menu[2] - 20, 4210752);
+                getModule().drawSplitString(guiGraphics, gui, Localization.ARCADE.HELP.translate(), menu[0] + 10, menu[1] + 20, menu[2] - 20, 4210752);
             }
         }
         else
@@ -326,33 +327,33 @@ public class ArcadeTracks extends ArcadeGame
             {
                 if (message.isVisible(isRunning, isRunning && player.getDireciotn() == TrackOrientation.DIRECTION.STILL, isRunning && isItemTaken))
                 {
-                    getModule().drawSplitString(gui, message.getMessage(), 9 + message.getX() * 16, 9 + message.getY() * 16, message.getW() * 16, 4210752);
+                    getModule().drawSplitString(guiGraphics, gui, message.getMessage(), 9 + message.getX() * 16, 9 + message.getY() * 16, message.getW() * 16, 4210752);
                 }
             }
             if (isUsingEditor())
             {
-                getModule().drawString(matrixStack, gui, "1-5 - " + Localization.ARCADE.INSTRUCTION_SHAPE.translate(), 10, 180, 4210752);
-                getModule().drawString(matrixStack, gui, "R - " + Localization.ARCADE.INSTRUCTION_ROTATE_TRACK.translate(), 10, 190, 4210752);
-                getModule().drawString(matrixStack, gui, "F - " + Localization.ARCADE.INSTRUCTION_FLIP_TRACK.translate(), 10, 200, 4210752);
-                getModule().drawString(matrixStack, gui, "A - " + Localization.ARCADE.INSTRUCTION_DEFAULT_DIRECTION.translate(), 10, 210, 4210752);
-                getModule().drawString(matrixStack, gui, "T - " + Localization.ARCADE.INSTRUCTION_TRACK_TYPE.translate(), 10, 220, 4210752);
-                getModule().drawString(matrixStack, gui, "D - " + Localization.ARCADE.INSTRUCTION_DELETE_TRACK.translate(), 10, 230, 4210752);
-                getModule().drawString(matrixStack, gui, "C - " + Localization.ARCADE.INSTRUCTION_COPY_TRACK.translate(), 10, 240, 4210752);
-                getModule().drawString(matrixStack, gui, "S - " + Localization.ARCADE.INSTRUCTION_STEVE.translate(), 330, 180, 4210752);
-                getModule().drawString(matrixStack, gui, "X - " + Localization.ARCADE.INSTRUCTION_MAP.translate(), 330, 190, 4210752);
-                getModule().drawString(matrixStack, gui, Localization.ARCADE.LEFT_MOUSE.translate() + " - " + Localization.ARCADE.INSTRUCTION_PLACE_TRACK.translate(), 330, 200, 4210752);
-                getModule().drawString(matrixStack, gui, Localization.ARCADE.RIGHT_MOUSE.translate() + " - " + Localization.ARCADE.INSTRUCTION_DESELECT_TRACK.translate(), 330, 210, 4210752);
+                getModule().drawString(guiGraphics, gui, "1-5 - " + Localization.ARCADE.INSTRUCTION_SHAPE.translate(), 10, 180, 4210752);
+                getModule().drawString(guiGraphics, gui, "R - " + Localization.ARCADE.INSTRUCTION_ROTATE_TRACK.translate(), 10, 190, 4210752);
+                getModule().drawString(guiGraphics, gui, "F - " + Localization.ARCADE.INSTRUCTION_FLIP_TRACK.translate(), 10, 200, 4210752);
+                getModule().drawString(guiGraphics, gui, "A - " + Localization.ARCADE.INSTRUCTION_DEFAULT_DIRECTION.translate(), 10, 210, 4210752);
+                getModule().drawString(guiGraphics, gui, "T - " + Localization.ARCADE.INSTRUCTION_TRACK_TYPE.translate(), 10, 220, 4210752);
+                getModule().drawString(guiGraphics, gui, "D - " + Localization.ARCADE.INSTRUCTION_DELETE_TRACK.translate(), 10, 230, 4210752);
+                getModule().drawString(guiGraphics, gui, "C - " + Localization.ARCADE.INSTRUCTION_COPY_TRACK.translate(), 10, 240, 4210752);
+                getModule().drawString(guiGraphics, gui, "S - " + Localization.ARCADE.INSTRUCTION_STEVE.translate(), 330, 180, 4210752);
+                getModule().drawString(guiGraphics, gui, "X - " + Localization.ARCADE.INSTRUCTION_MAP.translate(), 330, 190, 4210752);
+                getModule().drawString(guiGraphics, gui, Localization.ARCADE.LEFT_MOUSE.translate() + " - " + Localization.ARCADE.INSTRUCTION_PLACE_TRACK.translate(), 330, 200, 4210752);
+                getModule().drawString(guiGraphics, gui, Localization.ARCADE.RIGHT_MOUSE.translate() + " - " + Localization.ARCADE.INSTRUCTION_DESELECT_TRACK.translate(), 330, 210, 4210752);
             }
         }
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         if (!isSaveMenuOpen && isMenuOpen)
         {
             ResourceHelper.bindResource(ArcadeTracks.textureMenu);
-            getModule().drawImage(matrixStack, gui, getMenuArea(), 0, 0);
+            getModule().drawImage(guiGraphics, gui, getMenuArea(), 0, 0);
             for (int i = 0; i < 3; ++i)
             {
                 final int[] rect = getMenuTabArea(i);
@@ -360,12 +361,12 @@ public class ArcadeTracks extends ArcadeGame
                 final boolean hidden = !active && i == currentMenuTab;
                 if (!hidden)
                 {
-                    getModule().drawImage(matrixStack, gui, rect[0], rect[1] + rect[3], 0, active ? 114 : 113, rect[2], 1);
+                    getModule().drawImage(guiGraphics, gui, rect[0], rect[1] + rect[3], 0, active ? 114 : 113, rect[2], 1);
                 }
             }
             for (final ScrollableList list : lists)
             {
-                list.drawBackground(matrixStack, gui, x, y);
+                list.drawBackground(guiGraphics, gui, x, y);
             }
         }
         else if (currentMap != null)
@@ -377,27 +378,27 @@ public class ArcadeTracks extends ArcadeGame
                 {
                     for (int j = 0; j < trackMap[0].length; ++j)
                     {
-                        getModule().drawImage(matrixStack, gui, 5 + i * 16, 5 + j * 16, 16, 128, 16, 16);
+                        getModule().drawImage(guiGraphics, gui, 5 + i * 16, 5 + j * 16, 16, 128, 16, 16);
                     }
                 }
             }
             for (final Track track : tracks)
             {
-                getModule().drawImage(matrixStack, gui, getTrackArea(track.getX(), track.getY()), 16 * track.getU(), 16 * track.getV(), track.getRotation());
+                getModule().drawImage(guiGraphics, gui, getTrackArea(track.getX(), track.getY()), 16 * track.getU(), 16 * track.getV(), track.getRotation());
             }
             if (isUsingEditor())
             {
                 if (editorDetectorTrack != null && !isRunning)
                 {
-                    editorDetectorTrack.drawOverlay(matrixStack, getModule(), gui, editorDetectorTrack.getX() * 16 + 8, editorDetectorTrack.getY() * 16 + 8, isRunning);
-                    getModule().drawImage(matrixStack, gui, 5 + editorDetectorTrack.getX() * 16, 5 + editorDetectorTrack.getY() * 16, 32, 128, 16, 16);
+                    editorDetectorTrack.drawOverlay(guiGraphics, getModule(), gui, editorDetectorTrack.getX() * 16 + 8, editorDetectorTrack.getY() * 16 + 8, isRunning);
+                    getModule().drawImage(guiGraphics, gui, 5 + editorDetectorTrack.getX() * 16, 5 + editorDetectorTrack.getY() * 16, 32, 128, 16, 16);
                 }
             }
             else
             {
                 for (final Track track : tracks)
                 {
-                    track.drawOverlay(matrixStack, getModule(), gui, x, y, isRunning);
+                    track.drawOverlay(guiGraphics, getModule(), gui, x, y, isRunning);
                 }
             }
             if (!isItemTaken)
@@ -407,24 +408,24 @@ public class ArcadeTracks extends ArcadeGame
                 {
                     itemIndex = 1;
                 }
-                getModule().drawImage(matrixStack, gui, 5 + itemX * 16, 5 + itemY * 16, 16 * itemIndex, 240, 16, 16);
+                getModule().drawImage(guiGraphics, gui, 5 + itemX * 16, 5 + itemY * 16, 16 * itemIndex, 240, 16, 16);
             }
             for (final Cart cart : carts)
             {
-                cart.render(matrixStack, this, gui, tick);
+                cart.render(guiGraphics, this, gui, tick);
             }
             if (isUsingEditor() && !isRunning)
             {
-                getModule().drawImage(matrixStack, gui, 5 + playerStartX * 16, 5 + playerStartY * 16, 162, 212, 8, 8, playerStartDirection.getRenderRotation());
+                getModule().drawImage(guiGraphics, gui, 5 + playerStartX * 16, 5 + playerStartY * 16, 162, 212, 8, 8, playerStartDirection.getRenderRotation());
             }
             if (!isMenuOpen && editorTrack != null)
             {
-                getModule().drawImage(matrixStack, gui, x - 8, y - 8, 16 * editorTrack.getU(), 16 * editorTrack.getV(), 16, 16, editorTrack.getRotation());
+                getModule().drawImage(guiGraphics, gui, x - 8, y - 8, 16 * editorTrack.getU(), 16 * editorTrack.getV(), 16, 16, editorTrack.getRotation());
             }
             if (isSaveMenuOpen)
             {
                 final int[] rect2 = getSaveMenuArea();
-                getModule().drawImage(matrixStack, gui, rect2, 0, 144);
+                getModule().drawImage(guiGraphics, gui, rect2, 0, 144);
             }
         }
         ResourceHelper.bindResource(ArcadeTracks.textureGame);
@@ -435,19 +436,19 @@ public class ArcadeTracks extends ArcadeGame
                 final int[] rect = getButtonArea(i);
                 final int srcX = isButtonDisabled(i) ? 208 : (getModule().inRect(x, y, rect) ? 224 : 240);
                 final int srcY = i * 16;
-                getModule().drawImage(matrixStack, gui, rect, srcX, srcY);
+                getModule().drawImage(guiGraphics, gui, rect, srcX, srcY);
             }
         }
     }
 
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         for (int i = 0; i < 14; ++i)
         {
             if (!isButtonDisabled(i) && isButtonVisible(i))
             {
-                getModule().drawStringOnMouseOver(matrixStack, gui, getButtonText(i), x, y, getButtonArea(i));
+                getModule().drawStringOnMouseOver(guiGraphics, gui, getButtonText(i), x, y, getButtonArea(i));
             }
         }
     }
@@ -755,7 +756,7 @@ public class ArcadeTracks extends ArcadeGame
             case 9:
             {
                 userList.clear();
-                if (getModule().getCart().level.isClientSide)
+                if (getModule().getCart().level().isClientSide)
                 {
                     loadUserMaps();
                     break;

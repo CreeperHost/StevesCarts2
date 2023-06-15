@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.engines;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraftforge.api.distmarker.Dist;
@@ -50,15 +51,15 @@ public class ModuleCheatEngine extends ModuleEngine
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         final String[] split = getModuleName().split(" ");
-        drawString(matrixStack, gui, split[0], 8, 6, 4210752);
+        drawString(guiGraphics, gui, split[0], 8, 6, 4210752);
         if (split.length > 1)
         {
-            drawString(matrixStack, gui, split[1], 8, 16, 4210752);
+            drawString(guiGraphics, gui, split[1], 8, 16, 4210752);
         }
-        drawString(matrixStack, gui, Localization.MODULES.ENGINES.OVER_9000.translate(String.valueOf(getFuelLevel())), 8, 42, 4210752);
+        drawString(guiGraphics, gui, Localization.MODULES.ENGINES.OVER_9000.translate(String.valueOf(getFuelLevel())), 8, 42, 4210752);
     }
 
     @Override

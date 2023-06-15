@@ -1,8 +1,7 @@
 package vswe.stevescarts.client.renders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -12,9 +11,9 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -86,16 +85,16 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular> {
         }
 
         poseStack.translate(0.0, 0.375, 0.0);
-        poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F - yaw));
-        poseStack.mulPose(Vector3f.ZP.rotationDegrees(-pitch));
+        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - yaw));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(-pitch));
         float damageWobbleTicks = (float) entity.getHurtTime() - tickDelta;
         float damageWobbleStrength = Mth.clamp(entity.getDamage() - tickDelta, 0, Float.MAX_VALUE);
         if (damageWobbleTicks > 0.0f) {
-            poseStack.mulPose(Vector3f.XP.rotationDegrees(Mth.sin(damageWobbleTicks) * damageWobbleTicks * damageWobbleStrength / 10.0f * entity.getHurtDir()));
+            poseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(damageWobbleTicks) * damageWobbleTicks * damageWobbleStrength / 10.0f * entity.getHurtDir()));
         }
 
         yaw += (flip ? 0.0f : 180.0f);
-        poseStack.mulPose(Vector3f.YP.rotationDegrees(flip ? 0.0f : 180.0f));
+        poseStack.mulPose(Axis.YP.rotationDegrees(flip ? 0.0f : 180.0f));
 
         poseStack.scale(-1.0f, -1.0f, 1.0f);
         if (entity.getModules() != null) {
@@ -143,8 +142,8 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular> {
         for (int i = 0; i < labels.size(); i++) {
             Component label = labels.get(i);
             float f2 = (float) (-font.width(label) / 2);
-            font.drawInBatch(label, f2, height, 553648127, false, matrix4f, bufferSource, true, j, p_114502_);
-            font.drawInBatch(label, f2, height, -1, false, matrix4f, bufferSource, false, 0, p_114502_);
+            font.drawInBatch(label, f2, height, 553648127, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, j, p_114502_);
+            font.drawInBatch(label, f2, height, -1, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, 0, p_114502_);
 
             height += font.lineHeight;
         }

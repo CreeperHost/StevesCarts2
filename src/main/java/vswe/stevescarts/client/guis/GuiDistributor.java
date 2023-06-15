@@ -1,6 +1,8 @@
 package vswe.stevescarts.client.guis;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -33,12 +35,11 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack poseStack, float p_230450_2_, int x, int y)
+    protected void renderBg(GuiGraphics guiGraphics, float p_230450_2_, int x, int y)
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
-        ResourceHelper.bindResource(GuiDistributor.texture);
-        blit(poseStack, j, k, 0, 0, imageWidth, imageHeight);
+        guiGraphics.blit(GuiDistributor.texture, j, k, 0, 0, imageWidth, imageHeight);
         x -= getGuiLeft();
         y -= getGuiTop();
         final TileEntityManager[] invs = distributor.getInventories();
@@ -54,8 +55,8 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
                 {
                     srcX = box[2];
                 }
-                blit(poseStack, j + box[0], k + box[1], srcX, imageHeight, box[2], box[3]);
-                blit(poseStack, j + box[0] + 2, k + box[1] + 2, box[2] * 2 + (box[2] - 4) * side.getId(), imageHeight, box[2] - 4, box[3] - 4);
+                guiGraphics.blit(GuiDistributor.texture, j + box[0], k + box[1], srcX, imageHeight, box[2], box[3]);
+                guiGraphics.blit(GuiDistributor.texture, j + box[0] + 2, k + box[1] + 2, box[2] * 2 + (box[2] - 4) * side.getId(), imageHeight, box[2] - 4, box[3] - 4);
                 drawMouseMover(Localization.GUI.DISTRIBUTOR.SIDE.translate(side.getName()) + ((activeId != -1) ? (": [" + Localization.GUI.DISTRIBUTOR.DROP_INSTRUCTION.translate() + "]") : ""), x, y, box);
                 int settingCount = 0;
                 for (final DistributorSetting setting : DistributorSetting.settings)
@@ -63,7 +64,7 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
                     if (setting.isEnabled(distributor) && side.isSet(setting.getId()))
                     {
                         final int[] settingbox = getActiveSettingBoxRect(id, settingCount++);
-                        drawSetting(poseStack, setting, settingbox, inRect(x, y, settingbox));
+                        drawSetting(guiGraphics, setting, settingbox, inRect(x, y, settingbox));
                         drawMouseMover(setting.getName(invs) + ": [" + Localization.GUI.DISTRIBUTOR.REMOVE_INSTRUCTION.translate() + "]", x, y, settingbox);
                     }
                 }
@@ -75,36 +76,36 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
             if (setting2.isEnabled(distributor))
             {
                 final int[] box = getSettingBoxRect(setting2.getImageId(), setting2.getIsTop());
-                drawSetting(poseStack, setting2, box, inRect(x, y, box));
+                drawSetting(guiGraphics, setting2, box, inRect(x, y, box));
                 drawMouseMover(setting2.getName(invs), x, y, box);
             }
         }
         if (activeId != -1)
         {
             final DistributorSetting setting3 = DistributorSetting.settings.get(activeId);
-            drawSetting(poseStack, setting3, new int[]{x - 8, y - 8, 16, 16}, true);
+            drawSetting(guiGraphics, setting3, new int[]{x - 8, y - 8, 16, 16}, true);
         }
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack poseStack, int p_230451_2_, int p_230451_3_)
+    protected void renderLabels(GuiGraphics guiGraphics, int p_230451_2_, int p_230451_3_)
     {
     }
 
     @Override
-    public void render(@NotNull PoseStack poseStack, int x, int y, float p_230430_4_)
+    public void render(GuiGraphics guiGraphics, int x, int y, float p_230430_4_)
     {
-        this.renderBackground(poseStack);
-        super.render(poseStack, x, y, p_230430_4_);
-        font.draw(poseStack, Localization.GUI.DISTRIBUTOR.TITLE.translate(), leftPos + 8, topPos + 6, 4210752);
+        this.renderBackground(guiGraphics);
+        super.render(guiGraphics, x, y, p_230430_4_);
+        guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.DISTRIBUTOR.TITLE.translate(), leftPos + 8, topPos + 6, 4210752);
         final TileEntityManager[] invs = distributor.getInventories();
         if (invs.length == 0)
         {
-            font.draw(poseStack, Localization.GUI.DISTRIBUTOR.NOT_CONNECTED.translate(), leftPos + 30, topPos + 40, 16728128);
+            guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.DISTRIBUTOR.NOT_CONNECTED.translate(), leftPos + 30, topPos + 40, 16728128);
         }
         if (mouseOverText != null && !mouseOverText.equals(""))
         {
-            renderTooltip(poseStack, Component.literal(mouseOverText), x, y);
+            guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.literal(mouseOverText), x, y);
         }
         mouseOverText = null;
     }
@@ -123,7 +124,7 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
         return coords != null && x >= coords[0] && x < coords[0] + coords[2] && y >= coords[1] && y < coords[1] + coords[3];
     }
 
-    private void drawSetting(PoseStack matrixStack, final DistributorSetting setting, final int[] box, final boolean hover)
+    private void drawSetting(GuiGraphics guiGraphics, final DistributorSetting setting, final int[] box, final boolean hover)
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
@@ -136,8 +137,8 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
         {
             srcX += box[2];
         }
-        blit(matrixStack, j + box[0], k + box[1], srcX, imageHeight + getSideBoxRect(0)[3], box[2], box[3]);
-        blit(matrixStack, j + box[0] + 1, k + box[1] + 1, box[2] * 4 + (box[2] - 2) * setting.getImageId(), imageHeight + getSideBoxRect(0)[3], box[2] - 2, box[3] - 2);
+        guiGraphics.blit(GuiDistributor.texture, j + box[0], k + box[1], srcX, imageHeight + getSideBoxRect(0)[3], box[2], box[3]);
+        guiGraphics.blit(GuiDistributor.texture, j + box[0] + 1, k + box[1] + 1, box[2] * 4 + (box[2] - 2) * setting.getImageId(), imageHeight + getSideBoxRect(0)[3], box[2] - 2, box[3] - 2);
     }
 
     private int[] getSideBoxRect(final int i)

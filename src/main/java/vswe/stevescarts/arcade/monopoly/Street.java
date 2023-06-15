@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.monopoly;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.EnumSet;
@@ -19,25 +20,22 @@ public class Street extends Property
     }
 
     @Override
-    public void draw(PoseStack matrixStack, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
+    public void draw(GuiGraphics guiGraphics, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
     {
-        super.draw(matrixStack, gui, states);
-        //TODO
-        //		GlStateManager._color4f(color[0], color[1], color[2], 1.0f);
-        game.getModule().drawImage(matrixStack, gui, 0, 0, 76, 0, 76, 22);
-        //		GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        super.draw(guiGraphics, gui, states);
+        game.getModule().drawImage(guiGraphics, gui, 0, 0, 76, 0, 76, 22);
         if (structures > 0 && structures < 5)
         {
             for (int i = 0; i < structures; ++i)
             {
-                game.getModule().drawImage(matrixStack, gui, 3 + i * 18, 3, 76, 22, 16, 16);
+                game.getModule().drawImage(guiGraphics, gui, 3 + i * 18, 3, 76, 22, 16, 16);
             }
         }
         else if (structures == 5)
         {
-            game.getModule().drawImage(matrixStack, gui, 3, 3, 92, 22, 16, 16);
+            game.getModule().drawImage(guiGraphics, gui, 3, 3, 92, 22, 16, 16);
         }
-        drawValue(matrixStack, gui);
+        drawValue(guiGraphics, gui);
     }
 
     public void increaseStructure()

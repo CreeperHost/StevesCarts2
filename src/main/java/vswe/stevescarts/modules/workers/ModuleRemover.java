@@ -51,7 +51,7 @@ public class ModuleRemover extends ModuleWorker implements IActivatorModule {
     @Override
     public boolean work() {
         EntityMinecartModular cart = getCart();
-        Level world = cart.level;
+        Level world = cart.level();
         if (remove.getY() != -1 && (remove.getX() != cart.x() || remove.getZ() != cart.z()) && removeRail(world, remove, true)) {
             return false;
         }

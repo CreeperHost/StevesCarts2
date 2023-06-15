@@ -1,6 +1,8 @@
 package vswe.stevescarts.client.guis;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -26,20 +28,20 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
     }
 
     @Override
-    public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float p_230430_4_)
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float p_230430_4_)
     {
-        this.renderBackground(poseStack);
-        super.render(poseStack, mouseX, mouseY, p_230430_4_);
+        this.renderBackground(guiGraphics);
+        super.render(guiGraphics, mouseX, mouseY, p_230430_4_);
         if (upgrade.getUpgrade() != null)
         {
             final InterfaceEffect gui = upgrade.getUpgrade().getInterfaceEffect();
             if (gui != null)
             {
                 gui.drawForeground(upgrade, this);
-                gui.drawMouseOver(poseStack, upgrade, this, mouseX, mouseY);
+                gui.drawMouseOver(guiGraphics, upgrade, this, mouseX, mouseY);
             }
         }
-        renderTooltip(poseStack, mouseX, mouseY);
+        renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     public boolean inRect(final int x, final int y, final int[] coords)
@@ -48,12 +50,11 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack poseStack, float p_230450_2_, int mouseX, int mouseY)
+    protected void renderBg(GuiGraphics guiGraphics, float p_230450_2_, int mouseX, int mouseY)
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
-        ResourceHelper.bindResource(GuiUpgrade.texture);
-        blit(poseStack, j, k, 0, 0, imageWidth, imageHeight);
+        guiGraphics.blit(GuiUpgrade.texture, j, k, 0, 0, imageWidth, imageHeight);
         if (upgrade.getUpgrade() != null)
         {
             final InventoryEffect inventory = upgrade.getUpgrade().getInventoryEffect();
@@ -61,21 +62,21 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
             {
                 for (int i = 0; i < inventory.getInventorySize(); ++i)
                 {
-                    blit(poseStack, j + inventory.getSlotX(i) - 1, k + inventory.getSlotY(i) - 1, 0, imageHeight, 18, 18);
+                    guiGraphics.blit(GuiUpgrade.texture, j + inventory.getSlotX(i) - 1, k + inventory.getSlotY(i) - 1, 0, imageHeight, 18, 18);
                 }
             }
             final InterfaceEffect gui = upgrade.getUpgrade().getInterfaceEffect();
             if (gui != null)
             {
-                gui.drawBackground(poseStack, upgrade, this, mouseX, mouseY);
+                gui.drawBackground(guiGraphics, upgrade, this, mouseX, mouseY);
             }
         }
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack poseStack, int p_230451_2_, int p_230451_3_)
+    protected void renderLabels(GuiGraphics guiGraphics, int p_230451_2_, int p_230451_3_)
     {
-        font.draw(poseStack, upgrade.getUpgrade().getName(), 8, 6, 4210752);
+        guiGraphics.drawString(Minecraft.getInstance().font, upgrade.getUpgrade().getName(), 8, 6, 4210752);
     }
 
     static

@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.workers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -58,8 +59,8 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui) {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     public boolean work() {
         final BlockPos next = getLastblock();
         final EntityMinecartModular cart = getCart();
-        final Level world = cart.level;
+        final Level world = cart.level();
         final int x = next.getX();
         final int y = next.getY();
         final int z = next.getZ();
@@ -137,7 +138,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
         ResourceHelper.bindResource("/gui/torch.png");
         int barLength = 3 * light;
         if (light == 15) {
@@ -147,14 +148,14 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
         if (inRect(x, y, boxRect)) {
             srcX += boxRect[2];
         }
-        drawImage(matrixStack, gui, boxRect, srcX, 0);
-        drawImage(matrixStack, gui, 13, guiHeight() - 10 + 1, 0, 9, barLength, 7);
-        drawImage(matrixStack, gui, 12 + 3 * lightLimit, guiHeight() - 10, 0, 16, 1, 9);
+        drawImage(guiGraphics, gui, boxRect, srcX, 0);
+        drawImage(guiGraphics, gui, 13, guiHeight() - 10 + 1, 0, 9, barLength, 7);
+        drawImage(guiGraphics, gui, 12 + 3 * lightLimit, guiHeight() - 10, 0, 16, 1, 9);
     }
 
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y) {
-        drawStringOnMouseOver(matrixStack, gui, "Threshold: " + lightLimit + " Current: " + light, x, y, boxRect);
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
+        drawStringOnMouseOver(guiGraphics, gui, "Threshold: " + lightLimit + " Current: " + light, x, y, boxRect);
     }
 
     @Override
@@ -243,7 +244,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     @Override
     public void update() {
         super.update();
-        light = getCart().level.getLightEngine().getRawBrightness(getCart().blockPosition(), 15);
+        light = getCart().level().getLightEngine().getRawBrightness(getCart().blockPosition(), 15);
     }
 
     @Override
@@ -265,7 +266,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     }
 
     private void calculateTorches() {
-        if (getCart().level.isClientSide) {
+        if (getCart().level().isClientSide) {
             return;
         }
         int val = 0;

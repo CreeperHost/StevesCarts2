@@ -24,7 +24,7 @@ public class ContainerMinecart extends ContainerBase
 
     public ContainerMinecart(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
-        this(id, playerInventory, (EntityMinecartModular) playerInventory.player.level.getEntity(packetBuffer.readInt()), new SimpleContainerData(1));
+        this(id, playerInventory, (EntityMinecartModular) playerInventory.player.level().getEntity(packetBuffer.readInt()), new SimpleContainerData(1));
     }
 
     public ContainerMinecart(int id, Inventory playerInventory, EntityMinecartModular cart, SimpleContainerData data)

@@ -24,6 +24,6 @@ public class ModuleEgg extends ModuleProjectile
     @Override
     public Entity createProjectile(final Entity target, @Nonnull ItemStack item)
     {
-        return new ThrownEgg(getCart().level, 0, 0, 0);
+        return new ThrownEgg(getCart().level(), 0, 0, 0);
     }
 }

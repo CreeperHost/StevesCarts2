@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -40,7 +41,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
     public void update()
     {
         super.update();
-        if (!getCart().level.isClientSide)
+        if (!getCart().level().isClientSide)
         {
             if (getCart().hasCreativeSupplies())
             {
@@ -113,9 +114,9 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, Localization.MODULES.ATTACHMENTS.CAKE_SERVER.translate(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.CAKE_SERVER.translate(), 8, 6, 4210752);
     }
 
     @Override
@@ -132,9 +133,9 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        drawStringOnMouseOver(matrixStack, gui, Localization.MODULES.ATTACHMENTS.CAKES.translate(String.valueOf(getCakes()), String.valueOf(10)) + "\n" + Localization.MODULES.ATTACHMENTS.SLICES.translate(String.valueOf(getSlices()), String.valueOf(6)), x, y, rect);
+        drawStringOnMouseOver(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.CAKES.translate(String.valueOf(getCakes()), String.valueOf(10)) + "\n" + Localization.MODULES.ATTACHMENTS.SLICES.translate(String.valueOf(getSlices()), String.valueOf(6)), x, y, rect);
     }
 
     private int getCakes()
@@ -157,20 +158,20 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/cake.png");
-        drawImage(matrixStack, gui, rect, 0, inRect(x, y, rect) ? rect[3] : 0);
+        drawImage(guiGraphics, gui, rect, 0, inRect(x, y, rect) ? rect[3] : 0);
         final int maxHeight = rect[3] - 2;
         int height = (int) (getCakes() / 10.0f * maxHeight);
         if (height > 0)
         {
-            drawImage(matrixStack, gui, rect[0] + 1, rect[1] + 1 + maxHeight - height, rect[2], maxHeight - height, 7, height);
+            drawImage(guiGraphics, gui, rect[0] + 1, rect[1] + 1 + maxHeight - height, rect[2], maxHeight - height, 7, height);
         }
         height = (int) (getSlices() / 6.0f * maxHeight);
         if (height > 0)
         {
-            drawImage(matrixStack, gui, rect[0] + 9, rect[1] + 1 + maxHeight - height, rect[2] + 7, maxHeight - height, 3, height);
+            drawImage(guiGraphics, gui, rect[0] + 9, rect[1] + 1 + maxHeight - height, rect[2] + 7, maxHeight - height, 3, height);
         }
     }
 
@@ -191,7 +192,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
     {
         if (getCakeBuffer() > 0)
         {
-            if (!getCart().level.isClientSide && entityplayer.canEat(false))
+            if (!getCart().level().isClientSide && entityplayer.canEat(false))
             {
                 setCakeBuffer(getCakeBuffer() - 1);
                 entityplayer.getFoodData().eat(2, 0.1F);

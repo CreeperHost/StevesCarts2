@@ -3,9 +3,9 @@ package vswe.stevescarts.client.guis;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -133,7 +133,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack poseStack, float p_230450_2_, int mouseX, int mouseY)
+    protected void renderBg(GuiGraphics guiGraphics, float p_230450_2_, int mouseX, int mouseY)
     {
         if (firstLoad)
         {
@@ -142,13 +142,10 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         }
         final int j = getGuiLeft();
         final int k = getGuiTop();
-        ResourceHelper.bindResource(GuiCartAssembler.backgrounds[assembler.getSimulationInfo().getBackground()]);
-        blit(poseStack, j + 143, k + 15, 0, 0, 220, 148);
-        ResourceHelper.bindResource(GuiCartAssembler.textureLeft);
-        blit(poseStack, j, k, 0, 0, 256, imageHeight);
-        ResourceHelper.bindResource(GuiCartAssembler.textureRight);
-        blit(poseStack, j + 256, k, 0, 0, imageWidth - 256, imageHeight);
-        blit(poseStack, j + 256, k, 0, 0, imageWidth - 256, imageHeight);
+        guiGraphics.blit(GuiCartAssembler.backgrounds[assembler.getSimulationInfo().getBackground()], j + 143, k + 15, 0, 0, 220, 148);
+        guiGraphics.blit(GuiCartAssembler.textureLeft, j, k, 0, 0, 256, imageHeight);
+        guiGraphics.blit(GuiCartAssembler.textureRight, j + 256, k, 0, 0, imageWidth - 256, imageHeight);
+        guiGraphics.blit(GuiCartAssembler.textureRight, j + 256, k, 0, 0, imageWidth - 256, imageHeight);
         ResourceHelper.bindResource(GuiCartAssembler.textureExtra);
         final ArrayList<SlotAssembler> slots = assembler.getSlots();
         for (final SlotAssembler slot : slots)
@@ -188,7 +185,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                 }
             }
             //Slots
-            blit(poseStack, j + targetX, k + targetY, srcX, srcY, size, size);
+            guiGraphics.blit(GuiCartAssembler.textureExtra, j + targetX, k + targetY, srcX, srcY, size, size);
             int animationTick = slot.getAnimationTick();
             if (animationTick < 0)
             {
@@ -196,8 +193,8 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
             }
             if (animationTick < 8 && !slot.useLargeInterface())
             {
-                blit(poseStack, j + targetX + 1, k + targetY + 1, 0, 24 + animationTick, 16, 8 - animationTick);
-                blit(poseStack, j + targetX + 1, k + targetY + 1 + 8 + animationTick, 0, 32, 16, 8 - animationTick);
+                guiGraphics.blit(GuiCartAssembler.textureExtra, j + targetX + 1, k + targetY + 1, 0, 24 + animationTick, 16, 8 - animationTick);
+                guiGraphics.blit(GuiCartAssembler.textureExtra, j + targetX + 1, k + targetY + 1 + 8 + animationTick, 0, 32, 16, 8 - animationTick);
             }
             slot.update();
         }
@@ -205,8 +202,8 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         {
             final int targetY2 = box.getY() - 12;
             final int targetX2 = box.getX();
-            blit(poseStack, j + targetX2, k + targetY2, 0, 40, 115, 11);
-            blit(poseStack, j + targetX2 + 8, k + targetY2 + 2, 0, 51 + box.getID() * 7, 115, 7);
+            guiGraphics.blit(GuiCartAssembler.textureExtra, j + targetX2, k + targetY2, 0, 40, 115, 11);
+            guiGraphics.blit(GuiCartAssembler.textureExtra, j + targetX2 + 8, k + targetY2 + 2, 0, 51 + box.getID() * 7, 115, 7);
         }
         int srcX2 = 42;
         int srcY2 = 0;
@@ -223,30 +220,30 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         {
             srcY2 += 11;
         }
-        blit(poseStack, j + assembleRect[0], k + assembleRect[1], srcX2, srcY2, assembleRect[2], assembleRect[3]);
+        guiGraphics.blit(GuiCartAssembler.textureExtra, j + assembleRect[0], k + assembleRect[1], srcX2, srcY2, assembleRect[2], assembleRect[3]);
         float assemblingProgress = 0.0f;
         if (containerCartAssembler.getIsAssembling())
         {
             assemblingProgress = (float) containerCartAssembler.getAssemblingTime() / (float) containerCartAssembler.getMaxAssemblingTime();
         }
-        drawProgressBar(poseStack, assemblingProgRect, assemblingProgress, 22, mouseX, mouseY);
-        drawProgressBar(poseStack, fuelProgRect, (float) containerCartAssembler.getFuel() / (float) assembler.getMaxFuelLevel(), 31, mouseX, mouseY);
-        renderDropDownMenu(poseStack, mouseX, mouseY);
+        drawProgressBar(guiGraphics, assemblingProgRect, assemblingProgress, 22, mouseX, mouseY);
+        drawProgressBar(guiGraphics, fuelProgRect, (float) containerCartAssembler.getFuel() / (float) assembler.getMaxFuelLevel(), 31, mouseX, mouseY);
+        renderDropDownMenu(guiGraphics, GuiCartAssembler.textureExtra, mouseX, mouseY);
         renderEntityInInventory(leftPos + 256, topPos + 100, 50);
     }
 
     @Override
-    public void renderLabels(@NotNull PoseStack poseStack, int mouseX, int mouseY)
+    public void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY)
     {
-        font.draw(poseStack, Localization.GUI.ASSEMBLER.TITLE.translate(), 18, 6, 4210752);
+        guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.ASSEMBLER.TITLE.translate(), 18, 6, 4210752);
     }
 
     @Override
-    public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
     {
-        this.renderBackground(poseStack);
-        super.render(poseStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(poseStack, mouseX, mouseY);
+        this.renderBackground(guiGraphics);
+        super.render(guiGraphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(guiGraphics, mouseX, mouseY);
         if (assembler.isErrorListOutdated)
         {
             updateErrorList();
@@ -267,12 +264,12 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                 final TextWithColor info = lines.get(i);
                 if (info != null)
                 {
-                    font.draw(poseStack, info.getText(), leftPos + 370, topPos + 40 + i * 10, info.getColor());
+                    guiGraphics.drawString(Minecraft.getInstance().font, info.getText(), leftPos + 370, topPos + 40 + i * 10, info.getColor());
                 }
             }
             if (dotdotdot)
             {
-                font.draw(poseStack, "...", leftPos + 370, topPos + 40 + lineCount * 10, 4210752);
+                guiGraphics.drawString(Minecraft.getInstance().font, "...", leftPos + 370, topPos + 40 + lineCount * 10, 4210752);
             }
         }
         float assemblingProgress;
@@ -291,15 +288,15 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         {
             if (assembler.getIsDisassembling())
             {
-                drawProgressBarInfo(poseStack, assembleRect, mouseX, mouseY, Localization.GUI.ASSEMBLER.MODIFY_CART.translate());
+                drawProgressBarInfo(guiGraphics, assembleRect, mouseX, mouseY, Localization.GUI.ASSEMBLER.MODIFY_CART.translate());
             }
             else
             {
-                drawProgressBarInfo(poseStack, assembleRect, mouseX, mouseY, Localization.GUI.ASSEMBLER.ASSEMBLE_CART.translate());
+                drawProgressBarInfo(guiGraphics, assembleRect, mouseX, mouseY, Localization.GUI.ASSEMBLER.ASSEMBLE_CART.translate());
             }
         }
-        drawProgressBarInfo(poseStack, assemblingProgRect, mouseX, mouseY, assemblingInfo);
-        drawProgressBarInfo(poseStack, fuelProgRect, mouseX, mouseY, Localization.GUI.ASSEMBLER.FUEL_LEVEL.translate() + ": " + containerCartAssembler.getFuel() + "/" + assembler.getMaxFuelLevel());
+        drawProgressBarInfo(guiGraphics, assemblingProgRect, mouseX, mouseY, assemblingInfo);
+        drawProgressBarInfo(guiGraphics, fuelProgRect, mouseX, mouseY, Localization.GUI.ASSEMBLER.FUEL_LEVEL.translate() + ": " + containerCartAssembler.getFuel() + "/" + assembler.getMaxFuelLevel());
     }
 
     private String formatProgress(final float progress)
@@ -319,15 +316,15 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
-    private void drawProgressBarInfo(PoseStack matrixStack, final int[] rect, final int x, final int y, final String str)
+    private void drawProgressBarInfo(GuiGraphics guiGraphics, final int[] rect, final int x, final int y, final String str)
     {
         if (inRect(x - getGuiLeft(), y - getGuiTop(), rect))
         {
-            renderTooltip(matrixStack, Component.literal(str), x, y);
+            guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.literal(str), x, y);
         }
     }
 
-    private void drawProgressBar(PoseStack matrixStack, int[] rect, float progress, int barSrcY, int x, int y)
+    private void drawProgressBar(GuiGraphics guiGraphics, int[] rect, float progress, int barSrcY, int x, int y)
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
@@ -336,14 +333,14 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         {
             boxSrcY = 11;
         }
-        blit(matrixStack, j + rect[0], k + rect[1], 122, boxSrcY, rect[2], rect[3]);
+        guiGraphics.blit(GuiCartAssembler.textureExtra, j + rect[0], k + rect[1], 122, boxSrcY, rect[2], rect[3]);
         if (progress != 0.0f)
         {
             if (progress > 1.0f)
             {
                 progress = 1.0f;
             }
-            blit(matrixStack, j + rect[0] + 1, k + rect[1] + 1, 122, barSrcY, (int) (rect[2] * progress), rect[3] - 2);
+            guiGraphics.blit(GuiCartAssembler.textureExtra, j + rect[0] + 1, k + rect[1] + 1, 122, barSrcY, (int) (rect[2] * progress), rect[3] - 2);
         }
     }
 
@@ -363,8 +360,8 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         posestack1.translate(0.0D, 0.0D, 1000.0D);
         posestack1.scale((float) p_98853_, (float) p_98853_, (float) p_98853_);
 
-        Quaternion quaternion = Vector3f.YN.rotationDegrees(assembler.getRoll() * 10F);
-        Quaternion quaternion1 = Vector3f.XP.rotationDegrees(180);
+        var quaternion = Axis.YN.rotationDegrees(assembler.getRoll() * 10F);
+        var quaternion1 = Axis.XP.rotationDegrees(180);
         if (spin)
         {
             posestack1.mulPose(quaternion);
@@ -376,7 +373,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
 
         Lighting.setupForEntityInInventory();
         EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-        quaternion1.conj();
+        quaternion1.conjugate();
         entityrenderdispatcher.overrideCameraOrientation(quaternion1);
         entityrenderdispatcher.setRenderShadow(false);
         MultiBufferSource.BufferSource multibuffersource$buffersource = Minecraft.getInstance().renderBuffers().bufferSource();
@@ -391,7 +388,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         Lighting.setupFor3DItems();
     }
 
-    private void renderDropDownMenu(PoseStack matrixStack, final int x, final int y)
+    private void renderDropDownMenu(GuiGraphics guiGraphics, ResourceLocation resourceLocation, final int x, final int y)
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
@@ -405,45 +402,45 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                 int[] subrect = new int[0];
                 int srcX = 0;
                 int srcY = item.getIsLarge() ? 113 : 93;
-                blit(matrixStack, j + rect[0], k + rect[1], srcX, srcY, rect[2], rect[3]);
+                guiGraphics.blit(resourceLocation, j + rect[0], k + rect[1], srcX, srcY, rect[2], rect[3]);
                 if (item.getIsLarge())
                 {
-                    drawString(matrixStack, item.getName(), j + rect[0] + 55, k + rect[1] + 7);
+                    drawString(guiGraphics, resourceLocation, item.getName(), j + rect[0] + 55, k + rect[1] + 7);
                 }
-                blit(matrixStack, j + rect[0] + 34, k + rect[1] + 2, item.getImageID() % 16 * 16, 179 + item.getImageID() / 16 * 16, 16, 16);
+                guiGraphics.blit(resourceLocation, j + rect[0] + 34, k + rect[1] + 2, item.getImageID() % 16 * 16, 179 + item.getImageID() / 16 * 16, 16, 16);
                 if (item.hasSubmenu())
                 {
                     subrect = item.getSubRect(dropdownX, dropdownY, i);
                     srcX = (item.getIsSubMenuOpen() ? 0 : 43);
                     srcY = 133;
-                    blit(matrixStack, j + subrect[0], k + subrect[1], srcX, srcY, subrect[2], subrect[3]);
+                    guiGraphics.blit(resourceLocation, j + subrect[0], k + subrect[1], srcX, srcY, subrect[2], subrect[3]);
                 }
                 switch (item.getType())
                 {
-                    case BOOL -> drawBooleanBox(matrixStack, x, y, 5 + rect[0], 5 + rect[1], item.getBOOL());
+                    case BOOL -> drawBooleanBox(guiGraphics, resourceLocation, x, y, 5 + rect[0], 5 + rect[1], item.getBOOL());
                     case INT -> {
                         if (item.getIsSubMenuOpen())
                         {
-                            drawIncreamentBox(matrixStack, x, y, getOffSetXForSubMenuBox(0, 2) + subrect[0], 3 + subrect[1]);
-                            drawDecreamentBox(matrixStack, x, y, getOffSetXForSubMenuBox(1, 2) + subrect[0], 3 + subrect[1]);
+                            drawIncreamentBox(guiGraphics, resourceLocation, x, y, getOffSetXForSubMenuBox(0, 2) + subrect[0], 3 + subrect[1]);
+                            drawDecreamentBox(guiGraphics, resourceLocation, x, y, getOffSetXForSubMenuBox(1, 2) + subrect[0], 3 + subrect[1]);
                         }
                         final int targetX = rect[0] + 16;
                         final int targetY = rect[1] + 7;
                         final int valueToWrite = item.getINT();
                         if (valueToWrite >= 10)
                         {
-                            drawDigit(matrixStack, valueToWrite / 10, -1, targetX, targetY);
-                            drawDigit(matrixStack, valueToWrite % 10, 1, targetX, targetY);
+                            drawDigit(guiGraphics, resourceLocation, valueToWrite / 10, -1, targetX, targetY);
+                            drawDigit(guiGraphics, resourceLocation, valueToWrite % 10, 1, targetX, targetY);
                             break;
                         }
-                        drawDigit(matrixStack, valueToWrite, 0, targetX, targetY);
+                        drawDigit(guiGraphics, resourceLocation, valueToWrite, 0, targetX, targetY);
                     }
                     case MULTIBOOL -> {
                         if (item.getIsSubMenuOpen())
                         {
                             for (int count = item.getMULTIBOOLCount(), bool = 0; bool < count; ++bool)
                             {
-                                drawBooleanBox(matrixStack, x, y, subrect[0] + getOffSetXForSubMenuBox(bool, count), subrect[1] + 3, item.getMULTIBOOL(bool));
+                                drawBooleanBox(guiGraphics, resourceLocation, x, y, subrect[0] + getOffSetXForSubMenuBox(bool, count), subrect[1] + 3, item.getMULTIBOOL(bool));
                             }
                         }
                     }
@@ -452,7 +449,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         }
     }
 
-    private void drawString(PoseStack matrixStack, String str, final int x, final int y)
+    private void drawString(GuiGraphics guiGraphics, ResourceLocation resourceLocation, String str, final int x, final int y)
     {
         str = str.toUpperCase();
         for (int i = 0; i < str.length(); ++i)
@@ -461,7 +458,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
             final int index = validChars.indexOf(c);
             if (index != -1)
             {
-                blit(matrixStack, x + 7 * i, y, 8 * index, 165, 6, 7);
+                guiGraphics.blit(resourceLocation, x + 7 * i, y, 8 * index, 165, 6, 7);
             }
         }
     }
@@ -471,30 +468,30 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         return 2 + (int) (20.0f + (id - count / 2.0f) * 10.0f);
     }
 
-    private void drawDigit(PoseStack matrixStack, int digit, int offset, int targetX, int targetY)
+    private void drawDigit(GuiGraphics guiGraphics, ResourceLocation resourceLocation, int digit, int offset, int targetX, int targetY)
     {
         final int srcX = digit * 8;
         final int srcY = 172;
         targetX += offset * 4;
-        blit(matrixStack, getGuiLeft() + targetX, getGuiTop() + targetY, srcX, srcY, 6, 7);
+        guiGraphics.blit(resourceLocation, getGuiLeft() + targetX, getGuiTop() + targetY, srcX, srcY, 6, 7);
     }
 
-    private void drawIncreamentBox(PoseStack matrixStack, int mouseX, int mouseY, int x, int y)
+    private void drawIncreamentBox(GuiGraphics guiGraphics, ResourceLocation resourceLocation, int mouseX, int mouseY, int x, int y)
     {
-        drawStandardBox(matrixStack, mouseX, mouseY, x, y, 10);
+        drawStandardBox(guiGraphics, resourceLocation, mouseX, mouseY, x, y, 10);
     }
 
-    private void drawDecreamentBox(PoseStack matrixStack, int mouseX, int mouseY, int x, int y)
+    private void drawDecreamentBox(GuiGraphics guiGraphics, ResourceLocation resourceLocation, int mouseX, int mouseY, int x, int y)
     {
-        drawStandardBox(matrixStack, mouseX, mouseY, x, y, 20);
+        drawStandardBox(guiGraphics, resourceLocation, mouseX, mouseY, x, y, 20);
     }
 
-    private void drawBooleanBox(PoseStack matrixStack, int mouseX, int mouseY, int x, int y, boolean itemvalue)
+    private void drawBooleanBox(GuiGraphics guiGraphics, ResourceLocation resourceLocation, int mouseX, int mouseY, int x, int y, boolean itemvalue)
     {
-        drawStandardBox(matrixStack, mouseX, mouseY, x, y, 0);
+        drawStandardBox(guiGraphics, resourceLocation, mouseX, mouseY, x, y, 0);
         if (itemvalue)
         {
-            blit(matrixStack, getGuiLeft() + x + 2, getGuiTop() + y + 2, 0, 159, 6, 6);
+            guiGraphics.blit(resourceLocation, getGuiLeft() + x + 2, getGuiTop() + y + 2, 0, 159, 6, 6);
         }
     }
 
@@ -503,15 +500,15 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         return coords != null && x >= coords[0] && x < coords[0] + coords[2] && y >= coords[1] && y < coords[1] + coords[3];
     }
 
-    private void drawStandardBox(PoseStack matrixStack, int mouseX, int mouseY, int x, int y, int srcX)
+    private void drawStandardBox(GuiGraphics guiGraphics, ResourceLocation resourceLocation, int mouseX, int mouseY, int x, int y, int srcX)
     {
         final int targetX = getGuiLeft() + x;
         final int targetY = getGuiTop() + y;
         final int srcY = 149;
-        blit(matrixStack, targetX, targetY, srcX, srcY, 10, 10);
+        guiGraphics.blit(resourceLocation, targetX, targetY, srcX, srcY, 10, 10);
         if (inRect(mouseX, mouseY, new int[]{targetX, targetY, 10, 10}))
         {
-            blit(matrixStack, targetX, targetY, 30, srcY, 10, 10);
+            guiGraphics.blit(resourceLocation, targetX, targetY, 30, srcY, 10, 10);
         }
     }
 

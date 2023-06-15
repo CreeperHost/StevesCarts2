@@ -44,7 +44,7 @@ public class ModuleHydrater extends ModuleWorker
     @Override
     public boolean work()
     {
-        Level world = getCart().level;
+        Level world = getCart().level();
         BlockPos next = getNextblock();
         for (int i = -range; i <= range; ++i)
         {

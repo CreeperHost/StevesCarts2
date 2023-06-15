@@ -1,6 +1,7 @@
 package vswe.stevescarts.api.modules.template;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
@@ -120,7 +121,7 @@ public abstract class ModuleEngine extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, final GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/engine.png");
         final int sourceX = 16 * getPriority();
@@ -129,13 +130,13 @@ public abstract class ModuleEngine extends ModuleBase
         {
             sourceY = 16;
         }
-        drawImage(matrixStack, gui, priorityButton, sourceX, sourceY);
+        drawImage(guiGraphics, gui, priorityButton, sourceX, sourceY);
     }
 
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        drawStringOnMouseOver(matrixStack, gui, getPriorityText(), x, y, priorityButton);
+        drawStringOnMouseOver(guiGraphics, gui, getPriorityText(), x, y, priorityButton);
     }
 
     private String getPriorityText()

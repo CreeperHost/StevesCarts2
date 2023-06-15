@@ -24,6 +24,6 @@ public class ModuleCake extends ModuleProjectile
     @Override
     public Entity createProjectile(final Entity target, @Nonnull ItemStack item)
     {
-        return new EntityCake(getCart().level);
+        return new EntityCake(getCart().level());
     }
 }

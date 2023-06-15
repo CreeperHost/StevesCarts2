@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.workers.tools;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.common.util.FakePlayer;
 import vswe.stevescarts.api.StevesCartsAPI;
@@ -61,9 +63,9 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, Localization.MODULES.TOOLS.CUTTER.translate(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, Localization.MODULES.TOOLS.CUTTER.translate(), 8, 6, 4210752);
     }
 
     @Override
@@ -142,7 +144,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
     @Override
     public boolean work()
     {
-        Level world = getCart().level;
+        Level world = getCart().level();
         BlockPos next = getNextblock();
         final int size = getPlantSize();
         destroyLeaveBlockOnTrack(world, next);
@@ -212,7 +214,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
             {
                 if (isSaplingHandler(sapling))
                 {
-                    if (plantSapling(getCart().level, pos, sapling, getFakePlayer()))
+                    if (plantSapling(getCart().level(), pos, sapling, getFakePlayer()))
                     {
                         sapling.shrink(1);
                         startWorking(25);
@@ -329,7 +331,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         }
         List<ItemStack> stuff;
         final int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
-        stuff = block.getDrops(blockState, new LootContext.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withParameter(LootContextParams.ORIGIN, getCart().position()));
+        stuff = block.getDrops(blockState, new LootParams.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withParameter(LootContextParams.ORIGIN, getCart().position()));
         List<ItemStack> dropList = new ArrayList<>();
         for (ItemStack drop : dropList)
         { //Here to filter out any bad itemstacks, the mod I was testing with returned stacks with a size of 0

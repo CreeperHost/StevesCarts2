@@ -27,7 +27,7 @@ public class ModuleFlowerRemover extends ModuleBase {
     @Override
     public void update() {
         super.update();
-        if (getCart().level.isClientSide) {
+        if (getCart().level().isClientSide) {
             bladeangle += getBladeSpeed();
             if (getCart().hasFuel()) {
                 bladespeed = Math.min(1.0f, bladespeed + 0.005f);
@@ -63,41 +63,41 @@ public class ModuleFlowerRemover extends ModuleBase {
         BlockPos cartPos = getCart().getExactPosition();
         BlockPos minPos = cartPos.offset(-getBlocksOnSide(), -getBlocksFromLevel(), -getBlocksOnSide());
         BlockPos maxPos = cartPos.offset(getBlocksOnSide(), getBlocksFromLevel(), getBlocksOnSide());
-        ServerLevel serverLevel = (ServerLevel) getCart().level;
+        ServerLevel serverLevel = (ServerLevel) getCart().level();
 
         for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
             if (!isMowable(pos)) continue;
-            BlockState state = getCart().level.getBlockState(pos);
+            BlockState state = getCart().level().getBlockState(pos);
             List<ItemStack> drops = Block.getDrops(state, serverLevel, pos, serverLevel.getBlockEntity(pos));
             addStuff(drops);
-            getCart().level.removeBlock(pos, true);
+            getCart().level().removeBlock(pos, true);
         }
     }
 
     private void shearEntities() {
-        final List<LivingEntity> entities = getCart().level.getEntitiesOfClass(LivingEntity.class, getCart().getBoundingBox().inflate(getBlocksOnSide(), getBlocksFromLevel() + 2.0f, getBlocksOnSide()));
+        final List<LivingEntity> entities = getCart().level().getEntitiesOfClass(LivingEntity.class, getCart().getBoundingBox().inflate(getBlocksOnSide(), getBlocksFromLevel() + 2.0f, getBlocksOnSide()));
         for (LivingEntity target : entities) {
             if (target instanceof IForgeShearable shearable) {
                 BlockPos pos = target.blockPosition();
-                if (!shearable.isShearable(ItemStack.EMPTY, getCart().level, pos)) {
+                if (!shearable.isShearable(ItemStack.EMPTY, getCart().level(), pos)) {
                     continue;
                 }
-                addStuff(shearable.onSheared(null, ItemStack.EMPTY, getCart().level, pos, 0));
+                addStuff(shearable.onSheared(null, ItemStack.EMPTY, getCart().level(), pos, 0));
             }
         }
     }
 
     private boolean isMowable(BlockPos pos) {
-        BlockState blockState = getCart().level.getBlockState(pos);
-        return blockState.is(BlockTags.FLOWERS) || blockState.is(BlockTags.REPLACEABLE_PLANTS);
+        BlockState blockState = getCart().level().getBlockState(pos);
+        return blockState.is(BlockTags.FLOWERS) || blockState.is(BlockTags.REPLACEABLE);
     }
 
     private void addStuff(List<ItemStack> stuff) {
         for (ItemStack stack : stuff) {
             getCart().addItemToChest(stack);
             if (stack.getCount() != 0) {
-                ItemEntity entityitem = new ItemEntity(getCart().level, getCart().getExactPosition().getX(), getCart().getExactPosition().getY(), getCart().getExactPosition().getZ(), stack);
-                getCart().level.addFreshEntity(entityitem);
+                ItemEntity entityitem = new ItemEntity(getCart().level(), getCart().getExactPosition().getX(), getCart().getExactPosition().getY(), getCart().getExactPosition().getZ(), stack);
+                getCart().level().addFreshEntity(entityitem);
             }
         }
     }

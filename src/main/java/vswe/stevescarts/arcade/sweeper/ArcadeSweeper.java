@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.sweeper;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
@@ -143,14 +144,14 @@ public class ArcadeSweeper extends ArcadeGame
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource(ArcadeSweeper.textureMenu);
         for (int i = 0; i < tiles.length; ++i)
         {
             for (int j = 0; j < tiles[0].length; ++j)
             {
-                tiles[i][j].draw(matrixStack, this, gui, getMarginLeft() + i * 10, getMarginTop() + j * 10, x, y);
+                tiles[i][j].draw(guiGraphics, this, gui, getMarginLeft() + i * 10, getMarginTop() + j * 10, x, y);
             }
         }
     }
@@ -282,18 +283,18 @@ public class ArcadeSweeper extends ArcadeGame
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         final String[] mapnames = {Localization.ARCADE.MAP_1.translate(), Localization.ARCADE.MAP_2.translate(), Localization.ARCADE.MAP_3.translate()};
-        getModule().drawString(matrixStack, gui, Localization.ARCADE.LEFT.translate(String.valueOf(creepersLeft)), 10, 180, 4210752);
-        getModule().drawString(matrixStack, gui, Localization.ARCADE.TIME.translate(String.valueOf(ticks / 20)), 10, 190, 4210752);
-        getModule().drawString(matrixStack, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 10, 210, 4210752);
-        getModule().drawString(matrixStack, gui, "T - " + Localization.ARCADE.INSTRUCTION_CHANGE_MAP.translate(), 10, 230, 4210752);
-        getModule().drawString(matrixStack, gui, Localization.ARCADE.MAP.translate(mapnames[currentGameType]), 10, 240, 4210752);
-        getModule().drawString(matrixStack, gui, Localization.ARCADE.HIGH_SCORES.translate(), 330, 180, 4210752);
+        getModule().drawString(guiGraphics, gui, Localization.ARCADE.LEFT.translate(String.valueOf(creepersLeft)), 10, 180, 4210752);
+        getModule().drawString(guiGraphics, gui, Localization.ARCADE.TIME.translate(String.valueOf(ticks / 20)), 10, 190, 4210752);
+        getModule().drawString(guiGraphics, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 10, 210, 4210752);
+        getModule().drawString(guiGraphics, gui, "T - " + Localization.ARCADE.INSTRUCTION_CHANGE_MAP.translate(), 10, 230, 4210752);
+        getModule().drawString(guiGraphics, gui, Localization.ARCADE.MAP.translate(mapnames[currentGameType]), 10, 240, 4210752);
+        getModule().drawString(guiGraphics, gui, Localization.ARCADE.HIGH_SCORES.translate(), 330, 180, 4210752);
         for (int i = 0; i < 3; ++i)
         {
-            getModule().drawString(matrixStack, gui, Localization.ARCADE.HIGH_SCORE_ENTRY.translate(mapnames[i], String.valueOf(highscore[i])), 330, 190 + i * 10, 4210752);
+            getModule().drawString(guiGraphics, gui, Localization.ARCADE.HIGH_SCORE_ENTRY.translate(mapnames[i], String.valueOf(highscore[i])), 330, 190 + i * 10, 4210752);
         }
     }
 

@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.engines;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.creeperhost.polylib.helpers.FuelHelper;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -112,11 +113,11 @@ public abstract class ModuleCoalBase extends ModuleEngine
         double oZ = smokeSide.getStepZ();
         if (getCart().random.nextInt(2) == 0)
         {
-            getCart().level.addParticle(ParticleTypes.SMOKE, getCart().getX() + oX * 0.85, getCart().getY() + 0.12, getCart().getZ() + oZ * 0.85, 0.0, 0.0, 0.0);
+            getCart().level().addParticle(ParticleTypes.SMOKE, getCart().getX() + oX * 0.85, getCart().getY() + 0.12, getCart().getZ() + oZ * 0.85, 0.0, 0.0, 0.0);
         }
         if (getCart().random.nextInt(30) == 0)
         {
-            getCart().level.addParticle(ParticleTypes.FLAME, getCart().getX() + oX * 0.75, getCart().getY() + 0.15, getCart().getZ() + oZ * 0.75, 0, 0, 0);
+            getCart().level().addParticle(ParticleTypes.FLAME, getCart().getX() + oX * 0.75, getCart().getY() + 0.15, getCart().getZ() + oZ * 0.75, 0, 0, 0);
         }
     }
 
@@ -128,15 +129,15 @@ public abstract class ModuleCoalBase extends ModuleEngine
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, Localization.MODULES.ENGINES.COAL.translate(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, Localization.MODULES.ENGINES.COAL.translate(), 8, 6, 4210752);
         String strfuel = Localization.MODULES.ENGINES.NO_FUEL.translate();
         if (getFuelLevel() > 0)
         {
             strfuel = "Fuel: " + getFuelLevel();//TODO Why? Localization.MODULES.ENGINES.FUEL.translate(String.valueOf(getFuelLevel()));
         }
-        drawString(matrixStack, gui, strfuel, 8, 48, 4210752);
+        drawString(guiGraphics, gui, strfuel, 8, 48, 4210752);
     }
 
     @Override

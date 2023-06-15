@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -8,6 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.StevesCarts;
@@ -40,9 +42,9 @@ public class ModuleDynamite extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, Localization.MODULES.ATTACHMENTS.EXPLOSIVES.translate(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.EXPLOSIVES.translate(), 8, 6, 4210752);
     }
 
     @Override
@@ -114,13 +116,13 @@ public class ModuleDynamite extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/explosions.png");
-        drawImage(matrixStack, gui, fuseStartX, fuseStartY + 3, 12, 0, 105, 4);
-        drawImage(matrixStack, gui, fuseStartX + 105, fuseStartY - 4, 0, 10, 16, 16);
-        drawImage(matrixStack, gui, fuseStartX + (int) (105.0f * (1.0f - (getFuseLength() - getFuse()) / 150.0f)), fuseStartY, isPrimed() ? 8 : 4, 0, 4, 10);
-        drawImage(matrixStack, gui, getMovableMarker(), 0, 0);
+        drawImage(guiGraphics, gui, fuseStartX, fuseStartY + 3, 12, 0, 105, 4);
+        drawImage(guiGraphics, gui, fuseStartX + 105, fuseStartY - 4, 0, 10, 16, 16);
+        drawImage(guiGraphics, gui, fuseStartX + (int) (105.0f * (1.0f - (getFuseLength() - getFuse()) / 150.0f)), fuseStartY, isPrimed() ? 8 : 4, 0, 4, 10);
+        drawImage(guiGraphics, gui, getMovableMarker(), 0, 0);
     }
 
     @Override
@@ -165,7 +167,7 @@ public class ModuleDynamite extends ModuleBase
 
     private void explode()
     {
-        if (getCart().level.isClientSide) return;
+        if (getCart().level().isClientSide) return;
 
         if (isPlaceholder())
         {
@@ -175,7 +177,7 @@ public class ModuleDynamite extends ModuleBase
         {
             final float f = explosionSize();
             setStack(0, ItemStack.EMPTY);
-            getCart().level.explode(null, getCart().blockPosition().getX(), getCart().blockPosition().getY(), getCart().blockPosition().getZ(), f, Explosion.BlockInteraction.BREAK);
+            getCart().level().explode(null, getCart().blockPosition().getX(), getCart().blockPosition().getY(), getCart().blockPosition().getZ(), f, Level.ExplosionInteraction.TNT);
         }
     }
 
@@ -212,7 +214,7 @@ public class ModuleDynamite extends ModuleBase
 
     public void createExplosives()
     {
-        if (isPlaceholder() || getCart().level.isClientSide)
+        if (isPlaceholder() || getCart().level().isClientSide)
         {
             return;
         }

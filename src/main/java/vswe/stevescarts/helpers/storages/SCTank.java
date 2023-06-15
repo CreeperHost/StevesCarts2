@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.architectury.hooks.fluid.FluidStackHooks;
 import net.creeperhost.polylib.client.fluid.ScreenFluidRenderer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.sounds.SoundEvent;
@@ -117,7 +118,7 @@ public class SCTank extends FluidTank {
                             FluidUtil.tryFluidTransfer(containerFluidHandler, fluidSource, maxAmount, true);
                             if (player != null) {
                                 SoundEvent soundevent = simulatedTransfer.getFluid().getFluidType().getSound(simulatedTransfer, SoundActions.BUCKET_FILL);
-                                player.level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), soundevent, SoundSource.BLOCKS, 1.0F, 1.0F);
+                                player.level().playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), soundevent, SoundSource.BLOCKS, 1.0F, 1.0F);
                             }
                         } else {
                             containerFluidHandler.fill(simulatedTransfer, FluidAction.EXECUTE);
@@ -189,7 +190,7 @@ public class SCTank extends FluidTank {
 
     //I spent a couple of hours trying to find a way to make this work with ScreenFluidRenderer. But without overhauling the SC GUI system i could not find a good solution.
     @OnlyIn(Dist.CLIENT)
-    public void drawFluid(PoseStack matrixStack, AbstractContainerScreen<?> gui, final int startX, final int startY) {
+    public void drawFluid(GuiGraphics guiGraphics, AbstractContainerScreen<?> gui, final int startX, final int startY) {
         if (fluid.isEmpty()) return;
         int fluidLevel = (int) (48 * ((float) fluid.getAmount() / (float) capacity));
 
@@ -209,7 +210,7 @@ public class SCTank extends FluidTank {
             }
 
             for (int x = 0; x < 2; x++) {
-                owner.drawImage(tankid, gui, icon, startX + 2 + 16 * x, startY + 1 + 16 * y + (16 - pixels)/*, 0, (16 - pixels)*/, 16, pixels);
+                owner.drawImage(guiGraphics, tankid, gui, icon, startX + 2 + 16 * x, startY + 1 + 16 * y + (16 - pixels)/*, 0, (16 - pixels)*/, 16, pixels);
             }
         }
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1F);

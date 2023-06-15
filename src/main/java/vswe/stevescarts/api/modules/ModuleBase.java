@@ -3,7 +3,7 @@ package vswe.stevescarts.api.modules;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -464,7 +464,7 @@ public abstract class ModuleBase
      * @param gui The GUI that will draw the interface
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawForeground(PoseStack matrixStack, final GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, final GuiMinecart gui)
     {
     }
 
@@ -477,13 +477,13 @@ public abstract class ModuleBase
      * @param c    The color to be used
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawString(PoseStack matrixStack, final GuiMinecart gui, final String str, final int[] rect, final int c)
+    public void drawString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int[] rect, final int c)
     {
         if (rect.length < 4)
         {
             return;
         }
-        drawString(matrixStack, gui, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2, rect[1] + (rect[3] - Minecraft.getInstance().font.lineHeight + 3) / 2, c);
+        drawString(guiGraphics, gui, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2, rect[1] + (rect[3] - Minecraft.getInstance().font.lineHeight + 3) / 2, c);
     }
 
     /**
@@ -496,14 +496,15 @@ public abstract class ModuleBase
      * @param c   The color to be used
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawString(PoseStack matrixStack, final GuiMinecart gui, final String str, final int x, final int y, final int c)
+    public void drawString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int c)
     {
-        drawString(matrixStack, gui, str, x, y, -1, false, c);
+        guiGraphics.drawString(Minecraft.getInstance().font, str, x, y, -1);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void drawString(PoseStack matrixStack, GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c)
+    public void drawString(GuiGraphics guiGraphics, GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c)
     {
+        Minecraft mc = Minecraft.getInstance();
         final int left = gui.getGuiLeft();
         final int top = gui.getGuiTop();
         final int[] rect = {x, y, w, 8};
@@ -519,9 +520,9 @@ public abstract class ModuleBase
                 gui.pushScissor();
             }
             if (center) {
-                Minecraft.getInstance().font.draw(matrixStack, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX() + left, rect[1] + getY() + dif + top, c);
+                guiGraphics.drawString(mc.font, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX() + left, rect[1] + getY() + dif + top, c);
             } else {
-                Minecraft.getInstance().font.draw(matrixStack, str, rect[0] + getX() + left, rect[1] + getY() + dif + top, c);
+                guiGraphics.drawString(mc.font, str, rect[0] + getX() + left, rect[1] + getY() + dif + top, c);
             }
             if (!stealInterface) {
                 gui.popScissor();
@@ -530,7 +531,7 @@ public abstract class ModuleBase
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void drawStringWithShadow(PoseStack matrixStack, final GuiMinecart gui, final String str, final int x, final int y, final int c)
+    public void drawStringWithShadow(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int c)
     {
         final int j = gui.getGuiLeft();
         final int k = gui.getGuiTop();
@@ -541,7 +542,7 @@ public abstract class ModuleBase
         }
         if (rect[3] == 8)
         {
-            Minecraft.getInstance().font.drawShadow(matrixStack, str, rect[0] + getX(), rect[1] + getY(), c);
+            guiGraphics.drawString(Minecraft.getInstance().font, str, rect[0] + getX(), rect[1] + getY(), c);
         }
     }
 
@@ -556,13 +557,13 @@ public abstract class ModuleBase
      * @param c   The color to be used
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawSplitString(final GuiMinecart gui, final String str, final int x, final int y, final int w, final int c)
+    public void drawSplitString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int w, final int c)
     {
-        drawSplitString(gui, str, x, y, w, false, c);
+        drawSplitString(guiGraphics, gui, str, x, y, w, false, c);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void drawSplitString(final GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c)
+    public void drawSplitString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c)
     {
         //		final List newlines = gui.getFontRenderer().listFormattedStringToWidth(str, w);
         //		for (int i = 0; i < newlines.size(); ++i) {
@@ -572,14 +573,13 @@ public abstract class ModuleBase
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void drawItemInInterface(final GuiMinecart gui, @Nonnull ItemStack item, final int x, final int y)
+    public void drawItemInInterface(GuiGraphics guiGraphics, final GuiMinecart gui, @Nonnull ItemStack item, final int x, final int y)
     {
         final int[] rect = {x, y, 16, 16};
         handleScroll(rect);
         if (rect[3] == 16)
         {
-            final ItemRenderer renderitem = Minecraft.getInstance().getItemRenderer();
-            renderitem.renderGuiItem(item, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY());
+            guiGraphics.renderItem(item, gui.getGuiLeft(), + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY());
         }
     }
 
@@ -595,9 +595,9 @@ public abstract class ModuleBase
      * @param sizeY   The height of the image
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(PoseStack matrixStack, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY)
+    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY)
     {
-        drawImage(matrixStack, gui, targetX, targetY, srcX, srcY, sizeX, sizeY, GuiMinecart.RENDER_ROTATION.NORMAL);
+        drawImage(guiGraphics, gui, targetX, targetY, srcX, srcY, sizeX, sizeY, GuiMinecart.RENDER_ROTATION.NORMAL);
     }
 
     /**
@@ -613,9 +613,9 @@ public abstract class ModuleBase
      * @param rotation The rotation this will be drawn with
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(PoseStack matrixStack, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY, final GuiMinecart.RENDER_ROTATION rotation)
+    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY, final GuiMinecart.RENDER_ROTATION rotation)
     {
-        drawImage(matrixStack, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY, rotation);
+        drawImage(guiGraphics, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY, rotation);
     }
 
 
@@ -628,9 +628,9 @@ public abstract class ModuleBase
      * @param srcY They y coordinate in the source file
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(PoseStack matrixStack, final GuiMinecart gui, final int[] rect, final int srcX, final int srcY)
+    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final int[] rect, final int srcX, final int srcY)
     {
-        drawImage(matrixStack, gui, rect, srcX, srcY, GuiMinecart.RENDER_ROTATION.NORMAL);
+        drawImage(guiGraphics, gui, rect, srcX, srcY, GuiMinecart.RENDER_ROTATION.NORMAL);
     }
 
     /**
@@ -643,7 +643,7 @@ public abstract class ModuleBase
      * @param rotation The rotation this will be drawn with
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(PoseStack matrixStack, final GuiMinecart gui, int[] rect, final int srcX, int srcY, final GuiMinecart.RENDER_ROTATION rotation)
+    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, int[] rect, final int srcX, int srcY, final GuiMinecart.RENDER_ROTATION rotation)
     {
         if (rect.length < 4)
         {
@@ -656,7 +656,7 @@ public abstract class ModuleBase
         }
         if (rect[3] > 0)
         {
-            gui.drawTexturedModalRect(matrixStack, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), srcX, srcY, rect[2], rect[3], rotation);
+            gui.drawTexturedModalRect(guiGraphics, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), srcX, srcY, rect[2], rect[3], rotation);
         }
     }
 
@@ -667,33 +667,23 @@ public abstract class ModuleBase
      * @param icon    The Icon to draw
      * @param targetX The local x coordinate to draw it on
      * @param targetY The local y coordinate to draw it on
-     * @param srcX    The x coordinate in the source file
-     * @param srcY    The y coordinate in the source file
      * @param sizeX   The width of the image
      * @param sizeY   The height of the image
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(final GuiMinecart gui, final TextureAtlasSprite icon, final int targetX, final int targetY, final int sizeX, final int sizeY) {
-        this.drawImage(gui, icon, new int[]{targetX, targetY, sizeX, sizeY});
+    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, final int targetX, final int targetY, final int sizeX, final int sizeY) {
+        this.drawImage(guiGraphics, gui, icon, new int[]{targetX, targetY, sizeX, sizeY});
     }
 
-    /**
-     * Draw an image in the given interface, using the current texture and using the given dimentiosn.
-     *
-     * @param gui  The gui to draw it on
-     * @param rect The rectangle indicating where to draw it {targetX, targetY, sizeX, sizeY}
-     * @param srcX The x coordinate in the source file
-     * @param srcY They y coordinate in the source file
-     */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect) {
+    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect) {
         if (rect.length < 4) return;
         rect = this.cloneRect(rect);
         if (!this.doStealInterface()) {
             this.handleScroll(rect);
         }
         if (rect[3] > 0) {
-            GuiComponent.blit(new PoseStack(), gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), 0, rect[2], rect[3], icon);
+            guiGraphics.blit(gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), 0, rect[2], rect[3], icon);
         }
     }
 
@@ -886,11 +876,11 @@ public abstract class ModuleBase
      * @param gui The gui to draw on
      */
     @OnlyIn(Dist.CLIENT)
-    public final void drawButtonText(PoseStack matrixStack, GuiMinecart gui)
+    public final void drawButtonText(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         for (final ButtonBase button : buttons)
         {
-            button.drawButtonText(matrixStack, gui, this);
+            button.drawButtonText(guiGraphics, gui, this);
         }
     }
 
@@ -902,11 +892,11 @@ public abstract class ModuleBase
      * @param y   The y coordinate of the mouse
      */
     @OnlyIn(Dist.CLIENT)
-    public final void drawButtons(PoseStack matrixStack, final GuiMinecart gui, final int x, final int y)
+    public final void drawButtons(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
         for (final ButtonBase button : buttons)
         {
-            button.drawButton(matrixStack, gui, this, x, y);
+            button.drawButton(guiGraphics, gui, this, x, y);
         }
     }
 
@@ -918,13 +908,13 @@ public abstract class ModuleBase
      * @param y   The y coordinate of the mouse
      */
     @OnlyIn(Dist.CLIENT)
-    public final void drawButtonOverlays(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public final void drawButtonOverlays(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         for (final ButtonBase button : buttons)
         {
             if (button.isVisible())
             {
-                drawStringOnMouseOver(matrixStack, gui, button.toString(), x, y, button.getBounds());
+                drawStringOnMouseOver(guiGraphics, gui, button.toString(), x, y, button.getBounds());
             }
         }
     }
@@ -969,12 +959,12 @@ public abstract class ModuleBase
      * @param y   The y coordinate of the mouse
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawBackground(PoseStack matrixStack, final GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void drawBackgroundItems(final GuiMinecart gui, final int x, final int y)
+    public void drawBackgroundItems(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
     }
 
@@ -1037,7 +1027,7 @@ public abstract class ModuleBase
      * @param x   The x coordinate of the mouse
      * @param y   The y coordiante of the mouse
      */
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
     }
 
@@ -1337,13 +1327,6 @@ public abstract class ModuleBase
      */
     protected final <T> void registerDw(EntityDataAccessor<T> key, T value)
     {
-        for (SynchedEntityData.DataItem<?> entry : getCart().getDataManager().getAll())
-        {
-            if (entry.getAccessor() == key)
-            {
-                return;
-            }
-        }
         getCart().getDataManager().define(key, value);
     }
 
@@ -1551,9 +1534,9 @@ public abstract class ModuleBase
      * @param h   The height of the rectangle
      */
     @OnlyIn(Dist.CLIENT)
-    public final void drawStringOnMouseOver(PoseStack matrixStack, GuiMinecart gui, final String str, final int x, final int y, final int x1, final int y1, final int w, final int h)
+    public final void drawStringOnMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final String str, final int x, final int y, final int x1, final int y1, final int w, final int h)
     {
-        drawStringOnMouseOver(matrixStack, gui, str, x, y, new int[]{x1, y1, w, h});
+        drawStringOnMouseOver(guiGraphics, gui, str, x, y, new int[]{x1, y1, w, h});
     }
 
     /**
@@ -1566,7 +1549,7 @@ public abstract class ModuleBase
      * @param rect The rectangle that the mouse has to be in, defin as {x,y,width,height}
      */
     @OnlyIn(Dist.CLIENT)
-    public final void drawStringOnMouseOver(PoseStack matrixStack, final GuiMinecart gui, final String str, int x, int y, final int[] rect)
+    public final void drawStringOnMouseOver(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, int x, int y, final int[] rect)
     {
         if (!inRect(x, y, rect))
         {
@@ -1574,7 +1557,7 @@ public abstract class ModuleBase
         }
         x += getX();
         y += getY();
-        gui.drawMouseOver(matrixStack, str, x, y);
+        gui.drawMouseOver(guiGraphics, str, x, y);
     }
 
     /**
@@ -1632,7 +1615,7 @@ public abstract class ModuleBase
      * @param minecraft The mincraft instance to use with the rendering
      */
     @OnlyIn(Dist.CLIENT)
-    public void renderOverlay(PoseStack matrixStack, Minecraft minecraft)
+    public void renderOverlay(PoseStack poseStack, Minecraft minecraft)
     {
     }
 
@@ -1695,11 +1678,11 @@ public abstract class ModuleBase
      */
     protected boolean countsAsAir(BlockPos pos)
     {
-        if (getCart().level.getBlockState(pos).isAir())
+        if (getCart().level().getBlockState(pos).isAir())
         {
             return true;
         }
-        Block b = getCart().level.getBlockState(pos).getBlock();
+        Block b = getCart().level().getBlockState(pos).getBlock();
         return b instanceof SnowLayerBlock || b instanceof FlowerBlock || b instanceof VineBlock;
     }
 
@@ -1763,7 +1746,7 @@ public abstract class ModuleBase
 
     protected FakePlayer getFakePlayer()
     {
-        return FakePlayerFactory.getMinecraft((ServerLevel) getCart().level);
+        return FakePlayerFactory.getMinecraft((ServerLevel) getCart().level());
     }
 
     public boolean disableStandardKeyFunctionality()

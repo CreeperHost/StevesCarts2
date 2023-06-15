@@ -1,6 +1,8 @@
 package vswe.stevescarts.client.guis;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -30,12 +32,11 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack poseStack, float p_230450_2_, int mouseX, int mouseY)
+    protected void renderBg(GuiGraphics guiGraphics, float p_230450_2_, int mouseX, int mouseY)
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
-        ResourceHelper.bindResource(GuiActivator.texture);
-        blit(poseStack, j, k, 0, 0, imageWidth, imageHeight);
+        guiGraphics.blit(GuiActivator.texture, j, k, 0, 0, imageWidth, imageHeight);
         mouseX -= getGuiLeft();
         mouseY -= getGuiTop();
         for (int i = 0; i < activator.getOptions().size(); ++i)
@@ -47,13 +48,13 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
             {
                 srcX = 16;
             }
-            blit(poseStack, j + box[0], k + box[1], srcX, imageHeight, box[2], box[3]);
-            blit(poseStack, j + box[0] + 1, k + box[1] + 1, (box[2] - 2) * option.getOption(), imageHeight + box[3], box[2] - 2, box[3] - 2);
+            guiGraphics.blit(GuiActivator.texture, j + box[0], k + box[1], srcX, imageHeight, box[2], box[3]);
+            guiGraphics.blit(GuiActivator.texture, j + box[0] + 1, k + box[1] + 1, (box[2] - 2) * option.getOption(), imageHeight + box[3], box[2] - 2, box[3] - 2);
         }
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack poseStack, int p_230451_2_, int p_230451_3_)
+    protected void renderLabels(GuiGraphics guiGraphics, int p_230451_2_, int p_230451_3_)
     {
     }
 
@@ -63,41 +64,41 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
     }
 
     @Override
-    public void render(@NotNull PoseStack poseStack, int mouseX, int mouseY, float p_230430_4_)
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float p_230430_4_)
     {
-        this.renderBackground(poseStack);
-        super.render(poseStack, mouseX, mouseY, p_230430_4_);
-        renderTooltip(poseStack, mouseX, mouseY);
+        this.renderBackground(guiGraphics);
+        super.render(guiGraphics, mouseX, mouseY, p_230430_4_);
+        renderTooltip(guiGraphics, mouseX, mouseY);
         mouseX -= getGuiLeft();
         mouseY -= getGuiTop();
-        font.draw(poseStack, Localization.GUI.TOGGLER.TITLE.translate(), getGuiLeft() + 8, getGuiTop() + 6, 4210752);
+        guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.TOGGLER.TITLE.translate(), getGuiLeft() + 8, getGuiTop() + 6, 4210752);
         for (int i = 0; i < activator.getOptions().size(); ++i)
         {
             final ActivatorOption option = activator.getOptions().get(i);
             final int[] box = getBoxRect(i);
-            font.draw(poseStack, option.getName(), getGuiLeft() + box[0] + box[2] + 6, getGuiTop() + box[1] + 4, 4210752);
+            guiGraphics.drawString(Minecraft.getInstance().font, option.getName(), getGuiLeft() + box[0] + box[2] + 6, getGuiTop() + box[1] + 4, 4210752);
         }
         for (int i = 0; i < activator.getOptions().size(); ++i)
         {
             final ActivatorOption option = activator.getOptions().get(i);
             final int[] box = getBoxRect(i);
-            drawMouseMover(poseStack, option.getInfo(), mouseX, mouseY, box);
+            drawMouseMover(guiGraphics, option.getInfo(), mouseX, mouseY, box);
         }
     }
 
-    private void drawMouseMover(PoseStack matrixStack, String str, final int x, final int y, final int[] rect)
+    private void drawMouseMover(GuiGraphics guiGraphics, String str, final int x, final int y, final int[] rect)
     {
         if (inRect(x, y, rect))
         {
-            drawMouseOver(matrixStack, str, x, y, rect);
+            drawMouseOver(guiGraphics, str, x, y, rect);
         }
     }
 
-    public void drawMouseOver(PoseStack matrixStack, final String str, final int x, final int y, final int[] rect)
+    public void drawMouseOver(GuiGraphics guiGraphics, final String str, final int x, final int y, final int[] rect)
     {
         if (inRect(x, y, rect))
         {
-            renderTooltip(matrixStack, Component.literal(str), getGuiLeft() + x, getGuiTop() + y);
+            guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.literal(str), getGuiLeft() + x, getGuiTop() + y);
         }
     }
 

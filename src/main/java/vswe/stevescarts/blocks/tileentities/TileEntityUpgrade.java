@@ -1,7 +1,7 @@
 package vswe.stevescarts.blocks.tileentities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -329,9 +329,9 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawImage(int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height)
+    public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height)
     {
-        GuiComponent.blit(new PoseStack(), gui.getGuiLeft() + targetX, gui.getGuiTop() + targetY, 0, width, height, sprite);
+        guiGraphics.blit(gui.getGuiLeft() + targetX, gui.getGuiTop() + targetY, 0, width, height, sprite);
     }
 
     public void setCreativeBroken()

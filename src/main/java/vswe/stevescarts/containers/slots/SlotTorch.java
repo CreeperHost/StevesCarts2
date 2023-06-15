@@ -16,6 +16,6 @@ public class SlotTorch extends SlotBase
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return itemstack.sameItem(new ItemStack(Items.TORCH));
+        return itemstack.is(Items.TORCH);
     }
 }

@@ -56,7 +56,7 @@ public class PacketMinecartButton {
         }
 
         private static void handleServerSide(PacketMinecartButton msg, Supplier<NetworkEvent.Context> ctx) {
-            Level level = ctx.get().getSender().getLevel();
+            Level level = ctx.get().getSender().level();
             Player player = ctx.get().getSender();
             handle(msg, level, player);
         }

@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
@@ -59,9 +60,9 @@ public class ModuleFirework extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
@@ -90,7 +91,7 @@ public class ModuleFirework extends ModuleBase
 
     public void fire()
     {
-        if (getCart().level.isClientSide)
+        if (getCart().level().isClientSide)
         {
             return;
         }
@@ -338,8 +339,8 @@ public class ModuleFirework extends ModuleBase
 
     private void launchFirework(@Nonnull ItemStack firework)
     {
-        final FireworkRocketEntity rocket = new FireworkRocketEntity(getCart().level, getCart().blockPosition().getX(), getCart().blockPosition().getY() + 1.0, getCart().blockPosition().getZ(), firework);
+        final FireworkRocketEntity rocket = new FireworkRocketEntity(getCart().level(), getCart().blockPosition().getX(), getCart().blockPosition().getY() + 1.0, getCart().blockPosition().getZ(), firework);
 
-        getCart().level.addFreshEntity(rocket);
+        getCart().level().addFreshEntity(rocket);
     }
 }

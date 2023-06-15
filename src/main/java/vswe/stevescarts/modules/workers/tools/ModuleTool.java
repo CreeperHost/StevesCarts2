@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.workers.tools;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -62,24 +63,24 @@ public abstract class ModuleTool extends ModuleWorker
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/tool.png");
-        drawBox(matrixStack, gui, 0, 0, 1.0f);
-        drawBox(matrixStack, gui, 0, 8, useDurability() ? (((float) getCurrentDurability()) / ((float) getMaxDurability())) : 1.0f);
-        drawBox(matrixStack, gui, 0, 16, ((float) remainingRepairUnits) / ((float) maximumRepairUnits));
+        drawBox(guiGraphics, gui, 0, 0, 1.0f);
+        drawBox(guiGraphics, gui, 0, 8, useDurability() ? (((float) getCurrentDurability()) / ((float) getMaxDurability())) : 1.0f);
+        drawBox(guiGraphics, gui, 0, 16, ((float) remainingRepairUnits) / ((float) maximumRepairUnits));
         if (inRect(x, y, durabilityRect))
         {
-            drawBox(matrixStack, gui, 0, 24, 1.0f);
+            drawBox(guiGraphics, gui, 0, 24, 1.0f);
         }
     }
 
-    private void drawBox(PoseStack matrixStack, GuiMinecart gui, final int u, final int v, final float mult)
+    private void drawBox(GuiGraphics guiGraphics, GuiMinecart gui, final int u, final int v, final float mult)
     {
         final int w = (int) (durabilityRect[2] * mult);
         if (w > 0)
         {
-            drawImage(matrixStack, gui, durabilityRect[0], durabilityRect[1], u, v, w, durabilityRect[3]);
+            drawImage(guiGraphics, gui, durabilityRect[0], durabilityRect[1], u, v, w, durabilityRect[3]);
         }
     }
 
@@ -120,7 +121,7 @@ public abstract class ModuleTool extends ModuleWorker
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         String str;
         if (useDurability())
@@ -159,7 +160,7 @@ public abstract class ModuleTool extends ModuleWorker
                 str = str + " " + Localization.MODULES.TOOLS.UNBREAKABLE_REPAIR.translate();
             }
         }
-        drawStringOnMouseOver(matrixStack, gui, str, x, y, durabilityRect);
+        drawStringOnMouseOver(guiGraphics, gui, str, x, y, durabilityRect);
     }
 
     @Override
@@ -179,12 +180,12 @@ public abstract class ModuleTool extends ModuleWorker
     public void update()
     {
         super.update();
-        if (initialDurability != -1 && !getCart().level.isClientSide) {
+        if (initialDurability != -1 && !getCart().level().isClientSide) {
             setDurability(initialDurability);
             initialDurability = -1;
         }
 
-        if (!getCart().level.isClientSide && useDurability())
+        if (!getCart().level().isClientSide && useDurability())
         {
             if (isActuallyRepairing())
             {

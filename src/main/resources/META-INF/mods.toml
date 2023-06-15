@@ -15,20 +15,20 @@ description='''
 [[dependencies.stevescarts]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[41,)" #mandatory
+    versionRange="[46,)" #mandatory
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.stevescarts]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.2, )"
+    versionRange="[1.20, )"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.stevescarts]]
     modId="polylib"
     mandatory=true
-    versionRange = "[1900.0.2,)"
+    versionRange = "[1200.0.2,)"
     ordering="NONE"
     side="BOTH"

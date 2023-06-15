@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
@@ -36,7 +35,7 @@ public class BlockRailAdvDetector extends BaseRailBlock
 
     public BlockRailAdvDetector()
     {
-        this(Properties.of(Material.DECORATION).noCollission().strength(0.7F).sound(SoundType.METAL));
+        this(Properties.of().noCollission().strength(0.7F).sound(SoundType.METAL));
     }
 
     private BlockRailAdvDetector(Properties builder)

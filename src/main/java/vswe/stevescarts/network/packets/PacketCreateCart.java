@@ -39,7 +39,7 @@ public class PacketCreateCart
         {
             ctx.get().enqueueWork(() ->
             {
-                ServerLevel world = ctx.get().getSender().getLevel();
+                ServerLevel world = ctx.get().getSender().serverLevel();
                 if (msg.blockPos != null && world.getBlockEntity(msg.blockPos) != null)
                 {
                     BlockPos blockPos = msg.blockPos;

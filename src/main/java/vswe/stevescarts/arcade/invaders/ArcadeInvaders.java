@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.invaders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.api.distmarker.Dist;
@@ -228,50 +229,50 @@ public class ArcadeInvaders extends ArcadeGame
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource(ArcadeInvaders.texture);
         for (int i = 0; i < 27; ++i)
         {
-            getModule().drawImage(matrixStack, gui, 5 + i * 16, 150, 16, 32, 16, 16);
+            getModule().drawImage(guiGraphics, gui, 5 + i * 16, 150, 16, 32, 16, 16);
         }
         for (int i = 0; i < 5; ++i)
         {
-            getModule().drawImage(matrixStack, gui, 3 + i * 16, 190, 16, 32, 16, 16);
+            getModule().drawImage(guiGraphics, gui, 3 + i * 16, 190, 16, 32, 16, 16);
         }
         for (final Unit invader : invaders)
         {
-            invader.draw(matrixStack, gui);
+            invader.draw(guiGraphics, gui);
         }
         if (player != null)
         {
-            player.draw(matrixStack, gui);
+            player.draw(guiGraphics, gui);
         }
         for (final Unit player : lives)
         {
-            player.draw(matrixStack, gui);
+            player.draw(guiGraphics, gui);
         }
         for (final Unit projectile : projectiles)
         {
-            projectile.draw(matrixStack, gui);
+            projectile.draw(guiGraphics, gui);
         }
         for (final Unit building : buildings)
         {
-            building.draw(matrixStack, gui);
+            building.draw(guiGraphics, gui);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        getModule().drawString(matrixStack, gui, Localization.ARCADE.EXTRA_LIVES.translate() + ":", 10, 180, 4210752);
-        getModule().drawString(matrixStack, gui, Localization.ARCADE.HIGH_SCORE.translate(String.valueOf(highscore)), 10, 210, 4210752);
-        getModule().drawString(matrixStack, gui, Localization.ARCADE.SCORE.translate(String.valueOf(score)), 10, 220, 4210752);
-        getModule().drawString(matrixStack, gui, "W - " + Localization.ARCADE.INSTRUCTION_SHOOT.translate(), 330, 180, 4210752);
-        getModule().drawString(matrixStack, gui, "A - " + Localization.ARCADE.INSTRUCTION_LEFT.translate(), 330, 190, 4210752);
-        getModule().drawString(matrixStack, gui, "D - " + Localization.ARCADE.INSTRUCTION_RIGHT.translate(), 330, 200, 4210752);
-        getModule().drawString(matrixStack, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 330, 220, 4210752);
+        getModule().drawString(guiGraphics, gui, Localization.ARCADE.EXTRA_LIVES.translate() + ":", 10, 180, 4210752);
+        getModule().drawString(guiGraphics, gui, Localization.ARCADE.HIGH_SCORE.translate(String.valueOf(highscore)), 10, 210, 4210752);
+        getModule().drawString(guiGraphics, gui, Localization.ARCADE.SCORE.translate(String.valueOf(score)), 10, 220, 4210752);
+        getModule().drawString(guiGraphics, gui, "W - " + Localization.ARCADE.INSTRUCTION_SHOOT.translate(), 330, 180, 4210752);
+        getModule().drawString(guiGraphics, gui, "A - " + Localization.ARCADE.INSTRUCTION_LEFT.translate(), 330, 190, 4210752);
+        getModule().drawString(guiGraphics, gui, "D - " + Localization.ARCADE.INSTRUCTION_RIGHT.translate(), 330, 200, 4210752);
+        getModule().drawString(guiGraphics, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 330, 220, 4210752);
     }
 
     @OnlyIn(Dist.CLIENT)

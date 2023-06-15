@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.workers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.creeperhost.polylib.helpers.LevelHelper;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -47,8 +48,8 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui) {
-        drawString(matrixStack, gui, Localization.MODULES.ATTACHMENTS.RAILER.translate(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
+        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.RAILER.translate(), 8, 6, 4210752);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
                 //Check if we failed to place because there was already a valid track there.
                 boolean canContinue = false;
                 for (BlockPos pos : positions) {
-                    if (RailBlock.isRail(getCart().level, pos)) {
+                    if (RailBlock.isRail(getCart().level(), pos)) {
                         canContinue = true;
                         break;
                     }
@@ -127,7 +128,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
 
             if (doPlace) {
                 Block block = Block.byItem(stack.getItem());
-                boolean placed = getCart().level.setBlock(pos, block.defaultBlockState(), 3);
+                boolean placed = getCart().level().setBlock(pos, block.defaultBlockState(), 3);
                 if (!placed) return false;
                 if (!getCart().hasCreativeSupplies()) {
                     stack.shrink(1);
@@ -159,7 +160,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
     }
 
     private void calculateRails() {
-        if (getCart().level.isClientSide) {
+        if (getCart().level().isClientSide) {
             return;
         }
         byte valid = 0;

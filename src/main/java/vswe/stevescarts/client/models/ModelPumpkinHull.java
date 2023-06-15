@@ -23,7 +23,7 @@ public class ModelPumpkinHull extends ModelHull
 
     private boolean isActive(final ModuleBase module)
     {
-        final long time = module.getCart().level.getLevelData().getGameTime() % 24000L;
+        final long time = module.getCart().level().getLevelData().getGameTime() % 24000L;
         return time >= 12000L && time <= 18000L;
     }
 }

@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Cow;
@@ -37,7 +38,7 @@ public class ModuleMilker extends ModuleBase
         super.update();
         if (cooldown <= 0)
         {
-            if (!getCart().level.isClientSide && getCart().hasFuel())
+            if (!getCart().level().isClientSide && getCart().hasFuel())
             {
                 generateMilk();
                 depositeMilk();
@@ -120,9 +121,9 @@ public class ModuleMilker extends ModuleBase
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override

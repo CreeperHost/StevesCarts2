@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
@@ -82,9 +83,9 @@ public class ModuleDrillIntelligence extends ModuleAddon
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 0x404040);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 0x404040);
     }
 
     private int getDrillWidth()
@@ -127,7 +128,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/intelligence.png");
         final int w = getDrillWidth();
@@ -141,22 +142,22 @@ public class ModuleDrillIntelligence extends ModuleAddon
 
                 int srcX = (!hasHeightController || (j != maxY && j != h - 1)) ? 0 : 8;
                 int srcY = 0;
-                drawImage(matrixStack, gui, rect, srcX, srcY);
+                drawImage(guiGraphics, gui, rect, srcX, srcY);
                 if (isRestricted(j * w + i))
                 {
                     srcX = 16;
                     srcY = 8;
-                    drawImage(matrixStack, gui, rect, srcX, srcY);
+                    drawImage(guiGraphics, gui, rect, srcX, srcY);
                 }
                 else if (isActive(j * w + i))
                 {
                     srcX = (isLocked(j * w + i) ? 8 : 0);
                     srcY = 8;
-                    drawImage(matrixStack, gui, rect, srcX, srcY);
+                    drawImage(guiGraphics, gui, rect, srcX, srcY);
                 }
                 srcX = (inRect(x, y, rect) ? 8 : 0);
                 srcY = 16;
-                drawImage(matrixStack, gui, rect, srcX, srcY);
+                drawImage(guiGraphics, gui, rect, srcX, srcY);
             }
         }
     }
@@ -219,7 +220,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         final int w = getDrillWidth();
         final int h = getDrillHeight();
@@ -229,7 +230,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
             {
                 final int[] rect = getSettingRect(i, j);
                 final String str = isRestricted(j * w + i) ? Localization.MODULES.ADDONS.RESTRICTED_INTELLIGENCE.translate() : isLocked(j * w + i) ? Localization.MODULES.ADDONS.LOCKED.translate() : (Localization.MODULES.ADDONS.CHANGE_INTELLIGENCE.translate() + "\n" + Localization.MODULES.ADDONS.CURRENT_INTELLIGENCE.translate(isActive(j * w + i) ? "0" : "1"));
-                drawStringOnMouseOver(matrixStack, gui, str, x, y, rect);
+                drawStringOnMouseOver(guiGraphics, gui, str, x, y, rect);
             }
         }
     }

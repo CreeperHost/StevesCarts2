@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -23,7 +24,7 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         //TODO
         //		final List lines = Minecraft.getInstance().font.width(command, textbox[2] - 4);
@@ -46,10 +47,10 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/command.png");
-        drawImage(matrixStack, gui, textbox, 0, 0);
+        drawImage(guiGraphics, gui, textbox, 0, 0);
     }
 
     public void keyPress(final char character, final int extraInformation)
@@ -94,15 +95,16 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource
 
     private void executeCommand()
     {
-        if (!getCart().level.isClientSide)
+        if (!getCart().level().isClientSide)
         {
+            //TODO
         }
     }
 
     @Override
     public void moveMinecartOnRail(BlockPos pos)
     {
-        if (getCart().level.getBlockState(pos).getBlock() == Blocks.DETECTOR_RAIL)
+        if (getCart().level().getBlockState(pos).getBlock() == Blocks.DETECTOR_RAIL)
         {
             executeCommand();
         }

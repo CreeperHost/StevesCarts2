@@ -24,7 +24,7 @@ public class ModulePotion extends ModuleProjectile
     @Override
     public Entity createProjectile(final Entity target, @Nonnull ItemStack item)
     {
-        ThrownPotion potionEntity = new ThrownPotion(getCart().level, 0, 0, 0);
+        ThrownPotion potionEntity = new ThrownPotion(getCart().level(), 0, 0, 0);
         potionEntity.setItem(item);
         return potionEntity;
     }

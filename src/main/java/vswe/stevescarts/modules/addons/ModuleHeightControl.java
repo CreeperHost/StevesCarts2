@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -59,9 +60,9 @@ public class ModuleHeightControl extends ModuleAddon
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
         final String s = String.valueOf(getYTarget());
         int x = levelNumberBoxX + 6;
         int color = 16777215;
@@ -76,17 +77,17 @@ public class ModuleHeightControl extends ModuleAddon
         {
             x += 3;
         }
-        drawString(matrixStack, gui, s, x, levelNumberBoxY + 5, color);
+        drawString(guiGraphics, gui, s, x, levelNumberBoxY + 5, color);
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, int x, int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, int x, int y)
     {
         ResourceHelper.bindResource("/gui/heightcontrol.png");
-        drawImage(matrixStack, gui, levelNumberBoxX, levelNumberBoxY, 4, 36, 21, 15);
-        drawImage(matrixStack, gui, arrowUp, 4, 12);
-        drawImage(matrixStack, gui, arrowMiddle, 4, 21);
-        drawImage(matrixStack, gui, arrowDown, 4, 27);
+        drawImage(guiGraphics, gui, levelNumberBoxX, levelNumberBoxY, 4, 36, 21, 15);
+        drawImage(guiGraphics, gui, arrowUp, 4, 12);
+        drawImage(guiGraphics, gui, arrowMiddle, 4, 21);
+        drawImage(guiGraphics, gui, arrowDown, 4, 27);
         for (int i = 0; i < HeightControlOre.ores.size(); ++i)
         {
             final HeightControlOre ore = HeightControlOre.ores.get(i);
@@ -111,30 +112,30 @@ public class ModuleHeightControl extends ModuleAddon
                         srcY += 4;
                     }
                 }
-                drawImage(matrixStack, gui, oreMapX + i * 4, oreMapY + j * 4, srcX, srcY, 4, 4);
+                drawImage(guiGraphics, gui, oreMapX + i * 4, oreMapY + j * 4, srcX, srcY, 4, 4);
             }
         }
         if (getYTarget() != (int) getCart().y())
         {
-            drawMarker(matrixStack, gui, 5, false);
+            drawMarker(guiGraphics, gui, 5, false);
         }
         int pos = getYTarget() + 5 - (int) getCart().y();
         if (pos >= 0 && pos < 11)
         {
-            drawMarker(matrixStack, gui, pos, true);
+            drawMarker(guiGraphics, gui, pos, true);
         }
     }
 
-    private void drawMarker(PoseStack matrixStack, GuiMinecart gui, int pos, boolean isTargetLevel)
+    private void drawMarker(GuiGraphics guiGraphics, GuiMinecart gui, int pos, boolean isTargetLevel)
     {
         int srcX = 4;
         int srcY = isTargetLevel ? 6 : 0;
-        drawImage(matrixStack, gui, oreMapX - 1, oreMapY + pos * 4 - 1, srcX, srcY, 1, 6);
+        drawImage(guiGraphics, gui, oreMapX - 1, oreMapY + pos * 4 - 1, srcX, srcY, 1, 6);
         for (int i = 0; i < HeightControlOre.ores.size(); ++i)
         {
-            drawImage(matrixStack, gui, oreMapX + i * 4, oreMapY + pos * 4 - 1, srcX + 1, srcY, 4, 6);
+            drawImage(guiGraphics, gui, oreMapX + i * 4, oreMapY + pos * 4 - 1, srcX + 1, srcY, 4, 6);
         }
-        drawImage(matrixStack, gui, oreMapX + HeightControlOre.ores.size() * 4, oreMapY + pos * 4 - 1, srcX + 5, srcY, 1, 6);
+        drawImage(guiGraphics, gui, oreMapX + HeightControlOre.ores.size() * 4, oreMapY + pos * 4 - 1, srcX + 5, srcY, 1, 6);
     }
 
     @Override
@@ -198,8 +199,8 @@ public class ModuleHeightControl extends ModuleAddon
                 }
                 int targetY = getYTarget();
                 targetY += mult * dif;
-                int min = getCart().level.getMinBuildHeight();
-                int max = getCart().level.getMaxBuildHeight();
+                int min = getCart().level().getMinBuildHeight();
+                int max = getCart().level().getMaxBuildHeight();
                 if (targetY < min)
                 {
                     targetY = min;

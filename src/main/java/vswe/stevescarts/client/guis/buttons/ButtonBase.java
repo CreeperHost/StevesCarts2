@@ -1,6 +1,7 @@
 package vswe.stevescarts.client.guis.buttons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -110,15 +111,15 @@ public abstract class ButtonBase
         return 60 + texture() / 21 * 12;
     }
 
-    public void drawButtonText(PoseStack matrixStack, final GuiMinecart gui, final ModuleBase module)
+    public void drawButtonText(GuiGraphics guiGraphics, final GuiMinecart gui, final ModuleBase module)
     {
         if (isVisible() && hasText())
         {
-            module.drawString(matrixStack, gui, toString(), X() + 8, Y() + 7, 16777215);
+            module.drawString(guiGraphics, gui, toString(), X() + 8, Y() + 7, 16777215);
         }
     }
 
-    public void drawButton(PoseStack matrixStack, final GuiMinecart gui, final ModuleBase module, final int x, final int y)
+    public void drawButton(GuiGraphics guiGraphics, final GuiMinecart gui, final ModuleBase module, final int x, final int y)
     {
         final boolean visibility = isVisible();
         if (visibility != lastVisibility)
@@ -141,14 +142,14 @@ public abstract class ButtonBase
         {
             sourceY += 20;
         }
-        module.drawImage(matrixStack, gui, getBounds(), sourceX, sourceY);
+        module.drawImage(guiGraphics, gui, getBounds(), sourceX, sourceY);
         if (useTexture())
         {
-            module.drawImage(matrixStack, gui, X() + 4, Y() + 4, textureX(), textureY(), 12, 12);
+            module.drawImage(guiGraphics, gui, X() + 4, Y() + 4, textureX(), textureY(), 12, 12);
         }
         if (hasBorder())
         {
-            module.drawImage(matrixStack, gui, getBounds(), borderID() * 20, 0);
+            module.drawImage(guiGraphics, gui, getBounds(), borderID() * 20, 0);
         }
     }
 

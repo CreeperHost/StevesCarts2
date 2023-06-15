@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -85,26 +86,26 @@ public class ModuleShooterAdv extends ModuleShooter
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, Localization.MODULES.ATTACHMENTS.SHOOTER.translate(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.SHOOTER.translate(), 8, 6, 4210752);
         for (int i = 0; i < detectors.size(); ++i)
         {
             final int[] box = getSelectionBox(i);
-            drawString(matrixStack, gui, detectors.get(i).getName(), box[0] + 12, box[1], 4210752);
+            drawString(guiGraphics, gui, detectors.get(i).getName(), box[0] + 12, box[1], 4210752);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/mobdetector.png");
         for (int i = 0; i < detectors.size(); ++i)
         {
             final int srcX = isOptionActive(i) ? 0 : 8;
             final int srcY = inRect(x, y, getSelectionBox(i)) ? 8 : 0;
-            drawImage(matrixStack, gui, getSelectionBox(i), srcX, srcY);
+            drawImage(guiGraphics, gui, getSelectionBox(i), srcX, srcY);
         }
     }
 
@@ -151,7 +152,7 @@ public class ModuleShooterAdv extends ModuleShooter
             if (hasProjectileItem()) {
                 shootAtTarget(target);
             } else {
-                getCart().level.levelEvent(1001, getCart().blockPosition(), 0);
+                getCart().level().levelEvent(1001, getCart().blockPosition(), 0);
             }
         }
     }
@@ -178,13 +179,13 @@ public class ModuleShooterAdv extends ModuleShooter
             setHeading(projectile, disX, disY + (double) disD5, disZ, 1.6f, 0.0f);
         }
         BlockPos pos = getCart().blockPosition();
-        getCart().level.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ARROW_HIT, SoundSource.NEUTRAL, 1.0f, 1.0f / (getCart().random.nextFloat() * 0.4f + 0.8f));
+        getCart().level().playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ARROW_HIT, SoundSource.NEUTRAL, 1.0f, 1.0f / (getCart().random.nextFloat() * 0.4f + 0.8f));
 
         setProjectileDamage(projectile);
         setProjectileOnFire(projectile);
         setProjectileKnockback(projectile);
 
-        getCart().level.addFreshEntity(projectile);
+        getCart().level().addFreshEntity(projectile);
 
         damageEnchant();
     }
@@ -195,7 +196,7 @@ public class ModuleShooterAdv extends ModuleShooter
     }
 
     private Entity getTarget() {
-        List<LivingEntity> entities = getCart().level.getEntitiesOfClass(LivingEntity.class, getCart().getBoundingBox().inflate(getTargetDistance(), 4.0, getTargetDistance()));
+        List<LivingEntity> entities = getCart().level().getEntitiesOfClass(LivingEntity.class, getCart().getBoundingBox().inflate(getTargetDistance(), 4.0, getTargetDistance()));
         entities.sort(sorter);
 
         for (LivingEntity target : entities) {
@@ -215,7 +216,7 @@ public class ModuleShooterAdv extends ModuleShooter
         Entity cart = getCart();
         Vec3 vec3 = new Vec3(cart.getX(), cart.getEyeY(), cart.getZ());
         Vec3 vec31 = new Vec3(target.getX(), target.getEyeY(), target.getZ());
-        return cart.level.clip(new ClipContext(vec3, vec31, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, cart)).getType() == HitResult.Type.MISS;
+        return cart.level().clip(new ClipContext(vec3, vec31, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, cart)).getType() == HitResult.Type.MISS;
     }
 
     @Override

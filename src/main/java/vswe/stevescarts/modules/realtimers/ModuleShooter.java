@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -96,17 +97,17 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, Localization.MODULES.ATTACHMENTS.SHOOTER.translate(), 8, 6, 0x404040);
+        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.SHOOTER.translate(), 8, 6, 0x404040);
         final int delay = AInterval[getInterval()];
         final double freq = 20.0 / (delay + 1);
         String s = String.valueOf((int) (freq * 1000.0) / 1000.0);
-        drawString(matrixStack, gui, Localization.MODULES.ATTACHMENTS.FREQUENCY.translate() + ":", intervalDragArea[0] + intervalDragArea[2] + 5, 15, 0x404040);
-        drawString(matrixStack, gui, s, intervalDragArea[0] + intervalDragArea[2] + 5, 23, 0x404040);
+        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.FREQUENCY.translate() + ":", intervalDragArea[0] + intervalDragArea[2] + 5, 15, 0x404040);
+        drawString(guiGraphics, gui, s, intervalDragArea[0] + intervalDragArea[2] + 5, 23, 0x404040);
         s = delay / 20.0 + Localization.MODULES.ATTACHMENTS.SECONDS.translate(new String[0]);
-        drawString(matrixStack, gui, Localization.MODULES.ATTACHMENTS.DELAY.translate() + ":", intervalDragArea[0] + intervalDragArea[2] + 5, 35, 0x404040);
-        drawString(matrixStack, gui, s, intervalDragArea[0] + intervalDragArea[2] + 5, 43, 0x404040);
+        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.DELAY.translate() + ":", intervalDragArea[0] + intervalDragArea[2] + 5, 35, 0x404040);
+        drawString(guiGraphics, gui, s, intervalDragArea[0] + intervalDragArea[2] + 5, 43, 0x404040);
     }
 
     @Override
@@ -143,10 +144,10 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/shooter.png");
-        drawImage(matrixStack, gui, pipeSelectionX + 9, pipeSelectionY + 9 - 1, 0, 104, 8, 9);
+        drawImage(guiGraphics, gui, pipeSelectionX + 9, pipeSelectionY + 9 - 1, 0, 104, 8, 9);
         for (int i = 0; i < pipes.size(); ++i)
         {
             final int pipe = pipes.get(i);
@@ -164,23 +165,23 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
             {
                 srcY += 26;
             }
-            drawImage(matrixStack, gui, getRectForPipe(pipe), srcX, srcY);
+            drawImage(guiGraphics, gui, getRectForPipe(pipe), srcX, srcY);
         }
-        drawImage(matrixStack, gui, intervalSelection, 42, 52);
+        drawImage(guiGraphics, gui, intervalSelection, 42, 52);
         final int size = (int) (getInterval() / AInterval.length * 4.0f);
         int targetX = intervalSelectionX + 7;
         final int targetY = intervalSelectionY + getInterval() * 2;
         int srcX2 = 0;
         final int srcY2 = 52 + size * 13;
-        drawImage(matrixStack, gui, targetX, targetY, srcX2, srcY2, 25, 13);
+        drawImage(guiGraphics, gui, targetX, targetY, srcX2, srcY2, 25, 13);
         srcX2 += 25;
         targetX += 7;
-        drawImage(matrixStack, gui, targetX, targetY + 1, srcX2, srcY2 + 1, 1, 11);
-        drawImage(matrixStack, gui, targetX + 1, targetY + 2, srcX2 + 1, srcY2 + 2, 1, 9);
-        drawImage(matrixStack, gui, targetX + 1, targetY + 1, srcX2 + 1, srcY2 + 1, Math.min(getCooldownState(), 15), 2);
-        drawImage(matrixStack, gui, targetX + 15, targetY + 1, srcX2 + 15, srcY2 + 1, 2, Math.max(Math.min(getCooldownState(), 25) - 15, 0));
+        drawImage(guiGraphics, gui, targetX, targetY + 1, srcX2, srcY2 + 1, 1, 11);
+        drawImage(guiGraphics, gui, targetX + 1, targetY + 2, srcX2 + 1, srcY2 + 2, 1, 9);
+        drawImage(guiGraphics, gui, targetX + 1, targetY + 1, srcX2 + 1, srcY2 + 1, Math.min(getCooldownState(), 15), 2);
+        drawImage(guiGraphics, gui, targetX + 15, targetY + 1, srcX2 + 15, srcY2 + 1, 2, Math.max(Math.min(getCooldownState(), 25) - 15, 0));
         final int len = Math.max(Math.min(getCooldownState(), 41) - 25, 0);
-        drawImage(matrixStack, gui, targetX + 1 + (16 - len), targetY + 10, srcX2 + 1 + (16 - len), srcY2 + 10, len, 2);
+        drawImage(guiGraphics, gui, targetX + 1 + (16 - len), targetY + 10, srcX2 + 1 + (16 - len), srcY2 + 10, len, 2);
     }
 
     private int getCurrentCooldownState()
@@ -253,7 +254,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     @Override
     public void update()
     {
-        if (!getCart().level.isClientSide)
+        if (!getCart().level().isClientSide)
         {
             if (arrowTick > 0)
             {
@@ -343,14 +344,14 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
                 setProjectileDamage(projectile);
                 setProjectileOnFire(projectile);
                 setProjectileKnockback(projectile);
-                getCart().level.addFreshEntity(projectile);
+                getCart().level().addFreshEntity(projectile);
                 hasShot = true;
                 damageEnchant();
             }
         }
         if (hasShot)
         {
-            getCart().level.levelEvent(1002, getCart().blockPosition(), 0);
+            getCart().level().levelEvent(1002, getCart().blockPosition(), 0);
         }
     }
 
@@ -411,7 +412,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
             }
         };
 
-        Arrow arrow = new Arrow(getCart().level, 0, 0, 0);
+        Arrow arrow = new Arrow(getCart().level(), 0, 0, 0);
         arrow.setEffectsFromItem(stack);
         arrow.setOwner(getCart()); //Ensures arrows dont hit cart immediately after they are fired.
         return arrow;

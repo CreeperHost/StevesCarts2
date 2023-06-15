@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.monopoly;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.ArrayList;
@@ -34,34 +35,34 @@ public class Note
         return id;
     }
 
-    public void draw(PoseStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y)
+    public void draw(GuiGraphics guiGraphics, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y)
     {
         game.loadTexture(gui, 1);
-        game.getModule().drawImage(matrixStack, gui, x, y, 76 + u * 16, 38 + v * 16, 16, 16);
+        game.getModule().drawImage(guiGraphics, gui, x, y, 76 + u * 16, 38 + v * 16, 16, 16);
     }
 
-    public void draw(PoseStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount)
+    public void draw(GuiGraphics guiGraphics, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount)
     {
-        draw(matrixStack, game, gui, x, y, amount, 4210752);
+        draw(guiGraphics, game, gui, x, y, amount, 4210752);
     }
 
-    public void draw(PoseStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount, final int color)
+    public void draw(GuiGraphics guiGraphics, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount, final int color)
     {
-        draw(matrixStack, game, gui, x + 10, y);
-        game.getModule().drawString(matrixStack, gui, amount + "x ", new int[]{x + gui.getGuiLeft(), y + gui.getGuiTop(), 10, 16}, color);
+        draw(guiGraphics, game, gui, x + 10, y);
+        game.getModule().drawString(guiGraphics, gui, amount + "x ", new int[]{x + gui.getGuiLeft(), y + gui.getGuiTop(), 10, 16}, color);
     }
 
-    public void drawPlayer(PoseStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount)
+    public void drawPlayer(GuiGraphics guiGraphics, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount)
     {
         game.loadTexture(gui, 1);
-        game.drawImageInArea(matrixStack, gui, x, y, 76 + u * 16, 38 + v * 16, 16, 16);
+        game.drawImageInArea(guiGraphics, gui, x, y, 76 + u * 16, 38 + v * 16, 16, 16);
         if (x + 16 < 443)
         {
-            game.getModule().drawString(matrixStack, gui, String.valueOf(amount), x + gui.getGuiLeft(), y + 17 + gui.getGuiTop(), 16, true, 4210752);
+            game.getModule().drawString(guiGraphics, gui, String.valueOf(amount), x + gui.getGuiLeft(), y + 17 + gui.getGuiTop(), 16, true, 4210752);
         }
     }
 
-    public static int drawValue(PoseStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, int maxNoteCount, int value)
+    public static int drawValue(GuiGraphics guiGraphics, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, int maxNoteCount, int value)
     {
         int id = 0;
         for (int i = Note.notes.size() - 1; i >= 0; --i)
@@ -70,7 +71,7 @@ public class Note
             {
                 final int amount = value / Note.notes.get(i).units;
                 value -= amount * Note.notes.get(i).units;
-                Note.notes.get(i).draw(matrixStack, game, gui, x + id * 34, y, amount);
+                Note.notes.get(i).draw(guiGraphics, game, gui, x + id * 34, y, amount);
                 ++id;
                 --maxNoteCount;
             }
@@ -78,11 +79,11 @@ public class Note
         return id;
     }
 
-    public static void drawPlayerValue(PoseStack matrixStack, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int[] values)
+    public static void drawPlayerValue(GuiGraphics guiGraphics, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int[] values)
     {
         for (int i = 0; i < Note.notes.size(); ++i)
         {
-            Note.notes.get(i).drawPlayer(matrixStack, game, gui, x + (6 - i) * 20, y, values[i]);
+            Note.notes.get(i).drawPlayer(guiGraphics, game, gui, x + (6 - i) * 20, y, values[i]);
         }
     }
 

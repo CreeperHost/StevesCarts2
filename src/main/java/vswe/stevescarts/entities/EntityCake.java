@@ -45,7 +45,7 @@ public class EntityCake extends ThrownEgg
                 player.getFoodData().eat(14, 0.7f);
             }
         }
-        if (!level.isClientSide)
+        if (!level().isClientSide)
         {
             kill();
         }
@@ -56,15 +56,15 @@ public class EntityCake extends ThrownEgg
     {
         BlockPos pos = blockPosition();
 
-        if (level.getBlockState(pos).isAir() && Blocks.CAKE.canSurvive(Blocks.CAKE.defaultBlockState(), level, pos))//level.isSideSolid(pos.down(), EnumFacing.UP))
+        if (level().getBlockState(pos).isAir() && Blocks.CAKE.canSurvive(Blocks.CAKE.defaultBlockState(), level(), pos))//level.isSideSolid(pos.down(), EnumFacing.UP))
         {
-            level.setBlock(pos, Blocks.CAKE.defaultBlockState(), 3);
+            level().setBlock(pos, Blocks.CAKE.defaultBlockState(), 3);
         }
         for (int j = 0; j < 8; ++j)
         {
-            level.addParticle(ParticleTypes.ITEM_SNOWBALL, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
+            level().addParticle(ParticleTypes.ITEM_SNOWBALL, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
         }
-        if (!level.isClientSide)
+        if (!level().isClientSide)
         {
             kill();
         }

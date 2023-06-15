@@ -2,6 +2,7 @@ package vswe.stevescarts.entities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -9,12 +10,12 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
@@ -68,7 +69,6 @@ import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.modules.workers.CompWorkModule;
-import vswe.stevescarts.modules.workers.ModuleRailer;
 import vswe.stevescarts.modules.workers.ModuleWorker;
 
 import javax.annotation.Nonnull;
@@ -127,7 +127,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public @NotNull Packet<?> getAddEntityPacket()
+    public Packet<ClientGamePacketListener> getAddEntityPacket()
     {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
@@ -361,7 +361,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         final int maxH = 0;
         int guidata = 0;
         int packets = 0;
-        if (level.isClientSide)
+        if (level().isClientSide)
         {
             generateModels();
         }
@@ -458,7 +458,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     @Override
     public void remove(@NotNull RemovalReason removalReason)
     {
-        if (level.isClientSide)
+        if (level().isClientSide)
         {
             for (int var1 = 0; var1 < getContainerSize(); ++var1)
             {
@@ -477,13 +477,13 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderOverlay(PoseStack matrixStack, Minecraft minecraft)
+    public void renderOverlay(PoseStack poseStack, Minecraft minecraft)
     {
         if (modules != null)
         {
             for (final ModuleBase module : modules)
             {
-                module.renderOverlay(matrixStack, minecraft);
+                module.renderOverlay(poseStack, minecraft);
             }
         }
     }
@@ -494,7 +494,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             final ModuleEngine engine = getCurrentEngine();
             if (engine != null) {
                 engine.consumeFuel(consumption);
-                if (!isPlaceholder && level.isClientSide && hasFuel() && !isDisabled()) {
+                if (!isPlaceholder && level().isClientSide && hasFuel() && !isDisabled()) {
                     engine.smoke();
                 }
             }
@@ -640,7 +640,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public void destroy(@NotNull DamageSource damageSource)
     {
         this.kill();
-        if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS) && dropOnDeath()) {
+        if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS) && dropOnDeath()) {
             ItemStack itemstack = getCartItem();
             if (this.hasCustomName()) {
                 itemstack.setHoverName(this.getCustomName());
@@ -793,9 +793,8 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 module.moveMinecartOnRail(pos);
             }
         }
-        BlockState blockState = level.getBlockState(pos);
-//        BlockState stateBelow = level.getBlockState(pos.below());
-        RailShape railDirection = ((BaseRailBlock) blockState.getBlock()).getRailDirection(blockState, level, pos, this);
+        BlockState blockState = level().getBlockState(pos);
+        RailShape railDirection = ((BaseRailBlock) blockState.getBlock()).getRailDirection(blockState, level(), pos, this);
         cornerFlip = ((railDirection == RailShape.SOUTH_EAST || railDirection == RailShape.SOUTH_WEST) && getDeltaMovement().x < 0.0) || ((railDirection == RailShape.NORTH_EAST || railDirection == RailShape.NORTH_WEST) && getDeltaMovement().x > 0.0);
 
         if (blockState.getBlock() != ModBlocks.ADVANCED_DETECTOR.get() && isDisabled()) {
@@ -826,9 +825,9 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
 
     public boolean isCorner(BlockPos blockPos)
     {
-        if(level.getBlockState(blockPos).getBlock() == Blocks.RAIL)
+        if(level().getBlockState(blockPos).getBlock() == Blocks.RAIL)
         {
-            RailShape value = level.getBlockState(blockPos).getValue(RailBlock.SHAPE);
+            RailShape value = level().getBlockState(blockPos).getValue(RailBlock.SHAPE);
             if(value == RailShape.NORTH_EAST) return true;
             if(value == RailShape.NORTH_WEST) return true;
             if(value == RailShape.SOUTH_WEST) return true;
@@ -1215,7 +1214,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
 //        }
 
         onCartUpdate();
-        if (level.isClientSide)
+        if (level().isClientSide)
         {
             updateSounds();
         }
@@ -1300,7 +1299,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 return InteractionResult.SUCCESS;
             }
         }
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             if (!isDisabled() && !hasPassenger(player)) {
                 temppushX = getX() - player.getX();
                 temppushZ = getZ() - player.getZ();
@@ -1366,7 +1365,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         {
             return;
         }
-        if (!level.isClientSide && hasFuel())
+        if (!level().isClientSide && hasFuel())
         {
             if (workingTime <= 0)
             {
@@ -1645,7 +1644,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
 
     @Nullable
     @Override
-    public Entity getControllingPassenger()
+    public LivingEntity getControllingPassenger()
     {
         return null; //Works when returning null, not sure why
     }
@@ -1660,7 +1659,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public int getNextDataWatcher()
     {
         base++;
-        return getDataManager().getAll().size() + base + 1;
+        return getDataManager().getNonDefaultValues().size() + base + 1;
     }
 
     @Override
@@ -1791,12 +1790,12 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     @Override
     public void removeVehicle()
     {
-        if (!this.level.isClientSide)
+        if (!this.level().isClientSide)
         {
             if (!isRemoved())
             {
-                ItemEntity cartItem = new ItemEntity(this.level, this.getExactPosition().getX(), this.getExactPosition().getY(), this.getExactPosition().getZ(), getCartItem());
-                this.level.addFreshEntity(cartItem);
+                ItemEntity cartItem = new ItemEntity(this.level(), this.getExactPosition().getX(), this.getExactPosition().getY(), this.getExactPosition().getZ(), getCartItem());
+                this.level().addFreshEntity(cartItem);
             }
         }
         super.removeVehicle();

@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.engines;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -132,9 +133,9 @@ public abstract class ModuleThermalBase extends ModuleEngine
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, Localization.MODULES.ENGINES.THERMAL.translate(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, Localization.MODULES.ENGINES.THERMAL.translate(), 8, 6, 4210752);
         int consumption = getCart().getConsumption();
         if (consumption == 0)
         {
@@ -153,7 +154,7 @@ public abstract class ModuleThermalBase extends ModuleEngine
         {
             str = Localization.MODULES.ENGINES.NO_LAVA.translate();
         }
-        drawString(matrixStack, gui, str, 8, 22, 4210752);
+        drawString(guiGraphics, gui, str, 8, 22, 4210752);
     }
 
     @Override

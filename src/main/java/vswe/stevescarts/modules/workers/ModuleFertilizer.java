@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.workers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -79,27 +80,27 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/fertilize.png");
-        drawImage(matrixStack, gui, tankPosX, tankPosY, 0, 0, 18, 27);
+        drawImage(guiGraphics, gui, tankPosX, tankPosY, 0, 0, 18, 27);
         final float percentage = getFertAmount() / getMaxFert();
         final int size = (int) (percentage * 23.0f);
-        drawImage(matrixStack, gui, tankPosX + 2, tankPosY + 2 + (23 - size), 18, 23 - size, 14, size);
+        drawImage(guiGraphics, gui, tankPosX + 2, tankPosY + 2 + (23 - size), 18, 23 - size, 14, size);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        drawStringOnMouseOver(matrixStack, gui, Localization.MODULES.ATTACHMENTS.FERTILIZERS.translate() + ": " + getFertAmount() + " / " + getMaxFert(), x, y, tankPosX, tankPosY, 18, 27);
+        drawStringOnMouseOver(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.FERTILIZERS.translate() + ": " + getFertAmount() + " / " + getMaxFert(), x, y, tankPosX, tankPosY, 18, 27);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
@@ -123,7 +124,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     @Override
     public boolean work()
     {
-        Level world = getCart().level;
+        Level world = getCart().level();
         BlockPos next = getNextblock();
         for (int i = -range; i <= range; ++i)
         {
@@ -204,7 +205,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
 
     private void loadSupplies()
     {
-        if (getCart().level.isClientSide)
+        if (getCart().level().isClientSide)
         {
             return;
         }

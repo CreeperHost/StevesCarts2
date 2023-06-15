@@ -24,6 +24,6 @@ public class ModuleSnowball extends ModuleProjectile
     @Override
     public Entity createProjectile(final Entity target, @Nonnull ItemStack item)
     {
-        return new Snowball(getCart().level, 0, 0, 0);
+        return new Snowball(getCart().level(), 0, 0, 0);
     }
 }

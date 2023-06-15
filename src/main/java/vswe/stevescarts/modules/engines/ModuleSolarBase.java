@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.engines;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -76,13 +77,13 @@ public abstract class ModuleSolarBase extends ModuleEngine
 
     private void updateLight()
     {
-        if (!getCart().level.isDay() || getCart().level.isRaining())
+        if (!getCart().level().isDay() || getCart().level().isRaining())
         {
             light = 0;
         }
         else
         {
-            if (getCart().level.canSeeSky(getCart().blockPosition()))
+            if (getCart().level().canSeeSky(getCart().blockPosition()))
             {
                 light = 15;
             }
@@ -95,7 +96,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
         {
             light = (getSimInfo().getMaxLight() ? 15 : 14);
         }
-        else if (getCart().level.isClientSide)
+        else if (getCart().level().isClientSide)
         {
             light = getDw(LIGHT);
         }
@@ -112,7 +113,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
 
     private void chargeSolar()
     {
-        if (light == 15 && getCart().level.random.nextInt(8) < 4)
+        if (light == 15 && getCart().level().random.nextInt(8) < 4)
         {
             setFuelLevel(getFuelLevel() + getGenSpeed());
             if (getFuelLevel() > getMaxCapacity())
@@ -128,30 +129,30 @@ public abstract class ModuleSolarBase extends ModuleEngine
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, Localization.MODULES.ENGINES.SOLAR.translate(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, Localization.MODULES.ENGINES.SOLAR.translate(), 8, 6, 4210752);
         String strfuel = Localization.MODULES.ENGINES.NO_POWER.translate();
         if (getFuelLevel() > 0)
         {
             strfuel = "Power: " + getFuelLevel();//Localization.MODULES.ENGINES.POWER.translate(String.valueOf(getFuelLevel()));
         }
-        drawString(matrixStack, gui, strfuel, 8, 42, 4210752);
+        drawString(guiGraphics, gui, strfuel, 8, 42, 4210752);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        super.drawBackground(matrixStack, gui, x, y);
+        super.drawBackground(guiGraphics, gui, x, y);
         ResourceHelper.bindResource("/gui/solar.png");
         int lightWidth = light * 3;
         if (light == 15)
         {
             lightWidth += 2;
         }
-        drawImage(matrixStack, gui, 9, 20, 0, 0, 54, 18);
-        drawImage(matrixStack, gui, 15, 21, 0, 18, lightWidth, 16);
+        drawImage(guiGraphics, gui, 9, 20, 0, 0, 54, 18);
+        drawImage(guiGraphics, gui, 15, 21, 0, 18, lightWidth, 16);
     }
 
     @Override
@@ -178,7 +179,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
 
     public void updateSolarModel()
     {
-        if (getCart().level.isClientSide)
+        if (getCart().level().isClientSide)
         {
             updateDataForModel();
             if (UP_STATE != null && !setup)
@@ -208,7 +209,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
             down = !down;
         }
         upState = updatePanels();
-        if (!getCart().level.isClientSide)
+        if (!getCart().level().isClientSide)
         {
             updateDw(UP_STATE, upState);
         }

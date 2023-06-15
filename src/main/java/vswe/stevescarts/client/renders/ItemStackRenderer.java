@@ -2,19 +2,19 @@ package vswe.stevescarts.client.renders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +33,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implement
     }
 
     @Override
-    public void renderByItem(ItemStack itemStack, ItemTransforms.@NotNull TransformType transformType, @NotNull PoseStack matrixStack, @NotNull MultiBufferSource iRenderTypeBuffer, int p_239207_5_, int p_239207_6_)
+    public void renderByItem(ItemStack itemStack, ItemDisplayContext transformType, @NotNull PoseStack matrixStack, @NotNull MultiBufferSource iRenderTypeBuffer, int p_239207_5_, int p_239207_6_)
     {
         if (itemStack.getItem() != ModItems.CARTS.get())
         {
@@ -50,7 +50,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implement
 
             EntityMinecartModular cart = new EntityMinecartModular(Minecraft.getInstance().level, 0, 0, 0, itemStack.getTag(), Component.literal(""));
 
-            if (transformType == ItemTransforms.TransformType.GUI)
+            if (transformType == ItemDisplayContext.GUI)
             {
                 matrixStack.translate(-1, 0, 0);
                 matrixStack.scale(lowestMult, lowestMult, lowestMult);
@@ -59,8 +59,8 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implement
             {
                 matrixStack.translate(-0.5, -0.5, 0.5);
             }
-            matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180));
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(180));
+            matrixStack.mulPose(Axis.ZP.rotationDegrees(180));
+            matrixStack.mulPose(Axis.XP.rotationDegrees(180));
 
             if (cart.getModules() != null)
             {

@@ -4,6 +4,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotCakeDynamite;
@@ -48,15 +49,16 @@ public class ModuleCakeServerDynamite extends ModuleCakeServer
 
     private void explode()
     {
-        getCart().level.explode(null, getCart().getExactPosition().getX(), getCart().getExactPosition().getY(), getCart().getExactPosition().getZ(), dynamiteCount * .08f, Explosion.BlockInteraction.NONE);
+        getCart().level().explode(null, getCart().getExactPosition().getX(), getCart().getExactPosition().getY(), getCart().getExactPosition().getZ(), dynamiteCount * .08f, Level.ExplosionInteraction.NONE);
     }
 
     @Override
     public void update()
     {
         super.update();
-        if (!getCart().level.isClientSide)
+        if (!getCart().level().isClientSide)
         {
+            //TODO
             @Nonnull ItemStack item = getStack(0);
             //			if (!item.isEmpty() && item.getItem().equals(ModItems.COMPONENTS.get()) && dynamiteCount < getMaxDynamiteCount()) {
             //				final int count = Math.min(getMaxDynamiteCount() - dynamiteCount, item.getCount());

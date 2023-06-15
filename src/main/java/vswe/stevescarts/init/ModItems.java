@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 
 public class ModItems
 {
-    public static final Item.Properties ITEM_GROUP = new Item.Properties().tab(StevesCartsCreativeTabs.BLOCKS);
+    public static final Item.Properties ITEM_GROUP = new Item.Properties();
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MOD_ID);
 
     public static final RegistryObject<Item> CART_ASSEMBLER = ITEMS.register("blockcartassembler", () -> new BlockItem(ModBlocks.CART_ASSEMBLER.get(), ITEM_GROUP));

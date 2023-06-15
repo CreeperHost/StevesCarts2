@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.monopoly;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.EnumSet;
@@ -24,10 +25,10 @@ public class Station extends Property
     }
 
     @Override
-    public void draw(PoseStack matrixStack, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
+    public void draw(GuiGraphics guiGraphics, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
     {
-        super.draw(matrixStack, gui, states);
-        drawValue(matrixStack, gui);
+        super.draw(guiGraphics, gui, states);
+        drawValue(guiGraphics, gui);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class PacketDistributor
         {
             ctx.get().enqueueWork(() ->
             {
-                Level world = ctx.get().getSender().getLevel();
+                Level world = ctx.get().getSender().level();
                 if (msg.blockPos != null)
                 {
                     BlockPos blockPos = msg.blockPos;

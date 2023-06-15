@@ -2,7 +2,7 @@ package vswe.stevescarts.client.models.storages.tanks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.creeperhost.polylib.client.render.RenderUtils;
 import net.creeperhost.polylib.client.render.fluid.FluidRenderHelper;
 import net.creeperhost.polylib.client.render.rendertypes.FluidTankRenderType;
@@ -64,7 +64,7 @@ public class ModelSideTanks extends ModelCartbase
             matrixStack.pushPose();
             VertexConsumer buffer = rtb.getBuffer(FluidTankRenderType.RESIZABLE);
             //Left
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
+            matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
             matrixStack.translate(-0.45, -0.15F, -0.85);
 
             dev.architectury.fluid.FluidStack fluidStackA = dev.architectury.fluid.FluidStack.create(fluidStack.getFluid(), fluidStack.getAmount());
@@ -77,7 +77,7 @@ public class ModelSideTanks extends ModelCartbase
 
             //Right
             matrixStack.pushPose();
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
+            matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
             matrixStack.translate(-0.45, -0.15, 0.55);
             matrixStack.scale(0.7F, FluidRenderHelper.getScale(moduleTank.getFluidAmount(), moduleTank.getCapacity(), fluidStack.isEmpty()) / 3, 0.3F);
             RenderUtils.renderObject(FluidRenderHelper.getFluidModel(fluidStackA, FluidRenderHelper.STAGES + 1), matrixStack, buffer, RenderUtils.getColorARGB(fluidStackA, 0.2F),

@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
@@ -38,9 +39,9 @@ public class ModuleColorizer extends ModuleAddon
     }
 
     @Override
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
-        drawString(matrixStack, gui, getModuleName(), 8, 6, 4210752);
+        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
@@ -66,30 +67,27 @@ public class ModuleColorizer extends ModuleAddon
     }
 
     @Override
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         ResourceHelper.bindResource("/gui/color.png");
         for (int i = 0; i < 3; ++i)
         {
-            drawMarker(matrixStack, gui, x, y, i);
+            drawMarker(guiGraphics, gui, x, y, i);
         }
-        final float[] color = getColor();
-        //        GlStateManager._color4f(color[0], color[1], color[2], 1.0f);
-        drawImage(matrixStack, gui, scrollWidth + 25, 29, 4, 7, 28, 28);
-        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        drawImage(guiGraphics, gui, scrollWidth + 25, 29, 4, 7, 28, 28);
     }
 
     @Override
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         final String[] colorNames = {Localization.MODULES.ADDONS.COLOR_RED.translate(), Localization.MODULES.ADDONS.COLOR_GREEN.translate(), Localization.MODULES.ADDONS.COLOR_BLUE.translate()};
         for (int i = 0; i < 3; ++i)
         {
-            drawStringOnMouseOver(matrixStack, gui, colorNames[i] + ": " + getColorVal(i), x, y, getArea(i));
+            drawStringOnMouseOver(guiGraphics, gui, colorNames[i] + ": " + getColorVal(i), x, y, getArea(i));
         }
     }
 
-    private void drawMarker(PoseStack matrixStack, GuiMinecart gui, final int x, final int y, final int id)
+    private void drawMarker(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y, final int id)
     {
         final float[] colorArea = new float[3];
         final float[] colorMarker = new float[3];
@@ -106,12 +104,8 @@ public class ModuleColorizer extends ModuleAddon
                 colorMarker[i] = 0.0f;
             }
         }
-        //TODO
-        //        GlStateManager._color4f(colorArea[0], colorArea[1], colorArea[2], 1.0f);
-        drawImage(matrixStack, gui, getArea(id), 0, 0);
-        //        GlStateManager._color4f(colorMarker[0], colorMarker[1], colorMarker[2], 1.0f);
-        drawImage(matrixStack, gui, getMovableMarker(id), 0, 7);
-        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        drawImage(guiGraphics, gui, getArea(id), 0, 0);
+        drawImage(guiGraphics, gui, getMovableMarker(id), 0, 7);
     }
 
     @Override

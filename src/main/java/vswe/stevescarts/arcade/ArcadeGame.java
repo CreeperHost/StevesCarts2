@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
@@ -42,17 +43,17 @@ public abstract class ArcadeGame
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void drawForeground(PoseStack matrixStack, GuiMinecart gui)
+    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void drawBackground(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void drawMouseOver(PoseStack matrixStack, GuiMinecart gui, final int x, final int y)
+    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
     }
 
@@ -124,12 +125,12 @@ public abstract class ArcadeGame
         }
     }
 
-    public void drawImageInArea(PoseStack matrixStack, GuiMinecart gui, final int x, final int y, final int u, final int v, final int w, final int h)
+    public void drawImageInArea(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y, final int u, final int v, final int w, final int h)
     {
-        drawImageInArea(matrixStack, gui, x, y, u, v, w, h, 5, 4, 443, 168);
+        drawImageInArea(guiGraphics, gui, x, y, u, v, w, h, 5, 4, 443, 168);
     }
 
-    public void drawImageInArea(PoseStack matrixStack, GuiMinecart gui, int x, int y, int u, int v, int w, int h, final int x1, final int y1, final int x2, final int y2)
+    public void drawImageInArea(GuiGraphics guiGraphics, GuiMinecart gui, int x, int y, int u, int v, int w, int h, final int x1, final int y1, final int x2, final int y2)
     {
         if (x < x1)
         {
@@ -153,7 +154,7 @@ public abstract class ArcadeGame
         }
         if (w > 0 && h > 0)
         {
-            getModule().drawImage(matrixStack, gui, x, y, u, v, w, h);
+            getModule().drawImage(guiGraphics, gui, x, y, u, v, w, h);
         }
     }
 }
