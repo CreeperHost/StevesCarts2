@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/side_tanks_icon"
+    "layer0": "stevescarts:item/side_tanks_icon"
   }
 }

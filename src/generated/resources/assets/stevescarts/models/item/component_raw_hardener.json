@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/raw_hardener_icon"
+    "layer0": "stevescarts:item/raw_hardener_icon"
   }
 }

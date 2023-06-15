@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/seat_icon"
+    "layer0": "stevescarts:item/seat_icon"
   }
 }

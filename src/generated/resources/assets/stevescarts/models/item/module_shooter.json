@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/shooter_icon"
+    "layer0": "stevescarts:item/shooter_icon"
   }
 }

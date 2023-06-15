@@ -1,12 +1,12 @@
 {
   "parent": "block/cube",
   "textures":{
-    "particle":"stevescarts:blocks/liquid_manager_top",
-    "up":"stevescarts:blocks/liquid_manager_top",
-    "down":"stevescarts:blocks/liquid_manager_red",
-    "south": "stevescarts:blocks/liquid_manager_blue",
-    "north": "stevescarts:blocks/liquid_manager_yellow",
-    "east": "stevescarts:blocks/liquid_manager_red",
-    "west": "stevescarts:blocks/liquid_manager_green"
+    "particle":"stevescarts:block/liquid_manager_top",
+    "up":"stevescarts:block/liquid_manager_top",
+    "down":"stevescarts:block/liquid_manager_red",
+    "south": "stevescarts:block/liquid_manager_blue",
+    "north": "stevescarts:block/liquid_manager_yellow",
+    "east": "stevescarts:block/liquid_manager_red",
+    "west": "stevescarts:block/liquid_manager_green"
   }
 }

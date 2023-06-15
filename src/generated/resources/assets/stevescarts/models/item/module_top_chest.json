@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/top_chest_icon"
+    "layer0": "stevescarts:item/top_chest_icon"
   }
 }

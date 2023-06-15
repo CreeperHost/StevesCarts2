@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/netherite_wood_cutter_icon"
+    "layer0": "stevescarts:item/netherite_wood_cutter_icon"
   }
 }

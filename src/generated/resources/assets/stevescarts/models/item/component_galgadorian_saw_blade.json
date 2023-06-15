@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/galgadorian_saw_blade_icon"
+    "layer0": "stevescarts:item/galgadorian_saw_blade_icon"
   }
 }

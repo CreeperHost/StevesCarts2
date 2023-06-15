@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/yellow_gift_ribbon_icon"
+    "layer0": "stevescarts:item/yellow_gift_ribbon_icon"
   }
 }

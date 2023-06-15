@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:blocks/advanced_detector_rail"
+    "layer0": "stevescarts:block/advanced_detector_rail"
   }
 }

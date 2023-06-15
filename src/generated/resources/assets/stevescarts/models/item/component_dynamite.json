@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/dynamite_icon"
+    "layer0": "stevescarts:item/dynamite_icon"
   }
 }

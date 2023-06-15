@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/huge_iron_pane_icon"
+    "layer0": "stevescarts:item/huge_iron_pane_icon"
   }
 }

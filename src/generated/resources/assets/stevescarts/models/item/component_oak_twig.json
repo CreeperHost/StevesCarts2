@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/oak_twig_icon"
+    "layer0": "stevescarts:item/oak_twig_icon"
   }
 }

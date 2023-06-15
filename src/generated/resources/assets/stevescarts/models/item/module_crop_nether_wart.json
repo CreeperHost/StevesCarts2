@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/crop_nether_wart_icon"
+    "layer0": "stevescarts:item/crop_nether_wart_icon"
   }
 }

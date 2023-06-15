@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/entity_detector_monster_icon"
+    "layer0": "stevescarts:item/entity_detector_monster_icon"
   }
 }

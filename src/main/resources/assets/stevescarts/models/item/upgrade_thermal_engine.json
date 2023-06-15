@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "stevescarts:blocks/thermal_engine_icon"
+    "layer0": "stevescarts:block/thermal_engine_icon"
   }
 }

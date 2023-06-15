@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/crafter_icon"
+    "layer0": "stevescarts:item/crafter_icon"
   }
 }

@@ -1,8 +1,8 @@
 {
   "textures": {
-    "side": "stevescarts:blocks/upgrade_side_0_icon",
-    "front": "stevescarts:blocks/solar_panel_icon",
-    "particle":"stevescarts:blocks/upgrade_side_0_icon"
+    "side": "stevescarts:block/upgrade_side_0_icon",
+    "front": "stevescarts:block/solar_panel_icon",
+    "particle":"stevescarts:block/upgrade_side_0_icon"
   },
   "elements": [
     {

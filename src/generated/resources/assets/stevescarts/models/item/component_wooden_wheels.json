@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/wooden_wheels_icon"
+    "layer0": "stevescarts:item/wooden_wheels_icon"
   }
 }

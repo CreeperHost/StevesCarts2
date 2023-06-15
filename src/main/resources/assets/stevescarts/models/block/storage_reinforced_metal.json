@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "stevescarts:blocks/reinforced_metal_block"
+    "all": "stevescarts:block/reinforced_metal_block"
   }
 }

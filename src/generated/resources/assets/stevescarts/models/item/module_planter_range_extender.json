@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/planter_range_extender_icon"
+    "layer0": "stevescarts:item/planter_range_extender_icon"
   }
 }

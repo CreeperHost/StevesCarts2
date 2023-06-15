@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/blade_arm_icon"
+    "layer0": "stevescarts:item/blade_arm_icon"
   }
 }

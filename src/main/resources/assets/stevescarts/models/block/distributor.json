@@ -1,12 +1,12 @@
 {
   "parent": "block/cube",
   "textures":{
-    "particle":"stevescarts:blocks/cargo_distributor_blue",
-    "up":"stevescarts:blocks/cargo_distributor_orange",
-    "down":"stevescarts:blocks/cargo_distributor_purple",
-    "south": "stevescarts:blocks/cargo_distributor_blue",
-    "north": "stevescarts:blocks/cargo_distributor_yellow",
-    "east": "stevescarts:blocks/cargo_distributor_red",
-    "west": "stevescarts:blocks/cargo_distributor_green"
+    "particle":"stevescarts:block/cargo_distributor_blue",
+    "up":"stevescarts:block/cargo_distributor_orange",
+    "down":"stevescarts:block/cargo_distributor_purple",
+    "south": "stevescarts:block/cargo_distributor_blue",
+    "north": "stevescarts:block/cargo_distributor_yellow",
+    "east": "stevescarts:block/cargo_distributor_red",
+    "west": "stevescarts:block/cargo_distributor_green"
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "stevescarts:blocks/enhanced_galgadorian_block"
+    "all": "stevescarts:block/enhanced_galgadorian_block"
   }
 }

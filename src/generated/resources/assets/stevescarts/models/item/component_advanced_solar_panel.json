@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/advanced_solar_panel_icon"
+    "layer0": "stevescarts:item/advanced_solar_panel_icon"
   }
 }

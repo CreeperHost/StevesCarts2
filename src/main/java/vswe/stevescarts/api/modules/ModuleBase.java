@@ -1327,6 +1327,13 @@ public abstract class ModuleBase
      */
     protected final <T> void registerDw(EntityDataAccessor<T> key, T value)
     {
+        for (SynchedEntityData.DataItem<?> entry : getCart().getDataManager().itemsById.values())
+        {
+            if (entry.getAccessor() == key)
+            {
+                return;
+            }
+        }
         getCart().getDataManager().define(key, value);
     }
 

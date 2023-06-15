@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/warm_hat_icon"
+    "layer0": "stevescarts:item/warm_hat_icon"
   }
 }

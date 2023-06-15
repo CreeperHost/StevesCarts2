@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/internal_storage_icon"
+    "layer0": "stevescarts:item/internal_storage_icon"
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/experience_bank_icon"
+    "layer0": "stevescarts:item/experience_bank_icon"
   }
 }

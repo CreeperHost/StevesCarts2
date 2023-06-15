@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/compact_solar_engine_icon"
+    "layer0": "stevescarts:item/compact_solar_engine_icon"
   }
 }

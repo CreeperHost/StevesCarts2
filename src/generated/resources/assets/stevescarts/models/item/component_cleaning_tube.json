@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/cleaning_tube_icon"
+    "layer0": "stevescarts:item/cleaning_tube_icon"
   }
 }

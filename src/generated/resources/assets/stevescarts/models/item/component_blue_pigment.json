@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/blue_pigment_icon"
+    "layer0": "stevescarts:item/blue_pigment_icon"
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/birch_twig_icon"
+    "layer0": "stevescarts:item/birch_twig_icon"
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "stevescarts:blocks/cart_crane_icon"
+    "layer0": "stevescarts:block/cart_crane_icon"
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/divine_shield_icon"
+    "layer0": "stevescarts:item/divine_shield_icon"
   }
 }

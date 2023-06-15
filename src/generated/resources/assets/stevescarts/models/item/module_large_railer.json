@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/large_railer_icon"
+    "layer0": "stevescarts:item/large_railer_icon"
   }
 }

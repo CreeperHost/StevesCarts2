@@ -1,9 +1,9 @@
 {
   "parent": "block/cube_bottom_top",
   "textures": {
-    "particle":"stevescarts:blocks/cart_assembler_top",
-    "top":"stevescarts:blocks/cart_assembler_top",
-    "side":"stevescarts:blocks/cart_assembler_side_1",
-    "down":"stevescarts:blocks/cart_assembler_bot"
+    "particle":"stevescarts:block/cart_assembler_top",
+    "top":"stevescarts:block/cart_assembler_top",
+    "side":"stevescarts:block/cart_assembler_side_1",
+    "down":"stevescarts:block/cart_assembler_bot"
   }
 }

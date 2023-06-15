@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/smelter_icon"
+    "layer0": "stevescarts:item/smelter_icon"
   }
 }

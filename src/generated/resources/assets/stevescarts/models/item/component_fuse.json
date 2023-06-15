@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:items/fuse_icon"
+    "layer0": "stevescarts:item/fuse_icon"
   }
 }
