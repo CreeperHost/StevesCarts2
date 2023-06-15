@@ -3,13 +3,17 @@ package vswe.stevescarts;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import net.creeperhost.polylib.helpers.RegistryNameHelper;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -24,6 +28,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -38,6 +43,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -53,12 +60,12 @@ public class StevesCartsDataGenerators
         if (event.includeServer())
         {
 //            generator.addProvider(true, new GeneratorRecipes(generator));
-//            generator.addProvider(true, new GeneratorLoots(generator));
+            generator.addProvider(true, new GeneratorLoots(generator.getPackOutput()));
         }
 
         if (event.includeClient())
         {
-//            generator.addProvider(true, new GeneratorBlockTags(generator, event.getExistingFileHelper()));
+            generator.addProvider(true, new GeneratorBlockTags(generator.getPackOutput(), event.getLookupProvider(), generator, event.getExistingFileHelper()));
 //            generator.addProvider(true, new GeneratorLanguage(generator));
 //            generator.addProvider(true, new GeneratorBlockStates(generator, event.getExistingFileHelper()));
             generator.addProvider(true, new GeneratorItemModels(generator, event.getExistingFileHelper()));
@@ -144,79 +151,62 @@ public class StevesCartsDataGenerators
         }
     }
 
-//
-//    static class GeneratorLoots extends LootTableProvider
-//    {
-//        public GeneratorLoots(DataGenerator dataGeneratorIn)
-//        {
-//            super(dataGeneratorIn);
-//        }
-//
-//        @Override
-//        protected @NotNull List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables()
-//        {
-//            return ImmutableList.of(Pair.of(Blocks::new, LootContextParamSets.BLOCK));
-//        }
-//
-//        private static class Blocks extends BlockLoot
-//        {
-//            @Override
-//            protected void addTables()
-//            {
-//                ModBlocks.BLOCKS.getEntries().forEach(blockRegistryObject -> this.add(blockRegistryObject.get(), LootTable.lootTable().withPool(create(blockRegistryObject.get()))));
-//            }
-//
-//            public LootPool.Builder create(Block block)
-//            {
-//                return LootPool.lootPool().name(RegistryNameHelper.getRegistryName(block).get().toString())
-//                        .setRolls(ConstantValue.exactly(1)).when(ExplosionCondition.survivesExplosion())
-//                        .add(LootItem.lootTableItem(block)
-//                        .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY)));
-//
-//            }
-//
-//            @Override
-//            protected @NotNull Iterable<Block> getKnownBlocks()
-//            {
-//                List<Block> list = new ArrayList<>();
-//                ModBlocks.BLOCKS.getEntries().forEach(blockRegistryObject -> list.add(blockRegistryObject.get()));
-//                return ImmutableList.copyOf(list);
-//            }
-//        }
-//
-//        @Override
-//        protected void validate(Map<ResourceLocation, LootTable> map, @NotNull ValidationContext validationtracker)
-//        {
-//            map.forEach((name, table) -> LootTables.validate(validationtracker, name, table));
-//        }
-//    }
-//
-//    static class GeneratorRecipes extends RecipeProvider
-//    {
-//        public GeneratorRecipes(DataGenerator generator)
-//        {
-//            super(generator);
-//        }
-//
-//        @Override
-//        protected void buildCraftingRecipes(@NotNull Consumer<FinishedRecipe> consumer)
-//        {
-//        }
-//    }
-//
-//    static class GeneratorBlockTags extends BlockTagsProvider
-//    {
-//        public GeneratorBlockTags(DataGenerator generator, @Nullable ExistingFileHelper existingFileHelper)
-//        {
-//            super(generator, Constants.MOD_ID, existingFileHelper);
-//        }
-//
-//        @Override
-//        protected void addTags()
-//        {
-//            ModBlocks.BLOCKS.getEntries().forEach(blockRegistryObject -> tag(BlockTags.MINEABLE_WITH_PICKAXE).add(blockRegistryObject.get()));
-//            tag(BlockTags.RAILS).add(ModBlocks.ADVANCED_DETECTOR.get()).add(ModBlocks.JUNCTION.get());
-//            tag(BlockTags.BEACON_BASE_BLOCKS).add(ModBlocks.GALGADORIAN_METAL.get()).add(ModBlocks.REINFORCED_METAL.get()).add(ModBlocks.ENHANCED_GALGADORIAN_METAL.get());
-//        }
-//    }
+
+    static class GeneratorLoots extends LootTableProvider
+    {
+        public GeneratorLoots(PackOutput output)
+        {
+            super(output, Set.of(), ImmutableList.of(new SubProviderEntry(Blocks::new, LootContextParamSets.BLOCK)));
+        }
+
+        private static class Blocks extends BlockLootSubProvider
+        {
+            protected Blocks()
+            {
+                super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+            }
+            @Override
+            protected void generate()
+            {
+                ModBlocks.BLOCKS.getEntries().forEach(blockRegistryObject -> dropSelf(blockRegistryObject.get()));
+            }
+
+            @Override
+            protected @NotNull Iterable<Block> getKnownBlocks()
+            {
+                List<Block> list = new ArrayList<>();
+                ModBlocks.BLOCKS.getEntries().forEach(blockRegistryObject -> list.add(blockRegistryObject.get()));
+                return ImmutableList.copyOf(list);
+            }
+        }
+    }
+
+    static class GeneratorRecipes extends RecipeProvider
+    {
+        public GeneratorRecipes(PackOutput output)
+        {
+            super(output);
+        }
+
+        @Override
+        protected void buildRecipes(Consumer<FinishedRecipe> consumer)
+        {
+
+        }
+    }
+
+    static class GeneratorBlockTags extends BlockTagsProvider
+    {
+        public GeneratorBlockTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, DataGenerator generator, ExistingFileHelper helper) {
+            super(output, lookupProvider, Constants.MOD_ID, helper);
+        }
+
+        @Override
+        protected void addTags(HolderLookup.Provider provider)
+        {
+            ModBlocks.BLOCKS.getEntries().forEach(blockRegistryObject -> tag(BlockTags.MINEABLE_WITH_PICKAXE).add(blockRegistryObject.get()));
+            tag(BlockTags.RAILS).add(ModBlocks.ADVANCED_DETECTOR.get()).add(ModBlocks.JUNCTION.get());
+            tag(BlockTags.BEACON_BASE_BLOCKS).add(ModBlocks.GALGADORIAN_METAL.get()).add(ModBlocks.REINFORCED_METAL.get()).add(ModBlocks.ENHANCED_GALGADORIAN_METAL.get());
+        }
+    }
 }
