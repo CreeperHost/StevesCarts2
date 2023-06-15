@@ -1334,7 +1334,8 @@ public abstract class ModuleBase
                 return;
             }
         }
-        getCart().getDataManager().define(key, value);
+        if(!getCart().getDataManager().hasItem(key))
+            getCart().getDataManager().define(key, value);
     }
 
     /**

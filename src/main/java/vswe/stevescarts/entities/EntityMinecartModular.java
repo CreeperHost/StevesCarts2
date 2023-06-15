@@ -1659,8 +1659,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public int getNextDataWatcher()
     {
         base++;
-        if(getDataManager().getNonDefaultValues() == null) return base + 1;
-        return getDataManager().getNonDefaultValues().size() + base + 1;
+        return getDataManager().itemsById.size() + base + 1;
     }
 
     @Override
