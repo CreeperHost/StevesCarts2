@@ -50,7 +50,6 @@ public class PacketHandler
 
     public static void sendTo(Object message, ServerPlayer player)
     {
-        //TODO
-//        HANDLER.sendTo(message, player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+        HANDLER.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
     }
 }
