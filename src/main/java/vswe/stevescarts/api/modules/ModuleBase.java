@@ -498,7 +498,7 @@ public abstract class ModuleBase
     @OnlyIn(Dist.CLIENT)
     public void drawString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int c)
     {
-        guiGraphics.drawString(Minecraft.getInstance().font, str, x, y, -1);
+        drawString(guiGraphics, gui, str, x, y, -1, false, c);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -522,7 +522,7 @@ public abstract class ModuleBase
             if (center) {
                 guiGraphics.drawString(mc.font, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX() + left, rect[1] + getY() + dif + top, c);
             } else {
-                guiGraphics.drawString(mc.font, str, rect[0] + getX() + left, rect[1] + getY() + dif + top, c);
+                guiGraphics.drawString(mc.font, str, rect[0] + getX() + left, rect[1] + getY() + dif + top, 16777215);
             }
             if (!stealInterface) {
                 gui.popScissor();
