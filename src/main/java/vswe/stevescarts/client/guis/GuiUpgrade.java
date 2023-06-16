@@ -76,7 +76,7 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int p_230451_2_, int p_230451_3_)
     {
-        guiGraphics.drawString(Minecraft.getInstance().font, upgrade.getUpgrade().getName(), 8, 6, 4210752);
+        guiGraphics.drawString(Minecraft.getInstance().font, upgrade.getUpgrade().getName(), 8, 6, 16777215);
     }
 
     static
