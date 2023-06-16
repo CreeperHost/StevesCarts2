@@ -85,13 +85,13 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
         renderTooltip(guiGraphics, mouseX, mouseY);
         int[] coords = getMiddleCoords();
 
-        guiGraphics.drawString(Minecraft.getInstance().font, getManagerName(), leftPos + coords[0] - 34, topPos + 4, 4210752);
-        guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.MANAGER.TITLE.translate(), leftPos + coords[0] + coords[2], topPos + 4, 4210752);
+        guiGraphics.drawString(Minecraft.getInstance().font, getManagerName(), leftPos + coords[0] - 34, topPos + 4, 16777215);
+        guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.MANAGER.TITLE.translate(), leftPos + coords[0] + coords[2], topPos + 4, 16777215);
         for (int i = 0; i < 4; ++i)
         {
             coords = getTextCoords(i);
             final String str = getMaxSizeText(i);
-            guiGraphics.drawString(Minecraft.getInstance().font, str, leftPos + coords[0], topPos + coords[1], 4210752);
+            guiGraphics.drawString(Minecraft.getInstance().font, str, leftPos + coords[0], topPos + coords[1], 16777215);
         }
         for (int i = 0; i < 4; ++i)
         {

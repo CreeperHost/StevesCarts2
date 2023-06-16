@@ -235,7 +235,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
     @Override
     public void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY)
     {
-        guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.ASSEMBLER.TITLE.translate(), 18, 6, 4210752);
+        guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.ASSEMBLER.TITLE.translate(), 18, 6, 16777215);
     }
 
     @Override
@@ -264,7 +264,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                 final TextWithColor info = lines.get(i);
                 if (info != null)
                 {
-                    guiGraphics.drawString(Minecraft.getInstance().font, info.getText(), leftPos + 370, topPos + 40 + i * 10, info.getColor());
+                    guiGraphics.drawString(Minecraft.getInstance().font, info.getText(), leftPos + 370, topPos + 40 + i * 10, 16777215);
                 }
             }
             if (dotdotdot)

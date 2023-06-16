@@ -179,7 +179,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         mouseX -= getGuiLeft();
         mouseY -= getGuiTop();
         ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
-        guiGraphics.drawString(Minecraft.getInstance().font, cart.getName(), getGuiLeft() + 5, getGuiTop() + 172, 4210752);
+        guiGraphics.drawString(Minecraft.getInstance().font, cart.getName(), getGuiLeft() + 5, getGuiTop() + 172, 16777215);
         GlStateManager._enableBlend();
         for (int i = 0; i < moduleCounts.size(); ++i)
         {
@@ -188,7 +188,8 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
             {
                 int alpha = (int) ((inRect(mouseX, mouseY, getModuleDisplayX(i), getModuleDisplayY(i), 16, 16) ? 1.0f : 0.75f) * 256.0f);
                 String str = String.valueOf(count.getCount());
-                guiGraphics.drawString(Minecraft.getInstance().font, str, getGuiLeft() + getModuleDisplayX(i) + 16 - font.width(str), getModuleDisplayY(i) + 8, 0xFFFFFF | alpha << 24);
+                guiGraphics.drawString(Minecraft.getInstance().font, str, getGuiLeft() + getModuleDisplayX(i) + 16 - font.width(str),
+                        getModuleDisplayY(i) + 8, 0xFFFFFF | alpha << 24);
             }
         }
         GlStateManager._disableBlend();
