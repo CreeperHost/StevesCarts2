@@ -135,7 +135,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
         String strfuel = Localization.MODULES.ENGINES.NO_FUEL.translate();
         if (getFuelLevel() > 0)
         {
-            strfuel = "Fuel: " + getFuelLevel();//TODO Why? Localization.MODULES.ENGINES.FUEL.translate(String.valueOf(getFuelLevel()));
+            strfuel = "Fuel: " + getFuelLevel();
         }
         drawString(guiGraphics, gui, strfuel, 8, 48, 4210752);
     }

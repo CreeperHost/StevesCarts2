@@ -222,8 +222,9 @@ public class ArcadeInvaders extends ArcadeGame
 
     public boolean isKeyDown(int id)
     {
+
         //TODO
-        //		return InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), id);
+//        		return InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), id);
         return false;
     }
 

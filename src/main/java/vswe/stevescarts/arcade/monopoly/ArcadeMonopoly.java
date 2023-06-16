@@ -1,5 +1,6 @@
 package vswe.stevescarts.arcade.monopoly;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraftforge.api.distmarker.Dist;
@@ -756,21 +757,21 @@ public class ArcadeMonopoly extends ArcadeGame
 
     private void drawCard(GuiGraphics guiGraphics, PoseStack matrixStack, GuiMinecart gui, final boolean isFront)
     {
-        //TODO
-        //		GlStateManager._pushMatrix();
+        matrixStack.pushPose();
         final int x = 150;
         final int y = 44;
         final float s = cardScale;
         final float posX = gui.getGuiLeft() + 71;
         final float posY = gui.getGuiTop() + 40;
-        //		GlStateManager._translatef(0.0f, 0.0f, 100.0f);
-        //		GlStateManager._translatef(posX + x, posY + y, 0.0f);
-        //		GlStateManager._scalef(s, s, 1.0f);
-        //		GlStateManager._rotatef(cardRotation + (isFront ? 0 : 180), 0.0f, 1.0f, 0.0f);
-        //		GlStateManager._translatef(-posX, -posY, 0.0f);
+        matrixStack.translate(0.0f, 0.0f, 100.0f);
+        matrixStack.translate(posX + x, posY + y, 0.0f);
+        matrixStack.scale(s, s, 1.0f);
+//        matrixStack.mulPose(cardRotation + (isFront ? 0 : 180), 0.0f, 1.0f, 0.0f);
+        matrixStack.translate(-posX, -posY, 0.0f);
         loadTexture(gui, 0);
         final int[] rect = {0, 0, 142, 80};
         currentCard.render(this, guiGraphics,  gui, rect, isFront);
+        matrixStack.popPose();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -1127,8 +1128,6 @@ public class ArcadeMonopoly extends ArcadeGame
     public void loadTexture(final GuiMinecart gui, final int number)
     {
         ResourceHelper.bindResource(ArcadeMonopoly.textures[number]);
-        //TODO
-        //		GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     public Place[] getPlaces()

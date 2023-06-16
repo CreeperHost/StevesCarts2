@@ -114,7 +114,7 @@ public abstract class ArcadeGame
     public void load(final GuiMinecart gui)
     {
         //TODO
-        //		gui.enableKeyRepeat(allowKeyRepeat());
+//        		gui.enableKeyRepeat(allowKeyRepeat());
     }
 
     public void unload(final GuiMinecart gui)

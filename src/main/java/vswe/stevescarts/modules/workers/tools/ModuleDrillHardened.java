@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.workers.tools;
 
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.items.ItemCartComponent;
 
 import javax.annotation.Nonnull;
 
@@ -39,18 +40,16 @@ public class ModuleDrillHardened extends ModuleDrill
     @Override
     public String getRepairItemName()
     {
-        //TODO Config
-        //		return SCConfig.hardenedRepairName.isEmpty() ? ComponentTypes.REINFORCED_METAL.getLocalizedName(): SCConfig.hardenedRepairName;
-        return "";
+        return "stevescarts:component_reinforced_metal";
     }
 
     @Override
     public int getRepairItemUnits(@Nonnull ItemStack item)
     {
-        //TODO Config
-        //if (!item.isEmpty() && SCConfig.isValidRepairItem(item, "hardened")) {
-        //			return 450000;
-        //		}
+        if (!item.isEmpty() && item.getItem() == ItemCartComponent.byId(22))
+        {
+            return 320000;
+        }
         return 0;
     }
 

@@ -60,8 +60,7 @@ public class ModulePig extends ModuleHull
         Entity rider = getCart().getPassengers().get(0);
         if (rider != null && rider instanceof LivingEntity)
         {
-            //TODO
-            //			return ((LivingEntity) rider).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+            return ((LivingEntity) rider).getItemBySlot(EquipmentSlot.HEAD);
         }
         return ItemStack.EMPTY;
     }
@@ -100,17 +99,6 @@ public class ModulePig extends ModuleHull
             return Minecraft.getInstance().getItemColors().getColor(item, isOverlay ? 1 : 0);
         }
         return -1;
-    }
-
-    public boolean getHelmetMultiRender()
-    {
-        if (hasHelment())
-        {
-            @Nonnull ItemStack item = getHelmet();
-            //TODO: Do we need this still
-            //return ((ItemArmor) item.getItem()).requiresMultipleRenderPasses();
-        }
-        return false;
     }
 
     @Override

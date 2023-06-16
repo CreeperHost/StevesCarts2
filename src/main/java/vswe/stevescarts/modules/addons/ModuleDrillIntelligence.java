@@ -243,29 +243,6 @@ public class ModuleDrillIntelligence extends ModuleAddon
         return (int) Math.ceil(maxDrillWidth * (maxDrillHeight + 2) / 16.0f);
     }
 
-    //TODO If we are using EntityDataAccessor do we even need this?
-//    @Override
-//    protected void checkGuiData(final Object[] info)
-//    {
-//        if (isDisabled != null)
-//        {
-//            for (int i = 0; i < isDisabled.length; ++i)
-//            {
-//                updateGuiData(info, i, isDisabled[i]);
-//            }
-//        }
-//    }
-
-//    @Override
-//    public void receiveGuiData(final int id, final short data)
-//    {
-////        updateDw(enabledArray, getDw(enabledArray).set(id));
-////        if (id >= 0 && id < isDisabled.length)
-////        {
-////            isDisabled[id] = data;
-////        }
-//    }
-
     @Override
     public int numberOfPackets()
     {

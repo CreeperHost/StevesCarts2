@@ -44,30 +44,4 @@ public class ModuleEggBasket extends ModuleChest
     {
         return 0.3926991f;
     }
-
-    //TODO
-//    @Override
-//    public byte getExtraData()
-//    {
-//        return 0;
-//    }
-//
-//    @Override
-//    public boolean hasExtraData()
-//    {
-//        return true;
-//    }
-//
-//    @Override
-//    public void setExtraData(final byte b)
-//    {
-//        if (b == 0)
-//        {
-//            return;
-//        }
-//        final RandomSource rand = getCart().random;
-//        final int eggs = 1 + rand.nextInt(4) + rand.nextInt(4);
-//        @Nonnull ItemStack easterEgg = ComponentTypes.PAINTED_EASTER_EGG.getItemStack(eggs);
-//        setStack(0, easterEgg);
-//    }
 }

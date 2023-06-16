@@ -30,9 +30,6 @@ public class ModuleLabel extends ModuleAddon
     private EntityDataAccessor<Byte> USED;
     private EntityDataAccessor<Integer> DATA;
     private EntityDataAccessor<Byte> ACTIVE;
-
-    //TODO Find a way to use translation components for all this.
-
     public ModuleLabel(final EntityMinecartModular cart)
     {
         super(cart);

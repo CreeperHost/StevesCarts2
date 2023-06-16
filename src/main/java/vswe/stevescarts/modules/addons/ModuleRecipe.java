@@ -197,38 +197,6 @@ public abstract class ModuleRecipe extends ModuleAddon
         return canUseAdvancedFeatures() ? 3 : 0;
     }
 
-//  I dont think these are needed with EntityDataAccessor
-//    @Override
-//    protected void checkGuiData(final Object[] info)
-//    {
-//        if (canUseAdvancedFeatures())
-//        {
-//            updateGuiData(info, 0, (short) getDw(TARGET));
-//            updateGuiData(info, 1, (short) getDw(MODE));
-//            updateGuiData(info, 2, (short) getDw(MAX_ITEM_COUNT));
-//        }
-//    }
-//
-//    @Override
-//    public void receiveGuiData(final int id, final short data)
-//    {
-//        if (canUseAdvancedFeatures())
-//        {
-//            if (id == 0)
-//            {
-//                updateDw(TARGET, (byte) data);
-//            }
-//            else if (id == 1)
-//            {
-//                updateDw(MODE, (byte) data);
-//            }
-//            else if (id == 2)
-//            {
-//                updateDw(MAX_ITEM_COUNT, (byte) data);
-//            }
-//        }
-//    }
-
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
     {

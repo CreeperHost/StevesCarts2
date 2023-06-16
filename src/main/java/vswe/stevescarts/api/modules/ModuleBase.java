@@ -579,7 +579,7 @@ public abstract class ModuleBase
         handleScroll(rect);
         if (rect[3] == 16)
         {
-            guiGraphics.renderItem(item, gui.getGuiLeft(), + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY());
+            guiGraphics.renderItem(item, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY());
         }
     }
 
@@ -1216,39 +1216,6 @@ public abstract class ModuleBase
     }
 
     /**
-     * Sends a packet from the server to all players around the cart
-     *
-     * @param id The local id of the packet
-     */
-    protected void sendPacketAround(int id)
-    {
-        sendPacketAround(id, new byte[0]);
-    }
-
-    /**
-     * Sends a packet from the server to all players around the cart
-     *
-     * @param id   The local id of the packet
-     * @param data An extra byte sent along
-     */
-    protected void sendPacketAround(int id, byte data)
-    {
-        sendPacketAround(id, new byte[]{data});
-    }
-
-    /**
-     * Sends a packet from the server to all players around the cart
-     *
-     * @param id   The local id of the packet
-     * @param data A byte array of data sent along
-     */
-    protected void sendPacketAround(int id, byte[] data)
-    {
-        //TODO
-        //		PacketStevesCarts.sendPacketToAllAround(getPacketStart() + id, data, getCart());
-    }
-
-    /**
      * Receive a normal packet on the server or the client
      *
      * @param id     The local id of the packet
@@ -1269,7 +1236,7 @@ public abstract class ModuleBase
     public final void delegateReceivedPacket(int id, byte[] data, Player player)
     {
         if (id < 0)
-        {// || id >= totalNumberOfPackets()) {
+        {
             return;
         }
         if (id == totalNumberOfPackets() - 1 && useButtons())
