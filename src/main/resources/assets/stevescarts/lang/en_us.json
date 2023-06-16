@@ -1,7 +1,7 @@
 {
-    "itemGroup.SC2Modules": "Steve's Carts 2 Modules",
-    "itemGroup.SC2Items": "Steve's Carts 2 Components",
-    "itemGroup.SC2Blocks": "Steve's Carts 2 Blocks",
+    "stevescarts.creativetab.modules": "Steve's Carts 2 Modules",
+    "stevescarts.creativetab.items": "Steve's Carts 2 Components",
+    "stevescarts.creativetab.blocks": "Steve's Carts 2 Blocks",
     "entity.stevescarts.modular_cart":"Modular Cart",
     "gui.stevescarts.cartAssembler": "Cart Assembler",
     "gui.stevescarts.basicAssembleInstruction": "To start making a cart, please add a Cart Hull of your choice to the Hull Slot.",
