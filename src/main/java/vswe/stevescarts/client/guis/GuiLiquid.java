@@ -59,13 +59,13 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
         }
         for (int j = 0; j < 2; ++j)
         {
-            guiGraphics.blit(GuiLiquid.texture, leftPos + ((j == 0) ? 27 : 171), topPos + 63, 0, 102 + version * 12, 32, 12);
+//            guiGraphics.blit(GuiLiquid.texture, leftPos + ((j == 0) ? 27 : 171), topPos + 63, 0, 102 + version * 12, 32, 12);
         }
         for (int j = 0; j < 4; ++j)
         {
             final int[] coords2 = getTankCoords(j);
             final int type = j % 2;
-            guiGraphics.blit(GuiLiquid.texture, leftPos + coords2[0], topPos + coords2[1], 0, 51 * type, 36, 51);
+//            guiGraphics.blit(GuiLiquid.texture, leftPos + coords2[0], topPos + coords2[1], 0, 51 * type, 36, 51);
         }
 
         final int left = getGuiLeft();
