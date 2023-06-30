@@ -31,7 +31,7 @@ public class SCConfig
         COMMON_BUILDER.comment("General settings").push(CATEGORY_GENERAL);
         COMMON_BUILDER.pop();
 
-        CLIENT_BUILDER.comment("General settings").push(CATEGORY_GENERAL);
+        CLIENT_BUILDER.comment("Client General settings").push(CATEGORY_GENERAL);
         CLIENT_BUILDER.pop();
 
         disableTimedCrafting = COMMON_BUILDER.comment("Disabled timed crafting").define("disableTimedCrafting", false);
