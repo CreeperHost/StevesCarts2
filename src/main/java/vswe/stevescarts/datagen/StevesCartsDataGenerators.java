@@ -1,4 +1,4 @@
-package vswe.stevescarts;
+package vswe.stevescarts.datagen;
 
 import com.google.common.collect.ImmutableList;
 import net.creeperhost.polylib.helpers.RegistryNameHelper;
@@ -31,6 +31,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.Constants;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItems;
@@ -59,7 +60,7 @@ public class StevesCartsDataGenerators
         if (event.includeClient())
         {
             generator.addProvider(true, new GeneratorBlockTags(generator.getPackOutput(), event.getLookupProvider(), generator, event.getExistingFileHelper()));
-//            generator.addProvider(true, new GeneratorLanguage(generator));
+            generator.addProvider(true, new GeneratorLanguage(generator));
 //            generator.addProvider(true, new GeneratorBlockStates(generator, event.getExistingFileHelper()));
             generator.addProvider(true, new GeneratorItemModels(generator, event.getExistingFileHelper()));
         }
@@ -128,23 +129,6 @@ public class StevesCartsDataGenerators
         }
     }
 
-    static class GeneratorLanguage extends LanguageProvider
-    {
-        public GeneratorLanguage(DataGenerator gen)
-        {
-            super(gen.getPackOutput(), Constants.MOD_ID, "en_us");
-        }
-
-        @Override
-        protected void addTranslations()
-        {
-//            add("itemGroup.SC2Modules", "Steve's Carts 2 Modules");
-//            add("itemGroup.SC2Items", "Steve's Carts 2 Components");
-//            add("itemGroup.SC2Blocks", "Steve's Carts 2 Blocks");
-        }
-    }
-
-
     static class GeneratorLoots extends LootTableProvider
     {
         public GeneratorLoots(PackOutput output)
@@ -172,32 +156,6 @@ public class StevesCartsDataGenerators
                 return ImmutableList.copyOf(list);
             }
         }
-    }
-
-    static class GeneratorRecipes extends RecipeProvider
-    {
-        public GeneratorRecipes(PackOutput output)
-        {
-            super(output);
-        }
-
-        @Override
-        protected void buildRecipes(Consumer<FinishedRecipe> consumer)
-        {
-            SmithingTransformRecipeBuilder.smithing(
-                    Ingredient.of(new ItemStack(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE)),
-                    Ingredient.of(getStackFromModule(StevesCartsModules.BASIC_WOOD_CUTTER)),
-                    Ingredient.of(new ItemStack(Items.NETHERITE_INGOT)),
-                    RecipeCategory.MISC,
-                    getStackFromModule(StevesCartsModules.NETHERITE_WOOD_CUTTER).getItem()).unlocks("has_netherite", has(Tags.Items.INGOTS_NETHERITE))
-                    .save(consumer, "netherite_wood_cutter");
-        }
-    }
-
-    static ItemStack getStackFromModule(ModuleData moduleData)
-    {
-        if(moduleData == null) return ItemStack.EMPTY;
-        return moduleData.getItemStack();
     }
 
     static class GeneratorBlockTags extends BlockTagsProvider
