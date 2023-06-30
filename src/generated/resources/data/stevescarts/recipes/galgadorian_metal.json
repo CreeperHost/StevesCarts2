@@ -1,16 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    "XXX",
-    "XXX"
-  ],
+  "category": "misc",
+  "group": "stevescarts",
   "key": {
     "X": {
       "item": "stevescarts:component_galgadorian_metal"
     }
   },
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
   "result": {
     "item": "stevescarts:galgadorian_metal"
-  }
+  },
+  "show_notification": true
 }

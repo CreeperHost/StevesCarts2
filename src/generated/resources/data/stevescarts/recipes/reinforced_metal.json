@@ -1,16 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    "XXX",
-    "XXX"
-  ],
+  "category": "misc",
+  "group": "stevescarts",
   "key": {
     "X": {
       "item": "stevescarts:component_reinforced_metal"
     }
   },
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
   "result": {
     "item": "stevescarts:reinforced_metal"
-  }
+  },
+  "show_notification": true
 }

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": {
+      "tag": "forge:ingots/iron"
+    },
+    "P": {
+      "item": "minecraft:stone_pressure_plate"
+    },
+    "X": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "pattern": [
+    "#P#",
+    "#X#",
+    "#P#"
+  ],
+  "result": {
+    "item": "stevescarts:blockadvdetector"
+  },
+  "show_notification": true
+}
