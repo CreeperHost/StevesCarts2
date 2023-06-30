@@ -3,6 +3,7 @@ package vswe.stevescarts;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import net.creeperhost.polylib.helpers.RegistryNameHelper;
+import net.minecraft.advancements.critereon.TradeTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -10,11 +11,17 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -28,6 +35,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.LanguageProvider;
@@ -36,8 +44,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.api.StevesCartsAPI;
+import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItems;
+import vswe.stevescarts.init.StevesCartsModules;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -59,7 +70,7 @@ public class StevesCartsDataGenerators
 
         if (event.includeServer())
         {
-//            generator.addProvider(true, new GeneratorRecipes(generator));
+            generator.addProvider(true, new GeneratorRecipes(generator.getPackOutput()));
             generator.addProvider(true, new GeneratorLoots(generator.getPackOutput()));
         }
 
@@ -191,8 +202,20 @@ public class StevesCartsDataGenerators
         @Override
         protected void buildRecipes(Consumer<FinishedRecipe> consumer)
         {
-
+            SmithingTransformRecipeBuilder.smithing(
+                    Ingredient.of(new ItemStack(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE)),
+                    Ingredient.of(getStackFromModule(StevesCartsModules.BASIC_WOOD_CUTTER)),
+                    Ingredient.of(new ItemStack(Items.NETHERITE_INGOT)),
+                    RecipeCategory.MISC,
+                    getStackFromModule(StevesCartsModules.NETHERITE_WOOD_CUTTER).getItem()).unlocks("has_netherite", has(Tags.Items.INGOTS_NETHERITE))
+                    .save(consumer, "netherite_wood_cutter");
         }
+    }
+
+    static ItemStack getStackFromModule(ModuleData moduleData)
+    {
+        if(moduleData == null) return ItemStack.EMPTY;
+        return moduleData.getItemStack();
     }
 
     static class GeneratorBlockTags extends BlockTagsProvider
