@@ -4,8 +4,8 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.api.client.ModelCartbase;
-import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.workers.ModuleBridge;
 
 public class ModelBridge extends ModelCartbase

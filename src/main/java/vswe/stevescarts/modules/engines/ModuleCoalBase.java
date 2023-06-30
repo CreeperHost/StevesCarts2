@@ -1,6 +1,5 @@
 package vswe.stevescarts.modules.engines;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.creeperhost.polylib.helpers.FuelHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;

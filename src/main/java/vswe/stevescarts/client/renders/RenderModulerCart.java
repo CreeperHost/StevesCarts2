@@ -15,8 +15,8 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import vswe.stevescarts.api.client.ModelCartbase;
-import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 import java.util.ArrayList;
 

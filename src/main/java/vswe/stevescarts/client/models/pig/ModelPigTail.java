@@ -5,8 +5,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.client.ModelCartbase;
-import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.helpers.ResourceHelper;
 
 public class ModelPigTail extends ModelCartbase
 {

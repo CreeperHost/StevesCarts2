@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerCartAssembler;
@@ -13,7 +14,6 @@ import vswe.stevescarts.containers.slots.SlotModule;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModItems;
-import vswe.stevescarts.api.modules.data.ModuleData;
 
 import javax.annotation.Nonnull;
 

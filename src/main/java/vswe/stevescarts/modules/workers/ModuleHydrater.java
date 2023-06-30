@@ -7,8 +7,8 @@ import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.modules.workers.tools.ModuleFarmer;
 
 public class ModuleHydrater extends ModuleWorker

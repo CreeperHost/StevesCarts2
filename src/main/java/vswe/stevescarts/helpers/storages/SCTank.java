@@ -1,9 +1,7 @@
 package vswe.stevescarts.helpers.storages;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.architectury.hooks.fluid.FluidStackHooks;
-import net.creeperhost.polylib.client.fluid.ScreenFluidRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -26,7 +24,6 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import vswe.stevescarts.client.guis.GuiBase;
 import vswe.stevescarts.helpers.Localization;
 
 import java.text.NumberFormat;

@@ -15,8 +15,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.fluids.FluidStack;
 import vswe.stevescarts.api.client.ModelCartbase;
-import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 
 public class ModelTopTank extends ModelCartbase

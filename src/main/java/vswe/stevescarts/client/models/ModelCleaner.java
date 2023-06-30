@@ -3,8 +3,8 @@ package vswe.stevescarts.client.models;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.api.client.ModelCartbase;
-import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.helpers.ResourceHelper;
 
 public class ModelCleaner extends ModelCartbase
 {

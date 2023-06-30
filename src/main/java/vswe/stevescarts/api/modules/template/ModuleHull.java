@@ -1,7 +1,7 @@
 package vswe.stevescarts.api.modules.template;
 
-import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 public abstract class ModuleHull extends ModuleBase
 {

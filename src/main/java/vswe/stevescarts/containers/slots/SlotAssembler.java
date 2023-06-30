@@ -4,9 +4,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.api.modules.ModuleType;
+import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.items.ItemCarts;
-import vswe.stevescarts.api.modules.data.ModuleData;
 
 import javax.annotation.Nonnull;
 

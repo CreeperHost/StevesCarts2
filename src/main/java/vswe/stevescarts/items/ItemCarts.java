@@ -99,7 +99,7 @@ public class ItemCarts extends MinecartItem
 
     @Override
     public void appendHoverText(@NotNull ItemStack item, @Nullable Level p_77624_2_, @NotNull List<Component> list, @NotNull TooltipFlag p_77624_4_) {
-        if (item.hasTag()) {
+        if (item.getTag() != null) {
             if (item.getTag().contains("modules")) {
                 list.add(Component.literal(ChatFormatting.BLUE + "Installed Modules:"));
                 ListTag moduleListTag = (ListTag) item.getTag().get("modules");
@@ -115,18 +115,6 @@ public class ItemCarts extends MinecartItem
                 }
             }
         }
-    }
-
-    @Deprecated(forRemoval = true)
-    private String formatTime(int ticks)
-    {
-        int seconds = ticks / 20;
-        ticks -= seconds * 20;
-        int minutes = seconds / 60;
-        seconds -= minutes * 60;
-        final int hours = minutes / 60;
-        minutes -= hours * 60;
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     @Override

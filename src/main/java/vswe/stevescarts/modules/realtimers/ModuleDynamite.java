@@ -1,6 +1,5 @@
 package vswe.stevescarts.modules.realtimers;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -8,11 +7,10 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import vswe.stevescarts.StevesCarts;
+import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotExplosion;
@@ -20,7 +18,6 @@ import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.ComponentTypes;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.api.modules.ModuleBase;
 
 public class ModuleDynamite extends ModuleBase
 {

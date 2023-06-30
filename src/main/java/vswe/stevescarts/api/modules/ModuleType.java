@@ -1,9 +1,9 @@
 package vswe.stevescarts.api.modules;
 
-import vswe.stevescarts.modules.addons.ModuleAddon;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.api.modules.template.ModuleHull;
 import vswe.stevescarts.api.modules.template.ModuleStorage;
+import vswe.stevescarts.modules.addons.ModuleAddon;
 import vswe.stevescarts.modules.workers.tools.ModuleTool;
 
 public enum ModuleType

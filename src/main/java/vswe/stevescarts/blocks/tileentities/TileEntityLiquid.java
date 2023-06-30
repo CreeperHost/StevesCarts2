@@ -1,6 +1,5 @@
 package vswe.stevescarts.blocks.tileentities;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -24,7 +23,6 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
-import vswe.stevescarts.client.guis.GuiBase;
 import vswe.stevescarts.containers.ContainerLiquid;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.storages.ITankHolder;

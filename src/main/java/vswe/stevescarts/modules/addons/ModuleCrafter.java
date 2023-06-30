@@ -1,6 +1,5 @@
 package vswe.stevescarts.modules.addons;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.creeperhost.polylib.helpers.RecipeHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;

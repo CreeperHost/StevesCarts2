@@ -1,12 +1,9 @@
 package vswe.stevescarts.modules.storages.tanks;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.creeperhost.polylib.client.fluid.ScreenFluidRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -22,7 +19,7 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import vswe.stevescarts.StevesCarts;
-import vswe.stevescarts.client.guis.GuiBase;
+import vswe.stevescarts.api.modules.template.ModuleStorage;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotLiquidInput;
@@ -32,7 +29,6 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.helpers.storages.ITankHolder;
 import vswe.stevescarts.helpers.storages.SCTank;
-import vswe.stevescarts.api.modules.template.ModuleStorage;
 
 import javax.annotation.Nonnull;
 import java.util.Locale;

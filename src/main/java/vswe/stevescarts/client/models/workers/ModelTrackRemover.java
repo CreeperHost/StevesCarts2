@@ -2,8 +2,8 @@ package vswe.stevescarts.client.models.workers;
 
 import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.api.client.ModelCartbase;
-import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.helpers.ResourceHelper;
 
 public class ModelTrackRemover extends ModelCartbase
 {

@@ -2,14 +2,13 @@ package vswe.stevescarts.upgrades;
 
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+//TODO rewrite the entire upgrade system
 public class AssemblerUpgrade
 {
     private static HashMap<Byte, AssemblerUpgrade> upgrades;

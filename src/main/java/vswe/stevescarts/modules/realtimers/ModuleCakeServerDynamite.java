@@ -3,7 +3,6 @@ package vswe.stevescarts.modules.realtimers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.containers.slots.SlotBase;

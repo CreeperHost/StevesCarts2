@@ -1,6 +1,5 @@
 package vswe.stevescarts.arcade.tetris;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;

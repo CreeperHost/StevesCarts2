@@ -1,7 +1,6 @@
 package vswe.stevescarts.client.models;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -11,8 +10,8 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.api.client.ModelCartbase;
-import vswe.stevescarts.api.modules.interfaces.ILeverModule;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.api.modules.interfaces.ILeverModule;
 
 public class ModelLever extends ModelCartbase
 {

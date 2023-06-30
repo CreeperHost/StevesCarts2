@@ -1,6 +1,7 @@
 package vswe.stevescarts.helpers;
 
 import vswe.stevescarts.Constants;
+import vswe.stevescarts.api.modules.template.ModuleChest;
 import vswe.stevescarts.modules.addons.ModuleBrake;
 import vswe.stevescarts.modules.addons.ModuleInvisible;
 import vswe.stevescarts.modules.addons.ModuleLiquidSensors;
@@ -9,7 +10,6 @@ import vswe.stevescarts.modules.engines.ModuleSolarBase;
 import vswe.stevescarts.modules.realtimers.ModuleDynamite;
 import vswe.stevescarts.modules.realtimers.ModuleShooter;
 import vswe.stevescarts.modules.realtimers.ModuleShooterAdv;
-import vswe.stevescarts.api.modules.template.ModuleChest;
 import vswe.stevescarts.modules.storages.chests.ModuleInternalStorage;
 import vswe.stevescarts.modules.workers.ModuleBridge;
 import vswe.stevescarts.modules.workers.ModuleHydrater;

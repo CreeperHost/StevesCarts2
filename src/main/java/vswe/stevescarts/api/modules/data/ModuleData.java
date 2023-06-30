@@ -8,23 +8,24 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
+import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.init.ModItems;
-import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.items.ItemCartModule;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 public class ModuleData
 {
@@ -410,7 +411,7 @@ public class ModuleData
     @Nonnull
     public ItemStack getItemStack()
     {
-        ItemStack stack = new ItemStack(Items.AIR);
+        ItemStack stack = ItemStack.EMPTY;
         if (ModItems.MODULES.get(this) != null)
         {
             stack = new ItemStack(ModItems.MODULES.get(this).get());
@@ -466,6 +467,7 @@ public class ModuleData
         return true;
     }
 
+    //TODO KILL ALL OF THIS
     @OnlyIn(Dist.CLIENT)
     public void addExtraMessage(final List<Component> list)
     {
@@ -686,6 +688,7 @@ public class ModuleData
         return currentCost;
     }
 
+    //TODO dead code
     private static long calculateCombinations()
     {
         long combinations = 0L;
@@ -716,10 +719,10 @@ public class ModuleData
             return 0L;
         }
         long combinations = 1L;
-        final Iterator itt = potential.iterator();
+        final Iterator<ModuleData> itt = potential.iterator();
         while (itt.hasNext())
         {
-            final ModuleData module = (ModuleData) itt.next();
+            final ModuleData module = itt.next();
             final ArrayList<ModuleData> attachedCopy = (ArrayList<ModuleData>) attached.clone();
             attachedCopy.add(module);
             final ArrayList<ModuleData> potentialCopy = (ArrayList<ModuleData>) potential.clone();

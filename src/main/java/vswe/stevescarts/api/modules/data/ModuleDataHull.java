@@ -1,8 +1,8 @@
 package vswe.stevescarts.api.modules.data;
 
 import net.minecraft.resources.ResourceLocation;
-import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleType;
 
 public class ModuleDataHull extends ModuleData
 {

@@ -19,9 +19,9 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.api.client.ModelCartbase;
+import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.init.ModItems;
-import vswe.stevescarts.api.modules.ModuleBase;
 
 public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implements ItemPropertyFunction
 {

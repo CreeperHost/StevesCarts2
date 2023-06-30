@@ -2,8 +2,8 @@ package vswe.stevescarts.modules.realtimers;
 
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
-import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.entities.EntityMinecartModular;
 
 public class ModuleRocket extends ModuleBase
 {

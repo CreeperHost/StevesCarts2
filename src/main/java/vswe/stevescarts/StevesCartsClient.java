@@ -28,7 +28,11 @@ import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.client.renders.RenderModulerCart;
 import vswe.stevescarts.events.OverlayEventHandler;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.init.*;
+import vswe.stevescarts.init.ModBlocks;
+import vswe.stevescarts.init.ModEntities;
+import vswe.stevescarts.init.ModItems;
+import vswe.stevescarts.init.ModScreens;
+
 import static vswe.stevescarts.init.StevesCartsModules.*;
 
 public class StevesCartsClient

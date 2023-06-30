@@ -1,6 +1,5 @@
 package vswe.stevescarts;
 
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;

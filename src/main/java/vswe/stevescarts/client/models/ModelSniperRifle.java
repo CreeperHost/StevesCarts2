@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.modules.realtimers.ModuleSeat;
 import vswe.stevescarts.modules.realtimers.ModuleShooterAdv;
 
 public class ModelSniperRifle extends ModelCartbase {

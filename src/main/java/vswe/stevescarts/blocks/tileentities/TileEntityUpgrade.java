@@ -1,6 +1,5 @@
 package vswe.stevescarts.blocks.tileentities;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -25,11 +24,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.blocks.BlockUpgrade;
-import vswe.stevescarts.client.guis.GuiBase;
 import vswe.stevescarts.containers.ContainerUpgrade;
 import vswe.stevescarts.helpers.storages.ITankHolder;
 import vswe.stevescarts.helpers.storages.SCTank;

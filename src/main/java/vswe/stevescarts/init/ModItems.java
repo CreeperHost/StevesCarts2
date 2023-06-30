@@ -8,12 +8,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.api.StevesCartsAPI;
-import vswe.stevescarts.client.StevesCartsCreativeTabs;
+import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.helpers.ComponentTypes;
 import vswe.stevescarts.items.ItemCartComponent;
 import vswe.stevescarts.items.ItemCartModule;
 import vswe.stevescarts.items.ItemCarts;
-import vswe.stevescarts.api.modules.data.ModuleData;
 
 import java.util.LinkedHashMap;
 import java.util.Locale;

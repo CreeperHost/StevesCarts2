@@ -1,6 +1,5 @@
 package vswe.stevescarts.modules.workers;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -12,13 +11,11 @@ import net.minecraft.world.level.block.RailBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.IFluidBlock;
+import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotBridge;
 import vswe.stevescarts.entities.EntityMinecartModular;
-import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
-
-import javax.annotation.Nonnull;
 
 public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
     private EntityDataAccessor<Boolean> BRIDGE;

@@ -6,10 +6,8 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.helpers.ComponentTypes;
-import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.init.StevesCartsModules;
 

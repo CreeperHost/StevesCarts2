@@ -1,18 +1,16 @@
 package vswe.stevescarts.modules.addons;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
-import vswe.stevescarts.StevesCarts;
+import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 
 public class ModuleShield extends ModuleAddon implements IActivatorModule
 {

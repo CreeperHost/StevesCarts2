@@ -6,10 +6,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.init.ModContainers;
-import vswe.stevescarts.api.modules.ModuleBase;
 
 import java.util.ArrayList;
 import java.util.Collections;

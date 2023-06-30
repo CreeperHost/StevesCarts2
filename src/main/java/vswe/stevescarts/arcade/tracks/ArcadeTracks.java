@@ -1,6 +1,5 @@
 package vswe.stevescarts.arcade.tracks;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;

@@ -1,6 +1,5 @@
 package vswe.stevescarts.modules.addons;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -16,8 +15,8 @@ import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotEnchantment;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.EnchantmentData;
-import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.Localization;
+import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.network.DataSerializers;
 

@@ -1,8 +1,6 @@
 package vswe.stevescarts.arcade.tracks;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
-import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
