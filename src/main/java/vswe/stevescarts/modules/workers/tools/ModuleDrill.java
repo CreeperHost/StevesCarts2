@@ -8,6 +8,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -550,6 +552,12 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     {
         super.Load(tagCompound, id);
         setDrillEnabled(tagCompound.getBoolean(generateNBTName("DrillEnabled", id)));
+    }
+
+    @Override
+    public boolean receiveDamage(DamageSource source, float val)
+    {
+        return !source.is(DamageTypes.LAVA) || !source.is(DamageTypes.ON_FIRE);
     }
 
     @Override
