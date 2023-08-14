@@ -62,7 +62,6 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     {
         this.renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
-        this.renderTooltip(guiGraphics, mouseX, mouseY);
         if (cart == null) return;
         if (cart.getModules() != null)
         {
@@ -87,6 +86,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
                 renderReturnMouseOver(guiGraphics, mouseX, mouseY);
             }
         }
+        this.renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
 
