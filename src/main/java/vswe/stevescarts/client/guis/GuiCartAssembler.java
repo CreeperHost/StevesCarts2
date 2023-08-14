@@ -54,7 +54,6 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
     private final int[] assemblingProgRect = {375, 180, 115, 11};
     private final int[] fuelProgRect = {375, 200, 115, 11};
     private boolean spin = true;
-    private int oldScale;
 
     public GuiCartAssembler(ContainerCartAssembler containerCartAssembler, Inventory playerInventory, Component iTextComponent)
     {
@@ -69,17 +68,6 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         this.assembler = containerCartAssembler.getAssembler();
         this.imageWidth = 512;
         this.imageHeight = 256;
-        oldScale = Minecraft.getInstance().options.guiScale().get();
-        Minecraft.getInstance().options.guiScale().set(1);
-        Minecraft.getInstance().resizeDisplay();
-    }
-
-    @Override
-    public void onClose()
-    {
-        super.onClose();
-        Minecraft.getInstance().options.guiScale().set(oldScale);
-        Minecraft.getInstance().resizeDisplay();
     }
 
     private void updateErrorList()
