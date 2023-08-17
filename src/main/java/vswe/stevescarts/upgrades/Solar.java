@@ -1,9 +1,10 @@
 package vswe.stevescarts.upgrades;
 
+import vswe.stevescarts.api.upgrades.RechargerBaseUpgrade;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.helpers.Localization;
 
-public class Solar extends RechargerBase
+public class Solar extends RechargerBaseUpgrade
 {
     @Override
     protected int getAmount(final TileEntityUpgrade upgrade)

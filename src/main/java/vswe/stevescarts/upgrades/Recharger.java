@@ -1,9 +1,10 @@
 package vswe.stevescarts.upgrades;
 
+import vswe.stevescarts.api.upgrades.RechargerBaseUpgrade;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.helpers.Localization;
 
-public class Recharger extends RechargerBase
+public class Recharger extends RechargerBaseUpgrade
 {
     protected int amount;
 

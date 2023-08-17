@@ -12,7 +12,7 @@ import vswe.stevescarts.helpers.Localization;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-public class Blueprint extends SimpleInventoryEffect
+public class Blueprint extends SimpleInventoryUpgradeEffect
 {
     public Blueprint()
     {

@@ -27,6 +27,7 @@ import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.data.ModuleDataHull;
+import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.blocks.BlockCartAssembler;
 import vswe.stevescarts.containers.ContainerCartAssembler;
 import vswe.stevescarts.containers.ContainerUpgrade;
@@ -222,9 +223,9 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         return lst;
     }
 
-    public ArrayList<BaseEffect> getEffects()
+    public ArrayList<BaseUpgradeEffect> getEffects()
     {
-        final ArrayList<BaseEffect> lst = new ArrayList<>();
+        final ArrayList<BaseUpgradeEffect> lst = new ArrayList<>();
         for (final TileEntityUpgrade tile : upgrades)
         {
             final AssemblerUpgrade upgrade = tile.getUpgrade();
@@ -323,7 +324,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
             {
                 if (tile.getUpgrade() != null)
                 {
-                    for (final BaseEffect effect : tile.getUpgrade().getEffects())
+                    for (final BaseUpgradeEffect effect : tile.getUpgrade().getEffects())
                     {
                         if (effect instanceof Disassemble)
                         {
@@ -416,7 +417,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         {
             timeRequired += getAssemblingTime(module, true);
         }
-        for (final BaseEffect effect : getEffects())
+        for (final BaseUpgradeEffect effect : getEffects())
         {
             if (effect instanceof TimeFlatCart)
             {
@@ -682,7 +683,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     public int getMaxFuelLevel()
     {
         int capacity = 4000;
-        for (final BaseEffect effect : getEffects())
+        for (final BaseUpgradeEffect effect : getEffects())
         {
             if (effect instanceof FuelCapacity)
             {
@@ -703,7 +704,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     @SuppressWarnings("unused")
     public boolean isCombustionFuelValid()
     {
-        for (final BaseEffect effect : getEffects())
+        for (final BaseUpgradeEffect effect : getEffects())
         {
             if (effect instanceof CombustionFuel)
             {
@@ -726,7 +727,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     private int getTimeDecreased(final boolean isRemoved)
     {
         int timeDecr = 0;
-        for (final BaseEffect effect : getEffects())
+        for (final BaseUpgradeEffect effect : getEffects())
         {
             if (effect instanceof TimeFlat && !(effect instanceof TimeFlatRemoved))
             {
@@ -735,7 +736,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         }
         if (isRemoved)
         {
-            for (final BaseEffect effect : getEffects())
+            for (final BaseUpgradeEffect effect : getEffects())
             {
                 if (effect instanceof TimeFlatRemoved)
                 {
@@ -749,7 +750,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     private float getFuelCost()
     {
         float cost = 1.0f;
-        for (final BaseEffect effect : getEffects())
+        for (final BaseUpgradeEffect effect : getEffects())
         {
             if (effect instanceof FuelCost)
             {
@@ -762,7 +763,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     public float getEfficiency()
     {
         float efficiency = 1.0f;
-        for (final BaseEffect effect : getEffects())
+        for (final BaseUpgradeEffect effect : getEffects())
         {
             if (effect instanceof WorkEfficiency)
             {
@@ -782,7 +783,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         {
             if (tile.getUpgrade() != null)
             {
-                for (final BaseEffect effect : tile.getUpgrade().getEffects())
+                for (final BaseUpgradeEffect effect : tile.getUpgrade().getEffects())
                 {
                     if (effect instanceof Disassemble)
                     {

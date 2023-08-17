@@ -1,8 +1,9 @@
 package vswe.stevescarts.upgrades;
 
+import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.helpers.Localization;
 
-public class FuelCapacity extends BaseEffect
+public class FuelCapacity extends BaseUpgradeEffect
 {
     private final int capacity;
 

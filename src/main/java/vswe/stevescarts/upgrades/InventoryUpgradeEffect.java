@@ -9,11 +9,11 @@ import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
-public abstract class InventoryEffect extends InterfaceEffect
+public abstract class InventoryUpgradeEffect extends InterfaceUpgradeEffect
 {
     protected ArrayList<Slot> slots;
 
-    public InventoryEffect()
+    public InventoryUpgradeEffect()
     {
         slots = new ArrayList<>();
     }

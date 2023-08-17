@@ -1,8 +1,9 @@
 package vswe.stevescarts.upgrades;
 
+import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.helpers.Localization;
 
-public class Redstone extends BaseEffect
+public class Redstone extends BaseUpgradeEffect
 {
     @Override
     public String getName()

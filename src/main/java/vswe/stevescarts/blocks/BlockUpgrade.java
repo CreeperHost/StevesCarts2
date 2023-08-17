@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
-import vswe.stevescarts.upgrades.BaseEffect;
+import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -136,7 +136,7 @@ public class BlockUpgrade extends BlockContainerBase
     {
         if (assemblerUpgrade != null)
         {
-            for (final BaseEffect effect : assemblerUpgrade.getEffects())
+            for (final BaseUpgradeEffect effect : assemblerUpgrade.getEffects())
             {
                 tooltip.add(Component.literal(effect.getName()));
             }

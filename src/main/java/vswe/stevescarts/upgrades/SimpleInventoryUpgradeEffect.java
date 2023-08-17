@@ -1,11 +1,11 @@
 package vswe.stevescarts.upgrades;
 
-public abstract class SimpleInventoryEffect extends InventoryEffect
+public abstract class SimpleInventoryUpgradeEffect extends InventoryUpgradeEffect
 {
     private final int inventoryWidth;
     private final int inventoryHeight;
 
-    public SimpleInventoryEffect(final int inventoryWidth, final int inventoryHeight)
+    public SimpleInventoryUpgradeEffect(final int inventoryWidth, final int inventoryHeight)
     {
         this.inventoryWidth = inventoryWidth;
         this.inventoryHeight = inventoryHeight;

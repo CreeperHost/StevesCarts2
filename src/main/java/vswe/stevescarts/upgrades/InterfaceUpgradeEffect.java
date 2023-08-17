@@ -4,11 +4,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.ContainerListener;
+import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.client.guis.GuiUpgrade;
 import vswe.stevescarts.containers.ContainerUpgrade;
 
-public abstract class InterfaceEffect extends BaseEffect
+public abstract class InterfaceUpgradeEffect extends BaseUpgradeEffect
 {
     public void drawForeground(final TileEntityUpgrade upgrade, final GuiUpgrade gui)
     {

@@ -1,8 +1,9 @@
 package vswe.stevescarts.upgrades;
 
+import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.helpers.Localization;
 
-public class FuelCost extends BaseEffect
+public class FuelCost extends BaseUpgradeEffect
 {
     private final float cost;
 

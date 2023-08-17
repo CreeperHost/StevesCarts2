@@ -23,7 +23,7 @@ import vswe.stevescarts.blocks.tileentities.TileEntityManager;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.init.ModBlocks;
-import vswe.stevescarts.upgrades.BaseEffect;
+import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.upgrades.Disassemble;
 import vswe.stevescarts.upgrades.Transposer;
 
@@ -137,7 +137,7 @@ public class BlockRailAdvDetector extends BaseRailBlock
                         BlockEntity tileentity = world.getBlockEntity(offset);
                         TileEntityUpgrade upgrade = (TileEntityUpgrade) tileentity;
                         if (upgrade != null && upgrade.getUpgrade() != null) {
-                            for (BaseEffect effect : upgrade.getUpgrade().getEffects()) {
+                            for (BaseUpgradeEffect effect : upgrade.getUpgrade().getEffects()) {
                                 if (effect instanceof Transposer) {
                                     Transposer transposer = (Transposer) effect;
                                     if (upgrade.getMaster() == null) {
@@ -145,7 +145,7 @@ public class BlockRailAdvDetector extends BaseRailBlock
                                     }
                                     for (TileEntityUpgrade tile : upgrade.getMaster().getUpgradeTiles()) {
                                         if (tile.getUpgrade() != null) {
-                                            for (BaseEffect effect2 : tile.getUpgrade().getEffects()) {
+                                            for (BaseUpgradeEffect effect2 : tile.getUpgrade().getEffects()) {
                                                 if (effect2 instanceof Disassemble) {
                                                     Disassemble disassembler = (Disassemble) effect2;
                                                     if (tile.getItem(0).isEmpty()) {

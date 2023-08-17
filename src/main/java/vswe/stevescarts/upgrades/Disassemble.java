@@ -6,6 +6,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.api.modules.data.ModuleData;
+import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerCartAssembler;
@@ -17,7 +18,7 @@ import vswe.stevescarts.init.ModItems;
 
 import javax.annotation.Nonnull;
 
-public class Disassemble extends InventoryEffect
+public class Disassemble extends InventoryUpgradeEffect
 {
     @Override
     public int getInventorySize()
@@ -199,7 +200,7 @@ public class Disassemble extends InventoryEffect
     public int canDisassemble(final TileEntityUpgrade upgrade)
     {
         int disassembleCount = 0;
-        for (final BaseEffect effect : upgrade.getMaster().getEffects())
+        for (final BaseUpgradeEffect effect : upgrade.getMaster().getEffects())
         {
             if (effect instanceof Disassemble)
             {

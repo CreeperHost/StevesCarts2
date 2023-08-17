@@ -14,7 +14,7 @@ import vswe.stevescarts.containers.slots.SlotLiquidUpgradeInput;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.helpers.storages.SCTank;
 
-public abstract class TankEffect extends InventoryEffect
+public abstract class TankUpgradeEffect extends InventoryUpgradeEffect
 {
     private static final int tankInterfaceX = 35;
     private static final int tankInterfaceY = 20;
@@ -60,12 +60,12 @@ public abstract class TankEffect extends InventoryEffect
     @Override
     public void drawBackground(GuiGraphics guiGraphics, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
     {
-        if (TankEffect.texture == null)
+        if (TankUpgradeEffect.texture == null)
         {
-            TankEffect.texture = ResourceHelper.getResource("/gui/tank.png");
+            TankUpgradeEffect.texture = ResourceHelper.getResource("/gui/tank.png");
         }
         upgrade.tank.drawFluid(guiGraphics, gui, tankInterfaceX, tankInterfaceY);
-        guiGraphics.blit(TankEffect.texture, gui.getGuiLeft() + tankInterfaceX, gui.getGuiTop() + tankInterfaceY, 0, 0, 36, 51);
+        guiGraphics.blit(TankUpgradeEffect.texture, gui.getGuiLeft() + tankInterfaceX, gui.getGuiTop() + tankInterfaceY, 0, 0, 36, 51);
     }
 
     @OnlyIn(Dist.CLIENT)

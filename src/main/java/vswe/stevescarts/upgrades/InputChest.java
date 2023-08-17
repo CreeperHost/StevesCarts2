@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.data.ModuleDataHull;
+import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerCartAssembler;
@@ -18,7 +19,7 @@ import vswe.stevescarts.helpers.storages.TransferHandler;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-public class InputChest extends SimpleInventoryEffect
+public class InputChest extends SimpleInventoryUpgradeEffect
 {
     public InputChest(final int inventoryWidth, final int inventoryHeight)
     {
@@ -106,7 +107,7 @@ public class InputChest extends SimpleInventoryEffect
     {
         for (final TileEntityUpgrade tile : assembler.getUpgradeTiles())
         {
-            for (final BaseEffect effect : tile.getUpgrade().getEffects())
+            for (final BaseUpgradeEffect effect : tile.getUpgrade().getEffects())
             {
                 if (effect instanceof Blueprint)
                 {

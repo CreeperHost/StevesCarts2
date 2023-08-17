@@ -13,7 +13,7 @@ import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.init.ModContainers;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketFluidSync;
-import vswe.stevescarts.upgrades.InventoryEffect;
+import vswe.stevescarts.upgrades.InventoryUpgradeEffect;
 
 import java.util.Objects;
 
@@ -38,7 +38,7 @@ public class ContainerUpgrade extends ContainerBase
         {
             try
             {
-                final InventoryEffect inventory = upgrade.getUpgrade().getInventoryEffect();
+                final InventoryUpgradeEffect inventory = upgrade.getUpgrade().getInventoryEffect();
                 inventory.clear();
                 for (int id = 0; id < inventory.getInventorySize(); ++id)
                 {

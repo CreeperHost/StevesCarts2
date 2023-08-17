@@ -6,7 +6,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.helpers.Localization;
 
-public class ThermalFuel extends TankEffect
+public class ThermalFuel extends TankUpgradeEffect
 {
     public static final int LAVA_EFFICIENCY = 3;
 

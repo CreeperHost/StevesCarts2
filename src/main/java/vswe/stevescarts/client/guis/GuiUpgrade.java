@@ -9,8 +9,8 @@ import net.minecraft.world.entity.player.Inventory;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerUpgrade;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.upgrades.InterfaceEffect;
-import vswe.stevescarts.upgrades.InventoryEffect;
+import vswe.stevescarts.upgrades.InterfaceUpgradeEffect;
+import vswe.stevescarts.upgrades.InventoryUpgradeEffect;
 
 public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
 {
@@ -32,7 +32,7 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
         super.render(guiGraphics, mouseX, mouseY, p_230430_4_);
         if (upgrade.getUpgrade() != null)
         {
-            final InterfaceEffect gui = upgrade.getUpgrade().getInterfaceEffect();
+            final InterfaceUpgradeEffect gui = upgrade.getUpgrade().getInterfaceEffect();
             if (gui != null)
             {
                 gui.drawForeground(upgrade, this);
@@ -55,7 +55,7 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
         guiGraphics.blit(GuiUpgrade.texture, j, k, 0, 0, imageWidth, imageHeight);
         if (upgrade.getUpgrade() != null)
         {
-            final InventoryEffect inventory = upgrade.getUpgrade().getInventoryEffect();
+            final InventoryUpgradeEffect inventory = upgrade.getUpgrade().getInventoryEffect();
             if (inventory != null)
             {
                 for (int i = 0; i < inventory.getInventorySize(); ++i)
@@ -63,7 +63,7 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
                     guiGraphics.blit(GuiUpgrade.texture, j + inventory.getSlotX(i) - 1, k + inventory.getSlotY(i) - 1, 0, imageHeight, 18, 18);
                 }
             }
-            final InterfaceEffect gui = upgrade.getUpgrade().getInterfaceEffect();
+            final InterfaceUpgradeEffect gui = upgrade.getUpgrade().getInterfaceEffect();
             if (gui != null)
             {
                 gui.drawBackground(guiGraphics, upgrade, this, mouseX, mouseY);

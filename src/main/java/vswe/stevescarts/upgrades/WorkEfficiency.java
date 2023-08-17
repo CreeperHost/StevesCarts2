@@ -1,8 +1,9 @@
 package vswe.stevescarts.upgrades;
 
+import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.helpers.Localization;
 
-public class WorkEfficiency extends BaseEffect
+public class WorkEfficiency extends BaseUpgradeEffect
 {
     private final float efficiency;
 

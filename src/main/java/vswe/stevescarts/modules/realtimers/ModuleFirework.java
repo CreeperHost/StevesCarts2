@@ -309,7 +309,7 @@ public class ModuleFirework extends ModuleBase
         final int[] colors = new int[usedColors.size()];
         for (int k = 0; k < colors.length; ++k)
         {
-            //			colors[k] = ItemDye.DYE_COLORS[usedColors.get(k)];
+//            			colors[k] = ItemDye.DYE_COLORS[usedColors.get(k)];
         }
         //		for (int k = 0; k < getInventorySize(); ++k) {
         //			@Nonnull

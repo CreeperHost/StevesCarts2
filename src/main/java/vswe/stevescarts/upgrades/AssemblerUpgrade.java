@@ -2,6 +2,7 @@ package vswe.stevescarts.upgrades;
 
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.CompoundTag;
+import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class AssemblerUpgrade
     private static HashMap<Byte, AssemblerUpgrade> upgrades;
     private final byte id;
     private final String name;
-    private final ArrayList<BaseEffect> effects;
+    private final ArrayList<BaseUpgradeEffect> effects;
     private String icon;
 
     public static HashMap<Byte, AssemblerUpgrade> getUpgrades()
@@ -79,20 +80,20 @@ public class AssemblerUpgrade
         return I18n.get("block.stevescarts.upgrade_" + getRawName());
     }
 
-    public AssemblerUpgrade addEffect(final BaseEffect effect)
+    public AssemblerUpgrade addEffect(final BaseUpgradeEffect effect)
     {
         effects.add(effect);
         return this;
     }
 
-    public ArrayList<BaseEffect> getEffects()
+    public ArrayList<BaseUpgradeEffect> getEffects()
     {
         return effects;
     }
 
     public int getInventorySize()
     {
-        final InventoryEffect inv = getInventoryEffect();
+        final InventoryUpgradeEffect inv = getInventoryEffect();
         if (inv != null)
         {
             return inv.getInventorySize();
@@ -100,37 +101,37 @@ public class AssemblerUpgrade
         return 0;
     }
 
-    public InterfaceEffect getInterfaceEffect()
+    public InterfaceUpgradeEffect getInterfaceEffect()
     {
-        for (final BaseEffect effect : effects)
+        for (final BaseUpgradeEffect effect : effects)
         {
-            if (effect instanceof InterfaceEffect)
+            if (effect instanceof InterfaceUpgradeEffect)
             {
-                return (InterfaceEffect) effect;
+                return (InterfaceUpgradeEffect) effect;
             }
         }
         return null;
     }
 
-    public InventoryEffect getInventoryEffect()
+    public InventoryUpgradeEffect getInventoryEffect()
     {
-        for (final BaseEffect effect : effects)
+        for (final BaseUpgradeEffect effect : effects)
         {
-            if (effect instanceof InventoryEffect)
+            if (effect instanceof InventoryUpgradeEffect)
             {
-                return (InventoryEffect) effect;
+                return (InventoryUpgradeEffect) effect;
             }
         }
         return null;
     }
 
-    public TankEffect getTankEffect()
+    public TankUpgradeEffect getTankEffect()
     {
-        for (final BaseEffect effect : effects)
+        for (final BaseUpgradeEffect effect : effects)
         {
-            if (effect instanceof TankEffect)
+            if (effect instanceof TankUpgradeEffect)
             {
-                return (TankEffect) effect;
+                return (TankUpgradeEffect) effect;
             }
         }
         return null;
@@ -138,7 +139,7 @@ public class AssemblerUpgrade
 
     public void init(final TileEntityUpgrade upgrade)
     {
-        for (final BaseEffect effect : effects)
+        for (final BaseUpgradeEffect effect : effects)
         {
             effect.init(upgrade);
         }
@@ -146,7 +147,7 @@ public class AssemblerUpgrade
 
     public void load(final TileEntityUpgrade upgrade, final CompoundTag compound)
     {
-        for (final BaseEffect effect : effects)
+        for (final BaseUpgradeEffect effect : effects)
         {
             effect.load(upgrade, compound);
         }
@@ -154,7 +155,7 @@ public class AssemblerUpgrade
 
     public void save(final TileEntityUpgrade upgrade, final CompoundTag compound)
     {
-        for (final BaseEffect effect : effects)
+        for (final BaseUpgradeEffect effect : effects)
         {
             effect.save(upgrade, compound);
         }
@@ -162,7 +163,7 @@ public class AssemblerUpgrade
 
     public void update(final TileEntityUpgrade upgrade)
     {
-        for (final BaseEffect effect : effects)
+        for (final BaseUpgradeEffect effect : effects)
         {
             effect.update(upgrade);
         }
@@ -170,7 +171,7 @@ public class AssemblerUpgrade
 
     public void removed(final TileEntityUpgrade upgrade)
     {
-        for (final BaseEffect effect : effects)
+        for (final BaseUpgradeEffect effect : effects)
         {
             effect.removed(upgrade);
         }

@@ -33,7 +33,7 @@ import vswe.stevescarts.helpers.storages.SCTank;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
-import vswe.stevescarts.upgrades.InventoryEffect;
+import vswe.stevescarts.upgrades.InventoryUpgradeEffect;
 
 public class TileEntityUpgrade extends TileEntityBase implements WorldlyContainer, ITankHolder, MenuProvider
 {
@@ -286,7 +286,7 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
         super.setChanged();
         if (getUpgrade() != null)
         {
-            final InventoryEffect inv = getUpgrade().getInventoryEffect();
+            final InventoryUpgradeEffect inv = getUpgrade().getInventoryEffect();
             if (inv != null)
             {
                 inv.onInventoryChanged(this);
