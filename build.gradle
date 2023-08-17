@@ -124,6 +124,12 @@ repositories {
         name "Architectury"
         url "https://maven.architectury.dev/"
     }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
     // Put repositories for dependencies here
     // NeoGradle automatically adds the Forge maven and Maven Central for you
 
@@ -143,6 +149,7 @@ dependencies {
     minecraft "net.neoforged:forge:${minecraft_version}-${neo_version}"
     implementation fg.deobf("dev.architectury:architectury-forge:${rootProject.architectury_version}")
     implementation fg.deobf("net.creeperhost:polylib-forge:${rootProject.polylib_version}")
+    implementation fg.deobf("curse.maven:railcraft-reborn-901491:4708018")
 
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
