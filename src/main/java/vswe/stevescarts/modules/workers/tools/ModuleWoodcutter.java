@@ -350,20 +350,13 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         }
 
         List<ItemStack> nerfedstuff = getTierDrop(stuff);
-        boolean first = true;
         for (@Nonnull ItemStack iStack : nerfedstuff)
         {
             getCart().addItemToChest(iStack);
             if (iStack.getCount() != 0)
             {
-                if (first)
-                {
-                    return false;
-                }
-                final ItemEntity entityitem = new ItemEntity(world, getCart().x(), getCart().y(), getCart().z(), iStack);
-                world.addFreshEntity(entityitem);
+                return false;
             }
-            first = false;
         }
         world.removeBlock(here, false);
         int basetime;
