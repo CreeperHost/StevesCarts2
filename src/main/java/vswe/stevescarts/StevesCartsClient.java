@@ -42,8 +42,6 @@ public class StevesCartsClient
         ModScreens.init();
         initModels();
 
-        ItemProperties.register(ModItems.CARTS.get(), new ResourceLocation(Constants.MOD_ID, ""), ItemStackRenderer.getInstance());
-
         EntityRenderers.register(ModEntities.MODULAR_CART.get(), RenderModulerCart::new);
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.ADVANCED_DETECTOR.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.JUNCTION.get(), RenderType.cutout());

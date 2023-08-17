@@ -23,7 +23,7 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.init.ModItems;
 
-public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implements ItemPropertyFunction
+public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer
 {
     public static ItemStackRenderer instance;
 
@@ -88,11 +88,5 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer implement
             instance = new ItemStackRenderer(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
         }
         return instance;
-    }
-
-    @Override
-    public float call(@NotNull ItemStack p_174676_, @Nullable ClientLevel p_174677_, @Nullable LivingEntity p_174678_, int p_174679_)
-    {
-        return 1F;
     }
 }
