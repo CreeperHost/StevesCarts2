@@ -1192,26 +1192,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public void tick()
     {
         flipped = true;
-//        int i = Mth.floor(this.getX());
-//        int j = Mth.floor(this.getY());
-//        int k = Mth.floor(this.getZ());
-//        if (this.level.getBlockState(new BlockPos(i, j - 1, k)).is(BlockTags.RAILS))
-//        {
-//            --j;
-//        }
-
-//        BlockPos blockpos = new BlockPos(i, j, k);
-//        BlockState blockState = this.level.getBlockState(blockpos);
-
-//        if (blockState.getBlock() instanceof BaseRailBlock)
-//        {
-//            RailShape railshape = ((BaseRailBlock) blockState.getBlock()).getRailDirection(blockState, this.level, getExactPosition().below(), this);
-//            if (blockState.getBlock() != ModBlocks.JUNCTION.get())
-//            {
-//                lastRailShape = railshape;
-//            }
-//        }
-
         onCartUpdate();
         if (level().isClientSide)
         {
@@ -1283,7 +1263,10 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public @NotNull InteractionResult interactAt(@NotNull Player player, @NotNull Vec3 vec, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResult interactAt(@NotNull Player player, @NotNull Vec3 vec, @NotNull InteractionHand hand)
+    {
+        if(player.isCrouching()) return InteractionResult.FAIL;
+
         if (isPlaceholder) {
             return InteractionResult.FAIL;
         }
