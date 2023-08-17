@@ -41,12 +41,7 @@ public class StevesCartsClient
     {
         ModScreens.init();
         initModels();
-
         EntityRenderers.register(ModEntities.MODULAR_CART.get(), RenderModulerCart::new);
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ADVANCED_DETECTOR.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.JUNCTION.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(ModBlocks.BATTERIES.get(), RenderType.cutout());
-
         OverlayEventHandler.init();
     }
 
