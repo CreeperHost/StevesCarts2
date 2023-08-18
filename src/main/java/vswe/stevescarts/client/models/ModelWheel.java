@@ -2,6 +2,11 @@ package vswe.stevescarts.client.models;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -10,35 +15,17 @@ import vswe.stevescarts.helpers.ResourceHelper;
 
 public class ModelWheel extends ModelCartbase
 {
-    private static ResourceLocation texture;
-    private ModelPart anchor;
 
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
-    {
-        return ModelWheel.texture;
-    }
-
-    @Override
-    protected int getTextureWidth()
-    {
-        return 32;
-    }
-
-    @Override
-    protected int getTextureHeight()
-    {
-        return 32;
-    }
-
-    @Override
-    public float extraMult()
-    {
-        return 0.65f;
-    }
+//    @Override
+//    public float extraMult()
+//    {
+//        return 0.65f;
+//    }
 
     public ModelWheel()
     {
+        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/wheelModel.png"));
+
         //TODO
         //        AddRenderer(anchor = new ModelRenderer(this));
         //        anchor.setPos(-10.0f, -5.0f, 0.0f);
@@ -140,15 +127,17 @@ public class ModelWheel extends ModelCartbase
         //        innerright.yRot = -1.5707964f;
     }
 
+    public static LayerDefinition getTexturedModelData()
+    {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        return LayerDefinition.create(modelData, 32, 32);
+    }
+
     @Override
     public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll)
     {
         //TODO
 //        anchor.xRot = ((module == null) ? 0.0f : ((ModuleAdvControl) module).getWheelAngle());
-    }
-
-    static
-    {
-        ModelWheel.texture = ResourceHelper.getResource("/models/wheelModel.png");
     }
 }

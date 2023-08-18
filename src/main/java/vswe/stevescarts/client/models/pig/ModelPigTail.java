@@ -2,6 +2,11 @@ package vswe.stevescarts.client.models.pig;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -10,22 +15,16 @@ import vswe.stevescarts.helpers.ResourceHelper;
 
 public class ModelPigTail extends ModelCartbase
 {
-    private static ResourceLocation texture;
-
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
-    {
-        return ModelPigTail.texture;
-    }
-
-    @Override
-    protected int getTextureHeight()
-    {
-        return 32;
-    }
-
     public ModelPigTail()
     {
+        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/pigtailModel.png"));
+    }
+
+    public static LayerDefinition getTexturedModelData()
+    {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+
         //TODO
         //        final ModelRenderer tailanchor = new ModelRenderer(this);
         //        AddRenderer(tailanchor);
@@ -56,11 +55,9 @@ public class ModelPigTail extends ModelCartbase
         //        tailanchor.addChild(tail5);
         //        tail5.addBox(-0.5f, -0.5f, -0.0f, 1, 1, 1, 0.0f);
         //        tail5.setPos(0.0f, -2.0f, 0.0f);
-    }
 
-    static
-    {
-        ModelPigTail.texture = ResourceHelper.getResource("/models/pigtailModel.png");
+
+        return LayerDefinition.create(modelData, 32, 32);
     }
 
     @Override

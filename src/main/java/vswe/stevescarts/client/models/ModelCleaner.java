@@ -1,5 +1,10 @@
 package vswe.stevescarts.client.models;
 
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -8,34 +13,17 @@ import vswe.stevescarts.helpers.ResourceHelper;
 
 public class ModelCleaner extends ModelCartbase
 {
-    private static ResourceLocation texture;
-
-    @Override
-    public RenderType getRenderType(ModuleBase moduleBase)
-    {
-        return RenderType.entityCutoutNoCull(getResource(moduleBase));
-    }
-
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
-    {
-        return ModelCleaner.texture;
-    }
-
-    @Override
-    protected int getTextureWidth()
-    {
-        return 32;
-    }
-
-    @Override
-    protected int getTextureHeight()
-    {
-        return 32;
-    }
 
     public ModelCleaner()
     {
+        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/cleanerModel.png"));
+    }
+
+    public static LayerDefinition getTexturedModelData()
+    {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+
         //TODO
         //        final ModelRenderer box = new ModelRenderer(this, 0, 0);
         //        AddRenderer(box);
@@ -74,10 +62,6 @@ public class ModelCleaner extends ModelCartbase
         //            externaltube.setPos(-10.95f, -0.0f, -3.05f * (k * 2 - 1));
         //            externaltube.yRot = 1.5707964f;
         //        }
-    }
-
-    static
-    {
-        ModelCleaner.texture = ResourceHelper.getResource("/models/cleanerModel.png");
+        return LayerDefinition.create(modelData, 32, 32);
     }
 }

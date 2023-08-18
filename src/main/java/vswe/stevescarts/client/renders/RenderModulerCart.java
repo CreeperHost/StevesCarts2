@@ -137,7 +137,7 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular> {
         int j = (int) (f1 * 255.0F) << 24;
         Font font = this.getFont();
 
-        int height = 0;//labels.size() * font.lineHeight;
+        int height = 0;
 
         for (int i = 0; i < labels.size(); i++) {
             Component label = labels.get(i);
@@ -147,10 +147,6 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular> {
 
             height += font.lineHeight;
         }
-
-//        if (flag) {
-//            font.drawInBatch(p_114499_, f2, (float) i, -1, false, matrix4f, bufferSource, false, 0, p_114502_);
-//        }
 
         poseStack.popPose();
     }

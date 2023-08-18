@@ -1,23 +1,25 @@
 package vswe.stevescarts.client.models.workers;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import vswe.stevescarts.api.client.ModelCartbase;
-import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.helpers.ResourceHelper;
 
 public class ModelTrackRemover extends ModelCartbase
 {
-    private static ResourceLocation texture;
-
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
-    {
-        return ModelTrackRemover.texture;
-    }
-
     public ModelTrackRemover()
     {
-        super();
+        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/removerModel.png"));
+    }
+
+    public static LayerDefinition getTexturedModelData()
+    {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+//        modelPartData.addOrReplaceChild("sit", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0f, -2.0f, -2.0f, 8, 4, 4), PartPose.offset(0.0f, 1.0f, 0.0f));
+//        modelPartData.addOrReplaceChild("back", CubeListBuilder.create().texOffs(0, 8).addBox(-4.0f, -2.0f, -1.0f, 8, 12, 2), PartPose.offset(0.0f, -7.0f, 3.0f));
+
         //TODO
         //        final ModelRenderer base = new ModelRenderer(this, 0, 0);
         //        AddRenderer(base);
@@ -47,10 +49,8 @@ public class ModelTrackRemover extends ModelCartbase
         //        end.addBox(-7.0f, -11.0f, -0.5f, 14, 14, 1, 0.0f);
         //        end.setPos(12.0f, 0.0f, -0.0f);
         //        end.yRot = 1.5707964f;
-    }
 
-    static
-    {
-        ModelTrackRemover.texture = ResourceHelper.getResource("/models/removerModel.png");
+
+        return LayerDefinition.create(modelData, 32, 32);
     }
 }

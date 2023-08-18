@@ -2,31 +2,28 @@ package vswe.stevescarts.client.models.pig;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.helpers.ResourceHelper;
 
 public class ModelPigHelmet extends ModelCartbase
 {
-    private boolean isOverlay;
-
-    @Override
-    public ResourceLocation getResource(final ModuleBase module)
-    {
-        //		final ModulePig pig = (ModulePig) module;
-        //		return pig.getHelmetResource(isOverlay);
-        return new ResourceLocation("textures/entity/minecart.png");
-    }
-
-    @Override
-    protected int getTextureHeight()
-    {
-        return 32;
-    }
-
     public ModelPigHelmet(final boolean isOverlay)
     {
+        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/minecart.png"));
+    }
+
+    public static LayerDefinition getTexturedModelData()
+    {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
         //TODO
         //        this.isOverlay = isOverlay;
         //        final ModelRenderer Headwear = new ModelRenderer(this, 0, 0);
@@ -34,6 +31,7 @@ public class ModelPigHelmet extends ModelCartbase
         //        Headwear.addBox(-4.0f, -4.0f, -4.0f, 8, 8, 8, 0.0f);
         //        Headwear.setPos(-12.2f + (isOverlay ? 0.2f : 0.0f), -5.4f, 0.0f);
         //        Headwear.yRot = 1.5707964f;
+        return LayerDefinition.create(modelData, 32, 32);
     }
 
     @Override
