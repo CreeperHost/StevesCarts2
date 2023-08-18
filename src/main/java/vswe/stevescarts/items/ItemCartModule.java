@@ -36,24 +36,19 @@ public class ItemCartModule extends Item implements IModuleItem
         if (moduleData != null)
         {
             moduleData.addInformation(textComponents, stack.getTag());
-            textComponents.add(Component.literal("ID " + moduleData.getID()));
-        }
-        else if (!stack.isEmpty() && stack.getItem() instanceof ItemCartModule)
-        {
-            textComponents.add(Component.literal("Module id " + moduleData.getID()));
-        }
-        else
-        {
-            textComponents.add(Component.literal("Unknown module id"));
+            if(flag.isAdvanced())
+                textComponents.add(Component.literal("ID " + moduleData.getID()));
         }
         super.appendHoverText(stack, world, textComponents, flag);
     }
 
+    @Override
     public ModuleData getModuleData()
     {
         return moduleData;
     }
 
+    @Override
     public void addExtraDataToCart(final CompoundTag save, @Nonnull ItemStack module, final int i)
     {
         if (module.getTag() != null && module.getTag().contains("Data"))
