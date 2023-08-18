@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "D": {
+      "tag": "forge:gems/diamond"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "G": {
+      "tag": "forge:ingots/gold"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "III",
+    "GEG",
+    "IDI"
+  ],
+  "result": {
+    "item": "stevescarts:module_chunk_loader"
+  },
+  "show_notification": true
+}

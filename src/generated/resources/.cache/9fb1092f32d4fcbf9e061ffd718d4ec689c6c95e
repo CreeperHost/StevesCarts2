@@ -1,9 +1,11 @@
-// 1.20.1	2023-08-18T13:05:39.7474354	Recipes
+// 1.20.1	2023-08-18T15:21:24.1368314	Recipes
 a9091b81aef08b93ece19375cd6f98e42863af9c data/minecraft/advancements/recipes/misc/netherite_wood_cutter.json
 ebd68a5f48106e3ad0c234005e6ab5daac2db702 data/minecraft/recipes/netherite_wood_cutter.json
 1cce352ef607dfb271688f5a959ec9e03a33b52e data/stevescarts/advancements/recipes/misc/blockadvdetector.json
 dcf96acdb7cc066554d12e75377f489dd1d589b4 data/stevescarts/advancements/recipes/misc/galgadorian_metal.json
+89f1bafa64205502fc6d67ec45465ea61aac8650 data/stevescarts/advancements/recipes/misc/module_chunk_loader.json
 05aa75ab8e6bf0481e06bab8fa217ecfca4cb01e data/stevescarts/advancements/recipes/misc/reinforced_metal.json
 4caf4d06a45578e9f58981e9fcd10b55de61a92c data/stevescarts/recipes/blockadvdetector.json
 a2abd7ea5d326f1600c543f1d2ba8294155d32da data/stevescarts/recipes/galgadorian_metal.json
+57bf02b40c74ae674de37f7ea717be7008eb3074 data/stevescarts/recipes/module_chunk_loader.json
 63eb4d253b71d5a742d8c532580fdbe7bff76ad6 data/stevescarts/recipes/reinforced_metal.json

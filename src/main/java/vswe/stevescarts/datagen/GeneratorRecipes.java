@@ -3,6 +3,7 @@ package vswe.stevescarts.datagen;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -10,6 +11,7 @@ import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.StevesCarts;
+import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.helpers.ComponentTypes;
 import vswe.stevescarts.init.ModBlocks;
@@ -31,6 +33,7 @@ public class GeneratorRecipes extends RecipeProvider
         addBlockRecipes(consumer);
 
         addSmithingTableRecipes(consumer);
+        addModuleRecipes(consumer);
     }
 
     private void addBlockRecipes(Consumer<FinishedRecipe> consumer)
@@ -64,6 +67,21 @@ public class GeneratorRecipes extends RecipeProvider
                 .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
                 .save(consumer);
 
+    }
+
+    private void addModuleRecipes(Consumer<FinishedRecipe> consumer)
+    {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, getStackFromModule(StevesCartsModules.CHUNK_LOADER).getItem())
+                .pattern("III")
+                .pattern("GEG")
+                .pattern("IDI")
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('G', Tags.Items.INGOTS_GOLD)
+                .define('E', Items.ENDER_EYE)
+                .define('D', Tags.Items.GEMS_DIAMOND)
+                .group(Constants.MOD_ID)
+                .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
+                .save(consumer);
     }
 
     private void addSmithingTableRecipes(Consumer<FinishedRecipe> consumer)
