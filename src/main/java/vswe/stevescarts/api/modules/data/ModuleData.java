@@ -19,7 +19,6 @@ import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.init.ModItems;
-import vswe.stevescarts.items.ItemCartModule;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -350,8 +349,7 @@ public class ModuleData
                     //If this ever explodes, then someone please slap whoever decided to use the arbitrary index of the module used as the key for the id field. WTF...
                     String regName = moduleTag.getString(String.valueOf(i));
                     ModuleData data = StevesCartsAPI.MODULE_REGISTRY.get(new ResourceLocation(regName));
-                    ItemCartModule item = (ItemCartModule) ModItems.MODULES.get(data).get();
-                    ItemStack module = new ItemStack(item);
+                    ItemStack module = data.getItemStack();
                     if (moduleTag.contains("data")) {
                         module.addTagElement("data", moduleTag.getCompound("data"));
                     }
@@ -400,9 +398,9 @@ public class ModuleData
 
     public static boolean isItemOfModularType(@Nonnull ItemStack itemstack, final Class<? extends ModuleBase> validClass)
     {
-        if(itemstack.getItem() instanceof ItemCartModule itemCartModule)
+        if(itemstack.getItem() instanceof IModuleItem iModuleItem)
         {
-            final ModuleData moduleData = itemCartModule.getModuleData();
+            final ModuleData moduleData = iModuleItem.getModuleData();
             return moduleData != null && validClass.isAssignableFrom(moduleData.moduleClass);
         }
         return false;
