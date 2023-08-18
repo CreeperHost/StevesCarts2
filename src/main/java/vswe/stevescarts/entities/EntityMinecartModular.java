@@ -45,6 +45,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -53,6 +54,7 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
+import vswe.stevescarts.api.events.CartEvents;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
@@ -451,6 +453,10 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     @Override
     public void remove(@NotNull RemovalReason removalReason)
     {
+        CartEvents.CartRemovedEvent event = new CartEvents.CartRemovedEvent(this);
+        MinecraftForge.EVENT_BUS.post(event);
+        if(event.isCanceled()) return;
+
         if (level().isClientSide)
         {
             for (int var1 = 0; var1 < getContainerSize(); ++var1)
