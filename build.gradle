@@ -222,21 +222,21 @@ publishing {
         register('mavenJava', MavenPublication) {
             groupId "net.creeperhost"
             artifactId rootProject.archivesBaseName
-            version version
+            version project.mod_version
             from components.java
         }
     }
     repositories {
-        if (ENV.CREEPERHOST_MAVEN_TOKEN) {
+//        if (ENV.CREEPERHOST_MAVEN_TOKEN) {
             maven {
                 url "https://maven.creeperhost.net/repository/maven-releases/"
                 allowInsecureProtocol = true
                 credentials {
                     username = "githubci"
-                    password = ENV.CREEPERHOST_MAVEN_TOKEN
+                    password = "${ENV.CREEPERHOST_MAVEN_TOKEN}"
                 }
             }
-        }
+//        }
     }
 }
 
