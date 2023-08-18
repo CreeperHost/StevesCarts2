@@ -224,6 +224,7 @@ publishing {
         }
     }
     repositories {
+        println '???????'
         if (ENV.CREEPERHOST_MAVEN_TOKEN) {
             println 'We have a token'
             maven {
