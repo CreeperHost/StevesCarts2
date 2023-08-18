@@ -225,6 +225,7 @@ publishing {
     }
     repositories {
         if (ENV.CREEPERHOST_MAVEN_TOKEN) {
+            println 'We have a token'
             maven {
                 url "https://maven.creeperhost.net/release"
                 credentials {
