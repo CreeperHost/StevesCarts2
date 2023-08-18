@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotFirework;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
@@ -52,7 +52,7 @@ public class ModuleFirework extends ModuleBase
     }
 
     @Override
-    protected SlotBase getSlot(final int slotId, final int x, final int y)
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
     {
         return new SlotFirework(getCart(), slotId, 8 + x * 18, 16 + y * 18);
     }

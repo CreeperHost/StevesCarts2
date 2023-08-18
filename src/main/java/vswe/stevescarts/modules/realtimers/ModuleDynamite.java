@@ -12,7 +12,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotExplosion;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.ComponentTypes;
@@ -45,7 +45,7 @@ public class ModuleDynamite extends ModuleBase
     }
 
     @Override
-    protected SlotBase getSlot(final int slotId, final int x, final int y)
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
     {
         return new SlotExplosion(getCart(), slotId, 8 + x * 18, 23 + y * 18);
     }

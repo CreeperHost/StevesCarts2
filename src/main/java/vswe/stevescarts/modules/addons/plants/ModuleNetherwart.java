@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.api.farms.ICropModule;
 import vswe.stevescarts.entities.EntityMinecartModular;
-import vswe.stevescarts.modules.addons.ModuleAddon;
+import vswe.stevescarts.api.modules.template.ModuleAddon;
 
 import javax.annotation.Nonnull;
 

@@ -4,10 +4,11 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 
 import javax.annotation.Nonnull;
 
-public class SlotFirework extends SlotBase
+public class SlotFirework extends SlotStevesCarts
 {
     public SlotFirework(final Container iinventory, final int i, final int j, final int k)
     {

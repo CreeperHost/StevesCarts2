@@ -2,11 +2,12 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.modules.realtimers.ModuleShooter;
 
 import javax.annotation.Nonnull;
 
-public class SlotArrow extends SlotBase
+public class SlotArrow extends SlotStevesCarts
 {
     private final ModuleShooter shooter;
 

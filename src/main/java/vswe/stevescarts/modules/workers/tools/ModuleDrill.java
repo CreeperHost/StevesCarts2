@@ -31,6 +31,7 @@ import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.template.ModuleChest;
+import vswe.stevescarts.api.modules.template.ModuleTool;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;

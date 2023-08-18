@@ -2,11 +2,12 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 
 import javax.annotation.Nonnull;
 
-public abstract class SlotFake extends SlotBase implements ISpecialItemTransferValidator
+public abstract class SlotFake extends SlotStevesCarts implements ISpecialItemTransferValidator
 {
     public SlotFake(final Container iinventory, final int i, final int j, final int k)
     {

@@ -21,6 +21,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.api.slots.SlotChest;
 import vswe.stevescarts.blocks.BlockCargoManager;
 import vswe.stevescarts.containers.ContainerCargo;
 import vswe.stevescarts.containers.slots.*;

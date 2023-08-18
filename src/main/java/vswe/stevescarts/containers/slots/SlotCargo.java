@@ -1,9 +1,10 @@
 package vswe.stevescarts.containers.slots;
 
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 import vswe.stevescarts.containers.ContainerCargo;
 
-public class SlotCargo extends SlotBase implements ISpecialSlotValidator
+public class SlotCargo extends SlotStevesCarts implements ISpecialSlotValidator
 {
     private final TileEntityCargo cargo;
     private final ContainerCargo containerCargo;

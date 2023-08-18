@@ -2,12 +2,13 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.helpers.storages.TransferHandler;
-import vswe.stevescarts.modules.workers.tools.ModuleTool;
+import vswe.stevescarts.api.modules.template.ModuleTool;
 
 import javax.annotation.Nonnull;
 
-public class SlotRepair extends SlotBase implements ISpecialItemTransferValidator
+public class SlotRepair extends SlotStevesCarts implements ISpecialItemTransferValidator
 {
     private final ModuleTool tool;
 

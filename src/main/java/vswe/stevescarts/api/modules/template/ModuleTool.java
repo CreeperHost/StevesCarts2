@@ -1,4 +1,4 @@
-package vswe.stevescarts.modules.workers.tools;
+package vswe.stevescarts.api.modules.template;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
@@ -9,14 +9,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotRepair;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.addons.ModuleEnchants;
-import vswe.stevescarts.api.modules.template.ModuleWorker;
 
 import javax.annotation.Nonnull;
 
@@ -95,7 +94,7 @@ public abstract class ModuleTool extends ModuleWorker
     }
 
     @Override
-    protected SlotBase getSlot(final int slotId, final int x, final int y)
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
     {
         return new SlotRepair(this, getCart(), slotId, 76, 8);
     }

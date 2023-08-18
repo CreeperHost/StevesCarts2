@@ -3,10 +3,11 @@ package vswe.stevescarts.containers.slots;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 
 import javax.annotation.Nonnull;
 
-public class SlotCake extends SlotBase
+public class SlotCake extends SlotStevesCarts
 {
     public SlotCake(final Container iinventory, final int i, final int j, final int k)
     {

@@ -2,12 +2,13 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.helpers.ModularEnchantments;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-public class SlotEnchantment extends SlotBase
+public class SlotEnchantment extends SlotStevesCarts
 {
     private ArrayList<ModularEnchantments.EnchantmentType> enabledTypes;
 

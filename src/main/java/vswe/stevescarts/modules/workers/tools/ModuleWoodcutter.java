@@ -9,7 +9,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -22,8 +21,9 @@ import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.farms.ITreeModule;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
+import vswe.stevescarts.api.modules.template.ModuleTool;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotSapling;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.BlockPosHelpers;
@@ -73,7 +73,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
     }
 
     @Override
-    protected SlotBase getSlot(final int slotId, int x, final int y)
+    protected SlotStevesCarts getSlot(final int slotId, int x, final int y)
     {
         if (x == 0)
         {
@@ -199,7 +199,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         @Nonnull ItemStack sapling = ItemStack.EMPTY;
         for (int i = 0; i < getInventorySize(); ++i)
         {
-            final SlotBase slot = getSlots().get(i);
+            final SlotStevesCarts slot = getSlots().get(i);
             if (slot.containsValidItem())
             {
                 sapling = getStack(i);

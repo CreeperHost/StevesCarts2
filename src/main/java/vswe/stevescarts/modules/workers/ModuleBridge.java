@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.IFluidBlock;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotBridge;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
@@ -36,7 +36,7 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
     }
 
     @Override
-    protected SlotBase getSlot(final int slotId, final int x, final int y) {
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y) {
         return new SlotBridge(getCart(), slotId, 8 + x * 18, 23 + y * 18);
     }
 

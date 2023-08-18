@@ -22,8 +22,9 @@ import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.farms.ICropModule;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
+import vswe.stevescarts.api.modules.template.ModuleTool;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotSeed;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
@@ -93,7 +94,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     }
 
     @Override
-    protected SlotBase getSlot(final int slotId, int x, final int y)
+    protected SlotStevesCarts getSlot(final int slotId, int x, final int y)
     {
         if (x == 0)
         {

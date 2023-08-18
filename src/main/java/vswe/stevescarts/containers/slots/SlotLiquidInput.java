@@ -9,9 +9,10 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.helpers.storages.SCTank;
 
-public class SlotLiquidInput extends SlotBase
+public class SlotLiquidInput extends SlotStevesCarts
 {
     private SCTank tank;
     private int maxsize;

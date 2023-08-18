@@ -11,10 +11,11 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.containers.slots.SlotBase;
-import vswe.stevescarts.containers.slots.SlotChest;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.api.slots.SlotChest;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
@@ -29,9 +30,9 @@ public abstract class ModuleRecipe extends ModuleAddon
     private EntityDataAccessor<Byte> MODE;
 
     protected boolean dirty;
-    protected ArrayList<SlotBase> inputSlots;
-    protected ArrayList<SlotBase> outputSlots;
-    protected ArrayList<SlotBase> allTheSlots;
+    protected ArrayList<SlotStevesCarts> inputSlots;
+    protected ArrayList<SlotStevesCarts> outputSlots;
+    protected ArrayList<SlotStevesCarts> allTheSlots;
 
 
     public ModuleRecipe(final EntityMinecartModular cart)
@@ -365,7 +366,7 @@ public abstract class ModuleRecipe extends ModuleAddon
             {
                 if (module.getSlots() != null)
                 {
-                    for (final SlotBase slot : module.getSlots())
+                    for (final SlotStevesCarts slot : module.getSlots())
                     {
                         if (slot instanceof SlotChest)
                         {
@@ -384,7 +385,7 @@ public abstract class ModuleRecipe extends ModuleAddon
             {
                 if (module2.getSlots() != null)
                 {
-                    for (final SlotBase slot2 : module2.getSlots())
+                    for (final SlotStevesCarts slot2 : module2.getSlots())
                     {
                         if (validSlot.isInstance(slot2))
                         {

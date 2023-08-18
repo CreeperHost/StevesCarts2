@@ -7,7 +7,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.modules.ModuleBase;
-import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.init.ModContainers;
 
@@ -46,8 +46,8 @@ public class ContainerMinecart extends ContainerBase
             {
                 if (module.hasSlots())
                 {
-                    final ArrayList<SlotBase> slotsList = module.getSlots();
-                    for (final SlotBase slot : slotsList)
+                    final ArrayList<SlotStevesCarts> slotsList = module.getSlots();
+                    for (final SlotStevesCarts slot : slotsList)
                     {
                         slot.x = (slot.getX() + module.getX() + 1);
                         slot.y = (slot.getY() + module.getY() + 1);

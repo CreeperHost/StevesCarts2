@@ -38,7 +38,7 @@ import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.client.guis.buttons.ButtonBase;
 import vswe.stevescarts.containers.ContainerMinecart;
-import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.ButtonComparator;
 import vswe.stevescarts.helpers.SimulationInfo;
@@ -71,7 +71,7 @@ public abstract class ModuleBase
     protected int slotGlobalStart;
     private ResourceLocation moduleId;
     private ArrayList<ModelCartbase> models;
-    protected ArrayList<SlotBase> slotList;
+    protected ArrayList<SlotStevesCarts> slotList;
     private int moduleButtonId;
 
     /**
@@ -282,7 +282,7 @@ public abstract class ModuleBase
      *
      * @return The ArrayList of SlotBase with the slots
      */
-    public ArrayList<SlotBase> getSlots()
+    public ArrayList<SlotStevesCarts> getSlots()
     {
         return slotList;
     }
@@ -317,7 +317,7 @@ public abstract class ModuleBase
      * @param y      The y value of the slot, this is not hte interface coordinate but just which row it's in.
      * @return The created SlotBase
      */
-    protected SlotBase getSlot(final int slotId, final int x, final int y)
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
     {
         return null;
     }

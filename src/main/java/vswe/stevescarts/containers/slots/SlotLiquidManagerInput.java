@@ -1,9 +1,10 @@
 package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 
-public class SlotLiquidManagerInput extends SlotBase
+public class SlotLiquidManagerInput extends SlotStevesCarts
 {
     private TileEntityLiquid manager;
     private int tankid;

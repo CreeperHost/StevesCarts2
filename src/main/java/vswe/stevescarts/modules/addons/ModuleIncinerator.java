@@ -2,8 +2,9 @@ package vswe.stevescarts.modules.addons;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotIncinerator;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
@@ -71,7 +72,7 @@ public class ModuleIncinerator extends ModuleAddon
     }
 
     @Override
-    protected SlotBase getSlot(final int slotId, final int x, final int y)
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
     {
         return new SlotIncinerator(getCart(), slotId, 8 + x * 18, 23 + y * 18);
     }

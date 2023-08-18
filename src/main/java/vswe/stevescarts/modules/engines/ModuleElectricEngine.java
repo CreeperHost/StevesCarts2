@@ -8,7 +8,7 @@
 //import net.minecraftforge.api.distmarker.OnlyIn;
 //import vswe.stevescarts.client.guis.GuiMinecart;
 //import vswe.stevescarts.compat.ftbic.SlotElectricEngine;
-//import vswe.stevescarts.containers.slots.SlotBase;
+//import vswe.stevescarts.api.slots.SlotBase;
 //import vswe.stevescarts.entitys.EntityMinecartModular;
 //import vswe.stevescarts.helpers.Localization;
 //

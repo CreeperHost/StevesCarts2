@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.modules.template.ModuleStorage;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotLiquidInput;
 import vswe.stevescarts.containers.slots.SlotLiquidOutput;
 import vswe.stevescarts.entities.EntityMinecartModular;
@@ -61,7 +61,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     }
 
     @Override
-    protected SlotBase getSlot(final int slotId, final int x, final int y)
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
     {
         if (y == 0)
         {

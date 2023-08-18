@@ -19,9 +19,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.containers.ContainerMinecart;
-import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.entities.EntityMinecartModular;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.network.PacketHandler;
@@ -109,8 +108,8 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
                 {
                     if (module.hasGui() && module.hasSlots())
                     {
-                        final ArrayList<SlotBase> slotsList = module.getSlots();
-                        for (final SlotBase slot : slotsList)
+                        final ArrayList<SlotStevesCarts> slotsList = module.getSlots();
+                        for (final SlotStevesCarts slot : slotsList)
                         {
                             resetSlot(slot);
                         }
@@ -402,8 +401,8 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     {
         if (module.hasGui() && module.hasSlots())
         {
-            final ArrayList<SlotBase> slotsList = module.getSlots();
-            for (final SlotBase slot : slotsList)
+            final ArrayList<SlotStevesCarts> slotsList = module.getSlots();
+            for (final SlotStevesCarts slot : slotsList)
             {
                 final int[] rect = {slot.getX() + 1, slot.getY() + 1, 16, 16};
                 module.handleScroll(rect);
@@ -426,7 +425,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         }
     }
 
-    private void resetSlot(final SlotBase slot)
+    private void resetSlot(final SlotStevesCarts slot)
     {
         slot.x = -9001;
         slot.y = -9001;

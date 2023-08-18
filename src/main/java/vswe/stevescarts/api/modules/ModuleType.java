@@ -3,8 +3,8 @@ package vswe.stevescarts.api.modules;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.api.modules.template.ModuleHull;
 import vswe.stevescarts.api.modules.template.ModuleStorage;
-import vswe.stevescarts.modules.addons.ModuleAddon;
-import vswe.stevescarts.modules.workers.tools.ModuleTool;
+import vswe.stevescarts.api.modules.template.ModuleAddon;
+import vswe.stevescarts.api.modules.template.ModuleTool;
 
 public enum ModuleType
 {

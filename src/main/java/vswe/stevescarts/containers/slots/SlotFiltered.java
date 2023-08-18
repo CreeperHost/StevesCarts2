@@ -3,10 +3,11 @@ package vswe.stevescarts.containers.slots;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 
 import java.util.function.Supplier;
 
-public class SlotFiltered extends SlotBase
+public class SlotFiltered extends SlotStevesCarts
 {
     Supplier<Boolean> supplier;
     

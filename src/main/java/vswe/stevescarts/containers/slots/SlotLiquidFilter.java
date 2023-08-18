@@ -2,11 +2,12 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 
 import javax.annotation.Nonnull;
 
-public class SlotLiquidFilter extends SlotBase implements ISpecialItemTransferValidator
+public class SlotLiquidFilter extends SlotStevesCarts implements ISpecialItemTransferValidator
 {
     public SlotLiquidFilter(final Container iinventory, final int i, final int j, final int k)
     {

@@ -3,11 +3,12 @@ package vswe.stevescarts.containers.slots;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.modules.workers.tools.ModuleWoodcutter;
 
 import javax.annotation.Nonnull;
 
-public class SlotSapling extends SlotBase
+public class SlotSapling extends SlotStevesCarts
 {
     private ModuleWoodcutter module;
 

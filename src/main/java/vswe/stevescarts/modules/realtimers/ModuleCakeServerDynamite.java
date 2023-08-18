@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import vswe.stevescarts.SCConfig;
-import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotCakeDynamite;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
@@ -26,7 +26,7 @@ public class ModuleCakeServerDynamite extends ModuleCakeServer
     }
 
     @Override
-    protected SlotBase getSlot(final int slotId, final int x, final int y)
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
     {
         return new SlotCakeDynamite(getCart(), slotId, 8 + x * 18, 38 + y * 18);
     }

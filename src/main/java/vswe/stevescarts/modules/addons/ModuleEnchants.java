@@ -10,8 +10,9 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
+import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.containers.slots.SlotBase;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotEnchantment;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.EnchantmentData;
@@ -121,7 +122,7 @@ public class ModuleEnchants extends ModuleAddon {
     }
 
     @Override
-    protected SlotBase getSlot(int slotId, final int x, final int y) {
+    protected SlotStevesCarts getSlot(int slotId, final int x, final int y) {
         return new SlotEnchantment(getCart(), enabledTypes, slotId, 8, 14 + y * 20);
     }
 
