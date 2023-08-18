@@ -1,5 +1,6 @@
 package vswe.stevescarts.upgrades;
 
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.SimpleContainerData;
@@ -70,7 +71,7 @@ public class Disassemble extends InventoryUpgradeEffect
     @Override
     public String getName()
     {
-        return Localization.UPGRADES.DISASSEMBLE.translate();
+        return I18n.get("info.stevescarts.effectDisassemble");
     }
 
     @Override

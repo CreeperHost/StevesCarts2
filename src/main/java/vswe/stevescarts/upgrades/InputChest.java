@@ -1,5 +1,6 @@
 package vswe.stevescarts.upgrades;
 
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
@@ -29,7 +30,7 @@ public class InputChest extends SimpleInventoryUpgradeEffect
     @Override
     public String getName()
     {
-        return Localization.UPGRADES.INPUT_CHEST.translate(String.valueOf(getInventorySize()));
+        return I18n.get("info.stevescarts.effectInputChest") + (String.valueOf(getInventorySize()));
     }
 
     @Override

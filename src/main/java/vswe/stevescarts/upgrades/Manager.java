@@ -1,5 +1,6 @@
 package vswe.stevescarts.upgrades;
 
+import net.minecraft.client.resources.language.I18n;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.helpers.Localization;
 
@@ -8,6 +9,6 @@ public class Manager extends BaseUpgradeEffect
     @Override
     public String getName()
     {
-        return Localization.UPGRADES.BRIDGE.translate();
+        return I18n.get("info.stevescarts.effectManagerBridge");
     }
 }

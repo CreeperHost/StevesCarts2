@@ -1,5 +1,6 @@
 package vswe.stevescarts.upgrades;
 
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.Slot;
@@ -28,7 +29,7 @@ public class Blueprint extends SimpleInventoryUpgradeEffect
     @Override
     public String getName()
     {
-        return Localization.UPGRADES.BLUEPRINT.translate();
+        return I18n.get( "info.stevescarts.effectBlueprint");
     }
 
     public boolean isValidForBluePrint(final TileEntityUpgrade upgrade, final ArrayList<ModuleData> modules, final ModuleData module)

@@ -352,12 +352,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         workModules = new ArrayList<>();
         engineModules = new ArrayList<>();
         tankModules = new ArrayList<>();
-        @Deprecated(forRemoval = true)
-        final int x = 0;
-        @Deprecated(forRemoval = true)
-        final int y = 0;
-        @Deprecated(forRemoval = true)
-        final int maxH = 0;
         int guidata = 0;
         int packets = 0;
         if (level().isClientSide)

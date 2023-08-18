@@ -61,7 +61,24 @@ public final class Localization
     {
         public enum ASSEMBLER
         {
-            TITLE("cartAssembler"), ASSEMBLE_INSTRUCTION("basicAssembleInstruction"), INVALID_HULL("invalidHullError"), HULL_CAPACITY("hullCapacity"), COMPLEXITY_CAP("complexityCap"), TOTAL_COST("totalCost"), TOTAl_TIME("totalTime"), NO_ERROR("readyMessage"), ASSEMBLE_PROGRESS("assembleProgress"), TIME_LEFT("timeLeft"), IDLE_MESSAGE("idleAssemblerMessage"), MODIFY_CART("modifyCart"), ASSEMBLE_CART("assembleCart"), FUEL_LEVEL("fuelLevel"), HULL_ERROR("noHullError"), INVALID_HULL_SHORT("invalidHullErrorShort"), BUSY("busyAssemblerError"), DEPARTURE_BAY("departureBayError");
+            TITLE("cartAssembler"),
+            ASSEMBLE_INSTRUCTION("basicAssembleInstruction"),
+            INVALID_HULL("invalidHullError"),
+            HULL_CAPACITY("hullCapacity"),
+            COMPLEXITY_CAP("complexityCap"),
+            TOTAL_COST("totalCost"),
+            TOTAl_TIME("totalTime"),
+            NO_ERROR("readyMessage"),
+            ASSEMBLE_PROGRESS("assembleProgress"),
+            TIME_LEFT("timeLeft"),
+            IDLE_MESSAGE("idleAssemblerMessage"),
+            MODIFY_CART("modifyCart"),
+            ASSEMBLE_CART("assembleCart"),
+            FUEL_LEVEL("fuelLevel"),
+            HULL_ERROR("noHullError"),
+            INVALID_HULL_SHORT("invalidHullErrorShort"),
+            BUSY("busyAssemblerError"),
+            DEPARTURE_BAY("departureBayError");
 
             private final String name;
 
@@ -78,7 +95,23 @@ public final class Localization
 
         public enum MANAGER
         {
-            TITLE("manager"), CURRENT_SETTING("currentSetting"), CHANGE_TRANSFER_DIRECTION("changeTransferDirection"), DIRECTION_TO_CART("directionToCart"), DIRECTION_FROM_CART("directionFromCart"), CHANGE_TURN_BACK_SETTING("changeTurnBack"), TURN_BACK_NOT_SELECTED("turnBackDisabled"), TURN_BACK_DO("turnBack"), TURN_BACK_DO_NOT("continueForward"), CHANGE_TRANSFER_SIZE("changeTransferSize"), CHANGE_SIDE("changeSide"), CURRENT_SIDE("currentSide"), SIDE_RED("sideRed"), SIDE_BLUE("sideBlue"), SIDE_YELLOW("sideYellow"), SIDE_GREEN("sideGreen"), SIDE_DISABLED("sideDisabled");
+            TITLE("manager"),
+            CURRENT_SETTING("currentSetting"),
+            CHANGE_TRANSFER_DIRECTION("changeTransferDirection"),
+            DIRECTION_TO_CART("directionToCart"),
+            DIRECTION_FROM_CART("directionFromCart"),
+            CHANGE_TURN_BACK_SETTING("changeTurnBack"),
+            TURN_BACK_NOT_SELECTED("turnBackDisabled"),
+            TURN_BACK_DO("turnBack"),
+            TURN_BACK_DO_NOT("continueForward"),
+            CHANGE_TRANSFER_SIZE("changeTransferSize"),
+            CHANGE_SIDE("changeSide"),
+            CURRENT_SIDE("currentSide"),
+            SIDE_RED("sideRed"),
+            SIDE_BLUE("sideBlue"),
+            SIDE_YELLOW("sideYellow"),
+            SIDE_GREEN("sideGreen"),
+            SIDE_DISABLED("sideDisabled");
 
             private final String name;
 
@@ -95,7 +128,33 @@ public final class Localization
 
         public enum CARGO
         {
-            TITLE("cargoManager"), CHANGE_SLOT_LAYOUT("changeSlotLayout"), LAYOUT_SHARED("layoutShared"), LAYOUT_SIDE("layoutSide"), LAYOUT_COLOR("layoutColor"), TRANSFER_ALL("transferAll"), TRANSFER_ITEMS("transferItems"), TRANSFER_STACKS("transferStacks"), TRANSFER_ALL_SHORT("transferAllShort"), TRANSFER_ITEMS_SHORT("transferItemsShort"), TRANSFER_STACKS_SHORT("transferStacksShort"), CHANGE_STORAGE_AREA("changeTransferCartArea"), UNKNOWN_AREA("unknownAreaMessage"), AREA_ALL("cartAreaAll"), AREA_ENGINE("cartAreaEngine"), AREA_RAILER("cartAreaRailer"), AREA_STORAGE("cartAreaStorage"), AREA_TORCHES("cartAreaTorches"), AREA_EXPLOSIVES("cartAreaExplosives"), AREA_ARROWS("cartAreaArrows"), AREA_BRIDGE("cartAreaBridge"), AREA_SEEDS("cartAreaSeeds"), AREA_FERTILIZER("cartAreaFertilizer"), AREA_SAPLINGS("cartAreaSaplings"), AREA_FIREWORK("cartAreaFirework"), AREA_BUCKETS("cartAreaBuckets"), AREA_CAKES("cartAreaCakes");
+            TITLE("cargoManager"),
+            CHANGE_SLOT_LAYOUT("changeSlotLayout"),
+            LAYOUT_SHARED("layoutShared"),
+            LAYOUT_SIDE("layoutSide"),
+            LAYOUT_COLOR("layoutColor"),
+            TRANSFER_ALL("transferAll"),
+            TRANSFER_ITEMS("transferItems"),
+            TRANSFER_STACKS("transferStacks"),
+            TRANSFER_ALL_SHORT("transferAllShort"),
+            TRANSFER_ITEMS_SHORT("transferItemsShort"),
+            TRANSFER_STACKS_SHORT("transferStacksShort"),
+            CHANGE_STORAGE_AREA("changeTransferCartArea"),
+            UNKNOWN_AREA("unknownAreaMessage"),
+            AREA_ALL("cartAreaAll"),
+            AREA_ENGINE("cartAreaEngine"),
+            AREA_RAILER("cartAreaRailer"),
+            AREA_STORAGE("cartAreaStorage"),
+            AREA_TORCHES("cartAreaTorches"),
+            AREA_EXPLOSIVES("cartAreaExplosives"),
+            AREA_ARROWS("cartAreaArrows"),
+            AREA_BRIDGE("cartAreaBridge"),
+            AREA_SEEDS("cartAreaSeeds"),
+            AREA_FERTILIZER("cartAreaFertilizer"),
+            AREA_SAPLINGS("cartAreaSaplings"),
+            AREA_FIREWORK("cartAreaFirework"),
+            AREA_BUCKETS("cartAreaBuckets"),
+            AREA_CAKES("cartAreaCakes");
 
             private final String name;
 
@@ -112,7 +171,15 @@ public final class Localization
 
         public enum LIQUID
         {
-            TITLE("liquidManager"), CHANGE_LAYOUT("changeTankLayout"), LAYOUT_ALL("layoutSharedTanks"), LAYOUT_SIDE("layoutSidedTanks"), LAYOUT_COLOR("layoutColorTanks"), TRANSFER_ALL("transferAllLiquid"), TRANSFER_BUCKETS("transferBuckets"), TRANSFER_ALL_SHORT("transferAllLiquidShort"), TRANSFER_BUCKET_SHORT("transferBucketShort");
+            TITLE("liquidManager"),
+            CHANGE_LAYOUT("changeTankLayout"),
+            LAYOUT_ALL("layoutSharedTanks"),
+            LAYOUT_SIDE("layoutSidedTanks"),
+            LAYOUT_COLOR("layoutColorTanks"),
+            TRANSFER_ALL("transferAllLiquid"),
+            TRANSFER_BUCKETS("transferBuckets"),
+            TRANSFER_ALL_SHORT("transferAllLiquidShort"),
+            TRANSFER_BUCKET_SHORT("transferBucketShort");
 
             private final String name;
 
@@ -129,7 +196,20 @@ public final class Localization
 
         public enum TOGGLER
         {
-            TITLE("moduleToggler"), OPTION_DRILL("optionDrill"), OPTION_SHIELD("optionShield"), OPTION_INVISIBILITY("optionInvisibility"), OPTION_CHUNK("optionChunk"), OPTION_CAGE_AUTO("optionCageAuto"), OPTION_CAGE("optionCage"), OPTION_REMOVER("optionRemover"), SETTING_DISABLED("settingDisabled"), SETTING_ORANGE("settingOrange"), SETTING_BLUE("settingBlue"), STATE_ACTIVATE("stateActivate"), STATE_DEACTIVATE("stateDeactivate"), STATE_TOGGLE("stateToggle");
+            TITLE("moduleToggler"),
+            OPTION_DRILL("optionDrill"),
+            OPTION_SHIELD("optionShield"),
+            OPTION_INVISIBILITY("optionInvisibility"),
+            OPTION_CHUNK("optionChunk"),
+            OPTION_CAGE_AUTO("optionCageAuto"),
+            OPTION_CAGE("optionCage"),
+            OPTION_REMOVER("optionRemover"),
+            SETTING_DISABLED("settingDisabled"),
+            SETTING_ORANGE("settingOrange"),
+            SETTING_BLUE("settingBlue"),
+            STATE_ACTIVATE("stateActivate"),
+            STATE_DEACTIVATE("stateDeactivate"),
+            STATE_TOGGLE("stateToggle");
 
             private final String name;
 
@@ -146,7 +226,31 @@ public final class Localization
 
         public enum DISTRIBUTOR
         {
-            TITLE("externalDistributor"), NOT_CONNECTED("distributorNotConnected"), SIDE("sideName"), DROP_INSTRUCTION("dropInstruction"), REMOVE_INSTRUCTION("removeInstruction"), SETTING_ALL("distributorAll"), SETTING_RED("distributorRed"), SETTING_BLUE("distributorBlue"), SETTING_YELLOW("distributorYellow"), SETTING_GREEN("distributorGreen"), SETTING_TOP_LEFT("distributorTopLeft"), SETTING_TOP_RIGHT("distributorTopRight"), SETTING_BOTTOM_LEFT("distributorBottomLeft"), SETTING_BOTTOM_RIGHT("distributorBottomRight"), SETTING_TO_CART("distributorToCart"), SETTING_FROM_CART("distributorFromCart"), MANAGER_TOP("managerTop"), MANAGER_BOT("managerBot"), SIDE_ORANGE("distributorSideOrange"), SIDE_PURPLE("distributorSidePurple"), SIDE_YELLOW("distributorSideYellow"), SIDE_GREEN("distributorSideGreen"), SIDE_BLUE("distributorSideBlue"), SIDE_RED("distributorSideRed"), SIDE_TOOL_TIP("sideToolTip");
+            TITLE("externalDistributor"),
+            NOT_CONNECTED("distributorNotConnected"),
+            SIDE("sideName"),
+            DROP_INSTRUCTION("dropInstruction"),
+            REMOVE_INSTRUCTION("removeInstruction"),
+            SETTING_ALL("distributorAll"),
+            SETTING_RED("distributorRed"),
+            SETTING_BLUE("distributorBlue"),
+            SETTING_YELLOW("distributorYellow"),
+            SETTING_GREEN("distributorGreen"),
+            SETTING_TOP_LEFT("distributorTopLeft"),
+            SETTING_TOP_RIGHT("distributorTopRight"),
+            SETTING_BOTTOM_LEFT("distributorBottomLeft"),
+            SETTING_BOTTOM_RIGHT("distributorBottomRight"),
+            SETTING_TO_CART("distributorToCart"),
+            SETTING_FROM_CART("distributorFromCart"),
+            MANAGER_TOP("managerTop"),
+            MANAGER_BOT("managerBot"),
+            SIDE_ORANGE("distributorSideOrange"),
+            SIDE_PURPLE("distributorSidePurple"),
+            SIDE_YELLOW("distributorSideYellow"),
+            SIDE_GREEN("distributorSideGreen"),
+            SIDE_BLUE("distributorSideBlue"),
+            SIDE_RED("distributorSideRed"),
+            SIDE_TOOL_TIP("sideToolTip");
 
             private final String name;
 
@@ -163,7 +267,73 @@ public final class Localization
 
         public enum DETECTOR
         {
-            OUTPUT("operatorOutput"), AND("operatorAnd"), OR("operatorOr"), NOT("operatorNot"), XOR("operatorXor"), TOP("operatorTopUnit"), BOT("operatorBotUnit"), NORTH("operatorNorthUnit"), WEST("operatorWestUnit"), SOUTH("operatorSouthUnit"), EAST("operatorEastUnit"), REDSTONE("operatorRedstone"), REDSTONE_TOP("operatorRedstoneTop"), REDSTONE_BOT("operatorRedstoneBot"), REDSTONE_NORTH("operatorRedstoneNorth"), REDSTONE_WEST("operatorRedstoneWest"), REDSTONE_SOUTH("operatorRedstoneSouth"), REDSTONE_EAST("operatorRedstoneEast"), RAIL("stateRails"), TORCH("stateTorches"), SAPLING("stateSaplings"), SEED("sateSeeds"), BRIDGE("stateBridge"), PROJECTILE("stateProjectiles"), FERTILIZING("stateFertilizing"), SHIELD("stateShield"), CHUNK("stateChunk"), INVISIBILITY("stateInvisibility"), DRILL("stateDrill"), CAGE("stateCage"), STORAGE_FULL("stateStorageFull"), STORAGE_EMPTY("stateStorageEmpty"), PASSENGER("statePassenger"), ANIMAL("stateAnimal"), TAMEABLE("stateTameable"), BREEDABLE("stateBreedable"), HOSTILE("stateHostile"), CREEPER("stateCreeper"), SKELETON("stateSkeleton"), SPIDER("stateSpider"), ZOMBIE("stateZombie"), PIG_MAN("stateZombiePigMan"), SILVERFISH("stateSilverFish"), BLAZE("stateBlaze"), BAT("stateBat"), WITCH("stateWitch"), PIG("statePig"), SHEEP("stateSheep"), COW("stateCow"), MOOSHROOM("stateMooshroom"), CHICKEN("stateChicken"), WOLF("stateWolf"), SNOW_GOLEM("stateSnowGolem"), OCELOT("stateOcelot"), VILLAGER("stateVillager"), PLAYER("statePlayer"), ZOMBIE_VILLAGER("stateZombieVillager"), CHILD("stateChild"), TAMED("stateTamed"), POWER_RED("statePowerRed"), POWER_BLUE("statePowerBlue"), POWER_GREEN("statePowerGreen"), POWER_YELLOW("statePowerYellow"), TANKS_FULL("stateTanksFull"), TANKS_EMPTY("stateTanksEmpty"), TANK_EMPTY("stateTankEmpty"), CAKE("stateCake");
+            OUTPUT("operatorOutput"),
+            AND("operatorAnd"),
+            OR("operatorOr"),
+            NOT("operatorNot"),
+            XOR("operatorXor"),
+            TOP("operatorTopUnit"),
+            BOT("operatorBotUnit"),
+            NORTH("operatorNorthUnit"),
+            WEST("operatorWestUnit"),
+            SOUTH("operatorSouthUnit"),
+            EAST("operatorEastUnit"),
+            REDSTONE("operatorRedstone"),
+            REDSTONE_TOP("operatorRedstoneTop"),
+            REDSTONE_BOT("operatorRedstoneBot"),
+            REDSTONE_NORTH("operatorRedstoneNorth"),
+            REDSTONE_WEST("operatorRedstoneWest"),
+            REDSTONE_SOUTH("operatorRedstoneSouth"),
+            REDSTONE_EAST("operatorRedstoneEast"),
+            RAIL("stateRails"),
+            TORCH("stateTorches"),
+            SAPLING("stateSaplings"),
+            SEED("sateSeeds"),
+            BRIDGE("stateBridge"),
+            PROJECTILE("stateProjectiles"),
+            FERTILIZING("stateFertilizing"),
+            SHIELD("stateShield"),
+            CHUNK("stateChunk"),
+            INVISIBILITY("stateInvisibility"),
+            DRILL("stateDrill"),
+            CAGE("stateCage"),
+            STORAGE_FULL("stateStorageFull"),
+            STORAGE_EMPTY("stateStorageEmpty"),
+            PASSENGER("statePassenger"),
+            ANIMAL("stateAnimal"),
+            TAMEABLE("stateTameable"),
+            BREEDABLE("stateBreedable"),
+            HOSTILE("stateHostile"),
+            CREEPER("stateCreeper"),
+            SKELETON("stateSkeleton"),
+            SPIDER("stateSpider"),
+            ZOMBIE("stateZombie"),
+            PIG_MAN("stateZombiePigMan"),
+            SILVERFISH("stateSilverFish"),
+            BLAZE("stateBlaze"),
+            BAT("stateBat"),
+            WITCH("stateWitch"),
+            PIG("statePig"),
+            SHEEP("stateSheep"),
+            COW("stateCow"),
+            MOOSHROOM("stateMooshroom"),
+            CHICKEN("stateChicken"),
+            WOLF("stateWolf"),
+            SNOW_GOLEM("stateSnowGolem"),
+            OCELOT("stateOcelot"),
+            VILLAGER("stateVillager"),
+            PLAYER("statePlayer"),
+            ZOMBIE_VILLAGER("stateZombieVillager"),
+            CHILD("stateChild"),
+            TAMED("stateTamed"),
+            POWER_RED("statePowerRed"),
+            POWER_BLUE("statePowerBlue"),
+            POWER_GREEN("statePowerGreen"),
+            POWER_YELLOW("statePowerYellow"),
+            TANKS_FULL("stateTanksFull"),
+            TANKS_EMPTY("stateTanksEmpty"),
+            TANK_EMPTY("stateTankEmpty"),
+            CAKE("stateCake");
 
             private final String name;
 
@@ -177,24 +347,6 @@ public final class Localization
                 return doTranslate("gui.stevescarts." + name, vars);
             }
         }
-
-        public enum CART
-        {
-            RETURN("returnButton");
-
-            private final String name;
-
-            CART(final String name)
-            {
-                this.name = name;
-            }
-
-            public String translate(final String... vars)
-            {
-                return doTranslate("gui.stevescarts." + name, vars);
-            }
-        }
-
     }
 
     public enum MODULE_INFO
@@ -272,7 +424,10 @@ public final class Localization
 
     public enum UPGRADES
     {
-        BLUEPRINT("effectBlueprint"), COMBUSTION("effectCombustionFuel"), DEPLOYER("effectDeployer"), DISASSEMBLE("effectDisassemble"), FUEL_CAPACITY("effectFuelCapacity"), FUEL_COST("effectFuelCost"), INPUT_CHEST("effectInputChest"), BRIDGE("effectManagerBridge"), GENERATOR("effectGenerator"), REDSTONE("effectRedstone"), SOLAR("effectSolar"), THERMAL("effectThermal"), FLAT("effectTimeFlat"), CART_FLAT("effectTimeFlatCart"), FLAT_REMOVED("effectTimeFlatRemove"), TRANSPOSER("effectTransposer"), EFFICIENCY("effectEfficiency");
+        FLAT("effectTimeFlat"),
+        CART_FLAT("effectTimeFlatCart"),
+        FLAT_REMOVED("effectTimeFlatRemove"),
+        EFFICIENCY("effectEfficiency");
 
         private final String name;
 
@@ -291,7 +446,59 @@ public final class Localization
     {
         public enum ADDONS
         {
-            BUTTON_RANDOMIZE("buttonRandomize"), DETECTOR_ANIMALS("detectorAnimals"), DETECTOR_BATS("detectorBats"), DETECTOR_MONSTERS("detectorMonsters"), DETECTOR_PLAYERS("detectorPlayers"), DETECTOR_VILLAGERS("detectorVillagers"), PLANTER_RANGE("planterRangeExtenderTitle"), SAPLING_AMOUNT("saplingPlantAmount"), CONTROL_LEVER("controlLeverTitle"), LEVER_START("leverStartCart"), LEVER_STOP("leverStopCart"), LEVER_TURN("leverTurnAroundCart"), COLOR_RED("colorizerRgbRed"), COLOR_GREEN("colorizerRgbGreen"), COLOR_BLUE("colorizerRgbBlue"), LOCKED("intelligenceLockedBlock"), CHANGE_INTELLIGENCE("intelligenceChange"), CURRENT_INTELLIGENCE("intelligenceCurrent"), RESTRICTED_INTELLIGENCE("intelligenceRestricted"), ENCHANT_INSTRUCTION("enchanterInstruction"), INVISIBILITY("invisibilityToggle"), NAME("informationProviderLabelName"), DISTANCE("informationProviderLabelDistance"), DISTANCE_LONG("informationProviderMessageDistance"), POSITION("informationProviderLabelPosition"), POSITION_LONG("informationProviderMessagePosition"), FUEL("informationProviderLabelFuel"), FUEL_LONG("informationProviderMessageFuel"), FUEL_NO_CONSUMPTION("informationProviderMessageNoConsumption"), STORAGE("informationProviderLabelStorage"), LABELS("informationProviderLabels"), DURABILITY("informationProviderLabelDurability"), BROKEN("informationProviderMessageToolBroken"), NOT_BROKEN("informationProviderMessageToolNotBroken"), REPAIR("informationProviderMessageRepair"), UNBREAKABLE("informationProviderMessageUnbreakable"), K("powerThousandSuffix"), OBSERVER_INSTRUCTION("powerObserverInstruction"), OBSERVER_REMOVE("powerObserverRemoveInstruction"), OBSERVER_DROP("powerObserverDropInstruction"), OBSERVER_CHANGE("powerObserverChangeInstruction"), OBSERVER_CHANGE_10("powerObserverChangeInstruction10"), RECIPE_OUTPUT("recipeOutput"), CURRENT("recipeCurrentSelection"), INVALID_OUTPUT("recipeInvalidOutput"), RECIPE_MODE("recipeChangeMode"), RECIPE_NO_LIMIT("recipeNoLimit"), RECIPE_LIMIT("recipeLimit"), RECIPE_DISABLED("recipeDisabled"), RECIPE_CHANGE_AMOUNT("recipeChangeLimit"), RECIPE_CHANGE_AMOUNT_10("recipeChangeLimit10"), RECIPE_CHANGE_AMOUNT_64("recipeChangeLimit64"), SHIELD("shieldToggle");
+            BUTTON_RANDOMIZE("buttonRandomize"),
+            DETECTOR_ANIMALS("detectorAnimals"),
+            DETECTOR_BATS("detectorBats"),
+            DETECTOR_MONSTERS("detectorMonsters"),
+            DETECTOR_PLAYERS("detectorPlayers"),
+            DETECTOR_VILLAGERS("detectorVillagers"),
+            PLANTER_RANGE("planterRangeExtenderTitle"),
+            SAPLING_AMOUNT("saplingPlantAmount"),
+            CONTROL_LEVER("controlLeverTitle"),
+            LEVER_START("leverStartCart"),
+            LEVER_STOP("leverStopCart"),
+            LEVER_TURN("leverTurnAroundCart"),
+            COLOR_RED("colorizerRgbRed"),
+            COLOR_GREEN("colorizerRgbGreen"),
+            COLOR_BLUE("colorizerRgbBlue"),
+            LOCKED("intelligenceLockedBlock"),
+            CHANGE_INTELLIGENCE("intelligenceChange"),
+            CURRENT_INTELLIGENCE("intelligenceCurrent"),
+            RESTRICTED_INTELLIGENCE("intelligenceRestricted"),
+            ENCHANT_INSTRUCTION("enchanterInstruction"),
+            INVISIBILITY("invisibilityToggle"),
+            NAME("informationProviderLabelName"),
+            DISTANCE("informationProviderLabelDistance"),
+            DISTANCE_LONG("informationProviderMessageDistance"),
+            POSITION("informationProviderLabelPosition"),
+            POSITION_LONG("informationProviderMessagePosition"),
+            FUEL("informationProviderLabelFuel"),
+            FUEL_LONG("informationProviderMessageFuel"),
+            FUEL_NO_CONSUMPTION("informationProviderMessageNoConsumption"),
+            STORAGE("informationProviderLabelStorage"),
+            LABELS("informationProviderLabels"),
+            DURABILITY("informationProviderLabelDurability"),
+            BROKEN("informationProviderMessageToolBroken"),
+            NOT_BROKEN("informationProviderMessageToolNotBroken"),
+            REPAIR("informationProviderMessageRepair"),
+            UNBREAKABLE("informationProviderMessageUnbreakable"),
+            K("powerThousandSuffix"),
+            OBSERVER_INSTRUCTION("powerObserverInstruction"),
+            OBSERVER_REMOVE("powerObserverRemoveInstruction"),
+            OBSERVER_DROP("powerObserverDropInstruction"),
+            OBSERVER_CHANGE("powerObserverChangeInstruction"),
+            OBSERVER_CHANGE_10("powerObserverChangeInstruction10"),
+            RECIPE_OUTPUT("recipeOutput"),
+            CURRENT("recipeCurrentSelection"),
+            INVALID_OUTPUT("recipeInvalidOutput"),
+            RECIPE_MODE("recipeChangeMode"),
+            RECIPE_NO_LIMIT("recipeNoLimit"),
+            RECIPE_LIMIT("recipeLimit"),
+            RECIPE_DISABLED("recipeDisabled"),
+            RECIPE_CHANGE_AMOUNT("recipeChangeLimit"),
+            RECIPE_CHANGE_AMOUNT_10("recipeChangeLimit10"),
+            RECIPE_CHANGE_AMOUNT_64("recipeChangeLimit64"),
+            SHIELD("shieldToggle");
 
             private final String name;
 
@@ -308,7 +515,19 @@ public final class Localization
 
         public enum ENGINES
         {
-            OVER_9000("creativePowerLevel"), COAL("coalEngineTitle"), NO_FUEL("outOfFuel"), FUEL("fuelLevel"), SOLAR("solarEngineTitle"), NO_POWER("outOfPower"), POWER("powerLevel"), THERMAL("thermalEngineTitle"), POWERED("thermalPowered"), NO_WATER("outOfWater"), NO_LAVA("outOfLava"), ENGINE_DISABLED("engineDisabledMessage"), ENGINE_PRIORITY("enginePriorityMessage");
+            OVER_9000("creativePowerLevel"),
+            COAL("coalEngineTitle"),
+            NO_FUEL("outOfFuel"),
+            FUEL("fuelLevel"),
+            SOLAR("solarEngineTitle"),
+            NO_POWER("outOfPower"),
+            POWER("powerLevel"),
+            THERMAL("thermalEngineTitle"),
+            POWERED("thermalPowered"),
+            NO_WATER("outOfWater"),
+            NO_LAVA("outOfLava"),
+            ENGINE_DISABLED("engineDisabledMessage"),
+            ENGINE_PRIORITY("enginePriorityMessage");
 
             private final String name;
 
@@ -325,7 +544,14 @@ public final class Localization
 
         public enum TANKS
         {
-            CREATIVE_MODE("creativeTankMode"), CHANGE_MODE("creativeTankChangeMode"), RESET_MODE("creativeTankResetMode"), LOCKED("tankLocked"), LOCK("tankLock"), UNLOCK("tankUnlock"), EMPTY("tankEmpty"), INVALID("tankInvalidFluid");
+            CREATIVE_MODE("creativeTankMode"),
+            CHANGE_MODE("creativeTankChangeMode"),
+            RESET_MODE("creativeTankResetMode"),
+            LOCKED("tankLocked"),
+            LOCK("tankLock"),
+            UNLOCK("tankUnlock"),
+            EMPTY("tankEmpty"),
+            INVALID("tankInvalidFluid");
 
             private final String name;
 
@@ -342,7 +568,19 @@ public final class Localization
 
         public enum TOOLS
         {
-            DURABILITY("toolDurability"), BROKEN("toolBroken"), REPAIRING("toolRepairing"), DECENT("toolDecent"), INSTRUCTION("toolRepairInstruction"), UNBREAKABLE("toolUnbreakable"), UNBREAKABLE_REPAIR("toolUnbreakableRepairError"), DRILL("drillTitle"), TOGGLE("drillToggle"), DIAMONDS("repairDiamonds"), IRON("repairIron"), FARMER("farmerTitle"), CUTTER("cutterTitle");
+            DURABILITY("toolDurability"),
+            BROKEN("toolBroken"),
+            REPAIRING("toolRepairing"),
+            DECENT("toolDecent"),
+            INSTRUCTION("toolRepairInstruction"),
+            UNBREAKABLE("toolUnbreakable"),
+            UNBREAKABLE_REPAIR("toolUnbreakableRepairError"),
+            DRILL("drillTitle"),
+            TOGGLE("drillToggle"),
+            DIAMONDS("repairDiamonds"),
+            IRON("repairIron"),
+            FARMER("farmerTitle"),
+            CUTTER("cutterTitle");
 
             private final String name;
 

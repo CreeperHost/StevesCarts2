@@ -241,7 +241,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 
         if (inRect(x, y, returnButton))
         {
-            drawMouseOver(guiGraphics, Localization.GUI.CART.RETURN.translate(), x, y);
+            drawMouseOver(guiGraphics, "gui.stevescarts.returnButton", x, y);
         }
     }
 

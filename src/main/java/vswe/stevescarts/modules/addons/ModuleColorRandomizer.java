@@ -62,7 +62,6 @@ public class ModuleColorRandomizer extends ModuleAddon
     {
         ResourceHelper.bindResource("/gui/color_randomizer.png");
         drawImage(guiGraphics, gui, 50, 20, 0, 16, 28, 28);
-        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         if (inRect(x, y, button))
         {
             drawImage(guiGraphics, gui, 10, 26, 32, 0, 16, 16);
