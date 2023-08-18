@@ -406,10 +406,12 @@ public class ModuleData
         return false;
     }
 
+    @Deprecated(forRemoval = true)
     @Nonnull
     public ItemStack getItemStack()
     {
         ItemStack stack = ItemStack.EMPTY;
+
         if (ModItems.MODULES.get(this) != null)
         {
             stack = new ItemStack(ModItems.MODULES.get(this).get());
@@ -465,7 +467,6 @@ public class ModuleData
         return true;
     }
 
-    //TODO KILL ALL OF THIS
     @OnlyIn(Dist.CLIENT)
     public void addExtraMessage(final List<Component> list)
     {

@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -149,14 +150,18 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 
     private void renderModuleList(GuiGraphics guiGraphics, int x, int y)
     {
-        ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
-
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        for (int i = 0; i < moduleCounts.size(); ++i)
+//        ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
+        for (int i = 0; i < cart.getModules().size(); i++)
         {
-            ModuleCountPair count = moduleCounts.get(i);
-            drawModuleIcon(guiGraphics, count.getData(), getGuiLeft() + getModuleDisplayX(i), getGuiTop() + getModuleDisplayY(i), 1.0f, 1.0f, 0.0f, 0.0f);
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            drawModuleIcon(guiGraphics, cart.getModules().get(i).getItemStack(), getGuiLeft() + getModuleDisplayX(i), getGuiTop() + getModuleDisplayY(i), 1.0f, 1.0f, 0.0f, 0.0f);
         }
+
+//        for (int i = 0; i < moduleCounts.size(); ++i)
+//        {
+//            ModuleCountPair count = moduleCounts.get(i);
+//            drawModuleIcon(guiGraphics, count.getData(), getGuiLeft() + getModuleDisplayX(i), getGuiTop() + getModuleDisplayY(i), 1.0f, 1.0f, 0.0f, 0.0f);
+//        }
         GlStateManager._disableBlend();
     }
 
@@ -168,9 +173,9 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         guiGraphics.blit(GuiMinecart.textureReturn, returnButton[0] + getGuiLeft(), returnButton[1] + getGuiTop(), 0, uy, returnButton[2], returnButton[3]);
     }
 
-    public void drawModuleIcon(GuiGraphics guiGraphics, ModuleData icon, final int targetX, final int targetY, final float sizeX, final float sizeY, final float offsetX, final float offsetY)
+    public void drawModuleIcon(GuiGraphics guiGraphics, ItemStack icon, final int targetX, final int targetY, final float sizeX, final float sizeY, final float offsetX, final float offsetY)
     {
-        guiGraphics.renderItem(icon.getItemStack(), targetX, targetY);
+        guiGraphics.renderItem(icon, targetX, targetY);
         RenderSystem.disableDepthTest();
     }
 

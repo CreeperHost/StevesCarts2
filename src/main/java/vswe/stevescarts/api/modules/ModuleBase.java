@@ -42,6 +42,7 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.ButtonComparator;
 import vswe.stevescarts.helpers.SimulationInfo;
+import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketGuiData;
 import vswe.stevescarts.network.packets.PacketMinecartButton;
@@ -1742,6 +1743,11 @@ public abstract class ModuleBase
     public String getModuleName()
     {
         return I18n.get("item.stevescarts." + StevesCartsAPI.MODULE_REGISTRY.get(getModuleId()).getRawName());
+    }
+
+    public ItemStack getItemStack()
+    {
+        return new ItemStack(ModItems.MODULES.get(getData()).get());
     }
 
     public enum RAILDIRECTION

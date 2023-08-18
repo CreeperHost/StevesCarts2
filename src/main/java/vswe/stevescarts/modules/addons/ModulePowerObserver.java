@@ -150,7 +150,7 @@ public class ModulePowerObserver extends ModuleAddon
         if (initialHeight != rect[3]) {
             gui.pushScissor();
         }
-        gui.drawModuleIcon(guiGraphics, engine.getData(), gui.getGuiLeft() + getX() + rect[0], gui.getGuiTop() + getY() + rect[1] + offset, 0, 0, 0, 0);
+        gui.drawModuleIcon(guiGraphics, engine.getItemStack(), gui.getGuiLeft() + getX() + rect[0], gui.getGuiTop() + getY() + rect[1] + offset, 0, 0, 0, 0);
         if (initialHeight != rect[3]) {
             gui.popScissor();
         }
