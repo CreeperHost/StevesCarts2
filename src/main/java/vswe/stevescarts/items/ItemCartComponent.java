@@ -21,8 +21,6 @@ public class ItemCartComponent extends Item
     @Override
     public @NotNull Component getName(@NotNull ItemStack itemStack)
     {
-        //TODO clean up all of the component names so we can stop doing this
-        String name = componentType.getName().trim().replace(" ", "_").replace("'", "_").toLowerCase(Locale.ROOT);
-        return Component.translatable("item.stevescarts." + name);
+        return Component.translatable("item.stevescarts." + componentType.getName());
     }
 }

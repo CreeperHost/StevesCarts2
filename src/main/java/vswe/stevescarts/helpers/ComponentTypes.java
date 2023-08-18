@@ -8,14 +8,94 @@ import javax.annotation.Nonnull;
 
 public enum ComponentTypes
 {
-    WOODEN_WHEELS(0, "Wooden Wheels"), IRON_WHEELS(1, "Iron Wheels"), RED_PIGMENT(2, "Red Pigment"), GREEN_PIGMENT(3, "Green Pigment"), BLUE_PIGMENT(4, "Blue Pigment"), GLASS_O_MAGIC(5, "Glass o'Magic"), DYNAMITE(6, "Dynamite"), REMOVED_1(7, null), REMOVED_2(8, null), SIMPLE_PCB(9, "Simple PCB"), GRAPHICAL_INTERFACE(10, "Graphical Interface"), RAW_HANDLE(11, "Raw Handle"), REFINED_HANDLE(12, "Refined Handle"), SPEED_HANDLE(13, "Speed Handle"), WHEEL(14, "Wheel"), SAW_BLADE(15, "Saw Blade"), ADVANCED_PCB(16, "Advanced PCB"), WOOD_CUTTING_CORE(17, "Wood Cutting Core"), RAW_HARDENER(18, "Raw Hardener"), REFINED_HARDENER(19, "Refined Hardener"), HARDENED_MESH(20, "Hardened Mesh"), STABILIZED_METAL(21, "Stabilized Metal"), REINFORCED_METAL(22, "Reinforced Metal"), REINFORCED_WHEELS(23, "Reinforced Wheels"), PIPE(24, "Pipe"), SHOOTING_STATION(25, "Shooting Station"), ENTITY_SCANNER(26, "Entity Scanner"), ENTITY_ANALYZER(27, "Entity Analyzer"), EMPTY_DISK(28, "Empty Disk"), TRI_TORCH(29, "Tri-torch"), CHEST_PANE(30, "Chest Pane"), LARGE_CHEST_PANE(31, "Large Chest Pane"), HUGE_CHEST_PANE(32, "Huge Chest Pane"), CHEST_LOCK(33, "Chest Lock"), IRON_PANE(34, "Iron Pane"), LARGE_IRON_PANE(35, "Large Iron Pane"), HUGE_IRON_PANE(36, "Huge Iron Pane"), DYNAMIC_PANE(37, "Dynamic Pane"), LARGE_DYNAMIC_PANE(38, "Large Dynamic Pane"), HUGE_DYNAMIC_PANE(39, "Huge Dynamic Pane"), CLEANING_FAN(40, "Cleaning Fan"), CLEANING_CORE(41, "Cleaning Core"), CLEANING_TUBE(42, "Cleaning Tube"), FUSE(43, "Fuse"), SOLAR_PANEL(44, "Solar Panel Component"), EYE_OF_GALGADOR(45, "Eye of Galgador"), LUMP_OF_GALGADOR(46, "Lump of Galgador"), GALGADORIAN_METAL(47, "Galgadorian Metal"), LARGE_LUMP_OF_GALGADOR(48, "Large Lump of Galgador"), ENHANCED_GALGADORIAN_METAL(49, "Enhanced Galgadorian Metal"), STOLEN_PRESENT(50, "Stolen Present"), GREEN_WRAPPING_PAPER(51, "Green Wrapping Paper"), RED_WRAPPING_PAPER(52, "Red Wrapping Paper"), WARM_HAT(53, "Warm hat"), RED_GIFT_RIBBON(54, "Red Gift Ribbon"), YELLOW_GIFT_RIBBON(55, "Yellow Gift Ribbon"), SOCK(56, "Sock"), STUFFED_SOCK(57, "Stuffed Sock"), ADVANCED_SOLAR_PANEL(58, "Advanced Solar Panel"), BLANK_UPGRADE(59, "Blank Upgrade"), TANK_VALVE(60, "SCTank Valve"), TANK_PANE(61, "SCTank Pane"), LARGE_TANK_PANE(62, "Large SCTank Pane"), HUGE_TANK_PANE(63, "Huge SCTank Pane"), LIQUID_CLEANING_CORE(64, "Liquid Cleaning Core"), LIQUID_CLEANING_TUBE(65, "Liquid Cleaning Tube"), EXPLOSIVE_EASTER_EGG(66, "Explosive Easter Egg"), BURNING_EASTER_EGG(67, "Burning Easter Egg"), GLISTERING_EASTER_EGG(68, "Glistering Easter Egg"), CHOCOLATE_EASTER_EGG(69, "Chocolate Easter Egg"), PAINTED_EASTER_EGG(70, "Painted Easter Egg"), BASKET(71, "Basket"), OAK_LOG(72, "Oak Log"), OAK_TWIG(73, "Oak Twig"), SPRUCE_LOG(74, "Spruce Log"), SPRUCE_TWIG(75, "Spruce Twig"), BIRCH_LOG(76, "Birch Log"), BIRCH_TWIG(77, "Birch Twig"), JUNGLE_LOG(78, "Jungle Log"), JUNGLE_TWIG(79, "Jungle Twig"), HARDENED_SAW_BLADE(80, "Hardened Saw Blade"), GALGADORIAN_SAW_BLADE(81, "Galgadorian Saw Blade"), GALGADORIAN_WHEELS(82, "Galgadorian Wheels"), IRON_BLADE(83, "Iron Blade"), BLADE_ARM(84, "Blade Arm");
+    WOODEN_WHEELS( "wooden_wheels"),
+    IRON_WHEELS("iron_wheels"),
+    RED_PIGMENT("red_pigment"),
+    GREEN_PIGMENT("green_pigment"),
+    BLUE_PIGMENT("blue_pigment"),
+    GLASS_O_MAGIC("glass_o_magic"),
+    DYNAMITE("dynamite"),
+    SIMPLE_PCB("simple_pcb"),
+    GRAPHICAL_INTERFACE("graphical_interface"),
+    RAW_HANDLE("raw_handle"),
+    REFINED_HANDLE("refined_handle"),
+    SPEED_HANDLE("speed_handle"),
+    WHEEL("wheel"),
+    SAW_BLADE("saw_blade"),
+    ADVANCED_PCB("advanced_pcb"),
+    WOOD_CUTTING_CORE("wood_cutting_core"),
+    RAW_HARDENER("raw_hardener"),
+    REFINED_HARDENER("refined_hardener"),
+    HARDENED_MESH("hardened_mesh"),
+    STABILIZED_METAL("stabilized_metal"),
+    REINFORCED_METAL("reinforced_metal"),
+    REINFORCED_WHEELS("reinforced_wheels"),
+    PIPE("pipe"),
+    SHOOTING_STATION("shooting_station"),
+    ENTITY_SCANNER("entity_scanner"),
+    ENTITY_ANALYZER("entity_analyzer"),
+    EMPTY_DISK("empty_disk"),
+    TRI_TORCH("tri-torch"),
+    CHEST_PANE("chest_pane"),
+    LARGE_CHEST_PANE("large_chest_pane"),
+    HUGE_CHEST_PANE("huge_chest_pane"),
+    CHEST_LOCK("chest_lock"),
+    IRON_PANE("iron_pane"),
+    LARGE_IRON_PANE("large_iron_pane"),
+    HUGE_IRON_PANE("huge_iron_pane"),
+    DYNAMIC_PANE("dynamic_pane"),
+    LARGE_DYNAMIC_PANE("large_dynamic_pane"),
+    HUGE_DYNAMIC_PANE("huge_dynamic_pane"),
+    CLEANING_FAN("cleaning_fan"),
+    CLEANING_CORE("cleaning_core"),
+    CLEANING_TUBE("cleaning_tube"),
+    FUSE( "fuse"),
+    SOLAR_PANEL("solar_panel_component"),
+    EYE_OF_GALGADOR("eye_of_galgador"),
+    LUMP_OF_GALGADOR( "lump_of_galgador"),
+    GALGADORIAN_METAL("galgadorian_metal"),
+    LARGE_LUMP_OF_GALGADOR("large_lump_of_galgador"),
+    ENHANCED_GALGADORIAN_METAL( "enhanced_galgadorian_metal"),
+    STOLEN_PRESENT( "stolen_present"),
+    GREEN_WRAPPING_PAPER("green_wrapping_paper"),
+    RED_WRAPPING_PAPER("red_wrapping_paper"),
+    WARM_HAT( "warm_hat"),
+    RED_GIFT_RIBBON("red_gift_ribbon"),
+    YELLOW_GIFT_RIBBON( "yellow_gift_ribbon"),
+    SOCK( "sock"),
+    STUFFED_SOCK( "stuffed_sock"),
+    ADVANCED_SOLAR_PANEL("advanced_solar_panel"),
+    BLANK_UPGRADE("blank_upgrade"),
+    TANK_VALVE( "sctank_valve"),
+    TANK_PANE( "sctank_pane"),
+    LARGE_TANK_PANE("large_sctank_pane"),
+    HUGE_TANK_PANE("huge_sctank_pane"),
+    LIQUID_CLEANING_CORE("liquid_cleaning_core"),
+    LIQUID_CLEANING_TUBE("liquid_cleaning_tube"),
+    EXPLOSIVE_EASTER_EGG("explosive_easter_egg"),
+    BURNING_EASTER_EGG( "burning_easter_egg"),
+    GLISTERING_EASTER_EGG("glistering_easter_egg"),
+    CHOCOLATE_EASTER_EGG( "chocolate_easter_egg"),
+    PAINTED_EASTER_EGG("painted_easter_egg"),
+    BASKET("basket"),
+    OAK_LOG("oak_log"),
+    OAK_TWIG("oak_twig"),
+    SPRUCE_LOG("spruce_log"),
+    SPRUCE_TWIG( "spruce_twig"),
+    BIRCH_LOG( "birch_log"),
+    BIRCH_TWIG( "birch_twig"),
+    JUNGLE_LOG("jungle_log"),
+    JUNGLE_TWIG( "jungle_twig"),
+    HARDENED_SAW_BLADE( "hardened_saw_blade"),
+    GALGADORIAN_SAW_BLADE( "galgadorian_saw_blade"),
+    GALGADORIAN_WHEELS( "galgadorian_wheels"),
+    IRON_BLADE("iron_blade"),
+    BLADE_ARM("blade_arm");
 
-    private final int id;
     private final String name;
 
-    ComponentTypes(final int id, final String name)
+    ComponentTypes(final String name)
     {
-        this.id = id;
         this.name = name;
     }
 
@@ -26,24 +106,14 @@ public enum ComponentTypes
 
     public String getRawName()
     {
-        return name.replace(":", "").replace("'", "").replace(" ", "_").replace("-", "_").toLowerCase();
-    }
-
-    @Nonnull
-    public ItemStack getItemStack(final int count)
-    {
-        return new ItemStack(getItemStack().getItem(), count);
+        return name;
+//        return name.replace(":", "").replace("'", "").replace(" ", "_").replace("-", "_").toLowerCase();
     }
 
     @Nonnull
     public ItemStack getItemStack()
     {
         return new ItemStack(ModItems.COMPONENTS.get(this).get());
-    }
-
-    public int getId()
-    {
-        return id;
     }
 
     public boolean isStackOfType(@Nonnull ItemStack itemstack)

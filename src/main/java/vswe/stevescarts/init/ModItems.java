@@ -69,7 +69,7 @@ public class ModItems
         {
             if (value != null && value.getName() != null)
             {
-                String name = ("component_" + value.getName()).trim().replace(" ", "_").replace("'", "_").toLowerCase(Locale.ROOT);
+                String name = ("component_" + value.getName());
                 map.put(value, ITEMS.register(name, () -> new ItemCartComponent(value)));
             }
         }
