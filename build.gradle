@@ -220,7 +220,7 @@ tasks.named('jar', Jar).configure {
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
-            artifactId = "vswe.stevescarts"
+            artifactId = "net.creeperhost"
             from components.java
         }
     }
