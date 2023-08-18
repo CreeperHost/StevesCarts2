@@ -220,8 +220,7 @@ tasks.named('jar', Jar).configure {
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
-            artifactId = "net.creeperhost"
-            from components.java
+            artifact jar
         }
     }
     repositories {

@@ -24,7 +24,7 @@ jobs:
         distribution: 'temurin'
     - name: Build with Gradle
       env:
-        MAVEN_TOKEN: ${{ secrets.CREEPERHOST_MAVEN_TOKEN}}
+        MAVEN_TOKEN: ${{secrets.CREEPERHOST_MAVEN_TOKEN}}
       run: |
         chmod +x ./gradlew
         ./gradlew build publish --stacktrace --no-daemon
