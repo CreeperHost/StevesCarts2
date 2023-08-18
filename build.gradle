@@ -220,13 +220,12 @@ tasks.named('jar', Jar).configure {
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
-            artifact jar
+            artifactId = rootProject.archivesBaseName
+            from components.java
         }
     }
     repositories {
-        println '???????'
         if (ENV.CREEPERHOST_MAVEN_TOKEN) {
-            println 'We have a token'
             maven {
                 url "https://maven.creeperhost.net/release"
                 credentials {
