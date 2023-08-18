@@ -166,13 +166,6 @@ public class ArcadeTracks extends ArcadeGame
     {
         userList.clearList();
         userMaps = TrackLevel.loadMapsFromFolder();
-        if (Constants.arcadeDevOperator)
-        {
-            for (int i = 0; i < TrackStory.stories.size(); ++i)
-            {
-                userMaps.addAll(TrackStory.stories.get(i).getLevels());
-            }
-        }
         for (TrackLevel userMap : userMaps)
         {
             userList.add(userMap.getName());
@@ -1181,16 +1174,6 @@ public class ArcadeTracks extends ArcadeGame
     @OnlyIn(Dist.CLIENT)
     private boolean save(String name)
     {
-        if (Constants.arcadeDevOperator)
-        {
-            if (!name.startsWith(" "))
-            {
-                final String result = TrackLevel.saveMapToString(name, playerStartX, playerStartY, playerStartDirection, itemX, itemY, tracks);
-                System.out.println(result);
-                return true;
-            }
-            name = name.substring(1);
-        }
         if (TrackLevel.saveMap(name, playerStartX, playerStartY, playerStartDirection, itemX, itemY, tracks))
         {
             lastSavedName = name;

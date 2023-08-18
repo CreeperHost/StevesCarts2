@@ -169,12 +169,8 @@ public class SimulationInfo
         (itemMULTIBOOLPipes1 = new DropDownMenuItem("Pipes", 16, DropDownMenuItem.VALUETYPE.MULTIBOOL, ModuleShooter.class, ModuleShooterAdv.class)).setMULTIBOOLCount(4);
         (itemMULTIBOOLPipes2 = new DropDownMenuItem("Pipes", 16, DropDownMenuItem.VALUETYPE.MULTIBOOL, ModuleShooter.class, ModuleShooterAdv.class)).setMULTIBOOLCount(4);
         itemBOOLPipe = new DropDownMenuItem("Pipe", 17, DropDownMenuItem.VALUETYPE.BOOL, ModuleShooterAdv.class);
-        (itemINTBackground = new DropDownMenuItem("Background", 18, DropDownMenuItem.VALUETYPE.INT, null)).setINTLimit(Constants.hasGreenScreen ? 0 : 1, 3);
+        (itemINTBackground = new DropDownMenuItem("Background", 18, DropDownMenuItem.VALUETYPE.INT, null)).setINTLimit(1, 3);
         itemINTBackground.setINT(1);
-        if (Constants.hasGreenScreen)
-        {
-            items.add(itemINTBackground);
-        }
         items.add(itemBOOLChest);
         items.add(itemBOOLInvis);
         items.add(itemBOOLBrake);

@@ -983,43 +983,40 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
             {
                 return;
             }
-            if (!Constants.freezeCartSimulation)
+            final int minRoll = -5;
+            final int maxRoll = 25;
+            if (shouldSpin)
             {
-                final int minRoll = -5;
-                final int maxRoll = 25;
-                if (shouldSpin)
+                yaw += 2.0f;
+                roll %= 360.0f;
+                if (!rolldown)
                 {
-                    yaw += 2.0f;
-                    roll %= 360.0f;
-                    if (!rolldown)
+                    if (roll < minRoll - 3)
                     {
-                        if (roll < minRoll - 3)
-                        {
-                            roll += 5.0f;
-                        }
-                        else
-                        {
-                            roll += 0.2f;
-                        }
-                        if (roll > maxRoll)
-                        {
-                            rolldown = true;
-                        }
+                        roll += 5.0f;
                     }
                     else
                     {
-                        if (roll > maxRoll + 3)
-                        {
-                            roll -= 5.0f;
-                        }
-                        else
-                        {
-                            roll -= 0.2f;
-                        }
-                        if (roll < minRoll)
-                        {
-                            rolldown = false;
-                        }
+                        roll += 0.2f;
+                    }
+                    if (roll > maxRoll)
+                    {
+                        rolldown = true;
+                    }
+                }
+                else
+                {
+                    if (roll > maxRoll + 3)
+                    {
+                        roll -= 5.0f;
+                    }
+                    else
+                    {
+                        roll -= 0.2f;
+                    }
+                    if (roll < minRoll)
+                    {
+                        rolldown = false;
                     }
                 }
             }
