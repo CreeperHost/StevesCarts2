@@ -14,6 +14,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -33,6 +34,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
@@ -46,11 +48,13 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.world.ForgeChunkManager;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.Constants;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -77,6 +81,7 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class EntityMinecartModular extends AbstractMinecart implements Container, IEntityAdditionalSpawnData, IFluidHandler, MenuProvider
 {
@@ -1301,22 +1306,70 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         return Component.translatable("entity.minecart");
     }
 
-    @SuppressWarnings("unused")
     public void loadChunks()
     {
-    }
-
-    @SuppressWarnings("unused")
-    public void loadChunks(final int chunkX, final int chunkZ)
-    {
+        updateTicket(true);
     }
 
     public void initChunkLoading()
     {
+        updateTicket(true);
     }
 
     public void dropChunkLoading()
     {
+        updateTicket(false);
+    }
+
+    List<ChunkPos> loaded = new ArrayList<>();
+
+    public void updateTicket(boolean add)
+    {
+        if(loaded == null) return;
+        Stream<ChunkPos> stream = create3x3();
+        List<ChunkPos> copy = loaded;
+        stream.forEach(chunkPos ->
+        {
+            if(level() instanceof ServerLevel serverLevel)
+            {
+                boolean worked = ForgeChunkManager.forceChunk(serverLevel, Constants.MOD_ID, getUUID(), chunkPos.x, chunkPos.z, add, true);
+                if(worked)
+                {
+                   if(add)
+                   {
+                       copy.add(chunkPos);
+                   }
+                   else
+                   {
+                       copy.remove(chunkPos);
+                   }
+//                   System.out.println(worked + " " + chunkPos + " " +  (add ? "Added" : "Removed"));
+                }
+
+                //Cleanup chunks that are no longer in range
+                List<ChunkPos> dirty = new ArrayList<>();
+                if(copy != null && !copy.isEmpty())
+                {
+                    copy.forEach(chunkPos1 ->
+                    {
+                        if (chunkPos.equals(chunkPos1))
+                        {
+                            dirty.add(chunkPos1);
+//                            System.out.println(chunkPos1 + " is no longer in range removing for list and removing ticket");
+                            boolean removed = ForgeChunkManager.forceChunk(serverLevel, Constants.MOD_ID, getUUID(), chunkPos1.x, chunkPos1.z, false, true);
+//                            System.out.println(chunkPos1 + " Removed:" + removed);
+                        }
+                    });
+                }
+                if(copy != null) copy.removeAll(dirty);
+            }
+        });
+        loaded = copy;
+    }
+
+    public Stream<ChunkPos> create3x3()
+    {
+        return ChunkPos.rangeClosed(chunkPosition(), 3);
     }
 
     public void setWorker(final ModuleWorker worker)

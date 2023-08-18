@@ -1,6 +1,5 @@
 package vswe.stevescarts.helpers;
 
-import vswe.stevescarts.Constants;
 import vswe.stevescarts.api.modules.template.ModuleChest;
 import vswe.stevescarts.modules.addons.ModuleBrake;
 import vswe.stevescarts.modules.addons.ModuleInvisible;

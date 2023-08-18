@@ -127,6 +127,8 @@ public class StevesCartsModules
     public static ModuleData FRONT_TANK;
     public static ModuleData OPEN_TANK;
 
+    public static ModuleData CHUNK_LOADER;
+
     public static void init()
     {
         setupDefaultGroups();
@@ -413,6 +415,9 @@ public class StevesCartsModules
 
         CAKE_SERVER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "cake_server"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "cake_server"), "Cake Server", ModuleCakeServer.class, ModuleType.ADDON, 10).addSide(ModuleData.SIDE.TOP).addMessage(Localization.MODULE_INFO.ALPHA_MESSAGE));
+
+        CHUNK_LOADER = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "chunk_loader"),
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "chunk_loader"), "Chunk Loader", ModuleChunkLoader.class, ModuleType.ADDON, 10));
     }
 
     public static void setupDefaultGroups()
