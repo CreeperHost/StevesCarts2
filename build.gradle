@@ -228,6 +228,7 @@ publishing {
         if (ENV.CREEPERHOST_MAVEN_TOKEN) {
             maven {
                 url "https://maven.creeperhost.net/release"
+                allowInsecureProtocol = true
                 credentials {
                     username = "githubci"
                     password = "${ENV.CREEPERHOST_MAVEN_TOKEN}"
