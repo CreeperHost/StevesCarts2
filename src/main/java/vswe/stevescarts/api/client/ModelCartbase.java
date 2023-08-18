@@ -48,33 +48,9 @@ public abstract class ModelCartbase extends Model
         return root;
     }
 
-    @Deprecated(forRemoval = true)
-    protected int getTextureWidth()
-    {
-        return 64;
-    }
-
-    @Deprecated(forRemoval = true)
-    protected int getTextureHeight()
-    {
-        return 64;
-    }
-
-    @Deprecated(forRemoval = true)
-    public float extraMult()
-    {
-        return 1.0f;
-    }
-
-    @Deprecated(forRemoval = true)
     public ResourceLocation getResource(final ModuleBase module)
     {
         return texture;
-    }
-
-    @Deprecated
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, VertexConsumer rtb, final float yaw, final float pitch, final float roll)
-    {
     }
 
     public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll)
