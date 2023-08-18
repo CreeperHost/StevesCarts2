@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.workers;
 
+import vswe.stevescarts.api.modules.template.ModuleWorker;
+
 import java.util.Comparator;
 
 public class CompWorkModule implements Comparator

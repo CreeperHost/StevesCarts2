@@ -57,6 +57,7 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
+import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.containers.ContainerMinecart;
 import vswe.stevescarts.helpers.ActivatorOption;
@@ -68,7 +69,6 @@ import vswe.stevescarts.init.ModEntities;
 import vswe.stevescarts.modules.addons.ModuleCreativeSupplies;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.modules.workers.CompWorkModule;
-import vswe.stevescarts.modules.workers.ModuleWorker;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

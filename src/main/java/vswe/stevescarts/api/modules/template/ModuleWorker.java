@@ -1,4 +1,4 @@
-package vswe.stevescarts.modules.workers;
+package vswe.stevescarts.api.modules.template;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.BaseRailBlock;

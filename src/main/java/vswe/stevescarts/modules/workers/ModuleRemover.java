@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
+import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
 import javax.annotation.Nonnull;

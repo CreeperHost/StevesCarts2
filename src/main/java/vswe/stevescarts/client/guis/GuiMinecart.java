@@ -201,7 +201,6 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         x -= getGuiLeft();
         y -= getGuiTop();
         ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
-        //        GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
         for (int i = 0; i < moduleCounts.size(); ++i)
         {
             final ModuleCountPair count = moduleCounts.get(i);

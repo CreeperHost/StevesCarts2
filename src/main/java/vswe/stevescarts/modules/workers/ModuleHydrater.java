@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.modules.workers.tools.ModuleFarmer;
 

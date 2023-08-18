@@ -16,7 +16,7 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.addons.ModuleEnchants;
-import vswe.stevescarts.modules.workers.ModuleWorker;
+import vswe.stevescarts.api.modules.template.ModuleWorker;
 
 import javax.annotation.Nonnull;
 
