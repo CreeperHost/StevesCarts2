@@ -233,7 +233,7 @@ publishing {
                 allowInsecureProtocol = true
                 credentials {
                     username = "githubci"
-                    password = "${ENV.CREEPERHOST_MAVEN_TOKEN}"
+                    password = ENV.CREEPERHOST_MAVEN_TOKEN
                 }
             }
         }
