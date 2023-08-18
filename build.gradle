@@ -220,14 +220,14 @@ tasks.named('jar', Jar).configure {
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
-            artifactId = project.mod_group_id
+            artifactId = "vswe.stevescarts"
             from components.java
         }
     }
     repositories {
         if (ENV.CREEPERHOST_MAVEN_TOKEN) {
             maven {
-                url "https://maven.creeperhost.net"
+                url "https://maven.creeperhost.net/release"
                 credentials {
                     username = "githubci"
                     password = "${ENV.CREEPERHOST_MAVEN_TOKEN}"
