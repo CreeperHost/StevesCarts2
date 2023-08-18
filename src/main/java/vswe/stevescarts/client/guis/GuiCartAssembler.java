@@ -263,12 +263,12 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                 final TextWithColor info = lines.get(i);
                 if (info != null)
                 {
-                    guiGraphics.drawString(Minecraft.getInstance().font, info.getText(), leftPos + 370, topPos + 40 + i * 10, 16777215);
+                    guiGraphics.drawString(Minecraft.getInstance().font, info.getText(), leftPos + 370, topPos + 40 + i * 10, info.getColor(), false);
                 }
             }
             if (dotdotdot)
             {
-                guiGraphics.drawString(Minecraft.getInstance().font, "...", leftPos + 370, topPos + 40 + lineCount * 10, 4210752);
+                guiGraphics.drawString(Minecraft.getInstance().font, "...", leftPos + 370, topPos + 40 + lineCount * 10, 4210752, false);
             }
         }
         float assemblingProgress;

@@ -1,17 +1,13 @@
 package vswe.stevescarts.datagen;
 
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.Constants;
-import vswe.stevescarts.StevesCarts;
-import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.helpers.ComponentTypes;
 import vswe.stevescarts.init.ModBlocks;
