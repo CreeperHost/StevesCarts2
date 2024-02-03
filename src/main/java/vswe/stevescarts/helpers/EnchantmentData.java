@@ -1,9 +1,9 @@
 package vswe.stevescarts.helpers;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -89,13 +89,13 @@ public class EnchantmentData {
     public void write(FriendlyByteBuf buf) {
         buf.writeVarInt(enchant == null ? -1 : value);
         if (enchant != null){
-            buf.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.ENCHANTMENTS.getKey(enchant)));
+            buf.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.ENCHANTMENT.getKey(enchant)));
         }
     }
 
     public static EnchantmentData read(FriendlyByteBuf buf) {
         int value = buf.readVarInt();
-        EnchantmentData data = new EnchantmentData(value == -1 ? null : ForgeRegistries.ENCHANTMENTS.getValue(buf.readResourceLocation()));
+        EnchantmentData data = new EnchantmentData(value == -1 ? null : BuiltInRegistries.ENCHANTMENT.get(buf.readResourceLocation()));
         data.setValue(value);
         return data;
     }

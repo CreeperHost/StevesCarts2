@@ -4,6 +4,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -12,12 +13,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.IFluidTank;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.modules.template.ModuleStorage;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -127,7 +127,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
                 {
                     try
                     {
-                        Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(getDw(FLUID_NAME).toLowerCase(Locale.ROOT)));
+                        Fluid fluid = BuiltInRegistries.FLUID.get(new ResourceLocation(getDw(FLUID_NAME).toLowerCase(Locale.ROOT)));
                         if (fluid != null && fluid != Fluids.EMPTY)
                         {
                             tank.setFluid(new FluidStack(fluid, getDw(FLUID_AMOUNT)));
@@ -287,7 +287,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
 
     public String getFluidName(Fluid fluid)
     {
-        return ForgeRegistries.FLUIDS.getKey(fluid).toString();
+        return BuiltInRegistries.FLUID.getKey(fluid).toString();
     }
 
     public float getFluidRenderHeight()

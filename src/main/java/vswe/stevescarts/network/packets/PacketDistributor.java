@@ -3,7 +3,7 @@ package vswe.stevescarts.network.packets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 import vswe.stevescarts.blocks.tileentities.TileEntityDistributor;
 
 import java.util.function.Supplier;
@@ -35,21 +35,21 @@ public class PacketDistributor
 
     public static class Handler
     {
-        public static void handle(final PacketDistributor msg, Supplier<NetworkEvent.Context> ctx)
+        public static void handle(final PacketDistributor msg, NetworkEvent.Context ctx)
         {
-            ctx.get().enqueueWork(() ->
+            ctx.enqueueWork(() ->
             {
-                Level world = ctx.get().getSender().level();
+                Level world = ctx.getSender().level();
                 if (msg.blockPos != null)
                 {
                     BlockPos blockPos = msg.blockPos;
                     if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof TileEntityDistributor tileEntityDistributor)
                     {
-                        tileEntityDistributor.receivePacket(msg.id, msg.array, ctx.get().getSender());
+                        tileEntityDistributor.receivePacket(msg.id, msg.array, ctx.getSender());
                     }
                 }
             });
-            ctx.get().setPacketHandled(true);
+            ctx.setPacketHandled(true);
         }
     }
 }

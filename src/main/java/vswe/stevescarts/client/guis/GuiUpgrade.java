@@ -28,7 +28,7 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float p_230430_4_)
     {
-        this.renderBackground(guiGraphics);
+        this.renderBackground(guiGraphics, mouseX, mouseY, p_230430_4_);
         super.render(guiGraphics, mouseX, mouseY, p_230430_4_);
         if (upgrade.getUpgrade() != null)
         {

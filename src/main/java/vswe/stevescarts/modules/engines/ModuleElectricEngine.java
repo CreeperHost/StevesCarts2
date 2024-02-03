@@ -4,8 +4,8 @@
 //import dev.ftb.mods.ftbic.util.EnergyItemHandler;
 //import net.minecraft.network.datasync.DataParameter;
 //import net.minecraft.network.datasync.DataSerializers;
-//import net.minecraftforge.api.distmarker.Dist;
-//import net.minecraftforge.api.distmarker.OnlyIn;
+//import net.neoforged.api.distmarker.Dist;
+//import net.neoforged.api.distmarker.OnlyIn;
 //import vswe.stevescarts.client.guis.GuiMinecart;
 //import vswe.stevescarts.compat.ftbic.SlotElectricEngine;
 //import vswe.stevescarts.api.slots.SlotBase;

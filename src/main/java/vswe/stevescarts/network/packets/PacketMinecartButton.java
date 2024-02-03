@@ -4,14 +4,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.PlayNetworkDirection;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
-
-import java.util.function.Supplier;
 
 public class PacketMinecartButton {
     private final int cartID;
@@ -35,29 +33,29 @@ public class PacketMinecartButton {
     }
 
     public static class Handler {
-        public static void handle(PacketMinecartButton msg, Supplier<NetworkEvent.Context> ctx) {
-            ctx.get().enqueueWork(() ->
+        public static void handle(PacketMinecartButton msg, NetworkEvent.Context ctx) {
+            ctx.enqueueWork(() ->
             {
-                if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) {
+                if (ctx.getDirection() == PlayNetworkDirection.PLAY_TO_SERVER) {
                     handleServerSide(msg, ctx);
-                } else if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
+                } else if (ctx.getDirection() == PlayNetworkDirection.PLAY_TO_CLIENT) {
                     handleClientSide(msg, ctx);
                 }
             });
-            ctx.get().setPacketHandled(true);
+            ctx.setPacketHandled(true);
         }
 
         @OnlyIn(Dist.CLIENT)
-        private static void handleClientSide(PacketMinecartButton msg, Supplier<NetworkEvent.Context> ctx) {
+        private static void handleClientSide(PacketMinecartButton msg, NetworkEvent.Context ctx) {
             Minecraft mc = Minecraft.getInstance();
             Level level = mc.level;
             Player player = mc.player;
             handle(msg, level, player);
         }
 
-        private static void handleServerSide(PacketMinecartButton msg, Supplier<NetworkEvent.Context> ctx) {
-            Level level = ctx.get().getSender().level();
-            Player player = ctx.get().getSender();
+        private static void handleServerSide(PacketMinecartButton msg, NetworkEvent.Context ctx) {
+            Level level = ctx.getSender().level();
+            Player player = ctx.getSender();
             handle(msg, level, player);
         }
 

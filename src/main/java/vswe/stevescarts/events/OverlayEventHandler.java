@@ -3,8 +3,8 @@ package vswe.stevescarts.events;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.TickEvent;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
 /**
@@ -13,7 +13,7 @@ import vswe.stevescarts.entities.EntityMinecartModular;
 public class OverlayEventHandler {
 
     public static void init() {
-        MinecraftForge.EVENT_BUS.addListener(OverlayEventHandler::onRenderTick);
+        NeoForge.EVENT_BUS.addListener(OverlayEventHandler::onRenderTick);
     }
 
     private static void onRenderTick(TickEvent.RenderTickEvent event) {

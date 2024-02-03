@@ -1,19 +1,19 @@
 package vswe.stevescarts;
 
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 import vswe.stevescarts.client.StevesCartsCreativeTabs;
 import vswe.stevescarts.entities.CartDataSerializers;
+import vswe.stevescarts.helpers.ForceChunkHelper;
 import vswe.stevescarts.init.*;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
@@ -45,7 +45,8 @@ public class StevesCarts
 
         SCConfig.loadConfig(SCConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Constants.MOD_ID + "-client.toml"));
         SCConfig.loadConfig(SCConfig.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Constants.MOD_ID + "-common.toml"));
-        ForgeMod.enableMilkFluid();
+        NeoForgeMod.enableMilkFluid();
+        ForceChunkHelper.init();
     }
 
     public void creativeTabBuildEvent(BuildCreativeModeTabContentsEvent event)
@@ -74,7 +75,6 @@ public class StevesCarts
         PacketHandler.register();
 
         AssemblerUpgrade.init();
-        MinecraftForge.EVENT_BUS.register(this);
 
         TileEntityCargo.loadSelectionSettings();
         CartDataSerializers.init();

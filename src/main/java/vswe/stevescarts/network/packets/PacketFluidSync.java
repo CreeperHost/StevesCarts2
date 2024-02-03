@@ -5,13 +5,11 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.PlayNetworkDirection;
 import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
-
-import java.util.function.Supplier;
 
 public class PacketFluidSync
 {
@@ -40,11 +38,11 @@ public class PacketFluidSync
 
     public static class Handler
     {
-        public static void handle(final PacketFluidSync msg, Supplier<NetworkEvent.Context> ctx)
+        public static void handle(final PacketFluidSync msg, NetworkEvent.Context ctx)
         {
-            if (ctx.get().getDirection() != NetworkDirection.PLAY_TO_CLIENT) return;
+            if (ctx.getDirection() != PlayNetworkDirection.PLAY_TO_CLIENT) return;
 
-            ctx.get().enqueueWork(() -> {
+            ctx.enqueueWork(() -> {
                 ClientLevel clientWorld = Minecraft.getInstance().level;
                 if (clientWorld == null) return;
                 BlockEntity tile = clientWorld.getBlockEntity(msg.pos);
@@ -54,7 +52,7 @@ public class PacketFluidSync
                     entityUpgrade.tank.setFluid(msg.fluidStack);
                 }
             });
-            ctx.get().setPacketHandled(true);
+            ctx.setPacketHandled(true);
         }
     }
 }

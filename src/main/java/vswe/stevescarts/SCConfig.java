@@ -2,29 +2,29 @@ package vswe.stevescarts;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.nio.file.Path;
 
-@Mod.EventBusSubscriber()
+//@Mod.EventBusSubscriber()
 public class SCConfig
 {
     public static final String CATEGORY_GENERAL = "general";
-    private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-    private static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
+    private static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
+    private static final ModConfigSpec.Builder CLIENT_BUILDER = new ModConfigSpec.Builder();
 
-    public static ForgeConfigSpec COMMON_CONFIG;
-    public static ForgeConfigSpec CLIENT_CONFIG;
+    public static ModConfigSpec COMMON_CONFIG;
+    public static ModConfigSpec CLIENT_CONFIG;
 
-    public static ForgeConfigSpec.ConfigValue<Boolean> disableTimedCrafting;
-    public static ForgeConfigSpec.ConfigValue<Integer> maxDynamites;
-    public static ForgeConfigSpec.ConfigValue<Boolean> useArcadeSounds;
-    public static ForgeConfigSpec.ConfigValue<Boolean> useArcadeMobSounds;
-    public static ForgeConfigSpec.ConfigValue<Integer> drillSize;
-    public static ForgeConfigSpec.ConfigValue<Integer> basic_solar_production;
-    public static ForgeConfigSpec.ConfigValue<Integer> compact_solar_production;
-    public static ForgeConfigSpec.ConfigValue<Integer> standard_solar_production;
+    public static ModConfigSpec.ConfigValue<Boolean> disableTimedCrafting;
+    public static ModConfigSpec.ConfigValue<Integer> maxDynamites;
+    public static ModConfigSpec.ConfigValue<Boolean> useArcadeSounds;
+    public static ModConfigSpec.ConfigValue<Boolean> useArcadeMobSounds;
+    public static ModConfigSpec.ConfigValue<Integer> drillSize;
+    public static ModConfigSpec.ConfigValue<Integer> basic_solar_production;
+    public static ModConfigSpec.ConfigValue<Integer> compact_solar_production;
+    public static ModConfigSpec.ConfigValue<Integer> standard_solar_production;
 
     static
     {
@@ -52,7 +52,7 @@ public class SCConfig
         CLIENT_CONFIG = CLIENT_BUILDER.build();
     }
 
-    public static void loadConfig(ForgeConfigSpec spec, Path path)
+    public static void loadConfig(ModConfigSpec spec, Path path)
     {
         final CommentedFileConfig configData = CommentedFileConfig.builder(path).sync().autosave().writingMode(WritingMode.REPLACE).build();
 

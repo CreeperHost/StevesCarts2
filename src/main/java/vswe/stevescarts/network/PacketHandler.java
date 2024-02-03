@@ -1,18 +1,14 @@
 package vswe.stevescarts.network;
 
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.NetworkRegistry;
+import net.neoforged.neoforge.network.PacketDistributor.PacketTarget;
+import net.neoforged.neoforge.network.PlayNetworkDirection;
+import net.neoforged.neoforge.network.simple.MessageFunctions;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.network.packets.*;
-
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class PacketHandler
 {
@@ -33,7 +29,7 @@ public class PacketHandler
         registerMessage(PacketGuiData.class, PacketGuiData::encode, PacketGuiData::decode, PacketGuiData.Handler::handle);
     }
 
-    private static <MSG> void registerMessage(Class<MSG> type, BiConsumer<MSG, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> consumer)
+    private static <MSG> void registerMessage(Class<MSG> type, MessageFunctions.MessageEncoder<MSG> encoder, MessageFunctions.MessageDecoder<MSG> decoder, MessageFunctions.MessageConsumer<MSG> consumer)
     {
         HANDLER.registerMessage(index++, type, encoder, decoder, consumer);
     }
@@ -43,13 +39,13 @@ public class PacketHandler
         HANDLER.sendToServer(msg);
     }
 
-    public static void send(net.minecraftforge.network.PacketDistributor.PacketTarget target, Object message)
+    public static void send(PacketTarget target, Object message)
     {
         HANDLER.send(target, message);
     }
 
     public static void sendTo(Object message, ServerPlayer player)
     {
-        HANDLER.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        HANDLER.sendTo(message, player.connection.connection, PlayNetworkDirection.PLAY_TO_CLIENT);
     }
 }

@@ -1,11 +1,13 @@
 package vswe.stevescarts.datagen;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.api.modules.data.ModuleData;
@@ -14,25 +16,26 @@ import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.init.StevesCartsModules;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GeneratorRecipes extends RecipeProvider
 {
-    public GeneratorRecipes(PackOutput output)
+    public GeneratorRecipes(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
     {
-        super(output);
+        super(output, lookupProvider);
     }
 
     @Override
-    protected void buildRecipes(@NotNull Consumer<FinishedRecipe> consumer)
+    protected void buildRecipes(RecipeOutput consumer)
     {
         addBlockRecipes(consumer);
-
         addSmithingTableRecipes(consumer);
         addModuleRecipes(consumer);
     }
 
-    private void addBlockRecipes(Consumer<FinishedRecipe> consumer)
+    private void addBlockRecipes(RecipeOutput consumer)
     {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ADVANCED_DETECTOR.get())
                 .pattern("#P#")
@@ -65,7 +68,7 @@ public class GeneratorRecipes extends RecipeProvider
 
     }
 
-    private void addModuleRecipes(Consumer<FinishedRecipe> consumer)
+    private void addModuleRecipes(RecipeOutput consumer)
     {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, getStackFromModule(StevesCartsModules.CHUNK_LOADER).getItem())
                 .pattern("III")
@@ -80,7 +83,7 @@ public class GeneratorRecipes extends RecipeProvider
                 .save(consumer);
     }
 
-    private void addSmithingTableRecipes(Consumer<FinishedRecipe> consumer)
+    private void addSmithingTableRecipes(RecipeOutput consumer)
     {
         SmithingTransformRecipeBuilder.smithing(
                         Ingredient.of(new ItemStack(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE)),
@@ -94,6 +97,8 @@ public class GeneratorRecipes extends RecipeProvider
     private ItemStack getStackFromModule(ModuleData moduleData)
     {
         if(moduleData == null) return ItemStack.EMPTY;
-        return moduleData.getItemStack();
+        Supplier<Item> itemSupplier = ModItems.MODULES.get(moduleData);
+        if (itemSupplier == null || itemSupplier.get() == null) return ItemStack.EMPTY;
+        return new ItemStack(itemSupplier.get());
     }
 }

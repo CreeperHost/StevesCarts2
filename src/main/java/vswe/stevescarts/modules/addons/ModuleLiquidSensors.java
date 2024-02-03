@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.IFluidBlock;
+import net.neoforged.neoforge.fluids.IFluidBlock;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.entities.EntityMinecartModular;

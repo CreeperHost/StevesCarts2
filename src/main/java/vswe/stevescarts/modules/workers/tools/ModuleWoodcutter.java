@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraftforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.farms.ITreeModule;
 import vswe.stevescarts.api.modules.ModuleBase;

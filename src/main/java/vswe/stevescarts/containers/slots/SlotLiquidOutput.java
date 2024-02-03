@@ -2,7 +2,7 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.FluidUtil;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 

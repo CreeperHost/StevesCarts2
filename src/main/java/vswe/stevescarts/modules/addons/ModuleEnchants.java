@@ -1,15 +1,15 @@
 package vswe.stevescarts.modules.addons;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
@@ -237,7 +237,7 @@ public class ModuleEnchants extends ModuleAddon {
             EnchantmentData data = getEnchant(i);
             if (data.getEnchant() == null) continue;
 
-            nbt.putString(generateNBTName("EffectId" + i, id), ForgeRegistries.ENCHANTMENTS.getKey(data.getEnchant()).toString());
+            nbt.putString(generateNBTName("EffectId" + i, id), BuiltInRegistries.ENCHANTMENT.getKey(data.getEnchant()).toString());
             nbt.putInt(generateNBTName("Value" + i, id), data.getValue());
         }
     }
@@ -247,7 +247,7 @@ public class ModuleEnchants extends ModuleAddon {
         super.Load(nbt, id);
         for (int i = 0; i < 3; ++i) {
             if (!nbt.contains(generateNBTName("EffectId" + i, id))) continue;
-            EnchantmentData data = new EnchantmentData(ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(nbt.getString(generateNBTName("EffectId" + i, id)))));
+            EnchantmentData data = new EnchantmentData(BuiltInRegistries.ENCHANTMENT.get(new ResourceLocation(nbt.getString(generateNBTName("EffectId" + i, id)))));
             data.setValue(nbt.getInt(generateNBTName("Value" + i, id)));
             setEnchant(i, data);
         }

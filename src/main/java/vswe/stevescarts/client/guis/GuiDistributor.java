@@ -93,7 +93,7 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
     @Override
     public void render(GuiGraphics guiGraphics, int x, int y, float p_230430_4_)
     {
-        this.renderBackground(guiGraphics);
+        this.renderBackground(guiGraphics, x, y, p_230430_4_);
         super.render(guiGraphics, x, y, p_230430_4_);
         guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.DISTRIBUTOR.TITLE.translate(), leftPos + 8, topPos + 6, 16777215);
         final TileEntityManager[] invs = distributor.getInventories();

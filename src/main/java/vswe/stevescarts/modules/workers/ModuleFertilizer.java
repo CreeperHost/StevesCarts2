@@ -12,8 +12,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
@@ -148,7 +148,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
             if (blockTop instanceof CropBlock)
             {
                 CropBlock growable = (CropBlock) blockTop;
-                if (growable.isValidBonemealTarget(world, pos, stateOfTopBlock, false))
+                if (growable.isValidBonemealTarget(world, pos, stateOfTopBlock))
                 {
                     if (growable.isBonemealSuccess(world, getCart().random, pos, stateOfTopBlock))
                     {

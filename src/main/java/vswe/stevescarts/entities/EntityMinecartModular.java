@@ -45,14 +45,15 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.world.ForgeChunkManager;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.network.NetworkHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.ticket.ChunkTicketManager;
+import net.neoforged.neoforge.common.world.chunk.ForcedChunkManager;
+import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.StevesCarts;
@@ -67,11 +68,13 @@ import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.containers.ContainerMinecart;
 import vswe.stevescarts.helpers.ActivatorOption;
+import vswe.stevescarts.helpers.ForceChunkHelper;
 import vswe.stevescarts.helpers.GuiAllocationHelper;
 import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModEntities;
+import vswe.stevescarts.modules.addons.ModuleChunkLoader;
 import vswe.stevescarts.modules.addons.ModuleCreativeSupplies;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.modules.workers.CompWorkModule;
@@ -459,7 +462,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public void remove(@NotNull RemovalReason removalReason)
     {
         CartEvents.CartRemovedEvent event = new CartEvents.CartRemovedEvent(this);
-        MinecraftForge.EVENT_BUS.post(event);
+        NeoForge.EVENT_BUS.post(event);
         if(event.isCanceled()) return;
 
         if (level().isClientSide)
@@ -605,20 +608,20 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public double getMyRidingOffset()
+    public float getMyRidingOffset(Entity p_294931_)
     {
         if (modules != null && !getPassengers().isEmpty())
         {
-            for (final ModuleBase module : modules)
+            for (ModuleBase module : modules)
             {
-                final float offset = module.mountedOffset(getPassengers().get(0));
+                float offset = module.mountedOffset(getPassengers().get(0));
                 if (offset != 0.0f)
                 {
                     return offset;
                 }
             }
         }
-        return super.getMyRidingOffset();
+        return super.getMyRidingOffset(p_294931_);
     }
 
     @Override
@@ -1332,7 +1335,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         {
             if(level() instanceof ServerLevel serverLevel)
             {
-                boolean worked = ForgeChunkManager.forceChunk(serverLevel, Constants.MOD_ID, getUUID(), chunkPos.x, chunkPos.z, add, true);
+                boolean worked = ForceChunkHelper.CONTROLLER.forceChunk(serverLevel, getUUID(), chunkPos.x, chunkPos.z, add, true);
                 if(worked)
                 {
                    if(add)
@@ -1356,7 +1359,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                         {
                             dirty.add(chunkPos1);
 //                            System.out.println(chunkPos1 + " is no longer in range removing for list and removing ticket");
-                            boolean removed = ForgeChunkManager.forceChunk(serverLevel, Constants.MOD_ID, getUUID(), chunkPos1.x, chunkPos1.z, false, true);
+                            boolean removed = ForceChunkHelper.CONTROLLER.forceChunk(serverLevel, getUUID(), chunkPos1.x, chunkPos1.z, false, true);
 //                            System.out.println(chunkPos1 + " Removed:" + removed);
                         }
                     });

@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import vswe.stevescarts.client.models.*;
 import vswe.stevescarts.client.models.engines.*;
 import vswe.stevescarts.client.models.pig.ModelPigHead;

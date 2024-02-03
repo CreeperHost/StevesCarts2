@@ -2,7 +2,7 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 
 import javax.annotation.Nonnull;

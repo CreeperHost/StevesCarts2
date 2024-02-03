@@ -2,8 +2,8 @@ package vswe.stevescarts.arcade.monopoly;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.helpers.Localization;

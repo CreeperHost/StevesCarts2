@@ -15,13 +15,13 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.util.LazyOptional;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.IFluidTank;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.containers.ContainerDistributor;
 import vswe.stevescarts.helpers.DistributorSetting;
@@ -513,13 +513,13 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     {
     }
 
-    LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
+    LazyOptional<? extends net.neoforged.neoforge.items.IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
 
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing)
     {
-        if (!this.remove && facing != null && capability == ForgeCapabilities.ITEM_HANDLER)
+        if (!this.remove && facing != null && capability == Capabilities.ITEM_HANDLER)
         {
             return switch (facing)
                     {
@@ -531,7 +531,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
                         case WEST -> handlers[5].cast();
                     };
         }
-        if (capability == ForgeCapabilities.FLUID_HANDLER && hasAnyTank(facing))
+        if (capability == Capabilities.FLUID_HANDLER && hasAnyTank(facing))
         {
             return (LazyOptional<T>) LazyOptional.of(() -> fluidHandlerMap.get(facing));
         }

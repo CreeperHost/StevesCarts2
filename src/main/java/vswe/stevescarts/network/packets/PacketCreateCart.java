@@ -3,7 +3,7 @@ package vswe.stevescarts.network.packets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 
 import java.util.function.Supplier;
@@ -35,21 +35,21 @@ public class PacketCreateCart
 
     public static class Handler
     {
-        public static void handle(final PacketCreateCart msg, Supplier<NetworkEvent.Context> ctx)
+        public static void handle(final PacketCreateCart msg, NetworkEvent.Context ctx)
         {
-            ctx.get().enqueueWork(() ->
+            ctx.enqueueWork(() ->
             {
-                ServerLevel world = ctx.get().getSender().serverLevel();
+                ServerLevel world = ctx.getSender().serverLevel();
                 if (msg.blockPos != null && world.getBlockEntity(msg.blockPos) != null)
                 {
                     BlockPos blockPos = msg.blockPos;
                     if (world.isLoaded(blockPos) && world.getBlockEntity(blockPos) instanceof TileEntityCartAssembler tileEntityCartAssembler)
                     {
-                        tileEntityCartAssembler.receivePacket(msg.id, msg.data, ctx.get().getSender());
+                        tileEntityCartAssembler.receivePacket(msg.id, msg.data, ctx.getSender());
                     }
                 }
             });
-            ctx.get().setPacketHandled(true);
+            ctx.setPacketHandled(true);
         }
     }
 }

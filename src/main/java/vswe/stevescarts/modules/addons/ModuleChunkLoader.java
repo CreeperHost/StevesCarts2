@@ -93,6 +93,7 @@ public class ModuleChunkLoader extends ModuleAddon implements IActivatorModule
 
     private boolean isLoadingChunk()
     {
+        if (LOADING_CHUNK == null) return false;
         return getDw(LOADING_CHUNK);
     }
 

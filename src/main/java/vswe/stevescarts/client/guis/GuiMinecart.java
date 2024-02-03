@@ -15,8 +15,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.containers.ContainerMinecart;
@@ -60,7 +60,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
     {
-        this.renderBackground(guiGraphics);
+        this.renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
         if (cart == null) return;
         if (cart.getModules() != null)
@@ -484,21 +484,21 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount)
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY)
     {
-        super.mouseScrolled(mouseX, mouseY, amount);
-        if (amount < 0)
+        super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
+        if (scrollY < 0)
         {
-            amount = -1;
+            scrollY = -1;
         }
-        if (amount > 0)
+        if (scrollY > 0)
         {
-            amount = 1;
+            scrollY = 1;
         }
         if (this.inRect((int) mouseX - getGuiLeft(), (int) mouseY - getGuiTop(), 0, 0, imageWidth, imageHeight))
         {
             int moduleSize = this.cart.modularSpaceHeight;
-            int scroll = cart.getScrollY() + ((int) -amount * 4000) / (moduleSize - EntityMinecartModular.MODULAR_SPACE_HEIGHT);
+            int scroll = cart.getScrollY() + ((int) -scrollY * 4000) / (moduleSize - EntityMinecartModular.MODULAR_SPACE_HEIGHT);
             scroll = Mth.clamp(scroll, 0, 198);
             cart.setScrollY(scroll);
         }
@@ -586,7 +586,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder buff = tessellator.getBuilder();
         buff.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        float zLevel = 1F;
+        float zLevel = 0;//1F; //Ether everything needs to be on the same z level, or we need to go through and properly order *everything*
 
         buff.vertex((x), y + h, zLevel).uv((float) pt1[0], (float) pt1[1]).endVertex();
         buff.vertex((x + w), y + h, zLevel).uv((float) pt2[0], (float) pt2[1]).endVertex();

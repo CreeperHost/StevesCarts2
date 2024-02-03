@@ -3,7 +3,7 @@ package vswe.stevescarts.network.packets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 
 import java.util.function.Supplier;
@@ -35,21 +35,21 @@ public class PacketActivator
 
     public static class Handler
     {
-        public static void handle(final PacketActivator msg, Supplier<NetworkEvent.Context> ctx)
+        public static void handle(final PacketActivator msg, NetworkEvent.Context ctx)
         {
-            ctx.get().enqueueWork(() ->
+            ctx.enqueueWork(() ->
             {
-                ServerLevel world = ctx.get().getSender().serverLevel();
+                ServerLevel world = ctx.getSender().serverLevel();
                 if (msg.blockPos != null)
                 {
                     BlockPos blockPos = msg.blockPos;
                     if (world.getBlockEntity(blockPos) != null && world.getBlockEntity(blockPos) instanceof TileEntityActivator tileEntityActivator)
                     {
-                        tileEntityActivator.receivePacket(msg.id, msg.array, ctx.get().getSender());
+                        tileEntityActivator.receivePacket(msg.id, msg.array, ctx.getSender());
                     }
                 }
             });
-            ctx.get().setPacketHandled(true);
+            ctx.setPacketHandled(true);
         }
     }
 }

@@ -8,7 +8,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.IForgeShearable;
+import net.neoforged.neoforge.common.IShearable;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
@@ -77,7 +77,7 @@ public class ModuleFlowerRemover extends ModuleBase {
     private void shearEntities() {
         final List<LivingEntity> entities = getCart().level().getEntitiesOfClass(LivingEntity.class, getCart().getBoundingBox().inflate(getBlocksOnSide(), getBlocksFromLevel() + 2.0f, getBlocksOnSide()));
         for (LivingEntity target : entities) {
-            if (target instanceof IForgeShearable shearable) {
+            if (target instanceof IShearable shearable) {
                 BlockPos pos = target.blockPosition();
                 if (!shearable.isShearable(ItemStack.EMPTY, getCart().level(), pos)) {
                     continue;

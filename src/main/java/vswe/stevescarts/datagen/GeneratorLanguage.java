@@ -1,7 +1,7 @@
 package vswe.stevescarts.datagen;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 import vswe.stevescarts.Constants;
 
 public class GeneratorLanguage extends LanguageProvider
