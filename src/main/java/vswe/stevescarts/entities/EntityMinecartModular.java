@@ -48,14 +48,11 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.ticket.ChunkTicketManager;
-import net.neoforged.neoforge.common.world.chunk.ForcedChunkManager;
 import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
-import vswe.stevescarts.Constants;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -74,7 +71,6 @@ import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModEntities;
-import vswe.stevescarts.modules.addons.ModuleChunkLoader;
 import vswe.stevescarts.modules.addons.ModuleCreativeSupplies;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.modules.workers.CompWorkModule;
@@ -115,6 +111,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public int modularSpaceHeight;
     public boolean canScrollModules;
     private ArrayList<ModuleCountPair> moduleCounts;
+    private List<ChunkPos> forcedChunks = new ArrayList<>();
     public static final int[][][] railDirectionCoordinates;
     private ArrayList<ModuleBase> modules;
     private ArrayList<ModuleWorker> workModules;
@@ -1324,55 +1321,41 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         updateTicket(false);
     }
 
-    List<ChunkPos> loaded = new ArrayList<>();
 
-    public void updateTicket(boolean add)
-    {
-        if(loaded == null) return;
-        Stream<ChunkPos> stream = create3x3();
-        List<ChunkPos> copy = loaded;
-        stream.forEach(chunkPos ->
-        {
-            if(level() instanceof ServerLevel serverLevel)
-            {
-                boolean worked = ForceChunkHelper.CONTROLLER.forceChunk(serverLevel, getUUID(), chunkPos.x, chunkPos.z, add, true);
-                if(worked)
-                {
-                   if(add)
-                   {
-                       copy.add(chunkPos);
-                   }
-                   else
-                   {
-                       copy.remove(chunkPos);
-                   }
-//                   System.out.println(worked + " " + chunkPos + " " +  (add ? "Added" : "Removed"));
-                }
 
-                //Cleanup chunks that are no longer in range
-                List<ChunkPos> dirty = new ArrayList<>();
-                if(copy != null && !copy.isEmpty())
-                {
-                    copy.forEach(chunkPos1 ->
-                    {
-                        if (chunkPos.equals(chunkPos1))
-                        {
-                            dirty.add(chunkPos1);
-//                            System.out.println(chunkPos1 + " is no longer in range removing for list and removing ticket");
-                            boolean removed = ForceChunkHelper.CONTROLLER.forceChunk(serverLevel, getUUID(), chunkPos1.x, chunkPos1.z, false, true);
-//                            System.out.println(chunkPos1 + " Removed:" + removed);
-                        }
-                    });
+    public void updateTicket(boolean loadingEnabled) {
+        if (!(level() instanceof ServerLevel level)) return;
+        List<ChunkPos> removed = new ArrayList<>();
+
+        //If disabled then just un-force all chunks.
+        if (!loadingEnabled) {
+            forcedChunks.forEach(pos -> {
+                if (ForceChunkHelper.CONTROLLER.forceChunk(level, this, pos.x, pos.z, false, true)) {
+                    removed.add(pos);
                 }
-                if(copy != null) copy.removeAll(dirty);
+            });
+            forcedChunks.removeAll(removed);
+            return;
+        }
+
+        //Copy the loaded list then remove any already loaded chunks from the copy and load any new chunks.
+        List<ChunkPos> forcedCopy = new ArrayList<>(forcedChunks);
+        Stream<ChunkPos> loadArea = ChunkPos.rangeClosed(chunkPosition(), 1);
+        loadArea.forEach(pos -> {
+            if (forcedCopy.contains(pos)) {
+                forcedCopy.remove(pos);
+            } else if (ForceChunkHelper.CONTROLLER.forceChunk(level, this, pos.x, pos.z, true, true)) {
+                forcedChunks.add(pos);
             }
         });
-        loaded = copy;
-    }
 
-    public Stream<ChunkPos> create3x3()
-    {
-        return ChunkPos.rangeClosed(chunkPosition(), 3);
+        //The copy should now only contain chunks that are out of range, so unload them.
+        forcedCopy.forEach(pos -> {
+            if (ForceChunkHelper.CONTROLLER.forceChunk(level, this, pos.x, pos.z, false, true)) {
+                removed.add(pos);
+            }
+        });
+        forcedChunks.removeAll(removed);
     }
 
     public void setWorker(final ModuleWorker worker)
