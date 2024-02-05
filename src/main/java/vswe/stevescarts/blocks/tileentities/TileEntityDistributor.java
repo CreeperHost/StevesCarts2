@@ -15,13 +15,10 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.IFluidTank;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.containers.ContainerDistributor;
 import vswe.stevescarts.helpers.DistributorSetting;
@@ -30,7 +27,7 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.storages.SCTank;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.network.PacketHandler;
-import vswe.stevescarts.network.packets.PacketDistributor;
+import vswe.stevescarts.network.packets.PacketDistributorTile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,10 +42,11 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     private boolean dirty;
 
     private TileEntityManager[] inventories;
+    public IItemHandler[] invHandlers = new IItemHandler[6];
     public boolean hasTop;
     public boolean hasBot;
 
-    private final Map<Direction, IFluidHandler> fluidHandlerMap;
+    public final Map<Direction, IFluidHandler> fluidHandlerMap;
 
     public TileEntityDistributor(BlockPos blockPos, BlockState blockState)
     {
@@ -165,7 +163,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
 
     public void sendPacket(final int id, final byte[] data)
     {
-        PacketHandler.sendToServer(new PacketDistributor(getBlockPos(), id, data));
+        PacketHandler.sendToServer(new PacketDistributorTile(getBlockPos(), id, data));
     }
 
     public void receivePacket(final int id, final byte[] data, final ServerPlayer player)
@@ -511,31 +509,6 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     @Override
     public void clearContent()
     {
-    }
-
-    LazyOptional<? extends net.neoforged.neoforge.items.IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
-
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing)
-    {
-        if (!this.remove && facing != null && capability == Capabilities.ITEM_HANDLER)
-        {
-            return switch (facing)
-                    {
-                        case UP -> handlers[0].cast();
-                        case DOWN -> handlers[1].cast();
-                        case NORTH -> handlers[2].cast();
-                        case EAST -> handlers[3].cast();
-                        case SOUTH -> handlers[4].cast();
-                        case WEST -> handlers[5].cast();
-                    };
-        }
-        if (capability == Capabilities.FLUID_HANDLER && hasAnyTank(facing))
-        {
-            return (LazyOptional<T>) LazyOptional.of(() -> fluidHandlerMap.get(facing));
-        }
-        return super.getCapability(capability, facing);
     }
 
     @Override

@@ -4,8 +4,8 @@ import net.minecraft.world.level.block.Block;
 
 public class BlockMetalStorage extends Block
 {
-    public BlockMetalStorage()
+    public BlockMetalStorage(Block.Properties properties)
     {
-        super(Properties.of().strength(2.0F));
+        super(properties);
     }
 }

@@ -70,7 +70,7 @@ public class ContainerUpgrade extends ContainerBase
 
         if (!lastFluid.equals(upgrade.tank.getFluid()) || lastFluid.getAmount() != upgrade.tank.getFluid().getAmount()) {
             lastFluid = upgrade.tank.getFluid().copy();
-            PacketHandler.send(PacketDistributor.TRACKING_CHUNK.with(() -> upgrade.getLevel().getChunkAt(upgrade.getBlockPos())), new PacketFluidSync(lastFluid, upgrade.getBlockPos(), 0));
+            PacketDistributor.TRACKING_CHUNK.with(upgrade.getLevel().getChunkAt(upgrade.getBlockPos())).send(new PacketFluidSync(lastFluid, upgrade.getBlockPos(), 0));
         }
     }
 

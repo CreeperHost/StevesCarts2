@@ -125,7 +125,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
             {
                 for (int i = 0; i < getTanks().length; i++)
                 {
-                    PacketHandler.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(getBlockPos())), new PacketFluidSync(this.getTanks()[i].getFluid(), this.getBlockPos(), i));
+                    PacketDistributor.TRACKING_CHUNK.with(level.getChunkAt(getBlockPos())).send(new PacketFluidSync(this.getTanks()[i].getFluid(), this.getBlockPos(), i));
                 }
             }
         }

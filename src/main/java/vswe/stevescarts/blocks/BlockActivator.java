@@ -1,24 +1,27 @@
 package vswe.stevescarts.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 
 public class BlockActivator extends BlockContainerBase
 {
-    public BlockActivator()
+    public static final MapCodec<BlockActivator> CODEC = simpleCodec(BlockActivator::new);
+
+    public BlockActivator(Block.Properties properties)
     {
-        super(Properties.of().strength(2.0F));
+        super(properties);
     }
 
     @Override
@@ -26,7 +29,7 @@ public class BlockActivator extends BlockContainerBase
     {
         if (!level.isClientSide)
         {
-            NetworkHooks.openScreen((ServerPlayer) playerEntity, (MenuProvider) level.getBlockEntity(blockPos), blockPos);
+            playerEntity.openMenu((MenuProvider) level.getBlockEntity(blockPos), blockPos);
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.SUCCESS;
@@ -37,5 +40,10 @@ public class BlockActivator extends BlockContainerBase
     public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState)
     {
         return new TileEntityActivator(blockPos, blockState);
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 }

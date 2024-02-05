@@ -1,18 +1,18 @@
 package vswe.stevescarts.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
@@ -20,12 +20,13 @@ import vswe.stevescarts.polylib.Pair;
 
 import java.util.ArrayList;
 
-
 public class BlockCartAssembler extends BlockContainerBase
 {
-    public BlockCartAssembler()
+    public static final MapCodec<BlockCartAssembler> CODEC = simpleCodec(BlockCartAssembler::new);
+
+    public BlockCartAssembler(Block.Properties properties)
     {
-        super(Properties.of().strength(2.0F));
+        super(properties);
     }
 
     @Override
@@ -35,7 +36,7 @@ public class BlockCartAssembler extends BlockContainerBase
         {
             if (!playerEntity.isCrouching())
             {
-                NetworkHooks.openScreen((ServerPlayer) playerEntity, (MenuProvider) world.getBlockEntity(blockPos), blockPos);
+                playerEntity.openMenu((MenuProvider) world.getBlockEntity(blockPos), blockPos);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -166,5 +167,10 @@ public class BlockCartAssembler extends BlockContainerBase
     public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState)
     {
         return new TileEntityCartAssembler(blockPos, blockState);
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 }

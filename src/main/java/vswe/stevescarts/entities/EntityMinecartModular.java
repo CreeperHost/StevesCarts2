@@ -8,8 +8,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -48,10 +46,9 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
+import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
@@ -82,7 +79,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class EntityMinecartModular extends AbstractMinecart implements Container, IEntityAdditionalSpawnData, IFluidHandler, MenuProvider
+public class EntityMinecartModular extends AbstractMinecart implements Container, IEntityWithComplexSpawn, IFluidHandler, MenuProvider
 {
     public BlockPos disabledPos;
     protected boolean wasDisabled;
@@ -130,12 +127,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public ArrayList<ModuleBase> getModules()
     {
         return modules;
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket()
-    {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     public boolean hasModule(Class<? extends ModuleBase> module)
@@ -1295,7 +1286,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 pushX = temppushX;
                 pushZ = temppushZ;
             }
-            NetworkHooks.openScreen((ServerPlayer) player, this, packetBuffer -> packetBuffer.writeInt(getId()));
+            ((ServerPlayer) player).openMenu(this, packetBuffer -> packetBuffer.writeInt(getId()));
         }
         return InteractionResult.SUCCESS;
     }

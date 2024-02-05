@@ -14,9 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.capabilities.Capabilities;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.util.LazyOptional;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
@@ -420,18 +418,7 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
         return latestTransferToBeUsed;
     }
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability)
-    {
-        if (capability == Capabilities.ITEM_HANDLER)
-        {
-            return LazyOptional.of(this::createHandler).cast();
-        }
-        return super.getCapability(capability);
-    }
-
-    private @NotNull IItemHandlerModifiable createHandler()
+    public @NotNull IItemHandlerModifiable createHandler()
     {
         BlockState state = this.getBlockState();
         if (!(state.getBlock() instanceof BlockCargoManager))

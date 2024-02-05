@@ -13,7 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.SoundActions;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.fluids.FluidActionResult;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -27,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.helpers.Localization;
 
 import java.text.NumberFormat;
+import java.util.Optional;
 
 public class SCTank extends FluidTank {
     private final ITankHolder owner;
@@ -59,7 +59,7 @@ public class SCTank extends FluidTank {
                 result = FluidUtil.tryEmptyContainer(itemStack, this, FluidType.BUCKET_VOLUME, null, false);
                 if (result.isSuccess()) {
                     ItemStack container = result.getResult();
-                    LazyOptional<IFluidHandlerItem> opt = FluidUtil.getFluidHandler(container);
+                    Optional<IFluidHandlerItem> opt = FluidUtil.getFluidHandler(container);
                     if (opt.isPresent()) {
                         IFluidHandlerItem handler = opt.orElseThrow(RuntimeException::new);
                         fluidStack = handler.drain(FluidType.BUCKET_VOLUME, FluidAction.SIMULATE);

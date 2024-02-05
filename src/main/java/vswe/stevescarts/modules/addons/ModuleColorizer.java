@@ -6,7 +6,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.CartDataSerializers;
+import vswe.stevescarts.init.ModSerializers;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
@@ -154,7 +154,7 @@ public class ModuleColorizer extends ModuleAddon
     @Override
     public void initDw()
     {
-        COLORS = createDw(CartDataSerializers.VARINT);
+        COLORS = createDw(ModSerializers.INT_ARRAY.get());
         registerDw(COLORS, new int[]{255, 255, 255});
     }
 

@@ -411,7 +411,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
             }
         };
 
-        Arrow arrow = new Arrow(getCart().level(), 0, 0, 0);
+        Arrow arrow = new Arrow(getCart().level(), 0, 0, 0, stack);
         arrow.setEffectsFromItem(stack);
         arrow.setOwner(getCart()); //Ensures arrows dont hit cart immediately after they are fired.
         return arrow;

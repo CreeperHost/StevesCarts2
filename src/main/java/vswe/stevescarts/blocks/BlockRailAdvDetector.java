@@ -1,5 +1,6 @@
 package vswe.stevescarts.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
@@ -31,6 +32,7 @@ import javax.annotation.Nonnull;
 
 public class BlockRailAdvDetector extends BaseRailBlock
 {
+    public static final MapCodec<BlockRailAdvDetector> CODEC = simpleCodec(BlockRailAdvDetector::new);
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
 
     public BlockRailAdvDetector()
@@ -177,5 +179,10 @@ public class BlockRailAdvDetector extends BaseRailBlock
     private boolean isCartReadyForAction(EntityMinecartModular cart, BlockPos pos)
     {
         return cart.disabledPos != null && cart.disabledPos.equals(pos) && cart.isDisabled();
+    }
+
+    @Override
+    protected MapCodec<? extends BaseRailBlock> codec() {
+        return CODEC;
     }
 }

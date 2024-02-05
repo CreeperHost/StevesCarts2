@@ -1,5 +1,6 @@
 package vswe.stevescarts.blocks;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.level.BlockGetter;
@@ -19,6 +20,7 @@ import javax.annotation.Nullable;
 
 public class BlockRailJunction extends BaseRailBlock
 {
+    public static final MapCodec<BlockRailJunction> CODEC = simpleCodec(BlockRailJunction::new);
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
 
     public BlockRailJunction()
@@ -59,5 +61,10 @@ public class BlockRailJunction extends BaseRailBlock
             if (railShape != null) return railShape;
         }
         return super.getRailDirection(state, world, pos, cart);
+    }
+
+    @Override
+    protected MapCodec<? extends BaseRailBlock> codec() {
+        return CODEC;
     }
 }

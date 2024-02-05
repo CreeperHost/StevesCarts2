@@ -1,24 +1,25 @@
 package vswe.stevescarts.blocks;
 
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -27,18 +28,20 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
-import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class BlockUpgrade extends BlockContainerBase
 {
+    //TODO, Figure out this codec stuff....
+    public static final MapCodec<BlockUpgrade> CODEC = simpleCodec(BlockUpgrade::new);
+    
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty CONNECTED = BooleanProperty.create("connected");
 
@@ -56,9 +59,13 @@ public class BlockUpgrade extends BlockContainerBase
         BBS[Direction.SOUTH.ordinal()] = Block.box(0, 0, 0, 16, 16, thickness);
     }
 
-    public BlockUpgrade(AssemblerUpgrade assemblerUpgrade)
+    public BlockUpgrade(Properties properties) {
+        this(properties, null);
+    }
+
+    public BlockUpgrade(Block.Properties properties, AssemblerUpgrade assemblerUpgrade)
     {
-        super(Properties.of().noOcclusion().randomTicks().strength(2.0F));
+        super(properties);
         this.assemblerUpgrade = assemblerUpgrade;
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(CONNECTED, false));
     }
@@ -124,7 +131,7 @@ public class BlockUpgrade extends BlockContainerBase
         {
             if (!playerEntity.isCrouching())
             {
-                NetworkHooks.openScreen((ServerPlayer) playerEntity, (MenuProvider) world.getBlockEntity(blockPos), blockPos);
+                playerEntity.openMenu((MenuProvider) world.getBlockEntity(blockPos), blockPos);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -141,5 +148,10 @@ public class BlockUpgrade extends BlockContainerBase
                 tooltip.add(Component.literal(effect.getName()));
             }
         }
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
     }
 }
