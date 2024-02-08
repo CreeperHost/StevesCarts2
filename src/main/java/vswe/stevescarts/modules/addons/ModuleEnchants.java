@@ -19,15 +19,15 @@ import vswe.stevescarts.helpers.EnchantmentData;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.network.DataSerializers;
+import vswe.stevescarts.init.ModSerializers;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 public class ModuleEnchants extends ModuleAddon {
-    private final EntityDataAccessor<EnchantmentData> ENCHANT_0 = createDw(DataSerializers.ENCHANT_DATA);
-    private final EntityDataAccessor<EnchantmentData> ENCHANT_1 = createDw(DataSerializers.ENCHANT_DATA);
-    private final EntityDataAccessor<EnchantmentData> ENCHANT_2 = createDw(DataSerializers.ENCHANT_DATA);
+    private final EntityDataAccessor<EnchantmentData> ENCHANT_0 = createDw(ModSerializers.ENCHANT_DATA.get());
+    private final EntityDataAccessor<EnchantmentData> ENCHANT_1 = createDw(ModSerializers.ENCHANT_DATA.get());
+    private final EntityDataAccessor<EnchantmentData> ENCHANT_2 = createDw(ModSerializers.ENCHANT_DATA.get());
     private final ArrayList<ModularEnchantments.EnchantmentType> enabledTypes;
 
     public ModuleEnchants(EntityMinecartModular cart) {

@@ -11,25 +11,18 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.network.DataSerializers;
-import vswe.stevescarts.network.DataSerializers.ShortArray;
+import vswe.stevescarts.init.ModSerializers;
+import vswe.stevescarts.init.ModSerializers.ShortArray;
 
 public class ModulePowerObserver extends ModuleAddon
 {
-    private final EntityDataAccessor<ShortArray> AREA_DATA = createDw(DataSerializers.SHORT_ARRAY);
-    private final EntityDataAccessor<ShortArray> POWER_LEVEL = createDw(DataSerializers.SHORT_ARRAY);
-
-//    private short[] areaData;
-//    private short[] powerLevel;
+    private final EntityDataAccessor<ShortArray> AREA_DATA = createDw(ModSerializers.SHORT_ARRAY.get());
+    private final EntityDataAccessor<ShortArray> POWER_LEVEL = createDw(ModSerializers.SHORT_ARRAY.get());
     private int currentEngine;
-
-    //Syncronization, Make a ShortArray?
 
     public ModulePowerObserver(final EntityMinecartModular cart)
     {
         super(cart);
-//        areaData = new short[4];
-//        powerLevel = new short[4];
         currentEngine = -1;
     }
 
@@ -219,32 +212,6 @@ public class ModulePowerObserver extends ModuleAddon
     {
         return 8;
     }
-
-//    @Override
-//    protected void checkGuiData(final Object[] info)
-//    {
-//        for (int i = 0; i < 4; ++i)
-//        {
-//            updateGuiData(info, i, areaData[i]);
-//        }
-//        for (int i = 0; i < 4; ++i)
-//        {
-//            updateGuiData(info, i + 4, powerLevel[i]);
-//        }
-//    }
-//
-//    @Override
-//    public void receiveGuiData(final int id, final short data)
-//    {
-//        if (id >= 0 && id < 4)
-//        {
-//            areaData[id] = data;
-//        }
-//        else if (id >= 4 && id < 8)
-//        {
-//            powerLevel[id - 4] = data;
-//        }
-//    }
 
     @Override
     public int numberOfPackets()

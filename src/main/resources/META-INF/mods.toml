@@ -63,5 +63,12 @@ description='''${mod_description}'''
     ordering="NONE"
     side="BOTH"
 
+[[dependencies.stevescarts]]
+    modId = "polylib"
+    type="required"
+    versionRange = "[2004.0.3,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
 [[accessTransformers]]
     file="META-INF/accesstransformer.cfg"
