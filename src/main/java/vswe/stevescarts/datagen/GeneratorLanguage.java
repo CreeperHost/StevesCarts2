@@ -605,6 +605,8 @@ public class GeneratorLanguage extends LanguageProvider
         add("modules.attachments.stevescarts.noteBassGuitar", "Bass Guitar");
         add("modules.attachments.stevescarts.noteCreateTrack", "Create new track");
         add("modules.attachments.stevescarts.noteRemoveTrack", "Remove bottom track");
+        add("modules.attachments.stevescarts.noteAdd", "Add note to track #[%1]");
+        add("modules.attachments.stevescarts.noteRemove", "Remove rightmost note from track #[%1]");
         add("modules.attachments.stevescarts.noteActivateInstrument", "Activate [%1]");
         add("modules.attachments.stevescarts.noteDeactivateInstrument", "Remove NoteBlock setting");
         add("modules.attachments.stevescarts.noteDelay", "Change delay. Current Delay: [%1]");

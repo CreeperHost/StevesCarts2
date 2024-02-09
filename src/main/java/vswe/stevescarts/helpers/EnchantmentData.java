@@ -12,6 +12,7 @@ public class EnchantmentData {
     @Nullable
     private Enchantment enchant;
     private int value;
+    private boolean dirty = false;
 
     public EnchantmentData(Enchantment enchant) {
         this.enchant = enchant;
@@ -24,10 +25,12 @@ public class EnchantmentData {
 
     public void setValue(final int val) {
         value = val;
+        dirty = true;
     }
 
     public void setEnchantment(Enchantment enchant) {
         this.enchant = enchant;
+        dirty = true;
     }
 
     public Enchantment getEnchant() {
@@ -98,5 +101,13 @@ public class EnchantmentData {
         EnchantmentData data = new EnchantmentData(value == -1 ? null : BuiltInRegistries.ENCHANTMENT.get(buf.readResourceLocation()));
         data.setValue(value);
         return data;
+    }
+
+    public boolean isDirty() {
+        if (dirty) {
+            dirty = false;
+            return true;
+        }
+        return false;
     }
 }

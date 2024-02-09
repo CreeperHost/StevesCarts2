@@ -30,6 +30,13 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular> {
         if (entity.isInvisible()) {
             return;
         }
+        if (entity.getModules() != null) {
+            for (ModuleBase module : entity.getModules()) {
+                if (!module.shouldCartRender()) {
+                    return;
+                }
+            }
+        }
         super.render(entity, yaw, tickDelta, poseStack, vertexConsumers, light);
         poseStack.pushPose();
         long l = (long) entity.getId() * 493286711L;

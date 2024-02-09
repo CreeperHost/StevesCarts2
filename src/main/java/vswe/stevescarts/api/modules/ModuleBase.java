@@ -2,6 +2,7 @@ package vswe.stevescarts.api.modules;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import net.creeperhost.polylib.client.modulargui.lib.GuiRender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.VineBlock;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import vswe.stevescarts.api.StevesCartsAPI;
@@ -1314,6 +1316,11 @@ public abstract class ModuleBase
         getCart().getDataManager().set(key, value);
     }
 
+    protected final <T> void updateDw(EntityDataAccessor<T> key, T value, boolean force)
+    {
+        getCart().getDataManager().set(key, value, force);
+    }
+
     /**
      * Get a datamanger
      *
@@ -1588,7 +1595,7 @@ public abstract class ModuleBase
      * @param minecraft The mincraft instance to use with the rendering
      */
     @OnlyIn(Dist.CLIENT)
-    public void renderOverlay(PoseStack poseStack, Minecraft minecraft)
+    public void renderOverlay(ExtendedGui gui, GuiGraphics render, float partialTicks)
     {
     }
 

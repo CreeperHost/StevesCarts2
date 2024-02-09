@@ -1,6 +1,8 @@
 package vswe.stevescarts;
 
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.DistExecutor;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.fml.common.Mod;
@@ -13,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 import vswe.stevescarts.client.StevesCartsCreativeTabs;
 import vswe.stevescarts.entities.CartDataSerializers;
+import vswe.stevescarts.events.OverlayEventHandler;
 import vswe.stevescarts.helpers.ForceChunkHelper;
 import vswe.stevescarts.init.*;
 import vswe.stevescarts.network.PacketHandler;
@@ -47,6 +50,8 @@ public class StevesCarts
         SCConfig.loadConfig(SCConfig.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Constants.MOD_ID + "-common.toml"));
         NeoForgeMod.enableMilkFluid();
         ForceChunkHelper.init();
+
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> OverlayEventHandler::init);
     }
 
     public void creativeTabBuildEvent(BuildCreativeModeTabContentsEvent event)

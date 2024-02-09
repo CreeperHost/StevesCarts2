@@ -10,8 +10,10 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ILeverModule;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
@@ -64,7 +66,8 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void renderOverlay(PoseStack poseStack, Minecraft minecraft) {
+    public void renderOverlay(ExtendedGui gui, GuiGraphics render, float partialTicks) {
+        Minecraft mc = gui.getMinecraft();
         ResourceHelper.bindResource("/gui/drive.png");
         if (engineInformation != null)
         {
@@ -83,11 +86,11 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         }
         int enginesEndAt = getCart().getEngines().size() * 15;
         drawImage(5, enginesEndAt, 0, 15, 32, 32);
-        if (minecraft.options.keyUp.isDown()) {
+        if (gui.getMinecraft().options.keyUp.isDown()) {
             drawImage(15, enginesEndAt + 5, 42, 20, 12, 6);
-        } else if (minecraft.options.keyLeft.isDown()) {
+        } else if (gui.getMinecraft().options.keyLeft.isDown()) {
             drawImage(7, enginesEndAt + 13, 34, 28, 6, 12);
-        } else if (minecraft.options.keyRight.isDown()) {
+        } else if (gui.getMinecraft().options.keyRight.isDown()) {
             drawImage(29, enginesEndAt + 13, 56, 28, 6, 12);
         }
         int speedGraphicHeight = getSpeedSetting() * 2;
@@ -100,13 +103,14 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         drawImage(5, enginesEndAt + 72, 0, 47, 32, 20);
 
         //TODO
-//        guiGraphics.drawString(minecraft.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0x909090);
-//        guiGraphics.drawString(minecraft.font, distToString(odo), 7, enginesEndAt + 52 + 11, 0x909090);
-//        guiGraphics.drawString(minecraft.font, Localization.MODULES.ATTACHMENTS.TRIP.translate(), 7, enginesEndAt + 52 + 22, 0x909090);
-//        guiGraphics.drawString(minecraft.font, distToString(trip), 7, enginesEndAt + 52 + 31, 0x909090);
-//
-//        drawItem(guiGraphics, new ItemStack(Items.CLOCK), 5, enginesEndAt + 32 + 3);
-//        drawItem(guiGraphics, new ItemStack(Items.COMPASS), 21, enginesEndAt + 32 + 3);
+        render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0x909090);
+        render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0x909090);
+        render.drawString(mc.font, distToString(odo), 7, enginesEndAt + 52 + 11, 0x909090);
+        render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.TRIP.translate(), 7, enginesEndAt + 52 + 22, 0x909090);
+        render.drawString(mc.font, distToString(trip), 7, enginesEndAt + 52 + 31, 0x909090);
+
+        drawItem(render, new ItemStack(Items.CLOCK), 5, enginesEndAt + 32 + 3);
+        drawItem(render, new ItemStack(Items.COMPASS), 21, enginesEndAt + 32 + 3);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -256,29 +260,15 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
 
     @Override
     public double getPushFactor() {
-        switch (getSpeedSetting()) {
-            case 1 -> {
-                return 0.01;
-            }
-            case 2 -> {
-                return 0.03;
-            }
-            case 3 -> {
-                return 0.05;
-            }
-            case 4 -> {
-                return 0.07;
-            }
-            case 5 -> {
-                return 0.09;
-            }
-            case 6 -> {
-                return 0.11;
-            }
-            default -> {
-                return super.getPushFactor();
-            }
-        }
+        return switch (getSpeedSetting()) {
+            case 1 -> 0.01;
+            case 2 -> 0.03;
+            case 3 -> 0.05;
+            case 4 -> 0.07;
+            case 5 -> 0.09;
+            case 6 -> 0.11;
+            default -> super.getPushFactor();
+        };
     }
 
     private void encodeKeys() {
@@ -394,20 +384,12 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         if (!isMoving) {
             return super.getConsumption(isMoving);
         }
-        switch (getSpeedSetting()) {
-            case 4: {
-                return 1;
-            }
-            case 5: {
-                return 3;
-            }
-            case 6: {
-                return 5;
-            }
-            default: {
-                return super.getConsumption(isMoving);
-            }
-        }
+        return switch (getSpeedSetting()) {
+            case 4 -> 1;
+            case 5 -> 3;
+            case 6 -> 5;
+            default -> super.getConsumption(isMoving);
+        };
     }
 
     @Override

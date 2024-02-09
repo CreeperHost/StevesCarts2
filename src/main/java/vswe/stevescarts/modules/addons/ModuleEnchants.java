@@ -52,7 +52,7 @@ public class ModuleEnchants extends ModuleAddon {
     }
 
     public void setEnchant(int index, EnchantmentData data) {
-        updateDw(index == 0 ? ENCHANT_0 : index == 1 ? ENCHANT_1 : ENCHANT_2, data);
+        updateDw(index == 0 ? ENCHANT_0 : index == 1 ? ENCHANT_1 : ENCHANT_2, data, data.isDirty());
     }
 
 
