@@ -139,7 +139,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
 
     private int getCakes()
     {
-        if (getCakeBuffer() == 66)
+        if (getCakeBuffer() == 6)
         {
             return 10;
         }

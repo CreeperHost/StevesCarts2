@@ -33,7 +33,8 @@ public class ModelFarmer extends ModelCartbase {
         );
 
         for (int i = -1; i <= 1; i += 2) {
-            mainAnchor.addOrReplaceChild("smallArm" + i + i, CubeListBuilder.create().texOffs(26, 23)
+            mainAnchor.addOrReplaceChild("smallArm" + i + i, CubeListBuilder.create()
+                            .texOffs(26, 23)
                             .addBox(-1.0f, -1.0f, -1.0f, 8, 2, 2),
                     PartPose.offset(0.0f, 0.0f, i * 17)
             );

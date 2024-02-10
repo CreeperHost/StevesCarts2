@@ -1,25 +1,25 @@
 package vswe.stevescarts.modules.addons;
 
-import net.creeperhost.polylib.helpers.RecipeHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotCartCrafter;
 import vswe.stevescarts.containers.slots.SlotCartCrafterResult;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.helpers.RecipeHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Set;
 
 public class ModuleCrafter extends ModuleRecipe
 {
@@ -30,8 +30,7 @@ public class ModuleCrafter extends ModuleRecipe
     {
         super(cart);
         cooldown = 0;
-        //TODO
-//        craftingDummy = new CraftingDummy(this);
+        craftingDummy = new CraftingDummy(this);
     }
 
     @Override
@@ -138,19 +137,10 @@ public class ModuleCrafter extends ModuleRecipe
     @Nullable
     public CraftingRecipe getRecipe()
     {
-        Set<Recipe<?>> recipes = RecipeHelper.findRecipesByType(RecipeType.CRAFTING, getCart().level());
-        for (Recipe<?> iRecipe : recipes)
-        {
-            CraftingRecipe recipe = (CraftingRecipe) iRecipe;
-            if (recipe.matches(craftingDummy, getCart().level()))
-            {
-                return recipe;
-            }
-        }
-        return null;
+        return RecipeHelper.findRecipe(RecipeType.CRAFTING, craftingDummy, getCart().level()).map(RecipeHolder::value).orElse(null);
     }
 
-    @Nullable
+    @NotNull
     public ItemStack getResult()
     {
         CraftingRecipe recipe = getRecipe();

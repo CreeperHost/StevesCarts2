@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
@@ -84,8 +85,8 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     {
         ResourceHelper.bindResource("/gui/fertilize.png");
         drawImage(guiGraphics, gui, tankPosX, tankPosY, 0, 0, 18, 27);
-        final float percentage = getFertAmount() / getMaxFert();
-        final int size = (int) (percentage * 23.0f);
+        float percentage = getFertAmount() / (float) getMaxFert();
+        int size = (int) (percentage * 23.0f);
         drawImage(guiGraphics, gui, tankPosX + 2, tankPosY + 2 + (23 - size), 18, 23 - size, 14, size);
     }
 
@@ -130,7 +131,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
         {
             for (int j = -range; j <= range; ++j)
             {
-                if (random.nextInt(25) == 0 && fertilize(world, next.offset(i, +1, j)))
+                if (random.nextInt(25) == 0 && fertilize(world, next.offset(i, 0, j)))
                 {
                     break;
                 }

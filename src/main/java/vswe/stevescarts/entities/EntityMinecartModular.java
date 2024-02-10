@@ -1273,8 +1273,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     @Override
     public @NotNull InteractionResult interactAt(@NotNull Player player, @NotNull Vec3 vec, @NotNull InteractionHand hand)
     {
-        if(player.isCrouching()) return InteractionResult.FAIL;
-
         if (isPlaceholder) {
             return InteractionResult.FAIL;
         }

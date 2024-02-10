@@ -96,13 +96,13 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         int speedGraphicHeight = getSpeedSetting() * 2;
         drawImage(14, enginesEndAt + 13 + 12 - speedGraphicHeight, 41, 40 - speedGraphicHeight, 14, speedGraphicHeight);
         drawImage(0, 0, 0, 67, 5, 130);
-        //TODO this is a y-level indicator that needs to be redesigned for new world heights.
-        drawImage(1, 1 + (256 - getCart().y()) / 2, 5, 67, 5, 1);
+
+        double pos = map(getCart().y(), mc.level.getMinBuildHeight() + 1, mc.level.getMaxBuildHeight(), 127D, 0D);
+        drawImage(1, 1 + (int) pos, 5, 67, 5, 1);
         drawImage(5, enginesEndAt + 32, 0, 47, 32, 20);
         drawImage(5, enginesEndAt + 52, 0, 47, 32, 20);
         drawImage(5, enginesEndAt + 72, 0, 47, 32, 20);
 
-        //TODO
         render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0x909090);
         render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0x909090);
         render.drawString(mc.font, distToString(odo), 7, enginesEndAt + 52 + 11, 0x909090);
@@ -460,5 +460,9 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
             //			KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode(), false);
             //			KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), false);
         }
+    }
+
+    public static double map(double valueIn, double inMin, double inMax, double outMin, double outMax) {
+        return (valueIn - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
     }
 }
