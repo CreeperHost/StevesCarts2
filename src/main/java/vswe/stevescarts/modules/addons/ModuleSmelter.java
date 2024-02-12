@@ -1,15 +1,11 @@
 package vswe.stevescarts.modules.addons;
 
-import net.creeperhost.polylib.helpers.RecipeHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
@@ -20,6 +16,7 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotCartCrafterResult;
 import vswe.stevescarts.containers.slots.SlotFurnaceInput;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.helpers.RecipeHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -115,19 +112,7 @@ public class ModuleSmelter extends ModuleRecipe
     @Nullable
     public SmeltingRecipe getRecipeSmelting()
     {
-        Set<Recipe<?>> recipes = RecipeHelper.findRecipesByType(RecipeType.SMELTING, getCart().level());
-        for (Recipe<?> iRecipe : recipes)
-        {
-            SmeltingRecipe recipe = (SmeltingRecipe) iRecipe;
-            NonNullList<ItemStack> stacks = NonNullList.withSize(1, ItemStack.EMPTY);
-            stacks.set(0, getStack(0));
-            IItemHandlerModifiable iItemHandlerModifiable = new ItemStackHandler(stacks);
-            if (recipe.matches(new RecipeWrapper(iItemHandlerModifiable), getCart().level()))
-            {
-                return recipe;
-            }
-        }
-        return null;
+        return RecipeHelper.findSmeltRecipe(getStack(0), getCart().level()).map(RecipeHolder::value).orElse(null);
     }
 
     @Nullable

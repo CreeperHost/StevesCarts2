@@ -1,7 +1,9 @@
 package vswe.stevescarts.entities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.creeperhost.polylib.client.modulargui.lib.GuiRender;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -45,6 +47,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -472,13 +475,13 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderOverlay(PoseStack poseStack, Minecraft minecraft)
+    public void renderOverlay(ExtendedGui gui, GuiGraphics render, float partialTicks)
     {
         if (modules != null)
         {
             for (final ModuleBase module : modules)
             {
-                module.renderOverlay(poseStack, minecraft);
+                module.renderOverlay(gui, render, partialTicks);
             }
         }
     }
@@ -1261,8 +1264,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     @Override
     public @NotNull InteractionResult interactAt(@NotNull Player player, @NotNull Vec3 vec, @NotNull InteractionHand hand)
     {
-        if(player.isCrouching()) return InteractionResult.FAIL;
-
         if (isPlaceholder) {
             return InteractionResult.FAIL;
         }

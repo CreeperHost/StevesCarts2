@@ -1,9 +1,13 @@
 package vswe.stevescarts.modules.realtimers;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -1002,33 +1006,32 @@ public class ModuleNote extends ModuleBase
             {
                 if (volume > 0.0f)
                 {
-                    //TODO Sounds
-                    //					final float calculatedPitch = (float) Math.pow(2.0, (pitch - 12) / 12.0);
-                    //					SoundEvent event = SoundEvents.BLOCK_NOTE_HARP;
-                    //					if (instrumentId == 2) {
-                    //						event = SoundEvents.BLOCK_NOTE_BASEDRUM;
-                    //					} else if (instrumentId == 3) {
-                    //						event = SoundEvents.BLOCK_NOTE_SNARE;
-                    //					} else if (instrumentId == 4) {
-                    //						event = SoundEvents.BLOCK_NOTE_HAT;
-                    //					} else if (instrumentId == 5) {
-                    //						event = SoundEvents.BLOCK_NOTE_BASS;
-                    //					}
-                    //					getCart().world.playSound(null, getCart().getPosition(), event, SoundCategory.RECORDS, volume, calculatedPitch);
+                    final float calculatedPitch = (float) Math.pow(2.0, (pitch - 12) / 12.0);
+                    SoundEvent event = SoundEvents.NOTE_BLOCK_HARP.value();
+                    if (instrumentId == 2) {
+                    	event = SoundEvents.NOTE_BLOCK_BASEDRUM.value();
+                    } else if (instrumentId == 3) {
+                    	event = SoundEvents.NOTE_BLOCK_SNARE.value();
+                    } else if (instrumentId == 4) {
+                    	event = SoundEvents.NOTE_BLOCK_HAT.value();
+                    } else if (instrumentId == 5) {
+                    	event = SoundEvents.NOTE_BLOCK_BASS.value();
+                    }
+                    getCart().level().playSound(null, getCart().getExactPosition(), event, SoundSource.RECORDS, volume, calculatedPitch);
                 }
             }
             else
             {
                 double oX = 0.0;
                 double oZ = 0.0;
-                //				if (getCart().motionX != 0.0) {
-                //					oX = ((getCart().motionX > 0.0) ? -1 : 1);
-                //				}
-                //				if (getCart().motionZ != 0.0) {
-                //					oZ = ((getCart().motionZ > 0.0) ? -1 : 1);
-                //				}
-                //				getCart().world.spawnParticle(EnumParticleTypes.NOTE, getCart().x() + oZ * 1.0 + 0.5, getCart().y() + 1.2, getCart().z() + oX * 1.0 + 0.5, pitch / 24.0, 0.0, 0.0);
-                //				getCart().world.spawnParticle(EnumParticleTypes.NOTE, getCart().x() + oZ * -1.0 + 0.5, getCart().y() + 1.2, getCart().z() + oX * -1.0 + 0.5, pitch / 24.0, 0.0, 0.0);
+                if (getCart().getDeltaMovement().x != 0.0) {
+                	oX = ((getCart().getDeltaMovement().x > 0.0) ? -1 : 1);
+                }
+                if (getCart().getDeltaMovement().z != 0.0) {
+                	oZ = ((getCart().getDeltaMovement().z > 0.0) ? -1 : 1);
+                }
+                getCart().level().addParticle(ParticleTypes.NOTE, getCart().x() + oZ * 1.0 + 0.5, getCart().y() + 1.2, getCart().z() + oX * 1.0 + 0.5, pitch / 24.0, 0.0, 0.0);
+                getCart().level().addParticle(ParticleTypes.NOTE, getCart().x() + oZ * -1.0 + 0.5, getCart().y() + 1.2, getCart().z() + oX * -1.0 + 0.5, pitch / 24.0, 0.0, 0.0);
             }
         }
 

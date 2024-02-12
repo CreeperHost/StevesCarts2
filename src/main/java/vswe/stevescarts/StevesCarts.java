@@ -1,6 +1,10 @@
 package vswe.stevescarts;
 
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.DistExecutor;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -11,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 import vswe.stevescarts.client.StevesCartsCreativeTabs;
+import vswe.stevescarts.events.OverlayEventHandler;
 import vswe.stevescarts.init.ModSerializers;
 import vswe.stevescarts.helpers.ForceChunkHelper;
 import vswe.stevescarts.init.*;
@@ -48,6 +53,8 @@ public class StevesCarts
         ModCapabilities.init(modBus);
         PacketHandler.init(modBus);
         ModSerializers.init(modBus);
+
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> OverlayEventHandler::init);
     }
 
     public void creativeTabBuildEvent(BuildCreativeModeTabContentsEvent event)

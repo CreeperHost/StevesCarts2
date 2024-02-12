@@ -37,12 +37,15 @@ import static vswe.stevescarts.init.StevesCartsModules.*;
 
 public class StevesCartsClient
 {
+    public static void init() {
+        OverlayEventHandler.init();
+    }
+
     public static void clientInit(final FMLClientSetupEvent event)
     {
         ModScreens.init();
         initModels();
         EntityRenderers.register(ModEntities.MODULAR_CART.get(), RenderModulerCart::new);
-        OverlayEventHandler.init();
     }
 
     public static void initModels()

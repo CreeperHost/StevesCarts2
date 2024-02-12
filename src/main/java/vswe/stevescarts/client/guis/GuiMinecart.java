@@ -27,10 +27,7 @@ import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketMinecartTurn;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 {
@@ -226,6 +223,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         }
     }
 
+    @Deprecated
     public void drawMouseOver(GuiGraphics guiGraphics, final String str, final int x, final int y)
     {
         final String[] split = str.split("\n");
@@ -238,6 +236,14 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         guiGraphics.renderTooltip(Minecraft.getInstance().font, list, Optional.empty(), getGuiLeft() + x, getGuiTop() + y);
     }
 
+    public void drawMouseOver(GuiGraphics guiGraphics, List<Component> list, final int x, final int y) {
+        guiGraphics.renderTooltip(Minecraft.getInstance().font, list, Optional.empty(), getGuiLeft() + x, getGuiTop() + y);
+    }
+
+    public void drawMouseOver(GuiGraphics guiGraphics, Component toolTip, final int x, final int y) {
+        drawMouseOver(guiGraphics, Collections.singletonList(toolTip), x, y);
+    }
+
     private void renderReturnMouseOver(GuiGraphics guiGraphics, int x, int y)
     {
         x -= getGuiLeft();
@@ -245,7 +251,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 
         if (inRect(x, y, returnButton))
         {
-            drawMouseOver(guiGraphics, "gui.stevescarts.returnButton", x, y);
+            drawMouseOver(guiGraphics, Component.translatable("gui.stevescarts.returnButton"), x, y);
         }
     }
 

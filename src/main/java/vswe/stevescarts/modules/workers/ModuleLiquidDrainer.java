@@ -5,6 +5,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.IFluidBlock;
@@ -37,8 +38,8 @@ public class ModuleLiquidDrainer extends ModuleWorker
 
     public void handleLiquid(final ModuleDrill drill, BlockPos pos)
     {
-        final ArrayList<BlockPos> checked = new ArrayList<>();
-        final int result = drainAt(getCart().level(), drill, checked, pos, 0);
+        ArrayList<BlockPos> checked = new ArrayList<>();
+        int result = drainAt(getCart().level(), drill, checked, pos, 0);
         if (result > 0 && doPreWork())
         {
             drill.kill();
@@ -56,55 +57,39 @@ public class ModuleLiquidDrainer extends ModuleWorker
         return true;
     }
 
-    private int drainAt(Level world, final ModuleDrill drill, final ArrayList<BlockPos> checked, final BlockPos pos, int buckets)
+    private int drainAt(Level level, final ModuleDrill drill, final ArrayList<BlockPos> checked, final BlockPos pos, int buckets)
     {
         int drained = 0;
-        BlockState blockState = world.getBlockState(pos);
-        final Block b = blockState.getBlock();
-        if (!isLiquid(b))
-        {
+        BlockState state = level.getBlockState(pos);
+        if (!isLiquid(state)) {
             return 0;
         }
-        //		final int meta = b.getMetaFromState(blockState);
-        final FluidStack liquid = getFluidStack(b, pos, !doPreWork());
-        if (liquid != null)
-        {
-            if (doPreWork())
-            {
-                final FluidStack fluidStack = liquid;
-                fluidStack.grow(buckets * 1000);
+        FluidStack liquid = getFluidStack(state, pos, !doPreWork());
+        if (liquid != null) {
+            if (doPreWork()) {
+                liquid.grow(buckets * 1000);
             }
-            final int amount = getCart().fill(liquid, IFluidHandler.FluidAction.SIMULATE);
-            if (amount == liquid.getAmount())
-            {
-                final boolean isDrainable = true;//meta == 0;
-                if (!doPreWork())
-                {
-                    if (isDrainable)
-                    {
-                        getCart().fill(liquid, IFluidHandler.FluidAction.SIMULATE);
-                    }
-                    world.removeBlock(pos, false);
+            int amount = getCart().fill(liquid, IFluidHandler.FluidAction.SIMULATE);
+            if (amount == liquid.getAmount()) {
+                if (!doPreWork()) {
+                    getCart().fill(liquid, IFluidHandler.FluidAction.EXECUTE);
+                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
                 }
-                drained += (isDrainable ? 40 : 3);
-                buckets += (isDrainable ? 1 : 0);
+                drained += 40;
+                buckets += 1;
+            } else if (amount == 0 && drained == 0) {
+                drained = -1;
             }
         }
         checked.add(pos);
-        if (checked.size() < 100 && BlockPosHelpers.getHorizontalDistToCartSquared(pos, getCart()) < 200.0)
-        {
-            for (int y = 1; y >= 0; --y)
-            {
-                for (int x = -1; x <= 1; ++x)
-                {
-                    for (int z = -1; z <= 1; ++z)
-                    {
-                        if (Math.abs(x) + Math.abs(y) + Math.abs(z) == 1)
-                        {
+        if (checked.size() < 100 && BlockPosHelpers.getHorizontalDistToCartSquared(pos, getCart()) < 200.0) {
+            for (int y = 1; y >= 0; --y) {
+                for (int x = -1; x <= 1; ++x) {
+                    for (int z = -1; z <= 1; ++z) {
+                        if (Math.abs(x) + Math.abs(y) + Math.abs(z) == 1) {
                             BlockPos next = pos.offset(x, y, z);
-                            if (!checked.contains(next))
-                            {
-                                drained += drainAt(world, drill, checked, next, buckets);
+                            if (!checked.contains(next)) {
+                                drained += drainAt(level, drill, checked, next, buckets);
                             }
                         }
                     }
@@ -114,29 +99,22 @@ public class ModuleLiquidDrainer extends ModuleWorker
         return drained;
     }
 
-    private boolean isLiquid(final Block b)
-    {
-        final boolean isWater = b == Blocks.WATER || b == Blocks.ICE;
-        final boolean isLava = b == Blocks.LAVA;
-        final boolean isOther = b != null && b instanceof IFluidBlock;
-        return isWater || isLava || isOther;
+    private boolean isLiquid(BlockState state) {
+        FluidState fluid = state.getFluidState();
+        return (!fluid.isEmpty() && fluid.isSource()) || state.getBlock() instanceof IFluidBlock;
     }
 
-    private FluidStack getFluidStack(final Block b, BlockPos pos, final boolean doDrain)
-    {
-        if (b == Blocks.WATER)
-        {
-            return new FluidStack(Fluids.WATER, 1000);
+    private FluidStack getFluidStack(BlockState state, BlockPos pos, boolean doDrain) {
+        Block block = state.getBlock();
+        if (block instanceof IFluidBlock fluidBlock) {
+            return fluidBlock.drain(getCart().level(), pos, doDrain ? IFluidHandler.FluidAction.EXECUTE : IFluidHandler.FluidAction.SIMULATE);
         }
-        if (b == Blocks.LAVA)
-        {
-            return new FluidStack(Fluids.LAVA, 1000);
+
+        FluidState fluid = state.getFluidState();
+        if (fluid.isEmpty() || !fluid.isSource()) {
+            return null;
         }
-        if (b instanceof IFluidBlock)
-        {
-            final IFluidBlock liquid = (IFluidBlock) b;
-            return liquid.drain(getCart().level(), pos, IFluidHandler.FluidAction.EXECUTE);
-        }
-        return null;
+
+        return new FluidStack(fluid.getType(), 1000);
     }
 }

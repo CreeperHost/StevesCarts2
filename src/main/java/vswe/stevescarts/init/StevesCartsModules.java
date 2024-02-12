@@ -301,7 +301,7 @@ public class StevesCartsModules
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "seat"), "Seat", ModuleSeat.class, ModuleType.ADDON, 3).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.CENTER, ModuleData.SIDE.TOP}));
 
         BRAKE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "brake_handle"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "brake_handle"), "Brake Handle", ModuleBrake.class, ModuleType.ATTACHMENT, 12).addParent(SEAT));
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "brake_handle"), "Brake Handle", ModuleBrake.class, ModuleType.ATTACHMENT, 12).addSide(ModuleData.SIDE.RIGHT).addParent(SEAT));
 
         ADVANCED_CONTROL_SYSTEM = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "advanced_control_system"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "advanced_control_system"), "Advanced Control System", ModuleAdvControl.class, ModuleType.ATTACHMENT, 38).addSide(ModuleData.SIDE.RIGHT).addParent(SEAT));

@@ -30,14 +30,24 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular> {
         if (entity.isInvisible()) {
             return;
         }
+        if (entity.getModules() != null) {
+            for (ModuleBase module : entity.getModules()) {
+                if (!module.shouldCartRender()) {
+                    return;
+                }
+            }
+        }
         super.render(entity, yaw, tickDelta, poseStack, vertexConsumers, light);
         poseStack.pushPose();
-        long l = (long) entity.getId() * 493286711L;
-        l = l * l * 4392167121L + l * 98761L;
-        float h = (((float) (l >> 16 & 7L) + 0.5f) / 8.0f - 0.5f) * 0.004f;
-        float j = (((float) (l >> 20 & 7L) + 0.5f) / 8.0f - 0.5f) * 0.004f;
-        float k = (((float) (l >> 24 & 7L) + 0.5f) / 8.0f - 0.5f) * 0.004f;
+
+        //Slight random position offset?
+        long randomIsh = (long) entity.getId() * 493286711L;
+        randomIsh = randomIsh * randomIsh * 4392167121L + randomIsh * 98761L;
+        float h = (((float) (randomIsh >> 16 & 7L) + 0.5f) / 8.0f - 0.5f) * 0.004f;
+        float j = (((float) (randomIsh >> 20 & 7L) + 0.5f) / 8.0f - 0.5f) * 0.004f;
+        float k = (((float) (randomIsh >> 24 & 7L) + 0.5f) / 8.0f - 0.5f) * 0.004f;
         poseStack.translate(h, j, k);
+
         double renderX = Mth.lerp(tickDelta, entity.xOld, entity.getX());
         double renderY = Mth.lerp(tickDelta, entity.yOld, entity.getY());
         double renderZ = Mth.lerp(tickDelta, entity.zOld, entity.getZ());
@@ -47,12 +57,9 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular> {
         if (vec3 != null) {
             Vec3 vec3d2 = entity.getPosOffs(renderX, renderY, renderZ, offset);
             Vec3 vec3d3 = entity.getPosOffs(renderX, renderY, renderZ, -offset);
-            if (vec3d2 == null) {
-                vec3d2 = vec3;
-            }
-            if (vec3d3 == null) {
-                vec3d3 = vec3;
-            }
+            if (vec3d2 == null) vec3d2 = vec3;
+            if (vec3d3 == null) vec3d3 = vec3;
+
             poseStack.translate(vec3.x - renderX, (vec3d2.y + vec3d3.y) / 2.0 - renderY, vec3.z - renderZ);
             Vec3 vec3d4 = vec3d3.add(-vec3d2.x, -vec3d2.y, -vec3d2.z);
             if (vec3d4.length() != 0.0) {
@@ -61,20 +68,22 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular> {
                 pitch = (float) (Math.atan(vec3d4.y) * 73.0);
             }
         }
-        yaw = yaw % 360;
-        if (yaw < 0) {
-            yaw += 360;
-        }
-        yaw += 360;
-        double rotationYaw = (entity.getYRot() + 180) % 360;
-        if (rotationYaw < 0) {
-            rotationYaw = rotationYaw + 360;
-        }
-        rotationYaw = rotationYaw + 360;
 
-        if (Math.abs(yaw - rotationYaw) > 90) {
-            pitch = -pitch;
-        }
+
+//        yaw = yaw % 360;
+//        if (yaw < 0) {
+//            yaw += 360;
+//        }
+//        yaw += 360;
+//        double rotationYaw = (entity.getYRot() + 180) % 360;
+//        if (rotationYaw < 0) {
+//            rotationYaw = rotationYaw + 360;
+//        }
+//        rotationYaw = rotationYaw + 360;
+
+//        if (Math.abs(yaw - rotationYaw) > 90) {
+//            pitch = -pitch;
+//        }
 
         boolean flip = entity.getDeltaMovement().x > 0.0 != entity.getDeltaMovement().z > 0.0;
         if (entity.cornerFlip) {
@@ -89,6 +98,9 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular> {
         poseStack.mulPose(Axis.ZP.rotationDegrees(-pitch));
         float damageWobbleTicks = (float) entity.getHurtTime() - tickDelta;
         float damageWobbleStrength = Mth.clamp(entity.getDamage() - tickDelta, 0, Float.MAX_VALUE);
+        if (damageWobbleStrength < 0.0F) {
+            damageWobbleStrength = 0.0F;
+        }
         if (damageWobbleTicks > 0.0f) {
             poseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(damageWobbleTicks) * damageWobbleTicks * damageWobbleStrength / 10.0f * entity.getHurtDir()));
         }

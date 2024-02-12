@@ -10,10 +10,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
@@ -84,8 +86,8 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     {
         ResourceHelper.bindResource("/gui/fertilize.png");
         drawImage(guiGraphics, gui, tankPosX, tankPosY, 0, 0, 18, 27);
-        final float percentage = getFertAmount() / getMaxFert();
-        final int size = (int) (percentage * 23.0f);
+        float percentage = getFertAmount() / (float) getMaxFert();
+        int size = (int) (percentage * 23.0f);
         drawImage(guiGraphics, gui, tankPosX + 2, tankPosY + 2 + (23 - size), 18, 23 - size, 14, size);
     }
 
@@ -109,6 +111,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
         return super.guiWidth() + 25;
     }
 
+
     @Override
     public int guiHeight()
     {
@@ -130,7 +133,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
         {
             for (int j = -range; j <= range; ++j)
             {
-                if (random.nextInt(25) == 0 && fertilize(world, next.offset(i, +1, j)))
+                if (random.nextInt(25) == 0 && fertilize(world, next.offset(i, 0, j)))
                 {
                     break;
                 }
@@ -205,35 +208,20 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
 
     private void loadSupplies()
     {
-        if (getCart().level().isClientSide)
-        {
+        if (getCart().level().isClientSide) {
             return;
         }
-        if (!getStack(0).isEmpty())
-        {
-            final boolean isBone = getStack(0).getItem() == Items.BONE;
-            final boolean isBoneMeal = getStack(0).getItem() == Items.BONE_MEAL;
-            if (isBone || isBoneMeal)
-            {
-                int amount;
-                if (isBoneMeal)
-                {
-                    amount = 1;
-                }
-                else
-                {
-                    amount = 3;
-                }
-                if (getFertAmount() <= 4 * (192 - amount) && getStack(0).getCount() > 0)
-                {
-                    @Nonnull ItemStack stack = getStack(0);
-                    stack.shrink(1);
-                    addFert(amount * 4);
-                }
-                if (getStack(0).getCount() == 0)
-                {
-                    setStack(0, ItemStack.EMPTY);
-                }
+        ItemStack stack = getStack(0);
+        if (!stack.isEmpty()) {
+            int amount = 0;
+            if (stack.is(Items.BONE_MEAL)) amount = 1;
+            else if (stack.is(Tags.Items.BONES)) amount = 3;
+            else if (stack.is(Items.BONE_BLOCK)) amount = 9;
+            if (amount == 0) return;
+            amount *= 4;
+            if (getFertAmount() + amount <= 768) {
+                stack.shrink(1);
+                addFert(amount);
             }
         }
     }
