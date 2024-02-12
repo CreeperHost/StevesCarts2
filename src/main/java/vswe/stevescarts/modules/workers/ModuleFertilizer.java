@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
@@ -109,6 +110,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     {
         return super.guiWidth() + 25;
     }
+
 
     @Override
     public int guiHeight()
@@ -206,35 +208,20 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
 
     private void loadSupplies()
     {
-        if (getCart().level().isClientSide)
-        {
+        if (getCart().level().isClientSide) {
             return;
         }
-        if (!getStack(0).isEmpty())
-        {
-            final boolean isBone = getStack(0).getItem() == Items.BONE;
-            final boolean isBoneMeal = getStack(0).getItem() == Items.BONE_MEAL;
-            if (isBone || isBoneMeal)
-            {
-                int amount;
-                if (isBoneMeal)
-                {
-                    amount = 1;
-                }
-                else
-                {
-                    amount = 3;
-                }
-                if (getFertAmount() <= 4 * (192 - amount) && getStack(0).getCount() > 0)
-                {
-                    @Nonnull ItemStack stack = getStack(0);
-                    stack.shrink(1);
-                    addFert(amount * 4);
-                }
-                if (getStack(0).getCount() == 0)
-                {
-                    setStack(0, ItemStack.EMPTY);
-                }
+        ItemStack stack = getStack(0);
+        if (!stack.isEmpty()) {
+            int amount = 0;
+            if (stack.is(Items.BONE_MEAL)) amount = 1;
+            else if (stack.is(Tags.Items.BONES)) amount = 3;
+            else if (stack.is(Items.BONE_BLOCK)) amount = 9;
+            if (amount == 0) return;
+            amount *= 4;
+            if (getFertAmount() + amount <= 768) {
+                stack.shrink(1);
+                addFert(amount);
             }
         }
     }

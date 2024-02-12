@@ -3,6 +3,7 @@ package vswe.stevescarts.containers.slots;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 
 import javax.annotation.Nonnull;
@@ -17,6 +18,6 @@ public class SlotFertilizer extends SlotStevesCarts
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return itemstack.getItem() == Items.BONE || (itemstack.getItem() == Items.BONE_MEAL);
+        return itemstack.is(Tags.Items.BONES) || itemstack.is(Items.BONE_BLOCK) || (itemstack.getItem() == Items.BONE_MEAL);
     }
 }
