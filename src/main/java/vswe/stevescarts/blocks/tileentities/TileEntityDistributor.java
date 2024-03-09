@@ -66,7 +66,8 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
                 @Override
                 public int getTanks()
                 {
-                    return 4;
+                    final IFluidTank[] tanks = TileEntityDistributor.this.getTanks(facing);
+                    return tanks.length;
                 }
 
                 @Nonnull
