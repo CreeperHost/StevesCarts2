@@ -28,6 +28,6 @@ public class Solar extends RechargerBaseUpgrade
     @Override
     public String getName()
     {
-        return I18n.get("info.stevescarts.effectSolar");
+        return "info.stevescarts.effectSolar";
     }
 }

@@ -1,6 +1,5 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
@@ -14,7 +13,6 @@ import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerCartAssembler;
 import vswe.stevescarts.containers.slots.SlotAssemblerFuel;
 import vswe.stevescarts.containers.slots.SlotModule;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 
 import javax.annotation.Nonnull;
@@ -30,7 +28,7 @@ public class InputChest extends SimpleInventoryUpgradeEffect
     @Override
     public String getName()
     {
-        return I18n.get("info.stevescarts.effectInputChest") + (String.valueOf(getInventorySize()));
+        return "info.stevescarts.effectInputChest" + (String.valueOf(getInventorySize()));
     }
 
     @Override

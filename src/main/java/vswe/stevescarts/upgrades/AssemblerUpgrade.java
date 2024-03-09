@@ -1,6 +1,5 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.CompoundTag;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
@@ -77,7 +76,7 @@ public class AssemblerUpgrade
 
     public String getName()
     {
-        return I18n.get("block.stevescarts.upgrade_" + getRawName());
+        return "block.stevescarts.upgrade_" + getRawName();
     }
 
     public AssemblerUpgrade addEffect(final BaseUpgradeEffect effect)

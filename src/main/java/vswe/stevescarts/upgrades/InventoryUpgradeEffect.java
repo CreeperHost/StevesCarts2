@@ -3,6 +3,7 @@ package vswe.stevescarts.upgrades;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 
 import javax.annotation.Nonnull;
@@ -58,7 +59,7 @@ public abstract class InventoryUpgradeEffect extends InterfaceUpgradeEffect
             return (Slot) slotObject;
         } catch (Exception e)
         {
-            System.out.println("Failed to create slot! More info below.");
+            StevesCarts.LOGGER.info("Failed to create slot! More info below.");
             e.printStackTrace();
             return null;
         }

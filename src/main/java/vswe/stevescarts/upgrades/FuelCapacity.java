@@ -1,8 +1,6 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.client.resources.language.I18n;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
-import vswe.stevescarts.helpers.Localization;
 
 public class FuelCapacity extends BaseUpgradeEffect
 {
@@ -16,7 +14,7 @@ public class FuelCapacity extends BaseUpgradeEffect
     @Override
     public String getName()
     {
-        return I18n.get("info.stevescarts.effectFuelCapacity") + (((capacity >= 0) ? "+" : "") + capacity);
+        return "info.stevescarts.effectFuelCapacity" + (((capacity >= 0) ? "+" : "") + capacity);
     }
 
     public int getFuelCapacity()

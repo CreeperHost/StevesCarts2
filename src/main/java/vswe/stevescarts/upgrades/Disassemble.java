@@ -1,6 +1,5 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.SimpleContainerData;
@@ -13,7 +12,6 @@ import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerCartAssembler;
 import vswe.stevescarts.containers.slots.SlotCart;
 import vswe.stevescarts.containers.slots.SlotModule;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModItems;
 
@@ -71,7 +69,7 @@ public class Disassemble extends InventoryUpgradeEffect
     @Override
     public String getName()
     {
-        return I18n.get("info.stevescarts.effectDisassemble");
+        return "info.stevescarts.effectDisassemble";
     }
 
     @Override
