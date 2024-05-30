@@ -1,12 +1,14 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.client.resources.language.I18n;
+import net.neoforged.neoforge.common.I18nExtension;
 
 public final class Localization
 {
+    //TODO, this entire system needs to be switched to Components so this translation can be done client side.
+    // But that will require a significant rewrite of a lot of localisation.
     private static String doTranslate(final String name, final String... vars)
     {
-        String result = I18n.get(name);
+        String result = I18nExtension.parseMessage(name);
         for (int i = 0; i < vars.length; ++i)
         {
             final String pluralCheck = "[%" + (i + 1) + ":";
