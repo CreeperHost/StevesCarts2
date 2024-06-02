@@ -2,12 +2,10 @@ package vswe.stevescarts;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.nio.file.Path;
 
-//@Mod.EventBusSubscriber()
 public class SCConfig
 {
     public static final String CATEGORY_GENERAL = "general";
@@ -26,6 +24,18 @@ public class SCConfig
     public static ModConfigSpec.ConfigValue<Integer> compact_solar_production;
     public static ModConfigSpec.ConfigValue<Integer> standard_solar_production;
 
+    public static ModConfigSpec.ConfigValue<Boolean> allowCartToRunWithRepairItems;
+
+    public static ModConfigSpec.ConfigValue<String> woodcutterRepairDiamond;
+    public static ModConfigSpec.ConfigValue<String> woodcutterRepairHardened;
+    public static ModConfigSpec.ConfigValue<String> woodcutterRepairNetherite;
+
+    public static ModConfigSpec.ConfigValue<String> drillRepairIron;
+    public static ModConfigSpec.ConfigValue<String> drillRepairDiamond;
+    public static ModConfigSpec.ConfigValue<String> drillRepairHardened;
+
+    public static ModConfigSpec.ConfigValue<String> farmerRepairDiamond;
+
     static
     {
         COMMON_BUILDER.comment("General settings").push(CATEGORY_GENERAL);
@@ -42,6 +52,17 @@ public class SCConfig
         compact_solar_production = COMMON_BUILDER.comment("The amount of power the compact solar module will produce").define("compactSolarProduction", 20);
         standard_solar_production = COMMON_BUILDER.comment("The amount of power the standard solar module will produce").define("standardSolarProduction", 20);
 
+        woodcutterRepairDiamond = COMMON_BUILDER.comment("Repair item for Diamond Woodcutter").define("woodcutterRepairDiamond", "minecraft:diamond");
+        woodcutterRepairHardened = COMMON_BUILDER.comment("Repair item for Hardened Woodcutter").define("woodcutterRepairHardened", "stevescarts:component_reinforced_metal");
+        woodcutterRepairNetherite = COMMON_BUILDER.comment("Repair item for Netherite Woodcutter").define("woodcutterRepairNetherite", "minecraft:netherite_ingot");
+
+        drillRepairIron = COMMON_BUILDER.comment("Repair item for Iron Drill").define("drillRepairIron", "minecraft:iron_ingot");
+        drillRepairDiamond = COMMON_BUILDER.comment("Repair item for Diamond Drill").define("drillRepairDiamond", "minecraft:diamond");
+        drillRepairHardened = COMMON_BUILDER.comment("Repair item for Hardened Drill").define("drillRepairHardened", "stevescarts:component_reinforced_metal");
+
+        farmerRepairDiamond = COMMON_BUILDER.comment("Repair item for Diamond farmer").define("farmerRepairDiamond", "minecraft:diamond");
+
+        allowCartToRunWithRepairItems = COMMON_BUILDER.comment("Allow carts to run with items in the tool repair slot").define("allowCartToRunWithRepairItems", false);
 
         //Client
         useArcadeSounds = CLIENT_BUILDER.comment("Enable arcade machine sounds").define("useArcadeSounds", true);

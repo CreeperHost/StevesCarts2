@@ -1,10 +1,11 @@
 package vswe.stevescarts.modules.workers.tools;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.entities.EntityMinecartModular;
-import vswe.stevescarts.items.ItemCartComponent;
-
-import javax.annotation.Nonnull;
 
 public class ModuleDrillHardened extends ModuleDrill
 {
@@ -34,20 +35,18 @@ public class ModuleDrillHardened extends ModuleDrill
     @Override
     public int getMaxDurability()
     {
-        return 1000000;
+        return 320000*3;
     }
 
     @Override
-    public String getRepairItemName()
-    {
-        return "stevescarts:component_reinforced_metal";
+    public ResourceLocation getRepairItem() {
+        String item = SCConfig.drillRepairHardened.get();
+        return item.isEmpty() ? null : new ResourceLocation(item);
     }
 
     @Override
-    public int getRepairItemUnits(@Nonnull ItemStack item)
-    {
-        if (!item.isEmpty() && item.getItem() == ItemCartComponent.byId(22))
-        {
+    public int getRepairItemUnits(@NotNull ItemStack stack) {
+        if (BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(getRepairItem())) {
             return 320000;
         }
         return 0;
