@@ -243,7 +243,16 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         if (fortune > 0) {
             tool.enchant(Enchantments.BLOCK_FORTUNE, fortune);
         }
-        List<ItemStack> drops = block.getDrops(blockState, new LootParams.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, tool).withParameter(LootContextParams.ORIGIN, getCart().position()));
+
+        LootParams.Builder builder = new LootParams.Builder((ServerLevel) world)
+                .withParameter(LootContextParams.TOOL, tool)
+                .withParameter(LootContextParams.ORIGIN, getCart().position());
+
+        if (storage != null) {
+            builder.withParameter(LootContextParams.BLOCK_ENTITY, storage);
+        }
+
+        List<ItemStack> drops = block.getDrops(blockState, builder);
 
         if (!drops.isEmpty())
         {
