@@ -35,6 +35,7 @@ public class SCConfig
     public static ModConfigSpec.ConfigValue<String> drillRepairHardened;
 
     public static ModConfigSpec.ConfigValue<String> farmerRepairDiamond;
+    public static ModConfigSpec.ConfigValue<Boolean> assemblerInsertFuel;
 
     static
     {
@@ -63,6 +64,8 @@ public class SCConfig
         farmerRepairDiamond = COMMON_BUILDER.comment("Repair item for Diamond farmer").define("farmerRepairDiamond", "minecraft:diamond");
 
         allowCartToRunWithRepairItems = COMMON_BUILDER.comment("Allow carts to run with items in the tool repair slot").define("allowCartToRunWithRepairItems", false);
+        assemblerInsertFuel = COMMON_BUILDER.comment("Allow fuel to be auto inserted into the cart assembler").define("assemblerInsertFuel", false);
+
 
         //Client
         useArcadeSounds = CLIENT_BUILDER.comment("Enable arcade machine sounds").define("useArcadeSounds", true);
