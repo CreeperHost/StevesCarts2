@@ -13,6 +13,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -41,7 +42,7 @@ public class BlockUpgrade extends BlockContainerBase
 {
     //TODO, Figure out this codec stuff....
     public static final MapCodec<BlockUpgrade> CODEC = simpleCodec(BlockUpgrade::new);
-    
+
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty CONNECTED = BooleanProperty.create("connected");
 
@@ -125,7 +126,7 @@ public class BlockUpgrade extends BlockContainerBase
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState blockState, Level world, @NotNull BlockPos blockPos, @NotNull Player playerEntity, @NotNull InteractionHand hand, @NotNull BlockHitResult rayTraceResult)
+    public @NotNull InteractionResult useWithoutItem(@NotNull BlockState blockState, Level world, @NotNull BlockPos blockPos, @NotNull Player playerEntity, BlockHitResult result)
     {
         if (!world.isClientSide)
         {
@@ -139,7 +140,7 @@ public class BlockUpgrade extends BlockContainerBase
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack itemStack, @Nullable BlockGetter iBlockReader, @NotNull List<Component> tooltip, @NotNull TooltipFlag iTooltipFlag)
+    public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Item.TooltipContext iBlockReader, @NotNull List<Component> tooltip, @NotNull TooltipFlag iTooltipFlag)
     {
         if (assemblerUpgrade != null)
         {

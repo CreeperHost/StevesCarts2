@@ -1,6 +1,5 @@
 package vswe.stevescarts;
 
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForgeMod;
@@ -47,14 +46,14 @@ public class StevesCarts
         SCConfig.loadConfig(SCConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Constants.MOD_ID + "-client.toml"));
         SCConfig.loadConfig(SCConfig.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Constants.MOD_ID + "-common.toml"));
         NeoForgeMod.enableMilkFluid();
-        ForceChunkHelper.init();
+        ForceChunkHelper.init(modBus);
         ModCapabilities.init(modBus);
         PacketHandler.init(modBus);
         ModSerializers.init(modBus);
 
         if(FMLEnvironment.dist.isClient())
         {
-            OverlayEventHandler.init();
+            OverlayEventHandler.init(modBus);
         }
     }
 

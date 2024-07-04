@@ -25,7 +25,7 @@ public class BlockLiquidManager extends BlockContainerBase
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player playerEntity, @NotNull InteractionHand hand, @NotNull BlockHitResult blockRayTraceResult)
+    public @NotNull InteractionResult useWithoutItem(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player playerEntity, BlockHitResult result)
     {
         if (!level.isClientSide)
         {

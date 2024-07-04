@@ -1,5 +1,6 @@
 package vswe.stevescarts.helpers;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -13,20 +14,20 @@ import java.util.Map;
 
 public class ModularEnchantments {
 
-    private static final Map<Enchantment, EnchantmentType> ENCHANTMENT_TYPES = new HashMap<>();
-    private static final Map<Enchantment, Integer> ENCHANTMENT_BASE_VALUES = new HashMap<>();
+    private static final Map<ResourceKey<Enchantment>, EnchantmentType> ENCHANTMENT_TYPES = new HashMap<>();
+    private static final Map<ResourceKey<Enchantment>, Integer> ENCHANTMENT_BASE_VALUES = new HashMap<>();
 
     static {
-        addValidEnchantment(Enchantments.BLOCK_FORTUNE, EnchantmentType.TOOL, 50000);
-        addValidEnchantment(Enchantments.BLOCK_EFFICIENCY, EnchantmentType.TOOL, 50000);
+        addValidEnchantment(Enchantments.FORTUNE, EnchantmentType.TOOL, 50000);
+        addValidEnchantment(Enchantments.EFFICIENCY, EnchantmentType.TOOL, 50000);
         addValidEnchantment(Enchantments.UNBREAKING, EnchantmentType.TOOL, 64000);
-        addValidEnchantment(Enchantments.POWER_ARROWS, EnchantmentType.SHOOTER, 750);
-        addValidEnchantment(Enchantments.PUNCH_ARROWS, EnchantmentType.SHOOTER, 1000);
-        addValidEnchantment(Enchantments.FLAMING_ARROWS, EnchantmentType.SHOOTER, 1000);
-        addValidEnchantment(Enchantments.INFINITY_ARROWS, EnchantmentType.SHOOTER, 500);
+        addValidEnchantment(Enchantments.POWER, EnchantmentType.SHOOTER, 750);
+        addValidEnchantment(Enchantments.PUNCH, EnchantmentType.SHOOTER, 1000);
+        addValidEnchantment(Enchantments.FLAME, EnchantmentType.SHOOTER, 1000);
+        addValidEnchantment(Enchantments.INFINITY, EnchantmentType.SHOOTER, 500);
     }
 
-    public static void addValidEnchantment(Enchantment enchantment, EnchantmentType type, int baseValue) {
+    public static void addValidEnchantment(ResourceKey<Enchantment> enchantment, EnchantmentType type, int baseValue) {
         ENCHANTMENT_TYPES.put(enchantment, type);
         ENCHANTMENT_BASE_VALUES.put(enchantment, baseValue);
     }

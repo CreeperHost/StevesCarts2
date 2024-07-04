@@ -37,10 +37,6 @@ import static vswe.stevescarts.init.StevesCartsModules.*;
 
 public class StevesCartsClient
 {
-    public static void init() {
-        OverlayEventHandler.init();
-    }
-
     public static void clientInit(final FMLClientSetupEvent event)
     {
         ModScreens.init();

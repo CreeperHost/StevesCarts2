@@ -307,7 +307,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     {
         @Nonnull ItemStack filter = getItem(sideId * 3 + 2);
         final FluidStack filterFluid = FluidUtil.getFluidContained(filter).orElse(FluidStack.EMPTY);
-        return filterFluid.isEmpty() || filterFluid.isFluidEqual(fluid);
+        return filterFluid.isEmpty() || FluidStack.isSameFluidSameComponents(filterFluid, fluid);
     }
 
     public int getMaxAmount(final int id)
