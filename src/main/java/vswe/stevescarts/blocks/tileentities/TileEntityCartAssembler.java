@@ -1212,7 +1212,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         {
             final CompoundTag item = items.getCompound(i);
             final int slot = item.getByte("Slot") & 0xFF;
-            ItemStack iStack = ItemStack.of(item);
+            ItemStack iStack = ItemStack.parseOptional(provider, item);
             if (slot < getContainerSize())
             {
                 setItem(slot, iStack);
@@ -1223,13 +1223,13 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         for (int j = 0; j < spares.size(); ++j)
         {
             final CompoundTag item2 = spares.getCompound(j);
-            ItemStack iStack = ItemStack.of(item2);
+            ItemStack iStack = ItemStack.parseOptional(provider, item2);
             spareModules.add(iStack);
         }
         final CompoundTag outputTag = (CompoundTag) tagCompound.get("Output");
         if (outputTag != null)
         {
-            outputItem = ItemStack.of(outputTag);
+            outputItem = ItemStack.parseOptional(provider, outputTag);
         }
         if (tagCompound.contains("Fuel"))
         {
@@ -1257,7 +1257,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
             {
                 final CompoundTag item = new CompoundTag();
                 item.putByte("Slot", (byte) i);
-                iStack.save(item);
+                iStack.save(provider, item);
                 items.add(item);
             }
         }
@@ -1268,7 +1268,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
             if (!iStack2.isEmpty())
             {
                 final CompoundTag item2 = new CompoundTag();
-                iStack2.save(item2);
+                iStack2.save(provider, item2);
                 spares.add(item2);
             }
         }
@@ -1276,7 +1276,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         if (!outputItem.isEmpty())
         {
             final CompoundTag outputTag = new CompoundTag();
-            outputItem.save(outputTag);
+            outputItem.save(provider, outputTag);
             tagCompound.put("Output", outputTag);
         }
         tagCompound.putInt("IntFuel", getFuelLevel());
