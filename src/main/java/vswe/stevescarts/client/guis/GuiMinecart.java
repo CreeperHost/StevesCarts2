@@ -2,10 +2,7 @@ package vswe.stevescarts.client.guis;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -590,15 +587,14 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder buff = tessellator.getBuilder();
-        buff.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        BufferBuilder buff = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         float zLevel = 0;//1F; //Ether everything needs to be on the same z level, or we need to go through and properly order *everything*
 
-        buff.vertex((x), y + h, zLevel).uv((float) pt1[0], (float) pt1[1]).endVertex();
-        buff.vertex((x + w), y + h, zLevel).uv((float) pt2[0], (float) pt2[1]).endVertex();
-        buff.vertex((x + w), y, zLevel).uv((float) pt3[0], (float) pt3[1]).endVertex();
-        buff.vertex((x), y, zLevel).uv((float) pt4[0], (float) pt4[1]).endVertex();
-        tessellator.end();
+        buff.addVertex((x), y + h, zLevel).setUv((float) pt1[0], (float) pt1[1]);
+        buff.addVertex((x + w), y + h, zLevel).setUv((float) pt2[0], (float) pt2[1]);
+        buff.addVertex((x + w), y, zLevel).setUv((float) pt3[0], (float) pt3[1]);
+        buff.addVertex((x), y, zLevel).setUv((float) pt4[0], (float) pt4[1]);
+        BufferUploader.draw(buff.buildOrThrow());
     }
 
     public enum RENDER_ROTATION

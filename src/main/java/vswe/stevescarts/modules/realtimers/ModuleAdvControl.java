@@ -1,9 +1,9 @@
 package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -13,7 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ILeverModule;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
@@ -66,7 +65,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void renderOverlay(ExtendedGui gui, GuiGraphics render, float partialTicks) {
+    public void renderOverlay(Screen gui, GuiGraphics render, float partialTicks) {
         Minecraft mc = gui.getMinecraft();
         ResourceHelper.bindResource("/gui/drive.png");
         if (engineInformation != null)

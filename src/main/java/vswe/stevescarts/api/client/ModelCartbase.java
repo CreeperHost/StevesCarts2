@@ -30,11 +30,11 @@ public abstract class ModelCartbase extends Model
     }
 
     @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, float red, float green, float blue, float alpha)
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumer, int light, int overlay, int alpha)
     {
-        if (this.root != null)
+        if(root != null)
         {
-            this.root.render(poseStack, vertexConsumers, light, overlay, red, green, blue, alpha);
+            this.root.render(poseStack, vertexConsumer, light, overlay, alpha);
         }
     }
 

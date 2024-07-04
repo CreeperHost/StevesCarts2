@@ -132,7 +132,7 @@ public abstract class ContainerBase extends AbstractContainerMenu
     public static boolean canStacksMerge(ItemStack stack1, ItemStack stack2)
     {
         if (stack1.isEmpty() || stack2.isEmpty()) return false;
-        if (!ItemStack.isSameItemSameTags(stack1, stack2)) return false;
+        if (!ItemStack.isSameItemSameComponents(stack1, stack2)) return false;
         return true;
     }
 

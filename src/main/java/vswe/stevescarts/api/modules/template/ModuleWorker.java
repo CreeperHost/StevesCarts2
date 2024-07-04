@@ -6,7 +6,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
-import net.neoforged.neoforge.fluids.IFluidBlock;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
@@ -123,7 +122,7 @@ public abstract class ModuleWorker extends ModuleBase
             Block block = getCart().level().getBlockState(new BlockPos(coordX, pos.getY(), coordZ)).getBlock();
             boolean isWater = block == Blocks.WATER || block == Blocks.ICE;
             boolean isLava = block == Blocks.LAVA;
-            boolean isOther = block instanceof IFluidBlock;
+            boolean isOther = !getCart().level().getFluidState(pos).isEmpty();
             boolean isLiquid = isWater || isLava || isOther;
             result = !isLiquid;
         }

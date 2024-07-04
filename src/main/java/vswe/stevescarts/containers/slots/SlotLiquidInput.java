@@ -36,7 +36,7 @@ public class SlotLiquidInput extends SlotStevesCarts
         //Can Fill Container
         if (fluidStack.isEmpty() && !tank.getFluid().isEmpty()) return true;
         //Can Empty Container
-        return tank.getFluid().isEmpty() || tank.getFluid().isFluidEqual(fluidStack);
+        return tank.getFluid().isEmpty() || FluidStack.isSameFluidSameComponents(tank.getFluid(), fluidStack);
     }
 
     @Override

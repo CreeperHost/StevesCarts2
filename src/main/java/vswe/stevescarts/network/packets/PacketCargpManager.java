@@ -11,7 +11,7 @@ import vswe.stevescarts.Constants;
 import vswe.stevescarts.blocks.tileentities.TileEntityManager;
 
 public class PacketCargpManager implements CustomPacketPayload {
-    public static final ResourceLocation ID = new ResourceLocation(Constants.MOD_ID, "cargo_manager");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "cargo_manager");
     private final BlockPos blockPos;
     private final int id;
     private final byte[] array;

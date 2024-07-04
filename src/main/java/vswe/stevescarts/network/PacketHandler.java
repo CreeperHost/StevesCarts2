@@ -4,8 +4,10 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+//import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+//import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.network.packets.*;
 
@@ -16,8 +18,8 @@ public class PacketHandler {
         bus.addListener(PacketHandler::registerEvent);
     }
 
-    public static void registerEvent(RegisterPayloadHandlerEvent event) {
-        IPayloadRegistrar registrar = event.registrar(Constants.MOD_ID)
+    public static void registerEvent(RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar(Constants.MOD_ID)
                 .versioned(PROTOCOL_VERSION);
 
         //@formatter:off
@@ -34,11 +36,13 @@ public class PacketHandler {
 
     @Deprecated
     public static void sendToServer(CustomPacketPayload msg) {
-        PacketDistributor.SERVER.noArg().send(msg);
+        PacketDistributor.sendToServer(msg);
+//        PacketDistributor.SERVER.noArg().send(msg);
     }
 
     @Deprecated
     public static void sendTo(CustomPacketPayload message, ServerPlayer player) {
-        PacketDistributor.PLAYER.with(player).send(message);
+        PacketDistributor.sendToPlayer(player, message);
+//        PacketDistributor.PLAYER.with(player).send(message);
     }
 }

@@ -26,7 +26,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.fluids.IFluidBlock;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
@@ -241,7 +240,8 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
         ItemStack tool = new ItemStack(Items.DIAMOND_PICKAXE);
         if (fortune > 0) {
-            tool.enchant(Enchantments.BLOCK_FORTUNE, fortune);
+            //TODO
+//            tool.enchant(Enchantments.BLOCK_FORTUNE, fortune);
         }
 
         LootParams.Builder builder = new LootParams.Builder((ServerLevel) world)
@@ -355,10 +355,11 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         {
             return null;
         }
-        if (block instanceof IFluidBlock)
-        {
-            return null;
-        }
+        //TODO
+//        if (block instanceof IFluidBlock)
+//        {
+//            return null;
+//        }
         if (blockState.getDestroySpeed(world, pos) < 0.0f)
         {
             return null;

@@ -127,7 +127,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
                 {
                     try
                     {
-                        Fluid fluid = BuiltInRegistries.FLUID.get(new ResourceLocation(getDw(FLUID_NAME).toLowerCase(Locale.ROOT)));
+                        Fluid fluid = BuiltInRegistries.FLUID.get(ResourceLocation.parse(getDw(FLUID_NAME).toLowerCase(Locale.ROOT)));
                         if (fluid != null && fluid != Fluids.EMPTY)
                         {
                             tank.setFluid(new FluidStack(fluid, getDw(FLUID_AMOUNT)));

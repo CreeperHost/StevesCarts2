@@ -1,14 +1,12 @@
 package vswe.stevescarts.entities;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.creeperhost.polylib.client.modulargui.lib.GuiRender;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -47,7 +45,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -79,6 +76,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -211,11 +209,11 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public void defineSynchedData()
+    protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder)
     {
-        super.defineSynchedData();
-        this.entityData.define(IS_BURNING, false);
-        this.entityData.define(IS_DISANABLED, false);
+        super.defineSynchedData(builder);
+        builder.define(IS_BURNING, false);
+        builder.define(IS_DISANABLED, false);
     }
 
     private void loadPlaceHolderModules(final List<ResourceLocation> data)
@@ -280,7 +278,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         for (int i = 0; i < listTag.size(); i++) {
             Tag tag = listTag.get(i);
             modules.add((CompoundTag) tag);
-            names.add(new ResourceLocation(((CompoundTag) tag).getString(String.valueOf(i))));
+            names.add(ResourceLocation.parse(((CompoundTag) tag).getString(String.valueOf(i))));
         }
 
         if (!names.isEmpty()){
@@ -307,7 +305,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         if(data != null) {
             for (int i = 0; i < data.size(); i++) {
                 CompoundTag tag = data.get(i);
-                ResourceLocation name = new ResourceLocation(tag.getString(String.valueOf(i)));
+                ResourceLocation name = ResourceLocation.parse(tag.getString(String.valueOf(i)));
                 doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(name), tag);
             }
         }
@@ -475,7 +473,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderOverlay(ExtendedGui gui, GuiGraphics render, float partialTicks)
+    public void renderOverlay(Screen gui, GuiGraphics render, float partialTicks)
     {
         if (modules != null)
         {
@@ -593,27 +591,27 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    protected float getEyeHeight(@NotNull Pose pose, @NotNull EntityDimensions entityDimensions)
-    {
+    public double getEyeY() {
         return 0.9F;
     }
 
-    @Override
-    public float getMyRidingOffset(Entity p_294931_)
-    {
-        if (modules != null && !getPassengers().isEmpty())
-        {
-            for (ModuleBase module : modules)
-            {
-                float offset = module.mountedOffset(getPassengers().get(0));
-                if (offset != 0.0f)
-                {
-                    return offset;
-                }
-            }
-        }
-        return super.getMyRidingOffset(p_294931_);
-    }
+    //TODO
+//    @Override
+//    public float getMyRidingOffset(Entity p_294931_)
+//    {
+//        if (modules != null && !getPassengers().isEmpty())
+//        {
+//            for (ModuleBase module : modules)
+//            {
+//                float offset = module.mountedOffset(getPassengers().get(0));
+//                if (offset != 0.0f)
+//                {
+//                    return offset;
+//                }
+//            }
+//        }
+//        return super.getMyRidingOffset(p_294931_);
+//    }
 
     @Override
     @NotNull
@@ -641,7 +639,8 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS) && dropOnDeath()) {
             ItemStack itemstack = getCartItem();
             if (this.hasCustomName()) {
-                itemstack.setHoverName(this.getCustomName());
+                //TODO
+//                itemstack.setHoverName(this.getCustomName());
             }
             for (int i = 0; i < getContainerSize(); i++)
             {
@@ -1571,7 +1570,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public void writeSpawnData(final FriendlyByteBuf data)
+    public void writeSpawnData(final RegistryFriendlyByteBuf data)
     {
         if (moduleLoadingData == null) return;
         data.writeByte(moduleLoadingData.size());
@@ -1582,11 +1581,11 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
 
         //TODO, this is a hack, Our data watcher implementation is not compatible with 1.20.4+
         getDataManager().isDirty = true;
-        getDataManager().itemsById.values().forEach(e -> e.setDirty(true));
+        Arrays.stream(getDataManager().itemsById).forEach(e -> e.setDirty(true));
     }
 
     @Override
-    public void readSpawnData(final FriendlyByteBuf data)
+    public void readSpawnData(final RegistryFriendlyByteBuf data)
     {
         final byte length = data.readByte();
         List<ResourceLocation> list = new ArrayList<>();
@@ -1676,7 +1675,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public int getNextDataWatcher()
     {
         base++;
-        return getDataManager().itemsById.size() + base + 1;
+        return getDataManager().itemsById.length + base + 1;
     }
 
     @Override
@@ -1740,7 +1739,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         {
             FluidStack temp = null;
             temp = tankModules.get(i).drain(maxDrain, doDrain);
-            if (temp != null && (ret == null || ret.isFluidEqual(temp)))
+            if (temp != null && (ret == null || FluidStack.isSameFluidSameComponents(ret, temp)))
             {
                 if (ret == null)
                 {

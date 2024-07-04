@@ -3,11 +3,11 @@ package vswe.stevescarts.modules.addons;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.fluids.IFluidBlock;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.entities.EntityMinecartModular;
@@ -165,14 +165,14 @@ public class ModuleLiquidSensors extends ModuleAddon
             handleLiquid(drill, pos);
             return true;
         }
-        if (block != null && block instanceof IFluidBlock)
+        if (block != null && isFluid(getCart().level(), pos))
         {
             handleLiquid(drill, pos);
             return true;
         }
         final boolean isWater = block == Blocks.WATER || block == Blocks.WATER || block == Blocks.ICE;
         final boolean isLava = block == Blocks.LAVA || block == Blocks.LAVA;
-        final boolean isOther = block != null && block instanceof IFluidBlock;
+        final boolean isOther = block != null && isFluid(getCart().level(), pos);
         final boolean isLiquid = isWater || isLava || isOther;
         if (!isLiquid)
         {
@@ -191,30 +191,12 @@ public class ModuleLiquidSensors extends ModuleAddon
             handleLiquid(drill, pos);
             return true;
         }
-        BlockState state = getCart().level().getBlockState(pos);
-        //TODO
-        //		int m = state.getBlock().getMetaFromState(state);
-        //		if ((m & 0x8) == 0x8) {
-        //			if (block.getBlockFaceShape(getCart().world, state, pos.down(), EnumFacing.UP) == BlockFaceShape.SOLID) {
-        //				handleLiquid(drill, pos);
-        //				return true;
-        //			}
-        //			return false;
-        //		}
-        //		else {
-        //			if (isWater && (m & 0x7) == 0x7) {
-        //				return false;
-        //			}
-        //			if (isLava && (m & 0x7) == 0x7 && !getCart().world.provider.isSkyColored()) {
-        //				return false;
-        //			}
-        //			if (isLava && (m & 0x7) == 0x6) {
-        //				return false;
-        //			}
-        //			handleLiquid(drill, pos);
-        //			return true;
-        //		}
         return false;
+    }
+
+    private boolean isFluid(Level level, BlockPos pos)
+    {
+        return !level.getFluidState(pos).isEmpty();
     }
 
     private void handleLiquid(final ModuleDrill drill, BlockPos pos)

@@ -6,9 +6,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.IFluidBlock;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.entities.EntityMinecartModular;
@@ -101,14 +99,15 @@ public class ModuleLiquidDrainer extends ModuleWorker
 
     private boolean isLiquid(BlockState state) {
         FluidState fluid = state.getFluidState();
-        return (!fluid.isEmpty() && fluid.isSource()) || state.getBlock() instanceof IFluidBlock;
+        return (!fluid.isEmpty() && fluid.isSource());
     }
 
     private FluidStack getFluidStack(BlockState state, BlockPos pos, boolean doDrain) {
         Block block = state.getBlock();
-        if (block instanceof IFluidBlock fluidBlock) {
-            return fluidBlock.drain(getCart().level(), pos, doDrain ? IFluidHandler.FluidAction.EXECUTE : IFluidHandler.FluidAction.SIMULATE);
-        }
+        //TODO
+//        if (block instanceof IFluidBlock fluidBlock) {
+//            return fluidBlock.drain(getCart().level(), pos, doDrain ? IFluidHandler.FluidAction.EXECUTE : IFluidHandler.FluidAction.SIMULATE);
+//        }
 
         FluidState fluid = state.getFluidState();
         if (fluid.isEmpty() || !fluid.isSource()) {

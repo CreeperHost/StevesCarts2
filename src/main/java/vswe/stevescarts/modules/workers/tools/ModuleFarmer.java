@@ -12,11 +12,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.farms.ICropModule;
@@ -158,11 +158,12 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
                 if (!getStack(i).isEmpty() && isSeedValidHandler(getStack(i)))
                 {
                     BlockState cropblock = getCropFromSeedHandler(getStack(i));
-                    if (cropblock != null && cropblock.getBlock() instanceof IPlantable && world.getBlockState(pos.above()).isAir() && soilblock.canSustainPlant(soilState, world, pos, Direction.UP, (IPlantable) cropblock.getBlock()))
-                    {
-                        hasSeeds = i;
-                        break;
-                    }
+                    //TODO
+//                    if (cropblock != null && cropblock.getBlock() instanceof BonemealableBlock && world.getBlockState(pos.above()).isAir() && soilblock.canSustainPlant(soilState, world, pos, Direction.UP, cropblock.getBlock().defaultBlockState()))
+//                    {
+//                        hasSeeds = i;
+//                        break;
+//                    }
                 }
             }
             if (hasSeeds != -1)

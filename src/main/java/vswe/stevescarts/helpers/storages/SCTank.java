@@ -164,7 +164,7 @@ public class SCTank extends FluidTank {
         String name = Localization.MODULES.TANKS.EMPTY.translate();
         int amount = 0;
         if (!fluid.isEmpty()) {
-            name = fluid.getDisplayName().getString();
+            name = fluid.getHoverName().getString();
             amount = fluid.getAmount();
         }
         NumberFormat format = NumberFormat.getInstance();

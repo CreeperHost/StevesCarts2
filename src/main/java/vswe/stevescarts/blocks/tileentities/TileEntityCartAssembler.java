@@ -3,6 +3,7 @@ package vswe.stevescarts.blocks.tileentities;
 import net.creeperhost.polylib.helpers.FuelHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -330,9 +331,10 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                         if (effect instanceof Disassemble)
                         {
                             @Nonnull ItemStack oldcart = tile.getItem(0);
-                            if (!oldcart.isEmpty() && !outputItem.isEmpty() && oldcart.getItem() instanceof ItemCarts && outputItem.getItem() instanceof ItemCarts && oldcart.hasCustomHoverName())
+                            if (!oldcart.isEmpty() && !outputItem.isEmpty() && oldcart.getItem() instanceof ItemCarts && outputItem.getItem() instanceof ItemCarts)
                             {
-                                outputItem.setHoverName(oldcart.getDisplayName());
+                                //TODO
+//                                outputItem.setHoverName(oldcart.getDisplayName());
                             }
                             tile.setItem(0, ItemStack.EMPTY);
                         }
@@ -835,10 +837,11 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                     maxAssemblingTime = info.getInt("maxTime");
                     setAssemblingTime(info.getInt("currentTime"));
                     spareModules.clear();
-                    if (itemInSlot.hasCustomHoverName())
-                    {
-                        newItem.setHoverName(itemInSlot.getDisplayName());
-                    }
+                    //TODO
+//                    if (itemInSlot.hasCustomHoverName())
+//                    {
+//                        newItem.setHoverName(itemInSlot.getDisplayName());
+//                    }
                     isAssembling = true;
                     outputItem = newItem;
                     outputSlot.set(ItemStack.EMPTY);
@@ -1201,9 +1204,9 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @Override
-    public void load(@NotNull CompoundTag tagCompound)
+    public void loadAdditional(@NotNull CompoundTag tagCompound, HolderLookup.@NotNull Provider provider)
     {
-        super.load(tagCompound);
+        super.loadAdditional(tagCompound, provider);
         final ListTag items = tagCompound.getList("Items", NBTHelper.COMPOUND.getId());
         for (int i = 0; i < items.size(); ++i)
         {
@@ -1243,9 +1246,9 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
 
 
     @Override
-    public void saveAdditional(final @NotNull CompoundTag tagCompound)
+    public void saveAdditional(final @NotNull CompoundTag tagCompound, HolderLookup.@NotNull Provider provider)
     {
-        super.saveAdditional(tagCompound);
+        super.saveAdditional(tagCompound, provider);
         final ListTag items = new ListTag();
         for (int i = 0; i < getContainerSize(); ++i)
         {
@@ -1283,15 +1286,15 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag tag)
+    public void handleUpdateTag(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider lookupProvider)
     {
-        load(tag);
+        loadAdditional(tag, lookupProvider);
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
+    public void onDataPacket(@NotNull Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.@NotNull Provider lookupProvider)
     {
-        if(pkt.getTag() != null) load(pkt.getTag());
+        if(pkt.getTag() != null) loadAdditional(pkt.getTag(), lookupProvider);
     }
 
     @SuppressWarnings("unused")

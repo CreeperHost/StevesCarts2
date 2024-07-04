@@ -2,6 +2,7 @@ package vswe.stevescarts.blocks.tileentities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
@@ -127,22 +128,20 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public void load(@NotNull CompoundTag compoundNBT)
-    {
-        super.load(compoundNBT);
+    protected void loadAdditional(@NotNull CompoundTag compoundTag, HolderLookup.@NotNull Provider provider) {
+        super.loadAdditional(compoundTag, provider);
         for (final DistributorSide side : getSides())
         {
-            side.setData(compoundNBT.getInt("Side" + side.getId()));
+            side.setData(compoundTag.getInt("Side" + side.getId()));
         }
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag compoundNBT)
-    {
-        super.saveAdditional(compoundNBT);
+    protected void saveAdditional(@NotNull CompoundTag compoundTag, HolderLookup.@NotNull Provider provider) {
+        super.saveAdditional(compoundTag, provider);
         for (final DistributorSide side : getSides())
         {
-            compoundNBT.putInt("Side" + side.getId(), side.getData());
+            compoundTag.putInt("Side" + side.getId(), side.getData());
         }
     }
 
@@ -186,10 +185,11 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
             }
         }
     }
+
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
-    {
-        handleUpdateTag(pkt.getTag());
+    public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.@NotNull Provider lookupProvider) {
+        super.onDataPacket(net, pkt, lookupProvider);
+        handleUpdateTag(pkt.getTag(), lookupProvider);
     }
 
     public TileEntityManager[] getInventories()
@@ -359,7 +359,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
         final IFluidTank[] tanks = getTanks(from);
         for (IFluidTank tank : tanks) {
             FluidStack contents = tank.getFluid();
-            if (contents.isEmpty() || (!target.isEmpty() && !contents.isFluidEqual(target))) {
+            if (contents.isEmpty() || (!target.isEmpty() && !FluidStack.isSameFluidSameComponents(contents, target))) {
                 continue;
             }
 

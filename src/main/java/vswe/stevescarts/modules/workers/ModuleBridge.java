@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RailBlock;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.fluids.IFluidBlock;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -77,7 +76,7 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
 
     private boolean tryBuildBridge(Level world, BlockPos pos, final boolean doPlace) {
         final Block blockAtPos = world.getBlockState(pos).getBlock();
-        if ((countsAsAir(pos) || blockAtPos instanceof IFluidBlock) && isValidForTrack(pos.above(), false)) {
+        if ((countsAsAir(pos) || !world.getFluidState(pos).isEmpty()) && isValidForTrack(pos.above(), false)) {
             for (int slot = 0; slot < getInventorySize(); ++slot) {
                 ItemStack stack = getStack(slot);
                 if (stack.isEmpty() || !SlotBridge.isBridgeMaterial(stack)) continue;
@@ -95,8 +94,6 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
                 }
                 return true;
             }
-//            if (isValidForTrack(pos, true) || isValidForTrack(pos.above(), true) || !isValidForTrack(pos.above(2), true)) {
-//            }
         }
         return false;
     }

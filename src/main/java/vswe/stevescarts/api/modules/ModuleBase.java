@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -29,8 +30,6 @@ import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.VineBlock;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
-import net.neoforged.neoforge.common.I18nExtension;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import vswe.stevescarts.api.StevesCartsAPI;
@@ -1588,13 +1587,8 @@ public abstract class ModuleBase
         return null;
     }
 
-    /**
-     * Used to render graphical overlays on the screen
-     *
-     * @param minecraft The mincraft instance to use with the rendering
-     */
     @OnlyIn(Dist.CLIENT)
-    public void renderOverlay(ExtendedGui gui, GuiGraphics render, float partialTicks)
+    public void renderOverlay(Screen gui, GuiGraphics render, float partialTicks)
     {
     }
 
@@ -1748,7 +1742,9 @@ public abstract class ModuleBase
 
     public String getModuleName()
     {
-        return I18nExtension.parseMessage("item.stevescarts." + StevesCartsAPI.MODULE_REGISTRY.get(getModuleId()).getRawName());
+        //TODO
+        return "TODO";
+//        return I18nExtension.parseMessage("item.stevescarts." + StevesCartsAPI.MODULE_REGISTRY.get(getModuleId()).getRawName());
     }
 
     public ItemStack getItemStack()
