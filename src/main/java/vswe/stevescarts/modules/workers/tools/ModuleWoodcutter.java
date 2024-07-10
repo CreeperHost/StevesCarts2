@@ -24,6 +24,7 @@ import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleTool;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.containers.slots.SlotRepair;
 import vswe.stevescarts.containers.slots.SlotSapling;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.BlockPosHelpers;
@@ -200,7 +201,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         for (int i = 0; i < getInventorySize(); ++i)
         {
             final SlotStevesCarts slot = getSlots().get(i);
-            if (slot.containsValidItem())
+            if (slot.containsValidItem() && !(slot instanceof SlotRepair))
             {
                 sapling = getStack(i);
                 break;
