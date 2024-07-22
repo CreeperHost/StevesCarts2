@@ -1,12 +1,14 @@
 package vswe.stevescarts.upgrades;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.client.guis.GuiUpgrade;
 import vswe.stevescarts.containers.slots.SlotLiquidOutput;
@@ -99,11 +101,11 @@ public abstract class TankUpgradeEffect extends InventoryUpgradeEffect
     }
 
     @Override
-    public void load(final TileEntityUpgrade upgrade, final CompoundTag compound)
+    public void load(final TileEntityUpgrade upgrade, final CompoundTag compound, @NotNull HolderLookup.Provider provider)
     {
         if (compound.getByte("Exists") != 0)
         {
-            upgrade.tank.setFluid(FluidStack.loadFluidStackFromNBT(compound));
+            upgrade.tank.setFluid(FluidStack.parseOptional(provider, compound));
         }
         else
         {
@@ -112,7 +114,7 @@ public abstract class TankUpgradeEffect extends InventoryUpgradeEffect
     }
 
     @Override
-    public void save(final TileEntityUpgrade upgrade, final CompoundTag compound)
+    public void save(final TileEntityUpgrade upgrade, final CompoundTag compound, @NotNull HolderLookup.Provider provider)
     {
         if (upgrade.tank.getFluid().isEmpty())
         {
@@ -121,7 +123,7 @@ public abstract class TankUpgradeEffect extends InventoryUpgradeEffect
         else
         {
             compound.putByte("Exists", (byte) 1);
-            upgrade.tank.getFluid().writeToNBT(compound);
+            upgrade.tank.getFluid().save(provider, compound);
         }
     }
 }

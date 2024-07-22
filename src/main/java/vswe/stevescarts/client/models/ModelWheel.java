@@ -139,10 +139,10 @@ public class ModelWheel extends ModelCartbase {
     }
 
     @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, int colour) {
         poseStack.pushPose();
         poseStack.scale(0.65F, 0.65F, 0.65F);
-        super.renderToBuffer(poseStack, vertexConsumers, light, overlay, red, green, blue, alpha);
+        super.renderToBuffer(poseStack, vertexConsumers, light, overlay, colour);
         poseStack.popPose();
     }
 }

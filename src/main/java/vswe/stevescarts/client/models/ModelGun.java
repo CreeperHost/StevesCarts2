@@ -51,12 +51,11 @@ public class ModelGun extends ModelCartbase {
     }
 
     @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumer, int light, int overlay, int colour) {
         for (ModelPart gun : guns) {
-            gun.render(poseStack, vertexConsumers, light, overlay, red, green, blue, alpha);
+            gun.render(poseStack, vertexConsumer, light, overlay, colour);
         }
     }
-
 
     @Override
     public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll) {

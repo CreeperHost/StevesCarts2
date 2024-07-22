@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -117,14 +118,8 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
-    {
-        if(pkt.getTag() != null) load(pkt.getTag());
-    }
-
-    @Override
-    public CompoundTag getUpdateTag() {
-        return saveWithoutMetadata();
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        return saveWithoutMetadata(provider);
     }
 
     @Nullable
@@ -145,33 +140,31 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     }
 
     @Override
-    public void load(@NotNull CompoundTag compoundNBT)
-    {
-        super.load(compoundNBT);
-        setType(compoundNBT.getByte("Type"));
-        ContainerHelper.loadAllItems(compoundNBT, inventoryStacks);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+        super.loadAdditional(tag, provider);
+        setType(tag.getByte("Type"));
+        ContainerHelper.loadAllItems(tag, inventoryStacks, provider);
         setChanged();
         final AssemblerUpgrade upgrade = getUpgrade();
         if (upgrade != null)
         {
-            upgrade.load(this, compoundNBT);
+            upgrade.load(this, tag, provider);
         }
     }
 
-
     @Override
-    public void saveAdditional(@NotNull CompoundTag compoundNBT)
+    public void saveAdditional(@NotNull CompoundTag compoundNBT, HolderLookup.Provider provider)
     {
-        super.saveAdditional(compoundNBT);
+        super.saveAdditional(compoundNBT, provider);
         if (inventoryStacks != null)
         {
-            ContainerHelper.saveAllItems(compoundNBT, inventoryStacks);
+            ContainerHelper.saveAllItems(compoundNBT, inventoryStacks, provider);
         }
         compoundNBT.putByte("Type", (byte) type);
         final AssemblerUpgrade upgrade = getUpgrade();
         if (upgrade != null)
         {
-            upgrade.save(this, compoundNBT);
+            upgrade.save(this, compoundNBT, provider);
         }
     }
 

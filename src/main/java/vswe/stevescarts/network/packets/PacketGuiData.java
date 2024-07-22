@@ -8,12 +8,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.containers.ContainerBase;
 
 public class PacketGuiData implements CustomPacketPayload {
-    public static final ResourceLocation ID = new ResourceLocation(Constants.MOD_ID, "gui_data");
+    public static final Type<PacketGuiData> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "gui_data"));
     private final int containerId;
     private final int dataId;
     private final int data;
@@ -25,28 +26,30 @@ public class PacketGuiData implements CustomPacketPayload {
     }
 
     @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
     public void write(FriendlyByteBuf buf) {
         buf.writeInt(containerId);
         buf.writeVarInt(dataId);
         buf.writeVarInt(data);
     }
 
-    @Override
-    public ResourceLocation id() {
-        return ID;
-    }
-
     public static PacketGuiData read(FriendlyByteBuf buffer) {
         return new PacketGuiData(buffer.readInt(), buffer.readVarInt(), buffer.readVarInt());
     }
 
-    public static void handle(PacketGuiData msg, PlayPayloadContext ctx) {
-        if (ctx.flow() != PacketFlow.CLIENTBOUND) return;
-        ctx.workHandler().execute(() -> handleClientSide(msg, ctx));
+    public static class Handler implements IPayloadHandler<PacketGuiData> {
+        @Override
+        public void handle(PacketGuiData msg, IPayloadContext ctx) {
+            if (ctx.flow() != PacketFlow.CLIENTBOUND) return;
+            ctx.enqueueWork(() -> handleClientSide(msg, ctx));
+        }
     }
 
     @OnlyIn (Dist.CLIENT)
-    private static void handleClientSide(PacketGuiData msg, PlayPayloadContext ctx) {
+    private static void handleClientSide(PacketGuiData msg, IPayloadContext ctx) {
         Player player = Minecraft.getInstance().player;
         if (player != null && player.containerMenu instanceof ContainerBase menu && menu.containerId == msg.containerId) {
             menu.receiveGuiData(msg.dataId, msg.data);

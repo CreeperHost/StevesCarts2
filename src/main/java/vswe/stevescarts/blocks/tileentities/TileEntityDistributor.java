@@ -128,7 +128,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    protected void loadAdditional(@NotNull CompoundTag compoundTag, HolderLookup.@NotNull Provider provider) {
+    protected void loadAdditional(@NotNull CompoundTag compoundTag, @NotNull HolderLookup.Provider provider) {
         super.loadAdditional(compoundTag, provider);
         for (final DistributorSide side : getSides())
         {
@@ -137,7 +137,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag compoundTag, HolderLookup.@NotNull Provider provider) {
+    protected void saveAdditional(@NotNull CompoundTag compoundTag, @NotNull HolderLookup.Provider provider) {
         super.saveAdditional(compoundTag, provider);
         for (final DistributorSide side : getSides())
         {
@@ -187,9 +187,9 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, HolderLookup.@NotNull Provider lookupProvider) {
-        super.onDataPacket(net, pkt, lookupProvider);
-        handleUpdateTag(pkt.getTag(), lookupProvider);
+    public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, @NotNull HolderLookup.Provider provider) {
+        super.onDataPacket(net, pkt, provider);
+        handleUpdateTag(pkt.getTag(), provider);
     }
 
     public TileEntityManager[] getInventories()

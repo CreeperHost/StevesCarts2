@@ -1,6 +1,7 @@
 package vswe.stevescarts.blocks.tileentities;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -11,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.storages.TransferManager;
 import vswe.stevescarts.network.PacketHandler;
@@ -66,9 +68,8 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
     }
 
     @Override
-    public void load(@NotNull CompoundTag compoundTag)
-    {
-        super.load(compoundTag);
+    protected void loadAdditional(CompoundTag compoundTag, @NotNull HolderLookup.Provider provider) {
+        super.loadAdditional(compoundTag, provider);
         final ListTag nbttaglist = compoundTag.getList("Items", NBTHelper.COMPOUND.getId());
         cargoItemStacks = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
         for (int i = 0; i < nbttaglist.size(); ++i)
@@ -77,7 +78,7 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
             final byte byte0 = nbttagcompound2.getByte("Slot");
             if (byte0 >= 0 && byte0 < cargoItemStacks.size())
             {
-                cargoItemStacks.set(byte0, ItemStack.of(nbttagcompound2));
+                cargoItemStacks.set(byte0, ItemStack.parse(provider, nbttagcompound2).orElse(ItemStack.EMPTY));
             }
         }
         moveTime = compoundTag.getByte("movetime");
@@ -99,9 +100,9 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag compoundTag)
+    public void saveAdditional(@NotNull CompoundTag compoundTag, HolderLookup.Provider provider)
     {
-        super.saveAdditional(compoundTag);
+        super.saveAdditional(compoundTag, provider);
         compoundTag.putByte("movetime", (byte) moveTime);
         compoundTag.putByte("lowestNumber", (byte) getLowestSetting());
         compoundTag.putByte("layout", (byte) layoutType);
@@ -129,7 +130,7 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
             {
                 final CompoundTag nbttagcompound2 = new CompoundTag();
                 nbttagcompound2.putByte("Slot", (byte) j);
-                cargoItemStacks.get(j).save(nbttagcompound2);
+                cargoItemStacks.get(j).save(provider, nbttagcompound2);
                 nbttaglist.add(nbttagcompound2);
             }
         }

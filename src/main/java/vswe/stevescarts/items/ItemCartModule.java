@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.data.ModuleData;
+import vswe.stevescarts.init.ModItemData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,15 +32,14 @@ public class ItemCartModule extends Item implements IModuleItem
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level world, @NotNull List<Component> textComponents, @NotNull TooltipFlag flag)
-    {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (moduleData != null)
         {
-            moduleData.addInformation(textComponents, stack.getTag());
+            moduleData.addInformation(list, ModItemData.getTagCopy(stack));
             if(flag.isAdvanced())
-                textComponents.add(Component.literal("ID " + moduleData.getID()));
+                list.add(Component.literal("ID " + moduleData.getID()));
         }
-        super.appendHoverText(stack, world, textComponents, flag);
+        super.appendHoverText(stack, context, list, flag);
     }
 
     @Override
@@ -51,9 +51,10 @@ public class ItemCartModule extends Item implements IModuleItem
     @Override
     public void addExtraDataToCart(final CompoundTag save, @Nonnull ItemStack module, final int i)
     {
-        if (module.getTag() != null && module.getTag().contains("Data"))
+        CompoundTag tag = ModItemData.getTagCopy(module);
+        if (tag.contains("Data"))
         {
-            save.putByte("Data" + i, module.getTag().getByte("Data"));
+            save.putByte("Data" + i, tag.getByte("Data"));
         }
         else
         {

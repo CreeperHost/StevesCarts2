@@ -1,6 +1,7 @@
 package vswe.stevescarts.api.modules.template;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
@@ -191,13 +192,13 @@ public abstract class ModuleEngine extends ModuleBase
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
         tagCompound.putByte(generateNBTName("Priority", id), (byte) getPriority());
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
         setPriority(tagCompound.getByte(generateNBTName("Priority", id)));
     }

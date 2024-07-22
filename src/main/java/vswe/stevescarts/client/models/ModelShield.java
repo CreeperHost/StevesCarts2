@@ -40,10 +40,10 @@ public class ModelShield extends ModelCartbase {
     }
 
     @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, int colour) {
         if (!enabled) return;
         for (ModelPart shield : shields) {
-            shield.render(poseStack, vertexConsumers, light, overlay, red, green, blue, alpha);
+            shield.render(poseStack, vertexConsumers, light, overlay, colour);
         }
     }
 
@@ -52,7 +52,7 @@ public class ModelShield extends ModelCartbase {
         float shieldDistance = (module == null) ? 18.0f : ((ModuleShield) module).getShieldDistance();
         enabled = module == null || ((ModuleShield) module).hasShield();
         if (!enabled) return;
-        float shieldAngle = (module == null) ? 0.0f : interpolate(((ModuleShield) module).getShieldAngle(), ((ModuleShield) module).getShieldAngle(), Minecraft.getInstance().getPartialTick());
+        float shieldAngle = (module == null) ? 0.0f : interpolate(((ModuleShield) module).getShieldAngle(), ((ModuleShield) module).getShieldAngle(), Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false));
 
         for (int i = 0; i < shields.length; i++) {
             ModelPart part = shields[i];

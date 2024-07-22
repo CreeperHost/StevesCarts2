@@ -84,7 +84,7 @@ public class SCTank extends FluidTank {
                     }
                 }
             } else {
-                result = tryFillContainer(itemStack, this, Integer.MAX_VALUE, null, false);
+                result = FluidUtil.tryFillContainer(itemStack, this, Integer.MAX_VALUE, null, false);
                 if (result.isSuccess()) {
                     ItemStack container = result.getResult();
                     if (!container.isEmpty()) {
@@ -104,31 +104,6 @@ public class SCTank extends FluidTank {
         });
     }
 
-    @Deprecated //This is only needed until forge accepts my PR to fix this 4 year old bug
-    public static FluidActionResult tryFillContainer(@NotNull ItemStack container, IFluidHandler fluidSource, int maxAmount, @Nullable Player player, boolean doFill) {
-        ItemStack containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // do not modify the input
-        return FluidUtil.getFluidHandler(containerCopy)
-                .map(containerFluidHandler -> {
-                    FluidStack simulatedTransfer = FluidUtil.tryFluidTransfer(containerFluidHandler, fluidSource, maxAmount, false);
-                    if (!simulatedTransfer.isEmpty()) {
-                        if (doFill) {
-                            FluidUtil.tryFluidTransfer(containerFluidHandler, fluidSource, maxAmount, true);
-                            if (player != null) {
-                                SoundEvent soundevent = simulatedTransfer.getFluid().getFluidType().getSound(simulatedTransfer, SoundActions.BUCKET_FILL);
-                                player.level().playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), soundevent, SoundSource.BLOCKS, 1.0F, 1.0F);
-                            }
-                        } else {
-                            containerFluidHandler.fill(simulatedTransfer, FluidAction.EXECUTE);
-                        }
-
-                        ItemStack resultContainer = containerFluidHandler.getContainer();
-                        return new FluidActionResult(resultContainer);
-                    }
-                    return FluidActionResult.FAILURE;
-                })
-                .orElse(FluidActionResult.FAILURE);
-    }
-
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
         if (fluid.isEmpty() || maxDrain <= 0) {
@@ -140,7 +115,7 @@ public class SCTank extends FluidTank {
             drained = fluid.getAmount();
         }
 
-        FluidStack stack = new FluidStack(fluid, drained);
+        FluidStack stack = new FluidStack(fluid.getFluid(), drained);
         if (action == FluidAction.EXECUTE) {
             fluid.shrink(drained);
             if (fluid.getAmount() <= 0 && !isLocked) {

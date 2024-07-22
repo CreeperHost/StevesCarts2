@@ -1,5 +1,6 @@
 package vswe.stevescarts.network;
 
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
@@ -23,14 +24,14 @@ public class PacketHandler {
                 .versioned(PROTOCOL_VERSION);
 
         //@formatter:off
-        registrar.play(PacketCreateCart.ID,         PacketCreateCart::read,         PacketCreateCart::handle);
-        registrar.play(PacketMinecartButton.ID,     PacketMinecartButton::read,     PacketMinecartButton::handle);
-        registrar.play(PacketCargpManager.ID,       PacketCargpManager::read,       PacketCargpManager::handle);
-        registrar.play(PacketDistributorTile.ID,    PacketDistributorTile::read,    PacketDistributorTile::handle);
-        registrar.play(PacketActivator.ID,          PacketActivator::read,          PacketActivator::handle);
-        registrar.play(PacketFluidSync.ID,          PacketFluidSync::read,          PacketFluidSync::handle);
-        registrar.play(PacketMinecartTurn.ID,       PacketMinecartTurn::read,       PacketMinecartTurn::handle);
-        registrar.play(PacketGuiData.ID,            PacketGuiData::read,            PacketGuiData::handle);
+        registrar.playToServer(PacketCreateCart.TYPE,               StreamCodec.of((buff, packet) -> packet.write(buff), PacketCreateCart::read),       new PacketCreateCart.Handler());
+        registrar.playBidirectional(PacketMinecartButton.TYPE,      StreamCodec.of((buff, packet) -> packet.write(buff), PacketMinecartButton::read),   new PacketMinecartButton.Handler());
+        registrar.playToServer(PacketCargpManager.TYPE,             StreamCodec.of((buff, packet) -> packet.write(buff), PacketCargpManager::read),     new PacketCargpManager.Handler());
+        registrar.playToServer(PacketDistributorTile.TYPE,          StreamCodec.of((buff, packet) -> packet.write(buff), PacketDistributorTile::read),  new PacketDistributorTile.Handler());
+        registrar.playToServer(PacketActivator.TYPE,                StreamCodec.of((buff, packet) -> packet.write(buff), PacketActivator::read),        new PacketActivator.Handler());
+        registrar.playToServer(PacketFluidSync.TYPE,                StreamCodec.of((buff, packet) -> packet.write(buff), PacketFluidSync::read),        new PacketFluidSync.Handler());
+        registrar.playToServer(PacketMinecartTurn.TYPE,             StreamCodec.of((buff, packet) -> packet.write(buff), PacketMinecartTurn::read),     new PacketMinecartTurn.Handler());
+        registrar.playToClient(PacketGuiData.TYPE,                  StreamCodec.of((buff, packet) -> packet.write(buff), PacketGuiData::read),          new PacketGuiData.Handler());
         //@formatter:on
     }
 

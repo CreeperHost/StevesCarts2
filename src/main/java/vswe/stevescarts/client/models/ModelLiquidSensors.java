@@ -57,9 +57,9 @@ public class ModelLiquidSensors extends ModelCartbase {
     }
 
     @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, float red, float green, float blue, float alpha) {
-        this.sensorLeft[activeColour].render(poseStack, vertexConsumers, light, overlay, red, green, blue, alpha);
-        this.sensorRight[activeColour].render(poseStack, vertexConsumers, light, overlay, red, green, blue, alpha);
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, int colour) {
+        this.sensorLeft[activeColour].render(poseStack, vertexConsumers, light, overlay, colour);
+        this.sensorRight[activeColour].render(poseStack, vertexConsumers, light, overlay, colour);
     }
 
     @Override

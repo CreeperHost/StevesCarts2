@@ -240,7 +240,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         Block block = Block.byItem(stack.getItem());
         if (block instanceof SaplingBlock blockSapling)
         {
-            if (blockSapling.canSurvive(blockSapling.defaultBlockState(), world, pos.above()))
+            if (blockSapling.defaultBlockState().canSurvive(world, pos.above()))
             {
                 if (fakePlayer.mayUseItemAt(pos.above(), Direction.UP, stack))
                 {

@@ -117,7 +117,7 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular> {
                             //TODO Yaw is supposed to be radians. May want to change this at some point.
                             // Why do we even need applyEffects? It seems it was added so that Model#renderToBuffer can be used. But SC uses its own ModelCartbase so we can just add out own render method.
                             model.applyEffects(module, poseStack, vertexConsumers, yaw, pitch, 0);
-                            model.renderToBuffer(poseStack, vertexConsumers.getBuffer(model.getRenderType(module)), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                            model.renderToBuffer(poseStack, vertexConsumers.getBuffer(model.getRenderType(module)), light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
                         }
                     }
@@ -130,7 +130,7 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular> {
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull EntityMinecartModular p_114482_) {
-        return new ResourceLocation("textures/entity/minecart.png");
+        return ResourceLocation.withDefaultNamespace("textures/entity/minecart.png");
     }
 
     protected void renderLabels(EntityMinecartModular cart, PoseStack poseStack, MultiBufferSource bufferSource, int p_114502_) {

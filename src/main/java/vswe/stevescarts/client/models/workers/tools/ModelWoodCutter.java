@@ -43,9 +43,9 @@ public class ModelWoodCutter extends ModelCartbase
     }
 
     @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, int colour) {
         for (ModelPart anchor : anchors) {
-            anchor.render(poseStack, vertexConsumers, light, overlay, red, green, blue, alpha);
+            anchor.render(poseStack, vertexConsumers, light, overlay, colour);
         }
     }
 

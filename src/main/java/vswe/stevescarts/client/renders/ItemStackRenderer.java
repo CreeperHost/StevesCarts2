@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
 
 public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer
@@ -42,13 +43,13 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer
         }
         matrixStack.pushPose();
         matrixStack.scale(-1.0f, -1.0f, 1.0f);
-        CompoundTag info = itemStack.getTag();
-        if (info != null && info.contains("modules"))
+        CompoundTag info = ModItemData.getTagCopy(itemStack);
+        if (info.contains("modules"))
         {
             float lowestMult = 1.0f;
             VertexConsumer ivertexbuilder = iRenderTypeBuffer.getBuffer(RenderType.solid());
 
-            EntityMinecartModular cart = new EntityMinecartModular(Minecraft.getInstance().level, 0, 0, 0, itemStack.getTag(), Component.literal(""));
+            EntityMinecartModular cart = new EntityMinecartModular(Minecraft.getInstance().level, 0, 0, 0, info, Component.literal(""));
 
             if (transformType == ItemDisplayContext.GUI)
             {
@@ -72,7 +73,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer
                         {
                             iRenderTypeBuffer.getBuffer(model.getRenderType(module));
                             model.applyEffects(module, matrixStack, iRenderTypeBuffer, 0, 0, 0);
-                            model.renderToBuffer(matrixStack, ivertexbuilder, p_239207_5_, p_239207_6_, 1.0F, 1.0F, 1.0F, 1.0F);
+                            model.renderToBuffer(matrixStack, ivertexbuilder, p_239207_5_, p_239207_6_, 0xFFFFFFFF);
                         }
                     }
                 }

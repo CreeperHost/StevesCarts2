@@ -50,6 +50,7 @@ public class StevesCarts
         ModCapabilities.init(modBus);
         PacketHandler.init(modBus);
         ModSerializers.init(modBus);
+        ModItemData.init();
 
         if(FMLEnvironment.dist.isClient())
         {

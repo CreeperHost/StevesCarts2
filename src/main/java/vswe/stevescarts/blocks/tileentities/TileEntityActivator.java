@@ -1,6 +1,7 @@
 package vswe.stevescarts.blocks.tileentities;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -62,25 +63,22 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        return saveWithoutMetadata();
+    public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+        return saveWithoutMetadata(provider);
     }
 
     @Override
-    public void load(@NotNull CompoundTag compoundTag)
-    {
-        super.load(compoundTag);
-        for (final ActivatorOption option : options)
-        {
+    protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.loadAdditional(compoundTag, provider);
+        for (final ActivatorOption option : options) {
             option.setOption(compoundTag.getByte(option.getName()));
         }
     }
 
-
     @Override
-    public void saveAdditional(@NotNull CompoundTag compoundNBT)
+    public void saveAdditional(@NotNull CompoundTag compoundNBT, HolderLookup.Provider provider)
     {
-        super.saveAdditional(compoundNBT);
+        super.saveAdditional(compoundNBT, provider);
         for (final ActivatorOption option : options)
         {
             compoundNBT.putByte(option.getName(), (byte) option.getOption());

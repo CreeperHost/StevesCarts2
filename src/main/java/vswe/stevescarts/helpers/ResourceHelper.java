@@ -13,19 +13,19 @@ public class ResourceHelper
 
     public static ResourceLocation getResource(final String path)
     {
-        return new ResourceLocation(Constants.MOD_ID, "textures" + path.toLowerCase());
+        return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "textures" + path.toLowerCase());
     }
 
     public static ResourceLocation getResourceFromPath(final String path)
     {
-        return new ResourceLocation("textures" + path.toLowerCase());
+        return ResourceLocation.withDefaultNamespace("textures" + path.toLowerCase());
     }
 
     public static void bindResource(final ResourceLocation resource)
     {
         if (resource != null)
         {
-            ResourceLocation lowercaseLocation = new ResourceLocation(resource.getNamespace().toLowerCase(), resource.getPath().toLowerCase());
+            ResourceLocation lowercaseLocation = ResourceLocation.fromNamespaceAndPath(resource.getNamespace(), resource.getPath());
             RenderSystem.setShaderTexture(0, lowercaseLocation);
         }
     }

@@ -24,6 +24,7 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.init.ModItemData;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -55,8 +56,8 @@ public class ItemCarts extends MinecartItem
             {
                 try
                 {
-                    final CompoundTag info = stack.getTag();
-                    if (info != null && !info.contains("maxTime"))
+                    final CompoundTag info = ModItemData.getTagCopy(stack);
+                    if (!info.contains("maxTime"))
                     {
                         try
                         {
@@ -98,21 +99,21 @@ public class ItemCarts extends MinecartItem
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack item, @Nullable Level p_77624_2_, @NotNull List<Component> list, @NotNull TooltipFlag p_77624_4_) {
-        if (item.getTag() != null) {
-            if (item.getTag().contains("modules")) {
-                list.add(Component.literal(ChatFormatting.BLUE + "Installed Modules:"));
-                ListTag moduleListTag = (ListTag) item.getTag().get("modules");
-                if (moduleListTag != null && !moduleListTag.isEmpty()) {
-                    for (int i = 0; i < moduleListTag.size(); i++) {
-                        CompoundTag moduleTag = (CompoundTag) moduleListTag.get(i);
-                        ResourceLocation resourceLocation = new ResourceLocation(moduleTag.getString(String.valueOf(i)));
-                        ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(resourceLocation);
-                        if (moduleData != null) list.add(Component.literal(ChatFormatting.GOLD + moduleData.getDisplayName()));
-                    }
-                } else {
-                    list.add(Component.literal(ChatFormatting.RED + "No modules loaded"));
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+        if (!ModItemData.hasTag(stack)) return;
+        CompoundTag tag = ModItemData.getTagCopy(stack);
+        if (tag.contains("modules")) {
+            list.add(Component.literal(ChatFormatting.BLUE + "Installed Modules:"));
+            ListTag moduleListTag = (ListTag) tag.get("modules");
+            if (moduleListTag != null && !moduleListTag.isEmpty()) {
+                for (int i = 0; i < moduleListTag.size(); i++) {
+                    CompoundTag moduleTag = (CompoundTag) moduleListTag.get(i);
+                    ResourceLocation resourceLocation = ResourceLocation.parse(moduleTag.getString(String.valueOf(i)));
+                    ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(resourceLocation);
+                    if (moduleData != null) list.add(Component.literal(ChatFormatting.GOLD + moduleData.getDisplayName()));
                 }
+            } else {
+                list.add(Component.literal(ChatFormatting.RED + "No modules loaded"));
             }
         }
     }

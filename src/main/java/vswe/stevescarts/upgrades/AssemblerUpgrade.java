@@ -1,5 +1,6 @@
 package vswe.stevescarts.upgrades;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
@@ -144,19 +145,19 @@ public class AssemblerUpgrade
         }
     }
 
-    public void load(final TileEntityUpgrade upgrade, final CompoundTag compound)
+    public void load(final TileEntityUpgrade upgrade, final CompoundTag compound, HolderLookup.Provider provider)
     {
         for (final BaseUpgradeEffect effect : effects)
         {
-            effect.load(upgrade, compound);
+            effect.load(upgrade, compound, provider);
         }
     }
 
-    public void save(final TileEntityUpgrade upgrade, final CompoundTag compound)
+    public void save(final TileEntityUpgrade upgrade, final CompoundTag compound, HolderLookup.Provider provider)
     {
         for (final BaseUpgradeEffect effect : effects)
         {
-            effect.save(upgrade, compound);
+            effect.save(upgrade, compound, provider);
         }
     }
 

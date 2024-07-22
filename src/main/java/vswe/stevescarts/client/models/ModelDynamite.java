@@ -99,13 +99,13 @@ public class ModelDynamite extends ModelCartbase {
     }
 
     @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, int colour) {
         poseStack.pushPose();
         poseStack.scale(sizemult * 0.25F, sizemult * 0.25F, sizemult * 0.25F);
 
         for (ModelPart dynamite : dynamites) {
             if (!dynamite.visible) continue;
-            dynamite.render(poseStack, vertexConsumers, light, OverlayTexture.pack(OverlayTexture.u((sizemult -1) * 2), 10), red, green, blue, alpha);
+            dynamite.render(poseStack, vertexConsumers, light, OverlayTexture.pack(OverlayTexture.u((sizemult -1) * 2), 10), colour);
         }
 
         poseStack.popPose();

@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
+import org.joml.Matrix4fStack;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.data.ModuleDataHull;
@@ -350,10 +351,10 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         }
         assembler.createPlaceholder();
 
-        PoseStack posestack = RenderSystem.getModelViewStack();
-        posestack.pushPose();
-        posestack.translate(p_98851_, p_98852_, 1050.0D);
-        posestack.scale(1.0F, 1.0F, -1.0F);
+        Matrix4fStack matrix4fStack = RenderSystem.getModelViewStack();
+        matrix4fStack.pushMatrix();
+        matrix4fStack.translate(p_98851_, p_98852_, 1050.0F);
+        matrix4fStack.scale(1.0F, 1.0F, -1.0F);
         RenderSystem.applyModelViewMatrix();
         PoseStack posestack1 = new PoseStack();
         posestack1.translate(0.0D, 0.0D, 1000.0D);
@@ -382,7 +383,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         }
         multibuffersource$buffersource.endBatch();
         entityrenderdispatcher.setRenderShadow(true);
-        posestack.popPose();
+        matrix4fStack.popMatrix();
         RenderSystem.applyModelViewMatrix();
         Lighting.setupFor3DItems();
     }

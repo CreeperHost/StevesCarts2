@@ -56,7 +56,7 @@ public class EntityCake extends ThrownEgg
     {
         BlockPos pos = blockPosition();
 
-        if (level().getBlockState(pos).isAir() && Blocks.CAKE.canSurvive(Blocks.CAKE.defaultBlockState(), level(), pos))//level.isSideSolid(pos.down(), EnumFacing.UP))
+        if (level().getBlockState(pos).isAir() && Blocks.CAKE.defaultBlockState().canSurvive(level(), pos))//level.isSideSolid(pos.down(), EnumFacing.UP))
         {
             level().setBlock(pos, Blocks.CAKE.defaultBlockState(), 3);
         }

@@ -1132,7 +1132,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             for (int i = 0; i < modules.size(); ++i)
             {
                 final ModuleBase module = modules.get(i);
-                module.writeToNBT(tagCompound, i);
+                module.writeToNBT(tagCompound, i, registryAccess());
             }
         }
         return true;
@@ -1170,7 +1170,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             for (int i = 0; i < modules.size(); ++i)
             {
                 final ModuleBase module = modules.get(i);
-                module.readFromNBT(tagCompound, i);
+                module.readFromNBT(tagCompound, i, registryAccess());
             }
         }
     }

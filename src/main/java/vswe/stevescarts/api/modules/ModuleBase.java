@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -18,11 +19,13 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerBlock;
@@ -32,6 +35,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.data.ModuleData;
@@ -804,7 +808,7 @@ public abstract class ModuleBase
      * @param tagCompound The tag compound to write the data to
      * @param id          The number of this module
      */
-    public final void writeToNBT(final CompoundTag tagCompound, final int id)
+    public final void writeToNBT(final CompoundTag tagCompound, final int id, @NotNull HolderLookup.Provider provider)
     {
         if (getInventorySize() > 0)
         {
@@ -815,13 +819,13 @@ public abstract class ModuleBase
                 {
                     final CompoundTag item = new CompoundTag();
                     item.putByte("Slot", (byte) i);
-                    getStack(i).save(item);
+                    getStack(i).save(provider, item);
                     items.add(item);
                 }
             }
             tagCompound.put(generateNBTName("Items", id), items);
         }
-        Save(tagCompound, id);
+        save(tagCompound, id, provider);
     }
 
     /**
@@ -830,7 +834,7 @@ public abstract class ModuleBase
      * @param tagCompound The NBT tag compound to write to
      * @param id          The number of the module
      */
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(final CompoundTag tagCompound, final int id, @NotNull HolderLookup.Provider provider)
     {
     }
 
@@ -840,7 +844,7 @@ public abstract class ModuleBase
      * @param tagCompound The tag compound to read the data from
      * @param id          The number of this module
      */
-    public final void readFromNBT(final CompoundTag tagCompound, final int id)
+    public final void readFromNBT(final CompoundTag tagCompound, final int id, @NotNull HolderLookup.Provider provider)
     {
         if (getInventorySize() > 0)
         {
@@ -851,11 +855,11 @@ public abstract class ModuleBase
                 final int slot = item.getByte("Slot") & 0xFF;
                 if (slot >= 0 && slot < getInventorySize())
                 {
-                    setStack(slot, ItemStack.of(item));
+                    setStack(slot, ItemStack.parse(provider, item).orElse(ItemStack.EMPTY));
                 }
             }
         }
-        Load(tagCompound, id);
+        load(tagCompound, id, provider);
     }
 
     /**
@@ -864,7 +868,7 @@ public abstract class ModuleBase
      * @param tagCompound The NBT tag compound to read from
      * @param id          The number of the module
      */
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
     }
 
@@ -1292,15 +1296,17 @@ public abstract class ModuleBase
      */
     protected final <T> void registerDw(EntityDataAccessor<T> key, T value)
     {
-        for (SynchedEntityData.DataItem<?> entry : getCart().getDataManager().itemsById.values())
+        for (SynchedEntityData.DataItem<?> entry : getCart().getDataManager().itemsById)
         {
             if (entry.getAccessor() == key)
             {
                 return;
             }
         }
-        if(!getCart().getDataManager().hasItem(key))
+        //TODO
+        if(!getCart().getDataManager().hasItem(key)){
             getCart().getDataManager().define(key, value);
+        }
     }
 
     /**
@@ -1567,13 +1573,12 @@ public abstract class ModuleBase
 
         //formatter:off
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(targetX,           targetY + height, 	-90D).uv((float) sourceX * var7,            (float)(sourceY + height) * var8).endVertex();
-        bufferbuilder.vertex(targetX + width,   targetY + height, 	-90D).uv((float)(sourceX + width) * var7,   (float)(sourceY + height) * var8).endVertex();
-        bufferbuilder.vertex(targetX + width,   targetY, 			-90D).uv((float)(sourceX + width) * var7,   (float) sourceY * var8).endVertex();
-        bufferbuilder.vertex(targetX,           targetY, 			-90D).uv((float) sourceX * var7,            (float) sourceY * var8).endVertex();
-        BufferUploader.drawWithShader(bufferbuilder.end());
+        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.addVertex(targetX,           targetY + height, 	-90F).setUv((float) sourceX * var7,            (float)(sourceY + height) * var8);
+        bufferbuilder.addVertex(targetX + width,   targetY + height, 	-90F).setUv((float)(sourceX + width) * var7,   (float)(sourceY + height) * var8);
+        bufferbuilder.addVertex(targetX + width,   targetY, 			-90F).setUv((float)(sourceX + width) * var7,   (float) sourceY * var8);
+        bufferbuilder.addVertex(targetX,           targetY, 			-90F).setUv((float) sourceX * var7,            (float) sourceY * var8);
+        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
         //formatter:on
     }
 

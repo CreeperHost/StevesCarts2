@@ -113,9 +113,9 @@ public class ModelCompactSolarPanel extends ModelCartbase {
     }
 
     @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, float red, float green, float blue, float alpha) {
-        modelLeft.render(poseStack, vertexConsumers, light, overlay, red, green, blue, alpha);
-        modelRight.render(poseStack, vertexConsumers, light, overlay, red, green, blue, alpha);
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumers, int light, int overlay, int colour) {
+        modelLeft.render(poseStack, vertexConsumers, light, overlay, colour);
+        modelRight.render(poseStack, vertexConsumers, light, overlay, colour);
     }
 
     @Override

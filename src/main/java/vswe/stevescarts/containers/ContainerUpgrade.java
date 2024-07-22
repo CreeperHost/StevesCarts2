@@ -2,10 +2,12 @@ package vswe.stevescarts.containers;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.level.ChunkPos;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
@@ -68,9 +70,9 @@ public class ContainerUpgrade extends ContainerBase
     public void broadcastChanges() {
         super.broadcastChanges();
 
-        if (!lastFluid.equals(upgrade.tank.getFluid()) || lastFluid.getAmount() != upgrade.tank.getFluid().getAmount()) {
+        if ((!lastFluid.equals(upgrade.tank.getFluid()) || lastFluid.getAmount() != upgrade.tank.getFluid().getAmount()) && upgrade.getLevel() instanceof ServerLevel serverLevel) {
             lastFluid = upgrade.tank.getFluid().copy();
-            PacketDistributor.TRACKING_CHUNK.with(upgrade.getLevel().getChunkAt(upgrade.getBlockPos())).send(new PacketFluidSync(lastFluid, upgrade.getBlockPos(), 0));
+            PacketDistributor.sendToPlayersTrackingChunk(serverLevel, new ChunkPos(upgrade.getBlockPos()), new PacketFluidSync(lastFluid, upgrade.getBlockPos(), 0));
         }
     }
 

@@ -9,13 +9,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
 public class PacketMinecartButton implements CustomPacketPayload {
-    public static final ResourceLocation ID = new ResourceLocation(Constants.MOD_ID, "cart_button");
+    public static final Type<PacketMinecartButton> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "cart_button"));
     private final int cartID;
     private final int id;
     private final byte[] array;
@@ -27,43 +28,43 @@ public class PacketMinecartButton implements CustomPacketPayload {
     }
 
     @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
     public void write(FriendlyByteBuf buf) {
         buf.writeInt(cartID);
         buf.writeInt(id);
         buf.writeByteArray(array);
     }
 
-    @Override
-    public ResourceLocation id() {
-        return ID;
-    }
-
     public static PacketMinecartButton read(FriendlyByteBuf buffer) {
         return new PacketMinecartButton(buffer.readInt(), buffer.readInt(), buffer.readByteArray());
     }
 
-    public static void handle(PacketMinecartButton msg, PlayPayloadContext ctx) {
-
-        ctx.workHandler().execute(() -> {
-            if (ctx.flow() == PacketFlow.CLIENTBOUND) {
-                handleClientSide(msg, ctx);
-            } else {
-                handleServerSide(msg, ctx);
-            }
-        });
+    public static class Handler implements IPayloadHandler<PacketMinecartButton> {
+        @Override
+        public void handle(PacketMinecartButton msg, IPayloadContext ctx) {
+            ctx.enqueueWork(() -> {
+                if (ctx.flow() == PacketFlow.CLIENTBOUND) {
+                    handleClientSide(msg, ctx);
+                } else {
+                    handleServerSide(msg, ctx);
+                }
+            });
+        }
     }
 
     @OnlyIn (Dist.CLIENT)
-    private static void handleClientSide(PacketMinecartButton msg, PlayPayloadContext ctx) {
+    private static void handleClientSide(PacketMinecartButton msg, IPayloadContext ctx) {
         Minecraft mc = Minecraft.getInstance();
         Level level = mc.level;
         Player player = mc.player;
         handle(msg, level, player);
     }
 
-    private static void handleServerSide(PacketMinecartButton msg, PlayPayloadContext ctx) {
-        Player player = ctx.player().orElse(null);
-        if (player == null) return;
+    private static void handleServerSide(PacketMinecartButton msg, IPayloadContext ctx) {
+        Player player = ctx.player();
         handle(msg, player.level(), player);
     }
 

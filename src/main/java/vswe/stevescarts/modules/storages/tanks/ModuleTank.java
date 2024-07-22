@@ -4,6 +4,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -245,18 +246,20 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
         final CompoundTag compound = new CompoundTag();
-        tank.getFluid().writeToNBT(compound);
+        if (!tank.getFluid().isEmpty()) {
+            tank.getFluid().save(provider, compound);
+        }
         tagCompound.put(generateNBTName("Fluid", id), compound);
         tagCompound.putBoolean(generateNBTName("Locked", id), getDw(LOCKED));
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
-        FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(tagCompound.getCompound(generateNBTName("Fluid", id)));
+        FluidStack fluidStack = FluidStack.parse(provider, tagCompound.getCompound(generateNBTName("Fluid", id))).orElse(FluidStack.EMPTY);
         tank.setFluid(fluidStack);
         updateDw(LOCKED, tagCompound.getBoolean(generateNBTName("Locked", id)));
         updateDw();

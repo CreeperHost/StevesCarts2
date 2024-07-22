@@ -1,6 +1,7 @@
 package vswe.stevescarts.blocks.tileentities;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
@@ -209,9 +210,8 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     }
 
     @Override
-    public void load(@NotNull CompoundTag compoundTag)
-    {
-        super.load(compoundTag);
+    protected void loadAdditional(CompoundTag compoundTag, HolderLookup.@NotNull Provider provider) {
+        super.loadAdditional(compoundTag, provider);
         setWorkload(compoundTag.getByte("workload"));
         for (int i = 0; i < 4; ++i)
         {
@@ -220,9 +220,9 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag compoundTag)
+    public void saveAdditional(@NotNull CompoundTag compoundTag, HolderLookup.Provider provider)
     {
-        super.saveAdditional(compoundTag);
+        super.saveAdditional(compoundTag, provider);
         compoundTag.putByte("workload", (byte) getWorkload());
         for (int i = 0; i < 4; ++i)
         {

@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.Connection;
@@ -23,7 +24,6 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
-import vswe.stevescarts.Constants;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.ModuleType;
@@ -44,6 +44,7 @@ import vswe.stevescarts.helpers.SimulationInfo;
 import vswe.stevescarts.helpers.TitleBox;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModBlocks;
+import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.items.ItemCarts;
 import vswe.stevescarts.polylib.NBTHelper;
@@ -358,39 +359,36 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                 final SlotAssembler slot = getSlots().get(slotId);
                 if (!slot.getItem().isEmpty())
                 {
-                    CompoundTag comp = getOrCreateCompound(slot.getItem());
-                    if (comp.getInt(MODIFY_STATUS) == getKeepSize())
-                    {
-                        comp.putInt(MODIFY_STATUS, getRemovedSize());
+                    CompoundTag tag = ModItemData.getTagCopy(slot.getItem());
+                    if (tag.getInt(MODIFY_STATUS) == getKeepSize()) {
+                        tag.putInt(MODIFY_STATUS, getRemovedSize());
+                    } else {
+                        tag.putInt(MODIFY_STATUS, getKeepSize());
                     }
-                    else
-                    {
-                        comp.putInt(MODIFY_STATUS, getKeepSize());
-                    }
+                    ModItemData.setTag(slot.getItem(), tag);
                 }
             }
         }
     }
 
-    public static CompoundTag getOrCreateCompound(ItemStack stack)
-    {
-        if (!stack.hasTag() && !stack.isEmpty()) stack.setTag(new CompoundTag());
-        return stack.getTag();
-    }
-
-    public static int getSlotStatus(ItemStack stack)
-    {
-        if (stack.getTag() != null && stack.getTag().contains(TileEntityCartAssembler.MODIFY_STATUS, NBTHelper.INT.getId()))
-            return stack.getTag().getInt(TileEntityCartAssembler.MODIFY_STATUS);
+    public static int getSlotStatus(ItemStack stack) {
+        CompoundTag tag = ModItemData.getTagCopy(stack);
+        if (tag.contains(TileEntityCartAssembler.MODIFY_STATUS, NBTHelper.INT.getId())) {
+            return tag.getInt(TileEntityCartAssembler.MODIFY_STATUS);
+        }
         return 1;
     }
 
-    public static ItemStack removeModify(ItemStack stack)
-    {
-        if (stack.getTag() != null && stack.getTag().contains(MODIFY_STATUS, NBTHelper.INT.getId()))
+    public static ItemStack removeModify(ItemStack stack) {
+        CompoundTag tag = ModItemData.getTagCopy(stack);
+        if (tag.contains(MODIFY_STATUS, NBTHelper.INT.getId()))
         {
-            stack.getTag().remove(MODIFY_STATUS);
-            if (stack.getTag().size() <= 0) stack.setTag(null);
+            tag.remove(MODIFY_STATUS);
+            if (tag.size() <= 0) {
+                ModItemData.removeTag(stack);
+            } else {
+                ModItemData.setTag(stack, tag);
+            }
         }
         return stack;
     }
@@ -827,21 +825,19 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
             @Nonnull ItemStack itemInSlot = outputSlot.getItem();
             if (itemInSlot.getItem() == ModItems.CARTS.get())
             {
-                final CompoundTag info = itemInSlot.getTag();
-                if (info != null && info.contains("maxTime"))
+                CompoundTag tag = ModItemData.getTagCopy(itemInSlot);
+                if (tag.contains("maxTime"))
                 {
                     @Nonnull ItemStack newItem = new ItemStack(ModItems.CARTS.get());
                     final CompoundTag save = new CompoundTag();
-                    save.putByteArray("Modules", info.getByteArray("Modules"));
-                    newItem.setTag(save);
-                    maxAssemblingTime = info.getInt("maxTime");
-                    setAssemblingTime(info.getInt("currentTime"));
+                    save.putByteArray("Modules", tag.getByteArray("Modules"));
+                    ModItemData.setTag(newItem, save);
+                    maxAssemblingTime = tag.getInt("maxTime");
+                    setAssemblingTime(tag.getInt("currentTime"));
                     spareModules.clear();
-                    //TODO
-//                    if (itemInSlot.hasCustomHoverName())
-//                    {
-//                        newItem.setHoverName(itemInSlot.getDisplayName());
-//                    }
+                    if (itemInSlot.has(DataComponents.CUSTOM_NAME)) {
+                        newItem.set(DataComponents.CUSTOM_NAME, itemInSlot.get(DataComponents.CUSTOM_NAME));
+                    }
                     isAssembling = true;
                     outputItem = newItem;
                     outputSlot.set(ItemStack.EMPTY);
@@ -1204,7 +1200,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @Override
-    public void loadAdditional(@NotNull CompoundTag tagCompound, HolderLookup.@NotNull Provider provider)
+    public void loadAdditional(@NotNull CompoundTag tagCompound, HolderLookup.Provider provider)
     {
         super.loadAdditional(tagCompound, provider);
         final ListTag items = tagCompound.getList("Items", NBTHelper.COMPOUND.getId());
@@ -1212,7 +1208,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         {
             final CompoundTag item = items.getCompound(i);
             final int slot = item.getByte("Slot") & 0xFF;
-            ItemStack iStack = ItemStack.parseOptional(provider, item);
+            ItemStack iStack = ItemStack.parse(provider, item).orElse(ItemStack.EMPTY);
             if (slot < getContainerSize())
             {
                 setItem(slot, iStack);
@@ -1223,13 +1219,13 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         for (int j = 0; j < spares.size(); ++j)
         {
             final CompoundTag item2 = spares.getCompound(j);
-            ItemStack iStack = ItemStack.parseOptional(provider, item2);
+            ItemStack iStack = ItemStack.parse(provider, item2).orElse(ItemStack.EMPTY);
             spareModules.add(iStack);
         }
         final CompoundTag outputTag = (CompoundTag) tagCompound.get("Output");
         if (outputTag != null)
         {
-            outputItem = ItemStack.parseOptional(provider, outputTag);
+            outputItem = ItemStack.parse(provider, outputTag).orElse(ItemStack.EMPTY);
         }
         if (tagCompound.contains("Fuel"))
         {
@@ -1246,7 +1242,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
 
 
     @Override
-    public void saveAdditional(final @NotNull CompoundTag tagCompound, HolderLookup.@NotNull Provider provider)
+    public void saveAdditional(final @NotNull CompoundTag tagCompound, HolderLookup.Provider provider)
     {
         super.saveAdditional(tagCompound, provider);
         final ListTag items = new ListTag();
@@ -1298,17 +1294,17 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @SuppressWarnings("unused")
-    public CompoundTag getOutputInfo()
+    public CompoundTag getOutputInfoCopy()
     {
         if (outputItem.isEmpty())
         {
             return null;
         }
-        if (!outputItem.hasTag())
+        if (!ModItemData.hasTag(outputItem))
         {
             return null;
         }
-        return outputItem.getTag();
+        return ModItemData.getTagCopy(outputItem);
     }
 
     public void increaseFuel(final int val)

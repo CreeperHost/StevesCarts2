@@ -16,8 +16,10 @@ import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.ModuleType;
+import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
+import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
 
 import javax.annotation.Nonnull;
@@ -340,18 +342,18 @@ public class ModuleData
 
     public static NonNullList<ItemStack> getModularItems(@Nonnull ItemStack cart) {
         NonNullList<ItemStack> modules = NonNullList.create();
-        if (!cart.isEmpty() && cart.getItem() == ModItems.CARTS.get() && cart.getTag() != null) {
-            CompoundTag info = cart.getTag();
+        if (!cart.isEmpty() && cart.getItem() == ModItems.CARTS.get() && ModItemData.hasTag(cart)) {
+            CompoundTag info = ModItemData.getTagCopy(cart);
             if (info.contains("modules")) {
                 int i = 0;
                 for (Tag tag : info.getList("modules", 10)) {
                     CompoundTag moduleTag = (CompoundTag) tag;
                     //If this ever explodes, then someone please slap whoever decided to use the arbitrary index of the module used as the key for the id field. WTF...
                     String regName = moduleTag.getString(String.valueOf(i));
-                    ModuleData data = StevesCartsAPI.MODULE_REGISTRY.get(new ResourceLocation(regName));
+                    ModuleData data = StevesCartsAPI.MODULE_REGISTRY.get(ResourceLocation.parse(regName));
                     ItemStack module = data.getItemStack();
                     if (moduleTag.contains("data")) {
-                        module.addTagElement("data", moduleTag.getCompound("data"));
+                        ModItemData.modifyTag(module, t -> t.put("data", moduleTag.getCompound("data")));
                     }
                     modules.add(module);
                     i++;
@@ -373,7 +375,9 @@ public class ModuleData
             }
             modulesTag.add(i, moduleTag);
         }
-        cart.getOrCreateTag().put("modules", modulesTag);
+        CompoundTag tag = ModItemData.getTagCopy(cart);
+        tag.put("modules", modulesTag);
+        ModItemData.setTag(cart, tag);
         return cart;
     }
 
@@ -386,13 +390,16 @@ public class ModuleData
             IModuleItem cartModule = (IModuleItem) moduleStack.getItem();
             moduleTag.putString(String.valueOf(i), cartModule.getModuleData().getID().toString());
 
-            if (moduleStack.hasTag() && moduleStack.getOrCreateTag().contains("data")) {
-                moduleTag.put("data", moduleStack.getOrCreateTag().getCompound("data"));
+            CompoundTag tag = ModItemData.getTagCopy(moduleStack);
+            if (tag.contains("data")) {
+                moduleTag.put("data", tag.getCompound("data"));
             }
 
             modulesTag.add(i, moduleTag);
         }
-        cart.getOrCreateTag().put("modules", modulesTag);
+        CompoundTag tag = ModItemData.getTagCopy(cart);
+        tag.put("modules", modulesTag);
+        ModItemData.setTag(cart, tag);
         return cart;
     }
 

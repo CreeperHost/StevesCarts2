@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
+import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
 
 import javax.annotation.Nonnull;
@@ -30,11 +31,8 @@ public class SlotOutput extends SlotAssembler
     {
         if (!getAssembler().getIsAssembling() && itemstack.getItem() == ModItems.CARTS.get())
         {
-            final CompoundTag info = itemstack.getTag();
-            if (info != null && info.contains("maxTime"))
-            {
-                return true;
-            }
+            final CompoundTag info = ModItemData.getTagCopy(itemstack);
+            return info.contains("maxTime");
         }
         return false;
     }

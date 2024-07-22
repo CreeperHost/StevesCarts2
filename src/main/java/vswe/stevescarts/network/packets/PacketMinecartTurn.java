@@ -6,12 +6,13 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
 public class PacketMinecartTurn implements CustomPacketPayload {
-    public static final ResourceLocation ID = new ResourceLocation(Constants.MOD_ID, "cart_turn");
+    public static final Type<PacketMinecartTurn> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "cart_turn"));
     private final int cartID;
 
     public PacketMinecartTurn(int cartID) {
@@ -19,30 +20,32 @@ public class PacketMinecartTurn implements CustomPacketPayload {
     }
 
     @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(cartID);
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    @Override
-    public ResourceLocation id() {
-        return ID;
+    public void write(FriendlyByteBuf buf) {
+        buf.writeInt(cartID);
     }
 
     public static PacketMinecartTurn read(FriendlyByteBuf buffer) {
         return new PacketMinecartTurn(buffer.readInt());
     }
 
-    public static void handle(final PacketMinecartTurn msg, PlayPayloadContext ctx) {
-        if (ctx.flow() != PacketFlow.SERVERBOUND) return;
+    public static class Handler implements IPayloadHandler<PacketMinecartTurn> {
+        @Override
+        public void handle(PacketMinecartTurn msg, IPayloadContext ctx) {
+            if (ctx.flow() != PacketFlow.SERVERBOUND) return;
 
-        ctx.workHandler().execute(() -> {
-            if (ctx.player().orElse(null) instanceof ServerPlayer player) {
-                Level level = player.level();
-                if (level.getEntity(msg.cartID) == null) return;
-                if (level.getEntity(msg.cartID) instanceof EntityMinecartModular entityMinecartModular) {
-                    entityMinecartModular.turnback();
+            ctx.enqueueWork(() -> {
+                if (ctx.player() instanceof ServerPlayer player) {
+                    Level level = player.level();
+                    if (level.getEntity(msg.cartID) == null) return;
+                    if (level.getEntity(msg.cartID) instanceof EntityMinecartModular entityMinecartModular) {
+                        entityMinecartModular.turnback();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 }

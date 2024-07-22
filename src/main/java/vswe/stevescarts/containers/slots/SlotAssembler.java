@@ -6,6 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
+import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.items.ItemCarts;
 
 import javax.annotation.Nonnull;
@@ -158,6 +159,6 @@ public class SlotAssembler extends Slot
         {
             if (assembler.getIsAssembling()) return false;
         }
-        return !getItem().isEmpty() && (!getItem().hasTag() || !getItem().getTag().contains(TileEntityCartAssembler.MODIFY_STATUS) || getItem().getTag().getInt(TileEntityCartAssembler.MODIFY_STATUS) > 0);
+        return !getItem().isEmpty() && (!ModItemData.hasTag(getItem()) || !ModItemData.getTagCopy(getItem()).contains(TileEntityCartAssembler.MODIFY_STATUS) || ModItemData.getTagCopy(getItem()).getInt(TileEntityCartAssembler.MODIFY_STATUS) > 0);
     }
 }

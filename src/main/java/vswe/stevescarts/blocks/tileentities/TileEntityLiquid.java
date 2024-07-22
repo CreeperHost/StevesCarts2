@@ -5,8 +5,10 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -14,6 +16,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -116,17 +119,11 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
         }
     }
 
-    public void syncTanks()
-    {
-        if(level == null) return;
-        if (!level.isClientSide)
-        {
-            if (getTanks() != null)
-            {
-                for (int i = 0; i < getTanks().length; i++)
-                {
-                    PacketDistributor.TRACKING_CHUNK.with(level.getChunkAt(getBlockPos())).send(new PacketFluidSync(this.getTanks()[i].getFluid(), this.getBlockPos(), i));
-                }
+    public void syncTanks() {
+        if (!(level instanceof ServerLevel serverLevel)) return;
+        if (getTanks() != null) {
+            for (int i = 0; i < getTanks().length; i++) {
+                PacketDistributor.sendToPlayersTrackingChunk(serverLevel, new ChunkPos(getBlockPos()), new PacketFluidSync(this.getTanks()[i].getFluid(), this.getBlockPos(), i));
             }
         }
     }
@@ -345,27 +342,25 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     }
 
     @Override
-    public void load(@NotNull CompoundTag compoundTag)
-    {
-        super.load(compoundTag);
+    protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
+        super.loadAdditional(compoundTag, provider);
         for (int i = 0; i < 4; ++i)
         {
-            tanks[i].setFluid(FluidStack.loadFluidStackFromNBT(compoundTag.getCompound("Fluid" + i)));
+            tanks[i].setFluid(FluidStack.parseOptional(provider, compoundTag.getCompound("Fluid" + i)));
         }
         setWorkload(compoundTag.getShort("workload"));
     }
 
-
     @Override
-    public void saveAdditional(@NotNull CompoundTag compoundTag)
+    public void saveAdditional(@NotNull CompoundTag compoundTag, HolderLookup.Provider provider)
     {
-        super.saveAdditional(compoundTag);
+        super.saveAdditional(compoundTag, provider);
         for (int i = 0; i < 4; ++i)
         {
             if (!tanks[i].getFluid().isEmpty())
             {
-                final CompoundTag compound = new CompoundTag();
-                tanks[i].getFluid().writeToNBT(compound);
+                CompoundTag compound = new CompoundTag();
+                tanks[i].getFluid().save(provider, compound);
                 compoundTag.put("Fluid" + i, compound);
             }
         }

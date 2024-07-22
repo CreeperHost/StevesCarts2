@@ -1,5 +1,6 @@
 package vswe.stevescarts.upgrades;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.SimpleContainerData;
@@ -13,6 +14,7 @@ import vswe.stevescarts.containers.ContainerCartAssembler;
 import vswe.stevescarts.containers.slots.SlotCart;
 import vswe.stevescarts.containers.slots.SlotModule;
 import vswe.stevescarts.helpers.storages.TransferHandler;
+import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
 
 import javax.annotation.Nonnull;
@@ -61,7 +63,7 @@ public class Disassemble extends InventoryUpgradeEffect
     }
 
     @Override
-    public void load(final TileEntityUpgrade upgrade, final CompoundTag compound)
+    public void load(final TileEntityUpgrade upgrade, final CompoundTag compound, HolderLookup.Provider provider)
     {
         this.setLastCart(upgrade, upgrade.getItem(0));
     }
@@ -133,20 +135,20 @@ public class Disassemble extends InventoryUpgradeEffect
     {
         if (!cart.isEmpty())
         {
-            cart.save(upgrade.getCompound());
+            cart.save(upgrade.getLevel().registryAccess(), upgrade.getCompound());
         }
     }
 
     private ItemStack getLastCart(final TileEntityUpgrade upgrade)
     {
-        return ItemStack.of(upgrade.getCompound());
+        return ItemStack.parseOptional(upgrade.getLevel().registryAccess(), upgrade.getCompound());
     }
 
     private boolean updateCart(final TileEntityUpgrade upgrade, final ItemStack cart)
     {
         if (upgrade.getMaster() != null)
         {
-            if (cart.isEmpty() || cart.getItem() != ModItems.CARTS.get() || cart.getTag() == null || cart.getTag().contains("maxTime"))
+            if (cart.isEmpty() || cart.getItem() != ModItems.CARTS.get() || ModItemData.getTagCopy(cart).contains("maxTime"))
             {
                 this.resetMaster(upgrade.getMaster(), false);
                 this.setLastCart(upgrade, ItemStack.EMPTY);
@@ -183,7 +185,7 @@ public class Disassemble extends InventoryUpgradeEffect
                 final NonNullList<ItemStack> modules = ModuleData.getModularItems(cart);
                 for (ItemStack item : modules)
                 {
-                    TileEntityCartAssembler.getOrCreateCompound(item).putInt(TileEntityCartAssembler.MODIFY_STATUS, 0);
+                    ModItemData.modifyTag(item, tag -> tag.putInt(TileEntityCartAssembler.MODIFY_STATUS, 0));
                     TransferHandler.TransferItem(item, upgrade.getMaster(), new ContainerCartAssembler(0, null, upgrade.getMaster(), new SimpleContainerData(0)), 1);
                     if (!addedHull)
                     {

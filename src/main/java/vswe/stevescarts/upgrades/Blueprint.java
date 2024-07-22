@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.slots.SlotCart;
+import vswe.stevescarts.init.ModItemData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -37,8 +38,8 @@ public class Blueprint extends SimpleInventoryUpgradeEffect
         {
             return false;
         }
-        final CompoundTag info = blueprint.getTag();
-        if (info == null)
+        CompoundTag info = ModItemData.getTagCopy(blueprint);
+        if (info.isEmpty())
         {
             return false;
         }
