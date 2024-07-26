@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
@@ -183,7 +184,7 @@ public class ModuleColorRandomizer extends ModuleAddon
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         tagCompound.putByte(generateNBTName("Red", id), (byte) getColorVal(0));
         tagCompound.putByte(generateNBTName("Green", id), (byte) getColorVal(1));
@@ -191,7 +192,7 @@ public class ModuleColorRandomizer extends ModuleAddon
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         setColorVal(0, tagCompound.getByte(generateNBTName("Red", id)));
         setColorVal(1, tagCompound.getByte(generateNBTName("Green", id)));

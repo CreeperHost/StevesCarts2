@@ -1,10 +1,12 @@
 package vswe.stevescarts.modules.addons;
 
+import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -24,13 +26,11 @@ import java.util.ArrayList;
 public class ModuleCrafter extends ModuleRecipe
 {
     private int cooldown;
-    CraftingContainer craftingDummy;
 
     public ModuleCrafter(final EntityMinecartModular cart)
     {
         super(cart);
         cooldown = 0;
-        craftingDummy = new CraftingDummy(this);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ModuleCrafter extends ModuleRecipe
                                 for (int k = 0; k < inputSlots.size(); ++k)
                                 {
                                     @Nonnull ItemStack item2 = inputSlots.get(k).getItem();
-                                    if (!item2.isEmpty() && ItemStack.isSameItem(item2, recipe) && ItemStack.isSameItemSameTags(item2, recipe))
+                                    if (!item2.isEmpty() && ItemStack.isSameItem(item2, recipe) && ItemStack.isSameItemSameComponents(item2, recipe))
                                     {
                                         edited = true;
                                         if (item2.hasCraftingRemainingItem())
@@ -137,7 +137,8 @@ public class ModuleCrafter extends ModuleRecipe
     @Nullable
     public CraftingRecipe getRecipe()
     {
-        return RecipeHelper.findRecipe(RecipeType.CRAFTING, craftingDummy, getCart().level()).map(RecipeHolder::value).orElse(null);
+        CraftingInput input = CraftingInput.of(3, 3, Lists.newArrayList(getStack(0), getStack(1), getStack(2), getStack(3), getStack(4), getStack(5), getStack(6), getStack(7), getStack(8)));
+        return RecipeHelper.findRecipe(RecipeType.CRAFTING, input, getCart().level()).map(RecipeHolder::value).orElse(null);
     }
 
     @NotNull

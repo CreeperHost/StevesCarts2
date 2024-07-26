@@ -1,15 +1,23 @@
 package vswe.stevescarts.modules.realtimers;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.StevesCarts;
@@ -342,7 +350,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
                 setHeading(projectile, x, 0.10000000149011612D, y, 1.6f, 12.0f);
                 setProjectileDamage(projectile);
                 setProjectileOnFire(projectile);
-                setProjectileKnockback(projectile);
+//                setProjectileKnockback(projectile);
                 getCart().level().addFreshEntity(projectile);
                 hasShot = true;
                 damageEnchant();
@@ -366,7 +374,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     {
         if (enchanter != null && enchanter.useFlame())
         {
-            projectile.setSecondsOnFire(100);
+            projectile.igniteForSeconds(100);
         }
     }
 
@@ -383,18 +391,19 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
         }
     }
 
-    protected void setProjectileKnockback(final Entity projectile)
-    {
-        if (enchanter != null && projectile instanceof Arrow)
-        {
-            final int punch = enchanter.getPunchLevel();
-            if (punch > 0)
-            {
-                final Arrow arrow = (Arrow) projectile;
-                arrow.setKnockback(punch);
-            }
-        }
-    }
+//    protected void setProjectileKnockback(final Entity projectile)
+//    {
+//        if (enchanter != null && projectile instanceof Arrow)
+//        {
+//            final int punch = enchanter.getPunchLevel();
+//            if (punch > 0)
+//            {
+//                final Arrow arrow = (Arrow) projectile;
+//                //TODO, This no longer works because knockback is applied on hit by checking the enchants on the item the shooter is holding.
+////                arrow.setKnockback(punch);
+//            }
+//        }
+//    }
 
     protected void setHeading(final Entity projectile, final double motionX, final double motionY, final double motionZ, final float motionMult, final float motionNoise)
     {
@@ -409,10 +418,17 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
             if (module.isValidProjectile(stack)) {
                 return module.createProjectile(target, stack);
             }
-        };
+        }
 
-        Arrow arrow = new Arrow(getCart().level(), 0, 0, 0, stack);
-        arrow.setEffectsFromItem(stack);
+        ItemStack bow = null; //Yes! This is actually supposed to be null! Why Vanilla? WHY?!?!?!
+        if (enchanter != null && enchanter.getPunchLevel() > 0) {
+            bow = new ItemStack(Items.BOW);
+            Registry<Enchantment> registry = getCart().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+            bow.enchant(registry.getHolderOrThrow(Enchantments.PUNCH), enchanter.getPunchLevel());
+        }
+
+        Arrow arrow = new Arrow(getCart().level(), 0, 0, 0, stack, bow);
+//        arrow.setEffectsFromItem(stack); //TODO Do we even need this?
         arrow.setOwner(getCart()); //Ensures arrows dont hit cart immediately after they are fired.
         return arrow;
     }
@@ -531,7 +547,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
         tagCompound.putByte(generateNBTName("Pipes", id), getActivePipes());
         tagCompound.putByte(generateNBTName("Interval", id), (byte) getInterval());
@@ -539,7 +555,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
         setActivePipes(tagCompound.getByte(generateNBTName("Pipes", id)));
         setInterval(tagCompound.getByte(generateNBTName("Interval", id)));

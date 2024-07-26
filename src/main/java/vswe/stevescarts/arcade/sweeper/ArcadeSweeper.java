@@ -256,7 +256,7 @@ public class ArcadeSweeper extends ArcadeGame
             else if (result == Tile.TILE_OPEN_RESULT.DEAD)
             {
                 isPlaying = false;
-                ArcadeGame.playSound(SoundEvents.GENERIC_EXPLODE, 1.0f, (1.0f + (getModule().getCart().random.nextFloat() - getModule().getCart().random.nextFloat()) * 0.2f) * 0.7f);
+                ArcadeGame.playSound(SoundEvents.GENERIC_EXPLODE.value(), 1.0f, (1.0f + (getModule().getCart().random.nextFloat() - getModule().getCart().random.nextFloat()) * 0.2f) * 0.7f);
             }
             else if (result == Tile.TILE_OPEN_RESULT.OK && first)
             {

@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.addons;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -336,7 +337,7 @@ public abstract class ModuleRecipe extends ModuleAddon
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         if (canUseAdvancedFeatures())
         {
@@ -347,7 +348,7 @@ public abstract class ModuleRecipe extends ModuleAddon
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         if (canUseAdvancedFeatures())
         {
@@ -416,7 +417,7 @@ public abstract class ModuleRecipe extends ModuleAddon
         for (int i = 0; i < outputSlots.size(); ++i)
         {
             @Nonnull ItemStack item = outputSlots.get(i).getItem();
-            if (!item.isEmpty() && ItemStack.isSameItem(item, result) && ItemStack.isSameItemSameTags(item, result))
+            if (!item.isEmpty() && ItemStack.isSameItem(item, result) && ItemStack.isSameItemSameComponents(item, result))
             {
                 count += item.getCount();
                 if (count >= getDw(MAX_ITEM_COUNT))

@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.engines;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -192,9 +193,9 @@ public abstract class ModuleThermalBase extends ModuleEngine
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
-        super.Save(tagCompound, id);
+        super.save(tagCompound, id, provider);
         tagCompound.putShort(generateNBTName("Fuel", id), (short) getFuelLevel());
         if (requiresCoolant())
         {
@@ -203,9 +204,9 @@ public abstract class ModuleThermalBase extends ModuleEngine
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
-        super.Load(tagCompound, id);
+        super.load(tagCompound, id, provider);
         setFuelLevel(tagCompound.getShort(generateNBTName("Fuel", id)));
         if (requiresCoolant())
         {

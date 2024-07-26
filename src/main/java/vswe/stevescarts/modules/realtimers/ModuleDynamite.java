@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -315,14 +316,14 @@ public class ModuleDynamite extends ModuleBase
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         tagCompound.putShort(generateNBTName("FuseLength", id), (short) getFuseLength());
         tagCompound.putShort(generateNBTName("Fuse", id), (short) getFuse());
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         setFuseLength(tagCompound.getShort(generateNBTName("FuseLength", id)));
         setFuse(tagCompound.getShort(generateNBTName("Fuse", id)));

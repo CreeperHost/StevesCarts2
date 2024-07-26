@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -791,7 +792,7 @@ public class ModuleNote extends ModuleBase
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         short headerInfo = (short) tracks.size();
         headerInfo |= (short) (speedSetting << maximumTracksPerModuleBitCount);
@@ -809,7 +810,7 @@ public class ModuleNote extends ModuleBase
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         final short headerInfo = tagCompound.getShort(generateNBTName("Header", id));
         receiveGuiData(0, headerInfo);

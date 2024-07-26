@@ -3,6 +3,7 @@ package vswe.stevescarts.modules.workers;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -90,11 +91,11 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
                 BlockPos pos = new BlockPos(xTorch, y + level, zTorch);
                 BlockState state = Blocks.TORCH.defaultBlockState();
                 boolean canPlace = true;
-                if (!Blocks.TORCH.canSurvive(state, world, pos)) {
+                if (!state.canSurvive(world, pos)) {
                     canPlace = false;
                     for (Direction direction : Direction.Plane.HORIZONTAL) {
                         state = Blocks.WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, direction);
-                        if (Blocks.WALL_TORCH.canSurvive(state, world, pos)) {
+                        if (state.canSurvive(world, pos)) {
                             canPlace = true;
                             break;
                         }
@@ -284,12 +285,12 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id) {
+    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider) {
         tagCompound.putByte(generateNBTName("lightLimit", id), (byte) lightLimit);
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id) {
+    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider) {
         lightLimit = tagCompound.getByte(generateNBTName("lightLimit", id));
         calculateTorches();
     }

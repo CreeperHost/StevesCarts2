@@ -3,6 +3,7 @@ package vswe.stevescarts.modules.workers;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -189,7 +190,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
     }
 
     @Override
-    protected void Load(CompoundTag tagCompound, final int id) {
+    protected void load(CompoundTag tagCompound, final int id, HolderLookup.Provider provider) {
         calculateRails();
     }
 

@@ -1,11 +1,13 @@
 package vswe.stevescarts.helpers;
 
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -47,12 +49,13 @@ public class ModularEnchantments {
     public static boolean isValidBook(ItemStack stack, List<EnchantmentType> validTypes) {
         if (stack.isEmpty() || !stack.is(Items.ENCHANTED_BOOK)) return false;
 
-        Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(stack);
-        for (Enchantment enchantment : enchants.keySet()) {
-            if (!ENCHANTMENT_TYPES.containsKey(enchantment)) continue;
+        ItemEnchantments enchants = stack.getTagEnchantments();
+        for (Holder<Enchantment> enchantment : enchants.keySet()) {
+            ResourceKey<Enchantment> key = enchantment.unwrapKey().orElse(null);
+            if (key == null || !ENCHANTMENT_TYPES.containsKey(key)) continue;
 
             for (EnchantmentType validType : validTypes) {
-                if (ENCHANTMENT_TYPES.get(enchantment) == validType) {
+                if (ENCHANTMENT_TYPES.get(key) == validType) {
                     return true;
                 }
             }
@@ -62,20 +65,21 @@ public class ModularEnchantments {
 
     public static EnchantmentData addBook(List<EnchantmentType> enabledTypes, EnchantmentData data, @NotNull ItemStack stack) {
         if (stack.isEmpty() || stack.getItem() != Items.ENCHANTED_BOOK) return data;
-        Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(stack);
+        ItemEnchantments enchants = stack.getTagEnchantments();
         int addLevel = -1;
 
-        if (data.getEnchant() == null) {
-            for (Enchantment enchantment : enchants.keySet()) {
-                if (ENCHANTMENT_TYPES.containsKey(enchantment) && enabledTypes.contains(ENCHANTMENT_TYPES.get(enchantment))) {
+        if (data.getEnchantHolder() == null) {
+            for (Holder<Enchantment> enchantment : enchants.keySet()) {
+                ResourceKey<Enchantment> key = enchantment.unwrapKey().orElse(null);
+                if (key != null && ENCHANTMENT_TYPES.containsKey(key) && enabledTypes.contains(ENCHANTMENT_TYPES.get(key))) {
                     data.setEnchantment(enchantment);
                     data.setValue(0);
-                    addLevel = enchants.get(enchantment);
+                    addLevel = enchants.getLevel(enchantment);
                     break;
                 }
             }
-        } else if (enchants.containsKey(data.getEnchant())) {
-            addLevel = enchants.get(data.getEnchant());
+        } else if (enchants.keySet().contains(data.getEnchantHolder())) {
+            addLevel = enchants.getLevel(data.getEnchantHolder());
         }
 
         if (addLevel == -1) return data;

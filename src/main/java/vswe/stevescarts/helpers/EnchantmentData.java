@@ -1,20 +1,30 @@
 package vswe.stevescarts.helpers;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 public class EnchantmentData {
     @Nullable
-    private Enchantment enchant;
+    private Holder<Enchantment> enchant;
     private int value;
     private boolean dirty = false;
 
-    public EnchantmentData(Enchantment enchant) {
+    public EnchantmentData(Holder<Enchantment> enchant) {
         this.enchant = enchant;
         value = 0;
     }
@@ -28,12 +38,17 @@ public class EnchantmentData {
         dirty = true;
     }
 
-    public void setEnchantment(Enchantment enchant) {
+    public void setEnchantment(Holder<Enchantment> enchant) {
         this.enchant = enchant;
         dirty = true;
     }
 
+    @Nullable
     public Enchantment getEnchant() {
+        return enchant == null ? null : enchant.value();
+    }
+
+    public Holder<Enchantment> getEnchantHolder() {
         return enchant;
     }
 
@@ -44,10 +59,10 @@ public class EnchantmentData {
 
     private boolean damageEnchantLevel(int dmg, int value, int level) {
         if (enchant == null) return false;
-        if (level > enchant.getMaxLevel() || value <= 0) {
+        if (level > enchant.value().getMaxLevel() || value <= 0) {
             return false;
         }
-        int levelvalue = ModularEnchantments.getValue(enchant, level);
+        int levelvalue = ModularEnchantments.getValue(enchant.value(), level);
         if (!damageEnchantLevel(dmg, value - levelvalue, level + 1)) {
             int dmgdealt = dmg * (int) Math.pow(2.0, level - 1);
             if (dmgdealt > value) {
@@ -62,13 +77,13 @@ public class EnchantmentData {
     public int getLevel() {
         if (enchant == null) return 0;
         int value = getValue();
-        for (int i = 0; i < enchant.getMaxLevel(); ++i) {
+        for (int i = 0; i < enchant.value().getMaxLevel(); ++i) {
             if (value <= 0) {
                 return i;
             }
-            value -= ModularEnchantments.getValue(enchant, i + 1);
+            value -= ModularEnchantments.getValue(enchant.value(), i + 1);
         }
-        return enchant.getMaxLevel();
+        return enchant.value().getMaxLevel();
     }
 
     public String getInfoText() {
@@ -76,9 +91,9 @@ public class EnchantmentData {
         int value = getValue();
         int level = 0;
         int percentage = 0;
-        for (level = 1; level <= enchant.getMaxLevel(); ++level) {
+        for (level = 1; level <= enchant.value().getMaxLevel(); ++level) {
             if (value > 0) {
-                final int levelvalue = ModularEnchantments.getValue(enchant, level);
+                final int levelvalue = ModularEnchantments.getValue(enchant.value(), level);
                 percentage = 100 * value / levelvalue;
                 value -= levelvalue;
                 if (value < 0) {
@@ -86,20 +101,42 @@ public class EnchantmentData {
                 }
             }
         }
-        return ChatFormatting.YELLOW + enchant.getFullname(getLevel()).getString() + "\n" + percentage + "% left of this tier";
+        return ChatFormatting.YELLOW + Enchantment.getFullname(enchant, getLevel()).getString() + "\n" + percentage + "% left of this tier";
     }
 
-    public void write(FriendlyByteBuf buf) {
+    public void write(RegistryFriendlyByteBuf buf) {
         buf.writeVarInt(enchant == null ? -1 : value);
         if (enchant != null){
-            buf.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.ENCHANTMENT.getKey(enchant)));
+            buf.writeResourceLocation(Objects.requireNonNull(ResourceLocation.parse(enchant.getRegisteredName())));
         }
     }
 
-    public static EnchantmentData read(FriendlyByteBuf buf) {
+    public static EnchantmentData read(RegistryFriendlyByteBuf buf) {
         int value = buf.readVarInt();
-        EnchantmentData data = new EnchantmentData(value == -1 ? null : BuiltInRegistries.ENCHANTMENT.get(buf.readResourceLocation()));
+//        Enchantment enchantment = buf.registryAccess().registryOrThrow(Registries.ENCHANTMENT).get(buf.readResourceLocation());
+        ResourceKey<Enchantment> resKey = ResourceKey.create(Registries.ENCHANTMENT, buf.readResourceLocation());
+        Holder<Enchantment> enchantment = buf.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(resKey);
+        EnchantmentData data = new EnchantmentData(value == -1 ? null : enchantment);
         data.setValue(value);
+        return data;
+    }
+
+    public CompoundTag save(HolderLookup.Provider provider) {
+        CompoundTag tag = new CompoundTag();
+        if (enchant == null) return tag;
+        tag.putString("key", enchant.getRegisteredName());
+        tag.putInt("value", getLevel());
+        return tag;
+    }
+
+    @Nullable
+    public static EnchantmentData load(CompoundTag tag, HolderLookup.Provider provider) {
+        if (!tag.contains("key")) return null;
+        ResourceLocation key = ResourceLocation.parse(tag.getString("key"));
+        ResourceKey<Enchantment> resKey = ResourceKey.create(Registries.ENCHANTMENT, key);
+        Holder<Enchantment> enchant = provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(resKey);
+        EnchantmentData data = new EnchantmentData(enchant);
+        data.setValue(tag.getInt("value"));
         return data;
     }
 

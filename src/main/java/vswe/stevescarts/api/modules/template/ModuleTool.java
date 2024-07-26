@@ -2,6 +2,7 @@ package vswe.stevescarts.api.modules.template;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -289,7 +290,7 @@ public abstract class ModuleTool extends ModuleWorker
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         tagCompound.putInt(generateNBTName("Durability", id), getCurrentDurability());
         tagCompound.putShort(generateNBTName("Repair", id), (short) remainingRepairUnits);
@@ -297,7 +298,7 @@ public abstract class ModuleTool extends ModuleWorker
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         setDurability(tagCompound.getInt(generateNBTName("Durability", id)));
         remainingRepairUnits = tagCompound.getShort(generateNBTName("Repair", id));

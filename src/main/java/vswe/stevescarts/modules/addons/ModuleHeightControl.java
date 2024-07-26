@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.addons;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -254,13 +255,13 @@ public class ModuleHeightControl extends ModuleAddon
     }
 
     @Override
-    protected void Save(CompoundTag tagCompound, int id)
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         tagCompound.putShort(generateNBTName("Height", id), (short) getYTarget());
     }
 
     @Override
-    protected void Load(CompoundTag tagCompound, int id)
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         setYTarget(tagCompound.getShort(generateNBTName("Height", id)));
     }

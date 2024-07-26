@@ -79,10 +79,10 @@ public class ModuleFlowerRemover extends ModuleBase {
         for (LivingEntity target : entities) {
             if (target instanceof IShearable shearable) {
                 BlockPos pos = target.blockPosition();
-                if (!shearable.isShearable(ItemStack.EMPTY, getCart().level(), pos)) {
+                if (!shearable.isShearable(null, ItemStack.EMPTY, getCart().level(), pos)) {
                     continue;
                 }
-                addStuff(shearable.onSheared(null, ItemStack.EMPTY, getCart().level(), pos, 0));
+                addStuff(shearable.onSheared(null, ItemStack.EMPTY, getCart().level(), pos));
             }
         }
     }

@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.addons;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
@@ -343,7 +344,7 @@ public class ModulePowerObserver extends ModuleAddon
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id) {
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider) {
         for (int i = 0; i < 4; ++i) {
             tagCompound.putShort(generateNBTName("AreaData" + i, id), getAreaData()[i]);
             tagCompound.putShort(generateNBTName("PowerLevel" + i, id), getPowerLevel()[i]);
@@ -351,7 +352,7 @@ public class ModulePowerObserver extends ModuleAddon
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id) {
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider) {
         short[] areaData = new short[4];
         short[] powerLevel = new short[4];
         for (int i = 0; i < 4; ++i) {

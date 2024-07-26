@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
@@ -73,7 +74,7 @@ public class ModuleSmelter extends ModuleRecipe
                         while (i < inputSlots.size())
                         {
                             @Nonnull ItemStack item = inputSlots.get(i).getItem();
-                            if (!item.isEmpty() && ItemStack.isSameItem(item, recipe) && ItemStack.isSameItemSameTags(item, recipe))
+                            if (!item.isEmpty() && ItemStack.isSameItem(item, recipe) && ItemStack.isSameItemSameComponents(item, recipe))
                             {
                                 @Nonnull ItemStack itemStack = item;
                                 itemStack.shrink(1);
@@ -231,16 +232,16 @@ public class ModuleSmelter extends ModuleRecipe
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        super.Load(tagCompound, id);
+        super.load(tagCompound, id, provider);
         energyBuffer = tagCompound.getByte(generateNBTName("Buffer", id));
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        super.Save(tagCompound, id);
+        super.save(tagCompound, id, provider);
         tagCompound.putByte(generateNBTName("Buffer", id), (byte) energyBuffer);
     }
 

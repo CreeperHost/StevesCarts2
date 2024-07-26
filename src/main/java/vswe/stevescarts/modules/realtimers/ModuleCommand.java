@@ -3,6 +3,7 @@ package vswe.stevescarts.modules.realtimers;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.Blocks;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -110,13 +111,13 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         tagCompound.putString(generateNBTName("Command", id), command);
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         command = tagCompound.getString(generateNBTName("Command", id));
     }

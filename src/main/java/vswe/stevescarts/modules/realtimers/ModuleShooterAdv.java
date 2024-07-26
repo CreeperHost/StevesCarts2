@@ -2,6 +2,7 @@ package vswe.stevescarts.modules.realtimers;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -181,7 +182,7 @@ public class ModuleShooterAdv extends ModuleShooter
 
         setProjectileDamage(projectile);
         setProjectileOnFire(projectile);
-        setProjectileKnockback(projectile);
+//        setProjectileKnockback(projectile);
 
         getCart().level().addFreshEntity(projectile);
 
@@ -323,14 +324,14 @@ public class ModuleShooterAdv extends ModuleShooter
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         tagCompound.putByte(generateNBTName("Options", id), selectedOptions());
         saveTick(tagCompound, id);
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         setOptions(tagCompound.getByte(generateNBTName("Options", id)));
         loadTick(tagCompound, id);

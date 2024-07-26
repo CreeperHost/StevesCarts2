@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
@@ -259,13 +260,13 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         tagCompound.putByteArray(generateNBTName("enabled_data", id), getDisabledArray().getBytes());
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         int baseSize = getDrillWidth() * getDrillHeight();
         BoolArray loaded = BoolArray.fromBytes(tagCompound.getByteArray(generateNBTName("enabled_data", id)));

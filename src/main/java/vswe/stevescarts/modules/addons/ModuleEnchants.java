@@ -1,15 +1,20 @@
 package vswe.stevescarts.modules.addons;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
@@ -60,7 +65,7 @@ public class ModuleEnchants extends ModuleAddon {
         if (useSilkTouch()) {
             return 0;
         }
-        return getEnchantLevel(Enchantments.BLOCK_FORTUNE);
+        return getEnchantLevel(Enchantments.FORTUNE);
     }
 
     public boolean useSilkTouch() {
@@ -72,29 +77,29 @@ public class ModuleEnchants extends ModuleAddon {
     }
 
     public int getEfficiencyLevel() {
-        return getEnchantLevel(Enchantments.BLOCK_EFFICIENCY);
+        return getEnchantLevel(Enchantments.EFFICIENCY);
     }
 
     public int getPowerLevel() {
-        return getEnchantLevel(Enchantments.POWER_ARROWS);
+        return getEnchantLevel(Enchantments.POWER);
     }
 
     public int getPunchLevel() {
-        return getEnchantLevel(Enchantments.PUNCH_ARROWS);
+        return getEnchantLevel(Enchantments.PUNCH);
     }
 
     public boolean useFlame() {
-        return getEnchantLevel(Enchantments.FLAMING_ARROWS) > 0;
+        return getEnchantLevel(Enchantments.FLAME) > 0;
     }
 
     public boolean useInfinity() {
-        return getEnchantLevel(Enchantments.INFINITY_ARROWS) > 0;
+        return getEnchantLevel(Enchantments.INFINITY) > 0;
     }
 
-    private int getEnchantLevel(Enchantment enchant) {
+    private int getEnchantLevel(ResourceKey<Enchantment> enchant) {
         for (int i = 0; i < 3; ++i) {
             EnchantmentData test = getEnchant(i);
-            if (test.getEnchant() != null && test.getEnchant() == enchant) {
+            if (test.getEnchantHolder() != null && test.getEnchantHolder().is(enchant)) {
                 return test.getLevel();
             }
         }
@@ -231,24 +236,22 @@ public class ModuleEnchants extends ModuleAddon {
     }
 
     @Override
-    protected void Save(CompoundTag nbt, int id) {
-        super.Save(nbt, id);
+    protected void save(CompoundTag nbt, int id, @NotNull HolderLookup.Provider provider) {
+        super.save(nbt, id, provider);
         for (int i = 0; i < 3; ++i) {
             EnchantmentData data = getEnchant(i);
             if (data.getEnchant() == null) continue;
 
-            nbt.putString(generateNBTName("EffectId" + i, id), BuiltInRegistries.ENCHANTMENT.getKey(data.getEnchant()).toString());
-            nbt.putInt(generateNBTName("Value" + i, id), data.getValue());
+            nbt.put(generateNBTName("enchant" + i, id), data.save(provider));
         }
     }
 
     @Override
-    protected void Load(CompoundTag nbt, int id) {
-        super.Load(nbt, id);
+    protected void load(CompoundTag nbt, int id, @NotNull HolderLookup.Provider provider) {
+        super.load(nbt, id, provider);
         for (int i = 0; i < 3; ++i) {
-            if (!nbt.contains(generateNBTName("EffectId" + i, id))) continue;
-            EnchantmentData data = new EnchantmentData(BuiltInRegistries.ENCHANTMENT.get(new ResourceLocation(nbt.getString(generateNBTName("EffectId" + i, id)))));
-            data.setValue(nbt.getInt(generateNBTName("Value" + i, id)));
+            if (!nbt.contains(generateNBTName("enchant" + i, id))) continue;
+            EnchantmentData data = EnchantmentData.load(nbt.getCompound(generateNBTName("enchant" + i, id)), provider);
             setEnchant(i, data);
         }
     }

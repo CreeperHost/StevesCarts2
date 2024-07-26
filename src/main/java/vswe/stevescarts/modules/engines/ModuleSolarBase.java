@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.engines;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -253,17 +254,17 @@ public abstract class ModuleSolarBase extends ModuleEngine
     protected abstract void setAnimDone();
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
-        super.Save(tagCompound, id);
+        super.save(tagCompound, id, provider);
         tagCompound.putInt(generateNBTName("Fuel", id), getFuelLevel());
         tagCompound.putBoolean(generateNBTName("Up", id), upState);
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
-        super.Load(tagCompound, id);
+        super.load(tagCompound, id, provider);
         setFuelLevel(tagCompound.getInt(generateNBTName("Fuel", id)));
         upState = tagCompound.getBoolean(generateNBTName("Up", id));
         if (upState)

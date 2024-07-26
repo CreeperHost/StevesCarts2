@@ -55,6 +55,7 @@ public class StevesCarts
         if(FMLEnvironment.dist.isClient())
         {
             OverlayEventHandler.init(modBus);
+            StevesCartsClient.init(modBus);
         }
     }
 

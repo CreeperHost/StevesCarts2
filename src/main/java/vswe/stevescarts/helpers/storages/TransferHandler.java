@@ -6,6 +6,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.containers.slots.ISpecialItemTransferValidator;
 import vswe.stevescarts.containers.slots.ISpecialSlotValidator;
+import vswe.stevescarts.init.ModItemData;
 
 import javax.annotation.Nonnull;
 
@@ -68,7 +69,7 @@ public class TransferHandler
                         inv.getItem(i).getCount() < inv.getItem(i).getMaxStackSize() &&
                         inv.getItem(i).getCount() < cont.getSlot(i).getMaxStackSize() &&
                         inv.getItem(i).getCount() > 0 && iStack.getCount() > 0 &&
-                        (inv.getItem(i).getTag() == null || inv.getItem(i).getTag().equals(iStack.getTag()))) {
+                        (!ModItemData.hasTag(inv.getItem(i)) || ModItemData.getTagCopy(inv.getItem(i)).equals(ModItemData.getTagCopy(iStack)))) {
 
                     pos = i;
                     startEmpty = pos + 1;

@@ -29,7 +29,7 @@ public class ModuleWoodcutterDiamond extends ModuleWoodcutter
     @Override
     public ResourceLocation getRepairItem() {
         String item = SCConfig.drillRepairDiamond.get();
-        return item.isEmpty() ? null : new ResourceLocation(item);
+        return item.isEmpty() ? null : ResourceLocation.parse(item);
     }
 
     @Override

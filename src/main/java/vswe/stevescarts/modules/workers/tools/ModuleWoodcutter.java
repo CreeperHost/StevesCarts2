@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -278,7 +279,6 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
     {
         checked.add(here);
         BlockState blockState = world.getBlockState(here);
-        final Block block = blockState.getBlock();
         if (world.isEmptyBlock(here))
         {
             return false;
@@ -328,8 +328,20 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
             }
         }
         List<ItemStack> stuff;
+
+        //TODO, Figure out how to get this working
         final int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
-        stuff = block.getDrops(blockState, new LootParams.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withParameter(LootContextParams.ORIGIN, getCart().position()));
+
+        LootParams.Builder builder = new LootParams.Builder((ServerLevel) world)
+                .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
+                .withParameter(LootContextParams.ORIGIN, getCart().position());
+
+        BlockEntity blockEntity = world.getBlockEntity(here);
+        if (blockEntity != null) {
+            builder.withParameter(LootContextParams.BLOCK_ENTITY, blockEntity);
+        }
+
+        stuff = blockState.getDrops(builder);
         List<ItemStack> dropList = new ArrayList<>();
         for (ItemStack drop : dropList)
         { //Here to filter out any bad itemstacks, the mod I was testing with returned stacks with a size of 0
@@ -339,15 +351,15 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
             }
         }
 
-        int applerand = 200;
-        if (fortune > 0)
-        {
-            applerand -= 10 << fortune;
-            if (applerand < 40)
-            {
-                applerand = 40;
-            }
-        }
+//        int applerand = 200;
+//        if (fortune > 0)
+//        {
+//            applerand -= 10 << fortune;
+//            if (applerand < 40)
+//            {
+//                applerand = 40;
+//            }
+//        }
 
         List<ItemStack> nerfedstuff = getTierDrop(stuff);
         for (@Nonnull ItemStack iStack : nerfedstuff)

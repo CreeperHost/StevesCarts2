@@ -1,8 +1,10 @@
 package vswe.stevescarts.modules.addons;
 
+import com.mojang.patchy.BlockedServers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
@@ -43,12 +45,13 @@ public class ModuleSnowCannon extends ModuleAddon {
 
     private void generateSnow() {
         BlockPos cartPos = getCart().getExactPosition();
+        BlockState snowState = Blocks.SNOW.defaultBlockState();
         for (int x = -getBlocksOnSide(); x <= getBlocksOnSide(); ++x) {
             for (int z = -getBlocksOnSide(); z <= getBlocksOnSide(); ++z) {
                 for (int y = -getBlocksFromLevel(); y <= getBlocksFromLevel(); ++y) {
                     BlockPos pos = cartPos.offset(x, y, z);
-                    if (countsAsAir(pos) && !getCart().level().getBiome(pos).is(BiomeTags.SNOW_GOLEM_MELTS) && Blocks.SNOW.canSurvive(Blocks.SNOW.defaultBlockState(), getCart().level(), pos)) {
-                        getCart().level().setBlock(pos, Blocks.SNOW.defaultBlockState(), 3);
+                    if (countsAsAir(pos) && !getCart().level().getBiome(pos).is(BiomeTags.SNOW_GOLEM_MELTS) && snowState.canSurvive(getCart().level(), pos)) {
+                        getCart().level().setBlock(pos, snowState, 3);
                     }
                 }
             }

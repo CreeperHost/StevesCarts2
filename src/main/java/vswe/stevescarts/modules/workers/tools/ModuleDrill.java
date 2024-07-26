@@ -3,6 +3,7 @@ package vswe.stevescarts.modules.workers.tools;
 import net.creeperhost.polylib.helpers.LevelHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -252,7 +253,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
             builder.withParameter(LootContextParams.BLOCK_ENTITY, storage);
         }
 
-        List<ItemStack> drops = block.getDrops(blockState, builder);
+        List<ItemStack> drops = blockState.getDrops(builder);
 
         if (!drops.isEmpty())
         {
@@ -552,16 +553,16 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        super.Save(tagCompound, id);
+        super.save(tagCompound, id, provider);
         tagCompound.putBoolean(generateNBTName("DrillEnabled", id), isDrillEnabled());
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        super.Load(tagCompound, id);
+        super.load(tagCompound, id, provider);
         setDrillEnabled(tagCompound.getBoolean(generateNBTName("DrillEnabled", id)));
     }
 

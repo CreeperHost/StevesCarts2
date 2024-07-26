@@ -1,15 +1,8 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.ticks.ContainerSingleItem;
 
 import java.util.Optional;
 
@@ -20,52 +13,10 @@ import java.util.Optional;
 public class RecipeHelper {
 
     public static Optional<RecipeHolder<SmeltingRecipe>> findSmeltRecipe(ItemStack stack, Level level) {
-        return findRecipe(RecipeType.SMELTING, new DummySingleItem(stack), level);
+        return findRecipe(RecipeType.SMELTING, new SingleRecipeInput(stack), level);
     }
 
-    public static <C extends Container, T extends Recipe<C>> Optional<RecipeHolder<T>> findRecipe(RecipeType<T> type, C container, Level level) {
-        return level.getRecipeManager().getRecipeFor(type, container, level);
+    public static <I extends RecipeInput, T extends Recipe<I>> Optional<RecipeHolder<T>> findRecipe(RecipeType<T> type, I input, Level level) {
+        return level.getRecipeManager().getRecipeFor(type, input, level);
     }
-
-    private static class DummySingleItem implements Container {
-        private final ItemStack stack;
-
-        public DummySingleItem(ItemStack stack) {
-            this.stack = stack;
-        }
-
-        @Override
-        public int getContainerSize() {
-            return 1;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return false;
-        }
-
-        @Override
-        public ItemStack getItem(int p_18941_) { return stack; }
-
-        @Override
-        public ItemStack removeItem(int p_18942_, int p_18943_) { return ItemStack.EMPTY; }
-
-        @Override
-        public ItemStack removeItemNoUpdate(int p_18951_) {
-            return null;
-        }
-
-        @Override
-        public void setItem(int p_18944_, ItemStack p_18945_) {}
-
-        @Override
-        public void setChanged() {}
-
-        @Override
-        public boolean stillValid(Player p_18946_) { return true; }
-
-        @Override
-        public void clearContent() {}
-    }
-
 }

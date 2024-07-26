@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -208,8 +209,19 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
                 stopWorking();
                 List<ItemStack> stuff;
 
+                //TODO, Figure out how to get this working
                 final int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
-                stuff = block.getDrops(blockState, new LootParams.Builder((ServerLevel) world).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withParameter(LootContextParams.ORIGIN, getCart().position()));
+
+                LootParams.Builder builder = new LootParams.Builder((ServerLevel) world)
+                        .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
+                        .withParameter(LootContextParams.ORIGIN, getCart().position());
+
+                BlockEntity blockEntity = world.getBlockEntity(pos);
+                if (blockEntity != null) {
+                    builder.withParameter(LootContextParams.BLOCK_ENTITY, blockEntity);
+                }
+
+                stuff = blockState.getDrops(builder);
                 for (@Nonnull ItemStack iStack : stuff)
                 {
                     cart.addItemToChest(iStack);

@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.storages.tanks;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -93,16 +94,16 @@ public class ModuleCheatTank extends ModuleTank
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        super.Save(tagCompound, id);
+        super.save(tagCompound, id, provider);
         tagCompound.putByte(generateNBTName("mode", id), (byte) mode);
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        super.Load(tagCompound, id);
+        super.load(tagCompound, id, provider);
         mode = tagCompound.getByte(generateNBTName("mode", id));
     }
 

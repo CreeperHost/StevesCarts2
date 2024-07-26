@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import vswe.stevescarts.client.models.*;
 import vswe.stevescarts.client.models.engines.*;
@@ -37,9 +38,12 @@ import static vswe.stevescarts.init.StevesCartsModules.*;
 
 public class StevesCartsClient
 {
+    public static void init(IEventBus bus) {
+        ModScreens.init(bus);
+    }
+
     public static void clientInit(final FMLClientSetupEvent event)
     {
-        ModScreens.init();
         initModels();
         EntityRenderers.register(ModEntities.MODULAR_CART.get(), RenderModulerCart::new);
     }

@@ -82,7 +82,7 @@ public class ModulePig extends ModuleHull
         {
             return null;
         }
-        return new ResourceLocation("");
+        return ResourceLocation.parse("");
         //		return fakeArmorLayer.getArmorResource((Entity) null, item, EntityEquipmentSlot.HEAD, isOverlay ? "overlay" : null);
     }
 

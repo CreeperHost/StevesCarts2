@@ -3,6 +3,7 @@ package vswe.stevescarts.containers.slots;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
 
 public class SlotCart extends Slot
@@ -15,6 +16,6 @@ public class SlotCart extends Slot
     @Override
     public boolean mayPlace(ItemStack itemstack)
     {
-        return !itemstack.isEmpty() && itemstack.getItem() == ModItems.CARTS.get() && itemstack.getTag() != null && !itemstack.getTag().contains("maxTime");
+        return !itemstack.isEmpty() && itemstack.getItem() == ModItems.CARTS.get() && !ModItemData.getTagCopy(itemstack).contains("maxTime");
     }
 }

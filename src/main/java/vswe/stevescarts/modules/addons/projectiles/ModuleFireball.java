@@ -4,6 +4,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.Vec3;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
 import javax.annotation.Nonnull;
@@ -24,6 +25,6 @@ public class ModuleFireball extends ModuleProjectile
     @Override
     public Entity createProjectile(final Entity target, @Nonnull ItemStack item)
     {
-        return new SmallFireball(getCart().level(), 0, 0, 0, 0, 0, 0);
+        return new SmallFireball(getCart().level(), 0, 0, 0, Vec3.ZERO);
     }
 }

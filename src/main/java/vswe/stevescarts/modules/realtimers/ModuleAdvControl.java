@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -419,14 +420,14 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id) {
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider) {
         tagCompound.putByte(generateNBTName("Speed", id), (byte) getSpeedSetting());
         tagCompound.putDouble(generateNBTName("ODO", id), odo);
         tagCompound.putDouble(generateNBTName("TRIP", id), trip);
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id) {
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider) {
         setSpeedSetting(tagCompound.getByte(generateNBTName("Speed", id)));
         odo = tagCompound.getDouble(generateNBTName("ODO", id));
         trip = tagCompound.getDouble(generateNBTName("TRIP", id));

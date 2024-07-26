@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons.plants;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -136,13 +137,13 @@ public class ModulePlantSize extends ModuleAddon
     }
 
     @Override
-    protected void Save(final CompoundTag tagCompound, final int id)
+    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         tagCompound.putByte(generateNBTName("size", id), (byte) size);
     }
 
     @Override
-    protected void Load(final CompoundTag tagCompound, final int id)
+    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         size = tagCompound.getByte(generateNBTName("size", id));
     }
