@@ -1,11 +1,10 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
@@ -16,13 +15,14 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 import java.util.List;
 
 public class ModuleExperience extends ModuleBase
 {
     private static final int MAX_EXPERIENCE_AMOUNT = 1500;
-    private EntityDataAccessor<Integer> EXPERIENCE;
+    private final EntityData<Integer> experience = new EntityData<>(getCart(), new IntData(0));
 
     public ModuleExperience(final EntityMinecartModular cart)
     {
@@ -55,7 +55,7 @@ public class ModuleExperience extends ModuleBase
 
     public int getExperienceAmount()
     {
-        int val = getDw(EXPERIENCE);
+        int val = experience.get();
         if (val < 0)
         {
             return val + 256;
@@ -67,22 +67,22 @@ public class ModuleExperience extends ModuleBase
     {
         if (!isPlaceholder())
         {
-            updateDw(EXPERIENCE, val);
+            experience.set(val);
         }
     }
 
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 1;
-    }
-
-    @Override
-    public void initDw()
-    {
-        EXPERIENCE = createDw(EntityDataSerializers.INT);
-        registerDw(EXPERIENCE, 0);
-    }
+//    @Override
+//    public int numberOfDataWatchers()
+//    {
+//        return 1;
+//    }
+//
+//    @Override
+//    public void initDw()
+//    {
+//        EXPERIENCE = createDw(EntityDataSerializers.INT);
+//        registerDw(EXPERIENCE, 0);
+//    }
 
     @OnlyIn(Dist.CLIENT)
     @Override

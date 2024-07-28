@@ -1,17 +1,16 @@
 package vswe.stevescarts.modules.workers;
 
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
@@ -20,15 +19,15 @@ import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
-import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotFertilizer;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.workers.tools.ModuleFarmer;
+import vswe.stevescarts.polylib.EntityData;
 
-import javax.annotation.Nonnull;
 import java.util.Random;
 
 public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
@@ -36,10 +35,10 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     private int tankPosX;
     private int tankPosY;
     private int range;
-    private EntityDataAccessor<Integer> FERTILIZER;
     private final int fertPerBonemeal = 4;
     private final int maxStacksOfBones = 1;
     private final Random random = new Random();
+    private final EntityData<Integer> fertilizer = new EntityData<>(getCart(), new IntData(0));
 
     public ModuleFertilizer(final EntityMinecartModular cart)
     {
@@ -176,28 +175,15 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
 
     public int getFertAmount()
     {
-        return getDw(FERTILIZER);
+        return fertilizer.get();
     }
 
-    private void setFertAmount(final int val)
+    private void setFertAmount(int val)
     {
         if (!isPlaceholder())
         {
-            updateDw(FERTILIZER, val);
+            fertilizer.set(val);
         }
-    }
-
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 1;
-    }
-
-    @Override
-    public void initDw()
-    {
-        FERTILIZER = createDw(EntityDataSerializers.INT);
-        registerDw(FERTILIZER, 0);
     }
 
     @Override

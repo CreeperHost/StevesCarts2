@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.workers;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
+import net.creeperhost.polylib.data.serializable.ByteData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -10,13 +12,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 
 public class ModuleRemover extends ModuleWorker implements IActivatorModule {
     @Nonnull
     private BlockPos remove;
-    private EntityDataAccessor<Boolean> IS_ENABLED;
+    private final EntityData<Boolean> isEnabled = new EntityData<>(getCart(), new BooleanData(true));
 
     public ModuleRemover(final EntityMinecartModular cart) {
         super(cart);
@@ -24,18 +27,7 @@ public class ModuleRemover extends ModuleWorker implements IActivatorModule {
     }
 
     @Override
-    public void initDw() {
-        IS_ENABLED = createDw(EntityDataSerializers.BOOLEAN);
-        registerDw(IS_ENABLED, true);
-    }
-
-    @Override
     public int numberOfPackets() {
-        return 1;
-    }
-
-    @Override
-    public int numberOfDataWatchers() {
         return 1;
     }
 
@@ -110,12 +102,12 @@ public class ModuleRemover extends ModuleWorker implements IActivatorModule {
 
     private void enableRemoving(final boolean remove) {
         if (!isPlaceholder()) {
-            updateDw(IS_ENABLED, remove);
+            isEnabled.set(remove);
         }
     }
 
     private boolean isRemovingEnabled() {
-        return !isPlaceholder() && getDw(IS_ENABLED);
+        return !isPlaceholder() && isEnabled.get();
     }
 
     @Override

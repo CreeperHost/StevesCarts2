@@ -1,5 +1,8 @@
 package vswe.stevescarts.modules.engines;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
+import net.creeperhost.polylib.data.serializable.ByteData;
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -14,32 +17,23 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 import java.util.List;
 
 public abstract class ModuleSolarBase extends ModuleEngine
 {
-    private int light;
     private boolean maxLight;
     private int panelCoolDown;
     protected boolean down;
-    private boolean upState;
     private boolean setup;
-
-    private EntityDataAccessor<Integer> LIGHT;
-    private EntityDataAccessor<Boolean> UP_STATE;
-    private EntityDataAccessor<Integer> PRIORITY;
+    private final EntityData<Integer> light = new EntityData<>(getCart(), new IntData(0));
+    private final EntityData<Boolean> upState = new EntityData<>(getCart(), new BooleanData(false));
 
     public ModuleSolarBase(final EntityMinecartModular cart)
     {
         super(cart);
         down = true;
-    }
-
-    @Override
-    protected EntityDataAccessor<Integer> getPriorityDw()
-    {
-        return PRIORITY;
     }
 
     @Override
@@ -79,13 +73,13 @@ public abstract class ModuleSolarBase extends ModuleEngine
     {
         if (!getCart().level().isDay() || getCart().level().isRaining())
         {
-            light = 0;
+            light.set(0);
         }
         else
         {
             if (getCart().level().canSeeSky(getCart().blockPosition()))
             {
-                light = 15;
+                light.set(15);
             }
         }
     }
@@ -94,26 +88,18 @@ public abstract class ModuleSolarBase extends ModuleEngine
     {
         if (isPlaceholder())
         {
-            light = (getSimInfo().getMaxLight() ? 15 : 14);
+            light.set((getSimInfo().getMaxLight() ? 15 : 14));
         }
-        else if (getCart().level().isClientSide)
+        maxLight = (light.get() == 15);
+        if (!upState.get() && light.get() == 15)
         {
-            light = getDw(LIGHT);
-        }
-        else
-        {
-            updateDw(LIGHT, light);
-        }
-        maxLight = (light == 15);
-        if (!upState && light == 15)
-        {
-            light = 14;
+            light.set(14);
         }
     }
 
     private void chargeSolar()
     {
-        if (light == 15 && getCart().level().random.nextInt(8) < 4)
+        if (light.get() == 15 && getCart().level().random.nextInt(8) < 4)
         {
             setFuelLevel(getFuelLevel() + getGenSpeed());
             if (getFuelLevel() > getMaxCapacity())
@@ -125,7 +111,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
 
     public int getLight()
     {
-        return light;
+        return light.get();
     }
 
     @Override
@@ -146,30 +132,13 @@ public abstract class ModuleSolarBase extends ModuleEngine
     {
         super.drawBackground(guiGraphics, gui, x, y);
         ResourceHelper.bindResource("/gui/solar.png");
-        int lightWidth = light * 3;
-        if (light == 15)
+        int lightWidth = light.get() * 3;
+        if (light.get() == 15)
         {
             lightWidth += 2;
         }
         drawImage(guiGraphics, gui, 9, 20, 0, 0, 54, 18);
         drawImage(guiGraphics, gui, 15, 21, 0, 18, lightWidth, 16);
-    }
-
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return super.numberOfDataWatchers() + 2;
-    }
-
-    @Override
-    public void initDw()
-    {
-        PRIORITY = createDw(EntityDataSerializers.INT);
-        super.initDw();
-        LIGHT = createDw(EntityDataSerializers.INT);
-        UP_STATE = createDw(EntityDataSerializers.BOOLEAN);
-        registerDw(LIGHT, 0);
-        registerDw(UP_STATE, false);
     }
 
     protected boolean isGoingDown()
@@ -182,13 +151,13 @@ public abstract class ModuleSolarBase extends ModuleEngine
         if (getCart().level().isClientSide)
         {
             updateDataForModel();
-            if (UP_STATE != null && !setup)
+            if (!setup)
             {
-                boolean tmpUp = getDw(UP_STATE);
+                boolean tmpUp = upState.get();
                 if (tmpUp)
                 {
                     setAnimDone();
-                    upState = true;
+                    upState.set(true);
                     down = false;
                 }
                 setup = true;
@@ -208,11 +177,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
             panelCoolDown = 0;
             down = !down;
         }
-        upState = updatePanels();
-        if (!getCart().level().isClientSide)
-        {
-            updateDw(UP_STATE, upState);
-        }
+        upState.set(updatePanels());
     }
 
     @Override
@@ -254,21 +219,20 @@ public abstract class ModuleSolarBase extends ModuleEngine
     protected abstract void setAnimDone();
 
     @Override
-    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
+    protected void save(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
-        super.save(tagCompound, id, provider);
-        tagCompound.putInt(generateNBTName("Fuel", id), getFuelLevel());
-        tagCompound.putBoolean(generateNBTName("Up", id), upState);
+        super.save(tag, id, provider);
+        tag.putInt(generateNBTName("Fuel", id), getFuelLevel());
+        upState.save(generateNBTName("Up", id), tag, provider);
     }
 
     @Override
-    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
+    protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
-        super.load(tagCompound, id, provider);
-        setFuelLevel(tagCompound.getInt(generateNBTName("Fuel", id)));
-        upState = tagCompound.getBoolean(generateNBTName("Up", id));
-        if (upState)
-        {
+        super.load(tag, id, provider);
+        setFuelLevel(tag.getInt(generateNBTName("Fuel", id)));
+        upState.load(generateNBTName("Up", id), tag, provider);
+        if (upState.get()) {
             setAnimDone();
         }
     }

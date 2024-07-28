@@ -12,17 +12,10 @@ import vswe.stevescarts.helpers.Localization;
 
 public class ModuleCheatEngine extends ModuleEngine
 {
-    private EntityDataAccessor<Integer> PRIORITY;
 
     public ModuleCheatEngine(final EntityMinecartModular cart)
     {
         super(cart);
-    }
-
-    @Override
-    protected EntityDataAccessor<Integer> getPriorityDw()
-    {
-        return PRIORITY;
     }
 
     @Override
@@ -34,13 +27,6 @@ public class ModuleCheatEngine extends ModuleEngine
     public int getFuelLevel()
     {
         return 9001;
-    }
-
-    @Override
-    public void initDw()
-    {
-        PRIORITY = createDw(EntityDataSerializers.INT);
-        super.initDw();
     }
 
     @Override

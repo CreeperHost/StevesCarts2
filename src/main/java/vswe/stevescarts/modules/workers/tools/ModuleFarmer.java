@@ -1,8 +1,8 @@
 package vswe.stevescarts.modules.workers.tools;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,11 +23,12 @@ import vswe.stevescarts.api.farms.ICropModule;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleTool;
-import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotSeed;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
+import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     private int farming;
     private float farmAngle;
     private float rigAngle;
-    private EntityDataAccessor<Boolean> IS_FARMING;
+    private final EntityData<Boolean> isFarming = new EntityData<>(getCart(), new BooleanData(false));
 
     public ModuleFarmer(final EntityMinecartModular cart)
     {
@@ -278,24 +278,10 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
         return rigAngle;
     }
 
-    @Override
-    public void initDw()
-    {
-        super.initDw();
-        IS_FARMING = createDw(EntityDataSerializers.BOOLEAN);
-        registerDw(IS_FARMING, false);
-    }
-
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 1 + super.numberOfDataWatchers();
-    }
-
-    private void setFarming(final int val)
+    private void setFarming(int val)
     {
         farming = val;
-        updateDw(IS_FARMING, val > 0);
+        isFarming.set(val > 0);
     }
 
     protected boolean isFarming()
@@ -304,7 +290,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
         {
             return getSimInfo().getIsFarming();
         }
-        return getCart().isEngineBurning() && getDw(IS_FARMING);
+        return getCart().isEngineBurning() && isFarming.get();
     }
 
     @Override

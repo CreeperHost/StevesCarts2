@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.creeperhost.polylib.data.serializable.ByteData;
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -22,6 +24,7 @@ import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.addons.mobdetectors.ModuleMobdetector;
+import vswe.stevescarts.polylib.EntityData;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -32,8 +35,8 @@ public class ModuleShooterAdv extends ModuleShooter
     private ArrayList<ModuleMobdetector> detectors;
     private EntityNearestTarget sorter;
     private float detectorAngle;
-    private EntityDataAccessor<Byte> OPTION;
-    private EntityDataAccessor<Byte> RIFLE_DIRECTION;
+    private final EntityData<Byte> option = new EntityData<>(getCart(), new ByteData((byte) 0));
+    private final EntityData<Byte> rifleDirection = new EntityData<>(getCart(), new ByteData((byte) 0));
 
     public ModuleShooterAdv(final EntityMinecartModular cart)
     {
@@ -233,36 +236,21 @@ public class ModuleShooterAdv extends ModuleShooter
         return 1;
     }
 
-    @Override
-    public int numberOfDataWatchers()
+    private void switchOption(int id)
     {
-        return 2;
-    }
-
-    @Override
-    public void initDw()
-    {
-        OPTION = createDw(EntityDataSerializers.BYTE);
-        RIFLE_DIRECTION = createDw(EntityDataSerializers.BYTE);
-        registerDw(OPTION, (byte) 0);
-        registerDw(RIFLE_DIRECTION, (byte) 0);
-    }
-
-    private void switchOption(final int id)
-    {
-        byte val = getDw(OPTION);
+        byte val = option.get();
         val ^= (byte) (1 << id);
-        updateDw(OPTION, val);
+        option.set(val);
     }
 
-    public void setOptions(final byte val)
+    public void setOptions(byte val)
     {
-        updateDw(OPTION, val);
+        option.set(val);
     }
 
     public byte selectedOptions()
     {
-        return getDw(OPTION);
+        return option.get();
     }
 
     private boolean isOptionActive(final int id)
@@ -304,7 +292,7 @@ public class ModuleShooterAdv extends ModuleShooter
         {
             val += 256.0f;
         }
-        updateDw(RIFLE_DIRECTION, (byte) val);
+        rifleDirection.set((byte) val);
     }
 
     public float getRifleDirection()
@@ -316,7 +304,7 @@ public class ModuleShooterAdv extends ModuleShooter
         }
         else
         {
-            val = getDw(RIFLE_DIRECTION);
+            val = rifleDirection.get();
         }
         val /= 256.0f;
         val *= (float) Math.PI * 2;

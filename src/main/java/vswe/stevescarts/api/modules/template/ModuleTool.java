@@ -1,12 +1,10 @@
 package vswe.stevescarts.api.modules.template;
 
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -24,17 +22,18 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.addons.ModuleEnchants;
+import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 
 public abstract class ModuleTool extends ModuleWorker
 {
     private int initialDurability = -1;
-    private EntityDataAccessor<Integer> DURABILITY;
     private int remainingRepairUnits;
     private int maximumRepairUnits;
     protected ModuleEnchants enchanter;
     private final int[] durabilityRect;
+    private final EntityData<Integer> durability = new EntityData<>(getCart(), new IntData(getMaxDurability()));
 
     public ModuleTool(final EntityMinecartModular cart)
     {
@@ -173,19 +172,6 @@ public abstract class ModuleTool extends ModuleWorker
     }
 
     @Override
-    public int numberOfDataWatchers()
-    {
-        return 1;
-    }
-
-    @Override
-    public void initDw()
-    {
-        DURABILITY = createDw(EntityDataSerializers.INT);
-        registerDw(DURABILITY, getMaxDurability());
-    }
-
-    @Override
     public void update()
     {
         super.update();
@@ -307,12 +293,12 @@ public abstract class ModuleTool extends ModuleWorker
 
     public void setDurability(int amount)
     {
-        updateDw(DURABILITY, amount);
+        durability.set(amount);
     }
 
     public int getCurrentDurability()
     {
-        return getDw(DURABILITY);
+        return durability.get();
     }
 
     public int getRepairPercentage()

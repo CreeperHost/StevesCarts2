@@ -1,6 +1,5 @@
 package vswe.stevescarts.modules.addons;
 
-import com.mojang.patchy.BlockedServers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.block.Blocks;

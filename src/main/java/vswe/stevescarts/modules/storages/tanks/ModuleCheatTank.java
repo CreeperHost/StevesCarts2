@@ -59,7 +59,7 @@ public class ModuleCheatTank extends ModuleTank
                 mode = 1;
             }
             updateAmount();
-            updateDw();
+            updateData();
         }
         else
         {
@@ -94,17 +94,17 @@ public class ModuleCheatTank extends ModuleTank
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
+    protected void save(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
-        super.save(tagCompound, id, provider);
-        tagCompound.putByte(generateNBTName("mode", id), (byte) mode);
+        super.save(tag, id, provider);
+        tag.putByte(generateNBTName("mode", id), (byte) mode);
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
+    protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
-        super.load(tagCompound, id, provider);
-        mode = tagCompound.getByte(generateNBTName("mode", id));
+        super.load(tag, id, provider);
+        mode = tag.getByte(generateNBTName("mode", id));
     }
 
     private void updateAmount()

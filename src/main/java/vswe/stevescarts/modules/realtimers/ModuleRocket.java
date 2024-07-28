@@ -1,9 +1,12 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleRocket extends ModuleBase
 {
@@ -16,7 +19,7 @@ public class ModuleRocket extends ModuleBase
     private boolean isLanding;
     private double landY;
     private double groundY;
-    private EntityDataAccessor<Integer> UNKNOWN;
+    private final EntityData<Integer> unknown = new EntityData<>(getCart(), new IntData(0));
 
     public ModuleRocket(final EntityMinecartModular cart)
     {
@@ -79,7 +82,7 @@ public class ModuleRocket extends ModuleBase
         if (active)
         {
             takeOff();
-            updateDw(UNKNOWN, 1);
+            unknown.set(1);
         }
     }
 
@@ -97,19 +100,6 @@ public class ModuleRocket extends ModuleBase
         //		} else {
         //			landDirZ = ((getCart().motionZ > 0.0) ? 1 : -1);
         //		}
-    }
-
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 1;
-    }
-
-    @Override
-    public void initDw()
-    {
-        UNKNOWN = createDw(EntityDataSerializers.INT);
-        registerDw(UNKNOWN, 0);
     }
 
     private void land()

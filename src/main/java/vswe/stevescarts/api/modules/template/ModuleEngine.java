@@ -1,9 +1,9 @@
 package vswe.stevescarts.api.modules.template;
 
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -12,11 +12,13 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 public abstract class ModuleEngine extends ModuleBase
 {
     private int fuel;
     protected int[] priorityButton;
+    private final EntityData<Integer> option = new EntityData<>(getCart(), new IntData((byte) 0));
 
     public ModuleEngine(final EntityMinecartModular cart)
     {
@@ -57,15 +59,13 @@ public abstract class ModuleEngine extends ModuleBase
         return getPriority() >= 3 || getPriority() < 0;
     }
 
-    protected abstract EntityDataAccessor<Integer> getPriorityDw();
-
     public int getPriority()
     {
         if (isPlaceholder())
         {
             return 0;
         }
-        int temp = getDw(getPriorityDw());
+        int temp = option.get();
         if (temp < 0 || temp > 3)
         {
             temp = 3;
@@ -83,7 +83,7 @@ public abstract class ModuleEngine extends ModuleBase
         {
             data = 3;
         }
-        updateDw(getPriorityDw(), data);
+        option.set(data);
     }
 
     public void consumeFuel(final int comsumption)
@@ -175,18 +175,6 @@ public abstract class ModuleEngine extends ModuleBase
 
     @Override
     public int numberOfPackets()
-    {
-        return 1;
-    }
-
-    @Override
-    public void initDw()
-    {
-        registerDw(getPriorityDw(), 0);
-    }
-
-    @Override
-    public int numberOfDataWatchers()
     {
         return 1;
     }

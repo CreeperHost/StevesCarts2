@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.creeperhost.polylib.data.serializable.ByteData;
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -32,6 +34,7 @@ import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.addons.ModuleEnchants;
 import vswe.stevescarts.modules.addons.projectiles.ModuleProjectile;
+import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -51,9 +54,10 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     private final float[] pipeRotations;
     private final int[] AInterval;
     private int arrowTick;
-    private EntityDataAccessor<Byte> ACTIVE_PIPE;
-    private EntityDataAccessor<Integer> ARROW_INTERVAL;
-    private EntityDataAccessor<Integer> ARROW_COOLDOWN_STATE;
+
+    private final EntityData<Byte> activePipe = new EntityData<>(getCart(), new ByteData((byte) 0));
+    private final EntityData<Integer> arrowInterval = new EntityData<>(getCart(), new IntData(5));
+    private final EntityData<Integer> arrowCooldownState = new EntityData<>(getCart(), new IntData(0));
 
     public ModuleShooter(final EntityMinecartModular cart)
     {
@@ -484,42 +488,24 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
         }
     }
 
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 3;
-    }
-
-    @Override
-    public void initDw()
-    {
-        ACTIVE_PIPE = createDw(EntityDataSerializers.BYTE);
-        ARROW_INTERVAL = createDw(EntityDataSerializers.INT);
-        ARROW_COOLDOWN_STATE = createDw(EntityDataSerializers.INT);
-        registerDw(ACTIVE_PIPE, (byte) 0);
-        registerDw(ARROW_INTERVAL, 5);
-        registerDw(ARROW_COOLDOWN_STATE, 0);
-    }
-
     public int getInterval() {
-        return isPlaceholder() ? 5 : getDw(ARROW_INTERVAL);
+        return isPlaceholder() ? 5 : arrowInterval.get();
     }
 
     public void setInterval(int interval) {
-        updateDw(ARROW_INTERVAL, interval);
+        arrowInterval.set(interval);
     }
 
     public int getCooldownState() {
-        return isPlaceholder() ? 0 : getDw(ARROW_COOLDOWN_STATE);
+        return isPlaceholder() ? 0 : arrowCooldownState.get();
     }
 
     public void setCooldownState(int cooldown) {
-        updateDw(ARROW_COOLDOWN_STATE, cooldown);
+        arrowCooldownState.set(cooldown);
     }
 
-    public void setActivePipes(final byte val)
-    {
-        updateDw(ACTIVE_PIPE, val);
+    public void setActivePipes(byte val) {
+        activePipe.set(val);
     }
 
     public byte getActivePipes()
@@ -528,7 +514,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
         {
             return getSimInfo().getActivePipes();
         }
-        return getDw(ACTIVE_PIPE);
+        return activePipe.get();
     }
 
     protected boolean isPipeActive(final int id)

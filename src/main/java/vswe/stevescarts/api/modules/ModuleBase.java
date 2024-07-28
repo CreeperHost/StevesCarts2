@@ -50,6 +50,8 @@ import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketGuiData;
 import vswe.stevescarts.network.packets.PacketMinecartButton;
+import vswe.stevescarts.polylib.DataEntity;
+import vswe.stevescarts.polylib.EntityData;
 import vswe.stevescarts.polylib.NBTHelper;
 
 import javax.annotation.Nonnull;
@@ -1271,75 +1273,75 @@ public abstract class ModuleBase
         }
     }
 
-    /**
-     * The number of datamangers this module wants to use
-     *
-     * @return The amount of datamangers
-     */
-    public int numberOfDataWatchers()
-    {
-        return 0;
-    }
-
-    /**
-     * Used to initiate the datamangers
-     */
-    public void initDw()
-    {
-    }
-
-    /**
-     * Register a dataparameter to the datamanger
-     *
-     * @param key   The local datamanger key
-     * @param value The value to add
-     */
-    protected final <T> void registerDw(EntityDataAccessor<T> key, T value)
-    {
-        for (SynchedEntityData.DataItem<?> entry : getCart().getDataManager().itemsById)
-        {
-            if (entry.getAccessor() == key)
-            {
-                return;
-            }
-        }
-        //TODO
+//    /**
+//     * The number of datamangers this module wants to use
+//     *
+//     * @return The amount of datamangers
+//     */
+//    public int numberOfDataWatchers()
+//    {
+//        return 0;
+//    }
+//
+//    /**
+//     * Used to initiate the datamangers
+//     */
+//    public void initDw()
+//    {
+//    }
+//
+//    /**
+//     * Register a dataparameter to the datamanger
+//     *
+//     * @param key   The local datamanger key
+//     * @param value The value to add
+//     */
+//    protected final <T> void registerDw(EntityDataAccessor<T> key, T value)
+//    {
+//        for (SynchedEntityData.DataItem<?> entry : getCart().getDataManager().itemsById)
+//        {
+//            if (entry.getAccessor() == key)
+//            {
+//                return;
+//            }
+//        }
+//        //TODO
 //        if(!getCart().getDataManager().hasItem(key)){
 //            getCart().getDataManager().define(key, value);
 //        }
-    }
-
-    /**
-     * Updates a datamanger
-     *
-     * @param key   The local datamanger key
-     * @param value The value to update it to
-     */
-    protected final <T> void updateDw(EntityDataAccessor<T> key, T value)
-    {
-        getCart().getDataManager().set(key, value);
-    }
-
-    protected final <T> void updateDw(EntityDataAccessor<T> key, T value, boolean force)
-    {
-        getCart().getDataManager().set(key, value, force);
-    }
-
-    /**
-     * Get a datamanger
-     *
-     * @param key The local datamanger key
-     * @return The value of the datamanger
-     */
-    protected <T> T getDw(EntityDataAccessor<T> key)
-    {
-        return getCart().getDataManager().get(key);
-    }
-
-    protected <T> EntityDataAccessor<T> createDw(EntityDataSerializer<T> serializer)
-    {
-        return serializer.createAccessor(cart.getNextDataWatcher());
-    }
+//    }
+//
+//    /**
+//     * Updates a datamanger
+//     *
+//     * @param key   The local datamanger key
+//     * @param value The value to update it to
+//     */
+//    protected final <T> void updateDw(EntityDataAccessor<T> key, T value)
+//    {
+//        getCart().getDataManager().set(key, value);
+//    }
+//
+//    protected final <T> void updateDw(EntityDataAccessor<T> key, T value, boolean force)
+//    {
+//        getCart().getDataManager().set(key, value, force);
+//    }
+//
+//    /**
+//     * Get a datamanger
+//     *
+//     * @param key The local datamanger key
+//     * @return The value of the datamanger
+//     */
+//    protected <T> T getDw(EntityDataAccessor<T> key)
+//    {
+//        return getCart().getDataManager().get(key);
+//    }
+//
+//    protected <T> EntityDataAccessor<T> createDw(EntityDataSerializer<T> serializer)
+//    {
+//        return serializer.createAccessor(cart.getNextDataWatcher());
+//    }
 
     /**
      * The amount of Gui data this module want to use. Gui data is used for sending information from the server to the client

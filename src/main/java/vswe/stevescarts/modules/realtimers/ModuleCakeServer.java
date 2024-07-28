@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -18,6 +19,7 @@ import vswe.stevescarts.containers.slots.SlotCake;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 
@@ -28,7 +30,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
     private static final int SLICES_PER_CAKE = 6;
     private static final int MAX_TOTAL_SLICES = 66;
     private int[] rect;
-    private EntityDataAccessor<Integer> BUFFER;
+    private final EntityData<Integer> buffer = new EntityData<>(getCart(), new IntData(0));
 
     public ModuleCakeServer(final EntityMinecartModular cart)
     {
@@ -69,7 +71,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
 
     private void setCakeBuffer(final int i)
     {
-        updateDw(BUFFER, i);
+        buffer.set(i);
     }
 
     private int getCakeBuffer()
@@ -78,20 +80,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
         {
             return 6;
         }
-        return getDw(BUFFER);
-    }
-
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 1;
-    }
-
-    @Override
-    public void initDw()
-    {
-        BUFFER = createDw(EntityDataSerializers.INT);
-        registerDw(BUFFER, 0);
+        return buffer.get();
     }
 
     @Override

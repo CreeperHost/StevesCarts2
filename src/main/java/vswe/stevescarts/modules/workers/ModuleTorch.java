@@ -1,11 +1,11 @@
 package vswe.stevescarts.modules.workers;
 
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,11 +20,12 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
-import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotTorch;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 
@@ -33,8 +34,8 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     private int lightLimit;
     private int[] boxRect;
     boolean markerMoving;
-    private EntityDataAccessor<Integer> TORCHES;
-    private EntityDataAccessor<Integer> LIGHT_LEVEL;
+    private final EntityData<Integer> torches = new EntityData<>(getCart(), new IntData(0));
+//    private final EntityData<Integer> lightLevel = new EntityData<>(getCart(), new IntData(0));
 
     public ModuleTorch(final EntityMinecartModular cart) {
         super(cart);
@@ -249,18 +250,6 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     }
 
     @Override
-    public void initDw() {
-        TORCHES = createDw(EntityDataSerializers.INT);
-        LIGHT_LEVEL = createDw(EntityDataSerializers.INT);
-        registerDw(TORCHES, 0);
-    }
-
-    @Override
-    public int numberOfDataWatchers() {
-        return 2;
-    }
-
-    @Override
     public void onInventoryChanged() {
         super.onInventoryChanged();
         calculateTorches();
@@ -274,14 +263,14 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
         for (int i = 0; i < 3; ++i) {
             val |= (!(getStack(i).isEmpty()) ? 1 : 0) << i;
         }
-        updateDw(TORCHES, val);
+        torches.set(val);
     }
 
     public int getTorches() {
         if (isPlaceholder()) {
             return getSimInfo().getTorchInfo();
         }
-        return getDw(TORCHES);
+        return torches.get();
     }
 
     @Override

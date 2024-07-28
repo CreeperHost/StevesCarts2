@@ -5,8 +5,6 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.PacketDistributor;
-//import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
-//import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import vswe.stevescarts.Constants;
@@ -32,6 +30,7 @@ public class PacketHandler {
         registrar.playToServer(PacketFluidSync.TYPE,                StreamCodec.of((buff, packet) -> packet.write(buff), PacketFluidSync::read),        new PacketFluidSync.Handler());
         registrar.playToServer(PacketMinecartTurn.TYPE,             StreamCodec.of((buff, packet) -> packet.write(buff), PacketMinecartTurn::read),     new PacketMinecartTurn.Handler());
         registrar.playToClient(PacketGuiData.TYPE,                  StreamCodec.of((buff, packet) -> packet.write(buff), PacketGuiData::read),          new PacketGuiData.Handler());
+        registrar.playToClient(PacketEntityData.TYPE,               StreamCodec.of((buff, packet) -> packet.write(buff), PacketEntityData::read),       new PacketEntityData.Handler());
         //@formatter:on
     }
 

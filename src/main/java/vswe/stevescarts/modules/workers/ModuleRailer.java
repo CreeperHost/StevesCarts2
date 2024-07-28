@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.workers;
 
+import net.creeperhost.polylib.data.serializable.ByteData;
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,13 +24,14 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotBuilder;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
+import vswe.stevescarts.polylib.EntityData;
 
 import java.util.ArrayList;
 
 public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
     private boolean hasGeneratedAngles;
     private float[] railAngles;
-    private EntityDataAccessor<Byte> RAILS;
+    private final EntityData<Byte> rails = new EntityData<>(getCart(), new ByteData());
 
     public ModuleRailer(final EntityMinecartModular cart) {
         super(cart);
@@ -142,17 +145,6 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
     }
 
     @Override
-    public void initDw() {
-        RAILS = createDw(EntityDataSerializers.BYTE);
-        registerDw(RAILS, (byte) 0);
-    }
-
-    @Override
-    public int numberOfDataWatchers() {
-        return 1;
-    }
-
-    @Override
     public void onInventoryChanged() {
         super.onInventoryChanged();
         calculateRails();
@@ -168,14 +160,14 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
                 ++valid;
             }
         }
-        updateDw(RAILS, valid);
+        rails.set(valid);
     }
 
     public int getRails() {
         if (isPlaceholder()) {
             return getSimInfo().getRailCount();
         }
-        return getDw(RAILS);
+        return rails.get();
     }
 
     public float getRailAngle(final int i) {

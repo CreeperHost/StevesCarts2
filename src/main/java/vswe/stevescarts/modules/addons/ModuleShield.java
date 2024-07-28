@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -13,6 +15,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleShield extends ModuleAddon implements IActivatorModule
 {
@@ -21,7 +24,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     private float shieldAngle;
     private float lastShieldAngle;
     private int[] buttonRect;
-    private EntityDataAccessor<Boolean> STATUS;
+    private final EntityData<Boolean> status = new EntityData<>(getCart(), new BooleanData(false));
     private boolean setup;
 
     public ModuleShield(final EntityMinecartModular cart)
@@ -60,7 +63,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     public void update() {
         super.update();
         if (getCart().level().isClientSide && !setup) {
-            if (isPlaceholder() || !getDw(STATUS)) {
+            if (isPlaceholder() || !status.get()) {
                 shieldDistance = 0;
                 shield = false;
             }
@@ -129,7 +132,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     {
         if (!isPlaceholder())
         {
-            updateDw(STATUS, val);
+            status.set(val);
         }
     }
 
@@ -139,7 +142,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
         {
             return getSimInfo().getShieldActive();
         }
-        return getDw(STATUS);
+        return status.get();
     }
 
     @Override
@@ -182,7 +185,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     {
         if (id == 0)
         {
-            updateDw(STATUS, !getShieldStatus());
+            status.set(!getShieldStatus());
         }
     }
 
@@ -190,19 +193,6 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     public int numberOfPackets()
     {
         return 1;
-    }
-
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 2;
-    }
-
-    @Override
-    public void initDw()
-    {
-        STATUS = createDw(EntityDataSerializers.BOOLEAN);
-        registerDw(STATUS, false);
     }
 
     @Override

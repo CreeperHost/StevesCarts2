@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
+import net.creeperhost.polylib.data.serializable.ByteData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
@@ -17,6 +19,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 import java.util.ArrayList;
 
@@ -60,7 +63,7 @@ public class ModuleNote extends ModuleBase
     private boolean veryLongTrack;
     private int speedSetting;
 
-    private EntityDataAccessor<Boolean> PLAYING;
+    private final EntityData<Boolean> playing = new EntityData<>(getCart(), new BooleanData());
 
     public ModuleNote(final EntityMinecartModular cart)
     {
@@ -670,27 +673,14 @@ public class ModuleNote extends ModuleBase
         }
     }
 
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 1;
-    }
-
-    @Override
-    public void initDw()
-    {
-        PLAYING = createDw(EntityDataSerializers.BOOLEAN);
-        registerDw(PLAYING, false);
-    }
-
     private boolean isPlaying()
     {
-        return !isPlaceholder() && (getDw(PLAYING) || playProgress > 0);
+        return !isPlaceholder() && (playing.get() || playProgress > 0);
     }
 
-    private void setPlaying(final boolean val)
+    private void setPlaying(boolean val)
     {
-        updateDw(PLAYING, val);
+        playing.set(val);
     }
 
     @Override

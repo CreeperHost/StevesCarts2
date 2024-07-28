@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.workers.tools;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,6 +31,7 @@ import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.BlockPosHelpers;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.modules.addons.plants.ModulePlantSize;
+import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -41,7 +43,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
     private ModulePlantSize plantSize;
     private boolean isPlanting;
     private float cutterAngle;
-    private EntityDataAccessor<Boolean> IS_CUTTING;
+    private final EntityData<Boolean> isCutting = new EntityData<>(getCart(), new BooleanData(false));
 
     public ModuleWoodcutter(final EntityMinecartModular cart)
     {
@@ -387,23 +389,9 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         return true;
     }
 
-    @Override
-    public void initDw()
+    private void setCutting(boolean val)
     {
-        super.initDw();
-        IS_CUTTING = createDw(EntityDataSerializers.BOOLEAN);
-        registerDw(IS_CUTTING, false);
-    }
-
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 1 + super.numberOfDataWatchers();
-    }
-
-    private void setCutting(final boolean val)
-    {
-        updateDw(IS_CUTTING, val);
+        isCutting.set(val);
     }
 
     protected boolean isCutting()
@@ -412,7 +400,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         {
             return getSimInfo().getIsCutting();
         }
-        return getDw(IS_CUTTING);
+        return isCutting.get();
     }
 
     public float getCutterAngle()

@@ -4,12 +4,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.TridentModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -47,8 +49,6 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer
         if (info.contains("modules"))
         {
             float lowestMult = 1.0f;
-            VertexConsumer ivertexbuilder = iRenderTypeBuffer.getBuffer(RenderType.solid());
-
             EntityMinecartModular cart = new EntityMinecartModular(Minecraft.getInstance().level, 0, 0, 0, info, Component.literal(""));
 
             if (transformType == ItemDisplayContext.GUI)
@@ -71,9 +71,9 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer
                     {
                         for (ModelCartbase model : module.getModels())
                         {
-                            iRenderTypeBuffer.getBuffer(model.getRenderType(module));
+                            VertexConsumer buffer = iRenderTypeBuffer.getBuffer(model.getRenderType(module));
                             model.applyEffects(module, matrixStack, iRenderTypeBuffer, 0, 0, 0);
-                            model.renderToBuffer(matrixStack, ivertexbuilder, p_239207_5_, p_239207_6_, 0xFFFFFFFF);
+                            model.renderToBuffer(matrixStack, buffer, p_239207_5_, p_239207_6_, 0xFFFFFFFF);
                         }
                     }
                 }

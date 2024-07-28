@@ -1,10 +1,6 @@
 package vswe.stevescarts;
 
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import vswe.stevescarts.client.models.*;
@@ -25,13 +21,9 @@ import vswe.stevescarts.client.models.workers.ModelTrackRemover;
 import vswe.stevescarts.client.models.workers.tools.ModelDrill;
 import vswe.stevescarts.client.models.workers.tools.ModelFarmer;
 import vswe.stevescarts.client.models.workers.tools.ModelWoodCutter;
-import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.client.renders.RenderModulerCart;
-import vswe.stevescarts.events.OverlayEventHandler;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModEntities;
-import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.init.ModScreens;
 
 import static vswe.stevescarts.init.StevesCartsModules.*;

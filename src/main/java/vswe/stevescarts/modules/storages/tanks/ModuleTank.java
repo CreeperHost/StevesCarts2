@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.storages.tanks;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -7,7 +9,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -30,6 +31,8 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.helpers.storages.ITankHolder;
 import vswe.stevescarts.helpers.storages.SCTank;
+import vswe.stevescarts.polylib.EntityData;
+import vswe.stevescarts.polylib.StringData;
 
 import javax.annotation.Nonnull;
 import java.util.Locale;
@@ -39,9 +42,9 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     protected SCTank tank;
     private int tick;
     protected int[] tankBounds;
-    private EntityDataAccessor<String> FLUID_NAME;
-    private EntityDataAccessor<Integer> FLUID_AMOUNT;
-    private EntityDataAccessor<Boolean> LOCKED;
+    private final EntityData<String> fluidName = new EntityData<>(getCart(), new StringData(""));
+    private final EntityData<Integer> fluidAmount = new EntityData<>(getCart(), new IntData(-1));
+    private final EntityData<Boolean> locked = new EntityData<>(getCart(), new BooleanData(false));
 
     public ModuleTank(final EntityMinecartModular cart)
     {
@@ -120,7 +123,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
             }
             else if (!isPlaceholder())
             {
-                if (getDw(FLUID_NAME).isEmpty())
+                if (fluidName.get().isEmpty())
                 {
                     tank.setFluid(FluidStack.EMPTY);
                 }
@@ -128,10 +131,10 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
                 {
                     try
                     {
-                        Fluid fluid = BuiltInRegistries.FLUID.get(ResourceLocation.parse(getDw(FLUID_NAME).toLowerCase(Locale.ROOT)));
+                        Fluid fluid = BuiltInRegistries.FLUID.get(ResourceLocation.parse(fluidName.get().toLowerCase(Locale.ROOT)));
                         if (fluid != null && fluid != Fluids.EMPTY)
                         {
-                            tank.setFluid(new FluidStack(fluid, getDw(FLUID_AMOUNT)));
+                            tank.setFluid(new FluidStack(fluid, fluidAmount.get()));
                         }
                     } catch (Exception e)
                     {
@@ -174,7 +177,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
         {
             return;
         }
-        updateDw();
+        updateData();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -196,7 +199,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     protected String getTankInfo()
     {
         String str = tank.getMouseOver();
-        if (getDw(LOCKED))
+        if (locked.get())
         {
             str = str + "\n\n" + Localization.MODULES.TANKS.LOCKED.translate() + "\n" + Localization.MODULES.TANKS.UNLOCK.translate();
         }
@@ -246,46 +249,28 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     }
 
     @Override
-    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
+    protected void save(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
         final CompoundTag compound = new CompoundTag();
         if (!tank.getFluid().isEmpty()) {
             tank.getFluid().save(provider, compound);
         }
-        tagCompound.put(generateNBTName("Fluid", id), compound);
-        tagCompound.putBoolean(generateNBTName("Locked", id), getDw(LOCKED));
+        tag.put(generateNBTName("Fluid", id), compound);
+        locked.save(generateNBTName("Locked", id), tag, provider);
     }
 
     @Override
-    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
+    protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
-        FluidStack fluidStack = FluidStack.parse(provider, tagCompound.getCompound(generateNBTName("Fluid", id))).orElse(FluidStack.EMPTY);
+        FluidStack fluidStack = FluidStack.parse(provider, tag.getCompound(generateNBTName("Fluid", id))).orElse(FluidStack.EMPTY);
         tank.setFluid(fluidStack);
-        updateDw(LOCKED, tagCompound.getBoolean(generateNBTName("Locked", id)));
-        updateDw();
+        locked.load(generateNBTName("Locked", id), tag, provider);
+        updateData();
     }
 
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 3;
-    }
-
-    protected void updateDw()
-    {
-        updateDw(FLUID_NAME, (tank.getFluid().isEmpty()) ? "" : getFluidName(tank.getFluid().getFluid()));
-        updateDw(FLUID_AMOUNT, (tank.getFluid().isEmpty()) ? -1 : tank.getFluid().getAmount());
-    }
-
-    @Override
-    public void initDw()
-    {
-        FLUID_NAME = createDw(EntityDataSerializers.STRING);
-        FLUID_AMOUNT = createDw(EntityDataSerializers.INT);
-        LOCKED = createDw(EntityDataSerializers.BOOLEAN);
-        registerDw(FLUID_NAME, (tank.getFluid().isEmpty()) ? "" : getFluidName(tank.getFluid().getFluid()));
-        registerDw(FLUID_AMOUNT, (tank.getFluid().isEmpty()) ? -1 : tank.getFluid().getAmount());
-        registerDw(LOCKED, false);
+    protected void updateData() {
+        fluidName.set(tank.getFluid().isEmpty() ? "" : getFluidName(tank.getFluid().getFluid()));
+        fluidAmount.set(tank.getFluid().isEmpty() ? -1 : tank.getFluid().getAmount());
     }
 
     public String getFluidName(Fluid fluid)
@@ -327,14 +312,14 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     @Override
     protected void receivePacket(final int id, final byte[] data, final Player player)
     {
-        if ((!getFluid().isEmpty() || getDw(LOCKED)))
+        if ((!getFluid().isEmpty() || locked.get()))
         {
-            setLocked(!getDw(LOCKED));
+            setLocked(!locked.get());
 
-            if (!getDw(LOCKED) && !tank.getFluid().isEmpty() && tank.getFluid().getAmount() <= 0)
+            if (!locked.get() && !tank.getFluid().isEmpty() && tank.getFluid().getAmount() <= 0)
             {
                 tank.setFluid(FluidStack.EMPTY);
-                updateDw();
+                updateData();
             }
         }
     }
@@ -349,14 +334,14 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     protected void checkGuiData(final Object[] info)
     {
         updateGuiData(info, 0, (short) (tank.isLocked() ? 1 : 0));
-        updateDw();
+        updateData();
     }
 
     private void setLocked(boolean val)
     {
         if (!isPlaceholder())
         {
-            updateDw(LOCKED, val);
+            locked.set(val);
         }
     }
 

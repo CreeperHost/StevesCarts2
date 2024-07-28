@@ -18,24 +18,10 @@ public abstract class ModuleThermalBase extends ModuleEngine
 {
     private short coolantLevel;
     private static final int RELOAD_LIQUID_SIZE = 1;
-    private EntityDataAccessor<Integer> PRIORITY;
 
     public ModuleThermalBase(final EntityMinecartModular cart)
     {
         super(cart);
-    }
-
-    @Override
-    protected EntityDataAccessor<Integer> getPriorityDw()
-    {
-        return PRIORITY;
-    }
-
-    @Override
-    public void initDw()
-    {
-        PRIORITY = createDw(EntityDataSerializers.INT);
-        super.initDw();
     }
 
     private int getCoolantLevel()

@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.creeperhost.polylib.data.serializable.ByteData;
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -19,6 +21,7 @@ import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.ComponentTypes;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleDynamite extends ModuleBase
 {
@@ -27,9 +30,9 @@ public class ModuleDynamite extends ModuleBase
     private int fuseStartY;
     private final int maxFuseLength = 150;
 
-    private EntityDataAccessor<Byte> FUSE;
-    private EntityDataAccessor<Byte> FUSE_LENGTH;
-    private EntityDataAccessor<Byte> EXPLOSION;
+    private final EntityData<Byte> fuse = new EntityData<>(getCart(), new ByteData((byte) 0));
+    private final EntityData<Byte> fuseLength = new EntityData<>(getCart(), new ByteData((byte) 70));
+    private final EntityData<Byte> explosion = new EntityData<>(getCart(), new ByteData((byte) 8));
 
     public ModuleDynamite(final EntityMinecartModular cart)
     {
@@ -207,7 +210,7 @@ public class ModuleDynamite extends ModuleBase
         {
             return getSimInfo().getExplosionSize() / 2.5f;
         }
-        return getDw(EXPLOSION) / 2.5f;
+        return explosion.get() / 2.5f;
     }
 
     public void createExplosives()
@@ -221,24 +224,7 @@ public class ModuleDynamite extends ModuleBase
         {
             f += getStack(0).getCount() * 2;
         }
-        updateDw(EXPLOSION, (byte) f);
-    }
-
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 3;
-    }
-
-    @Override
-    public void initDw()
-    {
-        FUSE = createDw(EntityDataSerializers.BYTE);
-        FUSE_LENGTH = createDw(EntityDataSerializers.BYTE);
-        EXPLOSION = createDw(EntityDataSerializers.BYTE);
-        registerDw(FUSE, (byte) 0);
-        registerDw(FUSE_LENGTH, (byte) 70);
-        registerDw(EXPLOSION, (byte) 8);
+        explosion.set((byte) f);
     }
 
     public int getFuse()
@@ -247,7 +233,7 @@ public class ModuleDynamite extends ModuleBase
         {
             return getSimInfo().fuse;
         }
-        int val = getDw(FUSE);
+        int val = fuse.get();
         if (val < 0)
         {
             return val + 256;
@@ -263,7 +249,7 @@ public class ModuleDynamite extends ModuleBase
         }
         else
         {
-            updateDw(FUSE, (byte) val);
+            fuse.set((byte) val);
         }
     }
 
@@ -273,7 +259,7 @@ public class ModuleDynamite extends ModuleBase
         {
             val = getMaxFuse();
         }
-        updateDw(FUSE_LENGTH, (byte) val);
+        fuseLength.set((byte) val);
     }
 
     public int getFuseLength()
@@ -282,7 +268,7 @@ public class ModuleDynamite extends ModuleBase
         {
             return getSimInfo().getFuseLength();
         }
-        int val = getDw(FUSE_LENGTH);
+        int val = fuseLength.get();
         if (val < 0)
         {
             return val + 256;

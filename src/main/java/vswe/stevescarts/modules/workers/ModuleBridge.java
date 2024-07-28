@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.workers;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -16,9 +17,10 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotBridge;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
-    private EntityDataAccessor<Boolean> BRIDGE;
+    private final EntityData<Boolean> bridge = new EntityData<>(getCart(), new BooleanData(false));
 
     public ModuleBridge(final EntityMinecartModular cart) {
         super(cart);
@@ -98,26 +100,15 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
         return false;
     }
 
-    @Override
-    public void initDw() {
-        BRIDGE = createDw(EntityDataSerializers.BOOLEAN);
-        registerDw(BRIDGE, false);
-    }
-
-    @Override
-    public int numberOfDataWatchers() {
-        return 1;
-    }
-
-    private void setBridge(final boolean val) {
-        updateDw(BRIDGE, val);
+    private void setBridge(boolean val) {
+        bridge.set(val);
     }
 
     public boolean needBridge() {
         if (isPlaceholder()) {
             return getSimInfo().getNeedBridge();
         }
-        return getDw(BRIDGE);
+        return bridge.get();
     }
 
     @Override

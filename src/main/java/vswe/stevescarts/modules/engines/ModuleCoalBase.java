@@ -25,24 +25,9 @@ public abstract class ModuleCoalBase extends ModuleEngine
     private int fireCoolDown;
     private int fireIndex;
 
-    private EntityDataAccessor<Integer> PRIORITY;
-
     public ModuleCoalBase(final EntityMinecartModular cart)
     {
         super(cart);
-    }
-
-    @Override
-    protected EntityDataAccessor<Integer> getPriorityDw()
-    {
-        return PRIORITY;
-    }
-
-    @Override
-    public void initDw()
-    {
-        PRIORITY = createDw(EntityDataSerializers.INT);
-        super.initDw();
     }
 
     @Override

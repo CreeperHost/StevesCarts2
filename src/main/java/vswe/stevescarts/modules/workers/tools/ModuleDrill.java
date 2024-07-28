@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.workers.tools;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.creeperhost.polylib.helpers.LevelHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
@@ -38,6 +39,8 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.modules.addons.*;
+import vswe.stevescarts.polylib.EntityData;
+import vswe.stevescarts.polylib.StringData;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -53,8 +56,8 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     private int miningCoolDown;
     private int[] buttonRect;
     private boolean setup;
-    private EntityDataAccessor<Boolean> IS_MINING;
-    private EntityDataAccessor<Boolean> IS_ENABLED;
+    private final EntityData<Boolean> isMining = new EntityData<>(getCart(), new BooleanData(false));
+    private final EntityData<Boolean> isEnabled = new EntityData<>(getCart(), new BooleanData(true));
 
     public ModuleDrill(final EntityMinecartModular cart)
     {
@@ -403,7 +406,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         super.update();
         if (getCart().level().isClientSide && !setup)
         {
-            if (isPlaceholder() || !getDw(IS_MINING))
+            if (isPlaceholder() || !isMining.get())
             {
                 drillRotation = 0;
                 miningCoolDown = 10;
@@ -436,12 +439,12 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
 
     protected void startDrill()
     {
-        updateDw(IS_MINING, true);
+        isMining.set(true);
     }
 
     protected void stopDrill()
     {
-        updateDw(IS_MINING, false);
+        isMining.set(false);
     }
 
     protected boolean isMining()
@@ -450,28 +453,12 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         {
             return getSimInfo().getDrillSpinning();
         }
-        return getDw(IS_MINING);
+        return isMining.get();
     }
 
     protected boolean isDrillSpinning()
     {
         return isMining() || miningCoolDown < 10;
-    }
-
-    @Override
-    public void initDw()
-    {
-        super.initDw();
-        IS_MINING = createDw(EntityDataSerializers.BOOLEAN);
-        IS_ENABLED = createDw(EntityDataSerializers.BOOLEAN);
-        registerDw(IS_MINING, false);
-        registerDw(IS_ENABLED, true);
-    }
-
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 2 + super.numberOfDataWatchers();
     }
 
     public float getDrillRotation()
@@ -481,12 +468,12 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
 
     private boolean isDrillEnabled()
     {
-        return getDw(IS_ENABLED);
+        return isEnabled.get();
     }
 
-    public void setDrillEnabled(final boolean val)
+    public void setDrillEnabled(boolean val)
     {
-        updateDw(IS_ENABLED, val);
+        isEnabled.set(val);
     }
 
     @Override

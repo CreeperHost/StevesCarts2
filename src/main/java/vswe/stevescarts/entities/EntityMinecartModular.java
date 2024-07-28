@@ -71,6 +71,8 @@ import vswe.stevescarts.init.ModEntities;
 import vswe.stevescarts.modules.addons.ModuleCreativeSupplies;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.modules.workers.CompWorkModule;
+import vswe.stevescarts.polylib.DataEntity;
+import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -80,7 +82,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class EntityMinecartModular extends AbstractMinecart implements Container, IEntityWithComplexSpawn, IFluidHandler, MenuProvider
+public class EntityMinecartModular extends AbstractMinecart implements Container, IEntityWithComplexSpawn, IFluidHandler, MenuProvider, DataEntity
 {
     public BlockPos disabledPos;
     protected boolean wasDisabled;
@@ -121,6 +123,8 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     private int scrollY;
     @Deprecated(forRemoval = true)
     private int keepSilent;
+
+    private final List<EntityData<?>> entityDataList = new ArrayList<>();
 
     private static final EntityDataAccessor<Boolean> IS_BURNING = SynchedEntityData.defineId(EntityMinecartModular.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> IS_DISANABLED = SynchedEntityData.defineId(EntityMinecartModular.class, EntityDataSerializers.BOOLEAN);
@@ -214,6 +218,16 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         super.defineSynchedData(builder);
         builder.define(IS_BURNING, false);
         builder.define(IS_DISANABLED, false);
+    }
+
+    @Override
+    public List<EntityData<?>> getEntityDataList() {
+        return entityDataList;
+    }
+
+    @Override
+    public void registerEntityData(EntityData<?> data) {
+        entityDataList.add(data);
     }
 
     private void loadPlaceHolderModules(final List<ResourceLocation> data)
@@ -419,10 +433,10 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                         slots = module3.generateSlots(slots);
                     }
                 }
-                if (module3.numberOfDataWatchers() > 0)
-                {
-                    module3.initDw();
-                }
+//                if (module3.numberOfDataWatchers() > 0)
+//                {
+//                    module3.initDw();
+//                }
                 module3.setPacketStart(packets);
                 packets += module3.totalNumberOfPackets();
             }
@@ -1189,6 +1203,9 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     @Override
     public void tick()
     {
+        if (!level().isClientSide) {
+            entityDataList.forEach(EntityData::detectAndSend);
+        }
         flipped = true;
         onCartUpdate();
         if (level().isClientSide)

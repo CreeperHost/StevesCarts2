@@ -1,0 +1,72 @@
+package vswe.stevescarts.polylib;
+
+import net.creeperhost.polylib.data.serializable.AbstractDataStore;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.neoforged.neoforge.network.PacketDistributor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import vswe.stevescarts.network.packets.PacketEntityData;
+
+/**
+ * Created by brandon3055 on 27/07/2024
+ */
+public class EntityData<T> {
+    public static Logger LOGGER = LogManager.getLogger();
+
+    private final DataEntity entity;
+    private final AbstractDataStore<T> dataStore;
+    private T previousValue;
+
+    public EntityData(DataEntity entity, AbstractDataStore<T> dataStore) {
+        this.entity = entity;
+        this.dataStore = dataStore;
+        this.previousValue = dataStore.get();
+        entity.registerEntityData(this);
+    }
+
+    public T get() {
+        return dataStore.get();
+    }
+
+    private Entity getEntity() {
+        return (Entity) entity;
+    }
+
+    public void set(T value) {
+        if (getEntity().level() != null && getEntity().level().isClientSide()) {
+            return;
+        }
+        dataStore.set(value);
+    }
+
+    public void detectAndSend() {
+        if (!(getEntity().level() instanceof ServerLevel) || dataStore.isSameValue(previousValue)) {
+            return;
+        }
+
+        previousValue = dataStore.get();
+        int index = entity.getEntityDataList().indexOf(this);
+        if (index == -1) {
+            LOGGER.warn("Invalid entity data found on entity ()", entity);
+            return;
+        }
+
+        PacketDistributor.sendToPlayersTrackingEntity(getEntity(), new PacketEntityData(getEntity().getId(), index, dataStore));
+    }
+
+    public void fromBytes(RegistryFriendlyByteBuf buffer) {
+        dataStore.fromBytes(buffer);
+    }
+
+    public void save(String name, CompoundTag tag, HolderLookup.Provider provider) {
+        tag.put(name, dataStore.toTag(provider));
+    }
+
+    public void load(String name, CompoundTag tag, HolderLookup.Provider provider) {
+        dataStore.fromTag(provider, tag.get(name));
+    }
+}

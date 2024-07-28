@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -21,6 +22,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     private byte[] engineInformation;
@@ -36,7 +38,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     private double odo;
     private double trip;
     private int[] buttonRect;
-    private EntityDataAccessor<Integer> SPEED;
+    private final EntityData<Integer> speed = new EntityData<>(getCart(), new IntData(0));
 
     public ModuleAdvControl(final EntityMinecartModular cart) {
         super(cart);
@@ -353,25 +355,14 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         if (val < 0 || val > 6) {
             return;
         }
-        updateDw(SPEED, val);
+        speed.set(val);
     }
 
     private int getSpeedSetting() {
         if (isPlaceholder()) {
             return 1;
         }
-        return getDw(SPEED);
-    }
-
-    @Override
-    public int numberOfDataWatchers() {
-        return 1;
-    }
-
-    @Override
-    public void initDw() {
-        SPEED = createDw(EntityDataSerializers.INT);
-        registerDw(SPEED, 0);
+        return speed.get();
     }
 
     @Override
