@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.addons;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -11,12 +12,13 @@ import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleChunkLoader extends ModuleAddon implements IActivatorModule
 {
     private boolean rdyToInit;
     private int[] buttonRect;
-    private EntityDataAccessor<Boolean> LOADING_CHUNK;
+    private final EntityData<Boolean> loadingChunk = new EntityData<>(getCart(), new BooleanData(false));
 
     public ModuleChunkLoader(final EntityMinecartModular cart)
     {
@@ -77,7 +79,7 @@ public class ModuleChunkLoader extends ModuleAddon implements IActivatorModule
     {
         if (!isPlaceholder())
         {
-            updateDw(LOADING_CHUNK, val);
+            loadingChunk.set(val);
             if (!getCart().level().isClientSide && rdyToInit)
             {
                 if (val)
@@ -94,8 +96,7 @@ public class ModuleChunkLoader extends ModuleAddon implements IActivatorModule
 
     private boolean isLoadingChunk()
     {
-        if (LOADING_CHUNK == null) return false;
-        return getDw(LOADING_CHUNK);
+        return loadingChunk.get();
     }
 
     @Override
@@ -150,19 +151,6 @@ public class ModuleChunkLoader extends ModuleAddon implements IActivatorModule
     public int numberOfPackets()
     {
         return 1;
-    }
-
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 1;
-    }
-
-    @Override
-    public void initDw()
-    {
-        LOADING_CHUNK = createDw(EntityDataSerializers.BOOLEAN);
-        registerDw(LOADING_CHUNK, false);
     }
 
     @Override

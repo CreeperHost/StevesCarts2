@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.addons;
 
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
@@ -12,6 +13,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.HeightControlOre;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleHeightControl extends ModuleAddon
 {
@@ -22,7 +24,7 @@ public class ModuleHeightControl extends ModuleAddon
     private int[] arrowDown;
     private int oreMapX;
     private int oreMapY;
-    private EntityDataAccessor<Integer> Y_TARGET;
+    private final EntityData<Integer> yTarget = new EntityData<>(getCart(), new IntData(getCart().y()));
 
     public ModuleHeightControl(EntityMinecartModular cart)
     {
@@ -221,22 +223,9 @@ public class ModuleHeightControl extends ModuleAddon
         return 1;
     }
 
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 1;
-    }
-
-    @Override
-    public void initDw()
-    {
-        Y_TARGET = createDw(EntityDataSerializers.INT);
-        registerDw(Y_TARGET, (int) getCart().y());
-    }
-
     public void setYTarget(int val)
     {
-        updateDw(Y_TARGET, val);
+        yTarget.set(val);
     }
 
     @Override
@@ -246,7 +235,7 @@ public class ModuleHeightControl extends ModuleAddon
         {
             return 64;
         }
-        int data = getDw(Y_TARGET);
+        int data = yTarget.get();
 //        if (data < 0)
 //        {
 //            data += 256;

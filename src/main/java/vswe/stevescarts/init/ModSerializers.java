@@ -98,11 +98,11 @@ public class ModSerializers {
             return this;
         }
 
-        private void write(FriendlyByteBuf buf) {
+        public void write(FriendlyByteBuf buf) {
             buf.writeByteArray(storage);
         }
 
-        private static BoolArray read(FriendlyByteBuf buf) {
+        public static BoolArray read(FriendlyByteBuf buf) {
             return new BoolArray(buf.readByteArray());
         }
 
@@ -135,14 +135,14 @@ public class ModSerializers {
             return this;
         }
 
-        private void write(FriendlyByteBuf buf) {
+        public void write(FriendlyByteBuf buf) {
             buf.writeVarInt(storage.length);
             for (short s : storage) {
                 buf.writeShort(s);
             }
         }
 
-        private static ShortArray read(FriendlyByteBuf buf) {
+        public static ShortArray read(FriendlyByteBuf buf) {
             short[] shorts = new short[buf.readVarInt()];
             for (int i = 0; i < shorts.length; i++) {
                 shorts[i] = buf.readShort();

@@ -1,0 +1,48 @@
+package vswe.stevescarts.helpers;
+
+import net.creeperhost.polylib.data.serializable.AbstractDataStore;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.ShortTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import vswe.stevescarts.init.ModSerializers;
+
+/**
+ * Created by brandon3055 on 09/09/2023
+ */
+public class ShortArrayData extends AbstractDataStore<ModSerializers.ShortArray> {
+
+    public ShortArrayData(ModSerializers.ShortArray defaultValue) {
+        super(defaultValue);
+    }
+
+    @Override
+    public void toBytes(RegistryFriendlyByteBuf buf) {
+        value.write(buf);
+    }
+
+    @Override
+    public void fromBytes(RegistryFriendlyByteBuf buf) {
+        value = ModSerializers.ShortArray.read(buf);
+    }
+
+    @Override
+    public Tag toTag(HolderLookup.Provider provider) {
+        ListTag list = new ListTag();
+        for (short s : value.getArray()) {
+            list.add(ShortTag.valueOf(s));
+        }
+        return list;
+    }
+
+    @Override
+    public void fromTag(HolderLookup.Provider provider, Tag tag) {
+        ListTag list = (ListTag) tag;
+        short[] shorts = new short[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            shorts[i] = list.getShort(i);
+        }
+        value = new ModSerializers.ShortArray(shorts);
+    }
+}

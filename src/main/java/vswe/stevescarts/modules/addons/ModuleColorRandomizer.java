@@ -3,14 +3,14 @@ package vswe.stevescarts.modules.addons;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.init.ModSerializers;
+import vswe.stevescarts.helpers.IntArrayData;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 import java.util.Random;
 
@@ -20,7 +20,7 @@ public class ModuleColorRandomizer extends ModuleAddon
     private int cooldown;
     private boolean hover;
     private Random random;
-    private EntityDataAccessor<int[]> COLORS;
+    private final EntityData<int[]> colors = new EntityData<>(getCart(), new IntArrayData(new int[]{255, 255, 255}));
 
     public ModuleColorRandomizer(final EntityMinecartModular cart)
     {
@@ -124,19 +124,6 @@ public class ModuleColorRandomizer extends ModuleAddon
     }
 
     @Override
-    public int numberOfDataWatchers()
-    {
-        return 3;
-    }
-
-    @Override
-    public void initDw()
-    {
-        COLORS = createDw(ModSerializers.INT_ARRAY.get());
-        registerDw(COLORS, new int[]{255, 255, 255});
-    }
-
-    @Override
     public int numberOfPackets()
     {
         return 3;
@@ -157,7 +144,7 @@ public class ModuleColorRandomizer extends ModuleAddon
         {
             return 255;
         }
-        int tempVal = getDw(COLORS)[i];
+        int tempVal = colors.get()[i];
         if (tempVal < 0)
         {
             tempVal += 256;
@@ -167,9 +154,9 @@ public class ModuleColorRandomizer extends ModuleAddon
 
     public void setColorVal(final int id, final int val)
     {
-        int[] colors = getDw(COLORS);
+        int[] colors = this.colors.get();
         colors[id] = val;
-        updateDw(COLORS, colors);
+        this.colors.set(colors);
     }
 
     private float getColorComponent(final int i)

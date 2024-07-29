@@ -37,14 +37,23 @@ public class EntityData<T> {
     }
 
     public void set(T value) {
+        set(value, false);
+    }
+
+    public void set(T value, boolean force) {
         if (getEntity().level() != null && getEntity().level().isClientSide()) {
             return;
         }
         dataStore.set(value);
+        detectAndSend(force);
     }
 
     public void detectAndSend() {
-        if (!(getEntity().level() instanceof ServerLevel) || dataStore.isSameValue(previousValue)) {
+        detectAndSend(false);
+    }
+
+    public void detectAndSend(boolean force) {
+        if (!(getEntity().level() instanceof ServerLevel) || (dataStore.isSameValue(previousValue) && !force)) {
             return;
         }
 

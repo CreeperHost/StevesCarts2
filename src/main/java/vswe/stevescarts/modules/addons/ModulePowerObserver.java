@@ -10,16 +10,16 @@ import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
-import vswe.stevescarts.helpers.Localization;
-import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.helpers.*;
 import vswe.stevescarts.init.ModSerializers;
 import vswe.stevescarts.init.ModSerializers.ShortArray;
+import vswe.stevescarts.polylib.EntityData;
 
 public class ModulePowerObserver extends ModuleAddon
 {
-    private final EntityDataAccessor<ShortArray> AREA_DATA = createDw(ModSerializers.SHORT_ARRAY.get());
-    private final EntityDataAccessor<ShortArray> POWER_LEVEL = createDw(ModSerializers.SHORT_ARRAY.get());
     private int currentEngine;
+    private final EntityData<ShortArray> areaData = new EntityData<>(getCart(), new ShortArrayData(new ShortArray(4)));
+    private final EntityData<ShortArray> powerLevel = new EntityData<>(getCart(), new ShortArrayData(new ShortArray(4)));
 
     public ModulePowerObserver(final EntityMinecartModular cart)
     {
@@ -27,30 +27,20 @@ public class ModulePowerObserver extends ModuleAddon
         currentEngine = -1;
     }
 
-    @Override
-    public void initDw() {
-        registerDw(AREA_DATA, new ShortArray(4));
-        registerDw(POWER_LEVEL, new ShortArray(4));
-    }
-
     public short[] getAreaData() {
-        return getDw(AREA_DATA).getArray();
+        return areaData.get().getArray();
     }
 
     public short[] getPowerLevel() {
-        return getDw(POWER_LEVEL).getArray();
+        return powerLevel.get().getArray();
     }
 
     public void setAreaData(short[] shorts) {
-        updateDw(AREA_DATA, new ShortArray(shorts));
-    }
-    public void setPowerLevel(short[] shorts) {
-        updateDw(POWER_LEVEL, new ShortArray(shorts));
+        areaData.set(new ShortArray(shorts));
     }
 
-    @Override
-    public int numberOfDataWatchers() {
-        return 2;
+    public void setPowerLevel(short[] shorts) {
+        powerLevel.set(new ShortArray(shorts));
     }
 
     @Override

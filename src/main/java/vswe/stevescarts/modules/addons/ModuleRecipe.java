@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.creeperhost.polylib.data.serializable.ByteData;
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
@@ -20,21 +22,21 @@ import vswe.stevescarts.api.slots.SlotChest;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 public abstract class ModuleRecipe extends ModuleAddon
 {
-    private EntityDataAccessor<Byte> TARGET;
-    private EntityDataAccessor<Byte> MAX_ITEM_COUNT;
-    private EntityDataAccessor<Byte> MODE;
-
     protected boolean dirty;
     protected ArrayList<SlotStevesCarts> inputSlots;
     protected ArrayList<SlotStevesCarts> outputSlots;
     protected ArrayList<SlotStevesCarts> allTheSlots;
 
+    private final EntityData<Byte> target = new EntityData<>(getCart(), new ByteData((byte) 3));
+    private final EntityData<Byte> mode = new EntityData<>(getCart(), new ByteData((byte) 0));
+    private final EntityData<Byte> maxItemCount = new EntityData<>(getCart(), new ByteData((byte) 1));
 
     public ModuleRecipe(final EntityMinecartModular cart)
     {
@@ -56,7 +58,7 @@ public abstract class ModuleRecipe extends ModuleAddon
             final int[] area = getArea();
             ResourceHelper.bindResource("/gui/recipe.png");
             drawImage(guiGraphics, gui, area[0] - 2, area[1] - 2, 0, 0, 20, 20);
-            if (getDw(MODE) == 1)
+            if (mode.get() == 1)
             {
                 for (int i = 0; i < 3; ++i)
                 {
@@ -89,7 +91,7 @@ public abstract class ModuleRecipe extends ModuleAddon
         if (canUseAdvancedFeatures())
         {
             String str = null;
-            switch (getDw(MODE))
+            switch (mode.get())
             {
                 case 0:
                 {
@@ -98,7 +100,7 @@ public abstract class ModuleRecipe extends ModuleAddon
                 }
                 case 1:
                 {
-                    str = String.valueOf(getDw(MAX_ITEM_COUNT));
+                    str = String.valueOf(maxItemCount.get());
                     break;
                 }
                 default:
@@ -123,7 +125,7 @@ public abstract class ModuleRecipe extends ModuleAddon
             }
             else
             {
-                icon = TileEntityCargo.itemSelections.get(getDw(TARGET)).getIcon();
+                icon = TileEntityCargo.itemSelections.get(target.get()).getIcon();
             }
             final int[] area = getArea();
             drawItemInInterface(guiGraphics, gui, icon, area[0], area[1]);
@@ -132,7 +134,7 @@ public abstract class ModuleRecipe extends ModuleAddon
 
     private boolean isTargetInvalid()
     {
-        return getDw(TARGET) < 0 || getDw(TARGET) >= TileEntityCargo.itemSelections.size() || TileEntityCargo.itemSelections.get(getDw(TARGET)).getValidSlot() == null;
+        return target.get() < 0 || target.get() >= TileEntityCargo.itemSelections.size() || TileEntityCargo.itemSelections.get(target.get()).getValidSlot() == null;
     }
 
     @Override
@@ -147,7 +149,7 @@ public abstract class ModuleRecipe extends ModuleAddon
             }
             else
             {
-                str += TileEntityCargo.itemSelections.get(getDw(TARGET)).getName();
+                str += TileEntityCargo.itemSelections.get(target.get()).getName();
             }
             drawStringOnMouseOver(guiGraphics, gui, str, x, y, getArea());
             for (int i = 0; i < 3; ++i)
@@ -155,7 +157,7 @@ public abstract class ModuleRecipe extends ModuleAddon
                 if (i == 1)
                 {
                     str = Localization.MODULES.ADDONS.RECIPE_MODE.translate() + "\n" + Localization.MODULES.ADDONS.CURRENT.translate() + ": ";
-                    switch (getDw(MODE))
+                    switch (mode.get())
                     {
                         case 0:
                         {
@@ -174,7 +176,7 @@ public abstract class ModuleRecipe extends ModuleAddon
                         }
                     }
                 }
-                else if (getDw(MODE) != 1)
+                else if (mode.get() != 1)
                 {
                     str = null;
                 }
@@ -210,7 +212,7 @@ public abstract class ModuleRecipe extends ModuleAddon
             int i = 0;
             while (i < 3)
             {
-                if ((getDw(MODE) == 1 || i == 1) && inRect(x, y, getControlRect(i)))
+                if ((mode.get() == 1 || i == 1) && inRect(x, y, getControlRect(i)))
                 {
                     if (i == 1)
                     {
@@ -248,7 +250,7 @@ public abstract class ModuleRecipe extends ModuleAddon
     {
         if (canUseAdvancedFeatures())
         {
-            int mode = getDw(MODE);
+            int mode = this.mode.get();
             if (id == 0)
             {
                 dirty = true;
@@ -267,7 +269,7 @@ public abstract class ModuleRecipe extends ModuleAddon
                 {
                     mode = 2;
                 }
-                updateDw(MODE, (byte) mode);
+                this.mode.set((byte) mode);
             }
             else if (id == 2)
             {
@@ -280,18 +282,18 @@ public abstract class ModuleRecipe extends ModuleAddon
                 {
                     dif *= 10;
                 }
-                int maxItemCount = Math.min(Math.max(1, getDw(MAX_ITEM_COUNT) + dif), 999);
-                updateDw(MAX_ITEM_COUNT, (byte) maxItemCount);
+                int maxItemCount = Math.min(Math.max(1, this.maxItemCount.get() + dif), 999);
+                this.maxItemCount.set((byte) maxItemCount);
             }
         }
     }
 
     private void changeTarget(final boolean up)
     {
-        int target = getDw(TARGET);
+        int target = this.target.get();
         if (target >= TileEntityCargo.itemSelections.size())
         {
-            updateDw(TARGET, (byte) 0);
+            this.target.set((byte) 0);
         }
         else
         {
@@ -303,7 +305,7 @@ public abstract class ModuleRecipe extends ModuleAddon
             {
                 target--;
             }
-            updateDw(TARGET, (byte) target);
+            this.target.set((byte) target);
         }
     }
 
@@ -315,46 +317,28 @@ public abstract class ModuleRecipe extends ModuleAddon
         {
             return null;
         }
-        return TileEntityCargo.itemSelections.get(getDw(TARGET)).getValidSlot();
+        return TileEntityCargo.itemSelections.get(target.get()).getValidSlot();
     }
 
     @Override
-    public int numberOfDataWatchers()
-    {
-        return 3;
-    }
-
-    @Override
-    public void initDw()
-    {
-        super.initDw();
-        TARGET = createDw(EntityDataSerializers.BYTE);
-        MODE = createDw(EntityDataSerializers.BYTE);
-        MAX_ITEM_COUNT = createDw(EntityDataSerializers.BYTE);
-        registerDw(TARGET, (byte) 3);
-        registerDw(MODE, (byte) 0);
-        registerDw(MAX_ITEM_COUNT, (byte) 1);
-    }
-
-    @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
+    protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
         if (canUseAdvancedFeatures())
         {
-            updateDw(TARGET, tagCompound.getByte(generateNBTName("Target", id)));
-            updateDw(MODE, tagCompound.getByte(generateNBTName("Mode", id)));
-            updateDw(MAX_ITEM_COUNT, tagCompound.getByte(generateNBTName("MaxItems", id)));
+            target.load(generateNBTName("Target", id), tag, provider);
+            mode.load(generateNBTName("Mode", id), tag, provider);
+            maxItemCount.load(generateNBTName("MaxItems", id), tag, provider);
         }
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
+    protected void save(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
         if (canUseAdvancedFeatures())
         {
-            tagCompound.putByte(generateNBTName("Target", id), (byte) getDw(TARGET));
-            tagCompound.putByte(generateNBTName("Mode", id), (byte) getDw(MODE));
-            tagCompound.putShort(generateNBTName("MaxItems", id), (byte) getDw(MAX_ITEM_COUNT));
+            target.save(generateNBTName("Target", id), tag, provider);
+            mode.save(generateNBTName("Mode", id), tag, provider);
+            maxItemCount.save(generateNBTName("MaxItems", id), tag, provider);
         }
     }
 
@@ -405,11 +389,11 @@ public abstract class ModuleRecipe extends ModuleAddon
 
     protected boolean canCraftMoreOfResult(@Nonnull ItemStack result)
     {
-        if (getDw(MODE) == 0)
+        if (mode.get() == 0)
         {
             return true;
         }
-        if (getDw(MODE) == 2)
+        if (mode.get() == 2)
         {
             return false;
         }
@@ -420,7 +404,7 @@ public abstract class ModuleRecipe extends ModuleAddon
             if (!item.isEmpty() && ItemStack.isSameItem(item, result) && ItemStack.isSameItemSameComponents(item, result))
             {
                 count += item.getCount();
-                if (count >= getDw(MAX_ITEM_COUNT))
+                if (count >= maxItemCount.get())
                 {
                     return false;
                 }

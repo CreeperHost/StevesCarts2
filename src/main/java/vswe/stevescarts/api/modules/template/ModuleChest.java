@@ -1,5 +1,7 @@
 package vswe.stevescarts.api.modules.template;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -9,11 +11,12 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.api.slots.SlotChest;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.polylib.EntityData;
 
 public abstract class ModuleChest extends ModuleStorage
 {
     private float chestAngle;
-    private EntityDataAccessor<Boolean> IS_OPEN;
+    private final EntityData<Boolean> isOpen = new EntityData<>(getCart(), new BooleanData(false));
 
     public ModuleChest(final EntityMinecartModular cart)
     {
@@ -88,31 +91,11 @@ public abstract class ModuleChest extends ModuleStorage
         return hasVisualChest();
     }
 
-    @Override
-    public int numberOfDataWatchers()
-    {
-        if (hasVisualChest())
-        {
-            return 1;
-        }
-        return 0;
-    }
-
-    @Override
-    public void initDw()
-    {
-        if (hasVisualChest())
-        {
-            IS_OPEN = createDw(EntityDataSerializers.BOOLEAN);
-            registerDw(IS_OPEN, false);
-        }
-    }
-
     public void openChest()
     {
         if (hasVisualChest())
         {
-            updateDw(IS_OPEN, true);
+            isOpen.set(true);
         }
     }
 
@@ -120,7 +103,7 @@ public abstract class ModuleChest extends ModuleStorage
     {
         if (hasVisualChest())
         {
-            updateDw(IS_OPEN, false);
+            isOpen.set(false);
         }
     }
 
@@ -134,7 +117,7 @@ public abstract class ModuleChest extends ModuleStorage
         {
             return getSimInfo().getChestActive();
         }
-        return getDw(IS_OPEN);
+        return isOpen.get();
     }
 
     protected void handleChest()

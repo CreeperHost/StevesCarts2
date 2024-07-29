@@ -232,17 +232,17 @@ public class ModuleSmelter extends ModuleRecipe
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
+    protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
-        super.load(tagCompound, id, provider);
-        energyBuffer = tagCompound.getByte(generateNBTName("Buffer", id));
+        super.load(tag, id, provider);
+        energyBuffer = tag.getByte(generateNBTName("Buffer", id));
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
+    protected void save(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
-        super.save(tagCompound, id, provider);
-        tagCompound.putByte(generateNBTName("Buffer", id), (byte) energyBuffer);
+        super.save(tag, id, provider);
+        tag.putByte(generateNBTName("Buffer", id), (byte) energyBuffer);
     }
 
     @Override

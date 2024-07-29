@@ -53,6 +53,8 @@ public class PacketEntityData implements CustomPacketPayload {
         int entityId = buffer.readVarInt();
         int index = buffer.readVarInt();
         ByteBuf copy = buffer.copy();
+        //TODO, Need to find a better way to handle this packet.
+        while (buffer.readableBytes() > 0) buffer.readByte();
         return new PacketEntityData(entityId, index, new RegistryFriendlyByteBuf(copy, buffer.registryAccess()));
     }
 
@@ -71,10 +73,10 @@ public class PacketEntityData implements CustomPacketPayload {
 
         if (!(level.getEntity(msg.entityId) instanceof DataEntity dataEntity)) return;
 
-        List<EntityData<?, ?>> list = dataEntity.getEntityDataList();
+        List<EntityData<?>> list = dataEntity.getEntityDataList();
         if (msg.index < 0 || msg.index >= list.size()) return;
 
-        EntityData<?, ?> data = list.get(msg.index);
+        EntityData<?> data = list.get(msg.index);
         if (msg.buffer != null){
             data.fromBytes(msg.buffer);
         } else {

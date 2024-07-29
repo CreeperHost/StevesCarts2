@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.creeperhost.polylib.data.serializable.ByteData;
+import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -7,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.fml.ModLoader;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
@@ -18,6 +21,7 @@ import vswe.stevescarts.helpers.LabelInformation;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.template.ModuleTool;
+import vswe.stevescarts.polylib.EntityData;
 
 import java.util.ArrayList;
 
@@ -27,10 +31,11 @@ public class ModuleLabel extends ModuleAddon
     private int delay;
     private ArrayList<SlotStevesCarts> storageSlots;
     private ModuleTool tool;
-    private EntityDataAccessor<Integer> SECONDS;
-    private EntityDataAccessor<Byte> USED;
-    private EntityDataAccessor<Integer> DATA;
-    private EntityDataAccessor<Byte> ACTIVE;
+    private final EntityData<Integer> seconds = new EntityData<>(getCart(), new IntData(0));
+    private final EntityData<Byte> used = new EntityData<>(getCart(), new ByteData((byte) 0));
+    private final EntityData<Integer> data = new EntityData<>(getCart(), new IntData(0));
+    private final EntityData<Byte> active = new EntityData<>(getCart(), new ByteData((byte) (hasToolWithDurability() ? -1 : 0)));
+
     public ModuleLabel(final EntityMinecartModular cart)
     {
         super(cart);
@@ -64,7 +69,7 @@ public class ModuleLabel extends ModuleAddon
             @Override
             public Component getLabel()
             {
-                int seconds = getDw(SECONDS);
+                int seconds = ModuleLabel.this.seconds.get();
                 if (seconds == -1)
                 {
                     return Component.literal(Localization.MODULES.ADDONS.FUEL_NO_CONSUMPTION.translate());
@@ -81,7 +86,7 @@ public class ModuleLabel extends ModuleAddon
             @Override
             public Component getLabel()
             {
-                int used = getDw(USED);
+                int used = ModuleLabel.this.used.get();
                 if (used < 0)
                 {
                     used += 256;
@@ -110,7 +115,7 @@ public class ModuleLabel extends ModuleAddon
                             {
                                 return Component.literal(Localization.MODULES.ADDONS.UNBREAKABLE.translate());
                             }
-                            final int data = getDw(DATA);
+                            final int data = ModuleLabel.this.data.get();
                             if (data == 0)
                             {
                                 return Component.literal(Localization.MODULES.ADDONS.BROKEN.translate());
@@ -196,39 +201,12 @@ public class ModuleLabel extends ModuleAddon
 
     private boolean isActive(final int i)
     {
-        return !isPlaceholder() && (getDw(ACTIVE) & 1 << i) != 0x0;
+        return !isPlaceholder() && (active.get() & 1 << i) != 0x0;
     }
 
     private void toggleActive(final int i)
     {
-        updateDw(ACTIVE, (byte) (getDw(ACTIVE) ^ 1 << i));
-    }
-
-    @Override
-    public int numberOfDataWatchers()
-    {
-        int count = 3;
-        if (hasToolWithDurability())
-        {
-            ++count;
-        }
-        return count;
-    }
-
-    @Override
-    public void initDw()
-    {
-        SECONDS = createDw(EntityDataSerializers.INT);
-        USED = createDw(EntityDataSerializers.BYTE);
-        DATA = createDw(EntityDataSerializers.INT);
-        ACTIVE = createDw(EntityDataSerializers.BYTE);
-        registerDw(ACTIVE, (byte) 0);
-        registerDw(SECONDS, 0);
-        registerDw(USED, (byte) 0);
-        if (hasToolWithDurability())
-        {
-            registerDw(DATA, -1);
-        }
+        active.set((byte) (active.get() ^ 1 << i));
     }
 
     @Override
@@ -260,7 +238,7 @@ public class ModuleLabel extends ModuleAddon
                             data /= consumption * 20;
                         }
                     }
-                    updateDw(SECONDS, data);
+                    seconds.set(data);
                 }
                 if (isActive(4))
                 {
@@ -272,7 +250,7 @@ public class ModuleLabel extends ModuleAddon
                             ++data;
                         }
                     }
-                    updateDw(USED, (byte) data);
+                    used.set((byte) data);
                 }
                 if (hasToolWithDurability())
                 {
@@ -282,21 +260,21 @@ public class ModuleLabel extends ModuleAddon
                         {
                             if (tool.isActuallyRepairing())
                             {
-                                updateDw(DATA, -3 - tool.getRepairPercentage());
+                                data.set(-3 - tool.getRepairPercentage());
                             }
                             else
                             {
-                                updateDw(DATA, -2);
+                                data.set(-2);
                             }
                         }
                         else
                         {
-                            updateDw(DATA, tool.getCurrentDurability());
+                            data.set(tool.getCurrentDurability());
                         }
                     }
-                    else if (getDw(DATA) != -1)
+                    else if (data.get() != -1)
                     {
-                        updateDw(DATA, -1);
+                        data.set(-1);
                     }
                 }
                 delay = 20;
@@ -373,14 +351,14 @@ public class ModuleLabel extends ModuleAddon
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
+    protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
-        updateDw(ACTIVE, tagCompound.getByte(generateNBTName("Active", id)));
+        active.load(generateNBTName("Active", id), tag, provider);
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
+    protected void save(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
-        tagCompound.putByte(generateNBTName("Active", id), getDw(ACTIVE));
+        active.save(generateNBTName("Active", id), tag, provider);
     }
 }

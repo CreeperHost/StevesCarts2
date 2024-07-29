@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.addons;
 
+import net.creeperhost.polylib.data.serializable.ByteData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -13,13 +14,14 @@ import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.modules.workers.ModuleLiquidDrainer;
 import vswe.stevescarts.modules.workers.tools.ModuleDrill;
+import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleLiquidSensors extends ModuleAddon
 {
     private float sensorRotation;
     private int activetime;
     private int mult;
-    private EntityDataAccessor<Byte> SENSOR_INFO;
+    private final EntityData<Byte> sensorInfo = new EntityData<>(getCart(), new ByteData((byte) 1));
 
     public ModuleLiquidSensors(final EntityMinecartModular cart)
     {
@@ -73,19 +75,6 @@ public class ModuleLiquidSensors extends ModuleAddon
         }
     }
 
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 1;
-    }
-
-    @Override
-    public void initDw()
-    {
-        SENSOR_INFO = createDw(EntityDataSerializers.BYTE);
-        registerDw(SENSOR_INFO, (byte) 1);
-    }
-
     private void activateLight(final int light)
     {
         if (getLight() == 3 && light == 2)
@@ -114,7 +103,7 @@ public class ModuleLiquidSensors extends ModuleAddon
         {
             return;
         }
-        byte data = getDw(SENSOR_INFO);
+        byte data = sensorInfo.get();
         data &= 0xFFFFFFFC;
         data |= (byte) val;
         setSensorInfo(data);
@@ -126,7 +115,7 @@ public class ModuleLiquidSensors extends ModuleAddon
         {
             return;
         }
-        updateDw(SENSOR_INFO, val);
+        sensorInfo.set(val);
     }
 
     public int getLight()
@@ -135,7 +124,7 @@ public class ModuleLiquidSensors extends ModuleAddon
         {
             return getSimInfo().getLiquidLight();
         }
-        return getDw(SENSOR_INFO) & 0b11;
+        return sensorInfo.get() & 0b11;
     }
 
     protected boolean isDrillSpinning()
@@ -144,7 +133,7 @@ public class ModuleLiquidSensors extends ModuleAddon
         {
             return getSimInfo().getDrillSpinning();
         }
-        return (getDw(SENSOR_INFO) & 0x4) != 0x0;
+        return (sensorInfo.get() & 0x4) != 0x0;
     }
 
     public float getSensorRotation()

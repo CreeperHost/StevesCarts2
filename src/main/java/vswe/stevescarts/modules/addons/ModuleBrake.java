@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
+import net.creeperhost.polylib.data.serializable.ByteData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -12,12 +14,13 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleBrake extends ModuleAddon implements ILeverModule
 {
     private int[] startstopRect;
     private int[] turnbackRect;
-    private EntityDataAccessor<Boolean> FORGE_STOPPING;
+    private final EntityData<Boolean> forgeStopping = new EntityData<>(getCart(), new BooleanData(false));
 
     public ModuleBrake(final EntityMinecartModular cart)
     {
@@ -90,12 +93,12 @@ public class ModuleBrake extends ModuleAddon implements ILeverModule
         {
             return getSimInfo().getBrakeActive();
         }
-        return getDw(FORGE_STOPPING);
+        return forgeStopping.get();
     }
 
-    private void setForceStopping(final boolean val)
+    private void setForceStopping(boolean val)
     {
-        updateDw(FORGE_STOPPING, val);
+        forgeStopping.set(val);
     }
 
     @Override
@@ -148,19 +151,6 @@ public class ModuleBrake extends ModuleAddon implements ILeverModule
             return 0.0f;
         }
         return 1.0f;
-    }
-
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 1;
-    }
-
-    @Override
-    public void initDw()
-    {
-        FORGE_STOPPING = createDw(EntityDataSerializers.BOOLEAN);
-        registerDw(FORGE_STOPPING, false);
     }
 
     @Override

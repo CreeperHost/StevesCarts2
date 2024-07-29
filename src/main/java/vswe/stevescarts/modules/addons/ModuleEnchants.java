@@ -2,64 +2,46 @@ package vswe.stevescarts.modules.addons;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
-import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotEnchantment;
 import vswe.stevescarts.entities.EntityMinecartModular;
-import vswe.stevescarts.helpers.EnchantmentData;
-import vswe.stevescarts.helpers.Localization;
-import vswe.stevescarts.helpers.ModularEnchantments;
-import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.init.ModSerializers;
+import vswe.stevescarts.helpers.*;
+import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 public class ModuleEnchants extends ModuleAddon {
-    private final EntityDataAccessor<EnchantmentData> ENCHANT_0 = createDw(ModSerializers.ENCHANT_DATA.get());
-    private final EntityDataAccessor<EnchantmentData> ENCHANT_1 = createDw(ModSerializers.ENCHANT_DATA.get());
-    private final EntityDataAccessor<EnchantmentData> ENCHANT_2 = createDw(ModSerializers.ENCHANT_DATA.get());
     private final ArrayList<ModularEnchantments.EnchantmentType> enabledTypes;
+
+    private final EntityData<EnchantmentData> enchant0 = new EntityData<>(getCart(), new EnchantData(null));
+    private final EntityData<EnchantmentData> enchant1 = new EntityData<>(getCart(), new EnchantData(null));
+    private final EntityData<EnchantmentData> enchant2 = new EntityData<>(getCart(), new EnchantData(null));
 
     public ModuleEnchants(EntityMinecartModular cart) {
         super(cart);
         enabledTypes = new ArrayList<>();
     }
 
-    @Override
-    public void initDw() {
-        registerDw(ENCHANT_0, new EnchantmentData(null));
-        registerDw(ENCHANT_1, new EnchantmentData(null));
-        registerDw(ENCHANT_2, new EnchantmentData(null));
-    }
-
-    @Override
-    public int numberOfDataWatchers() {
-        return 3;
-    }
-
+    @Nullable
     public EnchantmentData getEnchant(int index) {
-        return getDw(index == 0 ? ENCHANT_0 : index == 1 ? ENCHANT_1 : ENCHANT_2);
+        return (index == 0 ? enchant0 : index == 1 ? enchant1 : enchant2).get();
     }
 
     public void setEnchant(int index, EnchantmentData data) {
-        updateDw(index == 0 ? ENCHANT_0 : index == 1 ? ENCHANT_1 : ENCHANT_2, data, data.isDirty());
+        (index == 0 ? enchant0 : index == 1 ? enchant1 : enchant2).set(data, data.isDirty());
     }
-
 
     public int getFortuneLevel() {
         if (useSilkTouch()) {

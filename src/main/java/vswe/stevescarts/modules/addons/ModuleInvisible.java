@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.creeperhost.polylib.data.serializable.BooleanData;
+import net.creeperhost.polylib.data.serializable.ByteData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -12,11 +14,12 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleInvisible extends ModuleAddon implements IActivatorModule
 {
     private int[] buttonRect;
-    private EntityDataAccessor<Boolean> VISABLE;
+    private final EntityData<Boolean> visable = new EntityData<>(getCart(), new BooleanData(true));
 
     public ModuleInvisible(final EntityMinecartModular cart)
     {
@@ -91,7 +94,7 @@ public class ModuleInvisible extends ModuleAddon implements IActivatorModule
         {
             return !getSimInfo().getInvisActive();
         }
-        return getDw(VISABLE);
+        return visable.get();
     }
 
     private String getStateName()
@@ -119,7 +122,7 @@ public class ModuleInvisible extends ModuleAddon implements IActivatorModule
 
     public void setIsVisible(final boolean val)
     {
-        updateDw(VISABLE, val);
+        visable.set(val);
     }
 
     @Override
@@ -132,19 +135,6 @@ public class ModuleInvisible extends ModuleAddon implements IActivatorModule
     public boolean shouldCartRender()
     {
         return isVisible();
-    }
-
-    @Override
-    public int numberOfDataWatchers()
-    {
-        return 1;
-    }
-
-    @Override
-    public void initDw()
-    {
-        VISABLE = createDw(EntityDataSerializers.BOOLEAN);
-        registerDw(VISABLE, true);
     }
 
     @Override

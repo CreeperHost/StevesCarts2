@@ -113,7 +113,6 @@ public class EnchantmentData {
 
     public static EnchantmentData read(RegistryFriendlyByteBuf buf) {
         int value = buf.readVarInt();
-//        Enchantment enchantment = buf.registryAccess().registryOrThrow(Registries.ENCHANTMENT).get(buf.readResourceLocation());
         ResourceKey<Enchantment> resKey = ResourceKey.create(Registries.ENCHANTMENT, buf.readResourceLocation());
         Holder<Enchantment> enchantment = buf.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(resKey);
         EnchantmentData data = new EnchantmentData(value == -1 ? null : enchantment);

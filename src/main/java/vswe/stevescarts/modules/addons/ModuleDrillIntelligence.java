@@ -3,7 +3,6 @@ package vswe.stevescarts.modules.addons;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -12,15 +11,15 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.helpers.BoolArrayData;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.init.ModSerializers;
 import vswe.stevescarts.init.ModSerializers.BoolArray;
 import vswe.stevescarts.modules.workers.tools.ModuleDrill;
+import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleDrillIntelligence extends ModuleAddon
 {
-    private final EntityDataAccessor<BoolArray> DISABLED_ARRAY = createDw(ModSerializers.BOOL_ARRAY.get());
     private ModuleDrill drill;
     private boolean hasHeightController;
     private int guiW;
@@ -28,6 +27,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     private boolean clickedState;
     private boolean clicked;
     private int lastId;
+    private final EntityData<BoolArray> disabledArray = new EntityData<>(getCart(), new BoolArrayData(new BoolArray(getDrillWidth() * getDrillHeight())));
 
     public ModuleDrillIntelligence(final EntityMinecartModular cart)
     {
@@ -36,17 +36,12 @@ public class ModuleDrillIntelligence extends ModuleAddon
         guiH = -1;
     }
 
-    @Override
-    public void initDw() {
-        registerDw(DISABLED_ARRAY, new BoolArray(getDrillWidth() * getDrillHeight()));
-    }
-
     public BoolArray getDisabledArray() {
-        return isPlaceholder() ? new BoolArray(16*16) : getDw(DISABLED_ARRAY);
+        return isPlaceholder() ? new BoolArray(16*16) : disabledArray.get();
     }
 
     public void setDisabledArray(BoolArray array) {
-        updateDw(DISABLED_ARRAY, array);
+        disabledArray.set(array);
     }
 
     @Override
@@ -331,10 +326,5 @@ public class ModuleDrillIntelligence extends ModuleAddon
                 }
             }
         }
-    }
-
-    @Override
-    public int numberOfDataWatchers() {
-        return 1;
     }
 }
