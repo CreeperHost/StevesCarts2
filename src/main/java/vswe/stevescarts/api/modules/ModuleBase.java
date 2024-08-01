@@ -33,6 +33,7 @@ import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.VineBlock;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.i18n.FMLTranslations;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import org.jetbrains.annotations.NotNull;
@@ -1749,9 +1750,7 @@ public abstract class ModuleBase
 
     public String getModuleName()
     {
-        //TODO
-        return "TODO";
-//        return I18nExtension.parseMessage("item.stevescarts." + StevesCartsAPI.MODULE_REGISTRY.get(getModuleId()).getRawName());
+        return FMLTranslations.parseMessage("item.stevescarts." + StevesCartsAPI.MODULE_REGISTRY.get(getModuleId()).getRawName());
     }
 
     public ItemStack getItemStack()

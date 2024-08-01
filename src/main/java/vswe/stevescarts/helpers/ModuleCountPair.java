@@ -1,6 +1,7 @@
 package vswe.stevescarts.helpers;
 
 import net.minecraft.nbt.CompoundTag;
+import net.neoforged.fml.i18n.FMLTranslations;
 import vswe.stevescarts.api.modules.data.ModuleData;
 
 public class ModuleCountPair
@@ -50,13 +51,11 @@ public class ModuleCountPair
     @Override
     public String toString()
     {
-        //TODO
-        return "TODO";
-//        String ret = data.getCartInfoText(I18nExtension.parseMessage(name), extraData);
-//        if (count != 1)
-//        {
-//            ret = ret + " x" + count;
-//        }
-//        return ret;
+        String ret = data.getCartInfoText(FMLTranslations.parseMessage(name), extraData);
+        if (count != 1)
+        {
+            ret = ret + " x" + count;
+        }
+        return ret;
     }
 }

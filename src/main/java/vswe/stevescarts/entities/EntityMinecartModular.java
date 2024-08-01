@@ -1595,10 +1595,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         {
             data.writeResourceLocation(b);
         }
-
-        //TODO, this is a hack, Our data watcher implementation is not compatible with 1.20.4+
-        getDataManager().isDirty = true;
-        Arrays.stream(getDataManager().itemsById).forEach(e -> e.setDirty(true));
+        entityDataList.forEach(e -> e.toBytes(data));
     }
 
     @Override
@@ -1611,6 +1608,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             list.add(data.readResourceLocation());
         }
         loadModulesFromNames(list);
+        entityDataList.forEach(e -> e.fromBytes(data));
     }
 
     public void setScrollY(final int val)

@@ -67,6 +67,10 @@ public class EntityData<T> {
         PacketDistributor.sendToPlayersTrackingEntity(getEntity(), new PacketEntityData(getEntity().getId(), index, dataStore));
     }
 
+    public void toBytes(RegistryFriendlyByteBuf buffer) {
+        dataStore.toBytes(buffer);
+    }
+
     public void fromBytes(RegistryFriendlyByteBuf buffer) {
         dataStore.fromBytes(buffer);
     }

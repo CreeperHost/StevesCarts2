@@ -1,5 +1,7 @@
 package vswe.stevescarts.helpers;
 
+import net.neoforged.fml.i18n.FMLTranslations;
+
 public final class Localization
 {
     //TODO, this entire system needs to be switched to Components so this translation can be done client side.
@@ -8,56 +10,55 @@ public final class Localization
     //No point in fixing this, its time to replace
     private static String doTranslate(final String name, final String... vars)
     {
-        return "TODO";
-//        String result = I18nExtension.getPattern(name, () -> name);
-//        for (int i = 0; i < vars.length; ++i)
-//        {
-//            final String pluralCheck = "[%" + (i + 1) + ":";
-//            final int index = result.indexOf(pluralCheck);
-//            if (index != -1)
-//            {
-//                final int endIndex = result.indexOf("]", index);
-//                if (endIndex != -1)
-//                {
-//                    final String optionsStr = result.substring(index + pluralCheck.length(), endIndex);
-//                    final String[] options = optionsStr.split("\\|");
-//                    final int optionId = (!vars[i].equals("1") && !vars[i].equals("-1")) ? 1 : 0;
-//                    if (optionId >= 0 && optionId < options.length)
-//                    {
-//                        final String option = options[optionId];
-//                        result = result.substring(0, index) + option + result.substring(endIndex + 1);
-//                        --i;
-//                    }
-//                }
-//            }
-//            else
-//            {
-//                final String listCheck = "[%" + (i + 1) + "->";
-//                final int index2 = result.indexOf(listCheck);
-//                if (index2 != -1)
-//                {
-//                    final int endIndex2 = result.indexOf("]", index2);
-//                    if (endIndex2 != -1)
-//                    {
-//                        final String optionsStr2 = result.substring(index2 + listCheck.length(), endIndex2);
-//                        final String[] options2 = optionsStr2.split("\\|");
-//                        final int optionId2 = Integer.parseInt(vars[i]);
-//                        if (optionId2 >= 0 && optionId2 < options2.length)
-//                        {
-//                            final String option2 = options2[optionId2];
-//                            result = result.substring(0, index2) + option2 + result.substring(endIndex2 + 1);
-//                            --i;
-//                        }
-//                    }
-//                }
-//                else
-//                {
-//                    result = result.replace("[%" + (i + 1) + "]", vars[i]);
-//                }
-//            }
-//        }
-//        //TODO look into this at some point
-//        return result.replace("Format error: ", "");
+        String result = FMLTranslations.getPattern(name, () -> name);
+        for (int i = 0; i < vars.length; ++i)
+        {
+            final String pluralCheck = "[%" + (i + 1) + ":";
+            final int index = result.indexOf(pluralCheck);
+            if (index != -1)
+            {
+                final int endIndex = result.indexOf("]", index);
+                if (endIndex != -1)
+                {
+                    final String optionsStr = result.substring(index + pluralCheck.length(), endIndex);
+                    final String[] options = optionsStr.split("\\|");
+                    final int optionId = (!vars[i].equals("1") && !vars[i].equals("-1")) ? 1 : 0;
+                    if (optionId >= 0 && optionId < options.length)
+                    {
+                        final String option = options[optionId];
+                        result = result.substring(0, index) + option + result.substring(endIndex + 1);
+                        --i;
+                    }
+                }
+            }
+            else
+            {
+                final String listCheck = "[%" + (i + 1) + "->";
+                final int index2 = result.indexOf(listCheck);
+                if (index2 != -1)
+                {
+                    final int endIndex2 = result.indexOf("]", index2);
+                    if (endIndex2 != -1)
+                    {
+                        final String optionsStr2 = result.substring(index2 + listCheck.length(), endIndex2);
+                        final String[] options2 = optionsStr2.split("\\|");
+                        final int optionId2 = Integer.parseInt(vars[i]);
+                        if (optionId2 >= 0 && optionId2 < options2.length)
+                        {
+                            final String option2 = options2[optionId2];
+                            result = result.substring(0, index2) + option2 + result.substring(endIndex2 + 1);
+                            --i;
+                        }
+                    }
+                }
+                else
+                {
+                    result = result.replace("[%" + (i + 1) + "]", vars[i]);
+                }
+            }
+        }
+        //TODO look into this at some point
+        return result.replace("Format error: ", "");
     }
 
     public static class GUI

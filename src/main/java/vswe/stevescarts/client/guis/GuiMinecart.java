@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.joml.Matrix4f;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.containers.ContainerMinecart;
@@ -586,15 +587,13 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         }
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder buff = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        BufferBuilder buff = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         float zLevel = 0;//1F; //Ether everything needs to be on the same z level, or we need to go through and properly order *everything*
-
         buff.addVertex((x), y + h, zLevel).setUv((float) pt1[0], (float) pt1[1]);
         buff.addVertex((x + w), y + h, zLevel).setUv((float) pt2[0], (float) pt2[1]);
         buff.addVertex((x + w), y, zLevel).setUv((float) pt3[0], (float) pt3[1]);
         buff.addVertex((x), y, zLevel).setUv((float) pt4[0], (float) pt4[1]);
-        BufferUploader.draw(buff.buildOrThrow());
+        BufferUploader.drawWithShader(buff.buildOrThrow());
     }
 
     public enum RENDER_ROTATION
