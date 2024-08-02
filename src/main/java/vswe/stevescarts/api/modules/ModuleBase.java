@@ -811,20 +811,15 @@ public abstract class ModuleBase
      * @param tagCompound The tag compound to write the data to
      * @param id          The number of this module
      */
-    public final void writeToNBT(final CompoundTag tagCompound, final int id, @NotNull HolderLookup.Provider provider)
-    {
-        if (getInventorySize() > 0)
-        {
-            final ListTag items = new ListTag();
-            for (int i = 0; i < getInventorySize(); ++i)
-            {
-                if (!getStack(i).isEmpty())
-                {
-                    final CompoundTag item = new CompoundTag();
-                    item.putByte("Slot", (byte) i);
-                    getStack(i).save(provider, item);
-                    items.add(item);
-                }
+    public final void writeToNBT(final CompoundTag tagCompound, final int id, @NotNull HolderLookup.Provider provider) {
+        if (getInventorySize() > 0) {
+            ListTag items = new ListTag();
+            for (int i = 0; i < getInventorySize(); ++i) {
+                ItemStack stack = getStack(i);
+                if (stack.isEmpty()) continue;
+                CompoundTag itemTag = new CompoundTag();
+                itemTag.putByte("Slot", (byte) i);
+                items.add(stack.save(provider, itemTag));
             }
             tagCompound.put(generateNBTName("Items", id), items);
         }
@@ -847,17 +842,13 @@ public abstract class ModuleBase
      * @param tagCompound The tag compound to read the data from
      * @param id          The number of this module
      */
-    public final void readFromNBT(final CompoundTag tagCompound, final int id, @NotNull HolderLookup.Provider provider)
-    {
-        if (getInventorySize() > 0)
-        {
-            final ListTag items = tagCompound.getList(generateNBTName("Items", id), NBTHelper.COMPOUND.getId());
-            for (int i = 0; i < items.size(); ++i)
-            {
-                final CompoundTag item = items.getCompound(i);
-                final int slot = item.getByte("Slot") & 0xFF;
-                if (slot >= 0 && slot < getInventorySize())
-                {
+    public final void readFromNBT(final CompoundTag tagCompound, final int id, @NotNull HolderLookup.Provider provider) {
+        if (getInventorySize() > 0) {
+            ListTag items = tagCompound.getList(generateNBTName("Items", id), NBTHelper.COMPOUND.getId());
+            for (int i = 0; i < items.size(); ++i) {
+                CompoundTag item = items.getCompound(i);
+                int slot = item.getByte("Slot") & 0xFF;
+                if (slot >= 0 && slot < getInventorySize()) {
                     setStack(slot, ItemStack.parse(provider, item).orElse(ItemStack.EMPTY));
                 }
             }

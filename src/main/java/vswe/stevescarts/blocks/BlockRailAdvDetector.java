@@ -47,6 +47,11 @@ public class BlockRailAdvDetector extends BaseRailBlock
     }
 
     @Override
+    protected MapCodec<? extends BaseRailBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(SHAPE, WATERLOGGED);
@@ -179,10 +184,5 @@ public class BlockRailAdvDetector extends BaseRailBlock
     private boolean isCartReadyForAction(EntityMinecartModular cart, BlockPos pos)
     {
         return cart.disabledPos != null && cart.disabledPos.equals(pos) && cart.isDisabled();
-    }
-
-    @Override
-    protected MapCodec<? extends BaseRailBlock> codec() {
-        return CODEC;
     }
 }

@@ -4,7 +4,7 @@
   "group": "stevescarts",
   "key": {
     "X": {
-      "item": "stevescarts:component_reinforced_metal"
+      "item": "stevescarts:component_galgadorian_metal"
     }
   },
   "pattern": [
@@ -13,6 +13,7 @@
     "XXX"
   ],
   "result": {
-    "item": "stevescarts:reinforced_metal"
+    "count": 1,
+    "id": "stevescarts:galgadorian_metal"
   }
 }

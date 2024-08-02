@@ -7,7 +7,8 @@
     "item": "stevescarts:module_basic_wood_cutter"
   },
   "result": {
-    "item": "stevescarts:module_netherite_wood_cutter"
+    "count": 1,
+    "id": "stevescarts:module_netherite_wood_cutter"
   },
   "template": {
     "item": "minecraft:netherite_upgrade_smithing_template"

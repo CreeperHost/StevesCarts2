@@ -25,16 +25,16 @@ import java.util.ArrayList;
 public class ModuleEnchants extends ModuleAddon {
     private final ArrayList<ModularEnchantments.EnchantmentType> enabledTypes;
 
-    private final EntityData<EnchantmentData> enchant0 = new EntityData<>(getCart(), new EnchantData(null));
-    private final EntityData<EnchantmentData> enchant1 = new EntityData<>(getCart(), new EnchantData(null));
-    private final EntityData<EnchantmentData> enchant2 = new EntityData<>(getCart(), new EnchantData(null));
+    private final EntityData<EnchantmentData> enchant0 = new EntityData<>(getCart(), new EnchantData(new EnchantmentData(null)));
+    private final EntityData<EnchantmentData> enchant1 = new EntityData<>(getCart(), new EnchantData(new EnchantmentData(null)));
+    private final EntityData<EnchantmentData> enchant2 = new EntityData<>(getCart(), new EnchantData(new EnchantmentData(null)));
 
     public ModuleEnchants(EntityMinecartModular cart) {
         super(cart);
         enabledTypes = new ArrayList<>();
     }
 
-    @Nullable
+    @NotNull
     public EnchantmentData getEnchant(int index) {
         return (index == 0 ? enchant0 : index == 1 ? enchant1 : enchant2).get();
     }

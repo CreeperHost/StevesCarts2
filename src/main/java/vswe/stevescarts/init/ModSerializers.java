@@ -12,64 +12,64 @@ import vswe.stevescarts.Constants;
 import vswe.stevescarts.helpers.EnchantmentData;
 
 public class ModSerializers {
-    public static final DeferredRegister<EntityDataSerializer<?>> SERIAL_REGISTER = DeferredRegister.create(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, Constants.MOD_ID);
+//    public static final DeferredRegister<EntityDataSerializer<?>> SERIAL_REGISTER = DeferredRegister.create(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, Constants.MOD_ID);
 
     public static void init(IEventBus bus) {
-        SERIAL_REGISTER.register(bus);
+//        SERIAL_REGISTER.register(bus);
     }
 
-    public static StreamCodec<RegistryFriendlyByteBuf, int[]> INT_ARRAY_CODEC = new StreamCodec<>() {
-        @Override
-        public int[] decode(RegistryFriendlyByteBuf buf) {
-            return buf.readVarIntArray();
-        }
+//    public static StreamCodec<RegistryFriendlyByteBuf, int[]> INT_ARRAY_CODEC = new StreamCodec<>() {
+//        @Override
+//        public int[] decode(RegistryFriendlyByteBuf buf) {
+//            return buf.readVarIntArray();
+//        }
+//
+//        @Override
+//        public void encode(RegistryFriendlyByteBuf buf, int[] ints) {
+//            buf.writeVarIntArray(ints);
+//        }
+//    };
+//
+//    public static StreamCodec<RegistryFriendlyByteBuf, BoolArray> BOOL_ARRAY_CODEC = new StreamCodec<>() {
+//        @Override
+//        public BoolArray decode(RegistryFriendlyByteBuf buf) {
+//            return BoolArray.read(buf);
+//        }
+//
+//        @Override
+//        public void encode(RegistryFriendlyByteBuf buf, BoolArray bools) {
+//            bools.write(buf);
+//        }
+//    };
+//
+//    public static StreamCodec<RegistryFriendlyByteBuf, ShortArray> SHORT_ARRAY_CODEC = new StreamCodec<>() {
+//        @Override
+//        public ShortArray decode(RegistryFriendlyByteBuf buf) {
+//            return ShortArray.read(buf);
+//        }
+//
+//        @Override
+//        public void encode(RegistryFriendlyByteBuf buf, ShortArray bools) {
+//            bools.write(buf);
+//        }
+//    };
+//
+//    public static StreamCodec<RegistryFriendlyByteBuf, EnchantmentData> ENCHANTMENT_CODEC = new StreamCodec<>() {
+//        @Override
+//        public EnchantmentData decode(RegistryFriendlyByteBuf buf) {
+//            return EnchantmentData.read(buf);
+//        }
+//
+//        @Override
+//        public void encode(RegistryFriendlyByteBuf buf, EnchantmentData bools) {
+//            bools.write(buf);
+//        }
+//    };
 
-        @Override
-        public void encode(RegistryFriendlyByteBuf buf, int[] ints) {
-            buf.writeVarIntArray(ints);
-        }
-    };
-
-    public static StreamCodec<RegistryFriendlyByteBuf, BoolArray> BOOL_ARRAY_CODEC = new StreamCodec<>() {
-        @Override
-        public BoolArray decode(RegistryFriendlyByteBuf buf) {
-            return BoolArray.read(buf);
-        }
-
-        @Override
-        public void encode(RegistryFriendlyByteBuf buf, BoolArray bools) {
-            bools.write(buf);
-        }
-    };
-
-    public static StreamCodec<RegistryFriendlyByteBuf, ShortArray> SHORT_ARRAY_CODEC = new StreamCodec<>() {
-        @Override
-        public ShortArray decode(RegistryFriendlyByteBuf buf) {
-            return ShortArray.read(buf);
-        }
-
-        @Override
-        public void encode(RegistryFriendlyByteBuf buf, ShortArray bools) {
-            bools.write(buf);
-        }
-    };
-
-    public static StreamCodec<RegistryFriendlyByteBuf, EnchantmentData> ENCHANTMENT_CODEC = new StreamCodec<>() {
-        @Override
-        public EnchantmentData decode(RegistryFriendlyByteBuf buf) {
-            return EnchantmentData.read(buf);
-        }
-
-        @Override
-        public void encode(RegistryFriendlyByteBuf buf, EnchantmentData bools) {
-            bools.write(buf);
-        }
-    };
-
-    public static DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<int[]>> INT_ARRAY = SERIAL_REGISTER.register("int_array", () -> EntityDataSerializer.forValueType(INT_ARRAY_CODEC));
-    public static DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<BoolArray>> BOOL_ARRAY = SERIAL_REGISTER.register("bool_array", () -> EntityDataSerializer.forValueType(BOOL_ARRAY_CODEC));
-    public static DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<ShortArray>> SHORT_ARRAY = SERIAL_REGISTER.register("short_array", () -> EntityDataSerializer.forValueType(SHORT_ARRAY_CODEC));
-    public static DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<EnchantmentData>> ENCHANT_DATA = SERIAL_REGISTER.register("enchant_data", () -> EntityDataSerializer.forValueType(ENCHANTMENT_CODEC));
+//    public static DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<int[]>> INT_ARRAY = SERIAL_REGISTER.register("int_array", () -> EntityDataSerializer.forValueType(INT_ARRAY_CODEC));
+//    public static DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<BoolArray>> BOOL_ARRAY = SERIAL_REGISTER.register("bool_array", () -> EntityDataSerializer.forValueType(BOOL_ARRAY_CODEC));
+//    public static DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<ShortArray>> SHORT_ARRAY = SERIAL_REGISTER.register("short_array", () -> EntityDataSerializer.forValueType(SHORT_ARRAY_CODEC));
+//    public static DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<EnchantmentData>> ENCHANT_DATA = SERIAL_REGISTER.register("enchant_data", () -> EntityDataSerializer.forValueType(ENCHANTMENT_CODEC));
 
 
     public static class BoolArray {

@@ -48,6 +48,10 @@ public class EntityData<T> {
         detectAndSend(force);
     }
 
+    public AbstractDataStore<T> getStorage() {
+        return dataStore;
+    }
+
     public void detectAndSend() {
         detectAndSend(false);
     }

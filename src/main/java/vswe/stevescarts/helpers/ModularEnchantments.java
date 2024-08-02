@@ -9,6 +9,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +40,7 @@ public class ModularEnchantments {
     }
 
     public static int getMaxValue(Enchantment enchant) {
+        if (enchant == null) return 0;
         int max = 0;
         for (int i = 0; i < enchant.getMaxLevel(); ++i) {
             max += getValue(enchant, i + 1);

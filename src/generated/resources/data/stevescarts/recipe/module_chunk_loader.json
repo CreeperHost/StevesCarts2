@@ -4,16 +4,16 @@
   "group": "stevescarts",
   "key": {
     "D": {
-      "tag": "forge:gems/diamond"
+      "tag": "c:gems/diamond"
     },
     "E": {
       "item": "minecraft:ender_eye"
     },
     "G": {
-      "tag": "forge:ingots/gold"
+      "tag": "c:ingots/gold"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     }
   },
   "pattern": [
@@ -22,6 +22,7 @@
     "IDI"
   ],
   "result": {
-    "item": "stevescarts:module_chunk_loader"
+    "count": 1,
+    "id": "stevescarts:module_chunk_loader"
   }
 }

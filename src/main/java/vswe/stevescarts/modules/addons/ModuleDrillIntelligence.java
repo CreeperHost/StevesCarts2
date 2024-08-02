@@ -42,6 +42,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
 
     public void setDisabledArray(BoolArray array) {
         disabledArray.set(array);
+        disabledArray.detectAndSend(true);
     }
 
     @Override

@@ -4,13 +4,13 @@
   "group": "stevescarts",
   "key": {
     "#": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "P": {
       "item": "minecraft:stone_pressure_plate"
     },
     "X": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     }
   },
   "pattern": [
@@ -19,6 +19,7 @@
     "#P#"
   ],
   "result": {
-    "item": "stevescarts:blockadvdetector"
+    "count": 1,
+    "id": "stevescarts:blockadvdetector"
   }
 }
