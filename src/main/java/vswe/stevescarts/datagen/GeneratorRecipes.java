@@ -3,6 +3,7 @@ package vswe.stevescarts.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -65,7 +66,6 @@ public class GeneratorRecipes extends RecipeProvider
                 .group(Constants.MOD_ID)
                 .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
                 .save(consumer);
-
     }
 
     private void addModuleRecipes(RecipeOutput consumer)

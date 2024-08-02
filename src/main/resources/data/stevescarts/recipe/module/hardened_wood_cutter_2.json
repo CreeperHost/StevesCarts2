@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    "###",
+    "#I#",
+    " X "
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "X": {
+      "item": "stevescarts:module_basic_wood_cutter"
+    },
+    "#": {
+      "item": "stevescarts:component_reinforced_metal"
+    }
+  },
+  "result": {
+    "id": "stevescarts:module_hardened_wood_cutter"
+  }
+}

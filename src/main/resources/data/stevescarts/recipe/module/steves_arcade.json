@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    " G ",
+    "X#X",
+    "RXR"
+  ],
+  "key": {
+    "#": {
+      "item": "stevescarts:component_simple_pcb"
+    },
+    "X": {
+      "tag": "minecraft:planks"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    }
+  },
+  "result": {
+    "id": "stevescarts:module_steves_arcade"
+  }
+}

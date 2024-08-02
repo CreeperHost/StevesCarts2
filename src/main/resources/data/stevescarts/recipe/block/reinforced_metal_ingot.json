@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    "X"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:reinforced_metal"
+    }
+  },
+  "result": {
+    "id": "stevescarts:component_reinforced_metal",
+    "count": 9
+  }
+}

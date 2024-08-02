@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    "SRS",
+    "GRG",
+    "R#R"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:bookshelf"
+    },
+    "R": {
+      "item": "stevescarts:component_reinforced_metal"
+    },
+    "G": {
+      "item": "stevescarts:component_eye_of_galgador"
+    },
+    "#": {
+      "item": "stevescarts:upgrade_module_knowledge"
+    }
+  },
+  "result": {
+    "id": "stevescarts:upgrade_industrial_espionage"
+  }
+}

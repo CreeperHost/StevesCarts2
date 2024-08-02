@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "stevescarts:component_chest_pane"
+    }
+  },
+  "result": {
+    "id": "stevescarts:component_large_chest_pane"
+  }
+}

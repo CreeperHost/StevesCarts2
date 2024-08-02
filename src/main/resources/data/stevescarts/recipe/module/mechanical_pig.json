@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    "# #",
+    "###",
+    "X X"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:porkchop"
+    },
+    "X": {
+      "item": "stevescarts:component_iron_wheels"
+    }
+  },
+  "result": {
+    "id": "stevescarts:module_mechanical_pig"
+  }
+}

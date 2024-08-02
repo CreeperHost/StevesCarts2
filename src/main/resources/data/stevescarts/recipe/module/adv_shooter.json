@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    " D ",
+    " SP",
+    "IEI"
+  ],
+  "key": {
+    "D": {
+      "item": "stevescarts:component_entity_scanner"
+    },
+    "S": {
+      "item": "stevescarts:component_shooting_station"
+    },
+    "P": {
+      "item": "stevescarts:component_pipe"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "E": {
+      "item": "stevescarts:component_entity_analyzer"
+    }
+  },
+  "result": {
+    "id": "stevescarts:module_advanced_shooter"
+  }
+}

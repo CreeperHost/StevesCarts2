@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:component_lump_of_galgador"
+    }
+  },
+  "result": {
+    "id": "stevescarts:component_large_lump_of_galgador"
+  }
+}

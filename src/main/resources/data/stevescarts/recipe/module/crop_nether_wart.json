@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    "#",
+    "X"
+  ],
+  "key": {
+    "X": {
+      "item": "stevescarts:component_empty_disk"
+    },
+    "#": {
+      "item": "minecraft:nether_wart"
+    }
+  },
+  "result": {
+    "id": "stevescarts:module_crop_nether_wart"
+  }
+}

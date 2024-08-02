@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    "GDG",
+    "XPX",
+    "#X#"
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "X": {
+      "item": "minecraft:glass_pane"
+    },
+    "#": {
+      "item": "minecraft:redstone"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "P": {
+      "item": "stevescarts:component_simple_pcb"
+    }
+  },
+  "result": {
+    "id": "stevescarts:component_graphical_interface"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:torch"
+    }
+  },
+  "result": {
+    "id": "stevescarts:component_tri_torch"
+  }
+}

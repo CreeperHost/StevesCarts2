@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    "PPP",
+    "PSP",
+    "PPP"
+  ],
+  "key": {
+    "S": {
+      "item": "stevescarts:component_shooting_station"
+    },
+    "P": {
+      "item": "stevescarts:component_pipe"
+    }
+  },
+  "result": {
+    "id": "stevescarts:module_shooter"
+  }
+}

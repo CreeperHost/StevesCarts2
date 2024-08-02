@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    "#",
+    "X",
+    "X"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:gunpowder"
+    },
+    "#": {
+      "item": "stevescarts:component_fuse"
+    }
+  },
+  "result": {
+    "id": "stevescarts:component_dynamite"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    "X#X",
+    "TET",
+    "X#X"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:magma_cream"
+    },
+    "#": {
+      "item": "minecraft:fermented_spider_eye"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "T": {
+      "item": "minecraft:ghast_tear"
+    }
+  },
+  "result": {
+    "id": "stevescarts:component_eye_of_galgador"
+  }
+}

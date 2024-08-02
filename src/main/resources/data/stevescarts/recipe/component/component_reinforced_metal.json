@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "group": "stevescarts",
+  "ingredient": {
+    "item": "stevescarts:component_stabilized_metal"
+  },
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_reinforced_metal"
+  },
+  "experience": 0.7,
+  "cookingtime": 200
+}

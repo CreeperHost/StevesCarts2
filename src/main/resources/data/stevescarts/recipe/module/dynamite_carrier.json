@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "pattern": [
+    " # ",
+    "#X#",
+    " # "
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:flint_and_steel"
+    },
+    "#": {
+      "item": "stevescarts:component_dynamite"
+    }
+  },
+  "result": {
+    "id": "stevescarts:module_dynamite_carrier"
+  }
+}
