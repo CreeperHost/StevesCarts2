@@ -487,13 +487,13 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderOverlay(Screen gui, GuiGraphics render, float partialTicks)
+    public void renderOverlay(GuiGraphics render, float partialTicks)
     {
         if (modules != null)
         {
             for (final ModuleBase module : modules)
             {
-                module.renderOverlay(gui, render, partialTicks);
+                module.renderOverlay(render, partialTicks);
             }
         }
     }

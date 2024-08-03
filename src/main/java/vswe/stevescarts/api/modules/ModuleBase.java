@@ -1587,7 +1587,7 @@ public abstract class ModuleBase
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderOverlay(Screen gui, GuiGraphics render, float partialTicks)
+    public void renderOverlay(GuiGraphics render, float partialTicks)
     {
     }
 

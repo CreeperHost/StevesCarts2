@@ -68,8 +68,8 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void renderOverlay(Screen gui, GuiGraphics render, float partialTicks) {
-        Minecraft mc = gui.getMinecraft();
+    public void renderOverlay(GuiGraphics render, float partialTicks) {
+        Minecraft mc = Minecraft.getInstance();
         ResourceHelper.bindResource("/gui/drive.png");
         if (engineInformation != null)
         {
@@ -88,11 +88,11 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         }
         int enginesEndAt = getCart().getEngines().size() * 15;
         drawImage(5, enginesEndAt, 0, 15, 32, 32);
-        if (gui.getMinecraft().options.keyUp.isDown()) {
+        if (mc.options.keyUp.isDown()) {
             drawImage(15, enginesEndAt + 5, 42, 20, 12, 6);
-        } else if (gui.getMinecraft().options.keyLeft.isDown()) {
+        } else if (mc.options.keyLeft.isDown()) {
             drawImage(7, enginesEndAt + 13, 34, 28, 6, 12);
-        } else if (gui.getMinecraft().options.keyRight.isDown()) {
+        } else if (mc.options.keyRight.isDown()) {
             drawImage(29, enginesEndAt + 13, 56, 28, 6, 12);
         }
         int speedGraphicHeight = getSpeedSetting() * 2;

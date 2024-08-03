@@ -1,8 +1,10 @@
 package vswe.stevescarts.events;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
@@ -12,16 +14,15 @@ import vswe.stevescarts.entities.EntityMinecartModular;
 public class OverlayEventHandler {
 
     public static void init(IEventBus iEventBus) {
-//        iEventBus.addListener(OverlayEventHandler::registerOverlay);
+        iEventBus.addListener(OverlayEventHandler::registerOverlay);
     }
 
-    //TODO
-//    private static void registerOverlay(RegisterGuiOverlaysEvent event) {
-//        event.registerAboveAll(new ResourceLocation(Constants.MOD_ID, "cart_overlay"), (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
-//            Player player = gui.getMinecraft().player;
-//            if (gui.getMinecraft().screen == null && player.getVehicle() instanceof EntityMinecartModular cart) {
-//                cart.renderOverlay(gui, guiGraphics, partialTick);
-//            }
-//        });
-//    }
+    private static void registerOverlay(RegisterGuiLayersEvent event) {
+        event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "cart_overlay"), (graphics, deltaTracker) -> {
+            Player player = Minecraft.getInstance().player;
+            if (Minecraft.getInstance().screen == null && player.getVehicle() instanceof EntityMinecartModular cart) {
+                cart.renderOverlay(graphics, deltaTracker.getGameTimeDeltaPartialTick(false));
+            }
+        });
+    }
 }
