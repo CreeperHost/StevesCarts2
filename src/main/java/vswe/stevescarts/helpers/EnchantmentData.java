@@ -62,7 +62,9 @@ public class EnchantmentData {
         if (level > enchant.value().getMaxLevel() || value <= 0) {
             return false;
         }
-        int levelvalue = ModularEnchantments.getValue(enchant.value(), level);
+        var optkey = enchant.unwrapKey();
+        if (!optkey.isPresent()) return false;
+        int levelvalue = ModularEnchantments.getValue(optkey.get(), level);
         if (!damageEnchantLevel(dmg, value - levelvalue, level + 1)) {
             int dmgdealt = dmg * (int) Math.pow(2.0, level - 1);
             if (dmgdealt > value) {
@@ -76,24 +78,28 @@ public class EnchantmentData {
     //Effective enchantment level
     public int getLevel() {
         if (enchant == null) return 0;
+        var optkey = enchant.unwrapKey();
+        if (!optkey.isPresent()) return 0;
         int value = getValue();
         for (int i = 0; i < enchant.value().getMaxLevel(); ++i) {
             if (value <= 0) {
                 return i;
             }
-            value -= ModularEnchantments.getValue(enchant.value(), i + 1);
+            value -= ModularEnchantments.getValue(optkey.get(), i + 1);
         }
         return enchant.value().getMaxLevel();
     }
 
     public String getInfoText() {
         if (enchant == null) return "";
+        var optkey = enchant.unwrapKey();
+        if (!optkey.isPresent()) return "";
         int value = getValue();
         int level = 0;
         int percentage = 0;
         for (level = 1; level <= enchant.value().getMaxLevel(); ++level) {
             if (value > 0) {
-                final int levelvalue = ModularEnchantments.getValue(enchant.value(), level);
+                final int levelvalue = ModularEnchantments.getValue(optkey.get(), level);
                 percentage = 100 * value / levelvalue;
                 value -= levelvalue;
                 if (value < 0) {

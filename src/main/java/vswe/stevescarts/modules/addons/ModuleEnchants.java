@@ -148,14 +148,17 @@ public class ModuleEnchants extends ModuleAddon {
     public void damageEnchant(final ModularEnchantments.EnchantmentType type, int dmg) {
         for (int i = 0; i < 3; ++i) {
             EnchantmentData data = getEnchant(i);
-            if (data.getEnchant() != null && ModularEnchantments.getType(data.getEnchant()) == type) {
-                data.damageEnchant(dmg);
+            if (data.getEnchantHolder() != null) {
+                var optkey = data.getEnchantHolder().unwrapKey();
+                if (optkey.isPresent() && ModularEnchantments.getType(optkey.get()) == type){
+                    data.damageEnchant(dmg);
+                }
             }
         }
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @OnlyIn (Dist.CLIENT)
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
         ResourceHelper.bindResource("/gui/enchant.png");
         for (int i = 0; i < 3; ++i) {
@@ -166,26 +169,29 @@ public class ModuleEnchants extends ModuleAddon {
                 drawImage(guiGraphics, gui, box, 0, 0);
             }
             EnchantmentData data = getEnchant(i);
-            if (data.getEnchant() != null) {
-                int maxlevel = data.getEnchant().getMaxLevel();
-                int value = data.getValue();
-                for (int j = 0; j < maxlevel; ++j) {
-                    int[] bar = getBarRect(i, j, maxlevel);
-                    if (j != maxlevel - 1) {
-                        drawImage(guiGraphics, gui, bar[0] + bar[2], bar[1], 61 + j, 1, 1, bar[3]);
-                    }
-                    int levelmaxvalue = ModularEnchantments.getValue(data.getEnchant(), j + 1);
-                    if (value > 0) {
-                        float mult = (float) value / (float) levelmaxvalue;
-                        if (mult > 1.0f) {
-                            mult = 1.0f;
-                        }
-                        bar[2] *= mult;
-                        drawImage(guiGraphics, gui, bar, 1, 13 + 11 * j);
-                    }
-                    value -= levelmaxvalue;
+            if (data.getEnchantHolder() == null) continue;
+            var optkey = data.getEnchantHolder().unwrapKey();
+            if (!optkey.isPresent()) continue;
+
+            int maxlevel = data.getEnchant().getMaxLevel();
+            int value = data.getValue();
+            for (int j = 0; j < maxlevel; ++j) {
+                int[] bar = getBarRect(i, j, maxlevel);
+                if (j != maxlevel - 1) {
+                    drawImage(guiGraphics, gui, bar[0] + bar[2], bar[1], 61 + j, 1, 1, bar[3]);
                 }
+                int levelmaxvalue = ModularEnchantments.getValue(optkey.get(), j + 1);
+                if (value > 0) {
+                    float mult = (float) value / (float) levelmaxvalue;
+                    if (mult > 1.0f) {
+                        mult = 1.0f;
+                    }
+                    bar[2] *= mult;
+                    drawImage(guiGraphics, gui, bar, 1, 13 + 11 * j);
+                }
+                value -= levelmaxvalue;
             }
+
         }
     }
 

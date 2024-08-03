@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class ModularEnchantments {
 
@@ -35,15 +36,15 @@ public class ModularEnchantments {
         ENCHANTMENT_BASE_VALUES.put(enchantment, baseValue);
     }
 
-    public static int getValue(Enchantment enchant, int level) {
+    public static int getValue(ResourceKey<Enchantment> enchant, int level) {
         return (int) Math.pow(2.0, level - 1) * ENCHANTMENT_BASE_VALUES.getOrDefault(enchant, 0);
     }
 
-    public static int getMaxValue(Enchantment enchant) {
+    public static int getMaxValue(Enchantment enchant, ResourceKey<Enchantment> key) {
         if (enchant == null) return 0;
         int max = 0;
         for (int i = 0; i < enchant.getMaxLevel(); ++i) {
-            max += getValue(enchant, i + 1);
+            max += getValue(key, i + 1);
         }
         return max;
     }
@@ -51,7 +52,7 @@ public class ModularEnchantments {
     public static boolean isValidBook(ItemStack stack, List<EnchantmentType> validTypes) {
         if (stack.isEmpty() || !stack.is(Items.ENCHANTED_BOOK)) return false;
 
-        ItemEnchantments enchants = stack.getTagEnchantments();
+        ItemEnchantments enchants = EnchantmentHelper.getEnchantmentsForCrafting(stack);
         for (Holder<Enchantment> enchantment : enchants.keySet()) {
             ResourceKey<Enchantment> key = enchantment.unwrapKey().orElse(null);
             if (key == null || !ENCHANTMENT_TYPES.containsKey(key)) continue;
@@ -67,7 +68,7 @@ public class ModularEnchantments {
 
     public static EnchantmentData addBook(List<EnchantmentType> enabledTypes, EnchantmentData data, @NotNull ItemStack stack) {
         if (stack.isEmpty() || stack.getItem() != Items.ENCHANTED_BOOK) return data;
-        ItemEnchantments enchants = stack.getTagEnchantments();
+        ItemEnchantments enchants = EnchantmentHelper.getEnchantmentsForCrafting(stack);
         int addLevel = -1;
 
         if (data.getEnchantHolder() == null) {
@@ -85,15 +86,17 @@ public class ModularEnchantments {
         }
 
         if (addLevel == -1) return data;
-        int newValue = getValue(data.getEnchant(), addLevel) + data.getValue();
-        if (newValue <= getMaxValue(data.getEnchant())) {
+        var opKey = data.getEnchantHolder().unwrapKey();
+        if (opKey.isEmpty()) return data;
+        int newValue = getValue(opKey.get(), addLevel) + data.getValue();
+        if (newValue <= getMaxValue(data.getEnchant(), opKey.get())) {
             data.setValue(newValue);
             stack.shrink(1);
         }
         return data;
     }
 
-    public static EnchantmentType getType(Enchantment enchant) {
+    public static EnchantmentType getType(ResourceKey<Enchantment> enchant) {
         return ENCHANTMENT_TYPES.get(enchant);
     }
 
