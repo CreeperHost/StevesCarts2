@@ -1,15 +1,14 @@
 package vswe.stevescarts.api.modules.template;
 
 import net.creeperhost.polylib.data.serializable.BooleanData;
-import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.api.slots.SlotChest;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -128,8 +127,7 @@ public abstract class ModuleChest extends ModuleStorage
         }
         if (isChestActive() && lidClosed() && playChestSound())
         {
-            //TODO Sounds
-            //			getCart().world.playSound(null, getCart().getPosition(), SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.PLAYERS, 0.5F, getCart().world.rand.nextFloat() * 0.1f + 0.9f);
+            getCart().level().playSound(null, getCart().blockPosition(), SoundEvents.CHEST_OPEN, SoundSource.PLAYERS, 0.5F, getCart().level().random.nextFloat() * 0.1f + 0.9f);
         }
         if (isChestActive() && chestAngle < chestFullyOpenAngle())
         {
@@ -145,8 +143,7 @@ public abstract class ModuleChest extends ModuleStorage
             chestAngle -= getLidSpeed();
             if (chestAngle < 1.1780972450961724 && lastAngle >= 1.1780972450961724 && playChestSound())
             {
-                //TODO Sounds
-                //getCart().world.playSound(null, getCart().getPosition(), SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.PLAYERS, 0.5F, getCart().world.rand.nextFloat() * 0.1f + 0.9f);
+                getCart().level().playSound(null, getCart().blockPosition(), SoundEvents.CHEST_CLOSE, SoundSource.PLAYERS, 0.5F, getCart().level().random.nextFloat() * 0.1f + 0.9f);
             }
             if (chestAngle < 0.0f)
             {

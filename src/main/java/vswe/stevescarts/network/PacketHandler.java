@@ -27,7 +27,7 @@ public class PacketHandler {
         registrar.playToServer(PacketCargpManager.TYPE,             StreamCodec.of((buff, packet) -> packet.write(buff), PacketCargpManager::read),     new PacketCargpManager.Handler());
         registrar.playToServer(PacketDistributorTile.TYPE,          StreamCodec.of((buff, packet) -> packet.write(buff), PacketDistributorTile::read),  new PacketDistributorTile.Handler());
         registrar.playToServer(PacketActivator.TYPE,                StreamCodec.of((buff, packet) -> packet.write(buff), PacketActivator::read),        new PacketActivator.Handler());
-        registrar.playToServer(PacketFluidSync.TYPE,                StreamCodec.of((buff, packet) -> packet.write(buff), PacketFluidSync::read),        new PacketFluidSync.Handler());
+        registrar.playToClient(PacketFluidSync.TYPE,                StreamCodec.of((buff, packet) -> packet.write(buff), PacketFluidSync::read),        new PacketFluidSync.Handler());
         registrar.playToServer(PacketMinecartTurn.TYPE,             StreamCodec.of((buff, packet) -> packet.write(buff), PacketMinecartTurn::read),     new PacketMinecartTurn.Handler());
         registrar.playToClient(PacketGuiData.TYPE,                  StreamCodec.of((buff, packet) -> packet.write(buff), PacketGuiData::read),          new PacketGuiData.Handler());
         registrar.playToClient(PacketEntityData.TYPE,               StreamCodec.of((buff, packet) -> packet.write(buff), PacketEntityData::read),       new PacketEntityData.Handler());

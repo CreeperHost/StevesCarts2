@@ -606,7 +606,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
 
     @Override
     public double getEyeY() {
-        return 0.9F;
+        return this.position().y + 0.9F;
     }
 
     //TODO

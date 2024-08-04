@@ -334,8 +334,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                             @Nonnull ItemStack oldcart = tile.getItem(0);
                             if (!oldcart.isEmpty() && !outputItem.isEmpty() && oldcart.getItem() instanceof ItemCarts && outputItem.getItem() instanceof ItemCarts)
                             {
-                                //TODO
-//                                outputItem.setHoverName(oldcart.getDisplayName());
+                                outputItem.set(DataComponents.CUSTOM_NAME, oldcart.getDisplayName());
                             }
                             tile.setItem(0, ItemStack.EMPTY);
                         }

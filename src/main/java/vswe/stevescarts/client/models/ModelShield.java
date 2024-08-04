@@ -52,7 +52,7 @@ public class ModelShield extends ModelCartbase {
         float shieldDistance = (module == null) ? 18.0f : ((ModuleShield) module).getShieldDistance();
         enabled = module == null || ((ModuleShield) module).hasShield();
         if (!enabled) return;
-        float shieldAngle = (module == null) ? 0.0f : interpolate(((ModuleShield) module).getShieldAngle(), ((ModuleShield) module).getShieldAngle(), Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false));
+        float shieldAngle = (module == null) ? 0.0f : interpolate(((ModuleShield) module).getLastShieldAngle(), ((ModuleShield) module).getShieldAngle(), Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false));
 
         for (int i = 0; i < shields.length; i++) {
             ModelPart part = shields[i];

@@ -75,7 +75,7 @@ public abstract class ModuleWorker extends ModuleBase
         return getNextblock(true);
     }
 
-    private BlockPos getNextblock(final boolean flag)
+    private BlockPos getNextblock(boolean flag)
     {
         BlockPos pos = getCart().blockPosition();
         if (BaseRailBlock.isRail(getCart().level(), pos.below()))

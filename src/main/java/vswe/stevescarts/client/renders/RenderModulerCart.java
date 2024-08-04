@@ -14,6 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
@@ -142,7 +143,8 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular> {
         float f = cart.getBbHeight() + 1.5F;
         poseStack.pushPose();
         poseStack.translate(0.0D, f, 0.0D);
-        poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+
+        poseStack.mulPose(new Quaternionf(this.entityRenderDispatcher.cameraOrientation()).rotateY((float) Math.PI));
         poseStack.scale(-0.025F, -0.025F, 0.025F);
         Matrix4f matrix4f = poseStack.last().pose();
         float f1 = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
@@ -154,10 +156,10 @@ public class RenderModulerCart extends EntityRenderer<EntityMinecartModular> {
         for (int i = 0; i < labels.size(); i++) {
             Component label = labels.get(i);
             float f2 = (float) (-font.width(label) / 2);
-            font.drawInBatch(label, f2, height, 553648127, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, j, p_114502_);
-            font.drawInBatch(label, f2, height, -1, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, 0, p_114502_);
+            font.drawInBatch(label, f2, height, 0x20ffffff, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, j, p_114502_);
+            font.drawInBatch(label, f2, height, 0xffffffff, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, 0, p_114502_);
 
-            height += font.lineHeight;
+            height += font.lineHeight + 1;
         }
 
         poseStack.popPose();
