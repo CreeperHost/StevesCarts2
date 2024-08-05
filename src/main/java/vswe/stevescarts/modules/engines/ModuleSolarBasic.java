@@ -19,7 +19,7 @@ public class ModuleSolarBasic extends ModuleSolarTop
     @Override
     protected int getMaxCapacity()
     {
-        return 100000;
+        return 10000;
     }
 
     @Override

@@ -10,8 +10,8 @@ import vswe.stevescarts.helpers.ResourceHelper;
 
 public class ModelCleaner extends ModelCartbase {
 
-    public ModelCleaner() {
-        super(null, ResourceHelper.getResource("/models/cleanerModel.png"));
+    public ModelCleaner(boolean liquid) {
+        super(null, ResourceHelper.getResource(liquid ? "/models/cleanermodelliquid.png" : "/models/cleanermodel.png"));
         makeModel();
     }
 

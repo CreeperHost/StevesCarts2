@@ -14,7 +14,6 @@ import vswe.stevescarts.client.models.storages.tanks.ModelAdvancedTank;
 import vswe.stevescarts.client.models.storages.tanks.ModelFrontTank;
 import vswe.stevescarts.client.models.storages.tanks.ModelSideTanks;
 import vswe.stevescarts.client.models.storages.tanks.ModelTopTank;
-import vswe.stevescarts.client.models.workers.ModelLiquidDrainer;
 import vswe.stevescarts.client.models.workers.ModelRailer;
 import vswe.stevescarts.client.models.workers.ModelTorchplacer;
 import vswe.stevescarts.client.models.workers.ModelTrackRemover;
@@ -87,7 +86,7 @@ public class StevesCartsClient
         SHOOTER.removeModel("Top").addModel("Rig", new ModelShootingRig()).addModel("Pipes", new ModelGun());
         ADVANCED_SHOOTER.removeModel("Top").addModel("Rig", new ModelShootingRig()).addModel("MobDetector", new ModelMobDetector()).addModel("Pipes", new ModelSniperRifle());
 
-        CLEANER.addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelCleaner());
+        CLEANER.addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelCleaner(false));
         DYNAMITE_CARRIER.addModel("Tnt", new ModelDynamite(ResourceHelper.getResource("/models/tntModel.png")));
         DIVINE_SHIELD.addModel("Shield", new ModelShield()).setModelMult(0.68f);
         NOTE_SEQUENCER.setModelMult(0.65f).addModel("Speakers", new ModelNote());
@@ -96,7 +95,7 @@ public class StevesCartsClient
         TOP_TANK.addModel("TopTank", new ModelTopTank());
         ADVANCED_TANK.addModel("LargeTank", new ModelAdvancedTank()).removeModel("Top");
         FRONT_TANK.setModelMult(0.68f).addModel("FrontTank", new ModelFrontTank());
-        CLEANER_LIQUID.addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelLiquidDrainer());
+        CLEANER_LIQUID.addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelCleaner(true));
         LAWN_MOWER.addModel("LawnMower", new ModelLawnMower()).setModelMult(0.4f);
         CAKE_SERVER.addModel("Cake", new ModelCake());
     }
