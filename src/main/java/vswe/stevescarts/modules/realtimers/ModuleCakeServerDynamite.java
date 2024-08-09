@@ -17,7 +17,7 @@ public class ModuleCakeServerDynamite extends ModuleCakeServer
 
     private int getMaxDynamiteCount()
     {
-        return Math.min(SCConfig.maxDynamites.get(), 25);
+        return Math.min(SCConfig.COMMON.maxDynamites.get(), 25);
     }
 
     public ModuleCakeServerDynamite(final EntityMinecartModular cart)

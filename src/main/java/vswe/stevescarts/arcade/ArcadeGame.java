@@ -35,7 +35,7 @@ public abstract class ArcadeGame
     @OnlyIn(Dist.CLIENT)
     public void update()
     {
-        if (SCConfig.useArcadeSounds.get())
+        if (SCConfig.CLIENT.useArcadeSounds.get())
         {
             getModule().getCart().silent();
         }
@@ -99,7 +99,7 @@ public abstract class ArcadeGame
     @OnlyIn(Dist.CLIENT)
     public static void playSound(SoundEvent sound, float volume, float pitch)
     {
-        if (SCConfig.useArcadeSounds.get() && sound != null)
+        if (SCConfig.CLIENT.useArcadeSounds.get() && sound != null)
         {
             //			SoundHandler.playSound(sound, SoundCategory.BLOCKS, volume, pitch);
         }

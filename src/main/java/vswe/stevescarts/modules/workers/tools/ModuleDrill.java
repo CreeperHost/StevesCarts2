@@ -144,8 +144,8 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
 
     private boolean isMiningSpotAllowed(BlockPos next, int holeX, int holeY, int[] range)
     {
-        int maxHeight = SCConfig.drillSize.get() * 2 + 1 - (hasHeightController ? range[2] == 0 ? -1 : 1 : 0);
-        if (Math.abs(holeX) <= SCConfig.drillSize.get() && holeY <= maxHeight)
+        int maxHeight = SCConfig.COMMON.drillSize.get() * 2 + 1 - (hasHeightController ? range[2] == 0 ? -1 : 1 : 0);
+        if (Math.abs(holeX) <= SCConfig.COMMON.drillSize.get() && holeY <= maxHeight)
         {
             return intelligence == null || intelligence.isActive(holeX + blocksOnSide(), holeY, range[2], next.getX() > getCart().x() || next.getZ() < getCart().z());
         }

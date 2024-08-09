@@ -135,7 +135,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
             for (int j = 0; j < h; ++j)
             {
                 final int[] rect = getSettingRect(i, j);
-                int maxY = ((getDrillHeight() / 2 - 1) - SCConfig.drillSize.get()) * 2;
+                int maxY = ((getDrillHeight() / 2 - 1) - SCConfig.COMMON.drillSize.get()) * 2;
 
                 int srcX = (!hasHeightController || (j != maxY && j != h - 1)) ? 0 : 8;
                 int srcY = 0;
@@ -189,7 +189,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
 
     private boolean isRestricted(int id)
     {
-        int size = SCConfig.drillSize.get();
+        int size = SCConfig.COMMON.drillSize.get();
         int centerX = (getDrillWidth() - 1) / 2;
         int x = id % getDrillWidth();
 

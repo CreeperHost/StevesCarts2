@@ -398,7 +398,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
 
     public int generateAssemblingTime()
     {
-        if (SCConfig.disableTimedCrafting.get())
+        if (SCConfig.COMMON.disableTimedCrafting.get())
         {
             return 1;
         }

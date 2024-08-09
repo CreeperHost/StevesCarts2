@@ -25,6 +25,6 @@ public class ModuleSolarBasic extends ModuleSolarTop
     @Override
     protected int getGenSpeed()
     {
-        return SCConfig.basic_solar_production.get();
+        return SCConfig.COMMON.basic_solar_production.get();
     }
 }

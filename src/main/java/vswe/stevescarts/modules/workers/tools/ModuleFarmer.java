@@ -4,8 +4,6 @@ import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -13,14 +11,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.util.TriState;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.farms.ICropModule;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -162,10 +159,12 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
                 if (!getStack(i).isEmpty() && isSeedValidHandler(getStack(i)))
                 {
                     BlockState cropblock = getCropFromSeedHandler(getStack(i));
-                    if (cropblock != null && cropblock.getBlock() instanceof IPlantable plantable && world.getBlockState(pos.above()).isAir() && soilblock.canSustainPlant(soilState, world, pos, Direction.UP, plantable))
-                    {
-                        hasSeeds = i;
-                        break;
+                    if (cropblock != null && world.getBlockState(pos.above()).isAir()) {
+                        TriState state = soilblock.canSustainPlant(soilState, world, pos, Direction.UP, cropblock);
+                        if (state.isTrue() || state.isDefault()) {
+                            hasSeeds = i;
+                            break;
+                        }
                     }
                 }
             }

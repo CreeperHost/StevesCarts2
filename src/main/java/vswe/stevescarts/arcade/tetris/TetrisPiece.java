@@ -172,7 +172,7 @@ public class TetrisPiece
                             isGameOver = true;
                         }
                     }
-                    if (SCConfig.useArcadeMobSounds.get())
+                    if (SCConfig.CLIENT.useArcadeMobSounds.get())
                     {
                         if (sound != null)
                         {

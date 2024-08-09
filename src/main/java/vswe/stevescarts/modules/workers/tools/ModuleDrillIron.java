@@ -40,7 +40,7 @@ public class ModuleDrillIron extends ModuleDrill
 
     @Override
     public ResourceLocation getRepairItem() {
-        String item = SCConfig.drillRepairIron.get();
+        String item = SCConfig.COMMON.drillRepairIron.get();
         return item.isEmpty() ? null : ResourceLocation.parse(item);
     }
 

@@ -147,7 +147,7 @@ public abstract class ModuleTool extends ModuleWorker
                 {
                     str = str + " [" + getRepairPercentage() + "%]";
                 }
-                else if (!SCConfig.allowCartToRunWithRepairItems.get())
+                else if (!SCConfig.COMMON.allowCartToRunWithRepairItems.get())
                 {
                     str += Localization.MODULES.TOOLS.DECENT.translate();
                 }
@@ -219,7 +219,7 @@ public abstract class ModuleTool extends ModuleWorker
 
     public boolean isRepairing()
     {
-        return (!getStack(0).isEmpty() && !SCConfig.allowCartToRunWithRepairItems.get()) || isActuallyRepairing();
+        return (!getStack(0).isEmpty() && !SCConfig.COMMON.allowCartToRunWithRepairItems.get()) || isActuallyRepairing();
     }
 
     public boolean isActuallyRepairing()

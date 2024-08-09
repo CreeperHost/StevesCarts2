@@ -23,6 +23,6 @@ public class SlotExplosion extends SlotStevesCarts implements ISlotExplosions
 
     @Override
     public int getMaxStackSize() {
-        return SCConfig.maxDynamites.get();
+        return SCConfig.COMMON.maxDynamites.get();
     }
 }

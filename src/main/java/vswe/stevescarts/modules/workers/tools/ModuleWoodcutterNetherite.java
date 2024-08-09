@@ -28,7 +28,7 @@ public class ModuleWoodcutterNetherite extends ModuleWoodcutter
 
     @Override
     public ResourceLocation getRepairItem() {
-        String item = SCConfig.woodcutterRepairNetherite.get();
+        String item = SCConfig.COMMON.woodcutterRepairNetherite.get();
         return item.isEmpty() ? null : ResourceLocation.parse(item);
     }
 

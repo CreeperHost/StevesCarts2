@@ -40,7 +40,7 @@ public class ModuleDrillDiamond extends ModuleDrill
 
     @Override
     public ResourceLocation getRepairItem() {
-        String item = SCConfig.drillRepairDiamond.get();
+        String item = SCConfig.COMMON.drillRepairDiamond.get();
         return item.isEmpty() ? null : ResourceLocation.parse(item);
     }
 

@@ -39,7 +39,7 @@ public class ModuleSolarCompact extends ModuleSolarBase
     @Override
     protected int getGenSpeed()
     {
-        return SCConfig.compact_solar_production.get();
+        return SCConfig.COMMON.compact_solar_production.get();
     }
 
     @Override

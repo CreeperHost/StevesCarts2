@@ -1,7 +1,10 @@
 package vswe.stevescarts;
 
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForgeConfig;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.fml.common.Mod;
@@ -26,7 +29,7 @@ public class StevesCarts
 
     public static Logger LOGGER = LogManager.getLogger();
 
-    public StevesCarts(IEventBus modBus)
+    public StevesCarts(IEventBus modBus, ModContainer container)
     {
         INSTANCE = this;
         modBus.addListener(this::commonSetup);
@@ -43,8 +46,10 @@ public class StevesCarts
 
         modBus.addListener(this::clientInit);
 
-        SCConfig.loadConfig(SCConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Constants.MOD_ID + "-client.toml"));
-        SCConfig.loadConfig(SCConfig.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve(Constants.MOD_ID + "-common.toml"));
+        container.registerConfig(ModConfig.Type.CLIENT, SCConfig.clientSpec, Constants.MOD_ID + "-client.toml");
+        container.registerConfig(ModConfig.Type.COMMON, SCConfig.commonSpec, Constants.MOD_ID + "-common.toml");
+        modBus.register(SCConfig.class);
+
         NeoForgeMod.enableMilkFluid();
         ForceChunkHelper.init(modBus);
         ModCapabilities.init(modBus);

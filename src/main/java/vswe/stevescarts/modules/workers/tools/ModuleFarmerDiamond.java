@@ -22,7 +22,7 @@ public class ModuleFarmerDiamond extends ModuleFarmer
 
     @Override
     public ResourceLocation getRepairItem() {
-        String item = SCConfig.farmerRepairDiamond.get();
+        String item = SCConfig.COMMON.farmerRepairDiamond.get();
         return item.isEmpty() ? null : ResourceLocation.parse(item);
     }
 

@@ -20,7 +20,7 @@ public class ModCapabilities {
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, ModBlocks.EXTERNAL_DISTRIBUTOR_TILE.get(), (entity, side) -> entity.fluidHandlerMap.get(side));
 
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlocks.CARGO_MANAGER_TILE.get(), (entity, side) -> entity.createHandler());
-        if(SCConfig.assemblerInsertFuel.get())
+        if(SCConfig.COMMON.assemblerInsertFuel.get())
             event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ModBlocks.CART_ASSEMBLER_TILE.get(), SidedInvWrapper::new);
     }
 }

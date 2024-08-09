@@ -28,7 +28,7 @@ public class ModuleWoodcutterHardened extends ModuleWoodcutter
 
     @Override
     public ResourceLocation getRepairItem() {
-        String item = SCConfig.woodcutterRepairHardened.get();
+        String item = SCConfig.COMMON.woodcutterRepairHardened.get();
         return item.isEmpty() ? null : ResourceLocation.parse(item);
     }
 
