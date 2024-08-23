@@ -130,8 +130,7 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
             {
                 final CompoundTag nbttagcompound2 = new CompoundTag();
                 nbttagcompound2.putByte("Slot", (byte) j);
-                cargoItemStacks.get(j).save(provider, nbttagcompound2);
-                nbttaglist.add(nbttagcompound2);
+                nbttaglist.add(cargoItemStacks.get(j).save(provider, nbttagcompound2));
             }
         }
         compoundTag.put("Items", nbttaglist);

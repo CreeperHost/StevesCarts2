@@ -1202,17 +1202,15 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     public void loadAdditional(@NotNull CompoundTag tagCompound, HolderLookup.Provider provider)
     {
         super.loadAdditional(tagCompound, provider);
-        final ListTag items = tagCompound.getList("Items", NBTHelper.COMPOUND.getId());
-        for (int i = 0; i < items.size(); ++i)
-        {
-            final CompoundTag item = items.getCompound(i);
-            final int slot = item.getByte("Slot") & 0xFF;
-            ItemStack iStack = ItemStack.parse(provider, item).orElse(ItemStack.EMPTY);
-            if (slot < getContainerSize())
-            {
-                setItem(slot, iStack);
+        ListTag itemList = tagCompound.getList("Items", NBTHelper.COMPOUND.getId());
+        for (int i = 0; i < itemList.size(); ++i) {
+            CompoundTag itemTag = itemList.getCompound(i);
+            int slot = itemTag.getByte("Slot") & 0xFF;
+            if (slot < getContainerSize()) {
+                setItem(slot, ItemStack.parse(provider, itemTag).orElse(ItemStack.EMPTY));
             }
         }
+
         final ListTag spares = tagCompound.getList("Spares", NBTHelper.COMPOUND.getId());
         spareModules.clear();
         for (int j = 0; j < spares.size(); ++j)
@@ -1244,35 +1242,31 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     public void saveAdditional(final @NotNull CompoundTag tagCompound, HolderLookup.Provider provider)
     {
         super.saveAdditional(tagCompound, provider);
-        final ListTag items = new ListTag();
-        for (int i = 0; i < getContainerSize(); ++i)
-        {
-            ItemStack iStack = getItem(i);
-            if (!iStack.isEmpty())
-            {
-                final CompoundTag item = new CompoundTag();
-                item.putByte("Slot", (byte) i);
-                iStack.save(provider, item);
-                items.add(item);
+        ListTag itemList = new ListTag();
+        for (int i = 0; i < getContainerSize(); ++i) {
+            ItemStack stack = getItem(i);
+            if (!stack.isEmpty()) {
+                CompoundTag itemTag = new CompoundTag();
+                itemTag.putByte("Slot", (byte) i);
+                itemList.add(stack.save(provider, itemTag));
             }
         }
-        tagCompound.put("Items", items);
+        tagCompound.put("Items", itemList);
+
         final ListTag spares = new ListTag();
         for (ItemStack iStack2 : spareModules)
         {
             if (!iStack2.isEmpty())
             {
                 final CompoundTag item2 = new CompoundTag();
-                iStack2.save(provider, item2);
-                spares.add(item2);
+                spares.add(iStack2.save(provider, item2));
             }
         }
         tagCompound.put("Spares", spares);
         if (!outputItem.isEmpty())
         {
             final CompoundTag outputTag = new CompoundTag();
-            outputItem.save(provider, outputTag);
-            tagCompound.put("Output", outputTag);
+            tagCompound.put("Output", outputItem.save(provider, outputTag));
         }
         tagCompound.putInt("IntFuel", getFuelLevel());
         tagCompound.putInt("maxTime", maxAssemblingTime);
