@@ -2,6 +2,7 @@ package vswe.stevescarts.blocks.tileentities;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -169,7 +170,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     @OnlyIn(Dist.CLIENT)
     public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height)
     {
-        guiGraphics.blit(targetX, targetY, 0, width, height, sprite);
+        guiGraphics.blitSprite(RenderType::guiTextured, sprite, targetX, targetY, 0, width, height);
     }
 
     @Override

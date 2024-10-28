@@ -19,7 +19,7 @@ public abstract class ModelCartbase extends Model
 
     public ModelCartbase(Function<ResourceLocation, RenderType> layerFactory, ResourceLocation texture, ModelPart root)
     {
-        super(layerFactory);
+        super(null, layerFactory);
         this.texture = texture;
         this.root = root;
     }

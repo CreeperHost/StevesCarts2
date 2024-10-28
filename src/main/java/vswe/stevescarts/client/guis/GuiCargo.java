@@ -3,6 +3,7 @@ package vswe.stevescarts.client.guis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -45,8 +46,8 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
             version = 1;
         }
         //version
-        guiGraphics.blit(GuiCargo.texturesLeft[version], leftPos, topPos, 0, 0, 256, imageHeight);
-        guiGraphics.blit(GuiCargo.texturesRight[version], leftPos + 256, topPos, 0, 0, imageWidth - 256, imageHeight);
+        guiGraphics.blit(RenderType::guiTextured, GuiCargo.texturesLeft[version], leftPos, topPos, 0, 0, 256, imageHeight, 256, 256);
+        guiGraphics.blit(RenderType::guiTextured, GuiCargo.texturesRight[version], leftPos + 256, topPos, 0, 0, imageWidth - 256, imageHeight, 256, 256);
 
         final int left = getGuiLeft();
         final int top = getGuiTop();
@@ -112,13 +113,13 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
         try
         {
             int[] coords = getReturnCoords(id);
-            guiGraphics.blit(resourceLocation, left + coords[0], top + coords[1], getColorSourceX() + (containerCargo.doReturn()[containerCargo.getColor()[id] - 1] ? 8 : 0), 80 + 8 * color, 8, 8);
+            guiGraphics.blit(RenderType::guiTextured, resourceLocation, left + coords[0], top + coords[1], getColorSourceX() + (containerCargo.doReturn()[containerCargo.getColor()[id] - 1] ? 8 : 0), 80 + 8 * color, 8, 8, 256, 256);
             coords = getBoxCoords(id);
-            guiGraphics.blit(resourceLocation, left + coords[0] - 2, top + coords[1] - 2, getColorSourceX(), 20 * color, 20, 20);
+            guiGraphics.blit(RenderType::guiTextured, resourceLocation, left + coords[0] - 2, top + coords[1] - 2, getColorSourceX(), 20 * color, 20, 20, 256, 256);
             if (containerCargo.getLayoutType() == 2)
             {
                 final int[] coords1 = getInvCoords(id);
-                guiGraphics.blit(resourceLocation, left + coords1[0] - 2, top + coords1[1] - 2, 125, 56 * color, 92, 56);
+                guiGraphics.blit(RenderType::guiTextured, resourceLocation, left + coords1[0] - 2, top + coords1[1] - 2, 125, 56 * color, 92, 56, 256, 256);
             }
         } catch (Exception e)
         {
@@ -149,7 +150,7 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
         final int targetY = getArrowCoords(id)[1];
         int sizeX = 28;
         int sizeY = 28;
-        guiGraphics.blit(resourceLocation, left + targetX, top + targetY, sourceX, sourceY, sizeX, sizeY);
+        guiGraphics.blit(RenderType::guiTextured, resourceLocation, left + targetX, top + targetY, sourceX, sourceY, sizeX, sizeY, 256, 256);
         if (id == manager.getLastSetting() && containerCargo.getColor()[id] != 5)
         {
             sourceY -= 28;
@@ -190,7 +191,7 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
                     offsetX = 28 - sizeX;
                 }
             }
-            guiGraphics.blit(resourceLocation, left + targetX + offsetX, top + targetY + offsetY, sourceX + offsetX, sourceY + offsetY, sizeX, sizeY);
+            guiGraphics.blit(RenderType::guiTextured, resourceLocation, left + targetX + offsetX, top + targetY + offsetY, sourceX + offsetX, sourceY + offsetY, sizeX, sizeY, 256, 256);
             offsetY = (offsetX = 0);
             sizeY = (sizeX = 28);
             if (scaledProgress > 19)
@@ -228,7 +229,7 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
                         offsetY = 6;
                     }
                 }
-                guiGraphics.blit(resourceLocation, left + targetX + offsetX, top + targetY + offsetY, sourceX + offsetX, sourceY + offsetY, sizeX, sizeY);
+                guiGraphics.blit(RenderType::guiTextured, resourceLocation, left + targetX + offsetX, top + targetY + offsetY, sourceX + offsetX, sourceY + offsetY, sizeX, sizeY, 256, 256);
             }
         }
     }

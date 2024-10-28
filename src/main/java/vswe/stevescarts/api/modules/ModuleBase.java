@@ -5,7 +5,9 @@ import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -688,7 +690,7 @@ public abstract class ModuleBase
             this.handleScroll(rect);
         }
         if (rect[3] > 0) {
-            guiGraphics.blit(gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), 0, rect[2], rect[3], icon);
+            guiGraphics.blitSprite(RenderType::guiTextured, icon, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), 0, rect[2], rect[3]);
         }
     }
 
@@ -1566,7 +1568,7 @@ public abstract class ModuleBase
         final float var8 = 0.00390625f;
 
         //formatter:off
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(CoreShaders.POSITION_TEX);
         BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         bufferbuilder.addVertex(targetX,           targetY + height, 	-90F).setUv((float) sourceX * var7,            (float)(sourceY + height) * var8);
         bufferbuilder.addVertex(targetX + width,   targetY + height, 	-90F).setUv((float)(sourceX + width) * var7,   (float)(sourceY + height) * var8);

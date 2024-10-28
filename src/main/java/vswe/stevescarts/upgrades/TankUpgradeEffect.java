@@ -1,6 +1,7 @@
 package vswe.stevescarts.upgrades;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -67,7 +68,7 @@ public abstract class TankUpgradeEffect extends InventoryUpgradeEffect
             TankUpgradeEffect.texture = ResourceHelper.getResource("/gui/tank.png");
         }
         upgrade.tank.drawFluid(guiGraphics, gui, tankInterfaceX, tankInterfaceY);
-        guiGraphics.blit(TankUpgradeEffect.texture, gui.getGuiLeft() + tankInterfaceX, gui.getGuiTop() + tankInterfaceY, 0, 0, 36, 51);
+        guiGraphics.blit(RenderType::guiTextured, TankUpgradeEffect.texture, gui.getGuiLeft() + tankInterfaceX, gui.getGuiTop() + tankInterfaceY, 0, 0, 36, 51, 256, 256);
     }
 
     @OnlyIn(Dist.CLIENT)

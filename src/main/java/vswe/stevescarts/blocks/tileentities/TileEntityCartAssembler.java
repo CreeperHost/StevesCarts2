@@ -878,9 +878,10 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
             if (fuel > 0 && getFuelLevel() + fuel <= getMaxFuelLevel())
             {
                 setFuelLevel(getFuelLevel() + fuel);
-                if (fuelSlot.getItem().hasCraftingRemainingItem())
+                ItemStack remainder = fuelSlot.getItem().getCraftingRemainder();
+                if (!remainder.isEmpty())
                 {
-                    fuelSlot.set(fuelSlot.getItem().getCraftingRemainingItem());
+                    fuelSlot.set(remainder);
                 }
                 else
                 {

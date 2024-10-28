@@ -86,7 +86,7 @@ public abstract class ModuleWorker extends ModuleBase
         if (BaseRailBlock.isRail(blockState))
         {
             RailShape direction = ((BaseRailBlock) blockState.getBlock()).getRailDirection(blockState, getCart().level(), pos, getCart());
-            if (direction.isAscending())
+            if (direction.isSlope())
             {
                 pos = pos.above();
             }

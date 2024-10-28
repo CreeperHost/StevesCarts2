@@ -4,6 +4,7 @@ import net.creeperhost.polylib.client.modulargui.lib.container.DataSync;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -40,7 +41,7 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
-        guiGraphics.blit(GuiDistributor.texture, j, k, 0, 0, imageWidth, imageHeight);
+        guiGraphics.blit(RenderType::guiTextured, GuiDistributor.texture, j, k, 0, 0, imageWidth, imageHeight, 256, 256);
         x -= getGuiLeft();
         y -= getGuiTop();
         final TileEntityManager[] invs = distributor.getInventories();
@@ -57,8 +58,8 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
                 {
                     srcX = box[2];
                 }
-                guiGraphics.blit(GuiDistributor.texture, j + box[0], k + box[1], srcX, imageHeight, box[2], box[3]);
-                guiGraphics.blit(GuiDistributor.texture, j + box[0] + 2, k + box[1] + 2, box[2] * 2 + (box[2] - 4) * side.getId(), imageHeight, box[2] - 4, box[3] - 4);
+                guiGraphics.blit(RenderType::guiTextured, GuiDistributor.texture, j + box[0], k + box[1], srcX, imageHeight, box[2], box[3], 256, 256);
+                guiGraphics.blit(RenderType::guiTextured, GuiDistributor.texture, j + box[0] + 2, k + box[1] + 2, box[2] * 2 + (box[2] - 4) * side.getId(), imageHeight, box[2] - 4, box[3] - 4, 256, 256);
                 drawMouseMover(Localization.GUI.DISTRIBUTOR.SIDE.translate(side.getName()) + ((activeId != -1) ? (": [" + Localization.GUI.DISTRIBUTOR.DROP_INSTRUCTION.translate() + "]") : ""), x, y, box);
                 int settingCount = 0;
                 for (final DistributorSetting setting : DistributorSetting.settings)
@@ -139,8 +140,8 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
         {
             srcX += box[2];
         }
-        guiGraphics.blit(GuiDistributor.texture, j + box[0], k + box[1], srcX, imageHeight + getSideBoxRect(0)[3], box[2], box[3]);
-        guiGraphics.blit(GuiDistributor.texture, j + box[0] + 1, k + box[1] + 1, box[2] * 4 + (box[2] - 2) * setting.getImageId(), imageHeight + getSideBoxRect(0)[3], box[2] - 2, box[3] - 2);
+        guiGraphics.blit(RenderType::guiTextured, GuiDistributor.texture, j + box[0], k + box[1], srcX, imageHeight + getSideBoxRect(0)[3], box[2], box[3], 256, 256);
+        guiGraphics.blit(RenderType::guiTextured, GuiDistributor.texture, j + box[0] + 1, k + box[1] + 1, box[2] * 4 + (box[2] - 2) * setting.getImageId(), imageHeight + getSideBoxRect(0)[3], box[2] - 2, box[3] - 2, 256, 256);
     }
 
     private int[] getSideBoxRect(final int i)

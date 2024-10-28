@@ -9,6 +9,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -142,10 +143,10 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         }
         final int j = getGuiLeft();
         final int k = getGuiTop();
-        guiGraphics.blit(GuiCartAssembler.backgrounds[assembler.getSimulationInfo().getBackground()], j + 143, k + 15, 0, 0, 220, 148);
-        guiGraphics.blit(GuiCartAssembler.textureLeft, j, k, 0, 0, 256, imageHeight);
-        guiGraphics.blit(GuiCartAssembler.textureRight, j + 256, k, 0, 0, imageWidth - 256, imageHeight);
-        guiGraphics.blit(GuiCartAssembler.textureRight, j + 256, k, 0, 0, imageWidth - 256, imageHeight);
+        guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.backgrounds[assembler.getSimulationInfo().getBackground()], j + 143, k + 15, 0, 0, 220, 148, 256, 256);
+        guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureLeft, j, k, 0, 0, 256, imageHeight, 256, 256);
+        guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureRight, j + 256, k, 0, 0, imageWidth - 256, imageHeight, 256, 256);
+        guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureRight, j + 256, k, 0, 0, imageWidth - 256, imageHeight, 256, 256);
         ResourceHelper.bindResource(GuiCartAssembler.textureExtra);
         final ArrayList<SlotAssembler> slots = assembler.getSlots();
         for (final SlotAssembler slot : slots)
@@ -185,7 +186,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                 }
             }
             //Slots
-            guiGraphics.blit(GuiCartAssembler.textureExtra, j + targetX, k + targetY, srcX, srcY, size, size);
+            guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureExtra, j + targetX, k + targetY, srcX, srcY, size, size, 256, 256);
             int animationTick = slot.getAnimationTick();
             if (animationTick < 0)
             {
@@ -193,8 +194,8 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
             }
             if (animationTick < 8 && !slot.useLargeInterface())
             {
-                guiGraphics.blit(GuiCartAssembler.textureExtra, j + targetX + 1, k + targetY + 1, 0, 24 + animationTick, 16, 8 - animationTick);
-                guiGraphics.blit(GuiCartAssembler.textureExtra, j + targetX + 1, k + targetY + 1 + 8 + animationTick, 0, 32, 16, 8 - animationTick);
+                guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureExtra, j + targetX + 1, k + targetY + 1, 0, 24 + animationTick, 16, 8 - animationTick, 256, 256);
+                guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureExtra, j + targetX + 1, k + targetY + 1 + 8 + animationTick, 0, 32, 16, 8 - animationTick, 256, 256);
             }
             slot.update();
         }
@@ -202,8 +203,8 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         {
             final int targetY2 = box.getY() - 12;
             final int targetX2 = box.getX();
-            guiGraphics.blit(GuiCartAssembler.textureExtra, j + targetX2, k + targetY2, 0, 40, 115, 11);
-            guiGraphics.blit(GuiCartAssembler.textureExtra, j + targetX2 + 8, k + targetY2 + 2, 0, 51 + box.getID() * 7, 115, 7);
+            guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureExtra, j + targetX2, k + targetY2, 0, 40, 115, 11, 256, 256);
+            guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureExtra, j + targetX2 + 8, k + targetY2 + 2, 0, 51 + box.getID() * 7, 115, 7, 256, 256);
         }
         int srcX2 = 42;
         int srcY2 = 0;
@@ -220,7 +221,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         {
             srcY2 += 11;
         }
-        guiGraphics.blit(GuiCartAssembler.textureExtra, j + assembleRect[0], k + assembleRect[1], srcX2, srcY2, assembleRect[2], assembleRect[3]);
+        guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureExtra, j + assembleRect[0], k + assembleRect[1], srcX2, srcY2, assembleRect[2], assembleRect[3], 256, 256);
         float assemblingProgress = 0.0f;
         if (containerCartAssembler.getIsAssembling())
         {
@@ -333,17 +334,18 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         {
             boxSrcY = 11;
         }
-        guiGraphics.blit(GuiCartAssembler.textureExtra, j + rect[0], k + rect[1], 122, boxSrcY, rect[2], rect[3]);
+        guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureExtra, j + rect[0], k + rect[1], 122, boxSrcY, rect[2], rect[3], 256, 256);
         if (progress != 0.0f)
         {
             if (progress > 1.0f)
             {
                 progress = 1.0f;
             }
-            guiGraphics.blit(GuiCartAssembler.textureExtra, j + rect[0] + 1, k + rect[1] + 1, 122, barSrcY, (int) (rect[2] * progress), rect[3] - 2);
+            guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureExtra, j + rect[0] + 1, k + rect[1] + 1, 122, barSrcY, (int) (rect[2] * progress), rect[3] - 2, 256, 256);
         }
     }
 
+    //TODO, This needs to be re-written
     public void renderEntityInInventory(int p_98851_, int p_98852_, int p_98853_)
     {
         if(assembler.getHullModule() == null){
@@ -355,7 +357,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         matrix4fStack.pushMatrix();
         matrix4fStack.translate(p_98851_, p_98852_, 1050.0F);
         matrix4fStack.scale(1.0F, 1.0F, -1.0F);
-        RenderSystem.applyModelViewMatrix();
+//        RenderSystem.applyModelViewMatrix();
         PoseStack posestack1 = new PoseStack();
         posestack1.translate(0.0D, 0.0D, 1000.0D);
         posestack1.scale((float) p_98853_, (float) p_98853_, (float) p_98853_);
@@ -379,12 +381,12 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         MultiBufferSource.BufferSource multibuffersource$buffersource = Minecraft.getInstance().renderBuffers().bufferSource();
         if (entityMinecartModular != null)
         {
-            RenderSystem.runAsFancy(() -> entityrenderdispatcher.render(entityMinecartModular, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, posestack1, multibuffersource$buffersource, 15728880));
+//            graphics.drawSpecial(bufferSource -> entityrenderdispatcher.render(entityMinecartModular, 0.0D, 0.0D, 0.0D, 1.0F, posestack1, multibuffersource$buffersource, 15728880));
         }
         multibuffersource$buffersource.endBatch();
         entityrenderdispatcher.setRenderShadow(true);
         matrix4fStack.popMatrix();
-        RenderSystem.applyModelViewMatrix();
+//        RenderSystem.applyModelViewMatrix();
         Lighting.setupFor3DItems();
     }
 
@@ -402,18 +404,18 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                 int[] subrect = new int[0];
                 int srcX = 0;
                 int srcY = item.getIsLarge() ? 113 : 93;
-                guiGraphics.blit(resourceLocation, j + rect[0], k + rect[1], srcX, srcY, rect[2], rect[3]);
+                guiGraphics.blit(RenderType::guiTextured, resourceLocation, j + rect[0], k + rect[1], srcX, srcY, rect[2], rect[3], 256, 256);
                 if (item.getIsLarge())
                 {
                     drawString(guiGraphics, resourceLocation, item.getName(), j + rect[0] + 55, k + rect[1] + 7);
                 }
-                guiGraphics.blit(resourceLocation, j + rect[0] + 34, k + rect[1] + 2, item.getImageID() % 16 * 16, 179 + item.getImageID() / 16 * 16, 16, 16);
+                guiGraphics.blit(RenderType::guiTextured, resourceLocation, j + rect[0] + 34, k + rect[1] + 2, item.getImageID() % 16 * 16, 179 + item.getImageID() / 16 * 16, 16, 16, 256, 256);
                 if (item.hasSubmenu())
                 {
                     subrect = item.getSubRect(dropdownX, dropdownY, i);
                     srcX = (item.getIsSubMenuOpen() ? 0 : 43);
                     srcY = 133;
-                    guiGraphics.blit(resourceLocation, j + subrect[0], k + subrect[1], srcX, srcY, subrect[2], subrect[3]);
+                    guiGraphics.blit(RenderType::guiTextured, resourceLocation, j + subrect[0], k + subrect[1], srcX, srcY, subrect[2], subrect[3], 256, 256);
                 }
                 switch (item.getType())
                 {
@@ -458,7 +460,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
             final int index = validChars.indexOf(c);
             if (index != -1)
             {
-                guiGraphics.blit(resourceLocation, x + 7 * i, y, 8 * index, 165, 6, 7);
+                guiGraphics.blit(RenderType::guiTextured, resourceLocation, x + 7 * i, y, 8 * index, 165, 6, 7, 256, 256);
             }
         }
     }
@@ -473,7 +475,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         final int srcX = digit * 8;
         final int srcY = 172;
         targetX += offset * 4;
-        guiGraphics.blit(resourceLocation, getGuiLeft() + targetX, getGuiTop() + targetY, srcX, srcY, 6, 7);
+        guiGraphics.blit(RenderType::guiTextured, resourceLocation, getGuiLeft() + targetX, getGuiTop() + targetY, srcX, srcY, 6, 7, 256, 256);
     }
 
     private void drawIncreamentBox(GuiGraphics guiGraphics, ResourceLocation resourceLocation, int mouseX, int mouseY, int x, int y)
@@ -491,7 +493,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         drawStandardBox(guiGraphics, resourceLocation, mouseX, mouseY, x, y, 0);
         if (itemvalue)
         {
-            guiGraphics.blit(resourceLocation, getGuiLeft() + x + 2, getGuiTop() + y + 2, 0, 159, 6, 6);
+            guiGraphics.blit(RenderType::guiTextured, resourceLocation, getGuiLeft() + x + 2, getGuiTop() + y + 2, 0, 159, 6, 6, 256, 256);
         }
     }
 
@@ -505,10 +507,10 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         final int targetX = getGuiLeft() + x;
         final int targetY = getGuiTop() + y;
         final int srcY = 149;
-        guiGraphics.blit(resourceLocation, targetX, targetY, srcX, srcY, 10, 10);
+        guiGraphics.blit(RenderType::guiTextured, resourceLocation, targetX, targetY, srcX, srcY, 10, 10, 256, 256);
         if (inRect(mouseX, mouseY, new int[]{targetX, targetY, 10, 10}))
         {
-            guiGraphics.blit(resourceLocation, targetX, targetY, 30, srcY, 10, 10);
+            guiGraphics.blit(RenderType::guiTextured, resourceLocation, targetX, targetY, 30, srcY, 10, 10, 256, 256);
         }
     }
 

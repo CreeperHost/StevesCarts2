@@ -3,6 +3,7 @@ package vswe.stevescarts.client.guis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -52,7 +53,7 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
-        guiGraphics.blit(GuiUpgrade.texture, j, k, 0, 0, imageWidth, imageHeight);
+        guiGraphics.blit(RenderType::guiTextured, GuiUpgrade.texture, j, k, 0, 0, imageWidth, imageHeight, 256, 256);
         if (upgrade.getUpgrade() != null)
         {
             final InventoryUpgradeEffect inventory = upgrade.getUpgrade().getInventoryEffect();
@@ -60,7 +61,7 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
             {
                 for (int i = 0; i < inventory.getInventorySize(); ++i)
                 {
-                    guiGraphics.blit(GuiUpgrade.texture, j + inventory.getSlotX(i) - 1, k + inventory.getSlotY(i) - 1, 0, imageHeight, 18, 18);
+                    guiGraphics.blit(RenderType::guiTextured, GuiUpgrade.texture, j + inventory.getSlotX(i) - 1, k + inventory.getSlotY(i) - 1, 0, imageHeight, 18, 18, 256, 256);
                 }
             }
             final InterfaceUpgradeEffect gui = upgrade.getUpgrade().getInterfaceEffect();

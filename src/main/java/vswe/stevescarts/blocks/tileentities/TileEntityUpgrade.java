@@ -2,6 +2,7 @@ package vswe.stevescarts.blocks.tileentities;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -321,7 +322,7 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     @Override
     public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height)
     {
-        guiGraphics.blit(gui.getGuiLeft() + targetX, gui.getGuiTop() + targetY, 0, width, height, sprite);
+        guiGraphics.blitSprite(RenderType::guiTextured, sprite, gui.getGuiLeft() + targetX, gui.getGuiTop() + targetY, 0, width, height);
     }
 
     public void setCreativeBroken()

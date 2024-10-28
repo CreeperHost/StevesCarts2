@@ -3,6 +3,7 @@ package vswe.stevescarts.client.guis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -34,7 +35,7 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
-        guiGraphics.blit(GuiActivator.texture, j, k, 0, 0, imageWidth, imageHeight);
+        guiGraphics.blit(RenderType::guiTextured, GuiActivator.texture, j, k, 0, 0, imageWidth, imageHeight, 256, 256);
         mouseX -= getGuiLeft();
         mouseY -= getGuiTop();
         for (int i = 0; i < activator.getOptions().size(); ++i)
@@ -46,8 +47,8 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
             {
                 srcX = 16;
             }
-            guiGraphics.blit(GuiActivator.texture, j + box[0], k + box[1], srcX, imageHeight, box[2], box[3]);
-            guiGraphics.blit(GuiActivator.texture, j + box[0] + 1, k + box[1] + 1, (box[2] - 2) * option.getOption(), imageHeight + box[3], box[2] - 2, box[3] - 2);
+            guiGraphics.blit(RenderType::guiTextured, GuiActivator.texture, j + box[0], k + box[1], srcX, imageHeight, box[2], box[3], 256, 256);
+            guiGraphics.blit(RenderType::guiTextured, GuiActivator.texture, j + box[0] + 1, k + box[1] + 1, (box[2] - 2) * option.getOption(), imageHeight + box[3], box[2] - 2, box[3] - 2, 256, 256);
         }
     }
 

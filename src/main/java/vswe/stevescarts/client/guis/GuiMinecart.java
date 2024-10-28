@@ -6,7 +6,9 @@ import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -90,8 +92,8 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     {
         final int left = getGuiLeft();
         final int top = getGuiTop();
-        guiGraphics.blit(GuiMinecart.textureLeft, left, top, 0, 0, 256, 256);
-        guiGraphics.blit(GuiMinecart.textureRight, left + 256, top, 0, 0, imageWidth - 256, imageHeight);
+        guiGraphics.blit(RenderType::guiTextured, GuiMinecart.textureLeft, left, top, 0, 0, 256, 256, 256, 256);
+        guiGraphics.blit(RenderType::guiTextured, GuiMinecart.textureRight, left + 256, top, 0, 0, imageWidth - 256, imageHeight, 256, 256);
         if (cart != null)
         {
             final ModuleBase thief = cart.getInterfaceThief();
@@ -115,8 +117,8 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
             else if (cart.getModules() != null)
             {
                 //Draw Scroll Bar
-                guiGraphics.blit(GuiMinecart.textureRight, left + scrollBox[0], top + scrollBox[1], 222, 24, scrollBox[2], scrollBox[3]);
-                guiGraphics.blit(GuiMinecart.textureRight, left + scrollBox[0] + 2, top + scrollBox[1] + 2 + cart.getScrollY(), 240, 26 + (cart.canScrollModules ? 0 : 25), 14, 25);
+                guiGraphics.blit(RenderType::guiTextured, GuiMinecart.textureRight, left + scrollBox[0], top + scrollBox[1], 222, 24, scrollBox[2], scrollBox[3], 256, 256);
+                guiGraphics.blit(RenderType::guiTextured, GuiMinecart.textureRight, left + scrollBox[0] + 2, top + scrollBox[1] + 2 + cart.getScrollY(), 240, 26 + (cart.canScrollModules ? 0 : 25), 14, 25, 256, 256);
 
                 for (final ModuleBase module : cart.getModules())
                 {
@@ -165,7 +167,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         x -= getGuiLeft();
         y -= getGuiTop();
         int uy = inRect(x, y, returnButton) ? 12 : 0;
-        guiGraphics.blit(GuiMinecart.textureReturn, returnButton[0] + getGuiLeft(), returnButton[1] + getGuiTop(), 0, uy, returnButton[2], returnButton[3]);
+        guiGraphics.blit(RenderType::guiTextured, GuiMinecart.textureReturn, returnButton[0] + getGuiLeft(), returnButton[1] + getGuiTop(), 0, uy, returnButton[2], returnButton[3], 256, 256);
     }
 
     public void drawModuleIcon(GuiGraphics guiGraphics, ItemStack icon, final int targetX, final int targetY, final float sizeX, final float sizeY, final float offsetX, final float offsetY)
@@ -586,7 +588,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
             }
         }
 
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(CoreShaders.POSITION_TEX);
         BufferBuilder buff = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         float zLevel = 0;//1F; //Ether everything needs to be on the same z level, or we need to go through and properly order *everything*
         buff.addVertex((x), y + h, zLevel).setUv((float) pt1[0], (float) pt1[1]);

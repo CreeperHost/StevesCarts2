@@ -3,6 +3,7 @@ package vswe.stevescarts.client.guis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -37,7 +38,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float p_230450_2_, int mouseX, int mouseY)
     {
-        guiGraphics.blit(GuiLiquid.texture, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        guiGraphics.blit(RenderType::guiTextured, GuiLiquid.texture, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
         if (getLiquid().getTanks() != null)
         {
             for (int i = 0; i < 4; ++i)
@@ -207,7 +208,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
         final int targetY = getArrowCoords(id)[1];
         int sizeX = 28;
         int sizeY = 28;
-        guiGraphics.blit(GuiLiquid.textureExtra, left + targetX, top + targetY, sourceX, sourceY, sizeX, sizeY);
+        guiGraphics.blit(RenderType::guiTextured, GuiLiquid.textureExtra, left + targetX, top + targetY, sourceX, sourceY, sizeX, sizeY, 256, 256);
         if (id == getLiquid().getLastSetting() && containerLiquid.getColor()[id] != 5)
         {
             sourceY -= 28;
@@ -248,7 +249,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
                     offsetX = 28 - sizeX;
                 }
             }
-            guiGraphics.blit(GuiLiquid.textureExtra, left + targetX + offsetX, top + targetY + offsetY, sourceX + offsetX, sourceY + offsetY, sizeX, sizeY);
+            guiGraphics.blit(RenderType::guiTextured, GuiLiquid.textureExtra, left + targetX + offsetX, top + targetY + offsetY, sourceX + offsetX, sourceY + offsetY, sizeX, sizeY, 256, 256);
             offsetY = (offsetX = 0);
             sizeY = (sizeX = 28);
             if (scaledProgress > 19)
@@ -286,7 +287,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
                         offsetY = 6;
                     }
                 }
-                guiGraphics.blit(GuiLiquid.textureExtra, left + targetX + offsetX, top + targetY + offsetY, sourceX + offsetX, sourceY + offsetY, sizeX, sizeY);
+                guiGraphics.blit(RenderType::guiTextured, GuiLiquid.textureExtra, left + targetX + offsetX, top + targetY + offsetY, sourceX + offsetX, sourceY + offsetY, sizeX, sizeY, 256, 256);
             }
         }
     }
@@ -356,13 +357,13 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
         try
         {
             int[] coords = getReturnCoords(id);
-            guiGraphics.blit(GuiLiquid.textureExtra, left + coords[0], top + coords[1], getColorSourceX() + (containerLiquid.doReturn()[containerLiquid.getColor()[id] - 1] ? 8 : 0), 80 + 8 * color, 8, 8);
+            guiGraphics.blit(RenderType::guiTextured, GuiLiquid.textureExtra, left + coords[0], top + coords[1], getColorSourceX() + (containerLiquid.doReturn()[containerLiquid.getColor()[id] - 1] ? 8 : 0), 80 + 8 * color, 8, 8, 256, 256);
             coords = getBoxCoords(id);
-            guiGraphics.blit(GuiLiquid.textureExtra, left + coords[0] - 2, top + coords[1] - 2, getColorSourceX(), 20 * color, 20, 20);
+            guiGraphics.blit(RenderType::guiTextured, GuiLiquid.textureExtra, left + coords[0] - 2, top + coords[1] - 2, getColorSourceX(), 20 * color, 20, 20, 256, 256);
             if (containerLiquid.getLayoutType() == 2)
             {
                 final int[] coords2 = getTankCoords(id);
-                guiGraphics.blit(GuiLiquid.textureExtra, left + coords2[0], top + coords2[1], 36, 51 * color, 36, 51);
+                guiGraphics.blit(RenderType::guiTextured, GuiLiquid.textureExtra, left + coords2[0], top + coords2[1], 36, 51 * color, 36, 51, 256, 256);
             }
         } catch (Exception e)
         {
