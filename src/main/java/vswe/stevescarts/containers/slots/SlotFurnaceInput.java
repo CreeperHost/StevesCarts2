@@ -1,5 +1,6 @@
 package vswe.stevescarts.containers.slots;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -17,7 +18,7 @@ public class SlotFurnaceInput extends SlotFake {
 
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack) {
-        return RecipeHelper.findSmeltRecipe(itemstack, level).isPresent();
+        return !(level instanceof ServerLevel serverLevel) || RecipeHelper.findSmeltRecipe(itemstack, serverLevel).isPresent();
     }
 
 }

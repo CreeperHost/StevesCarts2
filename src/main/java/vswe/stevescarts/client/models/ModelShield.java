@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -52,7 +53,8 @@ public class ModelShield extends ModelCartbase {
         float shieldDistance = (module == null) ? 18.0f : ((ModuleShield) module).getShieldDistance();
         enabled = module == null || ((ModuleShield) module).hasShield();
         if (!enabled) return;
-        float shieldAngle = (module == null) ? 0.0f : interpolate(((ModuleShield) module).getLastShieldAngle(), ((ModuleShield) module).getShieldAngle(), Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false));
+        float partialTick = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaPartialTick(true);
+        float shieldAngle = (module == null) ? 0.0f : interpolate(((ModuleShield) module).getLastShieldAngle(), ((ModuleShield) module).getShieldAngle(), partialTick);
 
         for (int i = 0; i < shields.length; i++) {
             ModelPart part = shields[i];

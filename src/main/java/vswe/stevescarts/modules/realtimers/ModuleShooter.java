@@ -427,8 +427,8 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
         ItemStack bow = null; //Yes! This is actually supposed to be null! Why Vanilla? WHY?!?!?!
         if (enchanter != null && enchanter.getPunchLevel() > 0) {
             bow = new ItemStack(Items.BOW);
-            Registry<Enchantment> registry = getCart().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
-            bow.enchant(registry.getHolderOrThrow(Enchantments.PUNCH), enchanter.getPunchLevel());
+            Registry<Enchantment> registry = getCart().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+            bow.enchant(registry.getOrThrow(Enchantments.PUNCH), enchanter.getPunchLevel());
         }
 
         Arrow arrow = new Arrow(getCart().level(), 0, 0, 0, stack, bow);

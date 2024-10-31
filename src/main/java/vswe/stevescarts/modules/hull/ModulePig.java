@@ -68,7 +68,7 @@ public class ModulePig extends ModuleHull
     public boolean hasHelment()
     {
         @Nonnull ItemStack item = getHelmet();
-        return !item.isEmpty() && item.getItem() instanceof ArmorItem && ((ArmorItem) item.getItem()).getEquipmentSlot() == EquipmentSlot.HEAD;
+        return !item.isEmpty() && item.getItem() instanceof ArmorItem && ((ArmorItem) item.getItem()).getEquipmentSlot(item) == EquipmentSlot.HEAD;
     }
 
     public ResourceLocation getHelmetResource(final boolean isOverlay)

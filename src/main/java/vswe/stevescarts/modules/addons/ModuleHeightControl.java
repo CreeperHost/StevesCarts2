@@ -202,8 +202,8 @@ public class ModuleHeightControl extends ModuleAddon
                 }
                 int targetY = getYTarget();
                 targetY += mult * dif;
-                int min = getCart().level().getMinBuildHeight();
-                int max = getCart().level().getMaxBuildHeight();
+                int min = getCart().level().getMinY();
+                int max = getCart().level().getMaxY();
                 if (targetY < min)
                 {
                     targetY = min;

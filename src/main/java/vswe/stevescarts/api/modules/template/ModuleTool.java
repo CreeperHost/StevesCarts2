@@ -154,7 +154,7 @@ public abstract class ModuleTool extends ModuleWorker
             }
             else
             {
-                Item item = BuiltInRegistries.ITEM.get(getRepairItem());
+                Item item = BuiltInRegistries.ITEM.getValue(getRepairItem());
                 if (item != Items.AIR){
                     str += Localization.MODULES.TOOLS.INSTRUCTION.translate(item.getName(new ItemStack(item)).getString());
                 }

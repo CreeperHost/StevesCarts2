@@ -12,8 +12,10 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.polylib.Pair;
@@ -155,10 +157,9 @@ public class BlockCartAssembler extends BlockContainerBase
     }
 
     @Override
-    public void neighborChanged(@NotNull BlockState blockState, @NotNull Level world, @NotNull BlockPos blockPos, @NotNull Block block, @NotNull BlockPos blockPos1, boolean p_220069_6_)
-    {
-        super.neighborChanged(blockState, world, blockPos, block, blockPos, p_220069_6_);
-        updateMultiBlock(world, blockPos);
+    protected void neighborChanged(BlockState p_60509_, Level p_60510_, BlockPos p_60511_, Block p_60512_, @Nullable Orientation p_365159_, boolean p_60514_) {
+        super.neighborChanged(p_60509_, p_60510_, p_60511_, p_60512_, p_365159_, p_60514_);
+        updateMultiBlock(p_60510_, p_60511_);
     }
 
 

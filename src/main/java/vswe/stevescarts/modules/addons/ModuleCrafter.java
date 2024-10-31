@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -71,9 +72,10 @@ public class ModuleCrafter extends ModuleRecipe
                                     if (!item2.isEmpty() && ItemStack.isSameItem(item2, recipe) && ItemStack.isSameItemSameComponents(item2, recipe))
                                     {
                                         edited = true;
-                                        if (item2.hasCraftingRemainingItem())
+                                        ItemStack remainder = item2.getCraftingRemainder();
+                                        if (!remainder.isEmpty())
                                         {
-                                            containers.add(item2.getItem().getCraftingRemainingItem(item2));
+                                            containers.add(remainder);
                                         }
                                         @Nonnull ItemStack itemStack = item2;
                                         itemStack.shrink(1);

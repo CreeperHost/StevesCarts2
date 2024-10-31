@@ -5,6 +5,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.neoforged.api.distmarker.Dist;
@@ -113,7 +114,7 @@ public class ModuleSmelter extends ModuleRecipe
     @Nullable
     public SmeltingRecipe getRecipeSmelting()
     {
-        return RecipeHelper.findSmeltRecipe(getStack(0), getCart().level()).map(RecipeHolder::value).orElse(null);
+        return getCart().level() instanceof ServerLevel serverLevel ? RecipeHelper.findSmeltRecipe(getStack(0), serverLevel).map(RecipeHolder::value).orElse(null) : null;
     }
 
     @Nullable

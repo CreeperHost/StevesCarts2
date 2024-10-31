@@ -2,10 +2,12 @@ package vswe.stevescarts.entities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownEgg;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
@@ -20,14 +22,14 @@ public class EntityCake extends ThrownEgg
         super(ModEntities.CAKE.get(), world);
     }
 
-    public EntityCake(final Level world, final LivingEntity thrower)
+    public EntityCake(final Level world, final LivingEntity thrower, ItemStack stack)
     {
-        super(world, thrower);
+        super(world, thrower, stack);
     }
 
-    public EntityCake(final Level world, final double x, final double y, final double z)
+    public EntityCake(final Level world, final double x, final double y, final double z, ItemStack stack)
     {
-        super(world, x, y, z);
+        super(world, x, y, z, stack);
     }
 
     public EntityCake(EntityType<EntityCake> entityCakeEntityType, Level world)
@@ -45,9 +47,9 @@ public class EntityCake extends ThrownEgg
                 player.getFoodData().eat(14, 0.7f);
             }
         }
-        if (!level().isClientSide)
+        if (level() instanceof ServerLevel serverLevel)
         {
-            kill();
+            kill(serverLevel);
         }
     }
 
@@ -64,9 +66,9 @@ public class EntityCake extends ThrownEgg
         {
             level().addParticle(ParticleTypes.ITEM_SNOWBALL, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
         }
-        if (!level().isClientSide)
+        if (level() instanceof ServerLevel serverLevel)
         {
-            kill();
+            kill(serverLevel);
         }
     }
 }
