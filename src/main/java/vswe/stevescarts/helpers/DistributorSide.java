@@ -3,6 +3,8 @@ package vswe.stevescarts.helpers;
 import net.minecraft.core.Direction;
 import vswe.stevescarts.blocks.tileentities.TileEntityDistributor;
 
+import java.util.Objects;
+
 public class DistributorSide
 {
     private final int id;
@@ -18,9 +20,10 @@ public class DistributorSide
         data = 0;
     }
 
-    public void setData(final int data)
+    public DistributorSide setData(final int data)
     {
         this.data = data;
+        return this;
     }
 
     public int getId()
@@ -119,5 +122,22 @@ public class DistributorSide
     public String getInfo()
     {
         return Localization.GUI.DISTRIBUTOR.SIDE_TOOL_TIP.translate(getName());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DistributorSide that = (DistributorSide) o;
+        return id == that.id && data == that.data && name == that.name && side == that.side;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, side, data);
+    }
+
+    public DistributorSide copy() {
+        return new DistributorSide(id, name, side).setData(data);
     }
 }

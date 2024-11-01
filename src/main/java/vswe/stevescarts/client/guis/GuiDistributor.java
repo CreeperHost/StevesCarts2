@@ -1,5 +1,6 @@
 package vswe.stevescarts.client.guis;
 
+import net.creeperhost.polylib.client.modulargui.lib.container.DataSync;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 
 public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor>
 {
+    private final ContainerDistributor containerDistributor;
     private String mouseOverText;
     private static ResourceLocation texture;
     private int activeId;
@@ -26,6 +28,7 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
     public GuiDistributor(ContainerDistributor containerDistributor, Inventory playerInventory, Component iTextComponent)
     {
         super(containerDistributor, playerInventory, iTextComponent);
+        this.containerDistributor = containerDistributor;
         activeId = -1;
         imageWidth = 255;
         imageHeight = 186;
@@ -41,10 +44,11 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
         x -= getGuiLeft();
         y -= getGuiTop();
         final TileEntityManager[] invs = distributor.getInventories();
-        final ArrayList<DistributorSide> sides = distributor.getSides();
+        final ArrayList<DataSync<DistributorSide>> sides = containerDistributor.sideSyncs;
         int id = 0;
-        for (final DistributorSide side : sides)
+        for (final DataSync<DistributorSide> sync : sides)
         {
+            DistributorSide side = sync.get();
             if (side.isEnabled(distributor))
             {
                 final int[] box = getSideBoxRect(id);
@@ -177,15 +181,17 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
             if (activeId != -1)
             {
                 int id = 0;
-                for (final DistributorSide side : distributor.getSides())
+                final ArrayList<DataSync<DistributorSide>> sides = containerDistributor.sideSyncs;
+                for (final DataSync<DistributorSide> sync : sides)
                 {
+                    DistributorSide side = sync.get();
                     if (side.isEnabled(distributor))
                     {
                         final int[] box = getSideBoxRect(id++);
                         if (inRect((int) x, (int) y, box))
                         {
                             //This is client-side and will need removing
-                            distributor.getSides().get(side.getId()).set(activeId);
+//                            distributor.getSides().get(side.getId()).set(activeId);
                             distributor.sendPacket(0, new byte[]{(byte) activeId, (byte) side.getId()});
                             //Remove from cursor
                             activeId = -1;
@@ -198,8 +204,10 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
         else if (button == 1)
         {
             int id = 0;
-            for (final DistributorSide side : distributor.getSides())
+            final ArrayList<DataSync<DistributorSide>> sides = containerDistributor.sideSyncs;
+            for (final DataSync<DistributorSide> sync : sides)
             {
+                DistributorSide side = sync.get();
                 if (side.isEnabled(distributor))
                 {
                     int settingCount = 0;
@@ -213,7 +221,7 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
                                 continue;
                             }
                             //This is client-side and will need removing
-                            distributor.getSides().get(side.getId()).reset(setting.getId());
+//                            distributor.getSides().get(side.getId()).reset(setting.getId());
                             distributor.sendPacket(1, new byte[]{(byte) setting.getId(), (byte) side.getId()});
                             //Remove from cursor
                             activeId = -1;
