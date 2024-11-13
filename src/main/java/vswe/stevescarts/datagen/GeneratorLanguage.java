@@ -304,7 +304,7 @@ public class GeneratorLanguage extends LanguageProvider
         add("item.stevescarts.red_pigment", "Red Pigment");
         add("item.stevescarts.green_pigment", "Green Pigment");
         add("item.stevescarts.blue_pigment", "Blue Pigment");
-        add("item.stevescarts.glass_o'magic", "Glass o'Magic");
+        add("item.stevescarts.glass_o_magic", "Glass o'Magic");
         add("item.stevescarts.dynamite", "Dynamite");
         add("item.stevescarts.simple_pcb", "Simple PCB");
         add("item.stevescarts.graphical_interface", "Graphical Interface");
@@ -326,7 +326,7 @@ public class GeneratorLanguage extends LanguageProvider
         add("item.stevescarts.entity_scanner", "Entity Scanner");
         add("item.stevescarts.entity_analyzer", "Entity Analyzer");
         add("item.stevescarts.empty_disk", "Empty Disk");
-        add("item.stevescarts.tri-torch", "Tri-torch");
+        add("item.stevescarts.tri_torch", "Tri-torch");
         add("item.stevescarts.chest_pane", "Chest Pane");
         add("item.stevescarts.large_chest_pane", "Large Chest Pane");
         add("item.stevescarts.huge_chest_pane", "Huge Chest Pane");
