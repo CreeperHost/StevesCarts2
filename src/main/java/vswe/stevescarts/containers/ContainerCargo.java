@@ -22,7 +22,7 @@ public class ContainerCargo extends ContainerBase
 
     public ContainerCargo(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
-        this(id, playerInventory, (TileEntityCargo) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new SimpleContainerData(17));
+        this(id, playerInventory, (TileEntityCargo) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new SimpleContainerData(21));
     }
 
     public ContainerCargo(int id, Inventory playerInventory, TileEntityCargo tileEntityCargo, SimpleContainerData data)
@@ -62,6 +62,60 @@ public class ContainerCargo extends ContainerBase
     public int[] getColor()
     {
         return new int[]{data.get(1), data.get(2), data.get(3), data.get(4)};
+    }
+
+    private int[] getAmounts()
+    {
+        return new int[]{data.get(17), data.get(18), data.get(19), data.get(20)};
+    }
+
+    public int getAmount(final int id)
+    {
+        final int val = getAmounts()[id];
+        switch (val)
+        {
+            case 1, 7 -> {
+                return 1;
+            }
+            case 2, 9 -> {
+                return 3;
+            }
+            case 3 -> {
+                return 8;
+            }
+            case 4 -> {
+                return 16;
+            }
+            case 5 -> {
+                return 32;
+            }
+            case 6 -> {
+                return 64;
+            }
+            case 8 -> {
+                return 2;
+            }
+            case 10 -> {
+                return 5;
+            }
+            default -> {
+                return 0;
+            }
+        }
+    }
+
+    public int getAmountType(final int id)
+    {
+        final int val = getAmounts()[id];
+        if (val == 0)
+        {
+            return 0;
+        }
+        if (val <= 6)
+        {
+            return 1;
+        }
+        return 2;
     }
 
     public boolean[] toCart()

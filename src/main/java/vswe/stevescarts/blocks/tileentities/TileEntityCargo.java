@@ -44,7 +44,7 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     public ArrayList<SlotCargo> cargoSlots;
     public int lastLayout;
     private TransferManager latestTransferToBeUsed;
-    protected final SimpleContainerData dataAccess = new SimpleContainerData(16)
+    protected final SimpleContainerData dataAccess = new SimpleContainerData(21)
     {
         public int get(int id)
         {
@@ -67,6 +67,10 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
                         case 14 -> doReturn[1] ? 1 : 0;
                         case 15 -> doReturn[2] ? 1 : 0;
                         case 16 -> doReturn[3] ? 1 : 0;
+                        case 17 -> amount[0];
+                        case 18 -> amount[1];
+                        case 19 -> amount[2];
+                        case 20 -> amount[3];
                         default -> throw new IllegalArgumentException("Invalid index: " + id);
                     };
         }
@@ -74,11 +78,6 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
         public void set(int p_221477_1_, int p_221477_2_)
         {
             throw new IllegalStateException("Cannot set values through IIntArray");
-        }
-
-        public int getCount()
-        {
-            return 17;
         }
     };
 
@@ -230,6 +229,7 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
         }
     }
 
+//    @Override
     public void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0)
@@ -279,9 +279,7 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
             }
             if (id == 2)
             {
-                final int[] amount = this.amount;
-                final int n = railID2;
-                amount[n] += difference2;
+                amount[railID2] += difference2;
                 if (this.amount[railID2] >= getAmountCount())
                 {
                     this.amount[railID2] = 0;
