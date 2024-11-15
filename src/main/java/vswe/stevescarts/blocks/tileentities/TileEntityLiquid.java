@@ -51,7 +51,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     private static final int[] botSlots;
     @SuppressWarnings("unused")
     private static final int[] sideSlots;
-    protected final SimpleContainerData dataAccess = new SimpleContainerData(12)
+    protected final SimpleContainerData dataAccess = new SimpleContainerData(17)
     {
         public int get(int id)
         {
@@ -70,6 +70,10 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
                 case 10 -> doReturn[1] ? 1 : 0;
                 case 11 -> doReturn[2] ? 1 : 0;
                 case 12 -> doReturn[3] ? 1 : 0;
+                case 13 -> amount[0];
+                case 14 -> amount[1];
+                case 15 -> amount[2];
+                case 16 -> amount[3];
                 default -> throw new IllegalArgumentException("Invalid index: " + id);
             };
         }
@@ -77,11 +81,6 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
         public void set(int p_221477_1_, int p_221477_2_)
         {
             throw new IllegalStateException("Cannot set values through IIntArray");
-        }
-
-        public int getCount()
-        {
-            return 13;
         }
     };
 
@@ -156,7 +155,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     @Override
     public void addToOutputContainer(final int tankid, @Nonnull ItemStack item)
     {
-        TransferHandler.TransferItem(item, this, tankid * 3 + 1, tankid * 3 + 1, new ContainerLiquid(0, null, this, new SimpleContainerData(13)), Slot.class, null, -1);
+        TransferHandler.TransferItem(item, this, tankid * 3 + 1, tankid * 3 + 1, new ContainerLiquid(0, null, this, new SimpleContainerData(17)), Slot.class, null, -1);
     }
 
     @Override
