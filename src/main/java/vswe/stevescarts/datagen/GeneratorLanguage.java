@@ -559,7 +559,7 @@ public class GeneratorLanguage extends LanguageProvider
         add("modules.tanks.stevescarts.creativeTankMode", "Current creative mode: [%1][%2->Normal|Always full|Always empty|Always half]");
         add("modules.tanks.stevescarts.creativeTankChangeMode", "Right-click to change");
         add("modules.tanks.stevescarts.creativeTankResetMode", "Shift and right-click to go back to normal");
-        add("modules.tanks.stevescarts.tankLocked", "Locked to this fluid");
+        add("modules.tanks.stevescarts.tankLocked", "Locked to:");
         add("modules.tanks.stevescarts.tankLock", "Click to lock to this fluid");
         add("modules.tanks.stevescarts.tankUnlock", "Click to unlock");
         add("modules.tanks.stevescarts.tankEmpty", "Empty");

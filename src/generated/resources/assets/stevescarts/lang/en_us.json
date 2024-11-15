@@ -635,7 +635,7 @@
   "modules.tanks.stevescarts.tankEmpty": "Empty",
   "modules.tanks.stevescarts.tankInvalidFluid": "Unknown",
   "modules.tanks.stevescarts.tankLock": "Click to lock to this fluid",
-  "modules.tanks.stevescarts.tankLocked": "Locked to this fluid",
+  "modules.tanks.stevescarts.tankLocked": "Locked to:",
   "modules.tanks.stevescarts.tankUnlock": "Click to unlock",
   "modules.tools.stevescarts.cutterTitle": "Wood cutter",
   "modules.tools.stevescarts.drillTitle": "Drill",

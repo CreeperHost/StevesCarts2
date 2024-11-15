@@ -1,6 +1,5 @@
 package vswe.stevescarts.modules.storages.tanks;
 
-import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -9,7 +8,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -22,8 +20,8 @@ import net.neoforged.neoforge.fluids.IFluidTank;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.modules.template.ModuleStorage;
-import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotLiquidInput;
 import vswe.stevescarts.containers.slots.SlotLiquidOutput;
 import vswe.stevescarts.entities.EntityMinecartModular;
@@ -32,6 +30,7 @@ import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.helpers.storages.ITankHolder;
 import vswe.stevescarts.helpers.storages.SCTank;
 import vswe.stevescarts.polylib.EntityData;
+import vswe.stevescarts.polylib.FluidDataNeo;
 import vswe.stevescarts.polylib.StringData;
 
 import javax.annotation.Nonnull;
@@ -44,7 +43,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     protected int[] tankBounds;
     private final EntityData<String> fluidName = new EntityData<>(getCart(), new StringData(""));
     private final EntityData<Integer> fluidAmount = new EntityData<>(getCart(), new IntData(-1));
-    private final EntityData<Boolean> locked = new EntityData<>(getCart(), new BooleanData(false));
+    private final EntityData<FluidStack> locked = new EntityData<>(getCart(), new FluidDataNeo());
 
     public ModuleTank(final EntityMinecartModular cart)
     {
@@ -119,7 +118,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
             tick = 5;
             if (!getCart().level().isClientSide)
             {
-                tank.containerTransfer();
+                tank.containerTransfer(locked.get());
             }
             else if (!isPlaceholder())
             {
@@ -199,9 +198,9 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     protected String getTankInfo()
     {
         String str = tank.getMouseOver();
-        if (locked.get())
+        if (!locked.get().isEmpty())
         {
-            str = str + "\n\n" + Localization.MODULES.TANKS.LOCKED.translate() + "\n" + Localization.MODULES.TANKS.UNLOCK.translate();
+            str = str + "\n\n" + Localization.MODULES.TANKS.LOCKED.translate() +" " + locked.get().getHoverName().getString() + "\n" + Localization.MODULES.TANKS.UNLOCK.translate();
         }
         else if (!tank.getFluid().isEmpty())
         {
@@ -225,12 +224,18 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     @Override
     public boolean isFluidValid(FluidStack stack)
     {
+        if (!locked.get().isEmpty() && !locked.get().is(stack.getFluid())) {
+            return false;
+        }
         return tank.isFluidValid(stack);
     }
 
     @Override
     public int fill(FluidStack resource, IFluidHandler.FluidAction action)
     {
+        if (!locked.get().isEmpty() && !locked.get().is(resource.getFluid())) {
+            return 0;
+        }
         return tank.fill(resource, action);
     }
 
@@ -256,7 +261,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
             tank.getFluid().save(provider, compound);
         }
         tag.put(generateNBTName("Fluid", id), compound);
-        locked.save(generateNBTName("Locked", id), tag, provider);
+        locked.save(generateNBTName("LockedStack", id), tag, provider);
     }
 
     @Override
@@ -264,7 +269,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     {
         FluidStack fluidStack = FluidStack.parse(provider, tag.getCompound(generateNBTName("Fluid", id))).orElse(FluidStack.EMPTY);
         tank.setFluid(fluidStack);
-        locked.load(generateNBTName("Locked", id), tag, provider);
+        locked.load(generateNBTName("LockedStack", id), tag, provider);
         updateData();
     }
 
@@ -312,15 +317,14 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     @Override
     protected void receivePacket(final int id, final byte[] data, final Player player)
     {
-        if ((!getFluid().isEmpty() || locked.get()))
+        if ((!getFluid().isEmpty() || !locked.get().isEmpty()))
         {
-            setLocked(!locked.get());
-
-            if (!locked.get() && !tank.getFluid().isEmpty() && tank.getFluid().getAmount() <= 0)
-            {
-                tank.setFluid(FluidStack.EMPTY);
-                updateData();
+            if (locked.get().isEmpty() && !tank.getFluid().isEmpty()) {
+                setLocked(new FluidStack(tank.getFluid().getFluid(), 1000));
+            } else {
+                setLocked(FluidStack.EMPTY);
             }
+            updateData();
         }
     }
 
@@ -330,14 +334,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
         return 1;
     }
 
-    @Override
-    protected void checkGuiData(final Object[] info)
-    {
-        updateGuiData(info, 0, (short) (tank.isLocked() ? 1 : 0));
-        updateData();
-    }
-
-    private void setLocked(boolean val)
+    private void setLocked(FluidStack val)
     {
         if (!isPlaceholder())
         {
