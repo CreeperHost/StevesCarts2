@@ -37,7 +37,11 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     public BoolArray getDisabledArray() {
-        return isPlaceholder() ? new BoolArray(16*16) : disabledArray.get();
+        if (isPlaceholder()) return new BoolArray(16*16);
+        if (disabledArray.get().getBytes().length != Math.ceil((getDrillWidth() * getDrillHeight()) / 8D)) {
+            disabledArray.set(new BoolArray(getDrillWidth() * getDrillHeight()));
+        }
+        return disabledArray.get();
     }
 
     public void setDisabledArray(BoolArray array) {

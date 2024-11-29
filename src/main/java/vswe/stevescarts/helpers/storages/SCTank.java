@@ -31,7 +31,6 @@ import java.util.Optional;
 public class SCTank extends FluidTank {
     private final ITankHolder owner;
     private final int tankid;
-    private boolean isLocked;
 
     public SCTank(final ITankHolder owner, final int tankSize, final int tankid) {
         super(tankSize);
@@ -48,6 +47,10 @@ public class SCTank extends FluidTank {
     }
 
     public void containerTransfer() {
+        containerTransfer(FluidStack.EMPTY);
+    }
+
+    public void containerTransfer(FluidStack restrictFluid) {
         ItemStack itemStack = owner.getInputContainer(tankid);
         if (itemStack.isEmpty()) return;
 
@@ -55,6 +58,9 @@ public class SCTank extends FluidTank {
             FluidStack fluidStack = itemHandler.drain(Integer.MAX_VALUE, FluidAction.SIMULATE);
             FluidActionResult result;
             if (!fluidStack.isEmpty()) {
+                if (!restrictFluid.isEmpty() && !restrictFluid.is(fluidStack.getFluid())) {
+                    return;
+                }
                 //Simulate Bucket Empty
                 result = FluidUtil.tryEmptyContainer(itemStack, this, FluidType.BUCKET_VOLUME, null, false);
                 if (result.isSuccess()) {
@@ -118,21 +124,9 @@ public class SCTank extends FluidTank {
         FluidStack stack = new FluidStack(fluid.getFluid(), drained);
         if (action == FluidAction.EXECUTE) {
             fluid.shrink(drained);
-            if (fluid.getAmount() <= 0 && !isLocked) {
-                fluid = FluidStack.EMPTY;
-            }
-
             onContentsChanged();
         }
         return stack;
-    }
-
-    public void setLocked(final boolean val) {
-        isLocked = val;
-    }
-
-    public boolean isLocked() {
-        return isLocked;
     }
 
     public String getMouseOver() {

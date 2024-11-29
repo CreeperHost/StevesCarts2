@@ -304,7 +304,7 @@ public class GeneratorLanguage extends LanguageProvider
         add("item.stevescarts.red_pigment", "Red Pigment");
         add("item.stevescarts.green_pigment", "Green Pigment");
         add("item.stevescarts.blue_pigment", "Blue Pigment");
-        add("item.stevescarts.glass_o'magic", "Glass o'Magic");
+        add("item.stevescarts.glass_o_magic", "Glass o'Magic");
         add("item.stevescarts.dynamite", "Dynamite");
         add("item.stevescarts.simple_pcb", "Simple PCB");
         add("item.stevescarts.graphical_interface", "Graphical Interface");
@@ -326,7 +326,7 @@ public class GeneratorLanguage extends LanguageProvider
         add("item.stevescarts.entity_scanner", "Entity Scanner");
         add("item.stevescarts.entity_analyzer", "Entity Analyzer");
         add("item.stevescarts.empty_disk", "Empty Disk");
-        add("item.stevescarts.tri-torch", "Tri-torch");
+        add("item.stevescarts.tri_torch", "Tri-torch");
         add("item.stevescarts.chest_pane", "Chest Pane");
         add("item.stevescarts.large_chest_pane", "Large Chest Pane");
         add("item.stevescarts.huge_chest_pane", "Huge Chest Pane");
@@ -559,7 +559,7 @@ public class GeneratorLanguage extends LanguageProvider
         add("modules.tanks.stevescarts.creativeTankMode", "Current creative mode: [%1][%2->Normal|Always full|Always empty|Always half]");
         add("modules.tanks.stevescarts.creativeTankChangeMode", "Right-click to change");
         add("modules.tanks.stevescarts.creativeTankResetMode", "Shift and right-click to go back to normal");
-        add("modules.tanks.stevescarts.tankLocked", "Locked to this fluid");
+        add("modules.tanks.stevescarts.tankLocked", "Locked to:");
         add("modules.tanks.stevescarts.tankLock", "Click to lock to this fluid");
         add("modules.tanks.stevescarts.tankUnlock", "Click to unlock");
         add("modules.tanks.stevescarts.tankEmpty", "Empty");

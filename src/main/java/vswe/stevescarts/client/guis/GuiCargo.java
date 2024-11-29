@@ -289,8 +289,8 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
 
     protected String getMaxSizeOverlay(final int id)
     {
-        final int amount = getCargo().getAmount(id);
-        final int type = getCargo().getAmountType(id);
+        final int amount = containerCargo.getAmount(id);
+        final int type = containerCargo.getAmountType(id);
         if (type == 0)
         {
             return Localization.GUI.CARGO.TRANSFER_ALL.translate();
@@ -304,7 +304,7 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
 
     protected String getMaxSizeText(final int id)
     {
-        final int type = getCargo().getAmountType(id);
+        final int type = containerCargo.getAmountType(id);
         String s;
         if (type == 0)
         {
@@ -312,7 +312,7 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
         }
         else
         {
-            final int amount = getCargo().getAmount(id);
+            final int amount = containerCargo.getAmount(id);
             s = String.valueOf(amount);
             if (type == 1)
             {

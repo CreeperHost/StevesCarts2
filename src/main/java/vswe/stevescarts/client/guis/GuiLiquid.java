@@ -306,15 +306,24 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
         //		renderitem.renderGuiItem(cartIcon, left + coords[0], top + coords[1]);
     }
 
-
     protected String getMaxSizeOverlay(final int id)
     {
-        return Localization.GUI.LIQUID.TRANSFER_BUCKETS.translate(getMaxSizeText(id));
+        float buckets = containerLiquid.getMaxAmountBuckets(id);
+        if (containerLiquid.getMaxAmount(id) == 0)
+        {
+            return Localization.GUI.LIQUID.TRANSFER_ALL.translate();
+        }
+        return Localization.GUI.LIQUID.TRANSFER_BUCKETS.translate(String.valueOf(buckets)) + Localization.GUI.LIQUID.TRANSFER_BUCKET_SHORT.translate();
     }
 
     protected String getMaxSizeText(final int id)
     {
-        return Localization.GUI.LIQUID.TRANSFER_BUCKET_SHORT.translate();
+        float buckets = containerLiquid.getMaxAmountBuckets(id);
+        if (containerLiquid.getMaxAmount(id) == 0)
+        {
+            return Localization.GUI.LIQUID.TRANSFER_ALL_SHORT.translate();
+        }
+        return buckets + Localization.GUI.LIQUID.TRANSFER_BUCKET_SHORT.translate();
     }
 
     protected int getArrowSourceX()
