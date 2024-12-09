@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotCakeDynamite;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
@@ -20,7 +20,7 @@ public class ModuleCakeServerDynamite extends ModuleCakeServer
         return Math.min(SCConfig.COMMON.maxDynamites.get(), 25);
     }
 
-    public ModuleCakeServerDynamite(final EntityMinecartModular cart)
+    public ModuleCakeServerDynamite(ModularMinecart cart)
     {
         super(cart);
     }
@@ -48,7 +48,7 @@ public class ModuleCakeServerDynamite extends ModuleCakeServer
 
     private void explode()
     {
-        getCart().level().explode(null, getCart().getExactPosition().getX(), getCart().getExactPosition().getY(), getCart().getExactPosition().getZ(), dynamiteCount * .08f, Level.ExplosionInteraction.NONE);
+        getCart().level().explode(null, getCart().blockPosition().getX(), getCart().blockPosition().getY(), getCart().blockPosition().getZ(), dynamiteCount * .08f, Level.ExplosionInteraction.NONE);
     }
 
     @Override

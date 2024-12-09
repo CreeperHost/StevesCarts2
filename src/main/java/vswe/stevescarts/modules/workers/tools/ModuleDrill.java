@@ -6,8 +6,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
@@ -16,7 +14,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.BaseRailBlock;
@@ -34,13 +31,12 @@ import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.template.ModuleChest;
 import vswe.stevescarts.api.modules.template.ModuleTool;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.modules.addons.*;
 import vswe.stevescarts.polylib.EntityData;
-import vswe.stevescarts.polylib.StringData;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -59,7 +55,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     private final EntityData<Boolean> isMining = new EntityData<>(getCart(), new BooleanData(false));
     private final EntityData<Boolean> isEnabled = new EntityData<>(getCart(), new BooleanData(true));
 
-    public ModuleDrill(final EntityMinecartModular cart)
+    public ModuleDrill(ModularMinecart cart)
     {
         super(cart);
         sensorLight = 1;
@@ -76,7 +72,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     public void init()
     {
         super.init();
-        for (final ModuleBase module : getCart().getModules())
+        for (final ModuleBase module : getCart().modules())
         {
             if (module instanceof ModuleDrillIntelligence)
             {
@@ -290,7 +286,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         {
             return true;
         }
-        for (ModuleBase module : getCart().getModules())
+        for (ModuleBase module : getCart().modules())
         {
             if (module instanceof ModuleIncinerator)
             {
@@ -308,7 +304,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
             return true;
         }
         boolean hasChest = false;
-        for (ModuleBase module2 : getCart().getModules())
+        for (ModuleBase module2 : getCart().modules())
         {
             if (module2 instanceof ModuleChest)
             {

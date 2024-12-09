@@ -14,7 +14,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
@@ -30,7 +30,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
     private final EntityData<Integer> light = new EntityData<>(getCart(), new IntData(0));
     private final EntityData<Boolean> upState = new EntityData<>(getCart(), new BooleanData(false));
 
-    public ModuleSolarBase(final EntityMinecartModular cart)
+    public ModuleSolarBase(ModularMinecart cart)
     {
         super(cart);
         down = true;

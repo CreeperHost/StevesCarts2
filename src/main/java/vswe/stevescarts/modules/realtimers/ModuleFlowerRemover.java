@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.IShearable;
 import vswe.stevescarts.api.modules.ModuleBase;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class ModuleFlowerRemover extends ModuleBase {
     private float bladeangle;
     private float bladespeed;
 
-    public ModuleFlowerRemover(final EntityMinecartModular cart) {
+    public ModuleFlowerRemover(ModularMinecart cart) {
         super(cart);
         bladespeed = 0.0f;
     }
@@ -60,7 +60,7 @@ public class ModuleFlowerRemover extends ModuleBase {
     }
 
     private void mownTheLawn() {
-        BlockPos cartPos = getCart().getExactPosition();
+        BlockPos cartPos = getCart().blockPosition();
         BlockPos minPos = cartPos.offset(-getBlocksOnSide(), -getBlocksFromLevel(), -getBlocksOnSide());
         BlockPos maxPos = cartPos.offset(getBlocksOnSide(), getBlocksFromLevel(), getBlocksOnSide());
         ServerLevel serverLevel = (ServerLevel) getCart().level();
@@ -96,7 +96,7 @@ public class ModuleFlowerRemover extends ModuleBase {
         for (ItemStack stack : stuff) {
             getCart().addItemToChest(stack);
             if (stack.getCount() != 0) {
-                ItemEntity entityitem = new ItemEntity(getCart().level(), getCart().getExactPosition().getX(), getCart().getExactPosition().getY(), getCart().getExactPosition().getZ(), stack);
+                ItemEntity entityitem = new ItemEntity(getCart().level(), getCart().blockPosition().getX(), getCart().blockPosition().getY(), getCart().blockPosition().getZ(), stack);
                 getCart().level().addFreshEntity(entityitem);
             }
         }

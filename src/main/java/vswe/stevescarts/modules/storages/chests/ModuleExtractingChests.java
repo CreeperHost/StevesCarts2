@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.storages.chests;
 
 import vswe.stevescarts.api.modules.template.ModuleChest;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleExtractingChests extends ModuleChest
 {
@@ -9,7 +9,7 @@ public class ModuleExtractingChests extends ModuleChest
     private final float endOffset;
     private float chestOffset;
 
-    public ModuleExtractingChests(final EntityMinecartModular cart)
+    public ModuleExtractingChests(ModularMinecart cart)
     {
         super(cart);
         startOffset = -14.0f;

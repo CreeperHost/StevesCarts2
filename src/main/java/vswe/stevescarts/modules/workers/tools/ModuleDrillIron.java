@@ -5,11 +5,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.SCConfig;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleDrillIron extends ModuleDrill
 {
-    public ModuleDrillIron(final EntityMinecartModular cart)
+    public ModuleDrillIron(ModularMinecart cart)
     {
         super(cart);
     }

@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 
 import javax.annotation.Nonnull;
@@ -16,7 +16,7 @@ public class ModuleCheatTank extends ModuleTank
     private static final ChatFormatting[] colors = new ChatFormatting[]{ChatFormatting.YELLOW, ChatFormatting.GREEN, ChatFormatting.RED, ChatFormatting.GOLD};
     private int mode;
 
-    public ModuleCheatTank(final EntityMinecartModular cart)
+    public ModuleCheatTank(ModularMinecart cart)
     {
         super(cart);
     }

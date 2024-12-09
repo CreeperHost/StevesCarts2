@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.engines;
 
 import vswe.stevescarts.SCConfig;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.AnimationRig;
 import vswe.stevescarts.helpers.AnimationRigVal;
 
@@ -16,7 +16,7 @@ public class ModuleSolarCompact extends ModuleSolarBase
     private AnimationRigVal extraction2;
     private AnimationRigVal innerextraction;
 
-    public ModuleSolarCompact(final EntityMinecartModular cart)
+    public ModuleSolarCompact(ModularMinecart cart)
     {
         super(cart);
         rig = new AnimationRig();

@@ -8,7 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.api.modules.template.ModuleHull;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
@@ -20,7 +20,7 @@ public class ModulePig extends ModuleHull
      * Only used for getting the texture of the armor.
      */
     //	private LayerBipedArmor fakeArmorLayer = new LayerBipedArmor(null);
-    public ModulePig(final EntityMinecartModular cart)
+    public ModulePig(ModularMinecart cart)
     {
         super(cart);
         oinkTimer = getRandomTimer();
@@ -33,7 +33,7 @@ public class ModulePig extends ModuleHull
 
     private int getRandomTimer()
     {
-        return oinkTimer = getCart().random.nextInt(900) + 300;
+        return oinkTimer = getCart().getRandom().nextInt(900) + 300;
     }
 
     @Override

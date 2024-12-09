@@ -1,9 +1,9 @@
 package vswe.stevescarts.containers.slots;
 
-import net.creeperhost.polylib.helpers.FuelHelper;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
+import vswe.stevescarts.polylib.FuelHelper;
 
 import javax.annotation.Nonnull;
 
@@ -17,14 +17,14 @@ public class SlotAssemblerFuel extends SlotAssembler
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return FuelHelper.isItemFuel(itemstack);
+        return FuelHelper.isItemFuel(itemstack, getAssembler().getLevel());
     }
 
     public int getFuelLevel(@Nonnull ItemStack itemstack)
     {
         if (mayPlace(itemstack))
         {
-            return (int) (FuelHelper.getItemBurnTime(itemstack) * 0.25);
+            return (int) (FuelHelper.getItemBurnTime(itemstack, getAssembler().getLevel()) * 0.25);
         }
         return 0;
     }

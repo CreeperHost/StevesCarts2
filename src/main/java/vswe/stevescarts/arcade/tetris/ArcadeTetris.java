@@ -60,7 +60,7 @@ public class ArcadeTetris extends ArcadeGame
 
     private void generatePiece()
     {
-        piece = TetrisPiece.createPiece(getModule().getCart().random.nextInt(7));
+        piece = TetrisPiece.createPiece(getModule().getCart().getRandom().nextInt(7));
     }
 
     @OnlyIn(Dist.CLIENT)

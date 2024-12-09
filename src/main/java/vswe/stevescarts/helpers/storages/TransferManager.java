@@ -1,6 +1,6 @@
 package vswe.stevescarts.helpers.storages;
 
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class TransferManager
 {
@@ -9,7 +9,7 @@ public class TransferManager
     private int lastsetting;
     private int lowestsetting;
     private int workload;
-    private EntityMinecartModular cart;
+    private ModularMinecart cart;
     private boolean toCartEnabled;
     private boolean fromCartEnabled;
 
@@ -80,12 +80,12 @@ public class TransferManager
         workload = val;
     }
 
-    public EntityMinecartModular getCart()
+    public ModularMinecart getCart()
     {
         return cart;
     }
 
-    public void setCart(final EntityMinecartModular val)
+    public void setCart(ModularMinecart val)
     {
         cart = val;
     }

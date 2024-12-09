@@ -5,7 +5,7 @@ import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import vswe.stevescarts.api.modules.ModuleBase;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleRocket extends ModuleBase
@@ -21,7 +21,7 @@ public class ModuleRocket extends ModuleBase
     private double groundY;
     private final EntityData<Integer> unknown = new EntityData<>(getCart(), new IntData(0));
 
-    public ModuleRocket(final EntityMinecartModular cart)
+    public ModuleRocket(ModularMinecart cart)
     {
         super(cart);
     }
@@ -50,13 +50,13 @@ public class ModuleRocket extends ModuleBase
         //			if (!isLanding || landDirX == 0) {
         //				getCart().posX = flyX;
         //			} else {
-        //				final EntityMinecartModular cart = getCart();
+        //				ModularMinecart cart = getCart();
         //				cart.posX += getCart().motionX;
         //			}
         //			if (!isLanding || landDirZ == 0) {
         //				getCart().posZ = flyZ;
         //			} else {
-        //				final EntityMinecartModular cart2 = getCart();
+        //				ModularMinecart cart2 = getCart();
         //				cart2.posZ += getCart().motionZ;
         //			}
         //			getCart().rotationYaw = yaw;

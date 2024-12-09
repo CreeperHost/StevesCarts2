@@ -1,11 +1,11 @@
 package vswe.stevescarts.modules.addons;
 
 import vswe.stevescarts.api.modules.template.ModuleAddon;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleCreativeSupplies extends ModuleAddon
 {
-    public ModuleCreativeSupplies(final EntityMinecartModular cart)
+    public ModuleCreativeSupplies(ModularMinecart cart)
     {
         super(cart);
     }

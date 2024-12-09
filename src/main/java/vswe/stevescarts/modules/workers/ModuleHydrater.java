@@ -9,14 +9,14 @@ import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.modules.workers.tools.ModuleFarmer;
 
 public class ModuleHydrater extends ModuleWorker
 {
     private int range;
 
-    public ModuleHydrater(final EntityMinecartModular cart)
+    public ModuleHydrater(ModularMinecart cart)
     {
         super(cart);
         range = 1;
@@ -32,7 +32,7 @@ public class ModuleHydrater extends ModuleWorker
     public void init()
     {
         super.init();
-        for (final ModuleBase module : getCart().getModules())
+        for (final ModuleBase module : getCart().modules())
         {
             if (module instanceof ModuleFarmer moduleFarmer)
             {

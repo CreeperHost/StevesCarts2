@@ -5,11 +5,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.SCConfig;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleWoodcutterNetherite extends ModuleWoodcutter
 {
-    public ModuleWoodcutterNetherite(final EntityMinecartModular cart)
+    public ModuleWoodcutterNetherite(ModularMinecart cart)
     {
         super(cart);
     }

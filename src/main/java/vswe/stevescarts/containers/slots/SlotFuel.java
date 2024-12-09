@@ -1,22 +1,25 @@
 package vswe.stevescarts.containers.slots;
 
-import net.creeperhost.polylib.helpers.FuelHelper;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.entities.ModularMinecart;
+import vswe.stevescarts.polylib.FuelHelper;
 
 import javax.annotation.Nonnull;
 
 public class SlotFuel extends SlotStevesCarts
 {
-    public SlotFuel(final Container iinventory, final int i, final int j, final int k)
+    private final ModularMinecart minecart;
+
+    public SlotFuel(final ModularMinecart minecart, final int i, final int j, final int k)
     {
-        super(iinventory, i, j, k);
+        super(minecart, i, j, k);
+        this.minecart = minecart;
     }
 
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return FuelHelper.isItemFuel(itemstack);
+        return FuelHelper.isItemFuel(itemstack, minecart.level());
     }
 }

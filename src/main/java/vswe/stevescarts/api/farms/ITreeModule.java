@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.util.FakePlayer;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 @Deprecated(forRemoval = true)
 public interface ITreeModule
@@ -17,7 +17,7 @@ public interface ITreeModule
      * @param cart
      * @return true if the block is a valid leaf
      */
-    EnumHarvestResult isLeaves(BlockState blockState, BlockPos pos, EntityMinecartModular cart);
+    EnumHarvestResult isLeaves(BlockState blockState, BlockPos pos, ModularMinecart cart);
 
     /**
      * @param blockState
@@ -25,7 +25,7 @@ public interface ITreeModule
      * @param cart
      * @return if the block is a valid piece of wood
      */
-    EnumHarvestResult isWood(BlockState blockState, BlockPos pos, EntityMinecartModular cart);
+    EnumHarvestResult isWood(BlockState blockState, BlockPos pos, ModularMinecart cart);
 
     /**
      * Only return true if the sapling can be planted with this module

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "vswe.stevescarts.mixin",
+  "minVersion": "0.7.11",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "CollisionContextMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

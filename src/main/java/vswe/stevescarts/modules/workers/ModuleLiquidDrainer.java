@@ -12,7 +12,7 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.wrappers.BucketPickupHandlerWrapper;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.BlockPosHelpers;
 import vswe.stevescarts.modules.workers.tools.ModuleDrill;
 
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class ModuleLiquidDrainer extends ModuleWorker
 {
-    public ModuleLiquidDrainer(final EntityMinecartModular cart)
+    public ModuleLiquidDrainer(ModularMinecart cart)
     {
         super(cart);
     }

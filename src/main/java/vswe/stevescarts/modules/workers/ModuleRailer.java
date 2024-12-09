@@ -1,14 +1,11 @@
 package vswe.stevescarts.modules.workers;
 
 import net.creeperhost.polylib.data.serializable.ByteData;
-import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,10 +16,10 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
-import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBuilder;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -33,7 +30,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
     private float[] railAngles;
     private final EntityData<Byte> rails = new EntityData<>(getCart(), new ByteData());
 
-    public ModuleRailer(final EntityMinecartModular cart) {
+    public ModuleRailer(ModularMinecart cart) {
         super(cart);
         hasGeneratedAngles = false;
     }
@@ -174,7 +171,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
         if (!hasGeneratedAngles) {
             railAngles = new float[getInventorySize()];
             for (int j = 0; j < getInventorySize(); ++j) {
-                railAngles[j] = getCart().random.nextFloat() / 2.0f - 0.25f;
+                railAngles[j] = getCart().getRandom().nextFloat() / 2.0f - 0.25f;
             }
             hasGeneratedAngles = true;
         }

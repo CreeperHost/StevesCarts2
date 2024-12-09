@@ -6,21 +6,18 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.fml.ModLoader;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
-import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.api.modules.template.ModuleTool;
 import vswe.stevescarts.api.slots.SlotChest;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.client.guis.GuiMinecart;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.LabelInformation;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.api.modules.template.ModuleTool;
 import vswe.stevescarts.polylib.EntityData;
 
 import java.util.ArrayList;
@@ -36,7 +33,7 @@ public class ModuleLabel extends ModuleAddon
     private final EntityData<Integer> data = new EntityData<>(getCart(), new IntData(0));
     private final EntityData<Byte> active = new EntityData<>(getCart(), new ByteData((byte) (hasToolWithDurability() ? -1 : 0)));
 
-    public ModuleLabel(final EntityMinecartModular cart)
+    public ModuleLabel(ModularMinecart cart)
     {
         super(cart);
         delay = 0;
@@ -99,9 +96,9 @@ public class ModuleLabel extends ModuleAddon
     @Override
     public void preInit()
     {
-        if (getCart().getModules() != null)
+        if (getCart().modules() != null)
         {
-            for (final ModuleBase moduleBase : getCart().getModules())
+            for (final ModuleBase moduleBase : getCart().modules())
             {
                 if (moduleBase instanceof ModuleTool)
                 {
@@ -145,7 +142,7 @@ public class ModuleLabel extends ModuleAddon
     public void init()
     {
         storageSlots = new ArrayList<>();
-        for (final ModuleBase module : getCart().getModules())
+        for (final ModuleBase module : getCart().modules())
         {
             if (module.getSlots() != null)
             {
@@ -219,7 +216,7 @@ public class ModuleLabel extends ModuleAddon
                 if (isActive(3))
                 {
                     int data = 0;
-                    for (final ModuleEngine engine : getCart().getEngines())
+                    for (final ModuleEngine engine : getCart().engines())
                     {
                         if (engine.getPriority() != 3)
                         {

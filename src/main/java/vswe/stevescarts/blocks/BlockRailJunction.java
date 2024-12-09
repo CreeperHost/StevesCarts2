@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import org.jetbrains.annotations.NotNull;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nullable;
 
@@ -23,12 +23,7 @@ public class BlockRailJunction extends BaseRailBlock
     public static final MapCodec<BlockRailJunction> CODEC = simpleCodec(BlockRailJunction::new);
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
 
-    public BlockRailJunction()
-    {
-        this(Properties.of().noCollission().strength(0.7F).sound(SoundType.METAL));
-    }
-
-    private BlockRailJunction(Properties builder)
+    public BlockRailJunction(Properties builder)
     {
         super(true, builder);
         this.registerDefaultState(this.stateDefinition.any().setValue(SHAPE, RailShape.NORTH_SOUTH).setValue(WATERLOGGED, Boolean.FALSE));
@@ -53,14 +48,14 @@ public class BlockRailJunction extends BaseRailBlock
     }
 
     @Override
-    public @NotNull RailShape getRailDirection(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @Nullable AbstractMinecart cart)
+    public @NotNull RailShape getRailDirection(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @Nullable AbstractMinecart abstractMinecart)
     {
-        if (cart instanceof final EntityMinecartModular entityMinecartModular)
+        if (abstractMinecart instanceof ModularMinecart modularMinecart)
         {
-            RailShape railShape = entityMinecartModular.getRailDirection(pos);
+            RailShape railShape = modularMinecart.getRailDirection(pos);
             if (railShape != null) return railShape;
         }
-        return super.getRailDirection(state, world, pos, cart);
+        return super.getRailDirection(state, world, pos, abstractMinecart);
     }
 
     @Override

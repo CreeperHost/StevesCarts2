@@ -7,9 +7,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
@@ -18,17 +15,17 @@ import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotArrow;
-import vswe.stevescarts.api.slots.SlotStevesCarts;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.ResourceHelper;
@@ -59,7 +56,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     private final EntityData<Integer> arrowInterval = new EntityData<>(getCart(), new IntData(5));
     private final EntityData<Integer> arrowCooldownState = new EntityData<>(getCart(), new IntData(0));
 
-    public ModuleShooter(final EntityMinecartModular cart)
+    public ModuleShooter(ModularMinecart cart)
     {
         super(cart);
         dragState = -1;
@@ -74,7 +71,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     {
         super.init();
         projectiles = new ArrayList<>();
-        for (final ModuleBase module : getCart().getModules())
+        for (final ModuleBase module : getCart().modules())
         {
             if (module instanceof ModuleProjectile)
             {
@@ -322,7 +319,10 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     protected void shoot()
     {
         setTimeToNext(AInterval[getInterval()]);
-        if ((getCart().pushX != 0.0 && getCart().pushZ != 0.0) || (getCart().pushX == 0.0 && getCart().pushZ == 0.0) || !getCart().hasFuel()) {
+        double pushX = getCart().getEffectiveVelocity().x;
+        double pushZ = getCart().getEffectiveVelocity().z;
+        //TODO, Test this and figure out if it needs to be re-written...
+        if ((pushX != 0.0 && pushZ != 0.0) || (pushX == 0.0 && pushZ == 0.0) || !getCart().hasFuel()) {
             return;
         }
         boolean hasShot = false;
@@ -336,15 +336,15 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
                 }
                 int x = pipe % 3 - 1;
                 int y = pipe / 3 - 1;
-                if (getCart().pushZ > 0.0) {
+                if (pushZ > 0.0) {
                     y *= -1;
                     x *= -1;
-                } else if (getCart().pushZ < 0) {
-                } else if (getCart().pushX < 0) {
+                } else if (pushZ < 0) {
+                } else if (pushX < 0) {
                     int temp = -x;
                     x = y;
                     y = temp;
-                } else if (getCart().pushX > 0.0) {
+                } else if (pushX > 0.0) {
                     int temp = x;
                     x = -y;
                     y = temp;

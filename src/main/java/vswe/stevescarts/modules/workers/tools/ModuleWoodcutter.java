@@ -5,8 +5,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -28,7 +26,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotRepair;
 import vswe.stevescarts.containers.slots.SlotSapling;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.BlockPosHelpers;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.modules.addons.plants.ModulePlantSize;
@@ -46,7 +44,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
     private float cutterAngle;
     private final EntityData<Boolean> isCutting = new EntityData<>(getCart(), new BooleanData(false));
 
-    public ModuleWoodcutter(final EntityMinecartModular cart)
+    public ModuleWoodcutter(ModularMinecart cart)
     {
         super(cart);
         cutterAngle = 0.7853982f;
@@ -98,7 +96,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
     {
         super.init();
         treeModules = new ArrayList<>();
-        for (final ModuleBase module : getCart().getModules())
+        for (final ModuleBase module : getCart().modules())
         {
             if (module instanceof ITreeModule)
             {
@@ -135,7 +133,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
     {
         while (percentage > 0)
         {
-            if (getCart().random.nextInt(100) < percentage)
+            if (getCart().getRandom().nextInt(100) < percentage)
             {
                 items.add(item.copy());
             }

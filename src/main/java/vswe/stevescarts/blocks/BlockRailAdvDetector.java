@@ -17,12 +17,13 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 import vswe.stevescarts.blocks.tileentities.TileEntityManager;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.upgrades.Disassemble;
@@ -35,12 +36,7 @@ public class BlockRailAdvDetector extends BaseRailBlock
     public static final MapCodec<BlockRailAdvDetector> CODEC = simpleCodec(BlockRailAdvDetector::new);
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
 
-    public BlockRailAdvDetector()
-    {
-        this(Properties.of().noCollission().strength(0.7F).sound(SoundType.METAL));
-    }
-
-    private BlockRailAdvDetector(Properties builder)
+    public BlockRailAdvDetector(Properties builder)
     {
         super(true, builder);
         this.registerDefaultState(this.stateDefinition.any().setValue(SHAPE, RailShape.NORTH_SOUTH).setValue(WATERLOGGED, Boolean.FALSE));
@@ -69,10 +65,10 @@ public class BlockRailAdvDetector extends BaseRailBlock
         return false;
     }
 
-    @Override
-    public void onMinecartPass(BlockState state, Level world, BlockPos pos, AbstractMinecart entityMinecart)
+    //TODO, Switch back to forge's onMinecartPass if it gets fixed.
+    public void onMinecartPassSC(BlockState state, Level world, BlockPos pos, AbstractMinecart entityMinecart)
     {
-        if (world.isClientSide || !(entityMinecart instanceof EntityMinecartModular cart))
+        if (world.isClientSide || !(entityMinecart instanceof ModularMinecart cart))
         {
             return;
         }
@@ -107,8 +103,9 @@ public class BlockRailAdvDetector extends BaseRailBlock
                         BlockEntity tileentity = world.getBlockEntity(offset);
                         if (tileentity instanceof TileEntityActivator activator)
                         {
+                            Vec3 velocity = cart.getEffectiveVelocity();
                             boolean isOrange = false;
-                            if (cart.temppushX == 0.0 == (cart.temppushZ == 0.0))
+                            if (velocity.x == 0 && velocity.z == 0)
                             {
                                 continue;
                             }
@@ -116,22 +113,22 @@ public class BlockRailAdvDetector extends BaseRailBlock
                             {
                                 if (j == -1)
                                 {
-                                    isOrange = (cart.temppushX < 0.0);
+                                    isOrange = (velocity.x < 0.0);
                                 }
                                 else
                                 {
-                                    isOrange = (cart.temppushX > 0.0);
+                                    isOrange = (velocity.x > 0.0);
                                 }
                             }
                             else if (j == 0)
                             {
                                 if (i == -1)
                                 {
-                                    isOrange = (cart.temppushZ > 0.0);
+                                    isOrange = (velocity.z > 0.0);
                                 }
                                 else
                                 {
-                                    isOrange = (cart.temppushZ < 0.0);
+                                    isOrange = (velocity.z < 0.0);
                                 }
                             }
                             boolean isBlueBerry = false;
@@ -181,8 +178,8 @@ public class BlockRailAdvDetector extends BaseRailBlock
             }
         }
     }
-    private boolean isCartReadyForAction(EntityMinecartModular cart, BlockPos pos)
+    private boolean isCartReadyForAction(ModularMinecart cart, BlockPos pos)
     {
-        return cart.disabledPos != null && cart.disabledPos.equals(pos) && cart.isDisabled();
+        return cart.getDisabledPos() != null && cart.getDisabledPos().equals(pos) && cart.isDisabled();
     }
 }

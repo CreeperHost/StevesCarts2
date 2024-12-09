@@ -5,12 +5,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.HeightControlOre;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
@@ -26,7 +24,7 @@ public class ModuleHeightControl extends ModuleAddon
     private int oreMapY;
     private final EntityData<Integer> yTarget = new EntityData<>(getCart(), new IntData(getCart().y()));
 
-    public ModuleHeightControl(EntityMinecartModular cart)
+    public ModuleHeightControl(ModularMinecart cart)
     {
         super(cart);
         levelNumberBoxX = 8;

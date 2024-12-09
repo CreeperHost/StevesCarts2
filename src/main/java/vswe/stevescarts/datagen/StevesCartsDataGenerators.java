@@ -40,7 +40,7 @@ public class StevesCartsDataGenerators {
         DataGenerator generator = event.getGenerator();
 
         if (event.includeServer()) {
-            generator.addProvider(true, new GeneratorRecipes(generator.getPackOutput(), event.getLookupProvider()));
+            generator.addProvider(true, new GeneratorRecipes.Runner(generator.getPackOutput(), event.getLookupProvider()));
             generator.addProvider(true, new GeneratorLoots(generator.getPackOutput(), event.getLookupProvider()));
         }
 

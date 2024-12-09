@@ -4,13 +4,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.ThrownEgg;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
 public class ModuleEgg extends ModuleProjectile
 {
-    public ModuleEgg(final EntityMinecartModular cart)
+    public ModuleEgg(ModularMinecart cart)
     {
         super(cart);
     }

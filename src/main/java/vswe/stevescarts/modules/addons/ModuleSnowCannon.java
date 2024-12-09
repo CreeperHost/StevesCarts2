@@ -5,12 +5,12 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleSnowCannon extends ModuleAddon {
     private int tick;
 
-    public ModuleSnowCannon(final EntityMinecartModular cart) {
+    public ModuleSnowCannon(ModularMinecart cart) {
         super(cart);
     }
 
@@ -43,7 +43,7 @@ public class ModuleSnowCannon extends ModuleAddon {
     }
 
     private void generateSnow() {
-        BlockPos cartPos = getCart().getExactPosition();
+        BlockPos cartPos = getCart().blockPosition();
         BlockState snowState = Blocks.SNOW.defaultBlockState();
         for (int x = -getBlocksOnSide(); x <= getBlocksOnSide(); ++x) {
             for (int z = -getBlocksOnSide(); z <= getBlocksOnSide(); ++z) {

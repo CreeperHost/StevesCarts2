@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import vswe.stevescarts.Constants;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class PacketMinecartTurn implements CustomPacketPayload {
     public static final Type<PacketMinecartTurn> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "cart_turn"));
@@ -41,8 +41,8 @@ public class PacketMinecartTurn implements CustomPacketPayload {
                 if (ctx.player() instanceof ServerPlayer player) {
                     Level level = player.level();
                     if (level.getEntity(msg.cartID) == null) return;
-                    if (level.getEntity(msg.cartID) instanceof EntityMinecartModular entityMinecartModular) {
-                        entityMinecartModular.turnback();
+                    if (level.getEntity(msg.cartID) instanceof ModularMinecart ModularMinecart) {
+                        ModularMinecart.turnback();
                     }
                 }
             });

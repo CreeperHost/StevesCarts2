@@ -1,6 +1,5 @@
 package vswe.stevescarts.blocks.tileentities;
 
-import net.creeperhost.polylib.helpers.FuelHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -37,7 +36,7 @@ import vswe.stevescarts.containers.slots.SlotAssembler;
 import vswe.stevescarts.containers.slots.SlotAssemblerFuel;
 import vswe.stevescarts.containers.slots.SlotHull;
 import vswe.stevescarts.containers.slots.SlotOutput;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.DropDownMenuItem;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.SimulationInfo;
@@ -47,6 +46,7 @@ import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.items.ItemCarts;
+import vswe.stevescarts.polylib.FuelHelper;
 import vswe.stevescarts.polylib.NBTHelper;
 import vswe.stevescarts.upgrades.*;
 
@@ -68,7 +68,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     private final ArrayList<DropDownMenuItem> dropDownItems;
     private final SimulationInfo info;
     private boolean shouldSpin;
-    private EntityMinecartModular placeholder;
+    private ModularMinecart placeholder;
     private float yaw;
     private float roll;
     private boolean rolldown;
@@ -932,7 +932,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         placeholder = null;
     }
 
-    public EntityMinecartModular getPlaceholder()
+    public ModularMinecart getPlaceholder()
     {
         return placeholder;
     }
@@ -1038,7 +1038,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     @Override
     public boolean canPlaceItemThroughFace(int id, @NotNull ItemStack itemStack, @Nullable Direction direction)
     {
-        if(id == fuelSlot.index && FuelHelper.isItemFuel(itemStack)) return true;
+        if(id == fuelSlot.index && FuelHelper.isItemFuel(itemStack, level)) return true;
         return false;
     }
 
@@ -1065,7 +1065,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     {
         if (placeholder == null)
         {
-            placeholder = new EntityMinecartModular(level, this, getModularInfo());
+            placeholder = new ModularMinecart(level, this, getModularInfo());
             updateRenderMenu();
             isErrorListOutdated = true;
         }

@@ -6,14 +6,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.api.modules.ModuleBase;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
 public class ModuleCleaner extends ModuleBase
 {
-    public ModuleCleaner(final EntityMinecartModular cart)
+    public ModuleCleaner(ModularMinecart cart)
     {
         super(cart);
     }
@@ -50,9 +50,10 @@ public class ModuleCleaner extends ModuleBase
         {
             if (!eItem.isPickable())
             {
-                double difX = getCart().getExactPosition().getX() - eItem.blockPosition().getX();
-                double difY = getCart().getExactPosition().getY() - eItem.blockPosition().getY();
-                double difZ = getCart().getExactPosition().getZ() - eItem.blockPosition().getZ();
+                double difX = getCart().blockPosition().getX() - eItem.blockPosition().getX();
+                double difY = getCart().blockPosition().getY() - eItem.blockPosition().getY();
+                double difZ = getCart().blockPosition().getZ() - eItem.blockPosition().getZ();
+                //TODO, Why is this commented out?
                 //				eItem.moveTo(calculatemotion(difX), calculatemotion(difY), calculatemotion(difZ));
                 //				eItem.xOld += calculatemotion(difX);
                 //				eItem.yo += calculatemotion(difY);
@@ -72,7 +73,7 @@ public class ModuleCleaner extends ModuleBase
                 getCart().addItemToChest(eItem.getItem());
                 if (stackSize != eItem.getItem().getCount())
                 {
-                    getCart().level().playSound(null, getCart().blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.2f, ((this.getCart().random.nextFloat() - this.getCart().random.nextFloat()) * 0.7f + 1.0f) * 2.0f);
+                    getCart().level().playSound(null, getCart().blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.2f, ((this.getCart().getRandom().nextFloat() - this.getCart().getRandom().nextFloat()) * 0.7f + 1.0f) * 2.0f);
                     if (eItem.getItem().getCount() <= 0)
                     {
                         eItem.remove(Entity.RemovalReason.DISCARDED);

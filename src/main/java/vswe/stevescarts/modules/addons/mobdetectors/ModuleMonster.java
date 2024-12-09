@@ -1,17 +1,15 @@
 package vswe.stevescarts.modules.addons.mobdetectors;
 
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Wolf;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.monster.*;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enemy;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 
 public class ModuleMonster extends ModuleMobdetector
 {
-    public ModuleMonster(final EntityMinecartModular cart)
+    public ModuleMonster(ModularMinecart cart)
     {
         super(cart);
     }

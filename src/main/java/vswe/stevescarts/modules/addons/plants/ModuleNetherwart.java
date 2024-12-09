@@ -8,14 +8,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.api.farms.ICropModule;
-import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
 public class ModuleNetherwart extends ModuleAddon implements ICropModule
 {
-    public ModuleNetherwart(final EntityMinecartModular cart)
+    public ModuleNetherwart(ModularMinecart cart)
     {
         super(cart);
     }

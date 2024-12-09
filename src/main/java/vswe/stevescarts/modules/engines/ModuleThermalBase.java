@@ -11,7 +11,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 
 public abstract class ModuleThermalBase extends ModuleEngine
@@ -19,7 +19,7 @@ public abstract class ModuleThermalBase extends ModuleEngine
     private short coolantLevel;
     private static final int RELOAD_LIQUID_SIZE = 1;
 
-    public ModuleThermalBase(final EntityMinecartModular cart)
+    public ModuleThermalBase(ModularMinecart cart)
     {
         super(cart);
     }

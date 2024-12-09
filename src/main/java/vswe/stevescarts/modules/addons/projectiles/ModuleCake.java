@@ -4,13 +4,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import vswe.stevescarts.entities.EntityCake;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
 public class ModuleCake extends ModuleProjectile
 {
-    public ModuleCake(final EntityMinecartModular cart)
+    public ModuleCake(ModularMinecart cart)
     {
         super(cart);
     }

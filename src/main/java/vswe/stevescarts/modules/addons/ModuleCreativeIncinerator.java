@@ -1,13 +1,13 @@
 package vswe.stevescarts.modules.addons;
 
 import net.minecraft.world.item.ItemStack;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
 public class ModuleCreativeIncinerator extends ModuleIncinerator
 {
-    public ModuleCreativeIncinerator(final EntityMinecartModular cart)
+    public ModuleCreativeIncinerator(ModularMinecart cart)
     {
         super(cart);
     }

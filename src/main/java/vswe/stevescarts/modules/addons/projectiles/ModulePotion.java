@@ -4,13 +4,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
 public class ModulePotion extends ModuleProjectile
 {
-    public ModulePotion(final EntityMinecartModular cart)
+    public ModulePotion(ModularMinecart cart)
     {
         super(cart);
     }

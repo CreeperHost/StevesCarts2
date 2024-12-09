@@ -1,13 +1,10 @@
 package vswe.stevescarts.modules.realtimers;
 
 import net.creeperhost.polylib.data.serializable.ByteData;
-import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -20,7 +17,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.addons.mobdetectors.ModuleMobdetector;
@@ -38,7 +35,7 @@ public class ModuleShooterAdv extends ModuleShooter
     private final EntityData<Byte> option = new EntityData<>(getCart(), new ByteData((byte) 0));
     private final EntityData<Byte> rifleDirection = new EntityData<>(getCart(), new ByteData((byte) 0));
 
-    public ModuleShooterAdv(final EntityMinecartModular cart)
+    public ModuleShooterAdv(ModularMinecart cart)
     {
         super(cart);
         sorter = new EntityNearestTarget(getCart());
@@ -49,7 +46,7 @@ public class ModuleShooterAdv extends ModuleShooter
     {
         super.preInit();
         detectors = new ArrayList<>();
-        for (final ModuleBase module : getCart().getModules())
+        for (final ModuleBase module : getCart().modules())
         {
             if (module instanceof ModuleMobdetector)
             {
@@ -181,7 +178,7 @@ public class ModuleShooterAdv extends ModuleShooter
             setHeading(projectile, disX, disY + (double) disD5, disZ, 1.6f, 0.0f);
         }
         BlockPos pos = getCart().blockPosition();
-        getCart().level().playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ARROW_HIT, SoundSource.NEUTRAL, 1.0f, 1.0f / (getCart().random.nextFloat() * 0.4f + 0.8f));
+        getCart().level().playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ARROW_HIT, SoundSource.NEUTRAL, 1.0f, 1.0f / (getCart().getRandom().nextFloat() * 0.4f + 0.8f));
 
         setProjectileDamage(projectile);
         setProjectileOnFire(projectile);

@@ -13,7 +13,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.api.modules.ModuleBase;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class PacketMinecartButton implements CustomPacketPayload {
     public static final Type<PacketMinecartButton> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "cart_button"));
@@ -70,9 +70,9 @@ public class PacketMinecartButton implements CustomPacketPayload {
 
     private static void handle(PacketMinecartButton msg, Level level, Player player) {
         if (level.getEntity(msg.cartID) == null) return;
-        if (level.getEntity(msg.cartID) instanceof EntityMinecartModular entityMinecartModular) {
+        if (level.getEntity(msg.cartID) instanceof ModularMinecart ModularMinecart) {
             int id = msg.id;
-            for (final ModuleBase module : entityMinecartModular.getModules()) {
+            for (final ModuleBase module : ModularMinecart.modules()) {
                 if (id >= module.getPacketStart() && id < module.getPacketStart() + module.totalNumberOfPackets()) {
                     module.delegateReceivedPacket(id - module.getPacketStart(), msg.array, player);
                     break;

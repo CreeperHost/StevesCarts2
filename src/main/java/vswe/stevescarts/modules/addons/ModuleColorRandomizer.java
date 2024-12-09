@@ -6,8 +6,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.IntArrayData;
-import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
@@ -22,7 +22,7 @@ public class ModuleColorRandomizer extends ModuleAddon
     private Random random;
     private final EntityData<int[]> colors = new EntityData<>(getCart(), new IntArrayData(new int[]{255, 255, 255}));
 
-    public ModuleColorRandomizer(final EntityMinecartModular cart)
+    public ModuleColorRandomizer(ModularMinecart cart)
     {
         super(cart);
         button = new int[]{10, 26, 16, 16};

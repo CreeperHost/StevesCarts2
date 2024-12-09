@@ -72,6 +72,6 @@ public class Die
 
     public void randomize()
     {
-        number = game.getModule().getCart().random.nextInt(6) + 1;
+        number = game.getModule().getCart().getRandom().nextInt(6) + 1;
     }
 }

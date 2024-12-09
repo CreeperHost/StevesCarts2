@@ -28,14 +28,13 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.containers.ContainerLiquid;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.storages.ITankHolder;
 import vswe.stevescarts.helpers.storages.SCTank;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.helpers.storages.TransferManager;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
-import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketFluidSync;
 
 import javax.annotation.Nonnull;
@@ -204,7 +203,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
         }
         else
         {
-            final ArrayList<ModuleTank> cartTanks = transfer.getCart().getModuleTanks();
+            final ArrayList<ModuleTank> cartTanks = transfer.getCart().moduleTanks();
             for (final IFluidTank cartTank : cartTanks)
             {
                 final int drain = drainTank(cartTank, transfer.getSetting(), maximumToTransfer, IFluidHandler.FluidAction.SIMULATE);
@@ -227,7 +226,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
         return sucess;
     }
 
-    private int fillTank(final EntityMinecartModular cart, final int tankId, final int sideId, int fillAmount, final IFluidHandler.FluidAction doFill)
+    private int fillTank(ModularMinecart cart, final int tankId, final int sideId, int fillAmount, final IFluidHandler.FluidAction doFill)
     {
         if (isTankValid(tankId, sideId))
         {
@@ -239,7 +238,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
             fillAmount = fluidToFill.getAmount();
             if (isFluidValid(sideId, fluidToFill))
             {
-                final ArrayList<ModuleTank> cartTanks = cart.getModuleTanks();
+                final ArrayList<ModuleTank> cartTanks = cart.moduleTanks();
                 for (final IFluidTank cartTank : cartTanks)
                 {
                     fluidToFill.shrink(cartTank.fill(fluidToFill, doFill));

@@ -10,7 +10,7 @@ import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.BoolArrayData;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
@@ -29,7 +29,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     private int lastId;
     private final EntityData<BoolArray> disabledArray = new EntityData<>(getCart(), new BoolArrayData(new BoolArray(getDrillWidth() * getDrillHeight())));
 
-    public ModuleDrillIntelligence(final EntityMinecartModular cart)
+    public ModuleDrillIntelligence(ModularMinecart cart)
     {
         super(cart);
         guiW = -1;
@@ -53,7 +53,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     public void preInit()
     {
         super.preInit();
-        for (final ModuleBase module : getCart().getModules())
+        for (final ModuleBase module : getCart().modules())
         {
             if (module instanceof ModuleDrill)
             {

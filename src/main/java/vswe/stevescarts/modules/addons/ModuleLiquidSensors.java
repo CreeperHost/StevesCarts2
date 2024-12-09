@@ -2,16 +2,13 @@ package vswe.stevescarts.modules.addons;
 
 import net.creeperhost.polylib.data.serializable.ByteData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.modules.workers.ModuleLiquidDrainer;
 import vswe.stevescarts.modules.workers.tools.ModuleDrill;
 import vswe.stevescarts.polylib.EntityData;
@@ -23,7 +20,7 @@ public class ModuleLiquidSensors extends ModuleAddon
     private int mult;
     private final EntityData<Byte> sensorInfo = new EntityData<>(getCart(), new ByteData((byte) 1));
 
-    public ModuleLiquidSensors(final EntityMinecartModular cart)
+    public ModuleLiquidSensors(ModularMinecart cart)
     {
         super(cart);
         activetime = -1;
@@ -191,7 +188,7 @@ public class ModuleLiquidSensors extends ModuleAddon
     private void handleLiquid(final ModuleDrill drill, BlockPos pos)
     {
         ModuleLiquidDrainer liquiddrainer = null;
-        for (final ModuleBase module : getCart().getModules())
+        for (final ModuleBase module : getCart().modules())
         {
             if (module instanceof ModuleLiquidDrainer)
             {

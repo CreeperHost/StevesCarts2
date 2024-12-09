@@ -1,18 +1,15 @@
 package vswe.stevescarts.modules.addons;
 
 import net.creeperhost.polylib.data.serializable.BooleanData;
-import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
@@ -27,7 +24,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     private final EntityData<Boolean> status = new EntityData<>(getCart(), new BooleanData(false));
     private boolean setup;
 
-    public ModuleShield(final EntityMinecartModular cart)
+    public ModuleShield(ModularMinecart cart)
     {
         super(cart);
         shield = true;

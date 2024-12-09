@@ -12,7 +12,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
@@ -24,7 +24,7 @@ public class ModuleExperience extends ModuleBase
     private static final int MAX_EXPERIENCE_AMOUNT = 1500;
     private final EntityData<Integer> experience = new EntityData<>(getCart(), new IntData(0));
 
-    public ModuleExperience(final EntityMinecartModular cart)
+    public ModuleExperience(ModularMinecart cart)
     {
         super(cart);
     }

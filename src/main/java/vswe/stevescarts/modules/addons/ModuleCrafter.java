@@ -3,32 +3,31 @@ package vswe.stevescarts.modules.addons;
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.util.context.ContextKeySet;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingInput;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotCartCrafter;
 import vswe.stevescarts.containers.slots.SlotCartCrafterResult;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.RecipeHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ModuleCrafter extends ModuleRecipe
 {
     private int cooldown;
 
-    public ModuleCrafter(final EntityMinecartModular cart)
+    public ModuleCrafter(ModularMinecart cart)
     {
         super(cart);
         cooldown = 0;
@@ -42,7 +41,7 @@ public class ModuleCrafter extends ModuleRecipe
             if (!getCart().level().isClientSide && getValidSlot() != null)
             {
                 @Nonnull ItemStack result = getResult();//dummy.getResult();
-                if (!result.isEmpty() && getCart().getModules() != null)
+                if (!result.isEmpty() && getCart().modules() != null)
                 {
                     if (result.getCount() == 0)
                     {
@@ -136,11 +135,15 @@ public class ModuleCrafter extends ModuleRecipe
         }
     }
 
+    private CraftingInput getInput() {
+        return CraftingInput.of(3, 3, Lists.newArrayList(getStack(0), getStack(1), getStack(2), getStack(3), getStack(4), getStack(5), getStack(6), getStack(7), getStack(8)));
+    }
+
     @Nullable
     public CraftingRecipe getRecipe()
     {
-        CraftingInput input = CraftingInput.of(3, 3, Lists.newArrayList(getStack(0), getStack(1), getStack(2), getStack(3), getStack(4), getStack(5), getStack(6), getStack(7), getStack(8)));
-        return RecipeHelper.findRecipe(RecipeType.CRAFTING, input, getCart().level()).map(RecipeHolder::value).orElse(null);
+        //TODO, Re write recipe handling...
+        return getCart().level() instanceof ServerLevel serverLevel ? RecipeHelper.findRecipe(RecipeType.CRAFTING, getInput(), serverLevel).map(RecipeHolder::value).orElse(null) : null;
     }
 
     @NotNull
@@ -149,7 +152,10 @@ public class ModuleCrafter extends ModuleRecipe
         CraftingRecipe recipe = getRecipe();
         if (recipe != null)
         {
-            return recipe.getResultItem(RegistryAccess.EMPTY).copy();
+            List<RecipeDisplay> displays = recipe.display();
+            if (!displays.isEmpty()) {
+                return displays.get((getCart().tickCount / 60) % displays.size()).result().resolveForFirstStack(new ContextMap.Builder().create(new ContextKeySet.Builder().build()));
+            }
         }
         return ItemStack.EMPTY;
     }
@@ -193,7 +199,7 @@ public class ModuleCrafter extends ModuleRecipe
     {
         if (getCart().level().isClientSide)
         {
-            setStack(9, getResult() == null ? ItemStack.EMPTY : getResult());
+            setStack(9, getResult());
         }
     }
 

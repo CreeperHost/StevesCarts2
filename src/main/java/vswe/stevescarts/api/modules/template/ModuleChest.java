@@ -9,7 +9,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.slots.SlotChest;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.polylib.EntityData;
 
 public abstract class ModuleChest extends ModuleStorage
@@ -17,7 +17,7 @@ public abstract class ModuleChest extends ModuleStorage
     private float chestAngle;
     private final EntityData<Boolean> isOpen = new EntityData<>(getCart(), new BooleanData(false));
 
-    public ModuleChest(final EntityMinecartModular cart)
+    public ModuleChest(ModularMinecart cart)
     {
         super(cart);
     }

@@ -4,13 +4,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleOpenTank extends ModuleTank
 {
     int cooldown;
 
-    public ModuleOpenTank(final EntityMinecartModular cart)
+    public ModuleOpenTank(ModularMinecart cart)
     {
         super(cart);
         cooldown = 0;

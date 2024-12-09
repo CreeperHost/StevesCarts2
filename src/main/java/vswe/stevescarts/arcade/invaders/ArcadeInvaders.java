@@ -168,7 +168,7 @@ public class ArcadeInvaders extends ArcadeGame
                 if (fireDelay == 0 && isKeyDown(87))
                 {
                     projectiles.add(new Projectile(this, player.x + 8 - 2, player.y - 15, true));
-                    ArcadeGame.playSound(SoundEvents.ARROW_SHOOT, 0.8f, 1.0f / (getModule().getCart().random.nextFloat() * 0.4f + 1.2f) + 0.5f);
+                    ArcadeGame.playSound(SoundEvents.ARROW_SHOOT, 0.8f, 1.0f / (getModule().getCart().getRandom().nextFloat() * 0.4f + 1.2f) + 0.5f);
                     fireDelay = 10;
                 }
                 else if (fireDelay > 0)

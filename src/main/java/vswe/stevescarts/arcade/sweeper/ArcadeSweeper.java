@@ -96,8 +96,8 @@ public class ArcadeSweeper extends ArcadeGame
         }
         for (int creepers = 0; creepers < totalCreepers; ++creepers)
         {
-            final int x2 = getModule().getCart().random.nextInt(width);
-            final int y2 = getModule().getCart().random.nextInt(height);
+            final int x2 = getModule().getCart().getRandom().nextInt(width);
+            final int y2 = getModule().getCart().getRandom().nextInt(height);
             if (!tiles[x2][y2].isCreeper())
             {
                 tiles[x2][y2].setCreeper();
@@ -256,7 +256,7 @@ public class ArcadeSweeper extends ArcadeGame
             else if (result == Tile.TILE_OPEN_RESULT.DEAD)
             {
                 isPlaying = false;
-                ArcadeGame.playSound(SoundEvents.GENERIC_EXPLODE.value(), 1.0f, (1.0f + (getModule().getCart().random.nextFloat() - getModule().getCart().random.nextFloat()) * 0.2f) * 0.7f);
+                ArcadeGame.playSound(SoundEvents.GENERIC_EXPLODE.value(), 1.0f, (1.0f + (getModule().getCart().getRandom().nextFloat() - getModule().getCart().getRandom().nextFloat()) * 0.2f) * 0.7f);
             }
             else if (result == Tile.TILE_OPEN_RESULT.OK && first)
             {

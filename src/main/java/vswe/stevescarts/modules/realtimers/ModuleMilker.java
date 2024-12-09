@@ -16,7 +16,7 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotMilker;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
@@ -25,7 +25,7 @@ public class ModuleMilker extends ModuleBase
     int cooldown;
     int milkbuffer;
 
-    public ModuleMilker(final EntityMinecartModular cart)
+    public ModuleMilker(ModularMinecart cart)
     {
         super(cart);
         cooldown = 0;

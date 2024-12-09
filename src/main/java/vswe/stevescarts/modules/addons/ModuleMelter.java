@@ -4,13 +4,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleMelter extends ModuleAddon
 {
     private int tick;
 
-    public ModuleMelter(final EntityMinecartModular cart)
+    public ModuleMelter(ModularMinecart cart)
     {
         super(cart);
     }
@@ -54,7 +54,7 @@ public class ModuleMelter extends ModuleAddon
 
     private void melt()
     {
-        BlockPos cartPos = getCart().getExactPosition();
+        BlockPos cartPos = getCart().blockPosition();
         for (int x = -getBlocksOnSide(); x <= getBlocksOnSide(); ++x)
         {
             for (int z = -getBlocksOnSide(); z <= getBlocksOnSide(); ++z)

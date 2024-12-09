@@ -3,12 +3,11 @@ package vswe.stevescarts.containers;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.init.ModContainers;
 
 import java.util.ArrayList;
@@ -19,30 +18,27 @@ public class ContainerMinecart extends ContainerBase
 {
     private Inventory playerInventory;
     public HashMap<Short, Short> cache;
-    public EntityMinecartModular cart;
-    private final SimpleContainerData data;
+    public ModularMinecart cart;
 
     public ContainerMinecart(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
     {
-        this(id, playerInventory, (EntityMinecartModular) playerInventory.player.level().getEntity(packetBuffer.readInt()), new SimpleContainerData(1));
+        this(id, playerInventory, (ModularMinecart) playerInventory.player.level().getEntity(packetBuffer.readInt()));
     }
 
-    public ContainerMinecart(int id, Inventory playerInventory, EntityMinecartModular cart, SimpleContainerData data)
+    public ContainerMinecart(int id, Inventory playerInventory, ModularMinecart cart)
     {
         super(ModContainers.CONTAINER_MINECART.get(), id);
-        this.data = data;
         this.cart = cart;
         cartInv(cart);
         playerInv(playerInventory);
-        addDataSlots(data);
     }
 
-    protected void cartInv(final EntityMinecartModular cart)
+    protected void cartInv(ModularMinecart cart)
     {
         this.cart = cart;
-        if (cart.getModules() != null)
+        if (cart.modules() != null)
         {
-            for (final ModuleBase module : cart.getModules())
+            for (final ModuleBase module : cart.modules())
             {
                 if (module.hasSlots())
                 {
@@ -103,8 +99,8 @@ public class ContainerMinecart extends ContainerBase
         super.broadcastChanges();
         Player player = playerInventory.player;
         
-        if (cart.getModules() != null) {
-            for (final ModuleBase module : cart.getModules()) {
+        if (cart.modules() != null) {
+            for (final ModuleBase module : cart.modules()) {
                 module.checkGuiData(this, Collections.singletonList(player), false);
             }
         }
@@ -113,8 +109,8 @@ public class ContainerMinecart extends ContainerBase
     @Override
     public void receiveGuiData(int id, int data) {
         data &= 0xFFFF;
-        if (cart.getModules() != null) {
-            for (final ModuleBase module : cart.getModules()) {
+        if (cart.modules() != null) {
+            for (final ModuleBase module : cart.modules()) {
                 if (id >= module.getGuiDataStart() && id < module.getGuiDataStart() + module.numberOfGuiData()) {
                     module.receiveGuiData(id - module.getGuiDataStart(), (short) data);
                     break;

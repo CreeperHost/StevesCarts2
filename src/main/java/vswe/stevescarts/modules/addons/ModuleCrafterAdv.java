@@ -1,10 +1,10 @@
 package vswe.stevescarts.modules.addons;
 
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleCrafterAdv extends ModuleCrafter
 {
-    public ModuleCrafterAdv(final EntityMinecartModular cart)
+    public ModuleCrafterAdv(ModularMinecart cart)
     {
         super(cart);
     }

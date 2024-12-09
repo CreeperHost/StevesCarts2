@@ -1,11 +1,11 @@
 package vswe.stevescarts.modules.engines;
 
 import vswe.stevescarts.SCConfig;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleSolarStandard extends ModuleSolarTop
 {
-    public ModuleSolarStandard(final EntityMinecartModular cart)
+    public ModuleSolarStandard(ModularMinecart cart)
     {
         super(cart);
     }

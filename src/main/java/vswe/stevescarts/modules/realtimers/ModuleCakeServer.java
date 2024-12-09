@@ -16,7 +16,7 @@ import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotCake;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
@@ -32,7 +32,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
     private int[] rect;
     private final EntityData<Integer> buffer = new EntityData<>(getCart(), new IntData(0));
 
-    public ModuleCakeServer(final EntityMinecartModular cart)
+    public ModuleCakeServer(ModularMinecart cart)
     {
         super(cart);
         cooldown = 0;

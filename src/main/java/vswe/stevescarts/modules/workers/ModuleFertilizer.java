@@ -5,7 +5,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -22,7 +21,7 @@ import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotFertilizer;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.workers.tools.ModuleFarmer;
@@ -40,7 +39,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     private final Random random = new Random();
     private final EntityData<Integer> fertilizer = new EntityData<>(getCart(), new IntData(0));
 
-    public ModuleFertilizer(final EntityMinecartModular cart)
+    public ModuleFertilizer(ModularMinecart cart)
     {
         super(cart);
         tankPosX = guiWidth() - 21;
@@ -70,7 +69,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     public void init()
     {
         super.init();
-        for (final ModuleBase module : getCart().getModules())
+        for (final ModuleBase module : getCart().modules())
         {
             if (module instanceof ModuleFarmer)
             {
@@ -153,9 +152,9 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
                 CropBlock growable = (CropBlock) blockTop;
                 if (growable.isValidBonemealTarget(world, pos, stateOfTopBlock))
                 {
-                    if (growable.isBonemealSuccess(world, getCart().random, pos, stateOfTopBlock))
+                    if (growable.isBonemealSuccess(world, getCart().getRandom(), pos, stateOfTopBlock))
                     {
-                        growable.performBonemeal((ServerLevel) world, getCart().random, pos, stateOfTopBlock);
+                        growable.performBonemeal((ServerLevel) world, getCart().getRandom(), pos, stateOfTopBlock);
                         setFertAmount(getFertAmount() - 2);
                         return true;
                     }

@@ -6,14 +6,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.modules.workers.tools.ModuleDrill;
 
 import java.util.ArrayList;
 
 public class ModuleOreTracker extends ModuleAddon
 {
-    public ModuleOreTracker(final EntityMinecartModular cart)
+    public ModuleOreTracker(ModularMinecart cart)
     {
         super(cart);
     }

@@ -6,13 +6,13 @@ import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotIncinerator;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
 public class ModuleIncinerator extends ModuleAddon
 {
-    public ModuleIncinerator(final EntityMinecartModular cart)
+    public ModuleIncinerator(ModularMinecart cart)
     {
         super(cart);
     }

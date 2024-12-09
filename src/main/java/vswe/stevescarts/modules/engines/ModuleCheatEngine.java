@@ -7,13 +7,13 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 
 public class ModuleCheatEngine extends ModuleEngine
 {
 
-    public ModuleCheatEngine(final EntityMinecartModular cart)
+    public ModuleCheatEngine(ModularMinecart cart)
     {
         super(cart);
     }

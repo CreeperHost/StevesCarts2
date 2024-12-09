@@ -3,11 +3,11 @@ package vswe.stevescarts.modules.workers.tools;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleFarmerGalgadorian extends ModuleFarmer
 {
-    public ModuleFarmerGalgadorian(final EntityMinecartModular cart)
+    public ModuleFarmerGalgadorian(ModularMinecart cart)
     {
         super(cart);
     }

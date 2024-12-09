@@ -19,9 +19,9 @@ public class ItemCartModule extends Item implements IModuleItem
 {
     public ModuleData moduleData;
 
-    public ItemCartModule(ModuleData moduleData)
+    public ItemCartModule(ModuleData moduleData, Item.Properties properties)
     {
-        super(new Item.Properties());
+        super(properties);
         this.moduleData = moduleData;
     }
 

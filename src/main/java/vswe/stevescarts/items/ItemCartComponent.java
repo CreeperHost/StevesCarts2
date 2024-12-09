@@ -12,9 +12,9 @@ public class ItemCartComponent extends Item
 {
     public ComponentTypes componentType;
 
-    public ItemCartComponent(ComponentTypes componentType)
+    public ItemCartComponent(ComponentTypes componentType, Item.Properties properties)
     {
-        super(new Item.Properties());
+        super(properties);
         this.componentType = componentType;
     }
 

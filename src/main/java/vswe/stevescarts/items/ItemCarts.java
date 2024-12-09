@@ -1,8 +1,8 @@
 package vswe.stevescarts.items;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -11,36 +11,34 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MinecartItem;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
-import vswe.stevescarts.client.renders.ItemStackRenderer;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
+import vswe.stevescarts.init.ModEntities;
 import vswe.stevescarts.init.ModItemData;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class ItemCarts extends MinecartItem
 {
-    public ItemCarts()
+    public ItemCarts(Properties props)
     {
-        super(AbstractMinecart.Type.RIDEABLE, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+        super(ModEntities.MODULAR_CART.get(), props);
     }
 
-    public String getName()
-    {
-        return "Modular Cart";
-    }
+//    @Override
+//    public Component getName()
+//    {
+//        return Component.literal("Modular Cart");
+//    }
 
     @Override
     public InteractionResult useOn(UseOnContext itemUseContext)
@@ -61,7 +59,8 @@ public class ItemCarts extends MinecartItem
                     {
                         try
                         {
-                            final EntityMinecartModular cart = new EntityMinecartModular(world, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, info, Component.literal(""));
+                            ModularMinecart cart = new ModularMinecart(world, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, info);
+                            cart.setYRot(-(player.getDirection().toYRot() + 90) + 360);
                             world.addFreshEntity(cart);
                         } catch (Exception e)
                         {
@@ -116,18 +115,5 @@ public class ItemCarts extends MinecartItem
                 list.add(Component.literal(ChatFormatting.RED + "No modules loaded"));
             }
         }
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer)
-    {
-        consumer.accept(new IClientItemExtensions()
-        {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer()
-            {
-                return ItemStackRenderer.getInstance();
-            }
-        });
     }
 }

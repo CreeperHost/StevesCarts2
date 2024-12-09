@@ -7,7 +7,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 
@@ -17,7 +17,7 @@ public class ModuleSeat extends ModuleBase
     private boolean relative;
     private float chairAngle;
 
-    public ModuleSeat(final EntityMinecartModular cart)
+    public ModuleSeat(ModularMinecart cart)
     {
         super(cart);
         buttonRect = new int[]{20, 20, 24, 12};

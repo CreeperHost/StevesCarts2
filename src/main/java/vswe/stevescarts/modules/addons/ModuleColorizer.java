@@ -6,8 +6,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.IntArrayData;
-import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
@@ -19,7 +19,7 @@ public class ModuleColorizer extends ModuleAddon
     private int markerMoving;
     private final EntityData<int[]> colors = new EntityData<>(getCart(), new IntArrayData(new int[]{255, 255, 255}));
 
-    public ModuleColorizer(final EntityMinecartModular cart)
+    public ModuleColorizer(ModularMinecart cart)
     {
         super(cart);
         markerOffsetX = 10;

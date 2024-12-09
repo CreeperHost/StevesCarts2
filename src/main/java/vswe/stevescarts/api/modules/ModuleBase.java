@@ -4,9 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.CoreShaders;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -15,24 +13,20 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializer;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.VineBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.i18n.FMLTranslations;
@@ -42,19 +36,17 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.data.ModuleData;
+import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.client.guis.buttons.ButtonBase;
 import vswe.stevescarts.containers.ContainerMinecart;
-import vswe.stevescarts.api.slots.SlotStevesCarts;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ButtonComparator;
 import vswe.stevescarts.helpers.SimulationInfo;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketGuiData;
 import vswe.stevescarts.network.packets.PacketMinecartButton;
-import vswe.stevescarts.polylib.DataEntity;
-import vswe.stevescarts.polylib.EntityData;
 import vswe.stevescarts.polylib.NBTHelper;
 
 import javax.annotation.Nonnull;
@@ -70,7 +62,7 @@ import java.util.List;
  */
 public abstract class ModuleBase
 {
-    private final EntityMinecartModular cart;
+    private final ModularMinecart cart;
     @Nonnull
     private final NonNullList<ItemStack> cargo;
     private int offSetX;
@@ -89,7 +81,7 @@ public abstract class ModuleBase
      *
      * @param cart The cart this module is created on
      */
-    public ModuleBase(final EntityMinecartModular cart)
+    public ModuleBase(ModularMinecart cart)
     {
         moduleButtonId = 0;
         this.cart = cart;
@@ -121,7 +113,7 @@ public abstract class ModuleBase
      *
      * @return The cart this module was created at
      */
-    public EntityMinecartModular getCart()
+    public ModularMinecart getCart()
     {
         return cart;
     }
@@ -133,7 +125,7 @@ public abstract class ModuleBase
      */
     public boolean isPlaceholder()
     {
-        return getCart().isPlaceholder;
+        return getCart().isPlaceholder();
     }
 
     /**
@@ -143,7 +135,7 @@ public abstract class ModuleBase
      */
     protected SimulationInfo getSimInfo()
     {
-        return getCart().placeholderAsssembler.getSimulationInfo();
+        return getCart().getPlaceholderAsssembler().getSimulationInfo();
     }
 
     /**
@@ -373,7 +365,7 @@ public abstract class ModuleBase
     }
 
     /**
-     * Returns the Y value this cart should try to be on. By returning -1 this module won't care about where the cart should be.
+     * Returns the Y value this cart should try to be on. By returning Integer.MIN_VALUE this module won't care about where the cart should be.
      * If no modules do care about this the cart will just continue where it already is.
      *
      * @return The Y value
@@ -388,7 +380,7 @@ public abstract class ModuleBase
      *
      * @param pos Blockpos in the world
      */
-    public void moveMinecartOnRail(BlockPos pos)
+    public void moveMinecartOnRail(BlockPos pos, BlockState state)
     {
     }
 
@@ -713,9 +705,9 @@ public abstract class ModuleBase
             rect[1] = y - getY();
             return dif;
         }
-        if (y + rect[3] > EntityMinecartModular.MODULAR_SPACE_HEIGHT)
+        if (y + rect[3] > ModularMinecart.MODULAR_SPACE_HEIGHT)
         {
-            rect[3] = Math.max(0, EntityMinecartModular.MODULAR_SPACE_HEIGHT - y);
+            rect[3] = Math.max(0, ModularMinecart.MODULAR_SPACE_HEIGHT - y);
             return 0;
         }
         return 0;
@@ -1084,7 +1076,7 @@ public abstract class ModuleBase
      */
     protected void turnback()
     {
-        for (final ModuleBase module : getCart().getModules())
+        for (final ModuleBase module : getCart().modules())
         {
             if (module != this && module.preventTurnback())
             {

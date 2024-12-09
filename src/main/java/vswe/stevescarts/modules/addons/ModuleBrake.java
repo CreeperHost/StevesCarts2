@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.interfaces.ILeverModule;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
@@ -22,7 +22,7 @@ public class ModuleBrake extends ModuleAddon implements ILeverModule
     private int[] turnbackRect;
     private final EntityData<Boolean> forgeStopping = new EntityData<>(getCart(), new BooleanData(false));
 
-    public ModuleBrake(final EntityMinecartModular cart)
+    public ModuleBrake(ModularMinecart cart)
     {
         super(cart);
         startstopRect = new int[]{15, 20, 24, 12};

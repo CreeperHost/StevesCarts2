@@ -23,7 +23,7 @@ import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotTorch;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -37,7 +37,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     private final EntityData<Integer> torches = new EntityData<>(getCart(), new IntData(0));
 //    private final EntityData<Integer> lightLevel = new EntityData<>(getCart(), new IntData(0));
 
-    public ModuleTorch(final EntityMinecartModular cart) {
+    public ModuleTorch(ModularMinecart cart) {
         super(cart);
         lightLimit = 8;
         boxRect = new int[]{12, guiHeight() - 10, 46, 9};
@@ -73,7 +73,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     @Override
     public boolean work() {
         final BlockPos next = getLastblock();
-        final EntityMinecartModular cart = getCart();
+        ModularMinecart cart = getCart();
         final Level world = cart.level();
         final int x = next.getX();
         final int y = next.getY();

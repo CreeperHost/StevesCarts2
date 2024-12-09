@@ -11,7 +11,7 @@ import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleChest;
 import vswe.stevescarts.arcade.monopoly.Villager;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.modules.addons.ModuleChunkLoader;
 import vswe.stevescarts.modules.addons.ModuleInvisible;
 import vswe.stevescarts.modules.addons.ModulePowerObserver;
@@ -58,13 +58,13 @@ public class ModuleState
         ModuleState.states.put(this.id, this);
     }
 
-    public boolean evaluate(final EntityMinecartModular cart)
+    public boolean evaluate(ModularMinecart cart)
     {
         switch (type)
         {
             case SUPPLY:
             {
-                for (final ModuleBase module : cart.getModules())
+                for (final ModuleBase module : cart.modules())
                 {
                     if (isModuleOfCorrectType(module) && module instanceof ISuppliesModule)
                     {
@@ -75,7 +75,7 @@ public class ModuleState
             }
             case ACTIVATION:
             {
-                for (final ModuleBase module : cart.getModules())
+                for (final ModuleBase module : cart.modules())
                 {
                     if (isModuleOfCorrectType(module) && module instanceof IActivatorModule)
                     {
@@ -89,7 +89,7 @@ public class ModuleState
                 if (this instanceof ModuleStateInv)
                 {
                     boolean hasModule = false;
-                    for (final ModuleBase module2 : cart.getModules())
+                    for (final ModuleBase module2 : cart.modules())
                     {
                         if (isModuleOfCorrectType(module2))
                         {
@@ -120,7 +120,7 @@ public class ModuleState
             }
             case POWER:
             {
-                for (final ModuleBase module2 : cart.getModules())
+                for (final ModuleBase module2 : cart.modules())
                 {
                     if (isModuleOfCorrectType(module2))
                     {
@@ -134,7 +134,7 @@ public class ModuleState
                 if (this instanceof ModuleStateTank)
                 {
                     boolean hasModule2 = false;
-                    for (final ModuleBase module3 : cart.getModules())
+                    for (final ModuleBase module3 : cart.modules())
                     {
                         if (isModuleOfCorrectType(module3))
                         {

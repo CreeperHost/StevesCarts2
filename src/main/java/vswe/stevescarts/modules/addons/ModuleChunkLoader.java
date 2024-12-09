@@ -4,13 +4,11 @@ import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -20,7 +18,7 @@ public class ModuleChunkLoader extends ModuleAddon implements IActivatorModule
     private int[] buttonRect;
     private final EntityData<Boolean> loadingChunk = new EntityData<>(getCart(), new BooleanData(false));
 
-    public ModuleChunkLoader(final EntityMinecartModular cart)
+    public ModuleChunkLoader(ModularMinecart cart)
     {
         super(cart);
         buttonRect = new int[]{20, 20, 24, 12};

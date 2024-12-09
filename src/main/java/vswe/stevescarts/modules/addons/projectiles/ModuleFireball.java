@@ -5,13 +5,13 @@ import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
 public class ModuleFireball extends ModuleProjectile
 {
-    public ModuleFireball(final EntityMinecartModular cart)
+    public ModuleFireball(ModularMinecart cart)
     {
         super(cart);
     }

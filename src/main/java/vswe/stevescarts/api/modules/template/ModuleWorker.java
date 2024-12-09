@@ -6,15 +6,16 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
+import net.minecraft.world.phys.Vec3;
 import vswe.stevescarts.api.modules.ModuleBase;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public abstract class ModuleWorker extends ModuleBase
 {
     private boolean preWork;
     private boolean shouldDie;
 
-    public ModuleWorker(final EntityMinecartModular cart)
+    public ModuleWorker(ModularMinecart cart)
     {
         super(cart);
         preWork = true;
@@ -91,9 +92,10 @@ public abstract class ModuleWorker extends ModuleBase
                 pos = pos.above();
             }
 
-            int[][] logic = EntityMinecartModular.railDirectionCoordinates[direction.ordinal()];
-            double pX = getCart().temppushX;
-            double pZ = getCart().temppushZ;
+            int[][] logic = ModularMinecart.railDirectionCoordinates[direction.ordinal()];
+            Vec3 motion = getCart().getEffectiveVelocity();
+            double pX = motion.x();
+            double pZ = motion.z();
             boolean xDir = (pX > 0.0 && logic[0][0] > 0) || pX == 0.0 || logic[0][0] == 0 || (pX < 0.0 && logic[0][0] < 0);
             boolean zDir = (pZ > 0.0 && logic[0][2] > 0) || pZ == 0.0 || logic[0][2] == 0 || (pZ < 0.0 && logic[0][2] < 0);
             int dir = ((xDir && zDir) != flag) ? 1 : 0;

@@ -4,12 +4,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -19,7 +16,7 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ILeverModule;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
@@ -40,7 +37,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     private int[] buttonRect;
     private final EntityData<Integer> speed = new EntityData<>(getCart(), new IntData(0));
 
-    public ModuleAdvControl(final EntityMinecartModular cart) {
+    public ModuleAdvControl(ModularMinecart cart) {
         super(cart);
         first = true;
         buttonRect = new int[]{15, 20, 24, 12};
@@ -73,11 +70,11 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         ResourceHelper.bindResource("/gui/drive.png");
         if (engineInformation != null)
         {
-            for (int i = 0; i < getCart().getEngines().size(); ++i) {
+            for (int i = 0; i < getCart().engines().size(); ++i) {
                 drawImage(5, i * 15, 0, 0, 66, 15);
                 int upperBarLength = engineInformation[i * 2] & 0x3F;
                 int lowerBarLength = engineInformation[i * 2 + 1] & 0x3F;
-                ModuleEngine engine = getCart().getEngines().get(i);
+                ModuleEngine engine = getCart().engines().get(i);
                 float[] rgb = engine.getGuiBarColor();
                 RenderSystem.setShaderColor(rgb[0], rgb[1], rgb[2], 1.0f);
                 drawImage(7, i * 15 + 2, 66, 0, upperBarLength, 5);
@@ -86,7 +83,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
                 drawImage(5, i * 15, 66 + engine.getPriority() * 7, 11, 7, 15);
             }
         }
-        int enginesEndAt = getCart().getEngines().size() * 15;
+        int enginesEndAt = getCart().engines().size() * 15;
         drawImage(5, enginesEndAt, 0, 15, 32, 32);
         if (mc.options.keyUp.isDown()) {
             drawImage(15, enginesEndAt + 5, 42, 20, 12, 6);
@@ -327,10 +324,10 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     }
 
     private void sendEnginePacket(final Player player) {
-        int engineCount = getCart().getEngines().size();
+        int engineCount = getCart().engines().size();
         byte[] data = new byte[engineCount * 2];
-        for (int i = 0; i < getCart().getEngines().size(); ++i) {
-            ModuleEngine engine = getCart().getEngines().get(i);
+        for (int i = 0; i < getCart().engines().size(); ++i) {
+            ModuleEngine engine = getCart().engines().get(i);
             int totalfuel = engine.getTotalFuel();
             int fuelInTopBar = 20000;
             int maxBarLength = 62;

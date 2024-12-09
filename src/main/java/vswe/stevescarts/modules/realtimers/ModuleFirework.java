@@ -22,7 +22,7 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotFirework;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ import java.util.List;
 public class ModuleFirework extends ModuleBase {
     private int fireCooldown;
 
-    public ModuleFirework(final EntityMinecartModular cart) {
+    public ModuleFirework(ModularMinecart cart) {
         super(cart);
     }
 
@@ -129,7 +129,7 @@ public class ModuleFirework extends ModuleBase {
             }
         }
         if (hasPaper && hasGunpowder) {
-            int maxGunpowder = getCart().random.nextInt(3) + 1;
+            int maxGunpowder = getCart().getRandom().nextInt(3) + 1;
             int countGunpowder = 0;
             boolean removedPaper = false;
             for (int j = 0; j < getInventorySize(); ++j) {
@@ -147,7 +147,7 @@ public class ModuleFirework extends ModuleBase {
                 }
             }
             int chargeCount;
-            for (chargeCount = 1; chargeCount < 7 && getCart().random.nextInt(3 + chargeCount / 3) == 0; ++chargeCount);
+            for (chargeCount = 1; chargeCount < 7 && getCart().getRandom().nextInt(3 + chargeCount / 3) == 0; ++chargeCount);
             List<FireworkExplosion> explosions = new ArrayList<>();
             for (int k = 0; k < chargeCount; ++k) {
                 ItemStack charge = getCharge();
@@ -187,7 +187,7 @@ public class ModuleFirework extends ModuleBase {
                 starSlots.add(i);
             }
         }
-        RandomSource random = getCart().random;
+        RandomSource random = getCart().getRandom();
         if (!starSlots.isEmpty()) {
             int slot = starSlots.get(random.nextInt(starSlots.size()));
             ItemStack item = getStack(slot);
@@ -247,7 +247,7 @@ public class ModuleFirework extends ModuleBase {
         if (colors.isEmpty()) {
             return ItemStack.EMPTY;
         }
-        if (getCart().random.nextInt(4) == 0) {
+        if (getCart().getRandom().nextInt(4) == 0) {
             generateColors(fadeColors, 8);
         }
 
@@ -269,7 +269,7 @@ public class ModuleFirework extends ModuleBase {
         }
 
         int colorCount;
-        for (colorCount = getCart().random.nextInt(2) + 1; colorCount <= maxColorCount - 2 && getCart().random.nextInt(2) == 0; colorCount += 2);
+        for (colorCount = getCart().getRandom().nextInt(2) + 1; colorCount <= maxColorCount - 2 && getCart().getRandom().nextInt(2) == 0; colorCount += 2);
 
         ArrayList<Integer> availableColours = new ArrayList<>();
         for (int colourId = 0; colourId < 16; ++colourId) {
@@ -280,7 +280,7 @@ public class ModuleFirework extends ModuleBase {
         if (availableColours.isEmpty()) return;
 
         while (colorCount > 0 && !availableColours.isEmpty()) {
-            int randomPick = getCart().random.nextInt(availableColours.size());
+            int randomPick = getCart().getRandom().nextInt(availableColours.size());
             int colorId = availableColours.get(randomPick);
             ++currentColors[colorId];
             if (--maxColors[colorId] <= 0) {

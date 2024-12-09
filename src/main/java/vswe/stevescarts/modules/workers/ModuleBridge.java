@@ -16,13 +16,13 @@ import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotBridge;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
     private final EntityData<Boolean> bridge = new EntityData<>(getCart(), new BooleanData(false));
 
-    public ModuleBridge(final EntityMinecartModular cart) {
+    public ModuleBridge(ModularMinecart cart) {
         super(cart);
     }
 

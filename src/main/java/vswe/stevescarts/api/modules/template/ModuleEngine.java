@@ -9,7 +9,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
@@ -20,7 +20,7 @@ public abstract class ModuleEngine extends ModuleBase
     protected int[] priorityButton;
     private final EntityData<Integer> option = new EntityData<>(getCart(), new IntData((byte) 0));
 
-    public ModuleEngine(final EntityMinecartModular cart)
+    public ModuleEngine(ModularMinecart cart)
     {
         super(cart);
         initPriorityButton();

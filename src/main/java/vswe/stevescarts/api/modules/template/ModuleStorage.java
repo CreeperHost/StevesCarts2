@@ -1,11 +1,11 @@
 package vswe.stevescarts.api.modules.template;
 
 import vswe.stevescarts.api.modules.ModuleBase;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleStorage extends ModuleBase
 {
-    public ModuleStorage(final EntityMinecartModular cart)
+    public ModuleStorage(ModularMinecart cart)
     {
         super(cart);
     }

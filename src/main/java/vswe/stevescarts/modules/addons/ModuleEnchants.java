@@ -10,12 +10,11 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotEnchantment;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.*;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -29,7 +28,7 @@ public class ModuleEnchants extends ModuleAddon {
     private final EntityData<EnchantmentData> enchant1 = new EntityData<>(getCart(), new EnchantData(new EnchantmentData(null)));
     private final EntityData<EnchantmentData> enchant2 = new EntityData<>(getCart(), new EnchantData(new EnchantmentData(null)));
 
-    public ModuleEnchants(EntityMinecartModular cart) {
+    public ModuleEnchants(ModularMinecart cart) {
         super(cart);
         enabledTypes = new ArrayList<>();
     }

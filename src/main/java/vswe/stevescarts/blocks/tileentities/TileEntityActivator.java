@@ -16,7 +16,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.containers.ContainerActivator;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ActivatorOption;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.init.ModBlocks;
@@ -99,7 +99,7 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider
         }
     }
 
-    public void handleCart(final EntityMinecartModular cart, final boolean isOrange)
+    public void handleCart(ModularMinecart cart, final boolean isOrange)
     {
         for (final ActivatorOption option : options)
         {

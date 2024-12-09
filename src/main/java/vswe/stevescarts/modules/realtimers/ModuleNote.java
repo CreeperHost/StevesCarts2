@@ -16,7 +16,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
@@ -65,7 +65,7 @@ public class ModuleNote extends ModuleBase
 
     private final EntityData<Boolean> playing = new EntityData<>(getCart(), new BooleanData());
 
-    public ModuleNote(final EntityMinecartModular cart)
+    public ModuleNote(ModularMinecart cart)
     {
         super(cart);
         currentInstrument = -1;
@@ -1008,7 +1008,7 @@ public class ModuleNote extends ModuleBase
                     } else if (instrumentId == 5) {
                     	event = SoundEvents.NOTE_BLOCK_BASS.value();
                     }
-                    getCart().level().playSound(null, getCart().getExactPosition(), event, SoundSource.RECORDS, volume, calculatedPitch);
+                    getCart().level().playSound(null, getCart().blockPosition(), event, SoundSource.RECORDS, volume, calculatedPitch);
                 }
             }
             else

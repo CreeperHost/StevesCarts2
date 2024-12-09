@@ -2,14 +2,14 @@ package vswe.stevescarts.modules.addons.projectiles;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
+import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
 public abstract class ModuleProjectile extends ModuleAddon
 {
-    public ModuleProjectile(final EntityMinecartModular cart)
+    public ModuleProjectile(ModularMinecart cart)
     {
         super(cart);
     }

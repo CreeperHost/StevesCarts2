@@ -1,11 +1,11 @@
 package vswe.stevescarts.modules.hull;
 
 import vswe.stevescarts.api.modules.template.ModuleHull;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleGalgadorian extends ModuleHull
 {
-    public ModuleGalgadorian(final EntityMinecartModular cart)
+    public ModuleGalgadorian(ModularMinecart cart)
     {
         super(cart);
     }

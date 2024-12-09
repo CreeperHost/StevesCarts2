@@ -12,8 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.storages.TransferManager;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketCargpManager;
@@ -136,12 +135,12 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
         compoundTag.put("Items", nbttaglist);
     }
 
-    public EntityMinecartModular getCart()
+    public ModularMinecart getCart()
     {
         return standardTransferHandler.getCart();
     }
 
-    public void setCart(final EntityMinecartModular cart)
+    public void setCart(ModularMinecart cart)
     {
         standardTransferHandler.setCart(cart);
     }

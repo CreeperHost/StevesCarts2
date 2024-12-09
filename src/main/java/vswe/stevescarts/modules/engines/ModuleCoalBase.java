@@ -1,13 +1,10 @@
 package vswe.stevescarts.modules.engines;
 
-import net.creeperhost.polylib.helpers.FuelHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -15,8 +12,9 @@ import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotFuel;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
+import vswe.stevescarts.polylib.FuelHelper;
 
 import javax.annotation.Nonnull;
 
@@ -25,7 +23,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
     private int fireCoolDown;
     private int fireIndex;
 
-    public ModuleCoalBase(final EntityMinecartModular cart)
+    public ModuleCoalBase(ModularMinecart cart)
     {
         super(cart);
     }
@@ -39,7 +37,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
             int i = 0;
             while (i < getInventorySize())
             {
-                setFuelLevel(getFuelLevel() + FuelHelper.getItemBurnTime(getStack(i)));
+                setFuelLevel(getFuelLevel() + FuelHelper.getItemBurnTime(getStack(i), getCart().level()));
                 if (getFuelLevel() > consumption)
                 {
                     if (getStack(i).isEmpty())
@@ -79,7 +77,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
         {
             if (!getStack(i).isEmpty())
             {
-                totalfuel += FuelHelper.getItemBurnTime(getStack(i)) * getStack(i).getCount();
+                totalfuel += FuelHelper.getItemBurnTime(getStack(i), getCart().level()) * getStack(i).getCount();
             }
         }
         return totalfuel;
@@ -97,11 +95,11 @@ public abstract class ModuleCoalBase extends ModuleEngine
         Direction smokeSide = getCart().getMotionDirection().getOpposite();
         double oX = smokeSide.getStepX();
         double oZ = smokeSide.getStepZ();
-        if (getCart().random.nextInt(2) == 0)
+        if (getCart().getRandom().nextInt(2) == 0)
         {
             getCart().level().addParticle(ParticleTypes.SMOKE, getCart().getX() + oX * 0.85, getCart().getY() + 0.12, getCart().getZ() + oZ * 0.85, 0.0, 0.0, 0.0);
         }
-        if (getCart().random.nextInt(30) == 0)
+        if (getCart().getRandom().nextInt(30) == 0)
         {
             getCart().level().addParticle(ParticleTypes.FLAME, getCart().getX() + oX * 0.75, getCart().getY() + 0.15, getCart().getZ() + oZ * 0.75, 0, 0, 0);
         }
@@ -157,7 +155,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
         super.update();
         if (fireCoolDown <= 0)
         {
-            fireIndex = getCart().random.nextInt(4) + 1;
+            fireIndex = getCart().getRandom().nextInt(4) + 1;
             fireCoolDown = 2;
         }
         else

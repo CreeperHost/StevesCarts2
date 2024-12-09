@@ -6,9 +6,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ResourceHelper;
 
 public abstract class ModuleCommand extends ModuleBase implements CommandSource
@@ -16,7 +17,7 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource
     private String command;
     private int[] textbox;
 
-    public ModuleCommand(final EntityMinecartModular cart)
+    public ModuleCommand(ModularMinecart cart)
     {
         super(cart);
         command = "say HI";
@@ -102,9 +103,9 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource
     }
 
     @Override
-    public void moveMinecartOnRail(BlockPos pos)
+    public void moveMinecartOnRail(BlockPos pos, BlockState state)
     {
-        if (getCart().level().getBlockState(pos).getBlock() == Blocks.DETECTOR_RAIL)
+        if (state.getBlock() == Blocks.DETECTOR_RAIL)
         {
             executeCommand();
         }

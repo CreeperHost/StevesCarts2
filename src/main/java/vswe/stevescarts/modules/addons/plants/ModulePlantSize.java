@@ -5,7 +5,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
@@ -15,7 +15,7 @@ public class ModulePlantSize extends ModuleAddon
     private int size;
     private int[] boxrect;
 
-    public ModulePlantSize(final EntityMinecartModular cart)
+    public ModulePlantSize(ModularMinecart cart)
     {
         super(cart);
         size = 1;

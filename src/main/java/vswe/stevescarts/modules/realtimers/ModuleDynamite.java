@@ -17,7 +17,7 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotExplosion;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ComponentTypes;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
@@ -34,7 +34,7 @@ public class ModuleDynamite extends ModuleBase
     private final EntityData<Byte> fuseLength = new EntityData<>(getCart(), new ByteData((byte) 70));
     private final EntityData<Byte> explosion = new EntityData<>(getCart(), new ByteData((byte) 8));
 
-    public ModuleDynamite(final EntityMinecartModular cart)
+    public ModuleDynamite(ModularMinecart cart)
     {
         super(cart);
         fuseStartX = super.guiWidth() + 5;

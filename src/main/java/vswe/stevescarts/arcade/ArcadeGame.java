@@ -37,7 +37,7 @@ public abstract class ArcadeGame
     {
         if (SCConfig.CLIENT.useArcadeSounds.get())
         {
-            getModule().getCart().silent();
+//            getModule().getCart().silent();//Sound stuff needs to be re-implemented at some point
         }
     }
 

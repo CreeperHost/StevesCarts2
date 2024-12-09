@@ -16,6 +16,6 @@ public class Villager extends CardPlace
     @Override
     public Card getCard()
     {
-        return CardVillager.cards.get(game.getModule().getCart().random.nextInt(CardVillager.cards.size()));
+        return CardVillager.cards.get(game.getModule().getCart().getRandom().nextInt(CardVillager.cards.size()));
     }
 }

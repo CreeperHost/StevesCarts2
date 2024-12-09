@@ -1,11 +1,11 @@
 package vswe.stevescarts.modules.hull;
 
 import vswe.stevescarts.api.modules.template.ModuleHull;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleReinforced extends ModuleHull
 {
-    public ModuleReinforced(final EntityMinecartModular cart)
+    public ModuleReinforced(ModularMinecart cart)
     {
         super(cart);
     }

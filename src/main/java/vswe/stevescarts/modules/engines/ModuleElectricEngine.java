@@ -9,7 +9,7 @@
 //import vswe.stevescarts.client.guis.GuiMinecart;
 //import vswe.stevescarts.compat.ftbic.SlotElectricEngine;
 //import vswe.stevescarts.api.slots.SlotBase;
-//import vswe.stevescarts.entitys.EntityMinecartModular;
+//import vswe.stevescarts.entitys.ModularMinecart;
 //import vswe.stevescarts.helpers.Localization;
 //
 //public class ModuleElectricEngine extends ModuleEngine
@@ -17,7 +17,7 @@
 //    private DataParameter<Integer> PRIORITY;
 //    private int maxStored = 50000;
 //
-//    public ModuleElectricEngine(EntityMinecartModular cart) {
+//    public ModuleElectricEngine(ModularMinecart cart) {
 //        super(cart);
 //    }
 //

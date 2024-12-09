@@ -4,25 +4,17 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.TridentModel;
 import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
 
@@ -49,7 +41,7 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer
         if (info.contains("modules"))
         {
             float lowestMult = 1.0f;
-            EntityMinecartModular cart = new EntityMinecartModular(Minecraft.getInstance().level, 0, 0, 0, info, Component.literal(""));
+            ModularMinecart cart = new ModularMinecart(Minecraft.getInstance().level, 0, 0, 0, info);
 
             if (transformType == ItemDisplayContext.GUI)
             {
@@ -63,9 +55,9 @@ public class ItemStackRenderer extends BlockEntityWithoutLevelRenderer
             matrixStack.mulPose(Axis.ZP.rotationDegrees(180));
             matrixStack.mulPose(Axis.XP.rotationDegrees(180));
 
-            if (cart.getModules() != null)
+            if (cart.modules() != null)
             {
-                for (ModuleBase module : cart.getModules())
+                for (ModuleBase module : cart.modules())
                 {
                     if (module.getModels() != null)
                     {

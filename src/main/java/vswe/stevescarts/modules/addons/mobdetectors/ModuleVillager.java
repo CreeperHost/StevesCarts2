@@ -3,12 +3,12 @@ package vswe.stevescarts.modules.addons.mobdetectors;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.npc.Villager;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 
 public class ModuleVillager extends ModuleMobdetector
 {
-    public ModuleVillager(final EntityMinecartModular cart)
+    public ModuleVillager(ModularMinecart cart)
     {
         super(cart);
     }

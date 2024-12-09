@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.modules.ModuleBase;
 
+import java.util.Collections;
 import java.util.function.Function;
 
 public abstract class ModelCartbase extends Model
@@ -19,7 +20,7 @@ public abstract class ModelCartbase extends Model
 
     public ModelCartbase(Function<ResourceLocation, RenderType> layerFactory, ResourceLocation texture, ModelPart root)
     {
-        super(null, layerFactory);
+        super(new ModelPart(Collections.emptyList(), Collections.emptyMap()), layerFactory);
         this.texture = texture;
         this.root = root;
     }

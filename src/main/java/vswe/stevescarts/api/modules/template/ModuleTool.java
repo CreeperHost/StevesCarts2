@@ -5,7 +5,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +16,7 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotRepair;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.ResourceHelper;
@@ -35,7 +34,7 @@ public abstract class ModuleTool extends ModuleWorker
     private final int[] durabilityRect;
     private final EntityData<Integer> durability = new EntityData<>(getCart(), new IntData(getMaxDurability()));
 
-    public ModuleTool(final EntityMinecartModular cart)
+    public ModuleTool(ModularMinecart cart)
     {
         super(cart);
         maximumRepairUnits = 1;
@@ -56,7 +55,7 @@ public abstract class ModuleTool extends ModuleWorker
     public void init()
     {
         super.init();
-        for (final ModuleBase module : getCart().getModules())
+        for (final ModuleBase module : getCart().modules())
         {
             if (module instanceof ModuleEnchants)
             {
@@ -235,7 +234,7 @@ public abstract class ModuleTool extends ModuleWorker
     public void damageTool(final int val)
     {
         final int unbreaking = (enchanter != null) ? enchanter.getUnbreakingLevel() : 0;
-        if (getCart().random.nextInt(100) < 100 / (unbreaking + 1))
+        if (getCart().getRandom().nextInt(100) < 100 / (unbreaking + 1))
         {
             setDurability(getCurrentDurability() - val);
             if (getCurrentDurability() < 0)

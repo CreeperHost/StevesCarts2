@@ -176,7 +176,7 @@ public class TetrisPiece
                     {
                         if (sound != null)
                         {
-                            ArcadeGame.playSound(sound, volume, (game.getModule().getCart().random.nextFloat() - game.getModule().getCart().random.nextFloat()) * 0.2f + 1.0f);
+                            ArcadeGame.playSound(sound, volume, (game.getModule().getCart().getRandom().nextFloat() - game.getModule().getCart().getRandom().nextFloat()) * 0.2f + 1.0f);
                         }
                     }
                     else

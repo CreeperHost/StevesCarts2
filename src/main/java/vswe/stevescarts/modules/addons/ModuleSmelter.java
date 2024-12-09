@@ -3,33 +3,34 @@ package vswe.stevescarts.modules.addons;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.context.ContextKeySet;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
-import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotCartCrafterResult;
 import vswe.stevescarts.containers.slots.SlotFurnaceInput;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.RecipeHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Set;
+import java.util.List;
 
 public class ModuleSmelter extends ModuleRecipe
 {
     private int energyBuffer;
     private int cooldown;
 
-    public ModuleSmelter(final EntityMinecartModular cart)
+    public ModuleSmelter(ModularMinecart cart)
     {
         super(cart);
         cooldown = 0;
@@ -60,7 +61,7 @@ public class ModuleSmelter extends ModuleRecipe
                 {
                     result = result.copy();
                 }
-                if (!result.isEmpty() && getCart().getModules() != null && getValidSlot() != null)
+                if (!result.isEmpty() && getCart().modules() != null && getValidSlot() != null)
                 {
                     prepareLists();
                     if (canCraftMoreOfResult(result))
@@ -114,6 +115,7 @@ public class ModuleSmelter extends ModuleRecipe
     @Nullable
     public SmeltingRecipe getRecipeSmelting()
     {
+        //TODO, Re write recipe handling...
         return getCart().level() instanceof ServerLevel serverLevel ? RecipeHelper.findSmeltRecipe(getStack(0), serverLevel).map(RecipeHolder::value).orElse(null) : null;
     }
 
@@ -123,7 +125,11 @@ public class ModuleSmelter extends ModuleRecipe
         AbstractCookingRecipe recipe = getRecipeSmelting();
         if (recipe != null)
         {
-            return recipe.getResultItem(RegistryAccess.EMPTY).copy();
+//            return recipe.getResultItem(RegistryAccess.EMPTY).copy();
+            List<RecipeDisplay> displays = recipe.display();
+            if (!displays.isEmpty()) {
+                return displays.get((getCart().tickCount / 60) % displays.size()).result().resolveForFirstStack(new ContextMap.Builder().create(new ContextKeySet.Builder().build()));
+            }
         }
         return ItemStack.EMPTY;
     }

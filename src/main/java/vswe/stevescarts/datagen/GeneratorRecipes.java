@@ -3,6 +3,7 @@ package vswe.stevescarts.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.data.recipes.packs.VanillaRecipeProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,22 +24,20 @@ import java.util.function.Supplier;
 
 public class GeneratorRecipes extends RecipeProvider
 {
-    public GeneratorRecipes(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
-    {
-        super(output, lookupProvider);
+    public GeneratorRecipes(HolderLookup.Provider provider, RecipeOutput output) {
+        super(provider, output);
     }
 
     @Override
-    protected void buildRecipes(RecipeOutput consumer)
-    {
-        addBlockRecipes(consumer);
-        addSmithingTableRecipes(consumer);
-        addModuleRecipes(consumer);
+    protected void buildRecipes() {
+        addBlockRecipes();
+        addSmithingTableRecipes();
+        addModuleRecipes();
     }
 
-    private void addBlockRecipes(RecipeOutput consumer)
+    private void addBlockRecipes()
     {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ADVANCED_DETECTOR.get())
+        shaped(RecipeCategory.MISC, ModBlocks.ADVANCED_DETECTOR.get())
                 .pattern("#P#")
                 .pattern("#X#")
                 .pattern("#P#")
@@ -47,30 +46,30 @@ public class GeneratorRecipes extends RecipeProvider
                 .define('P', Items.STONE_PRESSURE_PLATE)
                 .group(Constants.MOD_ID)
                 .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
-                .save(consumer);
+                .save(output);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.GALGADORIAN_METAL.get())
+        shaped(RecipeCategory.MISC, ModBlocks.GALGADORIAN_METAL.get())
                 .pattern("XXX")
                 .pattern("XXX")
                 .pattern("XXX")
                 .define('X', ModItems.COMPONENTS.get(ComponentTypes.GALGADORIAN_METAL).get())
                 .group(Constants.MOD_ID)
                 .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
-                .save(consumer);
+                .save(output);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.REINFORCED_METAL.get())
+        shaped(RecipeCategory.MISC, ModBlocks.REINFORCED_METAL.get())
                 .pattern("XXX")
                 .pattern("XXX")
                 .pattern("XXX")
                 .define('X', ModItems.COMPONENTS.get(ComponentTypes.REINFORCED_METAL).get())
                 .group(Constants.MOD_ID)
                 .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
-                .save(consumer);
+                .save(output);
     }
 
-    private void addModuleRecipes(RecipeOutput consumer)
+    private void addModuleRecipes()
     {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, getStackFromModule(StevesCartsModules.CHUNK_LOADER).getItem())
+        shaped(RecipeCategory.MISC, getStackFromModule(StevesCartsModules.CHUNK_LOADER).getItem())
                 .pattern("III")
                 .pattern("GEG")
                 .pattern("IDI")
@@ -80,18 +79,18 @@ public class GeneratorRecipes extends RecipeProvider
                 .define('D', Tags.Items.GEMS_DIAMOND)
                 .group(Constants.MOD_ID)
                 .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
-                .save(consumer);
+                .save(output);
     }
 
-    private void addSmithingTableRecipes(RecipeOutput consumer)
+    private void addSmithingTableRecipes()
     {
         SmithingTransformRecipeBuilder.smithing(
-                        Ingredient.of(new ItemStack(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE)),
-                        Ingredient.of(getStackFromModule(StevesCartsModules.BASIC_WOOD_CUTTER)),
-                        Ingredient.of(new ItemStack(Items.NETHERITE_INGOT)),
+                        Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+                        Ingredient.of(getStackFromModule(StevesCartsModules.BASIC_WOOD_CUTTER).getItem()),
+                        Ingredient.of(Items.NETHERITE_INGOT),
                         RecipeCategory.MISC,
                         getStackFromModule(StevesCartsModules.NETHERITE_WOOD_CUTTER).getItem()).unlocks("has_item", has(Tags.Items.INGOTS_NETHERITE))
-                .save(consumer, "netherite_wood_cutter");
+                .save(output, "netherite_wood_cutter");
     }
 
     private ItemStack getStackFromModule(ModuleData moduleData)
@@ -100,5 +99,21 @@ public class GeneratorRecipes extends RecipeProvider
         Supplier<Item> itemSupplier = ModItems.MODULES.get(moduleData);
         if (itemSupplier == null || itemSupplier.get() == null) return ItemStack.EMPTY;
         return new ItemStack(itemSupplier.get());
+    }
+
+    public static class Runner extends RecipeProvider.Runner {
+        public Runner(PackOutput p_365442_, CompletableFuture<HolderLookup.Provider> p_362168_) {
+            super(p_365442_, p_362168_);
+        }
+
+        @Override
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider p_364945_, RecipeOutput p_362956_) {
+            return new GeneratorRecipes(p_364945_, p_362956_);
+        }
+
+        @Override
+        public String getName() {
+            return "Steves Carts Recipes";
+        }
     }
 }

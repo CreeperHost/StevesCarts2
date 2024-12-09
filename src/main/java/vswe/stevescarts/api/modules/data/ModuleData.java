@@ -16,8 +16,7 @@ import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.ModuleType;
-import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
@@ -363,12 +362,12 @@ public class ModuleData
         return modules;
     }
 
-    public static ItemStack createModularCart(final EntityMinecartModular parentcart) {
+    public static ItemStack createModularCart(ModularMinecart parentcart) {
         ItemStack cart = new ItemStack(ModItems.CARTS.get(), 1);
         ListTag modulesTag = new ListTag();
-        for (int i = 0; i < parentcart.getModules().size(); i++) {
+        for (int i = 0; i < parentcart.modules().size(); i++) {
             CompoundTag moduleTag = new CompoundTag();
-            ModuleBase module = parentcart.getModules().get(i);
+            ModuleBase module = parentcart.modules().get(i);
             moduleTag.putString(String.valueOf(i), module.getModuleId().toString());
             if (module.hasExtraData()) {
                 moduleTag.put("data", module.writeExtraData());

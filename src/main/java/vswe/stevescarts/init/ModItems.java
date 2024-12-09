@@ -4,6 +4,7 @@ import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import vswe.stevescarts.Constants;
@@ -20,47 +21,46 @@ import java.util.function.Supplier;
 
 public class ModItems
 {
-    public static final Item.Properties ITEM_GROUP = new Item.Properties();
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, Constants.MOD_ID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Constants.MOD_ID);
 
-    public static final DeferredHolder<Item, Item> CART_ASSEMBLER = ITEMS.register("blockcartassembler", () -> new BlockItem(ModBlocks.CART_ASSEMBLER.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> CARGO_MANAGER = ITEMS.register("blockcargomanager", () -> new BlockItem(ModBlocks.CARGO_MANAGER.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> LIQUID_MANAGER = ITEMS.register("blockliquidmanager", () -> new BlockItem(ModBlocks.LIQUID_MANAGER.get(), ITEM_GROUP));
+    public static final DeferredHolder<Item, Item> CART_ASSEMBLER = ITEMS.registerItem("blockcartassembler", props -> new BlockItem(ModBlocks.CART_ASSEMBLER.get(), props));
+    public static final DeferredHolder<Item, Item> CARGO_MANAGER = ITEMS.registerItem("blockcargomanager", props -> new BlockItem(ModBlocks.CARGO_MANAGER.get(), props));
+    public static final DeferredHolder<Item, Item> LIQUID_MANAGER = ITEMS.registerItem("blockliquidmanager", props -> new BlockItem(ModBlocks.LIQUID_MANAGER.get(), props));
 
-    public static final DeferredHolder<Item, Item> EXTERNAL_DISTRIBUTOR = ITEMS.register("blockdistributor", () -> new BlockItem(ModBlocks.EXTERNAL_DISTRIBUTOR.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> MODULE_TOGGLER = ITEMS.register("blockactivator", () -> new BlockItem(ModBlocks.MODULE_TOGGLER.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> JUNCTION = ITEMS.register("blockjunction", () -> new BlockItem(ModBlocks.JUNCTION.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> ADVANCED_DETECTOR = ITEMS.register("blockadvdetector", () -> new BlockItem(ModBlocks.ADVANCED_DETECTOR.get(), ITEM_GROUP));
+    public static final DeferredHolder<Item, Item> EXTERNAL_DISTRIBUTOR = ITEMS.registerItem("blockdistributor", props -> new BlockItem(ModBlocks.EXTERNAL_DISTRIBUTOR.get(), props));
+    public static final DeferredHolder<Item, Item> MODULE_TOGGLER = ITEMS.registerItem("blockactivator", props -> new BlockItem(ModBlocks.MODULE_TOGGLER.get(), props));
+    public static final DeferredHolder<Item, Item> JUNCTION = ITEMS.registerItem("blockjunction", props -> new BlockItem(ModBlocks.JUNCTION.get(), props));
+    public static final DeferredHolder<Item, Item> ADVANCED_DETECTOR = ITEMS.registerItem("blockadvdetector", props -> new BlockItem(ModBlocks.ADVANCED_DETECTOR.get(), props));
 
     //storage blocks
-    public static final DeferredHolder<Item, Item> REINFORCED_METAL = ITEMS.register("reinforced_metal", () -> new BlockItem(ModBlocks.REINFORCED_METAL.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> GALGADORIAN_METAL = ITEMS.register("galgadorian_metal", () -> new BlockItem(ModBlocks.GALGADORIAN_METAL.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> ENHANCED_GALGADORIAN_METAL = ITEMS.register("enhanced_galgadorian_metal", () -> new BlockItem(ModBlocks.ENHANCED_GALGADORIAN_METAL.get(), ITEM_GROUP));
+    public static final DeferredHolder<Item, Item> REINFORCED_METAL = ITEMS.registerItem("reinforced_metal", props -> new BlockItem(ModBlocks.REINFORCED_METAL.get(), props));
+    public static final DeferredHolder<Item, Item> GALGADORIAN_METAL = ITEMS.registerItem("galgadorian_metal", props -> new BlockItem(ModBlocks.GALGADORIAN_METAL.get(), props));
+    public static final DeferredHolder<Item, Item> ENHANCED_GALGADORIAN_METAL = ITEMS.registerItem("enhanced_galgadorian_metal", props -> new BlockItem(ModBlocks.ENHANCED_GALGADORIAN_METAL.get(), props));
 
     //upgrades
-    public static final DeferredHolder<Item, Item> BATTERIES = ITEMS.register("upgrade_batteries", () -> new BlockItem(ModBlocks.BATTERIES.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> POWER_CRYSTAL = ITEMS.register("upgrade_power_crystal", () -> new BlockItem(ModBlocks.POWER_CRYSTAL.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> KNOWLEDGE = ITEMS.register("upgrade_module_knowledge", () -> new BlockItem(ModBlocks.KNOWLEDGE.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> INDUSTRIAL_ESPIONAGE = ITEMS.register("upgrade_industrial_espionage", () -> new BlockItem(ModBlocks.INDUSTRIAL_ESPIONAGE.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> EXPERIENCED_ASSEMBLER = ITEMS.register("upgrade_experienced_assembler", () -> new BlockItem(ModBlocks.EXPERIENCED_ASSEMBLER.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> NEW_ERA = ITEMS.register("upgrade_new_era", () -> new BlockItem(ModBlocks.NEW_ERA.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> COTWO_FRIENDLY = ITEMS.register("upgrade_cotwo_friendly", () -> new BlockItem(ModBlocks.COTWO_FRIENDLY.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> GENERIC_ENGINE = ITEMS.register("upgrade_generic_engine", () -> new BlockItem(ModBlocks.GENERIC_ENGINE.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> MODULE_INPUT = ITEMS.register("upgrade_module_input", () -> new BlockItem(ModBlocks.MODULE_INPUT.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> PRODUCTION_LINE = ITEMS.register("upgrade_production_line", () -> new BlockItem(ModBlocks.PRODUCTION_LINE.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> CART_DEPLOYER = ITEMS.register("upgrade_cart_deployer", () -> new BlockItem(ModBlocks.CART_DEPLOYER.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> CART_MODIFIER = ITEMS.register("upgrade_cart_modifier", () -> new BlockItem(ModBlocks.CART_MODIFIER.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> CART_CRANE = ITEMS.register("upgrade_cart_crane", () -> new BlockItem(ModBlocks.CART_CRANE.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> REDSTONE_CONTROL = ITEMS.register("upgrade_redstone_control", () -> new BlockItem(ModBlocks.REDSTONE_CONTROL.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> CREATIVE_MODE = ITEMS.register("upgrade_creative_mode", () -> new BlockItem(ModBlocks.CREATIVE_MODE.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> QUICK_DEMOLISHER = ITEMS.register("upgrade_quick_demolisher", () -> new BlockItem(ModBlocks.QUICK_DEMOLISHER.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> ENTROPY = ITEMS.register("upgrade_entropy", () -> new BlockItem(ModBlocks.ENTROPY.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> MANAGER_BRIDGE = ITEMS.register("upgrade_manager_bridge", () -> new BlockItem(ModBlocks.MANAGER_BRIDGE.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> THERMAL_ENGINE = ITEMS.register("upgrade_thermal_engine", () -> new BlockItem(ModBlocks.THERMAL_ENGINE.get(), ITEM_GROUP));
-    public static final DeferredHolder<Item, Item> SOLAR_PANEL = ITEMS.register("upgrade_solar_panel", () -> new BlockItem(ModBlocks.SOLAR_PANEL.get(), ITEM_GROUP));
+    public static final DeferredHolder<Item, Item> BATTERIES = ITEMS.registerItem("upgrade_batteries", props -> new BlockItem(ModBlocks.BATTERIES.get(), props));
+    public static final DeferredHolder<Item, Item> POWER_CRYSTAL = ITEMS.registerItem("upgrade_power_crystal", props -> new BlockItem(ModBlocks.POWER_CRYSTAL.get(), props));
+    public static final DeferredHolder<Item, Item> KNOWLEDGE = ITEMS.registerItem("upgrade_module_knowledge", props -> new BlockItem(ModBlocks.KNOWLEDGE.get(), props));
+    public static final DeferredHolder<Item, Item> INDUSTRIAL_ESPIONAGE = ITEMS.registerItem("upgrade_industrial_espionage", props -> new BlockItem(ModBlocks.INDUSTRIAL_ESPIONAGE.get(), props));
+    public static final DeferredHolder<Item, Item> EXPERIENCED_ASSEMBLER = ITEMS.registerItem("upgrade_experienced_assembler", props -> new BlockItem(ModBlocks.EXPERIENCED_ASSEMBLER.get(), props));
+    public static final DeferredHolder<Item, Item> NEW_ERA = ITEMS.registerItem("upgrade_new_era", props -> new BlockItem(ModBlocks.NEW_ERA.get(), props));
+    public static final DeferredHolder<Item, Item> COTWO_FRIENDLY = ITEMS.registerItem("upgrade_cotwo_friendly", props -> new BlockItem(ModBlocks.COTWO_FRIENDLY.get(), props));
+    public static final DeferredHolder<Item, Item> GENERIC_ENGINE = ITEMS.registerItem("upgrade_generic_engine", props -> new BlockItem(ModBlocks.GENERIC_ENGINE.get(), props));
+    public static final DeferredHolder<Item, Item> MODULE_INPUT = ITEMS.registerItem("upgrade_module_input", props -> new BlockItem(ModBlocks.MODULE_INPUT.get(), props));
+    public static final DeferredHolder<Item, Item> PRODUCTION_LINE = ITEMS.registerItem("upgrade_production_line", props -> new BlockItem(ModBlocks.PRODUCTION_LINE.get(), props));
+    public static final DeferredHolder<Item, Item> CART_DEPLOYER = ITEMS.registerItem("upgrade_cart_deployer", props -> new BlockItem(ModBlocks.CART_DEPLOYER.get(), props));
+    public static final DeferredHolder<Item, Item> CART_MODIFIER = ITEMS.registerItem("upgrade_cart_modifier", props -> new BlockItem(ModBlocks.CART_MODIFIER.get(), props));
+    public static final DeferredHolder<Item, Item> CART_CRANE = ITEMS.registerItem("upgrade_cart_crane", props -> new BlockItem(ModBlocks.CART_CRANE.get(), props));
+    public static final DeferredHolder<Item, Item> REDSTONE_CONTROL = ITEMS.registerItem("upgrade_redstone_control", props -> new BlockItem(ModBlocks.REDSTONE_CONTROL.get(), props));
+    public static final DeferredHolder<Item, Item> CREATIVE_MODE = ITEMS.registerItem("upgrade_creative_mode", props -> new BlockItem(ModBlocks.CREATIVE_MODE.get(), props));
+    public static final DeferredHolder<Item, Item> QUICK_DEMOLISHER = ITEMS.registerItem("upgrade_quick_demolisher", props -> new BlockItem(ModBlocks.QUICK_DEMOLISHER.get(), props));
+    public static final DeferredHolder<Item, Item> ENTROPY = ITEMS.registerItem("upgrade_entropy", props -> new BlockItem(ModBlocks.ENTROPY.get(), props));
+    public static final DeferredHolder<Item, Item> MANAGER_BRIDGE = ITEMS.registerItem("upgrade_manager_bridge", props -> new BlockItem(ModBlocks.MANAGER_BRIDGE.get(), props));
+    public static final DeferredHolder<Item, Item> THERMAL_ENGINE = ITEMS.registerItem("upgrade_thermal_engine", props -> new BlockItem(ModBlocks.THERMAL_ENGINE.get(), props));
+    public static final DeferredHolder<Item, Item> SOLAR_PANEL = ITEMS.registerItem("upgrade_solar_panel", props -> new BlockItem(ModBlocks.SOLAR_PANEL.get(), props));
 
 
-    public static final DeferredHolder<Item, Item> CARTS = ITEMS.register("modularcart", ItemCarts::new);
+    public static final DeferredHolder<Item, Item> CARTS = ITEMS.registerItem("modularcart", ItemCarts::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 
     public static final Map<ComponentTypes, Supplier<Item>> COMPONENTS = Util.make(new LinkedHashMap<>(), map ->
     {
@@ -69,7 +69,7 @@ public class ModItems
             if (value != null && value.getName() != null)
             {
                 String name = ("component_" + value.getName());
-                map.put(value, ITEMS.register(name, () -> new ItemCartComponent(value)));
+                map.put(value, ITEMS.registerItem(name, props -> new ItemCartComponent(value, props)));
             }
         }
     });
@@ -77,7 +77,7 @@ public class ModItems
     public static final Map<ModuleData, Supplier<Item>> MODULES = Util.make(new LinkedHashMap<>(), map -> {
         for (ModuleData value : StevesCartsAPI.MODULE_REGISTRY.values()) {
             if (value.getID().getNamespace().equalsIgnoreCase(Constants.MOD_ID)){
-                map.put(value, ITEMS.register(value.getName(), () -> new ItemCartModule(value)));
+                map.put(value, ITEMS.registerItem(value.getName(), props -> new ItemCartModule(value, props)));
             }
         }
     });

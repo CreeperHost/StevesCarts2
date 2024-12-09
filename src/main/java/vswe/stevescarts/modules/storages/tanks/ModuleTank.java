@@ -24,7 +24,7 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotLiquidInput;
 import vswe.stevescarts.containers.slots.SlotLiquidOutput;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.helpers.storages.ITankHolder;
@@ -45,7 +45,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     private final EntityData<Integer> fluidAmount = new EntityData<>(getCart(), new IntData(-1));
     private final EntityData<FluidStack> locked = new EntityData<>(getCart(), new FluidDataNeo());
 
-    public ModuleTank(final EntityMinecartModular cart)
+    public ModuleTank(ModularMinecart cart)
     {
         super(cart);
         tankBounds = new int[]{35, 20, 36, 51};

@@ -1,13 +1,10 @@
 package vswe.stevescarts.modules.addons;
 
 import net.creeperhost.polylib.data.serializable.ByteData;
-import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -19,7 +16,7 @@ import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.api.slots.SlotChest;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
@@ -38,7 +35,7 @@ public abstract class ModuleRecipe extends ModuleAddon
     private final EntityData<Byte> mode = new EntityData<>(getCart(), new ByteData((byte) 0));
     private final EntityData<Byte> maxItemCount = new EntityData<>(getCart(), new ByteData((byte) 1));
 
-    public ModuleRecipe(final EntityMinecartModular cart)
+    public ModuleRecipe(ModularMinecart cart)
     {
         super(cart);
         dirty = true;
@@ -347,7 +344,7 @@ public abstract class ModuleRecipe extends ModuleAddon
         if (inputSlots == null)
         {
             inputSlots = new ArrayList<>();
-            for (final ModuleBase module : getCart().getModules())
+            for (final ModuleBase module : getCart().modules())
             {
                 if (module.getSlots() != null)
                 {
@@ -367,7 +364,7 @@ public abstract class ModuleRecipe extends ModuleAddon
             outputSlots.clear();
             final Class validSlot = getValidSlot();
             if (validSlot != null) {
-                for (final ModuleBase module2 : getCart().getModules()) {
+                for (final ModuleBase module2 : getCart().modules()) {
                     if (module2.getSlots() != null) {
                         for (final SlotStevesCarts slot2 : module2.getSlots()) {
                             if (validSlot.isInstance(slot2)) {

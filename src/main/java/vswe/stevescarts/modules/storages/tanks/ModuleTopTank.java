@@ -1,10 +1,10 @@
 package vswe.stevescarts.modules.storages.tanks;
 
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 
 public class ModuleTopTank extends ModuleTank
 {
-    public ModuleTopTank(final EntityMinecartModular cart)
+    public ModuleTopTank(ModularMinecart cart)
     {
         super(cart);
     }

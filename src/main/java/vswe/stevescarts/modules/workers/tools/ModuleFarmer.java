@@ -26,7 +26,7 @@ import vswe.stevescarts.api.modules.template.ModuleTool;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotSeed;
-import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -42,7 +42,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     private float rigAngle;
     private final EntityData<Boolean> isFarming = new EntityData<>(getCart(), new BooleanData(false));
 
-    public ModuleFarmer(final EntityMinecartModular cart)
+    public ModuleFarmer(ModularMinecart cart)
     {
         super(cart);
         rigAngle = -3.926991f;
@@ -60,7 +60,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     {
         super.init();
         plantModules = new ArrayList<>();
-        for (final ModuleBase module : getCart().getModules())
+        for (final ModuleBase module : getCart().modules())
         {
             if (module instanceof ICropModule)
             {
@@ -191,7 +191,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
 
     protected boolean farm(Level world, BlockPos pos)
     {
-        EntityMinecartModular cart = getCart();
+        ModularMinecart cart = getCart();
         if (!isBroken())
         {
             pos = pos.above();

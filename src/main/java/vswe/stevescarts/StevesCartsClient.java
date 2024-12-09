@@ -1,8 +1,11 @@
 package vswe.stevescarts;
 
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import vswe.stevescarts.client.models.*;
 import vswe.stevescarts.client.models.engines.*;
 import vswe.stevescarts.client.models.pig.ModelPigHead;
@@ -20,9 +23,11 @@ import vswe.stevescarts.client.models.workers.ModelTrackRemover;
 import vswe.stevescarts.client.models.workers.tools.ModelDrill;
 import vswe.stevescarts.client.models.workers.tools.ModelFarmer;
 import vswe.stevescarts.client.models.workers.tools.ModelWoodCutter;
+import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.client.renders.RenderModulerCart;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModEntities;
+import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.init.ModScreens;
 
 import static vswe.stevescarts.init.StevesCartsModules.*;
@@ -31,6 +36,7 @@ public class StevesCartsClient
 {
     public static void init(IEventBus bus) {
         ModScreens.init(bus);
+        bus.addListener(StevesCartsClient::registerItemExtensions);
     }
 
     public static void clientInit(final FMLClientSetupEvent event)
@@ -98,5 +104,16 @@ public class StevesCartsClient
         CLEANER_LIQUID.addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/cleanerModelTop.png"))).addModel("Cleaner", new ModelCleaner(true));
         LAWN_MOWER.addModel("LawnMower", new ModelLawnMower()).setModelMult(0.4f);
         CAKE_SERVER.addModel("Cake", new ModelCake());
+    }
+
+    public static void registerItemExtensions(RegisterClientExtensionsEvent event) {
+        event.registerItem(new IClientItemExtensions()
+        {
+            @Override
+            public BlockEntityWithoutLevelRenderer getCustomRenderer()
+            {
+                return ItemStackRenderer.getInstance();
+            }
+        }, ModItems.CARTS);
     }
 }
