@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -88,6 +89,9 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     protected int motorRotation;
     protected int keepAlive;
 
+    private float rotationOffset;
+    private float playerRotationOffset;
+
     /**
      * When the cart needs to stop to perform a cart function, the current velocity is stored in this field,
      * So that it can be restored after the operation is complete.
@@ -143,7 +147,14 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         if (level().isClientSide) {
             updateSounds();
         }
+
+        double lastYRot = this.getYRot();
+        Vec3 lastPos = this.position();
         super.tick();
+        if (this.level().isClientSide && lastPos.distanceTo(this.position()) > 0.01) {
+            this.rotationOffset += (float) ((this.getYRot() - lastYRot) % 360.0);
+            this.rotationOffset %= 360.0F;
+        }
     }
 
     @Override
@@ -556,19 +567,20 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         return new ContainerMinecart(id, inventory, this);
     }
 
-    //=== Temporary Stubs ===//
+    @Override
+    protected void positionRider(Entity passenger, Entity.MoveFunction moveFunction) {
+        super.positionRider(passenger, moveFunction);
+        if (this.level().isClientSide && passenger instanceof Player player) {
+            if (player.shouldRotateWithMinecart() /* && useExperimentalMovement(this.level())*/) {
+                //TODO, Figure out if we want this, and get seat rendering working properly.
+//            if (true /*player.shouldRotateWithMinecart() && useExperimentalMovement(this.level())*/) {
+//                float f = (float) Mth.rotLerp(0.5, (double)this.playerRotationOffset, (double)this.rotationOffset);
+//                player.setYRot(player.getYRot() - (f - this.playerRotationOffset));
+//                this.playerRotationOffset = f;
+            }
+        }
 
-//
-//    public RailShape getRailDirection(BlockPos pos) {
-//        return null;
-//    }
-
-
-//    public double pushX;
-//    public double pushZ;
-//    public double temppushX;
-//    public double temppushZ;
-
+    }
 
     public static final int[][][] railDirectionCoordinates = new int[][][]{
             {{0, 0, -1}, {0, 0, 1}},

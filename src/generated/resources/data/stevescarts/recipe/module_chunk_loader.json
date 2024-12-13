@@ -3,18 +3,10 @@
   "category": "misc",
   "group": "stevescarts",
   "key": {
-    "D": {
-      "tag": "c:gems/diamond"
-    },
-    "E": {
-      "item": "minecraft:ender_eye"
-    },
-    "G": {
-      "tag": "c:ingots/gold"
-    },
-    "I": {
-      "tag": "c:ingots/iron"
-    }
+    "D": "#c:gems/diamond",
+    "E": "minecraft:ender_eye",
+    "G": "#c:ingots/gold",
+    "I": "#c:ingots/iron"
   },
   "pattern": [
     "III",

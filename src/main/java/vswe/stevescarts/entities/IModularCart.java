@@ -106,11 +106,13 @@ public interface IModularCart extends Container, IFluidHandler {
     }
 
     default int getYTarget() {
-        return modules().stream()
-                .mapToInt(ModuleBase::getYTarget)
-                .filter(e -> e != Integer.MIN_VALUE)
-                .findFirst()
-                .orElse(y());
+        for (ModuleBase module : modules()) {
+            int yTarget = module.getYTarget();
+            if (yTarget != Integer.MIN_VALUE) {
+                return yTarget;
+            }
+        }
+        return y();
     }
 
     default ModuleBase getInterfaceThief() {

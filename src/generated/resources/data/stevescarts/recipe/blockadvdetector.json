@@ -3,15 +3,9 @@
   "category": "misc",
   "group": "stevescarts",
   "key": {
-    "#": {
-      "tag": "c:ingots/iron"
-    },
-    "P": {
-      "item": "minecraft:stone_pressure_plate"
-    },
-    "X": {
-      "tag": "c:dusts/redstone"
-    }
+    "#": "#c:ingots/iron",
+    "P": "minecraft:stone_pressure_plate",
+    "X": "#c:dusts/redstone"
   },
   "pattern": [
     "#P#",

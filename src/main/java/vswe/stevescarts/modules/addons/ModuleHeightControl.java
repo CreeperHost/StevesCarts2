@@ -227,18 +227,11 @@ public class ModuleHeightControl extends ModuleAddon
     }
 
     @Override
-    public int getYTarget()
-    {
-        if (isPlaceholder())
-        {
+    public int getYTarget() {
+        if (isPlaceholder()) {
             return 64;
         }
-        int data = yTarget.get();
-//        if (data < 0)
-//        {
-//            data += 256;
-//        }
-        return data;
+        return yTarget.get();
     }
 
     @Override

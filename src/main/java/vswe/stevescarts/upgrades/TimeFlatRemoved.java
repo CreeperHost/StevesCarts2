@@ -1,5 +1,6 @@
 package vswe.stevescarts.upgrades;
 
+import net.minecraft.network.chat.Component;
 import vswe.stevescarts.helpers.Localization;
 
 public class TimeFlatRemoved extends TimeFlat
@@ -10,8 +11,8 @@ public class TimeFlatRemoved extends TimeFlat
     }
 
     @Override
-    public String getName()
+    public Component getName()
     {
-        return Localization.UPGRADES.FLAT_REMOVED.translate(((getSeconds() >= 0) ? "+" : "") + getSeconds(), String.valueOf(getSeconds()));
+        return Component.literal(Localization.UPGRADES.FLAT_REMOVED.translate(((getSeconds() >= 0) ? "+" : "") + getSeconds(), String.valueOf(getSeconds())));
     }
 }

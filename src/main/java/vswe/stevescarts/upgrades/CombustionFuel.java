@@ -1,12 +1,13 @@
 package vswe.stevescarts.upgrades;
 
+import net.minecraft.network.chat.Component;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 
 public class CombustionFuel extends BaseUpgradeEffect
 {
     @Override
-    public String getName()
+    public Component getName()
     {
-        return "info.stevescarts.effectCombustionFuel";
+        return Component.translatable("info.stevescarts.effectCombustionFuel");
     }
 }

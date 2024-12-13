@@ -3,6 +3,7 @@ package vswe.stevescarts.upgrades;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -69,9 +70,9 @@ public class Disassemble extends InventoryUpgradeEffect
     }
 
     @Override
-    public String getName()
+    public Component getName()
     {
-        return "info.stevescarts.effectDisassemble";
+        return Component.translatable("info.stevescarts.effectDisassemble");
     }
 
     @Override

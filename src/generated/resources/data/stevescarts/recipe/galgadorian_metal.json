@@ -3,9 +3,7 @@
   "category": "misc",
   "group": "stevescarts",
   "key": {
-    "X": {
-      "item": "stevescarts:component_galgadorian_metal"
-    }
+    "X": "stevescarts:component_galgadorian_metal"
   },
   "pattern": [
     "XXX",

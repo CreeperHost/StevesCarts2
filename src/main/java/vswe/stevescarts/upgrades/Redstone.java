@@ -1,12 +1,13 @@
 package vswe.stevescarts.upgrades;
 
+import net.minecraft.network.chat.Component;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 
 public class Redstone extends BaseUpgradeEffect
 {
     @Override
-    public String getName()
+    public Component getName()
     {
-        return "info.stevescarts.effectRedstone";
+        return Component.translatable("info.stevescarts.effectRedstone");
     }
 }

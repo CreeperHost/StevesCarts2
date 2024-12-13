@@ -1,5 +1,6 @@
 package vswe.stevescarts.upgrades;
 
+import net.minecraft.network.chat.Component;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 
 public class FuelCapacity extends BaseUpgradeEffect
@@ -12,9 +13,9 @@ public class FuelCapacity extends BaseUpgradeEffect
     }
 
     @Override
-    public String getName()
+    public Component getName()
     {
-        return "info.stevescarts.effectFuelCapacity" + (((capacity >= 0) ? "+" : "") + capacity);
+        return Component.translatable("info.stevescarts.effectFuelCapacity", (((capacity >= 0) ? "+" : "") + capacity));
     }
 
     public int getFuelCapacity()

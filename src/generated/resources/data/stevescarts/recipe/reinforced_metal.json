@@ -3,9 +3,7 @@
   "category": "misc",
   "group": "stevescarts",
   "key": {
-    "X": {
-      "item": "stevescarts:component_reinforced_metal"
-    }
+    "X": "stevescarts:component_reinforced_metal"
   },
   "pattern": [
     "XXX",
