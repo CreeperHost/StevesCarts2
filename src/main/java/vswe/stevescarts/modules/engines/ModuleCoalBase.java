@@ -6,8 +6,10 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
@@ -90,18 +92,13 @@ public abstract class ModuleCoalBase extends ModuleEngine
     }
 
     @Override
-    public void smoke()
-    {
-        Direction smokeSide = getCart().getMotionDirection().getOpposite();
-        double oX = smokeSide.getStepX();
-        double oZ = smokeSide.getStepZ();
-        if (getCart().getRandom().nextInt(2) == 0)
-        {
-            getCart().level().addParticle(ParticleTypes.SMOKE, getCart().getX() + oX * 0.85, getCart().getY() + 0.12, getCart().getZ() + oZ * 0.85, 0.0, 0.0, 0.0);
+    public void smoke() {
+        Vec3 velocity = getCart().getEffectiveVelocity().normalize();
+        if (getCart().getRandom().nextInt(2) == 0) {
+            getCart().level().addParticle(ParticleTypes.SMOKE, getCart().getX() - velocity.x * 0.85, getCart().getY() + 0.12, getCart().getZ() - velocity.z * 0.85, 0.0, 0.0, 0.0);
         }
-        if (getCart().getRandom().nextInt(30) == 0)
-        {
-            getCart().level().addParticle(ParticleTypes.FLAME, getCart().getX() + oX * 0.75, getCart().getY() + 0.15, getCart().getZ() + oZ * 0.75, 0, 0, 0);
+        if (getCart().getRandom().nextInt(30) == 0) {
+            getCart().level().addParticle(ParticleTypes.FLAME, getCart().getX() - velocity.x * 0.75, getCart().getY() + 0.15, getCart().getZ() - velocity.z * 0.75, 0, 0, 0);
         }
     }
 

@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.PoweredRailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.extensions.IBaseRailBlockExtension;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.blocks.BlockRailAdvDetector;
 

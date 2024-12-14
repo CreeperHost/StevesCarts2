@@ -112,11 +112,6 @@ public abstract class ModuleThermalBase extends ModuleEngine
         return new float[]{1.0f, 0.0f, 0.0f};
     }
 
-    @Override
-    public void smoke()
-    {
-    }
-
     @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)

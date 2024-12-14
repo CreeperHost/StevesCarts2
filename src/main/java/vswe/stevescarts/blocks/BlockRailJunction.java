@@ -2,7 +2,9 @@ package vswe.stevescarts.blocks;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.NewMinecartBehavior;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
@@ -48,14 +50,28 @@ public class BlockRailJunction extends BaseRailBlock
     }
 
     @Override
-    public @NotNull RailShape getRailDirection(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @Nullable AbstractMinecart abstractMinecart)
-    {
-        if (abstractMinecart instanceof ModularMinecart modularMinecart)
-        {
+    public @NotNull RailShape getRailDirection(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @Nullable AbstractMinecart cart) {
+        if (cart instanceof ModularMinecart modularMinecart) {
             RailShape railShape = modularMinecart.getRailDirection(pos);
-            if (railShape != null) return railShape;
+            if (railShape != null) {
+                return railShape;
+            }
         }
-        return super.getRailDirection(state, world, pos, abstractMinecart);
+        if (cart != null) {
+            Direction direction = cart.behavior.getMotionDirection();
+            if (cart.behavior instanceof NewMinecartBehavior) {
+                direction = direction.getCounterClockWise();//Why are the new cards rotated 90 degrees?...
+            }
+            return switch (direction) {
+                case NORTH -> RailShape.NORTH_SOUTH;
+                case SOUTH -> RailShape.NORTH_SOUTH;
+                case WEST -> RailShape.EAST_WEST;
+                case EAST -> RailShape.EAST_WEST;
+                default -> super.getRailDirection(state, world, pos, cart);
+            };
+        }
+
+        return super.getRailDirection(state, world, pos, cart);
     }
 
     @Override

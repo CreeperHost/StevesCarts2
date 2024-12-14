@@ -1,6 +1,7 @@
 package vswe.stevescarts.entities;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -270,8 +271,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         float sin = Math.sin(pushRad);
         float cos = Math.cosFromSin(sin, pushRad);
         return new Vec3(sin, 0, cos);
-
-//        return preStopVelocity == null ? getDeltaMovement() : preStopVelocity;
     }
 
     @Override
@@ -286,12 +285,8 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         //If engine is burning and we are not stopped, then apply engine power.
         if (isEngineBurning() && preStopVelocity == null) {
             double pushFactor = getPushFactor();
-            float rotation = behavior.getYRot();
-            float pushRad = (rotation + 90) * 0.017453292F;
-            float sin = Math.sin(pushRad);
-            float cos = Math.cosFromSin(sin, pushRad);
-            Vec3 pushVec = new Vec3(sin * pushFactor, 0, cos * pushFactor);
-            initialVelocity = initialVelocity.multiply(0.8D, 0.0D, 0.8D).add(pushVec);
+            Vec3 velocity = getEffectiveVelocity();
+            initialVelocity = initialVelocity.multiply(0.8D, 0.0D, 0.8D).add(velocity.multiply(pushFactor, 0, pushFactor));
             if (isInWater()) {
                 initialVelocity = initialVelocity.scale(0.1);
             }
