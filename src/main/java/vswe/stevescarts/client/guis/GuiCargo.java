@@ -100,10 +100,7 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
                 drawMouseOver(guiGraphics, Localization.GUI.MANAGER.CHANGE_TURN_BACK_SETTING.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + ((containerCargo.getColor()[i] == 5) ? Localization.GUI.MANAGER.TURN_BACK_NOT_SELECTED.translate() : (containerCargo.doReturn()[containerCargo.getColor()[i] - 1] ? Localization.GUI.MANAGER.TURN_BACK_DO.translate() : Localization.GUI.MANAGER.TURN_BACK_DO_NOT.translate())), mouseX, mouseY, getReturnCoords(i));
                 drawMouseOver(guiGraphics, Localization.GUI.MANAGER.CHANGE_TRANSFER_SIZE.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getMaxSizeOverlay(i), mouseX, mouseY, getTextCoords(i));
                 drawMouseOver(guiGraphics, Localization.GUI.MANAGER.CHANGE_SIDE.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SIDE.translate() + ": " + (new String[]{Localization.GUI.MANAGER.SIDE_RED.translate(), Localization.GUI.MANAGER.SIDE_BLUE.translate(), Localization.GUI.MANAGER.SIDE_YELLOW.translate(), Localization.GUI.MANAGER.SIDE_GREEN.translate(), Localization.GUI.MANAGER.SIDE_DISABLED.translate()})[containerCargo.getColor()[i] - 1], mouseX, mouseY, getColorpickerCoords(i));
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+            } catch (Exception ignored) {} //TODO, This is not a solution.
         }
         drawMouseOver(guiGraphics, getLayoutString() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getLayoutOption(containerCargo.getLayoutType()), mouseX, mouseY, getMiddleCoords());
     }
