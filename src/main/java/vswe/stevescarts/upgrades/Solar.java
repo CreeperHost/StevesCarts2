@@ -29,6 +29,6 @@ public class Solar extends RechargerBaseUpgrade
     @Override
     public Component getName()
     {
-        return Component.translatable("info.stevescarts.effectSolar");
+        return Localization.translate("info.stevescarts.effectSolar");
     }
 }

@@ -16,7 +16,7 @@ public class FuelCost extends BaseUpgradeEffect
     @Override
     public Component getName()
     {
-        return Component.translatable("info.stevescarts.effectFuelCost", (getPercentage() >= 0 ? "+" : "") + getPercentage());
+        return Localization.translate("info.stevescarts.effectFuelCost", (getPercentage() >= 0 ? "+" : "") + getPercentage());
     }
 
     private int getPercentage()

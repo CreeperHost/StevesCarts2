@@ -14,6 +14,7 @@ import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerCartAssembler;
 import vswe.stevescarts.containers.slots.SlotCart;
 import vswe.stevescarts.containers.slots.SlotModule;
+import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
@@ -72,7 +73,7 @@ public class Disassemble extends InventoryUpgradeEffect
     @Override
     public Component getName()
     {
-        return Component.translatable("info.stevescarts.effectDisassemble");
+        return Localization.translate("info.stevescarts.effectDisassemble");
     }
 
     @Override
