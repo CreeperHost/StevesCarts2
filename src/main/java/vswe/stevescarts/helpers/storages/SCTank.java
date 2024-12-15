@@ -145,15 +145,6 @@ public class SCTank extends FluidTank {
         owner.onFluidUpdated(tankid);
     }
 
-    public static void applyColour(FluidStack fluidStack) {
-        int fluidColor = FluidStackHooks.getColor(fluidStack.getFluid());
-        float red = (fluidColor >> 16 & 0xFF) / 255.0F;
-        float green = (fluidColor >> 8 & 0xFF) / 255.0F;
-        float blue = (fluidColor & 0xFF) / 255.0F;
-        float alpha = ((fluidColor >> 24) & 0xFF) / 255F;
-        RenderSystem.setShaderColor(red, green, blue, alpha);
-    }
-
     //I spent a couple of hours trying to find a way to make this work with ScreenFluidRenderer. But without overhauling the SC GUI system i could not find a good solution.
     @OnlyIn(Dist.CLIENT)
     public void drawFluid(GuiGraphics guiGraphics, AbstractContainerScreen<?> gui, final int startX, final int startY) {
@@ -164,8 +155,7 @@ public class SCTank extends FluidTank {
         if (icon == null) return;
 
         RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
-        applyColour(fluid);
-
+        int fluidColor = FluidStackHooks.getColor(fluid.getFluid());
         for (int y = 0; y < 3; y++) {
             int pixels = fluidLevel - (2 - y) * 16;
 
@@ -176,9 +166,8 @@ public class SCTank extends FluidTank {
             }
 
             for (int x = 0; x < 2; x++) {
-                owner.drawImage(guiGraphics, tankid, gui, icon, startX + 2 + 16 * x, startY + 1 + 16 * y + (16 - pixels)/*, 0, (16 - pixels)*/, 16, pixels);
+                owner.drawImage(guiGraphics, tankid, gui, icon, startX + 2 + 16 * x, startY + 1 + 16 * y + (16 - pixels)/*, 0, (16 - pixels)*/, 16, pixels, fluidColor);
             }
         }
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1F);
     }
 }

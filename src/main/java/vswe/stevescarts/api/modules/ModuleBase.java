@@ -682,7 +682,24 @@ public abstract class ModuleBase
             this.handleScroll(rect);
         }
         if (rect[3] > 0) {
-            guiGraphics.blitSprite(RenderType::guiTextured, icon, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), 0, rect[2], rect[3]);
+            guiGraphics.blitSprite(RenderType::guiTextured, icon, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), rect[2], rect[3], 0xFFFFFFFF);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, final int targetX, final int targetY, final int sizeX, final int sizeY, int colour) {
+        this.drawImage(guiGraphics, gui, icon, new int[]{targetX, targetY, sizeX, sizeY}, colour);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect, int colour) {
+        if (rect.length < 4) return;
+        rect = this.cloneRect(rect);
+        if (!this.doStealInterface()) {
+            this.handleScroll(rect);
+        }
+        if (rect[3] > 0) {
+            guiGraphics.blitSprite(RenderType::guiTextured, icon, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), rect[2], rect[3], colour);
         }
     }
 

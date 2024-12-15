@@ -167,9 +167,9 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height)
+    public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour)
     {
-        guiGraphics.blitSprite(RenderType::guiTextured, sprite, targetX, targetY, 0, width, height);
+        guiGraphics.blitSprite(RenderType::guiTextured, sprite, targetX, targetY, width, height, colour);
     }
 
     @Override
@@ -358,9 +358,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
         {
             if (!tanks[i].getFluid().isEmpty())
             {
-                CompoundTag compound = new CompoundTag();
-                tanks[i].getFluid().save(provider, compound);
-                compoundTag.put("Fluid" + i, compound);
+                compoundTag.put("Fluid" + i, tanks[i].getFluid().save(provider, new CompoundTag()));
             }
         }
         compoundTag.putShort("workload", (short) getWorkload());

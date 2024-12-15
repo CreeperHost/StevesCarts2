@@ -18,5 +18,5 @@ public interface ITankHolder
 
     void onFluidUpdated(final int p0);
 
-    void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height);
+    void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour);
 }

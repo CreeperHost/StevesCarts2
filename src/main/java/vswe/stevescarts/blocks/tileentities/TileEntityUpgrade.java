@@ -320,9 +320,9 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
 
     @OnlyIn (Dist.CLIENT)
     @Override
-    public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height)
+    public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour)
     {
-        guiGraphics.blitSprite(RenderType::guiTextured, sprite, gui.getGuiLeft() + targetX, gui.getGuiTop() + targetY, 0, width, height);
+        guiGraphics.blitSprite(RenderType::guiTextured, sprite, gui.getGuiLeft() + targetX, gui.getGuiTop() + targetY, width, height, colour);
     }
 
     public void setCreativeBroken()
