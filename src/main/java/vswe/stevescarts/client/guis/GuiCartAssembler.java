@@ -1,14 +1,22 @@
 package vswe.stevescarts.client.guis;
 
+import com.mojang.blaze3d.platform.Lighting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.data.ModuleDataHull;
@@ -22,6 +30,7 @@ import vswe.stevescarts.helpers.TitleBox;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketCreateCart;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -222,7 +231,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         drawProgressBar(guiGraphics, assemblingProgRect, assemblingProgress, 22, mouseX, mouseY);
         drawProgressBar(guiGraphics, fuelProgRect, (float) containerCartAssembler.getFuel() / (float) assembler.getMaxFuelLevel(), 31, mouseX, mouseY);
         renderDropDownMenu(guiGraphics, GuiCartAssembler.textureExtra, mouseX, mouseY);
-        renderEntityInInventory(leftPos + 256, topPos + 100, 50);
+        renderEntityInInventory(guiGraphics, leftPos + 256, topPos + 100, 50);
     }
 
     @Override
@@ -337,49 +346,32 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         }
     }
 
-    //TODO, This needs to be re-written
-    public void renderEntityInInventory(int xPos, int yPos, int scale)
-    {
-        if(assembler.getHullModule() == null){
+    public void renderEntityInInventory(GuiGraphics graphics, int xPos, int yPos, int scale) {
+        if (assembler.getHullModule() == null) {
             return;
         }
         assembler.createPlaceholder();
 
-//        Matrix4fStack matrix4fStack = RenderSystem.getModelViewStack();
-//        matrix4fStack.pushMatrix();
-//        matrix4fStack.translate(xPos, yPos, 1050.0F);
-//        matrix4fStack.scale(1.0F, 1.0F, -1.0F);
-//        RenderSystem.applyModelViewMatrix();
-//        PoseStack posestack1 = new PoseStack();
-//        posestack1.translate(0.0D, 0.0D, 1000.0D);
-//        posestack1.scale((float) scale, (float) scale, (float) scale);
+        StevesCarts.LOGGER.info(assembler.getRoll());
+        Quaternionf angle = new Quaternionf().rotationXYZ((float) Math.toRadians(assembler.getRoll()), (float) Math.toRadians(assembler.getYaw()), (float) Math.PI);
+        renderEntityInInventory(graphics, xPos, yPos, scale, angle, assembler.getPlaceholder());
+    }
 
-//        var quaternion = Axis.YN.rotationDegrees(assembler.getRoll() * 10F);
-//        var quaternion1 = Axis.XP.rotationDegrees(180);
-//        if (spin)
-//        {
-//            posestack1.mulPose(quaternion);
-//        }
+    public static void renderEntityInInventory(GuiGraphics guiGraphics, float x, float y, float scale, Quaternionf pose, Entity entity) {
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(x, y, 50.0);
+        guiGraphics.pose().scale(scale, scale, -scale);
+        guiGraphics.pose().mulPose(pose);
+        guiGraphics.flush();
+        Lighting.setupForEntityInInventory();
+        EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
 
-//        quaternion.mul(quaternion1);
-//        posestack1.mulPose(quaternion);
-//        ModularMinecart ModularMinecart = assembler.getPlaceholder();
-
-//        Lighting.setupForEntityInInventory();
-//        EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
-//        quaternion1.conjugate();
-//        entityrenderdispatcher.overrideCameraOrientation(quaternion1);
-//        entityrenderdispatcher.setRenderShadow(false);
-//        MultiBufferSource.BufferSource multibuffersource$buffersource = Minecraft.getInstance().renderBuffers().bufferSource();
-//        if (ModularMinecart != null)
-//        {
-//            graphics.drawSpecial(bufferSource -> entityrenderdispatcher.render(ModularMinecart, 0.0D, 0.0D, 0.0D, 1.0F, posestack1, multibuffersource$buffersource, 15728880));
-//        }
-//        multibuffersource$buffersource.endBatch();
-//        entityrenderdispatcher.setRenderShadow(true);
-//        matrix4fStack.popMatrix();
-//        RenderSystem.applyModelViewMatrix();
-//        Lighting.setupFor3DItems();
+        entityrenderdispatcher.setRenderShadow(false);
+        guiGraphics.drawSpecial((p_370280_) -> entityrenderdispatcher.render(entity, 0.0, 0.0, 0.0, 1.0F, guiGraphics.pose(), p_370280_, 15728880));
+        guiGraphics.flush();
+        entityrenderdispatcher.setRenderShadow(true);
+        guiGraphics.pose().popPose();
+        Lighting.setupFor3DItems();
     }
 
     private void renderDropDownMenu(GuiGraphics guiGraphics, ResourceLocation resourceLocation, final int x, final int y)
