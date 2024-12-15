@@ -16,9 +16,9 @@ import vswe.stevescarts.polylib.EntityData;
 
 public abstract class ModuleEngine extends ModuleBase
 {
-    private int fuel;
     protected int[] priorityButton;
-    private final EntityData<Integer> option = new EntityData<>(getCart(), new IntData((byte) 0));
+    private final EntityData<Integer> option = new EntityData<>(getCart(), new IntData(0));
+    private final EntityData<Integer> fuel = new EntityData<>(getCart(), new IntData(0));
 
     public ModuleEngine(ModularMinecart cart)
     {
@@ -46,12 +46,12 @@ public abstract class ModuleEngine extends ModuleBase
 
     public int getFuelLevel()
     {
-        return fuel;
+        return fuel.get();
     }
 
     public void setFuelLevel(final int val)
     {
-        fuel = val;
+        fuel.set(val);
     }
 
     protected boolean isDisabled()

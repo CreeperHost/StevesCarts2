@@ -237,17 +237,20 @@ public interface IModularCart extends Container, IFluidHandler {
     }
 
     default void updateFuel() {
+        if (!getCart().level().isClientSide()) {
+            getCart().setEngineBurning(hasFuel() && !getCart().isDisabled());
+        }
+
         int consumption = getConsumption();
         if (consumption > 0) {
             ModuleEngine engine = getCurrentEngine();
             if (engine != null) {
                 engine.consumeFuel(consumption);
-                if (!isPlaceholder() && getCart().level().isClientSide && hasFuel() && !getCart().isDisabled()) {
+                if (!isPlaceholder() && getCart().level().isClientSide && getCart().isEngineBurning()) {
                     engine.smoke();
                 }
             }
         }
-        getCart().setEngineBurning(hasFuel() && !getCart().isDisabled());
     }
 
     default void handleActivator(ActivatorOption option, boolean isOrange) {
@@ -283,7 +286,7 @@ public interface IModularCart extends Container, IFluidHandler {
         if (dir == ModuleBase.RAILDIRECTION.DEFAULT) {
             return null;
         }
-        int Yaw = (int) (getCart().getYRot() % 180.0f); //TODO Is this the correct rotation?
+        int Yaw = (int) (getCart().getYRot() % 180.0f);
         if (Yaw < 0) {
             Yaw += 180;
         }

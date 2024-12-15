@@ -1,7 +1,6 @@
 package vswe.stevescarts.entities;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -14,8 +13,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -99,7 +96,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
      * So that it can be restored after the operation is complete.
      */
     protected Vec3 preStopVelocity = null;
-//    protected boolean hasPower;
 
     //These two fields are used to control what happens on entering a junction track.
     protected RailShape fixedRailDirection;
@@ -469,26 +465,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         super.removeVehicle();
     }
 
-    @Override
-    public boolean save(@NotNull CompoundTag tagCompound) {
-        super.save(tagCompound);
-        if (name != null) tagCompound.putString("cartName", name.getString());
-//        tagCompound.putBoolean("hasPower", hasPower);
-//        tagCompound.putDouble("pushX", pushX);
-//        tagCompound.putDouble("pushZ", pushZ);
-//        tagCompound.putDouble("temppushX", temppushX);
-//        tagCompound.putDouble("temppushZ", temppushZ);
-        if (preStopVelocity != null) {
-            tagCompound.put("preStopVel", newDoubleList(preStopVelocity.x(), preStopVelocity.y(), preStopVelocity.z()));
-        }
-        tagCompound.putShort("workingTime", (short) workingTime);
-        writeModulesToNbt(tagCompound);
-        for (int i = 0; i < modules.size(); ++i) {
-            ModuleBase module = modules.get(i);
-            module.writeToNBT(tagCompound, i, registryAccess());
-        }
-        return true;
-    }
 
     public void writeModulesToNbt(CompoundTag compoundTag) {
         ListTag listTag = new ListTag();
@@ -501,14 +477,54 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     }
 
     @Override
-    public void load(@NotNull CompoundTag tagCompound) {
-        super.load(tagCompound);
-        name = Component.translatable(tagCompound.getString("cartName"));
-//        hasPower = tagCompound.getBoolean("hasPower");
-//        pushX = tagCompound.getDouble("pushX");
-//        pushZ = tagCompound.getDouble("pushZ");
-//        temppushX = tagCompound.getDouble("temppushX");
-//        temppushZ = tagCompound.getDouble("temppushZ");
+    public void writeSpawnData(RegistryFriendlyByteBuf data) {
+        if (moduleLoadingData == null) return;
+        data.writeByte(moduleLoadingData.size());
+        for (ResourceLocation b : moduleLoadingData) {
+            data.writeResourceLocation(b);
+        }
+        entityDataList.forEach(e -> e.toBytes(data));
+        data.writeBoolean(isEngineBurning());
+        data.writeBoolean(isDisabled());
+    }
+
+    @Override
+    public void readSpawnData(RegistryFriendlyByteBuf data) {
+        byte length = data.readByte();
+        List<ResourceLocation> list = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            list.add(data.readResourceLocation());
+        }
+        loadModulesFromNames(list);
+        entityDataList.forEach(e -> e.fromBytes(data));
+        setEngineBurning(data.readBoolean());
+        setIsDisabled(data.readBoolean());
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag tagCompound) {
+        super.addAdditionalSaveData(tagCompound);
+        if (name != null) tagCompound.putString("cartName", name.getString());
+        tagCompound.putBoolean("engine_burning", isEngineBurning());
+        tagCompound.putBoolean("disabled", isDisabled());
+
+        if (preStopVelocity != null) {
+            tagCompound.put("preStopVel", newDoubleList(preStopVelocity.x(), preStopVelocity.y(), preStopVelocity.z()));
+        }
+        tagCompound.putShort("workingTime", (short) workingTime);
+        writeModulesToNbt(tagCompound);
+        for (int i = 0; i < modules.size(); ++i) {
+            ModuleBase module = modules.get(i);
+            module.writeToNBT(tagCompound, i, registryAccess());
+        }
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag tagCompound) {
+        super.readAdditionalSaveData(tagCompound);
+        name = Localization.translate(tagCompound.getString("cartName"));
+        setEngineBurning(tagCompound.getBoolean("engine_burning"));
+        setIsDisabled(tagCompound.getBoolean("disabled"));
         preStopVelocity = null;
         if (tagCompound.contains("preStopVel")) {
             ListTag list = tagCompound.getList("preStopVel", Tag.TAG_DOUBLE);
@@ -521,28 +537,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
             module.readFromNBT(tagCompound, i, registryAccess());
         }
     }
-
-    @Override
-    public void writeSpawnData(RegistryFriendlyByteBuf data) {
-        if (moduleLoadingData == null) return;
-        data.writeByte(moduleLoadingData.size());
-        for (ResourceLocation b : moduleLoadingData) {
-            data.writeResourceLocation(b);
-        }
-        entityDataList.forEach(e -> e.toBytes(data));
-    }
-
-    @Override
-    public void readSpawnData(RegistryFriendlyByteBuf data) {
-        byte length = data.readByte();
-        List<ResourceLocation> list = new ArrayList<>();
-        for (int i = 0; i < length; i++) {
-            list.add(data.readResourceLocation());
-        }
-        loadModulesFromNames(list);
-        entityDataList.forEach(e -> e.fromBytes(data));
-    }
-
 
     @Override
     public List<EntityData<?>> getEntityDataList() {
