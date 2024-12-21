@@ -5,6 +5,7 @@ import dev.architectury.hooks.fluid.FluidStackHooks;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
@@ -29,6 +30,7 @@ import java.text.NumberFormat;
 import java.util.Optional;
 
 public class SCTank extends FluidTank {
+    public static final ResourceLocation BLOCK_ATLAS = ResourceLocation.withDefaultNamespace("textures/atlas/blocks.png");
     private final ITankHolder owner;
     private final int tankid;
 
@@ -154,7 +156,7 @@ public class SCTank extends FluidTank {
         TextureAtlasSprite icon = FluidStackHooks.getStillTexture(fluid.getFluid());
         if (icon == null) return;
 
-        RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
+        RenderSystem.setShaderTexture(0, BLOCK_ATLAS);
         int fluidColor = FluidStackHooks.getColor(fluid.getFluid());
         for (int y = 0; y < 3; y++) {
             int pixels = fluidLevel - (2 - y) * 16;

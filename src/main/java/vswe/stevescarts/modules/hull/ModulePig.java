@@ -93,11 +93,11 @@ public class ModulePig extends ModuleHull
 
     public int getHelmetColor(final boolean isOverlay)
     {
-        if (hasHelment())
-        {
-            @Nonnull ItemStack item = getHelmet();
-            return Minecraft.getInstance().getItemColors().getColor(item, isOverlay ? 1 : 0);
-        }
+//        if (hasHelment())
+//        {
+//            ItemStack item = getHelmet();
+//            return Minecraft.getInstance().cologetItemColors().getColor(item, isOverlay ? 1 : 0);
+//        }
         return -1;
     }
 

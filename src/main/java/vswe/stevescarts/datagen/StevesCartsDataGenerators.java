@@ -35,22 +35,25 @@ import java.util.concurrent.CompletableFuture;
 
 @EventBusSubscriber(modid = Constants.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class StevesCartsDataGenerators {
+
     @SubscribeEvent
-    public static void gatherData(GatherDataEvent event) {
+    public static void gatherData(GatherDataEvent.Client event) {
         DataGenerator generator = event.getGenerator();
+        generator.addProvider(true, new GeneratorBlockTags(generator.getPackOutput(), event.getLookupProvider(), generator, event.getExistingFileHelper()));
+        generator.addProvider(true, new GeneratorLanguage(generator));
+//        generator.addProvider(true, new GeneratorBlockStates(generator, event.getExistingFileHelper()));
+        generator.addProvider(true, new GeneratorItemModels(generator, event.getExistingFileHelper()));
 
-        if (event.includeServer()) {
-            generator.addProvider(true, new GeneratorRecipes.Runner(generator.getPackOutput(), event.getLookupProvider()));
-            generator.addProvider(true, new GeneratorLoots(generator.getPackOutput(), event.getLookupProvider()));
-        }
-
-        if (event.includeClient()) {
-            generator.addProvider(true, new GeneratorBlockTags(generator.getPackOutput(), event.getLookupProvider(), generator, event.getExistingFileHelper()));
-            generator.addProvider(true, new GeneratorLanguage(generator));
-//            generator.addProvider(true, new GeneratorBlockStates(generator, event.getExistingFileHelper()));
-            generator.addProvider(true, new GeneratorItemModels(generator, event.getExistingFileHelper()));
-        }
+        generator.addProvider(true, new GeneratorRecipes.Runner(generator.getPackOutput(), event.getLookupProvider()));
+        generator.addProvider(true, new GeneratorLoots(generator.getPackOutput(), event.getLookupProvider()));
     }
+
+//    @SubscribeEvent
+//    public static void gatherData(GatherDataEvent.Server event) {
+//        DataGenerator generator = event.getGenerator();
+//        generator.addProvider(true, new GeneratorRecipes.Runner(generator.getPackOutput(), event.getLookupProvider()));
+//        generator.addProvider(true, new GeneratorLoots(generator.getPackOutput(), event.getLookupProvider()));
+//    }
 
     static class GeneratorBlockStates extends BlockStateProvider {
         public GeneratorBlockStates(DataGenerator gen, ExistingFileHelper exFileHelper) {

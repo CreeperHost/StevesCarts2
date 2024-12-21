@@ -1,9 +1,12 @@
 package vswe.stevescarts;
 
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import com.mojang.serialization.*;
+import com.mojang.serialization.codecs.SimpleMapCodec;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import vswe.stevescarts.client.models.*;
@@ -29,6 +32,8 @@ import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModEntities;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.init.ModScreens;
+
+import java.util.stream.Stream;
 
 import static vswe.stevescarts.init.StevesCartsModules.*;
 
@@ -106,14 +111,17 @@ public class StevesCartsClient
         CAKE_SERVER.addModel("Cake", new ModelCake());
     }
 
-    public static void registerItemExtensions(RegisterClientExtensionsEvent event) {
-        event.registerItem(new IClientItemExtensions()
-        {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer()
-            {
-                return ItemStackRenderer.getInstance();
-            }
-        }, ModItems.CARTS);
+    public static void registerItemExtensions(RegisterSpecialModelRendererEvent event) {
+        event.register(ModItems.CARTS.getId(), ItemStackRenderer.Unbaked.MAP_CODEC);
+
+//        event.registerItem(new IClientItemExtensions()
+//        {
+//            render
+////            @Override
+////            public BlockEntityWithoutLevelRenderer getCustomRenderer()
+////            {
+////                return ItemStackRenderer.getInstance();
+////            }
+//        }, ModItems.CARTS);
     }
 }
