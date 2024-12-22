@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -31,6 +32,7 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
 {
@@ -58,10 +60,8 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     {
         super.init();
         plantModules = new ArrayList<>();
-        for (final ModuleBase module : getCart().getModules())
-        {
-            if (module instanceof ICropModule)
-            {
+        for (final ModuleBase module : getCart().getModules()) {
+            if (module instanceof ICropModule) {
                 plantModules.add((ICropModule) module);
             }
         }
@@ -156,7 +156,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
             {
                 if (!getStack(i).isEmpty() && isSeedValidHandler(getStack(i)))
                 {
-                    BlockState cropblock = getCropFromSeedHandler(getStack(i));
+                    BlockState cropblock = getCropFromSeedHandler(getStack(i), world, pos);
                     if (cropblock != null && cropblock.getBlock() instanceof IPlantable && world.getBlockState(pos.above()).isAir() && soilblock.canSustainPlant(soilState, world, pos, Direction.UP, (IPlantable) cropblock.getBlock()))
                     {
                         hasSeeds = i;
@@ -172,7 +172,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
                     return true;
                 }
                 stopWorking();
-                BlockState cropblock2 = getCropFromSeedHandler(getStack(hasSeeds));
+                BlockState cropblock2 = getCropFromSeedHandler(getStack(hasSeeds), world, pos);
                 world.setBlock(pos.above(), cropblock2, 3);
                 ItemStack stack = getStack(hasSeeds);
                 stack.shrink(1);
@@ -231,27 +231,31 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
 
     public boolean isSeedValidHandler(@Nonnull ItemStack seed)
     {
-        return seed.is(Tags.Items.SEEDS) || seed.is(Tags.Items.CROPS);
+        return seed.is(Tags.Items.SEEDS) || plantModules.stream().anyMatch(e -> e.isSeedValid(seed));
     }
 
-    protected BlockState getCropFromSeedHandler(@Nonnull ItemStack seed)
+    protected BlockState getCropFromSeedHandler(@Nonnull ItemStack seed, Level level, BlockPos pos)
     {
         Block cropBlock = Block.byItem(seed.getItem());
-        if (cropBlock == null) return null;
-        if (cropBlock instanceof CropBlock cropsBlock)
-        {
-            return cropsBlock.defaultBlockState();
+        BlockState state = cropBlock.defaultBlockState();
+        if (cropBlock instanceof CropBlock) {
+            return state;
         }
-        return null;
+        state = plantModules.stream()
+                .map(e -> e.getCropFromSeed(seed, level, pos))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
+        return state;
     }
 
     protected boolean isReadyToHarvestHandler(Level world, BlockPos pos)
     {
-        if (world.getBlockState(pos).getBlock() instanceof CropBlock cropsBlock)
-        {
+        BlockState state = world.getBlockState(pos);
+        if (state.getBlock() instanceof CropBlock cropsBlock) {
             return cropsBlock.isMaxAge(world.getBlockState(pos));
         }
-        return false;
+        return plantModules.stream().anyMatch(e -> e.isReadyToHarvest(world, pos));
     }
 
     public float getFarmAngle()
