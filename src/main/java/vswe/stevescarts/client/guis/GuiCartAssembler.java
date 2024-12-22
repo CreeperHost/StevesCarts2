@@ -351,8 +351,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
             return;
         }
         assembler.createPlaceholder();
-
-        StevesCarts.LOGGER.info(assembler.getRoll());
+        
         Quaternionf angle = new Quaternionf().rotationXYZ((float) Math.toRadians(assembler.getRoll()), (float) Math.toRadians(assembler.getYaw()), (float) Math.PI);
         renderEntityInInventory(graphics, xPos, yPos, scale, angle, assembler.getPlaceholder());
     }
