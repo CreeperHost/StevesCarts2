@@ -3,6 +3,7 @@ package vswe.stevescarts.containers.slots;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 
@@ -19,6 +20,6 @@ public class SlotSeed extends SlotStevesCarts
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        return itemstack.is(Tags.Items.SEEDS) || itemstack.is(ItemTags.VILLAGER_PLANTABLE_SEEDS);
+        return itemstack.is(Tags.Items.SEEDS) || itemstack.is(ItemTags.VILLAGER_PLANTABLE_SEEDS) || itemstack.is(Items.NETHER_WART);
     }
 }
