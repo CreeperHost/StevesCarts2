@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,7 +30,12 @@ public class ModuleNetherwart extends ModuleAddon implements ICropModule
     @Override
     public BlockState getCropFromSeed(@Nonnull ItemStack seed, Level world, BlockPos pos)
     {
-        return Blocks.NETHER_WART.defaultBlockState();
+        Block cropBlock = Block.byItem(seed.getItem());
+        BlockState state = cropBlock.defaultBlockState();
+        if (state.is(Blocks.NETHER_WART)) {
+            return state;
+        }
+        return null;
     }
 
     @Override
