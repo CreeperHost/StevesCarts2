@@ -21,10 +21,7 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.init.ModItems;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ModuleData
 {
@@ -737,7 +734,7 @@ public class ModuleData
 
     public String getRawName()
     {
-        return name.replace(":", "").replace("'", "").replace(" ", "_").replace("-", "_").toLowerCase();
+        return name.replace(":", "").replace("'", "").replace(" ", "_").replace("-", "_").toLowerCase(Locale.ROOT);
     }
 
     public enum SIDE

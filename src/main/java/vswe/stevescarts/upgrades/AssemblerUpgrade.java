@@ -7,6 +7,7 @@ import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 
 //TODO rewrite the entire upgrade system
 public class AssemblerUpgrade
@@ -178,7 +179,7 @@ public class AssemblerUpgrade
 
     public String getRawName()
     {
-        return name.replace(":", "").replace(" ", "_").toLowerCase();
+        return name.replace(":", "").replace(" ", "_").toLowerCase(Locale.ROOT);
     }
 
     public String getIcon()

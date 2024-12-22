@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.Constants;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 public class ResourceHelper
 {
@@ -13,19 +14,19 @@ public class ResourceHelper
 
     public static ResourceLocation getResource(final String path)
     {
-        return new ResourceLocation(Constants.MOD_ID, "textures" + path.toLowerCase());
+        return new ResourceLocation(Constants.MOD_ID, "textures" + path.toLowerCase(Locale.ROOT));
     }
 
     public static ResourceLocation getResourceFromPath(final String path)
     {
-        return new ResourceLocation("textures" + path.toLowerCase());
+        return new ResourceLocation("textures" + path.toLowerCase(Locale.ROOT));
     }
 
     public static void bindResource(final ResourceLocation resource)
     {
         if (resource != null)
         {
-            ResourceLocation lowercaseLocation = new ResourceLocation(resource.getNamespace().toLowerCase(), resource.getPath().toLowerCase());
+            ResourceLocation lowercaseLocation = new ResourceLocation(resource.getNamespace(), resource.getPath());
             RenderSystem.setShaderTexture(0, lowercaseLocation);
         }
     }
