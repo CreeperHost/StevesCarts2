@@ -33,7 +33,7 @@ public class ContainerMinecart extends ContainerBase
         this.data = data;
         this.cart = cart;
         cartInv(cart);
-        playerInv(playerInventory);
+        if (playerInventory != null) playerInv(playerInventory);
         addDataSlots(data);
     }
 
