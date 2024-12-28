@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:iron_bars",
+    "X": "minecraft:redstone"
+  },
+  "pattern": [
+    "#X#",
+    "X X",
+    "#X#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_cleaning_fan"
+  }
+}

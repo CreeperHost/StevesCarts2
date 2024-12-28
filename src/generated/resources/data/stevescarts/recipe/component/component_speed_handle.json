@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:redstone",
+    "B": "minecraft:blue_dye",
+    "H": "stevescarts:component_refined_handle",
+    "X": "minecraft:gold_ingot"
+  },
+  "pattern": [
+    "  B",
+    "XH ",
+    "#X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_speed_handle"
+  }
+}

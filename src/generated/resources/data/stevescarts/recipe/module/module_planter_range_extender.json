@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_advanced_pcb",
+    "R": "minecraft:redstone",
+    "S": "#minecraft:saplings",
+    "X": "stevescarts:component_simple_pcb"
+  },
+  "pattern": [
+    "R#R",
+    " S ",
+    "XSX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_planter_range_extender"
+  }
+}

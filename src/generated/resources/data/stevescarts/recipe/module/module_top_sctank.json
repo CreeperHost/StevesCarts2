@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_huge_sctank_pane",
+    "C": "stevescarts:component_sctank_valve",
+    "X": "stevescarts:component_sctank_pane"
+  },
+  "pattern": [
+    "###",
+    "XCX",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_top_sctank"
+  }
+}

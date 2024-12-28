@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:glowstone_dust",
+    "D": "minecraft:diamond",
+    "R": "stevescarts:component_stabilized_metal",
+    "X": "stevescarts:component_eye_of_galgador"
+  },
+  "pattern": [
+    "#D#",
+    "X#X",
+    "RXR"
+  ],
+  "result": {
+    "count": 2,
+    "id": "stevescarts:component_lump_of_galgador"
+  }
+}

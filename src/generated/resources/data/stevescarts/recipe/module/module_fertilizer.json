@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:glass_bottle",
+    "F": "minecraft:bone_meal",
+    "P": "stevescarts:component_simple_pcb",
+    "X": "minecraft:leather"
+  },
+  "pattern": [
+    "F F",
+    "#X#",
+    "XPX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_fertilizer"
+  }
+}

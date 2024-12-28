@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_galgadorian_metal",
+    "I": "minecraft:iron_ingot",
+    "X": "stevescarts:module_hardened_wood_cutter"
+  },
+  "pattern": [
+    "###",
+    "#I#",
+    " X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_galgadorian_wood_cutter"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:upgrade_batteries",
+    "D": "minecraft:diamond",
+    "E": "minecraft:emerald_block",
+    "X": "minecraft:glowstone_dust"
+  },
+  "pattern": [
+    "DXD",
+    "XEX",
+    "D#D"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:upgrade_power_crystal"
+  }
+}

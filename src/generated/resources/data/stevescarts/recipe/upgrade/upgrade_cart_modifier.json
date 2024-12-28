@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_blank_upgrade",
+    "A": "minecraft:anvil",
+    "I": "minecraft:iron_ingot",
+    "P": "stevescarts:component_simple_pcb"
+  },
+  "pattern": [
+    "I I",
+    "PAP",
+    "I#I"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:upgrade_cart_modifier"
+  }
+}

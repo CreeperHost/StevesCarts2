@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:iron_ingot",
+    "R": "minecraft:red_dye",
+    "S": "stevescarts:component_refined_handle",
+    "X": "minecraft:redstone"
+  },
+  "pattern": [
+    "  R",
+    "#S ",
+    "X# "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_brake_handle"
+  }
+}

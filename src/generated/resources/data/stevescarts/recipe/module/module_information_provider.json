@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_simple_pcb",
+    "G": "minecraft:glowstone_dust",
+    "I": "minecraft:iron_ingot",
+    "S": "minecraft:oak_sign",
+    "X": "minecraft:glass_pane"
+  },
+  "pattern": [
+    "XXX",
+    "IGI",
+    "#S#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_information_provider"
+  }
+}

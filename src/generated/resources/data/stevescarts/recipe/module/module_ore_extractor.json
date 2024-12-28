@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_advanced_pcb",
+    "G": "stevescarts:component_galgadorian_metal",
+    "R": "minecraft:quartz",
+    "T": "minecraft:redstone_torch",
+    "X": "stevescarts:component_eye_of_galgador"
+  },
+  "pattern": [
+    "T T",
+    "XGX",
+    "R#R"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_ore_extractor"
+  }
+}

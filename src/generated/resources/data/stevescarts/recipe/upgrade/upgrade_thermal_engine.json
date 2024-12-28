@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_blank_upgrade",
+    "F": "minecraft:furnace",
+    "N": "minecraft:nether_brick",
+    "O": "minecraft:obsidian",
+    "P": "minecraft:piston",
+    "X": "stevescarts:component_advanced_pcb"
+  },
+  "pattern": [
+    "NXN",
+    "PFP",
+    "O#O"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:upgrade_thermal_engine"
+  }
+}

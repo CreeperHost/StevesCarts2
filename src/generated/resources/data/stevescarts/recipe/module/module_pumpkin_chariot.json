@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "#minecraft:planks",
+    "P": "minecraft:pumpkin",
+    "X": "stevescarts:component_wooden_wheels"
+  },
+  "pattern": [
+    "# #",
+    "#P#",
+    "X X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_pumpkin_chariot"
+  }
+}

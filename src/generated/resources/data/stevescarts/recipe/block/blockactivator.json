@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "#minecraft:stone_crafting_materials",
+    "B": "minecraft:blue_dye",
+    "G": "minecraft:gold_ingot",
+    "I": "minecraft:iron_ingot",
+    "O": "minecraft:orange_dye",
+    "R": "minecraft:redstone",
+    "X": "stevescarts:component_advanced_pcb"
+  },
+  "pattern": [
+    "OGB",
+    "#I#",
+    "RXR"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:blockactivator"
+  }
+}

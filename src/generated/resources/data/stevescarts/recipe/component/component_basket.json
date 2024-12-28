@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:iron_ingot",
+    "X": "minecraft:stick"
+  },
+  "pattern": [
+    "XXX",
+    "X X",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_basket"
+  }
+}

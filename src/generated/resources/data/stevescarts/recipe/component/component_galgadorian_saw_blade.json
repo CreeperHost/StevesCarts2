@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:iron_ingot",
+    "X": "stevescarts:component_galgadorian_metal"
+  },
+  "pattern": [
+    "##X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_galgadorian_saw_blade"
+  }
+}

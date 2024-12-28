@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:gunpowder",
+    "B": "minecraft:blue_dye",
+    "X": "minecraft:gold_nugget"
+  },
+  "pattern": [
+    "###",
+    "#X#",
+    "#B#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_glistering_easter_egg"
+  }
+}

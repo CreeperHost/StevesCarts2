@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:cocoa_beans",
+    "S": "minecraft:sugar",
+    "X": "minecraft:egg"
+  },
+  "pattern": [
+    "#S#",
+    "#X#",
+    "#S#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_chocolate_easter_egg"
+  }
+}

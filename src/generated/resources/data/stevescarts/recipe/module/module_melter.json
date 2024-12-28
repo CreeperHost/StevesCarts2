@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:glowstone",
+    "G": "minecraft:glowstone_dust",
+    "O": "minecraft:nether_bricks",
+    "X": "minecraft:furnace"
+  },
+  "pattern": [
+    "O#O",
+    "GXG",
+    "O#O"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_melter"
+  }
+}

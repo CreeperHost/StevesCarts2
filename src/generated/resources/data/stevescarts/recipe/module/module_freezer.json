@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:snow",
+    "P": "stevescarts:component_simple_pcb",
+    "X": "minecraft:water_bucket"
+  },
+  "pattern": [
+    "#X#",
+    "XPX",
+    "#X#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_freezer"
+  }
+}

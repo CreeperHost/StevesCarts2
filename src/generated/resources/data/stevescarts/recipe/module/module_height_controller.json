@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:paper",
+    "C": "minecraft:compass",
+    "X": "stevescarts:component_simple_pcb"
+  },
+  "pattern": [
+    " C ",
+    "#X#",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_height_controller"
+  }
+}

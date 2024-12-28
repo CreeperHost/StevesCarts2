@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:blaze_powder",
+    "B": "minecraft:blaze_rod",
+    "M": "minecraft:magma_cream",
+    "R": "minecraft:red_dye",
+    "X": "minecraft:egg",
+    "Y": "minecraft:yellow_dye"
+  },
+  "pattern": [
+    "#B#",
+    "#X#",
+    "RMY"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_burning_easter_egg"
+  }
+}

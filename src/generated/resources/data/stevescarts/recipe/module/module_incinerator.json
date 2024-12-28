@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:obsidian",
+    "O": "minecraft:nether_bricks",
+    "X": "minecraft:furnace"
+  },
+  "pattern": [
+    "OOO",
+    "#X#",
+    "OOO"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_incinerator"
+  }
+}

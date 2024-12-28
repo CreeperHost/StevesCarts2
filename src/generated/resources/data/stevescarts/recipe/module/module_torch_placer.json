@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:iron_ingot",
+    "X": "stevescarts:component_tri_torch"
+  },
+  "pattern": [
+    "X X",
+    "# #",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_torch_placer"
+  }
+}

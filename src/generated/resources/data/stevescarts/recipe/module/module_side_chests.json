@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_huge_chest_pane",
+    "C": "stevescarts:component_chest_lock",
+    "L": "stevescarts:component_large_chest_pane",
+    "X": "stevescarts:component_chest_pane"
+  },
+  "pattern": [
+    "#X#",
+    "LCL",
+    "#X#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_side_chests"
+  }
+}

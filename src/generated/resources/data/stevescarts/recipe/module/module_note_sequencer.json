@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:note_block",
+    "J": "minecraft:jukebox",
+    "R": "minecraft:redstone",
+    "X": "#minecraft:planks"
+  },
+  "pattern": [
+    "# #",
+    "#J#",
+    "XRX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_note_sequencer"
+  }
+}

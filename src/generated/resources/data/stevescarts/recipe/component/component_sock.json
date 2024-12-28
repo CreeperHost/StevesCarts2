@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:red_wool",
+    "B": "minecraft:milk_bucket",
+    "X": "minecraft:cookie"
+  },
+  "pattern": [
+    "##X",
+    "##B",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_sock"
+  }
+}

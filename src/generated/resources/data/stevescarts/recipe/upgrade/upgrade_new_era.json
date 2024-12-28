@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:upgrade_experienced_assembler",
+    "B": "minecraft:enchanted_book",
+    "L": "stevescarts:component_advanced_pcb",
+    "X": "stevescarts:component_galgadorian_metal"
+  },
+  "pattern": [
+    "XBX",
+    "XLX",
+    "X#X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:upgrade_new_era"
+  }
+}

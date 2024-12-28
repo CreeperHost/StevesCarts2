@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:iron_ingot",
+    "P": "minecraft:piston",
+    "X": "minecraft:furnace"
+  },
+  "pattern": [
+    "###",
+    "#X#",
+    "P P"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_coal_engine"
+  }
+}

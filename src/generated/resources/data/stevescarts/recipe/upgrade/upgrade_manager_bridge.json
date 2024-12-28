@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_blank_upgrade",
+    "D": "stevescarts:blockdistributor",
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:ender_pearl",
+    "X": "stevescarts:component_simple_pcb"
+  },
+  "pattern": [
+    "IPI",
+    "XDX",
+    "I#I"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:upgrade_manager_bridge"
+  }
+}

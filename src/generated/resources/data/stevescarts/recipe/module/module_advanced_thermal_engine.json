@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_reinforced_metal",
+    "O": "minecraft:nether_brick",
+    "P": "minecraft:piston",
+    "X": "stevescarts:module_thermal_engine"
+  },
+  "pattern": [
+    "OOO",
+    "#X#",
+    "P P"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_advanced_thermal_engine"
+  }
+}

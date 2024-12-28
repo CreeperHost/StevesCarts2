@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "#minecraft:wooden_fences",
+    "C": "minecraft:crafting_table",
+    "D": "minecraft:dispenser",
+    "F": "stevescarts:component_fuse",
+    "S": "minecraft:flint_and_steel",
+    "X": "stevescarts:component_simple_pcb"
+  },
+  "pattern": [
+    "#D#",
+    "CFC",
+    "XSX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_firework_display"
+  }
+}

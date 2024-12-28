@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_blank_upgrade",
+    "C": "#c:chests/wooden",
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:piston",
+    "X": "stevescarts:component_advanced_pcb"
+  },
+  "pattern": [
+    " X ",
+    "PCP",
+    "I#I"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:upgrade_module_input"
+  }
+}

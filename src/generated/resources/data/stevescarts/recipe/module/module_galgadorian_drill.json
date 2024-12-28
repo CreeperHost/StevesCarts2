@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_galgadorian_metal",
+    "B": "minecraft:diamond_block",
+    "D": "stevescarts:module_hardened_drill",
+    "X": "stevescarts:component_enhanced_galgadorian_metal"
+  },
+  "pattern": [
+    "#X ",
+    "BDX",
+    "#X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_galgadorian_drill"
+  }
+}

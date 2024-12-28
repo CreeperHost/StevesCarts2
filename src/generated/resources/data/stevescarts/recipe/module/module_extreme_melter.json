@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:obsidian",
+    "M": "stevescarts:component_chest_lock",
+    "O": "minecraft:bricks",
+    "X": "minecraft:lava_bucket"
+  },
+  "pattern": [
+    "O#O",
+    "MXM",
+    "O#O"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_extreme_melter"
+  }
+}

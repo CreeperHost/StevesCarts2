@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "X": [
+      "stevescarts:component_oak_twig",
+      "stevescarts:component_spruce_twig",
+      "stevescarts:component_birch_twig",
+      "stevescarts:component_jungle_twig"
+    ]
+  },
+  "pattern": [
+    "X"
+  ],
+  "result": {
+    "count": 2,
+    "id": "minecraft:stick"
+  }
+}

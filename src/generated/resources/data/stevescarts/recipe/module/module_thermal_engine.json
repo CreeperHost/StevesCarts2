@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:obsidian",
+    "O": "minecraft:nether_bricks",
+    "P": "minecraft:piston",
+    "X": "minecraft:furnace"
+  },
+  "pattern": [
+    "OOO",
+    "#X#",
+    "P P"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_thermal_engine"
+  }
+}

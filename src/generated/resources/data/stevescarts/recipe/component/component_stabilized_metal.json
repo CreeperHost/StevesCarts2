@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:iron_ingot",
+    "M": "stevescarts:component_hardened_mesh",
+    "X": "stevescarts:component_refined_hardener"
+  },
+  "pattern": [
+    "#M#",
+    "###",
+    "XXX"
+  ],
+  "result": {
+    "count": 5,
+    "id": "stevescarts:component_stabilized_metal"
+  }
+}

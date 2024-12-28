@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:gunpowder",
+    "G": "minecraft:green_dye",
+    "X": "minecraft:egg"
+  },
+  "pattern": [
+    "###",
+    "#X#",
+    "#G#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_explosive_easter_egg"
+  }
+}

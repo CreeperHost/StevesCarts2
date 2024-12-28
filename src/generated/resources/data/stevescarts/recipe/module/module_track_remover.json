@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "###",
+    "# #",
+    "#  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_track_remover"
+  }
+}

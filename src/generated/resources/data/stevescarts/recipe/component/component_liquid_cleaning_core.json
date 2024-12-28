@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:iron_ingot",
+    "C": "stevescarts:component_cleaning_fan",
+    "X": "stevescarts:component_liquid_cleaning_tube"
+  },
+  "pattern": [
+    "C#C",
+    "XXX",
+    "#X#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_liquid_cleaning_core"
+  }
+}

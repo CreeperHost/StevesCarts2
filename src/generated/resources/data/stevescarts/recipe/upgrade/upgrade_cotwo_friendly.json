@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_blank_upgrade",
+    "C": "stevescarts:component_cleaning_fan",
+    "F": "#minecraft:wooden_fences",
+    "P": "minecraft:piston",
+    "X": "stevescarts:component_simple_pcb"
+  },
+  "pattern": [
+    " P ",
+    "XFX",
+    "C#C"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:upgrade_cotwo_friendly"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_solar_panel_component",
+    "P": "stevescarts:component_simple_pcb",
+    "X": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "# #",
+    "XPX",
+    "# #"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_advanced_solar_panel"
+  }
+}

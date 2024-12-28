@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:module_basic_farmer",
+    "D": "stevescarts:component_galgadorian_metal",
+    "X": "stevescarts:component_simple_pcb"
+  },
+  "pattern": [
+    "DDD",
+    " # ",
+    " X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_galgadorian_farmer"
+  }
+}

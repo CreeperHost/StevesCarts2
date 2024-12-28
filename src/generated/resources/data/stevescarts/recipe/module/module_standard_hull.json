@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:minecart",
+    "X": "stevescarts:component_iron_wheels"
+  },
+  "pattern": [
+    " # ",
+    "X X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_standard_hull"
+  }
+}

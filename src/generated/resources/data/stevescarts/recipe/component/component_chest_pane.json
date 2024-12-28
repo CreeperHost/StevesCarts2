@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "#minecraft:planks",
+    "X": "#minecraft:logs"
+  },
+  "pattern": [
+    "###",
+    "X#X",
+    "###"
+  ],
+  "result": {
+    "count": 32,
+    "id": "stevescarts:component_chest_pane"
+  }
+}

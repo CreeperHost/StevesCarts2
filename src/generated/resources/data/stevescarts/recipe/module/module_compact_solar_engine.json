@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_advanced_solar_panel",
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:piston",
+    "R": "minecraft:redstone",
+    "X": "stevescarts:component_advanced_pcb"
+  },
+  "pattern": [
+    "#I#",
+    "XRX",
+    "PIP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_compact_solar_engine"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_hardened_saw_blade",
+    "I": "minecraft:diamond",
+    "X": "stevescarts:component_wood_cutting_core"
+  },
+  "pattern": [
+    "###",
+    "#I#",
+    " X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_hardened_wood_cutter"
+  }
+}

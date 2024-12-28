@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_refined_hardener",
+    "O": "minecraft:obsidian",
+    "X": "minecraft:diamond_block"
+  },
+  "pattern": [
+    "O#O",
+    "#X#",
+    "O#O"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_divine_shield"
+  }
+}

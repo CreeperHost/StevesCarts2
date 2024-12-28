@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:glowstone_dust",
+    "X": "minecraft:blue_dye"
+  },
+  "pattern": [
+    " # ",
+    "XXX",
+    " # "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_blue_pigment"
+  }
+}

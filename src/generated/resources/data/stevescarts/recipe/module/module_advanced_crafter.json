@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_advanced_pcb",
+    "C": "stevescarts:module_crafter",
+    "D": "minecraft:diamond",
+    "X": "stevescarts:component_simple_pcb"
+  },
+  "pattern": [
+    " D ",
+    " # ",
+    "XCX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_advanced_crafter"
+  }
+}

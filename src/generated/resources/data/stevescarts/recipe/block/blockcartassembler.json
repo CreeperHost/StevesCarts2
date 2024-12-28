@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:stone",
+    "R": "stevescarts:component_simple_pcb",
+    "X": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "X#X",
+    "#X#",
+    "R#R"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:blockcartassembler"
+  }
+}

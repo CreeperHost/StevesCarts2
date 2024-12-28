@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_component_raw_handle": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stevescarts:component_raw_handle"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "stevescarts:smelting/component_refined_handle"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_component_raw_handle"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "stevescarts:smelting/component_refined_handle"
+    ]
+  }
+}

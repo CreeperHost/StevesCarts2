@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:red_wool",
+    "D": "minecraft:diamond",
+    "X": "minecraft:white_wool"
+  },
+  "pattern": [
+    " #X",
+    "#D#",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_warm_hat"
+  }
+}

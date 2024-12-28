@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:iron_ingot",
+    "D": "minecraft:diamond",
+    "L": "minecraft:lava_bucket",
+    "R": "minecraft:redstone",
+    "W": "minecraft:water_bucket",
+    "X": "stevescarts:component_advanced_pcb"
+  },
+  "pattern": [
+    "R R",
+    "LDW",
+    "#X#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_liquid_sensors"
+  }
+}

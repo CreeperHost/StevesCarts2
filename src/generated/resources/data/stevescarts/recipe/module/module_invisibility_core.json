@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:golden_carrot",
+    "E": "minecraft:ender_eye",
+    "X": "stevescarts:component_glass_o_magic"
+  },
+  "pattern": [
+    " X ",
+    "XEX",
+    " # "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_invisibility_core"
+  }
+}

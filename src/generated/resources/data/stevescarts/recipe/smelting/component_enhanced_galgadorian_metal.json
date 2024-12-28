@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "group": "stevescarts",
+  "ingredient": "stevescarts:component_large_lump_of_galgador",
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_enhanced_galgadorian_metal"
+  }
+}

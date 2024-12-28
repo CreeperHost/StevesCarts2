@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_simple_pcb",
+    "D": "minecraft:diamond",
+    "I": "minecraft:iron_ingot",
+    "X": "minecraft:gold_ingot"
+  },
+  "pattern": [
+    "DDD",
+    " I ",
+    "#X#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_basic_farmer"
+  }
+}

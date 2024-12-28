@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_cleaning_tube",
+    "X": "stevescarts:component_cleaning_core"
+  },
+  "pattern": [
+    "#X#",
+    "# #",
+    "# #"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_cleaning_machine"
+  }
+}

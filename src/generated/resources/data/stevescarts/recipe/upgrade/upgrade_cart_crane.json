@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_blank_upgrade",
+    "I": "minecraft:iron_ingot",
+    "P": "stevescarts:component_simple_pcb",
+    "R": "minecraft:rail",
+    "X": "minecraft:piston"
+  },
+  "pattern": [
+    "XRX",
+    "PIP",
+    " # "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:upgrade_cart_crane"
+  }
+}

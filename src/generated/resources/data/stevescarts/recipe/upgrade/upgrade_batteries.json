@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_blank_upgrade",
+    "D": "minecraft:diamond",
+    "X": "minecraft:redstone"
+  },
+  "pattern": [
+    "XXX",
+    "XDX",
+    "X#X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:upgrade_batteries"
+  }
+}

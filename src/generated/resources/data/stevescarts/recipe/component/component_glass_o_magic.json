@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:fermented_spider_eye",
+    "R": "minecraft:redstone",
+    "X": "minecraft:glass_pane"
+  },
+  "pattern": [
+    "X#X",
+    "XRX",
+    "XXX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_glass_o_magic"
+  }
+}

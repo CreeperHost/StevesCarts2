@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_simple_pcb",
+    "C": "minecraft:cauldron",
+    "E": "minecraft:emerald",
+    "G": "minecraft:glowstone_dust",
+    "X": "minecraft:redstone"
+  },
+  "pattern": [
+    " X ",
+    "GEG",
+    "#C#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_experience_bank"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:upgrade_quick_demolisher",
+    "D": "minecraft:diamond",
+    "G": "stevescarts:component_eye_of_galgador",
+    "L": "minecraft:lapis_block",
+    "X": "stevescarts:component_reinforced_metal"
+  },
+  "pattern": [
+    "GX ",
+    "DLD",
+    " #G"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:upgrade_entropy"
+  }
+}

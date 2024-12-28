@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:shears",
+    "X": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    " # ",
+    "XXX",
+    " X "
+  ],
+  "result": {
+    "count": 4,
+    "id": "stevescarts:component_iron_blade"
+  }
+}

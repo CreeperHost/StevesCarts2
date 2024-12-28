@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_blank_upgrade",
+    "L": "stevescarts:component_advanced_pcb",
+    "P": "stevescarts:component_simple_pcb",
+    "R": "minecraft:redstone",
+    "T": "minecraft:redstone_torch",
+    "X": "minecraft:repeater"
+  },
+  "pattern": [
+    "PXP",
+    "TLT",
+    "R#R"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:upgrade_redstone_control"
+  }
+}

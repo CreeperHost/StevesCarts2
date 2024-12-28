@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_large_chest_pane",
+    "C": "stevescarts:component_chest_lock",
+    "X": "stevescarts:component_chest_pane"
+  },
+  "pattern": [
+    "X#X",
+    "XCX",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_front_chest"
+  }
+}

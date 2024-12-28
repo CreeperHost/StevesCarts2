@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:redstone",
+    "G": "minecraft:gold_ingot",
+    "X": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "#X#",
+    "XGX",
+    "#X#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_simple_pcb"
+  }
+}

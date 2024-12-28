@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_hardened_mesh",
+    "B": "minecraft:diamond_block",
+    "D": "stevescarts:module_basic_drill",
+    "X": "stevescarts:component_reinforced_metal"
+  },
+  "pattern": [
+    "#X ",
+    "BDX",
+    "#X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_hardened_drill"
+  }
+}

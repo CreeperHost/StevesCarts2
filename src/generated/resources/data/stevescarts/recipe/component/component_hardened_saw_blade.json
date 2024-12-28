@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "minecraft:iron_ingot",
+    "X": "stevescarts:component_reinforced_metal"
+  },
+  "pattern": [
+    "##X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:component_hardened_saw_blade"
+  }
+}

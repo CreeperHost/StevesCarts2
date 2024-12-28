@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_galgadorian_saw_blade",
+    "I": "stevescarts:component_reinforced_metal",
+    "X": "stevescarts:component_wood_cutting_core"
+  },
+  "pattern": [
+    "###",
+    "#I#",
+    " X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:module_galgadorian_wood_cutter"
+  }
+}

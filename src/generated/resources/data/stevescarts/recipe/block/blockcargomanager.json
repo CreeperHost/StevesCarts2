@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "stevescarts",
+  "key": {
+    "#": "stevescarts:component_huge_iron_pane",
+    "R": "stevescarts:component_large_dynamic_pane",
+    "X": "stevescarts:component_large_iron_pane"
+  },
+  "pattern": [
+    "X#X",
+    "#R#",
+    "X#X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stevescarts:blockcargomanager"
+  }
+}
