@@ -113,15 +113,5 @@ public class StevesCartsClient
 
     public static void registerItemExtensions(RegisterSpecialModelRendererEvent event) {
         event.register(ModItems.CARTS.getId(), ItemStackRenderer.Unbaked.MAP_CODEC);
-
-//        event.registerItem(new IClientItemExtensions()
-//        {
-//            render
-////            @Override
-////            public BlockEntityWithoutLevelRenderer getCustomRenderer()
-////            {
-////                return ItemStackRenderer.getInstance();
-////            }
-//        }, ModItems.CARTS);
     }
 }
