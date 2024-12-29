@@ -17,4 +17,9 @@ public class SlotCartCrafter extends SlotFake
     {
         return true;
     }
+
+    @Override
+    public void setChanged() {
+        super.setChanged();
+    }
 }

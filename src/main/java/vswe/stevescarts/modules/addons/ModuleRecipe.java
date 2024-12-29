@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import net.creeperhost.polylib.data.serializable.ByteData;
+import net.creeperhost.polylib.data.serializable.StackData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
@@ -34,6 +35,8 @@ public abstract class ModuleRecipe extends ModuleAddon
     private final EntityData<Byte> target = new EntityData<>(getCart(), new ByteData((byte) 3));
     private final EntityData<Byte> mode = new EntityData<>(getCart(), new ByteData((byte) 0));
     private final EntityData<Byte> maxItemCount = new EntityData<>(getCart(), new ByteData((byte) 1));
+
+    public final EntityData<ItemStack> outputDisplay = new EntityData<>(getCart(), new StackData());
 
     public ModuleRecipe(ModularMinecart cart)
     {
@@ -97,7 +100,7 @@ public abstract class ModuleRecipe extends ModuleAddon
                 }
                 case 1:
                 {
-                    str = String.valueOf(maxItemCount.get());
+                    str = String.valueOf(0xFF & maxItemCount.get());
                     break;
                 }
                 default:
@@ -279,7 +282,7 @@ public abstract class ModuleRecipe extends ModuleAddon
                 {
                     dif *= 10;
                 }
-                int maxItemCount = Math.min(Math.max(1, this.maxItemCount.get() + dif), 999);
+                int maxItemCount = Math.min(Math.max(1, (0xFF & this.maxItemCount.get()) + dif), 128);
                 this.maxItemCount.set((byte) maxItemCount);
             }
         }
@@ -401,7 +404,7 @@ public abstract class ModuleRecipe extends ModuleAddon
             if (!item.isEmpty() && ItemStack.isSameItem(item, result) && ItemStack.isSameItemSameComponents(item, result))
             {
                 count += item.getCount();
-                if (count >= maxItemCount.get())
+                if (count >= (0xFF & maxItemCount.get()))
                 {
                     return false;
                 }
