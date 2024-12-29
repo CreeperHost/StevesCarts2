@@ -5,13 +5,11 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.context.ContextKeySet;
-import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
-import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
@@ -19,16 +17,16 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotCartCrafterResult;
 import vswe.stevescarts.containers.slots.SlotFurnaceInput;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.RecipeHelper;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
+import java.util.Optional;
 
 public class ModuleSmelter extends ModuleRecipe
 {
     private int energyBuffer;
     private int cooldown;
+    private RecipeHolder<SmeltingRecipe> lastRecipe = null;
+    private boolean inventoryDirty = true;
 
     public ModuleSmelter(ModularMinecart cart)
     {
@@ -37,98 +35,86 @@ public class ModuleSmelter extends ModuleRecipe
     }
 
     @Override
-    public void update()
-    {
-        if (getCart().level().isClientSide)
-        {
+    public void update() {
+        if (!(getCart().level() instanceof ServerLevel level) || getValidSlot() == null) {
             return;
         }
-        if (getCart().hasFuelForModule() && energyBuffer < 10)
-        {
+
+        ItemStack recipe = getStack(0);
+        if (inventoryDirty) {
+            outputDisplay.set(getResult(level, recipe));
+            inventoryDirty = false;
+        }
+
+        if (getCart().hasFuelForModule() && energyBuffer < 10) {
             ++energyBuffer;
         }
-        if (cooldown <= 0)
-        {
-            if (energyBuffer == 10)
-            {
-                @Nonnull ItemStack recipe = getStack(0);
-                @Nonnull ItemStack result = ItemStack.EMPTY;
-                if (!recipe.isEmpty())
-                {
-                    if (getSmeltingResult() != null) result = getSmeltingResult();
+
+        if (--cooldown > 0) {
+            return;
+        }
+        cooldown = 40;
+
+        if (energyBuffer < 10) {
+            return;
+        }
+
+        ItemStack result = getResult(level, recipe);
+        outputDisplay.set(result);
+        if (result.isEmpty()) {
+            return;
+        }
+
+        prepareLists();
+
+        if (!canCraftMoreOfResult(result)) {
+            return;
+        }
+
+        NonNullList<ItemStack> originals = NonNullList.create();
+        for (SlotStevesCarts allTheSlot : allTheSlots) {
+            ItemStack item = allTheSlot.getItem();
+            originals.add((item.isEmpty()) ? ItemStack.EMPTY : item.copy());
+        }
+
+        int i = 0;
+        while (i < inputSlots.size()) {
+            @Nonnull ItemStack item = inputSlots.get(i).getItem();
+            if (!item.isEmpty() && ItemStack.isSameItem(item, recipe) && ItemStack.isSameItemSameComponents(item, recipe)) {
+                @Nonnull ItemStack itemStack = item;
+                itemStack.shrink(1);
+                if (itemStack.getCount() <= 0) {
+                    inputSlots.get(i).set(ItemStack.EMPTY);
                 }
-                if (!result.isEmpty())
-                {
-                    result = result.copy();
-                }
-                if (!result.isEmpty() && getCart().modules() != null && getValidSlot() != null)
-                {
-                    prepareLists();
-                    if (canCraftMoreOfResult(result))
-                    {
-                        final NonNullList<ItemStack> originals = NonNullList.create();
-                        for (int i = 0; i < allTheSlots.size(); ++i)
-                        {
-                            @Nonnull ItemStack item = allTheSlots.get(i).getItem();
-                            originals.add((item.isEmpty()) ? ItemStack.EMPTY : item.copy());
-                        }
-                        int i = 0;
-                        while (i < inputSlots.size())
-                        {
-                            @Nonnull ItemStack item = inputSlots.get(i).getItem();
-                            if (!item.isEmpty() && ItemStack.isSameItem(item, recipe) && ItemStack.isSameItemSameComponents(item, recipe))
-                            {
-                                @Nonnull ItemStack itemStack = item;
-                                itemStack.shrink(1);
-                                if (itemStack.getCount() <= 0)
-                                {
-                                    inputSlots.get(i).set(ItemStack.EMPTY);
-                                }
-                                getCart().addItemToChest(result, getValidSlot(), null);
-                                if (result.getCount() != 0)
-                                {
-                                    for (int j = 0; j < allTheSlots.size(); ++j)
-                                    {
-                                        allTheSlots.get(j).set(originals.get(j));
-                                    }
-                                    break;
-                                }
-                                energyBuffer = 0;
-                                break;
-                            }
-                            else
-                            {
-                                ++i;
-                            }
-                        }
+                getCart().addItemToChest(result, getValidSlot(), null);
+                if (result.getCount() != 0) {
+                    for (int j = 0; j < allTheSlots.size(); ++j) {
+                        allTheSlots.get(j).set(originals.get(j));
                     }
+                    break;
                 }
+                energyBuffer = 0;
+                break;
+            } else {
+                ++i;
             }
-            cooldown = 40;
-        }
-        else
-        {
-            --cooldown;
         }
     }
 
-    @Nullable
-    public SmeltingRecipe getRecipeSmelting()
-    {
-        //TODO, Re write recipe handling...
-        return getCart().level() instanceof ServerLevel serverLevel ? RecipeHelper.findSmeltRecipe(getStack(0), serverLevel).map(RecipeHolder::value).orElse(null) : null;
+    @Override
+    public void onInventoryChanged() {
+        inventoryDirty = true;
     }
 
-    @Nullable
-    public ItemStack getSmeltingResult()
-    {
-        AbstractCookingRecipe recipe = getRecipeSmelting();
-        if (recipe != null)
-        {
-//            return recipe.getResultItem(RegistryAccess.EMPTY).copy();
-            List<RecipeDisplay> displays = recipe.display();
-            if (!displays.isEmpty()) {
-                return displays.get((getCart().tickCount / 60) % displays.size()).result().resolveForFirstStack(new ContextMap.Builder().create(new ContextKeySet.Builder().build()));
+    private ItemStack getResult(ServerLevel level, ItemStack inputStack) {
+        SingleRecipeInput input = new SingleRecipeInput(inputStack);
+        Optional<RecipeHolder<SmeltingRecipe>> optional = level.getServer().getRecipeManager().getRecipeFor(RecipeType.SMELTING, input, level, lastRecipe);
+        if (optional.isPresent()) {
+            lastRecipe = optional.get();
+            SmeltingRecipe recipe = lastRecipe.value();
+            ItemStack result = recipe.assemble(input, level.registryAccess());
+            if (result.isItemEnabled(level.enabledFeatures())) {
+                return result;
             }
         }
         return ItemStack.EMPTY;
@@ -195,28 +181,12 @@ public class ModuleSmelter extends ModuleRecipe
         }
     }
 
-    @Override
-    public void onInventoryChanged()
-    {
-        super.onInventoryChanged();
-        if (getCart().level().isClientSide)
-        {
-            if (!getStack(0).isEmpty() && !getSmeltingResult().isEmpty())
-            {
-                setStack(1, getSmeltingResult());
-            }
-            else
-            {
-                setStack(1, ItemStack.EMPTY);
-            }
-        }
-    }
-
     @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         super.drawForeground(guiGraphics, gui);
+        setStack(1, outputDisplay.get());
         drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
