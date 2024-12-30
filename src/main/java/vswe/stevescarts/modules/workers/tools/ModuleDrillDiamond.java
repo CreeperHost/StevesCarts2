@@ -35,7 +35,7 @@ public class ModuleDrillDiamond extends ModuleDrill
     @Override
     public int getMaxDurability()
     {
-        return 300000;
+        return SCConfig.COMMON.drillDurabilityDiamond.get();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ModuleDrillDiamond extends ModuleDrill
     @Override
     public int getRepairItemUnits(@NotNull ItemStack stack) {
         if (BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(getRepairItem())) {
-            return 100000;
+            return SCConfig.COMMON.drillRepairAmountDiamond.get();
         }
         return 0;
     }

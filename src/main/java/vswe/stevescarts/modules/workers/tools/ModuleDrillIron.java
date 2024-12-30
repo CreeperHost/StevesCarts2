@@ -35,7 +35,7 @@ public class ModuleDrillIron extends ModuleDrill
     @Override
     public int getMaxDurability()
     {
-        return 50000;
+        return SCConfig.COMMON.drillDurabilityIron.get();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ModuleDrillIron extends ModuleDrill
     @Override
     public int getRepairItemUnits(@NotNull ItemStack stack) {
         if (BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(getRepairItem())) {
-            return 20000;
+            return SCConfig.COMMON.drillRepairAmountIron.get();
         }
         return 0;
     }
