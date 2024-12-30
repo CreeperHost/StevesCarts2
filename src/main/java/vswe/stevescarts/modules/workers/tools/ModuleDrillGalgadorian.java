@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.workers.tools;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.entities.EntityMinecartModular;
 
@@ -37,8 +38,7 @@ public class ModuleDrillGalgadorian extends ModuleDrill
     }
 
     @Override
-    public String getRepairItemName()
-    {
+    public ResourceLocation getRepairItem() {
         return null;
     }
 

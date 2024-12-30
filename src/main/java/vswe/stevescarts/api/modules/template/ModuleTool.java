@@ -1,10 +1,14 @@
 package vswe.stevescarts.api.modules.template;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -37,7 +41,7 @@ public abstract class ModuleTool extends ModuleWorker
 
     public abstract int getMaxDurability();
 
-    public abstract String getRepairItemName();
+    public abstract ResourceLocation getRepairItem();
 
     public abstract int getRepairItemUnits(@Nonnull ItemStack p0);
 
@@ -147,7 +151,10 @@ public abstract class ModuleTool extends ModuleWorker
             }
             else
             {
-                str += Localization.MODULES.TOOLS.INSTRUCTION.translate(getRepairItemName());
+                Item item = BuiltInRegistries.ITEM.get(getRepairItem());
+                if (item != Items.AIR){
+                    str += Localization.MODULES.TOOLS.INSTRUCTION.translate(item.getName(new ItemStack(item)).getString());
+                }
             }
         }
         else

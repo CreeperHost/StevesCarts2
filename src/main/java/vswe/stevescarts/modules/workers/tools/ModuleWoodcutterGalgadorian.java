@@ -1,9 +1,9 @@
 package vswe.stevescarts.modules.workers.tools;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.entities.EntityMinecartModular;
-
-import javax.annotation.Nonnull;
 
 public class ModuleWoodcutterGalgadorian extends ModuleWoodcutter
 {
@@ -25,13 +25,12 @@ public class ModuleWoodcutterGalgadorian extends ModuleWoodcutter
     }
 
     @Override
-    public String getRepairItemName()
-    {
+    public ResourceLocation getRepairItem() {
         return null;
     }
 
     @Override
-    public int getRepairItemUnits(@Nonnull ItemStack item)
+    public int getRepairItemUnits(@NotNull ItemStack item)
     {
         return 0;
     }
