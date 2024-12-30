@@ -4,9 +4,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBase;
 import vswe.stevescarts.containers.slots.SlotRepair;
@@ -38,7 +42,7 @@ public abstract class ModuleTool extends ModuleWorker
 
     public abstract int getMaxDurability();
 
-    public abstract String getRepairItemName();
+    public abstract ResourceLocation getRepairItem();
 
     public abstract int getRepairItemUnits(@Nonnull ItemStack p0);
 
@@ -148,7 +152,10 @@ public abstract class ModuleTool extends ModuleWorker
             }
             else
             {
-                str += Localization.MODULES.TOOLS.INSTRUCTION.translate(getRepairItemName());
+                Item item = ForgeRegistries.ITEMS.getValue(getRepairItem());
+                if (item != null && item != Items.AIR){
+                    str += Localization.MODULES.TOOLS.INSTRUCTION.translate(item.getName(new ItemStack(item)).getString());
+                }
             }
         }
         else
