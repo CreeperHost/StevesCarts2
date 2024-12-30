@@ -23,7 +23,7 @@ public class ModuleWoodcutterHardened extends ModuleWoodcutter
     @Override
     public int getMaxDurability()
     {
-        return 640000;
+        return SCConfig.COMMON.woodcutterDurabilityHardened.get();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ModuleWoodcutterHardened extends ModuleWoodcutter
     @Override
     public int getRepairItemUnits(@NotNull ItemStack stack) {
         if (BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(getRepairItem())) {
-            return 320000;
+            return SCConfig.COMMON.woodcutterRepairAmountHardened.get();
         }
         return 0;
     }

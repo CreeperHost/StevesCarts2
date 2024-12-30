@@ -1,15 +1,11 @@
 package vswe.stevescarts;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingMode;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.Logging;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
-
-import java.nio.file.Path;
 
 public class SCConfig {
     public static final String CATEGORY_GENERAL = "general";
@@ -37,14 +33,29 @@ public class SCConfig {
         public final ModConfigSpec.ConfigValue<Boolean> allowCartToRunWithRepairItems;
 
         public final ModConfigSpec.ConfigValue<String> woodcutterRepairDiamond;
+        public final ModConfigSpec.ConfigValue<Integer> woodcutterRepairAmountDiamond;
+        public final ModConfigSpec.ConfigValue<Integer> woodcutterDurabilityDiamond;
         public final ModConfigSpec.ConfigValue<String> woodcutterRepairHardened;
+        public final ModConfigSpec.ConfigValue<Integer> woodcutterRepairAmountHardened;
+        public final ModConfigSpec.ConfigValue<Integer> woodcutterDurabilityHardened;
         public final ModConfigSpec.ConfigValue<String> woodcutterRepairNetherite;
+        public final ModConfigSpec.ConfigValue<Integer> woodcutterRepairAmountNetherite;
+        public final ModConfigSpec.ConfigValue<Integer> woodcutterDurabilityNetherite;
 
         public final ModConfigSpec.ConfigValue<String> drillRepairIron;
+        public final ModConfigSpec.ConfigValue<Integer> drillRepairAmountIron;
+        public final ModConfigSpec.ConfigValue<Integer> drillDurabilityIron;
         public final ModConfigSpec.ConfigValue<String> drillRepairDiamond;
+        public final ModConfigSpec.ConfigValue<Integer> drillRepairAmountDiamond;
+        public final ModConfigSpec.ConfigValue<Integer> drillDurabilityDiamond;
         public final ModConfigSpec.ConfigValue<String> drillRepairHardened;
+        public final ModConfigSpec.ConfigValue<Integer> drillRepairAmountHardened;
+        public final ModConfigSpec.ConfigValue<Integer> drillDurabilityHardened;
 
         public final ModConfigSpec.ConfigValue<String> farmerRepairDiamond;
+        public final ModConfigSpec.ConfigValue<Integer> farmerRepairAmountDiamond;
+        public final ModConfigSpec.ConfigValue<Integer> farmerDurabilityDiamond;
+
         public final ModConfigSpec.ConfigValue<Boolean> assemblerInsertFuel;
 
         Common(ModConfigSpec.Builder builder) {
@@ -59,15 +70,37 @@ public class SCConfig {
             compact_solar_production = builder.comment("The amount of power the compact solar module will produce").define("compactSolarProduction", 20);
             standard_solar_production = builder.comment("The amount of power the standard solar module will produce").define("standardSolarProduction", 20);
 
+
             woodcutterRepairDiamond = builder.comment("Repair item for Diamond Woodcutter").define("woodcutterRepairDiamond", "minecraft:diamond");
+            woodcutterRepairAmountDiamond = builder.comment("Repair value for Diamond Woodcutter repair item").define("woodcutterRepairAmountDiamond", 160000);
+            woodcutterDurabilityDiamond = builder.comment("Diamond Woodcutter max durability").define("woodcutterDurabilityDiamond", 320000);
+
             woodcutterRepairHardened = builder.comment("Repair item for Hardened Woodcutter").define("woodcutterRepairHardened", "stevescarts:component_reinforced_metal");
+            woodcutterRepairAmountHardened = builder.comment("Repair value for Hardened Woodcutter repair item").define("woodcutterRepairAmountHardened", 320000);
+            woodcutterDurabilityHardened = builder.comment("Hardened Woodcutter max durability").define("woodcutterDurabilityHardened", 640000);
+
             woodcutterRepairNetherite = builder.comment("Repair item for Netherite Woodcutter").define("woodcutterRepairNetherite", "minecraft:netherite_ingot");
+            woodcutterRepairAmountNetherite = builder.comment("Repair value for Netherite Woodcutter repair item").define("woodcutterRepairAmountNetherite", 450000);
+            woodcutterDurabilityNetherite = builder.comment("Netherite Woodcutter max durability").define("woodcutterDurabilityNetherite", 1000000);
+
 
             drillRepairIron = builder.comment("Repair item for Iron Drill").define("drillRepairIron", "minecraft:iron_ingot");
+            drillRepairAmountIron = builder.comment("Repair value for Iron Drill repair item").define("drillRepairAmountIron", 20000);
+            drillDurabilityIron = builder.comment("Iron Drill max durability").define("drillDurabilityIron", 50000);
+
             drillRepairDiamond = builder.comment("Repair item for Diamond Drill").define("drillRepairDiamond", "minecraft:diamond");
+            drillRepairAmountDiamond = builder.comment("Repair value for Diamond Drill repair item").define("drillRepairAmountDiamond", 100000);
+            drillDurabilityDiamond = builder.comment("Diamond Drill max durability").define("drillDurabilityDiamond", 300000);
+
             drillRepairHardened = builder.comment("Repair item for Hardened Drill").define("drillRepairHardened", "stevescarts:component_reinforced_metal");
+            drillRepairAmountHardened = builder.comment("Repair value for Hardened Drill repair item").define("drillRepairAmountHardened", 450000);
+            drillDurabilityHardened = builder.comment("Hardened Drill max durability").define("drillDurabilityHardened", 1000000);
+
 
             farmerRepairDiamond = builder.comment("Repair item for Diamond farmer").define("farmerRepairDiamond", "minecraft:diamond");
+            farmerRepairAmountDiamond = builder.comment("Repair value for Diamond farmer repair item").define("farmerRepairAmountDiamond", 150000);
+            farmerDurabilityDiamond = builder.comment("Diamond farmer max durability").define("farmerDurabilityDiamond", 300000);
+
 
             allowCartToRunWithRepairItems = builder.comment("Allow carts to run with items in the tool repair slot").define("allowCartToRunWithRepairItems", false);
             assemblerInsertFuel = builder.comment("Allow fuel to be auto inserted into the cart assembler").define("assemblerInsertFuel", false);

@@ -35,7 +35,7 @@ public class ModuleDrillHardened extends ModuleDrill
     @Override
     public int getMaxDurability()
     {
-        return 320000*3;
+        return SCConfig.COMMON.drillDurabilityHardened.get();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ModuleDrillHardened extends ModuleDrill
     @Override
     public int getRepairItemUnits(@NotNull ItemStack stack) {
         if (BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(getRepairItem())) {
-            return 320000;
+            return SCConfig.COMMON.drillRepairAmountHardened.get();
         }
         return 0;
     }
