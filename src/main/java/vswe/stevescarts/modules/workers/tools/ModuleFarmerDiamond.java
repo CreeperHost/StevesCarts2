@@ -17,7 +17,7 @@ public class ModuleFarmerDiamond extends ModuleFarmer
     @Override
     public int getMaxDurability()
     {
-        return 300000;
+        return SCConfig.farmerDurabilityDiamond.get();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ModuleFarmerDiamond extends ModuleFarmer
     @Override
     public int getRepairItemUnits(@NotNull ItemStack stack) {
         if (BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(getRepairItem())) {
-            return 150000;
+            return SCConfig.farmerRepairAmountDiamond.get();
         }
         return 0;
     }

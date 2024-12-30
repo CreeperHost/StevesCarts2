@@ -17,13 +17,13 @@ public class ModuleWoodcutterNetherite extends ModuleWoodcutter
     @Override
     public int getPercentageDropChance()
     {
-        return 80;
+        return 90;
     }
 
     @Override
     public int getMaxDurability()
     {
-        return 320000;
+        return SCConfig.woodcutterDurabilityNetherite.get();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ModuleWoodcutterNetherite extends ModuleWoodcutter
     @Override
     public int getRepairItemUnits(@NotNull ItemStack stack) {
         if (BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(getRepairItem())) {
-            return 160000;
+            return SCConfig.woodcutterRepairAmountNetherite.get();
         }
         return 0;
     }
@@ -43,6 +43,6 @@ public class ModuleWoodcutterNetherite extends ModuleWoodcutter
     @Override
     public int getRepairSpeed()
     {
-        return 150;
+        return 250;
     }
 }

@@ -23,19 +23,19 @@ public class ModuleWoodcutterDiamond extends ModuleWoodcutter
     @Override
     public int getMaxDurability()
     {
-        return 320000;
+        return SCConfig.woodcutterDurabilityDiamond.get();
     }
 
     @Override
     public ResourceLocation getRepairItem() {
-        String item = SCConfig.drillRepairDiamond.get();
+        String item = SCConfig.woodcutterRepairDiamond.get();
         return item.isEmpty() ? null : new ResourceLocation(item);
     }
 
     @Override
     public int getRepairItemUnits(@NotNull ItemStack stack) {
         if (BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(getRepairItem())) {
-            return 16000;
+            return SCConfig.woodcutterRepairAmountDiamond.get();
         }
         return 0;
     }
