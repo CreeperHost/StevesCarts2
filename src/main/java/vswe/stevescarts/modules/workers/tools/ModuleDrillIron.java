@@ -1,10 +1,11 @@
 package vswe.stevescarts.modules.workers.tools;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.entities.EntityMinecartModular;
-
-import javax.annotation.Nonnull;
 
 public class ModuleDrillIron extends ModuleDrill
 {
@@ -34,21 +35,19 @@ public class ModuleDrillIron extends ModuleDrill
     @Override
     public int getMaxDurability()
     {
-        return 50000;
+        return SCConfig.drillDurabilityIron.get();
     }
 
     @Override
-    public String getRepairItemName()
-    {
-        return "minecraft:iron_ingot";
+    public ResourceLocation getRepairItem() {
+        String item = SCConfig.drillRepairIron.get();
+        return item.isEmpty() ? null : new ResourceLocation(item);
     }
 
     @Override
-    public int getRepairItemUnits(@Nonnull ItemStack item)
-    {
-        if (!item.isEmpty() && item.getItem() == Items.IRON_INGOT)
-        {
-            return 20000;
+    public int getRepairItemUnits(@NotNull ItemStack stack) {
+        if (BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(getRepairItem())) {
+            return SCConfig.drillRepairAmountIron.get();
         }
         return 0;
     }

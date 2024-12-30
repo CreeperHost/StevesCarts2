@@ -1,10 +1,11 @@
 package vswe.stevescarts.modules.workers.tools;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.entities.EntityMinecartModular;
-import vswe.stevescarts.items.ItemCartComponent;
-
-import javax.annotation.Nonnull;
 
 public class ModuleWoodcutterHardened extends ModuleWoodcutter
 {
@@ -22,21 +23,19 @@ public class ModuleWoodcutterHardened extends ModuleWoodcutter
     @Override
     public int getMaxDurability()
     {
-        return 640000;
+        return SCConfig.woodcutterDurabilityHardened.get();
     }
 
     @Override
-    public String getRepairItemName()
-    {
-        return "stevescarts:component_reinforced_metal";
+    public ResourceLocation getRepairItem() {
+        String item = SCConfig.woodcutterRepairHardened.get();
+        return item.isEmpty() ? null : new ResourceLocation(item);
     }
 
     @Override
-    public int getRepairItemUnits(@Nonnull ItemStack item)
-    {
-        if (!item.isEmpty() && item.getItem() == ItemCartComponent.byId(22))
-        {
-            return 320000;
+    public int getRepairItemUnits(@NotNull ItemStack stack) {
+        if (BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(getRepairItem())) {
+            return SCConfig.woodcutterRepairAmountHardened.get();
         }
         return 0;
     }
