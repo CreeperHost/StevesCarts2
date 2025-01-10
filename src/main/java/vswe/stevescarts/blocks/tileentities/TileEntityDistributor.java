@@ -184,6 +184,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
                 {
                     getSides().get(sideId).reset(settingId);
                 }
+                setChanged();
             }
         }
     }
@@ -549,6 +550,6 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity)
     {
-        return new ContainerDistributor(id, playerInventory, this, new SimpleContainerData(0));
+        return new ContainerDistributor(id, playerInventory, this);
     }
 }
