@@ -1,5 +1,6 @@
 package vswe.stevescarts.blocks.tileentities;
 
+import net.creeperhost.polylib.helpers.FuelHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -1032,12 +1033,13 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     @Override
     public int @NotNull [] getSlotsForFace(@NotNull Direction direction)
     {
-        return new int[0];
+        return new int[]{fuelSlot.getSlotIndex()};
     }
 
     @Override
     public boolean canPlaceItemThroughFace(int id, @NotNull ItemStack itemStack, @Nullable Direction direction)
     {
+        if(id == fuelSlot.getSlotIndex() && FuelHelper.isItemFuel(itemStack)) return true;
         return false;
     }
 
