@@ -1032,13 +1032,13 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     @Override
     public int @NotNull [] getSlotsForFace(@NotNull Direction direction)
     {
-        return new int[]{fuelSlot.index};
+        return new int[]{fuelSlot.getSlotIndex()};
     }
 
     @Override
     public boolean canPlaceItemThroughFace(int id, @NotNull ItemStack itemStack, @Nullable Direction direction)
     {
-        if(id == fuelSlot.index && FuelHelper.isItemFuel(itemStack, level)) return true;
+        if(id == fuelSlot.getSlotIndex() && FuelHelper.isItemFuel(itemStack, level)) return true;
         return false;
     }
 
