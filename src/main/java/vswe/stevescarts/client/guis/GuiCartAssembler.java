@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix4fStack;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.data.ModuleData;
@@ -81,9 +82,14 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         }
         else
         {
-            IModuleItem cartModule = (IModuleItem) this.assembler.getItem(0).getItem();
-            final ModuleData hulldata = cartModule.getModuleData();
-            if (hulldata == null || !(hulldata instanceof final ModuleDataHull hull))
+            ItemStack stack = this.assembler.getItem(0);
+            if (!(stack.getItem() instanceof IModuleItem cartModule)) {
+                this.hasErrors = false;
+                this.statusLog = lines;
+                return;
+            }
+            ModuleData hulldata = cartModule.getModuleData();
+            if (hulldata == null || !(hulldata instanceof ModuleDataHull hull))
             {
                 this.addText(lines, Localization.GUI.ASSEMBLER.INVALID_HULL.translate(), 10357518);
                 this.hasErrors = true;
