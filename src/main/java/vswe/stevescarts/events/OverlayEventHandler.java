@@ -21,7 +21,7 @@ public class OverlayEventHandler {
 
         Minecraft minecraft = Minecraft.getInstance();
         Player player = minecraft.player;
-        if (minecraft.screen == null && player.getVehicle() instanceof EntityMinecartModular cart) {
+        if (minecraft.screen == null && player != null && player.getVehicle() instanceof EntityMinecartModular cart) {
             cart.renderOverlay(new PoseStack(), minecraft);
         }
     }
