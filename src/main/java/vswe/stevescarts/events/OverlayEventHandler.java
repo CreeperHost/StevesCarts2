@@ -21,7 +21,7 @@ public class OverlayEventHandler {
     private static void registerOverlay(RegisterGuiOverlaysEvent event) {
         event.registerAboveAll(new ResourceLocation(Constants.MOD_ID, "cart_overlay"), (gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
             Player player = gui.getMinecraft().player;
-            if (gui.getMinecraft().screen == null && player.getVehicle() instanceof EntityMinecartModular cart) {
+            if (gui.getMinecraft().screen == null && player != null && player.getVehicle() instanceof EntityMinecartModular cart) {
                 cart.renderOverlay(gui, guiGraphics, partialTick);
             }
         });
