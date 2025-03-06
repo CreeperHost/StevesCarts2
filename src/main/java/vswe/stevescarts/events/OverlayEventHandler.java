@@ -20,7 +20,7 @@ public class OverlayEventHandler {
     private static void registerOverlay(RegisterGuiLayersEvent event) {
         event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "cart_overlay"), (graphics, deltaTracker) -> {
             Player player = Minecraft.getInstance().player;
-            if (Minecraft.getInstance().screen == null && player.getVehicle() instanceof ModularMinecart cart) {
+            if (Minecraft.getInstance().screen == null && player != null && player.getVehicle() instanceof ModularMinecart cart) {
                 cart.renderOverlay(graphics, deltaTracker.getGameTimeDeltaPartialTick(false));
             }
         });
