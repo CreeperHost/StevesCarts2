@@ -30,8 +30,7 @@ public class ModuleCrafter extends ModuleRecipe
     {
         super(cart);
         cooldown = 0;
-        //TODO
-//        craftingDummy = new CraftingDummy(this);
+        craftingDummy = new CraftingDummy(this);
     }
 
     @Override
