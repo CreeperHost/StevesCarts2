@@ -17,4 +17,9 @@ public class SlotCartCrafter extends SlotFake
     {
         return true;
     }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
 }
