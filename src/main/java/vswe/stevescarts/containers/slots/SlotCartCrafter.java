@@ -22,4 +22,9 @@ public class SlotCartCrafter extends SlotFake
     public void setChanged() {
         super.setChanged();
     }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
 }
