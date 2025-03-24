@@ -2,6 +2,7 @@ package vswe.stevescarts.blocks;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 import vswe.stevescarts.blocks.tileentities.TileEntityManager;
@@ -177,9 +179,44 @@ public class BlockRailAdvDetector extends BaseRailBlock
                 }
             }
         }
+        int power = world.getBestNeighborSignal(pos);
+        if (power > 0) {
+        	cart.releaseCart();
+        }
     }
+
     private boolean isCartReadyForAction(ModularMinecart cart, BlockPos pos)
     {
         return cart.getDisabledPos() != null && cart.getDisabledPos().equals(pos) && cart.isDisabled();
+    }
+
+    @Override
+    public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction direction) {
+        for (Direction facing : Direction.values()) {
+            if (facing.getAxis() == Direction.Axis.Y) continue;
+            BlockPos posOther = pos.relative(facing);
+            Block block = level.getBlockState(posOther).getBlock();
+            if (block == ModBlocks.CARGO_MANAGER.get() || block == ModBlocks.LIQUID_MANAGER.get() || block == ModBlocks.MODULE_TOGGLER.get()) {
+                return false;
+            }
+            if (level.getBlockEntity(posOther) instanceof TileEntityUpgrade upgrade) {
+                if (upgrade.getUpgrade() != null) {
+                    for (BaseUpgradeEffect effect : upgrade.getUpgrade().getEffects()) {
+                        if (effect instanceof Transposer && upgrade.getMaster() != null) {
+                            for (TileEntityUpgrade tile : upgrade.getMaster().getUpgradeTiles()) {
+                                if (tile.getUpgrade() != null) {
+                                    for (BaseUpgradeEffect effect2 : tile.getUpgrade().getEffects()) {
+                                        if (effect2 instanceof Disassemble) {
+                                            return false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
 }

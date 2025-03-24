@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -53,6 +54,7 @@ import vswe.stevescarts.init.ModEntities;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.polylib.DataEntity;
 import vswe.stevescarts.polylib.EntityData;
+import vswe.stevescarts.polylib.NBTHelper;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -517,6 +519,9 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
             ModuleBase module = modules.get(i);
             module.writeToNBT(tagCompound, i, registryAccess());
         }
+        if (disabledPos != null) {
+            tagCompound.put("disabled_pos", NbtUtils.writeBlockPos(disabledPos));
+        }
     }
 
     @Override
@@ -535,6 +540,9 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         for (int i = 0; i < modules.size(); ++i) {
             ModuleBase module = modules.get(i);
             module.readFromNBT(tagCompound, i, registryAccess());
+        }
+        if (tagCompound.contains("disabled_pos")) {
+            disabledPos = NbtUtils.readBlockPos(tagCompound, "disabled_pos").orElse(null);
         }
     }
 
