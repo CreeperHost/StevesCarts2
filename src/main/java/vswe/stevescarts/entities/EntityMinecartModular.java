@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -1149,6 +1150,9 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 module.writeToNBT(tagCompound, i, registryAccess());
             }
         }
+        if (disabledPos != null) {
+            tagCompound.put("disabled_pos", NbtUtils.writeBlockPos(disabledPos));
+        }
         return true;
     }
 
@@ -1186,6 +1190,9 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 final ModuleBase module = modules.get(i);
                 module.readFromNBT(tagCompound, i, registryAccess());
             }
+        }
+        if (tagCompound.contains("disabled_pos")) {
+            disabledPos = NbtUtils.readBlockPos(tagCompound, "disabled_pos").orElse(null);
         }
     }
 
