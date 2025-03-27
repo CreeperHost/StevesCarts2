@@ -21,6 +21,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -40,6 +41,7 @@ import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
+import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.events.CartEvents;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
@@ -86,6 +88,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     protected boolean isPlaceholder;
     protected boolean wasDisabled;
     protected BlockPos disabledPos;
+    protected boolean fullStop = false;
     protected int workingTime;
     protected int motorRotation;
     protected int keepAlive;
@@ -141,6 +144,18 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     public void tick() {
         if (!level().isClientSide) {
             entityDataList.forEach(EntityData::detectAndSend);
+            if (isDisabled() && disabledPos != null) {
+                if (!fullStop) {
+                    double xOffset = (disabledPos.getX() + 0.5) - position().x;
+                    double zOffset = (disabledPos.getZ() + 0.5) - position().z;
+                    move(MoverType.SELF, new Vec3(xOffset * 0.25, 0, zOffset * 0.25));
+                    if (xOffset < 0.05 && zOffset < 0.05) {
+                        fullStop = true;
+                    }
+                }
+            } else {
+                fullStop = false;
+            }
         }
         flipped = true;
         onCartUpdate();
