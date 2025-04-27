@@ -301,7 +301,7 @@ public class ArcadeTetris extends ArcadeGame
     @Override
     public void Load(final CompoundTag tagCompound, final int id)
     {
-        highscore = tagCompound.getShort(getModule().generateNBTName("Highscore", id));
+        highscore = tagCompound.getShortOr(getModule().generateNBTName("Highscore", id), (short) 0);
     }
 
     static

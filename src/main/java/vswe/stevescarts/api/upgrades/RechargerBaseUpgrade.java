@@ -17,14 +17,14 @@ public abstract class RechargerBaseUpgrade extends BaseUpgradeEffect
             {
                 return;
             }
-            if (comp.getShort("GenerateCooldown") >= 1200 / getAmount(tileEntityUpgrade))
+            if (comp.getShortOr("GenerateCooldown", (short) 0) >= 1200 / getAmount(tileEntityUpgrade))
             {
                 comp.putShort("GenerateCooldown", (short) 0);
                 tileEntityUpgrade.getMaster().increaseFuel(1);
             }
             else
             {
-                comp.putShort("GenerateCooldown", (short) (comp.getShort("GenerateCooldown") + 1));
+                comp.putShort("GenerateCooldown", (short) (comp.getShortOr("GenerateCooldown", (short) 0) + 1));
             }
         }
     }

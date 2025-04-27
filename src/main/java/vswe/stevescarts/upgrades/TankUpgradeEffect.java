@@ -90,8 +90,8 @@ public abstract class TankUpgradeEffect extends InventoryUpgradeEffect
     {
         super.update(upgrade);
         if(upgrade.getLevel() == null) return;
-        upgrade.getCompound().putByte("Tick", (byte) (upgrade.getCompound().getByte("Tick") - 1));
-        if (upgrade.getCompound().getByte("Tick") <= 0)
+        upgrade.getCompound().putByte("Tick", (byte) (upgrade.getCompound().getByteOr("Tick", (byte) 0) - 1));
+        if (upgrade.getCompound().getByteOr("Tick", (byte) 0) <= 0)
         {
             upgrade.getCompound().putByte("Tick", (byte) 5);
             if (!upgrade.getLevel().isClientSide && slots != null && slots.size() >= 2)
@@ -104,7 +104,7 @@ public abstract class TankUpgradeEffect extends InventoryUpgradeEffect
     @Override
     public void load(final TileEntityUpgrade upgrade, final CompoundTag compound, @NotNull HolderLookup.Provider provider)
     {
-        if (compound.getByte("Exists") != 0)
+        if (compound.getByteOr("Exists", (byte) 0) != 0)
         {
             upgrade.tank.setFluid(FluidStack.parseOptional(provider, compound));
         }

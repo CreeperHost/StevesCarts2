@@ -280,7 +280,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
 
     @Override
     protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider) {
-        lightLimit = tagCompound.getByte(generateNBTName("lightLimit", id));
+        lightLimit = tagCompound.getByteOr(generateNBTName("lightLimit", id), (byte) 0);
         calculateTorches();
     }
 

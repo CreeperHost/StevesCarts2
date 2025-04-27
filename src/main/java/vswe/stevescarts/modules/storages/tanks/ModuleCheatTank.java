@@ -104,7 +104,7 @@ public class ModuleCheatTank extends ModuleTank
     protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
         super.load(tag, id, provider);
-        mode = tag.getByte(generateNBTName("mode", id));
+        mode = tag.getByteOr(generateNBTName("mode", id), (byte) 0);
     }
 
     private void updateAmount()

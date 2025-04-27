@@ -71,7 +71,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
 
     private void updateLight()
     {
-        if (!getCart().level().isDay() || getCart().level().isRaining())
+        if (!getCart().level().isBrightOutside() || getCart().level().isRaining())
         {
             light.set(0);
         }
@@ -230,7 +230,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
     protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
         super.load(tag, id, provider);
-        setFuelLevel(tag.getInt(generateNBTName("Fuel", id)));
+        setFuelLevel(tag.getIntOr(generateNBTName("Fuel", id), 0));
         upState.load(generateNBTName("Up", id), tag, provider);
         if (upState.get()) {
             setAnimDone();

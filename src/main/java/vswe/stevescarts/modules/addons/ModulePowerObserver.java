@@ -346,8 +346,8 @@ public class ModulePowerObserver extends ModuleAddon
         short[] areaData = new short[4];
         short[] powerLevel = new short[4];
         for (int i = 0; i < 4; ++i) {
-            areaData[i] = tagCompound.getShort(generateNBTName("AreaData" + i, id));
-            powerLevel[i] = tagCompound.getShort(generateNBTName("PowerLevel" + i, id));
+            areaData[i] = tagCompound.getShortOr(generateNBTName("AreaData" + i, id), (short) 0);
+            powerLevel[i] = tagCompound.getShortOr(generateNBTName("PowerLevel" + i, id), (short) 0);
         }
         setAreaData(areaData);
         setPowerLevel(powerLevel);

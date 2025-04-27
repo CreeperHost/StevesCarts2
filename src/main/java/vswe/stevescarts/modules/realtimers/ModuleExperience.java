@@ -197,7 +197,7 @@ public class ModuleExperience extends ModuleBase
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        setExperienceAmount(tagCompound.getShort(generateNBTName("Experience", id)));
+        setExperienceAmount(tagCompound.getShortOr(generateNBTName("Experience", id), (short) 0));
     }
 
     @Override

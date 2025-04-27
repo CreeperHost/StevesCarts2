@@ -226,7 +226,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     @Override
     protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
-        setFertAmount(tagCompound.getShort(generateNBTName("Fert", id)));
+        setFertAmount(tagCompound.getShortOr(generateNBTName("Fert", id), (short) 0));
     }
 
     @Override

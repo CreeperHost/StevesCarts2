@@ -23,6 +23,7 @@ import vswe.stevescarts.init.ModItems;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class ModuleData
 {
@@ -342,14 +343,14 @@ public class ModuleData
             CompoundTag info = ModItemData.getTagCopy(cart);
             if (info.contains("modules")) {
                 int i = 0;
-                for (Tag tag : info.getList("modules", 10)) {
+                for (Tag tag : info.getListOrEmpty("modules")) {
                     CompoundTag moduleTag = (CompoundTag) tag;
                     //If this ever explodes, then someone please slap whoever decided to use the arbitrary index of the module used as the key for the id field. WTF...
-                    String regName = moduleTag.getString(String.valueOf(i));
+                    String regName = moduleTag.getStringOr(String.valueOf(i), "");
                     ModuleData data = StevesCartsAPI.MODULE_REGISTRY.get(ResourceLocation.parse(regName));
                     ItemStack module = data.getItemStack();
                     if (moduleTag.contains("data")) {
-                        ModItemData.modifyTag(module, t -> t.put("data", moduleTag.getCompound("data")));
+                        ModItemData.modifyTag(module, t -> t.put("data", moduleTag.getCompoundOrEmpty("data")));
                     }
                     modules.add(module);
                     i++;
@@ -388,7 +389,7 @@ public class ModuleData
 
             CompoundTag tag = ModItemData.getTagCopy(moduleStack);
             if (tag.contains("data")) {
-                moduleTag.put("data", tag.getCompound("data"));
+                moduleTag.put("data", tag.getCompoundOrEmpty("data"));
             }
 
             modulesTag.add(i, moduleTag);
@@ -471,17 +472,17 @@ public class ModuleData
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void addExtraMessage(final List<Component> list)
+    public void addExtraMessage(Consumer<Component> consumer)
     {
         if (message != null)
         {
-            list.add(Component.literal(""));
+            consumer.accept(Component.literal(""));
             for (final Localization.MODULE_INFO m : message)
             {
                 final String str = m.translate();
                 if (str.length() <= MAX_MESSAGE_ROW_LENGTH)
                 {
-                    addExtraMessage(list, str);
+                    addExtraMessage(consumer, str);
                 }
                 else
                 {
@@ -496,39 +497,39 @@ public class ModuleData
                         }
                         else
                         {
-                            addExtraMessage(list, row);
+                            addExtraMessage(consumer, row);
                             row = word;
                         }
                     }
-                    addExtraMessage(list, row);
+                    addExtraMessage(consumer, row);
                 }
             }
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void addExtraMessage(final List<Component> list, final String str)
+    private void addExtraMessage(Consumer<Component> consumer, final String str)
     {
-        list.add(Component.literal(ChatFormatting.DARK_GRAY + (ChatFormatting.ITALIC + str + ChatFormatting.RESET)));
+        consumer.accept(Component.literal(ChatFormatting.DARK_GRAY + (ChatFormatting.ITALIC + str + ChatFormatting.RESET)));
     }
 
     @OnlyIn(Dist.CLIENT)
-    public final void addInformation(final List<Component> list, final CompoundTag compound)
+    public final void addInformation(Consumer<Component> consumer, final CompoundTag compound)
     {
-        list.add(Component.literal(ChatFormatting.GRAY + Localization.MODULE_INFO.MODULAR_COST.translate() + ": " + modularCost));
+        consumer.accept(Component.literal(ChatFormatting.GRAY + Localization.MODULE_INFO.MODULAR_COST.translate() + ": " + modularCost));
         if (compound != null && compound.contains("Data"))
         {
-            final String extradatainfo = getModuleInfoText(compound.getByte("Data"));
+            final String extradatainfo = getModuleInfoText(compound.getByteOr("Data", (byte) 0));
             if (extradatainfo != null)
             {
-                list.add(Component.literal(ChatFormatting.WHITE + extradatainfo));
+                consumer.accept(Component.literal(ChatFormatting.WHITE + extradatainfo));
             }
         }
         if (Screen.hasShiftDown())
         {
             if (getRenderingSides() == null || getRenderingSides().size() == 0)
             {
-                list.add(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.NO_SIDES.translate()));
+                consumer.accept(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.NO_SIDES.translate()));
             }
             else
             {
@@ -549,45 +550,45 @@ public class ModuleData
                         sides.append(", ").append(side.toString());
                     }
                 }
-                list.add(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.OCCUPIED_SIDES.translate(sides.toString(), String.valueOf(getRenderingSides().size()))));
+                consumer.accept(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.OCCUPIED_SIDES.translate(sides.toString(), String.valueOf(getRenderingSides().size()))));
             }
             if (getNemesis() != null && getNemesis().size() != 0)
             {
                 if (getRenderingSides() == null || getRenderingSides().size() == 0)
                 {
-                    list.add(Component.literal(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_HOWEVER.translate() + ":"));
+                    consumer.accept(Component.literal(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_HOWEVER.translate() + ":"));
                 }
                 else
                 {
-                    list.add(Component.literal(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_ALSO.translate() + ":"));
+                    consumer.accept(Component.literal(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_ALSO.translate() + ":"));
                 }
                 for (final ModuleData module : getNemesis())
                 {
-                    list.add(Component.literal(ChatFormatting.RED + module.getName()));
+                    consumer.accept(Component.literal(ChatFormatting.RED + module.getName()));
                 }
             }
             if (parent != null)
             {
-                list.add(Component.literal(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + parent.getName()));
+                consumer.accept(Component.literal(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + parent.getName()));
             }
             if (getRequirement() != null && getRequirement().size() != 0)
             {
                 for (final ModuleDataGroup group : getRequirement())
                 {
-                    list.add(Component.literal(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + group.getCountName() + " " + group.getName()));
+                    consumer.accept(Component.literal(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + group.getCountName() + " " + group.getName()));
                 }
             }
             if (getAllowDuplicate())
             {
-                list.add(Component.literal(ChatFormatting.GREEN + Localization.MODULE_INFO.DUPLICATES.translate()));
+                consumer.accept(Component.literal(ChatFormatting.GREEN + Localization.MODULE_INFO.DUPLICATES.translate()));
             }
         }
         else
         {
-            list.add(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.SHIFT_FOR_MORE.translate("SHIFT")));
+            consumer.accept(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.SHIFT_FOR_MORE.translate("SHIFT")));
         }
-        list.add(Component.literal(ChatFormatting.BLUE + "Module Type: " + ChatFormatting.WHITE + moduleType.name()));
-        addExtraMessage(list);
+        consumer.accept(Component.literal(ChatFormatting.BLUE + "Module Type: " + ChatFormatting.WHITE + moduleType.name()));
+        addExtraMessage(consumer);
     }
 
     public static String checkForErrors(final ModuleDataHull hull, final ArrayList<ModuleData> modules)

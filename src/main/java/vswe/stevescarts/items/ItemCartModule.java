@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.IModuleItem;
@@ -15,6 +16,7 @@ import vswe.stevescarts.init.ModItemData;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ItemCartModule extends Item implements IModuleItem
 {
@@ -33,14 +35,13 @@ public class ItemCartModule extends Item implements IModuleItem
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> consumer, TooltipFlag flag) {
         if (moduleData != null)
         {
-            moduleData.addInformation(list, ModItemData.getTagCopy(stack));
+            moduleData.addInformation(consumer, ModItemData.getTagCopy(stack));
             if(flag.isAdvanced())
-                list.add(Component.literal("ID " + moduleData.getID()));
+                consumer.accept(Component.literal("ID " + moduleData.getID()));
         }
-        super.appendHoverText(stack, context, list, flag);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class ItemCartModule extends Item implements IModuleItem
         CompoundTag tag = ModItemData.getTagCopy(module);
         if (tag.contains("Data"))
         {
-            save.putByte("Data" + i, tag.getByte("Data"));
+            save.putByte("Data" + i, tag.getByteOr("Data", (byte) 0));
         }
         else
         {

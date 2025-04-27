@@ -212,7 +212,7 @@ public class ModuleSmelter extends ModuleRecipe
     protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
         super.load(tag, id, provider);
-        energyBuffer = tag.getByte(generateNBTName("Buffer", id));
+        energyBuffer = tag.getByteOr(generateNBTName("Buffer", id), (byte) 0);
     }
 
     @Override

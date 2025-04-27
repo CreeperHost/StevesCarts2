@@ -145,6 +145,6 @@ public class ModulePlantSize extends ModuleAddon
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        size = tagCompound.getByte(generateNBTName("size", id));
+        size = tagCompound.getByteOr(generateNBTName("size", id), (byte) 0);
     }
 }

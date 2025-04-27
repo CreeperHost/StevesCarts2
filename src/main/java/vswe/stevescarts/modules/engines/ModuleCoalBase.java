@@ -181,7 +181,7 @@ public abstract class ModuleCoalBase extends ModuleEngine
     protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
         super.load(tagCompound, id, provider);
-        setFuelLevel(tagCompound.getShort(generateNBTName("Fuel", id)));
+        setFuelLevel(tagCompound.getShortOr(generateNBTName("Fuel", id), (short) 0));
         if (getFuelLevel() < 0)
         {
             setFuelLevel(getFuelLevel() + 65536);

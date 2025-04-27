@@ -37,6 +37,6 @@ public class StringData extends AbstractDataStore<String> {
 
     @Override
     public void fromTag(HolderLookup.Provider provider, Tag tag) {
-        value = validValue(tag.getAsString(), value);
+        value = validValue(tag.asString().orElse(""), value);
     }
 }

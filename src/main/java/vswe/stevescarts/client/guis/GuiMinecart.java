@@ -1,12 +1,11 @@
 package vswe.stevescarts.client.guis;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -85,7 +84,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         guiGraphics.blit(RenderType::guiTextured, GuiMinecart.textureLeft, left, top, 0, 0, 256, 256, 256, 256);
         guiGraphics.blit(RenderType::guiTextured, GuiMinecart.textureRight, left + 256, top, 0, 0, imageWidth - 256, imageHeight, 256, 256);
         guiGraphics.flush(); //Need to flush because... Lets just say this entire gui is in desperate need of a complete overhaul...
-        RenderSystem.setShaderTexture(0, GuiMinecart.textureRight);
+//        RenderSystem.setShaderTexture(0, GuiMinecart.textureRight);
 
         if (cart != null)
         {
@@ -143,7 +142,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 //        ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
         for (int i = 0; i < cart.modules().size(); i++)
         {
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+//            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             drawModuleIcon(guiGraphics, cart.modules().get(i).getItemStack(), getGuiLeft() + getModuleDisplayX(i), getGuiTop() + getModuleDisplayY(i), 1.0f, 1.0f, 0.0f, 0.0f);
         }
 
@@ -152,7 +151,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 //            ModuleCountPair count = moduleCounts.get(i);
 //            drawModuleIcon(guiGraphics, count.getData(), getGuiLeft() + getModuleDisplayX(i), getGuiTop() + getModuleDisplayY(i), 1.0f, 1.0f, 0.0f, 0.0f);
 //        }
-        GlStateManager._disableBlend();
+//        GlStateManager._disableBlend();
     }
 
     private void renderReturnButton(GuiGraphics guiGraphics, int x, int y)
@@ -166,7 +165,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     public void drawModuleIcon(GuiGraphics guiGraphics, ItemStack icon, final int targetX, final int targetY, final float sizeX, final float sizeY, final float offsetX, final float offsetY)
     {
         guiGraphics.renderItem(icon, targetX, targetY);
-        RenderSystem.disableDepthTest();
+//        RenderSystem.disableDepthTest();
     }
 
     private void renderModuleListText(GuiGraphics guiGraphics, int mouseX, int mouseY)
@@ -581,14 +580,15 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
             }
         }
 
-        RenderSystem.setShader(CoreShaders.POSITION_TEX);
-        BufferBuilder buff = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        Matrix4f mat = guiGraphics.pose().last().pose();
-        buff.addVertex(mat, (x), y + h, 0).setUv((float) pt1[0], (float) pt1[1]);
-        buff.addVertex(mat, (x + w), y + h, 0).setUv((float) pt2[0], (float) pt2[1]);
-        buff.addVertex(mat, (x + w), y, 0).setUv((float) pt3[0], (float) pt3[1]);
-        buff.addVertex(mat, (x), y, 0).setUv((float) pt4[0], (float) pt4[1]);
-        BufferUploader.drawWithShader(buff.buildOrThrow());
+        //TODO texturing stuff
+//        RenderSystem.setShader(CoreShaders.POSITION_TEX);
+//        BufferBuilder buff = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+//        Matrix4f mat = guiGraphics.pose().last().pose();
+//        buff.addVertex(mat, (x), y + h, 0).setUv((float) pt1[0], (float) pt1[1]);
+//        buff.addVertex(mat, (x + w), y + h, 0).setUv((float) pt2[0], (float) pt2[1]);
+//        buff.addVertex(mat, (x + w), y, 0).setUv((float) pt3[0], (float) pt3[1]);
+//        buff.addVertex(mat, (x), y, 0).setUv((float) pt4[0], (float) pt4[1]);
+//        BufferUploader.drawWithShader(buff.buildOrThrow());
     }
 
     public enum RENDER_ROTATION

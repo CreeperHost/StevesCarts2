@@ -120,6 +120,6 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        command = tagCompound.getString(generateNBTName("Command", id));
+        command = tagCompound.getStringOr(generateNBTName("Command", id), "");
     }
 }

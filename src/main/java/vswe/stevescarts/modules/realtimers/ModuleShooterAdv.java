@@ -172,7 +172,8 @@ public class ModuleShooterAdv extends ModuleShooter
 
             setRifleDirection((float) Math.atan2(disZ, disX));
 
-            projectile.moveTo(getCart().getX(), posY, getCart().getZ(), theta, phi);
+            projectile.setPos(getCart().getX(), posY, getCart().getZ());
+            projectile.forceSetRotation(theta, phi);
 
             float disD5 = (float) dis * 0.2f;
             setHeading(projectile, disX, disY + (double) disD5, disZ, 1.6f, 0.0f);
@@ -318,7 +319,7 @@ public class ModuleShooterAdv extends ModuleShooter
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        setOptions(tagCompound.getByte(generateNBTName("Options", id)));
+        setOptions(tagCompound.getByteOr(generateNBTName("Options", id), (byte) 0));
         loadTick(tagCompound, id);
     }
 

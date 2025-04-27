@@ -243,6 +243,6 @@ public class ModuleHeightControl extends ModuleAddon
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        setYTarget(tagCompound.getShort(generateNBTName("Height", id)));
+        setYTarget(tagCompound.getShortOr(generateNBTName("Height", id), (short) 0));
     }
 }

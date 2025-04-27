@@ -138,11 +138,11 @@ public class EnchantmentData {
     @Nullable
     public static EnchantmentData load(CompoundTag tag, HolderLookup.Provider provider) {
         if (!tag.contains("key")) return null;
-        ResourceLocation key = ResourceLocation.parse(tag.getString("key"));
+        ResourceLocation key = ResourceLocation.parse(tag.getStringOr("key", ""));
         ResourceKey<Enchantment> resKey = ResourceKey.create(Registries.ENCHANTMENT, key);
         Holder<Enchantment> enchant = provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(resKey);
         EnchantmentData data = new EnchantmentData(enchant);
-        data.setValue(tag.getInt("value"));
+        data.setValue(tag.getIntOr("value", 0));
         return data;
     }
 

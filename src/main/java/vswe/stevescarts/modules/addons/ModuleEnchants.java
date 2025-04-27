@@ -238,7 +238,7 @@ public class ModuleEnchants extends ModuleAddon {
         super.load(nbt, id, provider);
         for (int i = 0; i < 3; ++i) {
             if (!nbt.contains(generateNBTName("enchant" + i, id))) continue;
-            EnchantmentData data = EnchantmentData.load(nbt.getCompound(generateNBTName("enchant" + i, id)), provider);
+            EnchantmentData data = EnchantmentData.load(nbt.getCompoundOrEmpty(generateNBTName("enchant" + i, id)), provider);
             setEnchant(i, data);
         }
     }

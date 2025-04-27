@@ -546,7 +546,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         super.load(tagCompound, id, provider);
-        setDrillEnabled(tagCompound.getBoolean(generateNBTName("DrillEnabled", id)));
+        setDrillEnabled(tagCompound.getBooleanOr(generateNBTName("DrillEnabled", id), false));
     }
 
     @Override

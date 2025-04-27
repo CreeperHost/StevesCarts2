@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -855,11 +854,11 @@ public abstract class ModuleBase
      */
     public final void readFromNBT(final CompoundTag tagCompound, final int id, @NotNull HolderLookup.Provider provider) {
         if (getInventorySize() > 0) {
-            ListTag items = tagCompound.getList(generateNBTName("Items", id), NBTHelper.COMPOUND.getId());
+            ListTag items = tagCompound.getListOrEmpty(generateNBTName("Items", id));
             for (int i = 0; i < items.size(); ++i) {
-                CompoundTag item = items.getCompound(i);
-                int slot = item.getByte("Slot") & 0xFF;
-                if (slot >= 0 && slot < getInventorySize()) {
+                CompoundTag item = items.getCompoundOrEmpty(i);
+                int slot = item.getByteOr("Slot", (byte) 0) & 0xFF;
+                if (slot < getInventorySize()) {
                     setStack(slot, ItemStack.parse(provider, item).orElse(ItemStack.EMPTY));
                 }
             }
@@ -1576,14 +1575,15 @@ public abstract class ModuleBase
         final float var7 = 0.00390625f;
         final float var8 = 0.00390625f;
 
+        //TODO Draw Image, will need to do sprite stuff i think.
         //formatter:off
-        RenderSystem.setShader(CoreShaders.POSITION_TEX);
-        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.addVertex(targetX,           targetY + height, 	-90F).setUv((float) sourceX * var7,            (float)(sourceY + height) * var8);
-        bufferbuilder.addVertex(targetX + width,   targetY + height, 	-90F).setUv((float)(sourceX + width) * var7,   (float)(sourceY + height) * var8);
-        bufferbuilder.addVertex(targetX + width,   targetY, 			-90F).setUv((float)(sourceX + width) * var7,   (float) sourceY * var8);
-        bufferbuilder.addVertex(targetX,           targetY, 			-90F).setUv((float) sourceX * var7,            (float) sourceY * var8);
-        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
+//        RenderSystem.setShader(CoreShaders.POSITION_TEX);
+//        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+//        bufferbuilder.addVertex(targetX,           targetY + height, 	-90F).setUv((float) sourceX * var7,            (float)(sourceY + height) * var8);
+//        bufferbuilder.addVertex(targetX + width,   targetY + height, 	-90F).setUv((float)(sourceX + width) * var7,   (float)(sourceY + height) * var8);
+//        bufferbuilder.addVertex(targetX + width,   targetY, 			-90F).setUv((float)(sourceX + width) * var7,   (float) sourceY * var8);
+//        bufferbuilder.addVertex(targetX,           targetY, 			-90F).setUv((float) sourceX * var7,            (float) sourceY * var8);
+//        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
         //formatter:on
     }
 

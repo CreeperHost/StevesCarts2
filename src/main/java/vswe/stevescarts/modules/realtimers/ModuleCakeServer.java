@@ -117,7 +117,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        setCakeBuffer(tagCompound.getShort(generateNBTName("Cake", id)));
+        setCakeBuffer(tagCompound.getShortOr(generateNBTName("Cake", id), (short) 0));
     }
 
     @OnlyIn(Dist.CLIENT)

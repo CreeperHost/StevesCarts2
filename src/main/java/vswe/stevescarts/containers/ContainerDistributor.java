@@ -79,7 +79,7 @@ public class ContainerDistributor extends ModularGuiContainerMenu {
 
         @Override
         public void fromTag(HolderLookup.Provider provider, Tag tag) {
-            value.setData(((IntTag) tag).getAsInt());
+            value.setData(((IntTag) tag).value());
         }
 
         @Override

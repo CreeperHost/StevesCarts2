@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MinecartItem;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,6 +27,7 @@ import vswe.stevescarts.init.ModEntities;
 import vswe.stevescarts.init.ModItemData;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ItemCarts extends MinecartItem
 {
@@ -98,21 +100,21 @@ public class ItemCarts extends MinecartItem
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> consumer, TooltipFlag flag) {
         if (!ModItemData.hasTag(stack)) return;
         CompoundTag tag = ModItemData.getTagCopy(stack);
         if (tag.contains("modules")) {
-            list.add(Component.literal(ChatFormatting.BLUE + "Installed Modules:"));
+            consumer.accept(Component.literal(ChatFormatting.BLUE + "Installed Modules:"));
             ListTag moduleListTag = (ListTag) tag.get("modules");
             if (moduleListTag != null && !moduleListTag.isEmpty()) {
                 for (int i = 0; i < moduleListTag.size(); i++) {
                     CompoundTag moduleTag = (CompoundTag) moduleListTag.get(i);
-                    ResourceLocation resourceLocation = ResourceLocation.parse(moduleTag.getString(String.valueOf(i)));
+                    ResourceLocation resourceLocation = ResourceLocation.parse(moduleTag.getStringOr(String.valueOf(i), ""));
                     ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(resourceLocation);
-                    if (moduleData != null) list.add(Component.literal(ChatFormatting.GOLD + moduleData.getDisplayName()));
+                    if (moduleData != null) consumer.accept(Component.literal(ChatFormatting.GOLD + moduleData.getDisplayName()));
                 }
             } else {
-                list.add(Component.literal(ChatFormatting.RED + "No modules loaded"));
+                consumer.accept(Component.literal(ChatFormatting.RED + "No modules loaded"));
             }
         }
     }

@@ -359,7 +359,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                 if (!slot.getItem().isEmpty())
                 {
                     CompoundTag tag = ModItemData.getTagCopy(slot.getItem());
-                    if (tag.getInt(MODIFY_STATUS) == getKeepSize()) {
+                    if (tag.getIntOr(MODIFY_STATUS, 0) == getKeepSize()) {
                         tag.putInt(MODIFY_STATUS, getRemovedSize());
                     } else {
                         tag.putInt(MODIFY_STATUS, getKeepSize());
@@ -372,15 +372,15 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
 
     public static int getSlotStatus(ItemStack stack) {
         CompoundTag tag = ModItemData.getTagCopy(stack);
-        if (tag.contains(TileEntityCartAssembler.MODIFY_STATUS, NBTHelper.INT.getId())) {
-            return tag.getInt(TileEntityCartAssembler.MODIFY_STATUS);
+        if (tag.contains(TileEntityCartAssembler.MODIFY_STATUS)) {
+            return tag.getIntOr(TileEntityCartAssembler.MODIFY_STATUS, 0);
         }
         return 1;
     }
 
     public static ItemStack removeModify(ItemStack stack) {
         CompoundTag tag = ModItemData.getTagCopy(stack);
-        if (tag.contains(MODIFY_STATUS, NBTHelper.INT.getId()))
+        if (tag.contains(MODIFY_STATUS))
         {
             tag.remove(MODIFY_STATUS);
             if (tag.size() <= 0) {
@@ -829,10 +829,10 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                 {
                     @Nonnull ItemStack newItem = new ItemStack(ModItems.CARTS.get());
                     final CompoundTag save = new CompoundTag();
-                    save.putByteArray("Modules", tag.getByteArray("Modules"));
+                    save.putByteArray("Modules", tag.getByteArray("Modules").orElseGet(() -> new byte[0]));
                     ModItemData.setTag(newItem, save);
-                    maxAssemblingTime = tag.getInt("maxTime");
-                    setAssemblingTime(tag.getInt("currentTime"));
+                    maxAssemblingTime = tag.getIntOr("maxTime", 0);
+                    setAssemblingTime(tag.getIntOr("currentTime", 0));
                     spareModules.clear();
                     if (itemInSlot.has(DataComponents.CUSTOM_NAME)) {
                         newItem.set(DataComponents.CUSTOM_NAME, itemInSlot.get(DataComponents.CUSTOM_NAME));
@@ -1203,39 +1203,39 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     public void loadAdditional(@NotNull CompoundTag tagCompound, HolderLookup.Provider provider)
     {
         super.loadAdditional(tagCompound, provider);
-        ListTag itemList = tagCompound.getList("Items", NBTHelper.COMPOUND.getId());
+        ListTag itemList = tagCompound.getListOrEmpty("Items");
         for (int i = 0; i < itemList.size(); ++i) {
-            CompoundTag itemTag = itemList.getCompound(i);
-            int slot = itemTag.getByte("Slot") & 0xFF;
+            CompoundTag itemTag = itemList.getCompoundOrEmpty(i);
+            int slot = itemTag.getByteOr("Slot", (byte) 0) & 0xFF;
             if (slot < getContainerSize()) {
                 setItem(slot, ItemStack.parse(provider, itemTag).orElse(ItemStack.EMPTY));
             }
         }
 
-        final ListTag spares = tagCompound.getList("Spares", NBTHelper.COMPOUND.getId());
+        ListTag spares = tagCompound.getListOrEmpty("Spares");
         spareModules.clear();
         for (int j = 0; j < spares.size(); ++j)
         {
-            final CompoundTag item2 = spares.getCompound(j);
+            CompoundTag item2 = spares.getCompoundOrEmpty(j);
             ItemStack iStack = ItemStack.parse(provider, item2).orElse(ItemStack.EMPTY);
             spareModules.add(iStack);
         }
-        final CompoundTag outputTag = (CompoundTag) tagCompound.get("Output");
+        CompoundTag outputTag = (CompoundTag) tagCompound.get("Output");
         if (outputTag != null)
         {
             outputItem = ItemStack.parse(provider, outputTag).orElse(ItemStack.EMPTY);
         }
         if (tagCompound.contains("Fuel"))
         {
-            setFuelLevel(tagCompound.getShort("Fuel"));
+            setFuelLevel(tagCompound.getShortOr("Fuel", (short) 0));
         }
         else
         {
-            setFuelLevel(tagCompound.getInt("IntFuel"));
+            setFuelLevel(tagCompound.getIntOr("IntFuel", 0));
         }
-        maxAssemblingTime = tagCompound.getInt("maxTime");
-        setAssemblingTime(tagCompound.getInt("currentTime"));
-        isAssembling = tagCompound.getBoolean("isAssembling");
+        maxAssemblingTime = tagCompound.getIntOr("maxTime", 0);
+        setAssemblingTime(tagCompound.getIntOr("currentTime", 0));
+        isAssembling = tagCompound.getBooleanOr("isAssembling", false);
     }
 
 

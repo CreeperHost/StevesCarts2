@@ -135,6 +135,6 @@ public class ModuleMilker extends ModuleBase
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        milkbuffer = tagCompound.getShort(generateNBTName("Milk", id));
+        milkbuffer = tagCompound.getShortOr(generateNBTName("Milk", id), (short) 0);
     }
 }

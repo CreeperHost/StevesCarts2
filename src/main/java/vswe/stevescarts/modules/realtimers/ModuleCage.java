@@ -245,7 +245,7 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        disablePickup = tagCompound.getBoolean(generateNBTName("disablePickup", id));
+        disablePickup = tagCompound.getBooleanOr(generateNBTName("disablePickup", id), false);
     }
 
     @Override

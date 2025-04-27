@@ -143,7 +143,7 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider);
-        setType(tag.getByte("Type"));
+        setType(tag.getByteOr("Type", (byte) 0));
         ContainerHelper.loadAllItems(tag, inventoryStacks, provider);
         setChanged();
         final AssemblerUpgrade upgrade = getUpgrade();

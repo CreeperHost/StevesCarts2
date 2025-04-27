@@ -416,9 +416,9 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
 
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider) {
-        setSpeedSetting(tagCompound.getByte(generateNBTName("Speed", id)));
-        odo = tagCompound.getDouble(generateNBTName("ODO", id));
-        trip = tagCompound.getDouble(generateNBTName("TRIP", id));
+        setSpeedSetting(tagCompound.getByteOr(generateNBTName("Speed", id), (byte) 0));
+        odo = tagCompound.getDoubleOr(generateNBTName("ODO", id), 0);
+        trip = tagCompound.getDoubleOr(generateNBTName("TRIP", id), 0);
     }
 
     public float getWheelAngle() {

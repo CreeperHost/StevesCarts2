@@ -188,10 +188,10 @@ public abstract class ModuleThermalBase extends ModuleEngine
     protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
         super.load(tagCompound, id, provider);
-        setFuelLevel(tagCompound.getShort(generateNBTName("Fuel", id)));
+        setFuelLevel(tagCompound.getShortOr(generateNBTName("Fuel", id), (short) 0));
         if (requiresCoolant())
         {
-            setCoolantLevel(tagCompound.getShort(generateNBTName("Coolant", id)));
+            setCoolantLevel(tagCompound.getShortOr(generateNBTName("Coolant", id), (short) 0));
         }
     }
 }

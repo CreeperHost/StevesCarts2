@@ -269,7 +269,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
         int baseSize = getDrillWidth() * getDrillHeight();
-        BoolArray loaded = BoolArray.fromBytes(tagCompound.getByteArray(generateNBTName("enabled_data", id)));
+        BoolArray loaded = BoolArray.fromBytes(tagCompound.getByteArray(generateNBTName("enabled_data", id)).orElseGet(() -> new byte[0]));
         if (loaded.getBytes().length * 8 >= baseSize) {
             setDisabledArray(loaded);
         }

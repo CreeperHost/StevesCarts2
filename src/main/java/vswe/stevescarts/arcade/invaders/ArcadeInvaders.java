@@ -386,7 +386,7 @@ public class ArcadeInvaders extends ArcadeGame
     @Override
     public void Load(final CompoundTag tagCompound, final int id)
     {
-        highscore = tagCompound.getShort(getModule().generateNBTName("HighscoreGhast", id));
+        highscore = tagCompound.getShortOr(getModule().generateNBTName("HighscoreGhast", id), (short) 0);
     }
 
     static

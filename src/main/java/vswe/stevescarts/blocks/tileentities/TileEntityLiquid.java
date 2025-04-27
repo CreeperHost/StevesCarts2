@@ -345,9 +345,9 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
         super.loadAdditional(compoundTag, provider);
         for (int i = 0; i < 4; ++i)
         {
-            tanks[i].setFluid(FluidStack.parseOptional(provider, compoundTag.getCompound("Fluid" + i)));
+            tanks[i].setFluid(FluidStack.parseOptional(provider, compoundTag.getCompoundOrEmpty("Fluid" + i)));
         }
-        setWorkload(compoundTag.getShort("workload"));
+        setWorkload(compoundTag.getShortOr("workload", (short) 0));
     }
 
     @Override

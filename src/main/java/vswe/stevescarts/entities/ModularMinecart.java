@@ -2,10 +2,7 @@ package vswe.stevescarts.entities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -61,6 +58,7 @@ import vswe.stevescarts.polylib.NBTHelper;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by brandon3055 on 07/12/2024
@@ -535,30 +533,47 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
             module.writeToNBT(tagCompound, i, registryAccess());
         }
         if (disabledPos != null) {
-            tagCompound.put("disabled_pos", NbtUtils.writeBlockPos(disabledPos));
+            tagCompound.put("disabled_pos", writeBlockPos(disabledPos));
         }
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tagCompound) {
         super.readAdditionalSaveData(tagCompound);
-        name = Localization.translate(tagCompound.getString("cartName"));
-        setEngineBurning(tagCompound.getBoolean("engine_burning"));
-        setIsDisabled(tagCompound.getBoolean("disabled"));
+        name = Localization.translate(tagCompound.getStringOr("cartName", ""));
+        setEngineBurning(tagCompound.getBooleanOr("engine_burning", false));
+        setIsDisabled(tagCompound.getBooleanOr("disabled", false));
         preStopVelocity = null;
         if (tagCompound.contains("preStopVel")) {
-            ListTag list = tagCompound.getList("preStopVel", Tag.TAG_DOUBLE);
-            preStopVelocity = new Vec3(list.getDouble(0), list.getDouble(1), list.getDouble(1));
+            ListTag list = tagCompound.getListOrEmpty("preStopVel");
+            preStopVelocity = new Vec3(list.getDoubleOr(0, 0), list.getDoubleOr(1, 0), list.getDoubleOr(1, 0));
         }
-        workingTime = tagCompound.getShort("workingTime");
+        workingTime = tagCompound.getShortOr("workingTime", (short) 0);
         loadModules(tagCompound);
         for (int i = 0; i < modules.size(); ++i) {
             ModuleBase module = modules.get(i);
             module.readFromNBT(tagCompound, i, registryAccess());
         }
         if (tagCompound.contains("disabled_pos")) {
-            disabledPos = NbtUtils.readBlockPos(tagCompound, "disabled_pos").orElse(null);
+            disabledPos = readBlockPos(tagCompound, "disabled_pos").orElse(null);
         }
+    }
+
+    public static Optional<BlockPos> readBlockPos(CompoundTag tag, String key) {
+        int[] aint = tag.getIntArray(key).orElseGet(() -> new int[0]);
+        return aint.length == 3 ? Optional.of(new BlockPos(aint[0], aint[1], aint[2])) : Optional.empty();
+    }
+
+    public static Tag writeBlockPos(BlockPos pos) {
+        return new IntArrayTag(new int[]{pos.getX(), pos.getY(), pos.getZ()});
+    }
+
+    protected ListTag newDoubleList(double... numbers) {
+        ListTag listtag = new ListTag();
+        for(double d0 : numbers) {
+            listtag.add(DoubleTag.valueOf(d0));
+        }
+        return listtag;
     }
 
     @Override

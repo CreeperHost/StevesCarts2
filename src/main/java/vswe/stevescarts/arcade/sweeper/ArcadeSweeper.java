@@ -348,7 +348,7 @@ public class ArcadeSweeper extends ArcadeGame
     {
         for (int i = 0; i < 3; ++i)
         {
-            highscore[i] = tagCompound.getShort(getModule().generateNBTName("HighscoreSweeper" + i, id));
+            highscore[i] = tagCompound.getShortOr(getModule().generateNBTName("HighscoreSweeper" + i, id), (short) 0);
         }
     }
 

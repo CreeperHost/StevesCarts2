@@ -126,6 +126,7 @@ public abstract class ButtonBase
             module.buttonVisibilityChanged();
         }
         lastVisibility = visibility;
+        //TODO Replace with updated texture handling
         ResourceHelper.bindResource(ButtonBase.texture);
         if (!visibility)
         {

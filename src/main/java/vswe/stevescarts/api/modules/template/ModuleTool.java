@@ -285,9 +285,9 @@ public abstract class ModuleTool extends ModuleWorker
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        setDurability(tagCompound.getInt(generateNBTName("Durability", id)));
-        remainingRepairUnits = tagCompound.getShort(generateNBTName("Repair", id));
-        maximumRepairUnits = tagCompound.getShort(generateNBTName("MaxRepair", id));
+        setDurability(tagCompound.getIntOr(generateNBTName("Durability", id), 0));
+        remainingRepairUnits = tagCompound.getShortOr(generateNBTName("Repair", id), (short) 0);
+        maximumRepairUnits = tagCompound.getShortOr(generateNBTName("MaxRepair", id), (short) 0);
     }
 
     public void setDurability(int amount)
@@ -321,8 +321,8 @@ public abstract class ModuleTool extends ModuleWorker
 
     @Override
     public void readExtraData(CompoundTag nbt) {
-        initialDurability = nbt.getInt("durability");
-        remainingRepairUnits = nbt.getShort("repair");
-        maximumRepairUnits = nbt.getShort("max_repair");
+        initialDurability = nbt.getIntOr("durability", 0);
+        remainingRepairUnits = nbt.getShortOr("repair", (short) 0);
+        maximumRepairUnits = nbt.getShortOr("max_repair", (short) 0);
     }
 }

@@ -69,26 +69,26 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
     @Override
     protected void loadAdditional(CompoundTag compoundTag, @NotNull HolderLookup.Provider provider) {
         super.loadAdditional(compoundTag, provider);
-        final ListTag nbttaglist = compoundTag.getList("Items", NBTHelper.COMPOUND.getId());
+        final ListTag nbttaglist = compoundTag.getListOrEmpty("Items");
         cargoItemStacks = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
         for (int i = 0; i < nbttaglist.size(); ++i)
         {
-            final CompoundTag nbttagcompound2 = nbttaglist.getCompound(i);
-            final byte byte0 = nbttagcompound2.getByte("Slot");
+            final CompoundTag nbttagcompound2 = nbttaglist.getCompoundOrEmpty(i);
+            final byte byte0 = nbttagcompound2.getByteOr("Slot", (byte) 0);
             if (byte0 >= 0 && byte0 < cargoItemStacks.size())
             {
                 cargoItemStacks.set(byte0, ItemStack.parse(provider, nbttagcompound2).orElse(ItemStack.EMPTY));
             }
         }
-        moveTime = compoundTag.getByte("movetime");
-        setLowestSetting(compoundTag.getByte("lowestNumber"));
-        layoutType = compoundTag.getByte("layout");
-        final byte temp = compoundTag.getByte("tocart");
-        final byte temp2 = compoundTag.getByte("doReturn");
+        moveTime = compoundTag.getByteOr("movetime", (byte) 0);
+        setLowestSetting(compoundTag.getByteOr("lowestNumber", (byte) 0));
+        layoutType = compoundTag.getByteOr("layout", (byte) 0);
+        final byte temp = compoundTag.getByteOr("tocart", (byte) 0);
+        final byte temp2 = compoundTag.getByteOr("doReturn", (byte) 0);
         for (int j = 0; j < 4; ++j)
         {
-            amount[j] = compoundTag.getByte("amount" + j);
-            color[j] = compoundTag.getByte("color" + j);
+            amount[j] = compoundTag.getByteOr("amount" + j, (byte) 0);
+            color[j] = compoundTag.getByteOr("color" + j, (byte) 0);
             if (color[j] == 0)
             {
                 color[j] = j + 1;

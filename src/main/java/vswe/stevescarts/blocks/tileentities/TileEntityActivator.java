@@ -71,7 +71,7 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider
     protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
         super.loadAdditional(compoundTag, provider);
         for (final ActivatorOption option : options) {
-            option.setOption(compoundTag.getByte(option.getName()));
+            option.setOption(compoundTag.getByteOr(option.getName(), (byte) 0));
         }
     }
 

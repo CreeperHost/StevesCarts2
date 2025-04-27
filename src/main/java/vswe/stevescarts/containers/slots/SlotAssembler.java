@@ -159,6 +159,6 @@ public class SlotAssembler extends Slot
         {
             if (assembler.getIsAssembling()) return false;
         }
-        return !getItem().isEmpty() && (!ModItemData.hasTag(getItem()) || !ModItemData.getTagCopy(getItem()).contains(TileEntityCartAssembler.MODIFY_STATUS) || ModItemData.getTagCopy(getItem()).getInt(TileEntityCartAssembler.MODIFY_STATUS) > 0);
+        return !getItem().isEmpty() && (!ModItemData.hasTag(getItem()) || !ModItemData.getTagCopy(getItem()).contains(TileEntityCartAssembler.MODIFY_STATUS) || ModItemData.getTagCopy(getItem()).getIntOr(TileEntityCartAssembler.MODIFY_STATUS, 0) > 0);
     }
 }

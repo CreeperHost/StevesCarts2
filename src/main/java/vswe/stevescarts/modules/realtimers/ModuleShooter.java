@@ -350,7 +350,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
                     y = temp;
                 }
                 Entity projectile = getProjectile(null, getProjectileItem(true));
-                projectile.moveTo(getCart().getX() + x * 1.5, getCart().getY() + 0.75F, getCart().getZ() + y * 1.5);
+                projectile.setPos(getCart().getX() + x * 1.5, getCart().getY() + 0.75F, getCart().getZ() + y * 1.5);
                 setHeading(projectile, x, 0.10000000149011612D, y, 1.6f, 12.0f);
                 setProjectileDamage(projectile);
                 setProjectileOnFire(projectile);
@@ -390,7 +390,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
             if (power > 0)
             {
                 final Arrow arrow = (Arrow) projectile;
-                arrow.setBaseDamage(arrow.getBaseDamage() + power * 0.5 + 0.5);
+                arrow.setBaseDamage(2 + power * 0.5 + 0.5);
             }
         }
     }
@@ -543,8 +543,8 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     @Override
     protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
-        setActivePipes(tagCompound.getByte(generateNBTName("Pipes", id)));
-        setInterval(tagCompound.getByte(generateNBTName("Interval", id)));
+        setActivePipes(tagCompound.getByteOr(generateNBTName("Pipes", id), (byte) 0));
+        setInterval(tagCompound.getByteOr(generateNBTName("Interval", id), (byte) 0));
         loadTick(tagCompound, id);
     }
 
@@ -555,7 +555,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
 
     protected void loadTick(final CompoundTag tagCompound, final int id)
     {
-        arrowTick = tagCompound.getByte(generateNBTName("Tick", id));
+        arrowTick = tagCompound.getByteOr(generateNBTName("Tick", id), (byte) 0);
     }
 
     @Override

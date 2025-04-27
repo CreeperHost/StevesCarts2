@@ -802,16 +802,16 @@ public class ModuleNote extends ModuleBase
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        final short headerInfo = tagCompound.getShort(generateNBTName("Header", id));
+        final short headerInfo = tagCompound.getShortOr(generateNBTName("Header", id), (short) 0);
         receiveGuiData(0, headerInfo);
         for (int i = 0; i < tracks.size(); ++i)
         {
-            final short trackInfo = tagCompound.getShort(generateNBTName("Track" + i, id));
+            final short trackInfo = tagCompound.getShortOr(generateNBTName("Track" + i, id), (short) 0);
             receiveGuiData(1 + (maximumNotesPerTrack + 1) * i, trackInfo);
             final Track track = tracks.get(i);
             for (int j = 0; j < track.notes.size(); ++j)
             {
-                final short noteInfo = tagCompound.getShort(generateNBTName("Note" + i + ":" + j, id));
+                final short noteInfo = tagCompound.getShortOr(generateNBTName("Note" + i + ":" + j, id), (short) 0);
                 receiveGuiData(1 + (maximumNotesPerTrack + 1) * i + 1 + j, noteInfo);
             }
         }

@@ -5,7 +5,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.api.modules.template.ModuleHull;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -68,7 +67,7 @@ public class ModulePig extends ModuleHull
     public boolean hasHelment()
     {
         @Nonnull ItemStack item = getHelmet();
-        return !item.isEmpty() && item.getItem() instanceof ArmorItem && ((ArmorItem) item.getItem()).getEquipmentSlot(item) == EquipmentSlot.HEAD;
+        return !item.isEmpty() && item.getEquipmentSlot() == EquipmentSlot.HEAD;
     }
 
     public ResourceLocation getHelmetResource(final boolean isOverlay)

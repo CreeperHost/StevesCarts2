@@ -207,7 +207,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        setShieldStatus(tagCompound.getBoolean(generateNBTName("Shield", id)));
+        setShieldStatus(tagCompound.getBooleanOr(generateNBTName("Shield", id), false));
     }
 
     @Override

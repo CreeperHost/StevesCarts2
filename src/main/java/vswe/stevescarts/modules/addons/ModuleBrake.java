@@ -162,6 +162,6 @@ public class ModuleBrake extends ModuleAddon implements ILeverModule
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        setForceStopping(tagCompound.getBoolean(generateNBTName("ForceStop", id)));
+        setForceStopping(tagCompound.getBooleanOr(generateNBTName("ForceStop", id), false));
     }
 }

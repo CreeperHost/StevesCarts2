@@ -53,9 +53,9 @@ public class InputChest extends SimpleInventoryUpgradeEffect
         if (!upgrade.getLevel().isClientSide && upgrade.getMaster() != null)
         {
             final CompoundTag comp = upgrade.getCompound();
-            if (comp.getByte("TransferCooldown") != 0)
+            if (comp.getByteOr("TransferCooldown", (byte) 0) != 0)
             {
-                comp.putByte("TransferCooldown", (byte) (comp.getByte("TransferCooldown") - 1));
+                comp.putByte("TransferCooldown", (byte) (comp.getByteOr("TransferCooldown", (byte) 0) - 1));
             }
             else
             {

@@ -568,7 +568,7 @@ public interface IModularCart extends Container, IFluidHandler {
             module.setModuleId(moduleData.getID());
             modules().add(module);
             if (data != null && data.contains("data")) {
-                module.readExtraData(data.getCompound("data"));
+                module.readExtraData(data.getCompoundOrEmpty("data"));
             }
         } catch (Exception e) {
             StevesCarts.LOGGER.error("Failed to load module with ID " + moduleData.getID() + "! More info below.");
@@ -585,7 +585,7 @@ public interface IModularCart extends Container, IFluidHandler {
         for (int i = 0; i < listTag.size(); i++) {
             Tag tag = listTag.get(i);
             modules.add((CompoundTag) tag);
-            names.add(ResourceLocation.parse(((CompoundTag) tag).getString(String.valueOf(i))));
+            names.add(ResourceLocation.parse(((CompoundTag) tag).getStringOr(String.valueOf(i), "")));
         }
 
         if (!names.isEmpty()) {
@@ -607,7 +607,7 @@ public interface IModularCart extends Container, IFluidHandler {
         if (data != null) {
             for (int i = 0; i < data.size(); i++) {
                 CompoundTag tag = data.get(i);
-                ResourceLocation name = ResourceLocation.parse(tag.getString(String.valueOf(i)));
+                ResourceLocation name = ResourceLocation.parse(tag.getStringOr(String.valueOf(i), ""));
                 doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(name), tag);
             }
         }

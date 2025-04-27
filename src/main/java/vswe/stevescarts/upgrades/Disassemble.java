@@ -143,7 +143,10 @@ public class Disassemble extends InventoryUpgradeEffect
 
     private ItemStack getLastCart(final TileEntityUpgrade upgrade)
     {
-        return ItemStack.parseOptional(upgrade.getLevel().registryAccess(), upgrade.getCompound());
+        if (upgrade.getCompound().isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+        return ItemStack.parse(upgrade.getLevel().registryAccess(), upgrade.getCompound()).orElse(ItemStack.EMPTY);
     }
 
     private boolean updateCart(final TileEntityUpgrade upgrade, final ItemStack cart)

@@ -166,7 +166,7 @@ public class ModuleChunkLoader extends ModuleAddon implements IActivatorModule
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        setChunkLoading(tagCompound.getBoolean(generateNBTName("ChunkLoading", id)));
+        setChunkLoading(tagCompound.getBooleanOr(generateNBTName("ChunkLoading", id), false));
     }
 
     @Override

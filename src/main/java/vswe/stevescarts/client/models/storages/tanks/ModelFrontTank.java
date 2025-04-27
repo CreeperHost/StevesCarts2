@@ -52,19 +52,20 @@ public class ModelFrontTank extends ModelCartbase
         ModuleTank moduleTank = (ModuleTank) module;
         FluidStack fluidStack = moduleTank.getFluid();
         int light = 15;
-        if(fluidStack != null && !fluidStack.isEmpty())
-        {
-            matrixStack.pushPose();
-            VertexConsumer buffer = rtb.getBuffer(FluidTankRenderType.RESIZABLE);
-            matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
-            matrixStack.translate(-1.1, -0.25D, -0.4);
-            matrixStack.scale(0.5F, FluidRenderHelper.getScale(moduleTank.getFluidAmount(), moduleTank.getCapacity(), fluidStack.isEmpty()) / 2, 0.8F);
-            dev.architectury.fluid.FluidStack fluidStackA = dev.architectury.fluid.FluidStack.create(fluidStack.getFluid(), fluidStack.getAmount());
-
-            RenderUtils.renderObject(FluidRenderHelper.getFluidModel(fluidStackA, FluidRenderHelper.STAGES + 1), matrixStack, buffer, RenderUtils.getColorARGB(fluidStackA, 0.2F),
-                    RenderUtils.calculateGlowLight(light, fluidStackA));
-
-            matrixStack.popPose();
-        }
+        //TODO fluid rendering
+//        if(fluidStack != null && !fluidStack.isEmpty())
+//        {
+//            matrixStack.pushPose();
+//            VertexConsumer buffer = rtb.getBuffer(FluidTankRenderType.RESIZABLE);
+//            matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
+//            matrixStack.translate(-1.1, -0.25D, -0.4);
+//            matrixStack.scale(0.5F, FluidRenderHelper.getScale(moduleTank.getFluidAmount(), moduleTank.getCapacity(), fluidStack.isEmpty()) / 2, 0.8F);
+//            dev.architectury.fluid.FluidStack fluidStackA = dev.architectury.fluid.FluidStack.create(fluidStack.getFluid(), fluidStack.getAmount());
+//
+//            RenderUtils.renderObject(FluidRenderHelper.getFluidModel(fluidStackA, FluidRenderHelper.STAGES + 1), matrixStack, buffer, RenderUtils.getColorARGB(fluidStackA, 0.2F),
+//                    RenderUtils.calculateGlowLight(light, fluidStackA));
+//
+//            matrixStack.popPose();
+//        }
     }
 }

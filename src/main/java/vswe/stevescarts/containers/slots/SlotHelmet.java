@@ -1,9 +1,10 @@
 package vswe.stevescarts.containers.slots;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 
 import javax.annotation.Nonnull;
@@ -18,13 +19,9 @@ public class SlotHelmet extends SlotStevesCarts
     @Override
     public boolean mayPlace(@Nonnull ItemStack itemstack)
     {
-        if(itemstack.getItem() instanceof ArmorItem armorItem)
+        if(itemstack.getEquipmentSlot() == EquipmentSlot.HEAD)
         {
-            EquipmentSlot equipmentSlot = armorItem.getEquipmentSlot(itemstack);
-            if(equipmentSlot == EquipmentSlot.HEAD)
-            {
-                return true;
-            }
+            return true;
         }
         return false;
     }

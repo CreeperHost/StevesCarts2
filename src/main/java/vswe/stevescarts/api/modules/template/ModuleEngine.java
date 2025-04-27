@@ -123,6 +123,7 @@ public abstract class ModuleEngine extends ModuleBase
     @Override
     public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
+        //TODO Replace with updated texture handling
         ResourceHelper.bindResource("/gui/engine.png");
         final int sourceX = 16 * getPriority();
         int sourceY = 0;
@@ -188,6 +189,6 @@ public abstract class ModuleEngine extends ModuleBase
     @Override
     protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
     {
-        setPriority(tagCompound.getByte(generateNBTName("Priority", id)));
+        setPriority(tagCompound.getByteOr(generateNBTName("Priority", id), (byte) 0));
     }
 }

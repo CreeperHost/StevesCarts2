@@ -41,7 +41,7 @@ public class ShortArrayData extends AbstractDataStore<ModSerializers.ShortArray>
         ListTag list = (ListTag) tag;
         short[] shorts = new short[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            shorts[i] = list.getShort(i);
+            shorts[i] = list.getShortOr(i, (short) 0);
         }
         value = new ModSerializers.ShortArray(shorts);
     }

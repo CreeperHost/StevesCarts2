@@ -184,6 +184,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
         tank.drawFluid(guiGraphics, gui, tankBounds[0], tankBounds[1]);
+        //TODO Replace with updated texture handling
         ResourceHelper.bindResource("/gui/tank.png");
         drawImage(guiGraphics, gui, tankBounds, 0, 0);
     }
@@ -267,7 +268,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     @Override
     protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
     {
-        FluidStack fluidStack = FluidStack.parse(provider, tag.getCompound(generateNBTName("Fluid", id))).orElse(FluidStack.EMPTY);
+        FluidStack fluidStack = FluidStack.parse(provider, tag.getCompoundOrEmpty(generateNBTName("Fluid", id))).orElse(FluidStack.EMPTY);
         tank.setFluid(fluidStack);
         locked.load(generateNBTName("LockedStack", id), tag, provider);
         updateData();

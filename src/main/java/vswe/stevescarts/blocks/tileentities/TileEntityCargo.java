@@ -211,10 +211,10 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     @Override
     protected void loadAdditional(CompoundTag compoundTag, HolderLookup.@NotNull Provider provider) {
         super.loadAdditional(compoundTag, provider);
-        setWorkload(compoundTag.getByte("workload"));
+        setWorkload(compoundTag.getByteOr("workload", (byte) 0));
         for (int i = 0; i < 4; ++i)
         {
-            target[i] = compoundTag.getByte("target" + i);
+            target[i] = compoundTag.getByteOr("target" + i, (byte) 0);
         }
     }
 

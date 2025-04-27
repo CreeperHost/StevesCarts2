@@ -138,17 +138,18 @@ public class BlockUpgrade extends BlockContainerBase
         return InteractionResult.SUCCESS;
     }
 
-    @Override
-    public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Item.TooltipContext iBlockReader, @NotNull List<Component> tooltip, @NotNull TooltipFlag iTooltipFlag)
-    {
-        if (assemblerUpgrade != null)
-        {
-            for (final BaseUpgradeEffect effect : assemblerUpgrade.getEffects())
-            {
-                tooltip.add(effect.getName());
-            }
-        }
-    }
+    //TODO, may need custom itemblock?
+//    @Override
+//    public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Item.TooltipContext iBlockReader, @NotNull List<Component> tooltip, @NotNull TooltipFlag iTooltipFlag)
+//    {
+//        if (assemblerUpgrade != null)
+//        {
+//            for (final BaseUpgradeEffect effect : assemblerUpgrade.getEffects())
+//            {
+//                tooltip.add(effect.getName());
+//            }
+//        }
+//    }
 
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {

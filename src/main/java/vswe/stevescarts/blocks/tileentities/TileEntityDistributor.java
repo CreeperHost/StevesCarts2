@@ -132,7 +132,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
         super.loadAdditional(compoundTag, provider);
         for (final DistributorSide side : getSides())
         {
-            side.setData(compoundTag.getInt("Side" + side.getId()));
+            side.setData(compoundTag.getIntOr("Side" + side.getId(), 0));
         }
     }
 

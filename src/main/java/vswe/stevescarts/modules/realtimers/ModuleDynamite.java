@@ -311,8 +311,8 @@ public class ModuleDynamite extends ModuleBase
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        setFuseLength(tagCompound.getShort(generateNBTName("FuseLength", id)));
-        setFuse(tagCompound.getShort(generateNBTName("Fuse", id)));
+        setFuseLength(tagCompound.getShortOr(generateNBTName("FuseLength", id), (short) 0));
+        setFuse(tagCompound.getShortOr(generateNBTName("Fuse", id), (short) 0));
         createExplosives();
     }
 }

@@ -896,7 +896,7 @@ public class ArcadeTracks extends ArcadeGame
     {
         for (int i = 0; i < unlockedLevels.length; ++i)
         {
-            unlockedLevels[i] = tagCompound.getByte(getModule().generateNBTName("Unlocked" + i, id));
+            unlockedLevels[i] = tagCompound.getByteOr(getModule().generateNBTName("Unlocked" + i, id), (byte) 0);
         }
         loadStories();
     }

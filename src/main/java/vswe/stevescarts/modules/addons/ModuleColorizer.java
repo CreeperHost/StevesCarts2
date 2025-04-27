@@ -204,8 +204,8 @@ public class ModuleColorizer extends ModuleAddon
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        setColorVal(0, tagCompound.getByte(generateNBTName("Red", id)));
-        setColorVal(1, tagCompound.getByte(generateNBTName("Green", id)));
-        setColorVal(2, tagCompound.getByte(generateNBTName("Blue", id)));
+        setColorVal(0, tagCompound.getByteOr(generateNBTName("Red", id), (byte) 0));
+        setColorVal(1, tagCompound.getByteOr(generateNBTName("Green", id), (byte) 0));
+        setColorVal(2, tagCompound.getByteOr(generateNBTName("Blue", id), (byte) 0));
     }
 }

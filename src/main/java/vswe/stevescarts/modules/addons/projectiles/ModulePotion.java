@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.addons.projectiles;
 
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.entity.projectile.ThrownSplashPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -24,7 +24,7 @@ public class ModulePotion extends ModuleProjectile
     @Override
     public Entity createProjectile(final Entity target, @Nonnull ItemStack item)
     {
-        ThrownPotion potionEntity = new ThrownPotion(getCart().level(), 0, 0, 0, item);
+        ThrownSplashPotion potionEntity = new ThrownSplashPotion(getCart().level(), 0, 0, 0, item);
         potionEntity.setItem(item);
         return potionEntity;
     }

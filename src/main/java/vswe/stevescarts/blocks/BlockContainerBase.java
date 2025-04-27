@@ -40,16 +40,17 @@ public abstract class BlockContainerBase extends BaseEntityBlock
         };
     }
 
-    @Override
-    public void onRemove(@NotNull BlockState blockState, @NotNull Level level, @NotNull BlockPos blockPos, @NotNull BlockState blockState2, boolean b)
-    {
-        if(blockState != blockState2)
-        {
-            if (level.getBlockEntity(blockPos) != null && level.getBlockEntity(blockPos) instanceof Container container)
-            {
-                Containers.dropContents(level, blockPos, container);
-            }
-        }
-        super.onRemove(blockState, level, blockPos, blockState2, b);
-    }
+//    This exact logic now exists by default in BlockEntity#preRemoveSideEffects
+//    @Override
+//    public void onRemove(@NotNull BlockState blockState, @NotNull Level level, @NotNull BlockPos blockPos, @NotNull BlockState blockState2, boolean b)
+//    {
+//        if(blockState != blockState2)
+//        {
+//            if (level.getBlockEntity(blockPos) != null && level.getBlockEntity(blockPos) instanceof Container container)
+//            {
+//                Containers.dropContents(level, blockPos, container);
+//            }
+//        }
+//        super.onRemove(blockState, level, blockPos, blockState2, b);
+//    }
 }

@@ -149,7 +149,7 @@ public class ModuleInvisible extends ModuleAddon implements IActivatorModule
     @Override
     protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
     {
-        setIsVisible(!tagCompound.getBoolean(generateNBTName("Invis", id)));
+        setIsVisible(!tagCompound.getBooleanOr(generateNBTName("Invis", id), false));
     }
 
     @Override

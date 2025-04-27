@@ -23,7 +23,7 @@ public class Solar extends RechargerBaseUpgrade
     {
         if(upgrade.getLevel() == null) return false;
 
-        return upgrade.getLevel().canSeeSky(upgrade.getBlockPos()) && upgrade.getLevel().isDay();
+        return upgrade.getLevel().canSeeSky(upgrade.getBlockPos()) && upgrade.getLevel().isBrightOutside();
     }
 
     @Override

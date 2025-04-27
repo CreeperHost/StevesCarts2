@@ -24,11 +24,12 @@ public class ResourceHelper
 
     public static void bindResource(final ResourceLocation resource)
     {
-        if (resource != null)
-        {
-            ResourceLocation lowercaseLocation = ResourceLocation.fromNamespaceAndPath(resource.getNamespace(), resource.getPath());
-            RenderSystem.setShaderTexture(0, lowercaseLocation);
-        }
+        //TODO Replace with updated texture handling
+//        if (resource != null)
+//        {
+//            ResourceLocation lowercaseLocation = ResourceLocation.fromNamespaceAndPath(resource.getNamespace(), resource.getPath());
+//            RenderSystem.setShaderTexture(0, lowercaseLocation);
+//        }
     }
 
     public static void bindResource(final String path)
