@@ -2,6 +2,7 @@ package vswe.stevescarts.arcade.tracks;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -344,8 +345,8 @@ public class ArcadeTracks extends ArcadeGame
     {
         if (!isSaveMenuOpen && isMenuOpen)
         {
-            ResourceHelper.bindResource(ArcadeTracks.textureMenu);
-            getModule().drawImage(guiGraphics, gui, getMenuArea(), 0, 0);
+            ResourceLocation texture = ResourceHelper.getResource(ArcadeTracks.textureMenu);
+            getModule().drawImage(guiGraphics, texture, gui, getMenuArea(), 0, 0);
             for (int i = 0; i < 3; ++i)
             {
                 final int[] rect = getMenuTabArea(i);
@@ -353,44 +354,44 @@ public class ArcadeTracks extends ArcadeGame
                 final boolean hidden = !active && i == currentMenuTab;
                 if (!hidden)
                 {
-                    getModule().drawImage(guiGraphics, gui, rect[0], rect[1] + rect[3], 0, active ? 114 : 113, rect[2], 1);
+                    getModule().drawImage(guiGraphics, texture, gui, rect[0], rect[1] + rect[3], 0, active ? 114 : 113, rect[2], 1);
                 }
             }
             for (final ScrollableList list : lists)
             {
-                list.drawBackground(guiGraphics, gui, x, y);
+                list.drawBackground(guiGraphics, texture, gui, x, y);
             }
         }
         else if (currentMap != null)
         {
-            ResourceHelper.bindResource(ArcadeTracks.textureGame);
+            ResourceLocation texture = ResourceHelper.getResource(ArcadeTracks.textureGame);
             if (isUsingEditor() && !isRunning)
             {
                 for (int i = 0; i < trackMap.length; ++i)
                 {
                     for (int j = 0; j < trackMap[0].length; ++j)
                     {
-                        getModule().drawImage(guiGraphics, gui, 5 + i * 16, 5 + j * 16, 16, 128, 16, 16);
+                        getModule().drawImage(guiGraphics, texture, gui, 5 + i * 16, 5 + j * 16, 16, 128, 16, 16);
                     }
                 }
             }
             for (final Track track : tracks)
             {
-                getModule().drawImage(guiGraphics, gui, getTrackArea(track.getX(), track.getY()), 16 * track.getU(), 16 * track.getV(), track.getRotation());
+                getModule().drawImage(guiGraphics, texture, gui, getTrackArea(track.getX(), track.getY()), 16 * track.getU(), 16 * track.getV(), track.getRotation());
             }
             if (isUsingEditor())
             {
                 if (editorDetectorTrack != null && !isRunning)
                 {
-                    editorDetectorTrack.drawOverlay(guiGraphics, getModule(), gui, editorDetectorTrack.getX() * 16 + 8, editorDetectorTrack.getY() * 16 + 8, isRunning);
-                    getModule().drawImage(guiGraphics, gui, 5 + editorDetectorTrack.getX() * 16, 5 + editorDetectorTrack.getY() * 16, 32, 128, 16, 16);
+                    editorDetectorTrack.drawOverlay(guiGraphics, texture, getModule(), gui, editorDetectorTrack.getX() * 16 + 8, editorDetectorTrack.getY() * 16 + 8, isRunning);
+                    getModule().drawImage(guiGraphics, texture, gui, 5 + editorDetectorTrack.getX() * 16, 5 + editorDetectorTrack.getY() * 16, 32, 128, 16, 16);
                 }
             }
             else
             {
                 for (final Track track : tracks)
                 {
-                    track.drawOverlay(guiGraphics, getModule(), gui, x, y, isRunning);
+                    track.drawOverlay(guiGraphics, texture, getModule(), gui, x, y, isRunning);
                 }
             }
             if (!isItemTaken)
@@ -400,27 +401,27 @@ public class ArcadeTracks extends ArcadeGame
                 {
                     itemIndex = 1;
                 }
-                getModule().drawImage(guiGraphics, gui, 5 + itemX * 16, 5 + itemY * 16, 16 * itemIndex, 240, 16, 16);
+                getModule().drawImage(guiGraphics, texture, gui, 5 + itemX * 16, 5 + itemY * 16, 16 * itemIndex, 240, 16, 16);
             }
             for (final Cart cart : carts)
             {
-                cart.render(guiGraphics, this, gui, tick);
+                cart.render(guiGraphics, texture, this, gui, tick);
             }
             if (isUsingEditor() && !isRunning)
             {
-                getModule().drawImage(guiGraphics, gui, 5 + playerStartX * 16, 5 + playerStartY * 16, 162, 212, 8, 8, playerStartDirection.getRenderRotation());
+                getModule().drawImage(guiGraphics, texture, gui, 5 + playerStartX * 16, 5 + playerStartY * 16, 162, 212, 8, 8, playerStartDirection.getRenderRotation());
             }
             if (!isMenuOpen && editorTrack != null)
             {
-                getModule().drawImage(guiGraphics, gui, x - 8, y - 8, 16 * editorTrack.getU(), 16 * editorTrack.getV(), 16, 16, editorTrack.getRotation());
+                getModule().drawImage(guiGraphics, texture, gui, x - 8, y - 8, 16 * editorTrack.getU(), 16 * editorTrack.getV(), 16, 16, editorTrack.getRotation());
             }
             if (isSaveMenuOpen)
             {
                 final int[] rect2 = getSaveMenuArea();
-                getModule().drawImage(guiGraphics, gui, rect2, 0, 144);
+                getModule().drawImage(guiGraphics, texture, gui, rect2, 0, 144);
             }
         }
-        ResourceHelper.bindResource(ArcadeTracks.textureGame);
+        ResourceLocation texture =  ResourceHelper.getResource(ArcadeTracks.textureGame);
         for (int i = 0; i < 14; ++i)
         {
             if (isButtonVisible(i))
@@ -428,7 +429,7 @@ public class ArcadeTracks extends ArcadeGame
                 final int[] rect = getButtonArea(i);
                 final int srcX = isButtonDisabled(i) ? 208 : (getModule().inRect(x, y, rect) ? 224 : 240);
                 final int srcY = i * 16;
-                getModule().drawImage(guiGraphics, gui, rect, srcX, srcY);
+                getModule().drawImage(guiGraphics, texture, gui, rect, srcX, srcY);
             }
         }
     }

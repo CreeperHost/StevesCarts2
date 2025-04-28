@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.invaders;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class Projectile extends Unit
@@ -14,15 +15,15 @@ public class Projectile extends Unit
     }
 
     @Override
-    public void draw(GuiGraphics guiGraphics, GuiMinecart gui)
+    public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui)
     {
         if (playerProjectile)
         {
-            game.getModule().drawImage(guiGraphics, gui, x, y, 38, 0, 5, 16);
+            game.getModule().drawImage(guiGraphics, texture, gui, x, y, 38, 0, 5, 16);
         }
         else
         {
-            game.getModule().drawImage(guiGraphics, gui, x, y, 32, 0, 6, 6);
+            game.getModule().drawImage(guiGraphics, texture, gui, x, y, 32, 0, 6, 6);
         }
     }
 

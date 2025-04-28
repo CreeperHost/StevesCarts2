@@ -7,6 +7,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
@@ -154,8 +155,8 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/shooter.png");
-        drawImage(guiGraphics, gui, pipeSelectionX + 9, pipeSelectionY + 9 - 1, 0, 104, 8, 9);
+        ResourceLocation texture = ResourceHelper.getResource("/gui/shooter.png");
+        drawImage(guiGraphics, texture, gui, pipeSelectionX + 9, pipeSelectionY + 9 - 1, 0, 104, 8, 9);
         for (int i = 0; i < pipes.size(); ++i)
         {
             final int pipe = pipes.get(i);
@@ -173,23 +174,23 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
             {
                 srcY += 26;
             }
-            drawImage(guiGraphics, gui, getRectForPipe(pipe), srcX, srcY);
+            drawImage(guiGraphics, texture, gui, getRectForPipe(pipe), srcX, srcY);
         }
-        drawImage(guiGraphics, gui, intervalSelection, 42, 52);
+        drawImage(guiGraphics, texture, gui, intervalSelection, 42, 52);
         final int size = (int) (getInterval() / AInterval.length * 4.0f);
         int targetX = intervalSelectionX + 7;
         final int targetY = intervalSelectionY + getInterval() * 2;
         int srcX2 = 0;
         final int srcY2 = 52 + size * 13;
-        drawImage(guiGraphics, gui, targetX, targetY, srcX2, srcY2, 25, 13);
+        drawImage(guiGraphics, texture, gui, targetX, targetY, srcX2, srcY2, 25, 13);
         srcX2 += 25;
         targetX += 7;
-        drawImage(guiGraphics, gui, targetX, targetY + 1, srcX2, srcY2 + 1, 1, 11);
-        drawImage(guiGraphics, gui, targetX + 1, targetY + 2, srcX2 + 1, srcY2 + 2, 1, 9);
-        drawImage(guiGraphics, gui, targetX + 1, targetY + 1, srcX2 + 1, srcY2 + 1, Math.min(getCooldownState(), 15), 2);
-        drawImage(guiGraphics, gui, targetX + 15, targetY + 1, srcX2 + 15, srcY2 + 1, 2, Math.max(Math.min(getCooldownState(), 25) - 15, 0));
+        drawImage(guiGraphics, texture, gui, targetX, targetY + 1, srcX2, srcY2 + 1, 1, 11);
+        drawImage(guiGraphics, texture, gui, targetX + 1, targetY + 2, srcX2 + 1, srcY2 + 2, 1, 9);
+        drawImage(guiGraphics, texture, gui, targetX + 1, targetY + 1, srcX2 + 1, srcY2 + 1, Math.min(getCooldownState(), 15), 2);
+        drawImage(guiGraphics, texture, gui, targetX + 15, targetY + 1, srcX2 + 15, srcY2 + 1, 2, Math.max(Math.min(getCooldownState(), 25) - 15, 0));
         final int len = Math.max(Math.min(getCooldownState(), 41) - 25, 0);
-        drawImage(guiGraphics, gui, targetX + 1 + (16 - len), targetY + 10, srcX2 + 1 + (16 - len), srcY2 + 10, len, 2);
+        drawImage(guiGraphics, texture, gui, targetX + 1 + (16 - len), targetY + 10, srcX2 + 1 + (16 - len), srcY2 + 10, len, 2);
     }
 
     private int getCurrentCooldownState()

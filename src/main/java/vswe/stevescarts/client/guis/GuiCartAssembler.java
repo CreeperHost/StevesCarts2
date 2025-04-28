@@ -154,7 +154,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureLeft, j, k, 0, 0, 256, imageHeight, 256, 256);
         guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureRight, j + 256, k, 0, 0, imageWidth - 256, imageHeight, 256, 256);
         guiGraphics.blit(RenderType::guiTextured, GuiCartAssembler.textureRight, j + 256, k, 0, 0, imageWidth - 256, imageHeight, 256, 256);
-        ResourceHelper.bindResource(GuiCartAssembler.textureExtra);
+//        ResourceHelper.bindResource(GuiCartAssembler.textureExtra);
         final ArrayList<SlotAssembler> slots = assembler.getSlots();
         for (final SlotAssembler slot : slots)
         {

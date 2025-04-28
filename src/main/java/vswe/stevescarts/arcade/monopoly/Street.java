@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.monopoly;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.EnumSet;
@@ -19,20 +20,20 @@ public class Street extends Property
     }
 
     @Override
-    public void draw(GuiGraphics guiGraphics, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
+    public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
     {
-        super.draw(guiGraphics, gui, states);
-        game.getModule().drawImage(guiGraphics, gui, 0, 0, 76, 0, 76, 22);
+        super.draw(guiGraphics, texture, gui, states);
+        game.getModule().drawImage(guiGraphics, texture, gui, 0, 0, 76, 0, 76, 22);
         if (structures > 0 && structures < 5)
         {
             for (int i = 0; i < structures; ++i)
             {
-                game.getModule().drawImage(guiGraphics, gui, 3 + i * 18, 3, 76, 22, 16, 16);
+                game.getModule().drawImage(guiGraphics, texture, gui, 3 + i * 18, 3, 76, 22, 16, 16);
             }
         }
         else if (structures == 5)
         {
-            game.getModule().drawImage(guiGraphics, gui, 3, 3, 92, 22, 16, 16);
+            game.getModule().drawImage(guiGraphics, texture, gui, 3, 3, 92, 22, 16, 16);
         }
         drawValue(guiGraphics, gui);
     }

@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -141,7 +142,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
-        ResourceHelper.bindResource("/gui/torch.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/torch.png");
         int barLength = 3 * light;
         if (light == 15) {
             --barLength;
@@ -150,9 +151,9 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
         if (inRect(x, y, boxRect)) {
             srcX += boxRect[2];
         }
-        drawImage(guiGraphics, gui, boxRect, srcX, 0);
-        drawImage(guiGraphics, gui, 13, guiHeight() - 10 + 1, 0, 9, barLength, 7);
-        drawImage(guiGraphics, gui, 12 + 3 * lightLimit, guiHeight() - 10, 0, 16, 1, 9);
+        drawImage(guiGraphics, texture, gui, boxRect, srcX, 0);
+        drawImage(guiGraphics, texture, gui, 13, guiHeight() - 10 + 1, 0, 9, barLength, 7);
+        drawImage(guiGraphics, texture, gui, 12 + 3 * lightLimit, guiHeight() - 10, 0, 16, 1, 9);
     }
 
     @Override

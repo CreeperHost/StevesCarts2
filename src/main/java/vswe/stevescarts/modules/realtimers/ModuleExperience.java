@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
@@ -121,7 +122,7 @@ public class ModuleExperience extends ModuleBase
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void drawContent(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y, final int id)
+    private void drawContent(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y, final int id)
     {
         final int lowerLevel = id * 1500 / 3;
         final int currentLevel = getExperienceAmount() - lowerLevel;
@@ -131,19 +132,19 @@ public class ModuleExperience extends ModuleBase
             part = 1.0f;
         }
         final int[] content = getContentRect(part);
-        drawImage(guiGraphics, gui, content, 4 + content[2] * (id + 1), content[4] - content[3]);
+        drawImage(guiGraphics, texture, gui, content, 4 + content[2] * (id + 1), content[4] - content[3]);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/experience.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/experience.png");
         for (int i = 0; i < 3; ++i)
         {
-            drawContent(guiGraphics, gui, x, y, i);
+            drawContent(guiGraphics, texture, gui, x, y, i);
         }
-        drawImage(guiGraphics, gui, getContainerRect(), 0, inRect(x, y, getContainerRect()) ? 65 : 0);
+        drawImage(guiGraphics, texture, gui, getContainerRect(), 0, inRect(x, y, getContainerRect()) ? 65 : 0);
     }
 
     @Override

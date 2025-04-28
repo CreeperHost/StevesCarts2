@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.tracks;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.ArrayList;
@@ -54,14 +55,14 @@ public class ScrollableList
     {
     }
 
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y)
     {
         if (!isVisible())
         {
             return;
         }
         final int[] menu = game.getMenuArea();
-        game.getModule().drawImage(guiGraphics, gui, menu[0] + this.x, menu[1] + this.y, 0, 192, 132, 64);
+        game.getModule().drawImage(guiGraphics, texture, gui, menu[0] + this.x, menu[1] + this.y, 0, 192, 132, 64);
         for (int i = 0; i < items.size(); ++i)
         {
             final int[] rect = getLevelButtonArea(i);
@@ -74,15 +75,15 @@ public class ScrollableList
                     srcY -= rect[4];
                     borderSrcY -= rect[4];
                 }
-                game.getModule().drawImage(guiGraphics, gui, rect, 146, srcY);
+                game.getModule().drawImage(guiGraphics, texture, gui, rect, 146, srcY);
                 if (i == selectedIndex)
                 {
-                    game.getModule().drawImage(guiGraphics, gui, rect, 146, borderSrcY);
+                    game.getModule().drawImage(guiGraphics, texture, gui, rect, 146, borderSrcY);
                 }
             }
         }
         final int[] area = getScrollArea();
-        game.getModule().drawImage(guiGraphics, gui, area[0], area[1] + scrollPosition, 132, 256 - ((items.size() >= 4) ? 32 : 16), 14, 16);
+        game.getModule().drawImage(guiGraphics, texture, gui, area[0], area[1] + scrollPosition, 132, 256 - ((items.size() >= 4) ? 32 : 16), 14, 16);
     }
 
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)

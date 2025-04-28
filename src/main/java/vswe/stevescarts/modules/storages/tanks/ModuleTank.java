@@ -184,9 +184,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
         tank.drawFluid(guiGraphics, gui, tankBounds[0], tankBounds[1]);
-        //TODO Replace with updated texture handling
-        ResourceHelper.bindResource("/gui/tank.png");
-        drawImage(guiGraphics, gui, tankBounds, 0, 0);
+        drawImage(guiGraphics, ResourceHelper.getResource("/gui/tank.png"), gui, tankBounds, 0, 0);
     }
 
     @OnlyIn(Dist.CLIENT)

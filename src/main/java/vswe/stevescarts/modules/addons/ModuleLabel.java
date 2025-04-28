@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
@@ -187,12 +188,12 @@ public class ModuleLabel extends ModuleAddon
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/label.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/label.png");
         for (int i = 0; i < labels.size(); ++i)
         {
             final int[] rect = getBoxArea(i);
-            drawImage(guiGraphics, gui, rect, isActive(i) ? 8 : 0, 0);
-            drawImage(guiGraphics, gui, rect, inRect(x, y, rect) ? 8 : 0, 8);
+            drawImage(guiGraphics, texture, gui, rect, isActive(i) ? 8 : 0, 0);
+            drawImage(guiGraphics, texture, gui, rect, inRect(x, y, rect) ? 8 : 0, 8);
         }
     }
 

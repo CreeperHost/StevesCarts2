@@ -3,6 +3,7 @@ package vswe.stevescarts.modules.addons;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -70,12 +71,12 @@ public class ModuleColorizer extends ModuleAddon
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/color.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/color.png");
         for (int i = 0; i < 3; ++i)
         {
-            drawMarker(guiGraphics, gui, x, y, i);
+            drawMarker(guiGraphics, texture, gui, x, y, i);
         }
-        drawImage(guiGraphics, gui, scrollWidth + 25, 29, 4, 7, 28, 28);
+        drawImage(guiGraphics, texture, gui, scrollWidth + 25, 29, 4, 7, 28, 28);
     }
 
     @Override
@@ -88,7 +89,7 @@ public class ModuleColorizer extends ModuleAddon
         }
     }
 
-    private void drawMarker(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y, final int id)
+    private void drawMarker(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y, final int id)
     {
         final float[] colorArea = new float[3];
         final float[] colorMarker = new float[3];
@@ -105,8 +106,8 @@ public class ModuleColorizer extends ModuleAddon
                 colorMarker[i] = 0.0f;
             }
         }
-        drawImage(guiGraphics, gui, getArea(id), 0, 0);
-        drawImage(guiGraphics, gui, getMovableMarker(id), 0, 7);
+        drawImage(guiGraphics, texture, gui, getArea(id), 0, 0);
+        drawImage(guiGraphics, texture, gui, getMovableMarker(id), 0, 7);
     }
 
     @Override

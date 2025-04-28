@@ -3,6 +3,7 @@ package vswe.stevescarts.client.guis;
 import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import net.creeperhost.polylib.client.modulargui.sprite.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -84,14 +85,13 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         guiGraphics.blit(RenderType::guiTextured, GuiMinecart.textureLeft, left, top, 0, 0, 256, 256, 256, 256);
         guiGraphics.blit(RenderType::guiTextured, GuiMinecart.textureRight, left + 256, top, 0, 0, imageWidth - 256, imageHeight, 256, 256);
         guiGraphics.flush(); //Need to flush because... Lets just say this entire gui is in desperate need of a complete overhaul...
-//        RenderSystem.setShaderTexture(0, GuiMinecart.textureRight);
 
         if (cart != null)
         {
             final ModuleBase thief = cart.getInterfaceThief();
             if (thief != null)
             {
-                drawModuleSlots(guiGraphics, thief);
+                drawModuleSlots(guiGraphics, GuiMinecart.textureRight, thief);
                 drawModuleBackground(guiGraphics, thief, mouseX, mouseY);
                 drawModuleBackgroundItems(guiGraphics, thief, mouseX, mouseY);
                 for (final ModuleBase module : cart.modules())
@@ -114,7 +114,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 
                 for (final ModuleBase module : cart.modules())
                 {
-                    drawModuleSlots(guiGraphics, module);
+                    drawModuleSlots(guiGraphics, GuiMinecart.textureRight, module);
                 }
 
                 for (final ModuleBase module : cart.modules())
@@ -400,7 +400,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         }
     }
 
-    private void drawModuleSlots(GuiGraphics guiGraphics, final ModuleBase module)
+    private void drawModuleSlots(GuiGraphics guiGraphics, ResourceLocation texture, final ModuleBase module)
     {
         if (module.hasGui() && module.hasSlots())
         {
@@ -419,10 +419,10 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
                 {
                     resetSlot(slot);
                 }
-                module.drawImage(guiGraphics, this, slot.getX(), slot.getY(), getXSize() - 256, 0, 18, 18);
+                module.drawImage(guiGraphics, texture, this, slot.getX(), slot.getY(), getXSize() - 256, 0, 18, 18);
                 if (!drawAll)
                 {
-                    module.drawImage(guiGraphics, this, slot.getX() + 1, slot.getY() + 1, getXSize() - 256 + 18, 1, 16, 16);
+                    module.drawImage(guiGraphics, texture, this, slot.getX() + 1, slot.getY() + 1, getXSize() - 256 + 18, 1, 16, 16);
                 }
             }
         }
@@ -511,7 +511,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         GuiHelper.popScissor();
     }
 
-    public void drawTexturedModalRect(GuiGraphics guiGraphics, final int x, final int y, final int u, final int v, final int w, final int h, final RENDER_ROTATION rotation)
+    public void drawTexturedModalRect(GuiGraphics guiGraphics, ResourceLocation texture, int x, int y, int u, int v, int w, int h, RENDER_ROTATION rotation)
     {
         final float fw = 0.00390625f;
         final float fy = 0.00390625f;
@@ -580,15 +580,14 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
             }
         }
 
-        //TODO texturing stuff
-//        RenderSystem.setShader(CoreShaders.POSITION_TEX);
-//        BufferBuilder buff = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-//        Matrix4f mat = guiGraphics.pose().last().pose();
-//        buff.addVertex(mat, (x), y + h, 0).setUv((float) pt1[0], (float) pt1[1]);
-//        buff.addVertex(mat, (x + w), y + h, 0).setUv((float) pt2[0], (float) pt2[1]);
-//        buff.addVertex(mat, (x + w), y, 0).setUv((float) pt3[0], (float) pt3[1]);
-//        buff.addVertex(mat, (x), y, 0).setUv((float) pt4[0], (float) pt4[1]);
-//        BufferUploader.drawWithShader(buff.buildOrThrow());
+        guiGraphics.drawSpecial(buffer -> {
+            VertexConsumer consumer = buffer.getBuffer(RenderType.guiTextured(texture));
+            Matrix4f mat = guiGraphics.pose().last().pose();
+            consumer.addVertex(mat, (x), y + h, 0).setUv((float) pt1[0], (float) pt1[1]).setColor(0xFFFFFFFF);
+            consumer.addVertex(mat, (x + w), y + h, 0).setUv((float) pt2[0], (float) pt2[1]).setColor(0xFFFFFFFF);
+            consumer.addVertex(mat, (x + w), y, 0).setUv((float) pt3[0], (float) pt3[1]).setColor(0xFFFFFFFF);
+            consumer.addVertex(mat, (x), y, 0).setUv((float) pt4[0], (float) pt4[1]).setColor(0xFFFFFFFF);
+        });
     }
 
     public enum RENDER_ROTATION

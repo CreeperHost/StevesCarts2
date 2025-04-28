@@ -8,6 +8,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -358,44 +359,44 @@ public class ModuleNote extends ModuleBase
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/note.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/note.png");
         for (int i = getScrollY(); i < Math.min(tracks.size(), getScrollY() + tracksInView); ++i)
         {
             final Track track = tracks.get(i);
             for (int j = getScrollX(); j < Math.min(track.notes.size(), getScrollX() + notesInView); ++j)
             {
                 final Note note = track.notes.get(j);
-                note.draw(guiGraphics, gui, x, y, i - getScrollY(), j - getScrollX());
+                note.draw(guiGraphics, texture, gui, x, y, i - getScrollY(), j - getScrollX());
             }
         }
         for (final Button button : buttons)
         {
-            button.draw(guiGraphics, gui, x, y);
+            button.draw(guiGraphics, texture, gui, x, y);
         }
         if (tooLongTrack)
         {
-            drawImage(guiGraphics, gui, scrollXrect, 48, 0);
+            drawImage(guiGraphics, texture, gui, scrollXrect, 48, 0);
             int[] marker = getMarkerX();
-            drawImage(guiGraphics, gui, marker, 148, 1);
+            drawImage(guiGraphics, texture, gui, marker, 148, 1);
             if (veryLongTrack)
             {
                 marker = getMarkerXTune();
-                drawImage(guiGraphics, gui, marker, 153, 1);
+                drawImage(guiGraphics, texture, gui, marker, 153, 1);
             }
         }
         else
         {
-            drawImage(guiGraphics, gui, scrollXrect, 48, 16);
+            drawImage(guiGraphics, texture, gui, scrollXrect, 48, 16);
         }
         if (tooTallModule)
         {
-            drawImage(guiGraphics, gui, scrollYrect, 0, 48);
+            drawImage(guiGraphics, texture, gui, scrollYrect, 0, 48);
             final int[] marker = getMarkerY();
-            drawImage(guiGraphics, gui, marker, 1, 148);
+            drawImage(guiGraphics, texture, gui, marker, 1, 148);
         }
         else
         {
-            drawImage(guiGraphics, gui, scrollYrect, 16, 48);
+            drawImage(guiGraphics, texture, gui, scrollYrect, 16, 48);
         }
     }
 
@@ -841,11 +842,11 @@ public class ModuleNote extends ModuleBase
         }
 
         @Override
-        public void draw(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
+        public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y)
         {
             if (isValid())
             {
-                super.draw(guiGraphics, gui, x, y);
+                super.draw(guiGraphics, texture, gui, x, y);
             }
         }
 
@@ -903,14 +904,14 @@ public class ModuleNote extends ModuleBase
             }
         }
 
-        public void draw(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
+        public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y)
         {
             if (!inRect(x, y, getRect()))
             {
                 //TODO
                 //                GlStateManager._color4f((color >> 16) / 255.0f, (color >> 8 & 0xFF) / 255.0f, (color & 0xFF) / 255.0f, 1.0f);
             }
-            drawImage(guiGraphics, gui, getRect(), 32, 0);
+            drawImage(guiGraphics, texture, gui, getRect(), 32, 0);
             //TODO
             //            GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
             int srcX = 0;
@@ -919,10 +920,10 @@ public class ModuleNote extends ModuleBase
             {
                 srcX += 16;
             }
-            drawImage(guiGraphics, gui, getRect(), srcX, srcY);
+            drawImage(guiGraphics, texture, gui, getRect(), srcX, srcY);
             if (imageID != -1)
             {
-                drawImage(guiGraphics, gui, getRect(), imageID * 16, 32);
+                drawImage(guiGraphics, texture, gui, getRect(), imageID * 16, 32);
             }
         }
     }
@@ -952,7 +953,7 @@ public class ModuleNote extends ModuleBase
             drawString(guiGraphics, gui, str, rect[0] + 3, rect[1] + 6, instrumentColors[instrumentId]);
         }
 
-        public void draw(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y, final int trackID, final int noteID)
+        public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y, final int trackID, final int noteID)
         {
             int srcX = 0;
             if (instrumentId == 0)
@@ -961,10 +962,10 @@ public class ModuleNote extends ModuleBase
             }
             final int[] rect = getBounds(trackID, noteID);
 
-            drawImage(guiGraphics, gui, rect, srcX, 0);
+            drawImage(guiGraphics, texture, gui, rect, srcX, 0);
             if (inRect(x, y, rect))
             {
-                drawImage(guiGraphics, gui, rect, 32, 0);
+                drawImage(guiGraphics, texture, gui, rect, 32, 0);
             }
         }
 

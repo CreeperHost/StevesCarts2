@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.tetris;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import vswe.stevescarts.SCConfig;
@@ -129,11 +130,11 @@ public class TetrisPiece
         return parts;
     }
 
-    public void render(GuiGraphics guiGraphics, ArcadeTetris game, final GuiMinecart gui)
+    public void render(GuiGraphics guiGraphics, ResourceLocation texture, ArcadeTetris game, final GuiMinecart gui)
     {
         for (int i = 0; i < parts.length; ++i)
         {
-            parts[i].render(guiGraphics, game, gui, x, y);
+            parts[i].render(guiGraphics, texture, game, gui, x, y);
         }
     }
 

@@ -2,6 +2,7 @@ package vswe.stevescarts.arcade.invaders;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -231,34 +232,34 @@ public class ArcadeInvaders extends ArcadeGame
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource(ArcadeInvaders.texture);
+        ResourceLocation texture = ResourceHelper.getResource(ArcadeInvaders.texture);
         for (int i = 0; i < 27; ++i)
         {
-            getModule().drawImage(guiGraphics, gui, 5 + i * 16, 150, 16, 32, 16, 16);
+            getModule().drawImage(guiGraphics, texture, gui, 5 + i * 16, 150, 16, 32, 16, 16);
         }
         for (int i = 0; i < 5; ++i)
         {
-            getModule().drawImage(guiGraphics, gui, 3 + i * 16, 190, 16, 32, 16, 16);
+            getModule().drawImage(guiGraphics, texture, gui, 3 + i * 16, 190, 16, 32, 16, 16);
         }
         for (final Unit invader : invaders)
         {
-            invader.draw(guiGraphics, gui);
+            invader.draw(guiGraphics, texture, gui);
         }
         if (player != null)
         {
-            player.draw(guiGraphics, gui);
+            player.draw(guiGraphics, texture, gui);
         }
         for (final Unit player : lives)
         {
-            player.draw(guiGraphics, gui);
+            player.draw(guiGraphics, texture, gui);
         }
         for (final Unit projectile : projectiles)
         {
-            projectile.draw(guiGraphics, gui);
+            projectile.draw(guiGraphics, texture, gui);
         }
         for (final Unit building : buildings)
         {
-            building.draw(guiGraphics, gui);
+            building.draw(guiGraphics, texture, gui);
         }
     }
 

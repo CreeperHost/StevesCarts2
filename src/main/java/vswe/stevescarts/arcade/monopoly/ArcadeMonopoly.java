@@ -2,6 +2,7 @@ package vswe.stevescarts.arcade.monopoly;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
@@ -588,15 +589,15 @@ public class ArcadeMonopoly extends ArcadeGame
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         PoseStack matrixStack = guiGraphics.pose();
-        loadTexture(gui, 1);
-        die.draw(guiGraphics, gui, 20, 20);
-        die2.draw(guiGraphics, gui, 50, 20);
+        ResourceLocation texture = getTexture(gui, 1);
+        die.draw(guiGraphics, texture, gui, 20, 20);
+        die2.draw(guiGraphics, texture, gui, 50, 20);
         final float smallgridX = x / 0.17f - 686.94116f;
         final float smallgridY = y / 0.17f - 30.117645f;
         boolean foundHover = false;
         if (selectedPlace != -1)
         {
-            drawPropertyOnBoardWithPositionRotationAndScale(guiGraphics, gui, places[selectedPlace], selectedPlace, true, false, (int) ((590.6666666666666 - ((getId(selectedPlace) == 0) ? 122 : 76)) / 2.0), 51, 0, 0.75f);
+            drawPropertyOnBoardWithPositionRotationAndScale(guiGraphics, texture, gui, places[selectedPlace], selectedPlace, true, false, (int) ((590.6666666666666 - ((getId(selectedPlace) == 0) ? 122 : 76)) / 2.0), 51, 0, 0.75f);
         }
         for (int i = 0; i < places.length; ++i)
         {
@@ -604,22 +605,22 @@ public class ArcadeMonopoly extends ArcadeGame
             {
                 if (selectedPlace == -1)
                 {
-                    drawPropertyOnBoardWithPositionRotationAndScale(guiGraphics, gui, places[i], i, true, false, (int) ((590.6666666666666 - ((getId(i) == 0) ? 122 : 76)) / 2.0), 51, 0, 0.75f);
+                    drawPropertyOnBoardWithPositionRotationAndScale(guiGraphics, texture, gui, places[i], i, true, false, (int) ((590.6666666666666 - ((getId(i) == 0) ? 122 : 76)) / 2.0), 51, 0, 0.75f);
                 }
                 foundHover = true;
-                drawPropertyOnBoard(guiGraphics, gui, places[i], i, getSide(i), getId(i), true);
+                drawPropertyOnBoard(guiGraphics, texture, gui, places[i], i, getSide(i), getId(i), true);
             }
             else
             {
-                drawPropertyOnBoard(guiGraphics, gui, places[i], i, getSide(i), getId(i), false);
+                drawPropertyOnBoard(guiGraphics, texture, gui, places[i], i, getSide(i), getId(i), false);
             }
         }
         for (int i = 0; i < pieces.size(); ++i)
         {
             final Piece piece = pieces.get(i);
-            loadTexture(gui, 1);
             final int[] menu = piece.getMenuRect(i);
-            getModule().drawImage(guiGraphics, gui, menu, 0, 122);
+            ResourceLocation texture2 = getTexture(gui, 1);
+            getModule().drawImage(guiGraphics, texture2, gui, menu, 0, 122);
             for (int j = 0; j < 3; ++j)
             {
                 int v = 0;
@@ -641,10 +642,10 @@ public class ArcadeMonopoly extends ArcadeGame
                         break;
                     }
                 }
-                getModule().drawImage(guiGraphics, gui, menu[0] + 3, menu[1] + 3 + j * 9, j * 12, 152 + 6 * v, 12, 6);
+                getModule().drawImage(guiGraphics, texture2, gui, menu[0] + 3, menu[1] + 3 + j * 9, j * 12, 152 + 6 * v, 12, 6);
             }
             final int[] player = piece.getPlayerMenuRect(i);
-            getModule().drawImage(guiGraphics, gui, player, 232, 24 * piece.getV());
+            getModule().drawImage(guiGraphics, texture2, gui, player, 232, 24 * piece.getV());
             Note.drawPlayerValue(guiGraphics, this, gui, menu[0] + 50, menu[1] + 2, piece.getNoteCount());
             for (int k = piece.getAnimationNotes().size() - 1; k >= 0; --k)
             {
@@ -661,7 +662,7 @@ public class ArcadeMonopoly extends ArcadeGame
             }
             piece.updateExtending(getModule().inRect(x, y, menu));
         }
-        loadTexture(gui, 1);
+        ResourceLocation texture3 = getTexture(gui, 1);
         int id = 0;
         for (final Button button : buttons)
         {
@@ -677,7 +678,7 @@ public class ArcadeMonopoly extends ArcadeGame
                 {
                     v = 2;
                 }
-                getModule().drawImage(guiGraphics, gui, rect, 152, v * 18);
+                getModule().drawImage(guiGraphics, texture3, gui, rect, 152, v * 18);
             }
         }
         if (getSelectedPlace() != null)
@@ -685,16 +686,16 @@ public class ArcadeMonopoly extends ArcadeGame
             if (getSelectedPlace() instanceof Street)
             {
                 final Street street = (Street) getSelectedPlace();
-                getModule().drawImage(guiGraphics, gui, 32, 185, 76, 22, 16, 16);
+                getModule().drawImage(guiGraphics, texture3, gui, 32, 185, 76, 22, 16, 16);
                 if (street.getOwner() != null && !street.isMortgaged())
                 {
                     if (street.getStructureCount() == 0)
                     {
-                        getModule().drawImage(guiGraphics, gui, 7, street.ownsAllInGroup(street.getOwner()) ? 241 : 226, 124, 22, 5, 10);
+                        getModule().drawImage(guiGraphics, texture3, gui, 7, street.ownsAllInGroup(street.getOwner()) ? 241 : 226, 124, 22, 5, 10);
                     }
                     else
                     {
-                        getModule().drawImage(guiGraphics, gui, 323, 172 + (street.getStructureCount() - 1) * 17, 124, 22, 5, 10);
+                        getModule().drawImage(guiGraphics, texture3, gui, 323, 172 + (street.getStructureCount() - 1) * 17, 124, 22, 5, 10);
                     }
                 }
                 for (int l = 1; l <= 5; ++l)
@@ -711,7 +712,7 @@ public class ArcadeMonopoly extends ArcadeGame
                 final Station station = (Station) getSelectedPlace();
                 if (station.getOwner() != null && !station.isMortgaged())
                 {
-                    getModule().drawImage(guiGraphics, gui, 323, 184 + (station.getOwnedInGroup() - 1) * 17, 124, 22, 5, 10);
+                    getModule().drawImage(guiGraphics, texture3, gui, 323, 184 + (station.getOwnedInGroup() - 1) * 17, 124, 22, 5, 10);
                 }
                 Note.drawValue(guiGraphics, this, gui, 62, 170, 3, station.getMortgageValue());
                 for (int l = 1; l <= 4; ++l)
@@ -724,7 +725,7 @@ public class ArcadeMonopoly extends ArcadeGame
                 final Utility utility = (Utility) getSelectedPlace();
                 if (utility.getOwner() != null && !utility.isMortgaged())
                 {
-                    getModule().drawImage(guiGraphics, gui, 323, 184 + (utility.getOwnedInGroup() - 1) * 17, 124, 22, 5, 10);
+                    getModule().drawImage(guiGraphics, texture3, gui, 323, 184 + (utility.getOwnedInGroup() - 1) * 17, 124, 22, 5, 10);
                 }
                 Note.drawValue(guiGraphics, this, gui, 62, 170, 3, utility.getMortgageValue());
                 for (int l = 1; l <= 3; ++l)
@@ -767,9 +768,8 @@ public class ArcadeMonopoly extends ArcadeGame
         matrixStack.scale(s, s, 1.0f);
 //        matrixStack.mulPose(cardRotation + (isFront ? 0 : 180), 0.0f, 1.0f, 0.0f);
         matrixStack.translate(-posX, -posY, 0.0f);
-        loadTexture(gui, 0);
         final int[] rect = {0, 0, 142, 80};
-        currentCard.render(this, guiGraphics,  gui, rect, isFront);
+        currentCard.render(this, guiGraphics, getTexture(gui, 0), gui, rect, isFront);
         matrixStack.popPose();
     }
 
@@ -811,7 +811,7 @@ public class ArcadeMonopoly extends ArcadeGame
 
     private void drawStreetRent(GuiGraphics guiGraphics, GuiMinecart gui, final Street street, final int structures)
     {
-        loadTexture(gui, 1);
+        ResourceLocation texture = getTexture(gui, 1);
         int graphicalStructures = structures;
         int u = 0;
         if (graphicalStructures == 5)
@@ -822,29 +822,29 @@ public class ArcadeMonopoly extends ArcadeGame
         final int yPos = 169 + (structures - 1) * 17;
         for (int i = 0; i < graphicalStructures; ++i)
         {
-            getModule().drawImage(guiGraphics, gui, 330 + i * 6, yPos, 76 + u * 16, 22, 16, 16);
+            getModule().drawImage(guiGraphics, texture, gui, 330 + i * 6, yPos, 76 + u * 16, 22, 16, 16);
         }
         Note.drawValue(guiGraphics, this, gui, 370, yPos, 3, street.getRentCost(structures));
     }
 
     private void drawStationRent(GuiGraphics guiGraphics, GuiMinecart gui, final Station station, final int ownedStations)
     {
-        loadTexture(gui, 1);
+        ResourceLocation texture = getTexture(gui, 1);
         final int yPos = 181 + (ownedStations - 1) * 17;
         for (int i = 0; i < ownedStations; ++i)
         {
-            getModule().drawImage(guiGraphics, gui, 330 + i * 16, yPos, 76 + i * 16, 70, 16, 16);
+            getModule().drawImage(guiGraphics, texture, gui, 330 + i * 16, yPos, 76 + i * 16, 70, 16, 16);
         }
         Note.drawValue(guiGraphics, this, gui, 410, yPos, 2, station.getRentCost(ownedStations));
     }
 
     private void drawUtilityRent(GuiGraphics guiGraphics, GuiMinecart gui, final Utility utility, final int utils)
     {
-        loadTexture(gui, 1);
+        ResourceLocation texture = getTexture(gui, 1);
         final int yPos = 181 + (utils - 1) * 17;
         for (int i = 0; i < utils; ++i)
         {
-            getModule().drawImage(guiGraphics, gui, 330 + i * 16, yPos, 76 + i * 16, 86, 16, 16);
+            getModule().drawImage(guiGraphics, texture, gui, 330 + i * 16, yPos, 76 + i * 16, 86, 16, 16);
         }
         Note.drawValue(guiGraphics, this, gui, 400, yPos, 2, utility.getRentCost(utils));
     }
@@ -939,7 +939,7 @@ public class ArcadeMonopoly extends ArcadeGame
         }
     }
 
-    private void drawPropertyOnBoard(GuiGraphics guiGraphics, GuiMinecart gui, final Place place, final int id, final int side, int i, final boolean hover)
+    private void drawPropertyOnBoard(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final Place place, final int id, final int side, int i, final boolean hover)
     {
         int offX = 0;
         int offY = 0;
@@ -1015,10 +1015,10 @@ public class ArcadeMonopoly extends ArcadeGame
         }
         offX += 686;
         offY += 30;
-        drawPropertyOnBoardWithPositionRotationAndScale(guiGraphics, gui, place, id, false, hover, offX, offY, rotation, 0.17f);
+        drawPropertyOnBoardWithPositionRotationAndScale(guiGraphics, texture, gui, place, id, false, hover, offX, offY, rotation, 0.17f);
     }
 
-    private void drawPropertyOnBoardWithPositionRotationAndScale(GuiGraphics guiGraphics, GuiMinecart gui, final Place place, final int id, final boolean zoom, final boolean hover, final int x, final int y, final int r, final float s)
+    private void drawPropertyOnBoardWithPositionRotationAndScale(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final Place place, final int id, final boolean zoom, final boolean hover, final int x, final int y, final int r, final float s)
     {
         final EnumSet<Place.PLACE_STATE> states = EnumSet.noneOf(Place.PLACE_STATE.class);
         if (zoom)
@@ -1047,7 +1047,7 @@ public class ArcadeMonopoly extends ArcadeGame
         //		GlStateManager._scalef(s, s, 1.0f);
         //		GlStateManager._rotatef(r, 0.0f, 0.0f, 1.0f);
         //		GlStateManager._translatef(-posX, -posY, 0.0f);
-        place.draw(guiGraphics, gui, states);
+        place.draw(guiGraphics, texture, gui, states);
         final int[] total = new int[place.getPieceAreaCount()];
         for (int i = 0; i < pieces.size(); ++i)
         {
@@ -1063,9 +1063,9 @@ public class ArcadeMonopoly extends ArcadeGame
         {
             if (!pieces.get(j).isBankrupt() && pieces.get(j).getPosition() == id)
             {
-                loadTexture(gui, 1);
+                getTexture(gui, 1);
                 final int area = place.getPieceAreaForPiece(pieces.get(j));
-                place.drawPiece(guiGraphics, gui, pieces.get(j), total[area], pos[area]++, area, states);
+                place.drawPiece(guiGraphics, texture, gui, pieces.get(j), total[area], pos[area]++, area, states);
             }
         }
         place.drawText(guiGraphics, gui, states);
@@ -1124,9 +1124,9 @@ public class ArcadeMonopoly extends ArcadeGame
         selectedPlace = -1;
     }
 
-    public void loadTexture(final GuiMinecart gui, final int number)
+    public ResourceLocation getTexture(final GuiMinecart gui, final int number)
     {
-        ResourceHelper.bindResource(ArcadeMonopoly.textures[number]);
+        return ResourceHelper.getResource(ArcadeMonopoly.textures[number]);
     }
 
     public Place[] getPlaces()

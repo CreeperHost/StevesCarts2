@@ -36,8 +36,7 @@ public class Note
 
     public void draw(GuiGraphics guiGraphics, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y)
     {
-        game.loadTexture(gui, 1);
-        game.getModule().drawImage(guiGraphics, gui, x, y, 76 + u * 16, 38 + v * 16, 16, 16);
+        game.getModule().drawImage(guiGraphics, game.getTexture(gui, 1), gui, x, y, 76 + u * 16, 38 + v * 16, 16, 16);
     }
 
     public void draw(GuiGraphics guiGraphics, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount)
@@ -53,8 +52,7 @@ public class Note
 
     public void drawPlayer(GuiGraphics guiGraphics, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount)
     {
-        game.loadTexture(gui, 1);
-        game.drawImageInArea(guiGraphics, gui, x, y, 76 + u * 16, 38 + v * 16, 16, 16);
+        game.drawImageInArea(guiGraphics, game.getTexture(gui, 1), gui, x, y, 76 + u * 16, 38 + v * 16, 16, 16);
         if (x + 16 < 443)
         {
             game.getModule().drawString(guiGraphics, gui, String.valueOf(amount), x + gui.getGuiLeft(), y + 17 + gui.getGuiTop(), 16, true, 4210752);

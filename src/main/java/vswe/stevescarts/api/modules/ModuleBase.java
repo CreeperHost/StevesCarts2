@@ -32,6 +32,7 @@ import net.neoforged.fml.i18n.FMLTranslations;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.data.ModuleData;
@@ -593,9 +594,9 @@ public abstract class ModuleBase
      * @param sizeY   The height of the image
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY)
+    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY)
     {
-        drawImage(guiGraphics, gui, targetX, targetY, srcX, srcY, sizeX, sizeY, GuiMinecart.RENDER_ROTATION.NORMAL);
+        drawImage(guiGraphics, texture, gui, targetX, targetY, srcX, srcY, sizeX, sizeY, GuiMinecart.RENDER_ROTATION.NORMAL);
     }
 
     /**
@@ -611,9 +612,9 @@ public abstract class ModuleBase
      * @param rotation The rotation this will be drawn with
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY, final GuiMinecart.RENDER_ROTATION rotation)
+    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY, final GuiMinecart.RENDER_ROTATION rotation)
     {
-        drawImage(guiGraphics, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY, rotation);
+        drawImage(guiGraphics, texture, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY, rotation);
     }
 
 
@@ -626,9 +627,9 @@ public abstract class ModuleBase
      * @param srcY They y coordinate in the source file
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final int[] rect, final int srcX, final int srcY)
+    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, final GuiMinecart gui, final int[] rect, final int srcX, final int srcY)
     {
-        drawImage(guiGraphics, gui, rect, srcX, srcY, GuiMinecart.RENDER_ROTATION.NORMAL);
+        drawImage(guiGraphics, texture, gui, rect, srcX, srcY, GuiMinecart.RENDER_ROTATION.NORMAL);
     }
 
     /**
@@ -641,7 +642,7 @@ public abstract class ModuleBase
      * @param rotation The rotation this will be drawn with
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, int[] rect, final int srcX, int srcY, final GuiMinecart.RENDER_ROTATION rotation)
+    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, final GuiMinecart gui, int[] rect, final int srcX, int srcY, final GuiMinecart.RENDER_ROTATION rotation)
     {
         if (rect.length < 4)
         {
@@ -654,7 +655,7 @@ public abstract class ModuleBase
         }
         if (rect[3] > 0)
         {
-            gui.drawTexturedModalRect(guiGraphics, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), srcX, srcY, rect[2], rect[3], rotation);
+            gui.drawTexturedModalRect(guiGraphics, texture, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), srcX, srcY, rect[2], rect[3], rotation);
         }
     }
 
@@ -1548,17 +1549,17 @@ public abstract class ModuleBase
         gui.drawMouseOver(guiGraphics, str, x, y);
     }
 
-    /**
-     * Draws an image overlay on the screen. Observe that this is not when a special interface is open.
-     *
-     * @param rect    The rectangle for the image's dimensions {targetX, targetY, width, height}
-     * @param sourceX The x coordinate in the source file
-     * @param sourceY The y coordinate in the source file
-     */
-    protected void drawImage(final int[] rect, final int sourceX, final int sourceY)
-    {
-        drawImage(rect[0], rect[1], sourceX, sourceY, rect[2], rect[3]);
-    }
+//    /**
+//     * Draws an image overlay on the screen. Observe that this is not when a special interface is open.
+//     *
+//     * @param rect    The rectangle for the image's dimensions {targetX, targetY, width, height}
+//     * @param sourceX The x coordinate in the source file
+//     * @param sourceY The y coordinate in the source file
+//     */
+//    protected void drawImage(final int[] rect, final int sourceX, final int sourceY)
+//    {
+//        drawImage(rect[0], rect[1], sourceX, sourceY, rect[2], rect[3]);
+//    }
 
     /**
      * Draws an image overlay on the screen. Observe that this is not when a special interface is open.
@@ -1570,21 +1571,20 @@ public abstract class ModuleBase
      * @param width   The width of the image
      * @param height  The height of the image
      */
-    protected void drawImage(int targetX, int targetY, int sourceX, int sourceY, int width, int height)
+    protected void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, int targetX, int targetY, int sourceX, int sourceY, int width, int height)
     {
         final float var7 = 0.00390625f;
         final float var8 = 0.00390625f;
 
-        //TODO Draw Image, will need to do sprite stuff i think.
-        //formatter:off
-//        RenderSystem.setShader(CoreShaders.POSITION_TEX);
-//        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-//        bufferbuilder.addVertex(targetX,           targetY + height, 	-90F).setUv((float) sourceX * var7,            (float)(sourceY + height) * var8);
-//        bufferbuilder.addVertex(targetX + width,   targetY + height, 	-90F).setUv((float)(sourceX + width) * var7,   (float)(sourceY + height) * var8);
-//        bufferbuilder.addVertex(targetX + width,   targetY, 			-90F).setUv((float)(sourceX + width) * var7,   (float) sourceY * var8);
-//        bufferbuilder.addVertex(targetX,           targetY, 			-90F).setUv((float) sourceX * var7,            (float) sourceY * var8);
-//        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
-        //formatter:on
+        guiGraphics.drawSpecial(buffer -> {
+            VertexConsumer consumer = buffer.getBuffer(RenderType.guiTextured(texture));
+            //formatter:off
+            consumer.addVertex(targetX,           targetY + height, 	-90F).setUv((float) sourceX * var7,            (float)(sourceY + height) * var8).setColor(0xFFFFFFFF);
+            consumer.addVertex(targetX + width,   targetY + height, 	-90F).setUv((float)(sourceX + width) * var7,   (float)(sourceY + height) * var8).setColor(0xFFFFFFFF);
+            consumer.addVertex(targetX + width,   targetY, 			    -90F).setUv((float)(sourceX + width) * var7,   (float) sourceY * var8).setColor(0xFFFFFFFF);
+            consumer.addVertex(targetX,           targetY, 			    -90F).setUv((float) sourceX * var7,            (float) sourceY * var8).setColor(0xFFFFFFFF);
+            //formatter:on
+        });
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -126,8 +126,6 @@ public abstract class ButtonBase
             module.buttonVisibilityChanged();
         }
         lastVisibility = visibility;
-        //TODO Replace with updated texture handling
-        ResourceHelper.bindResource(ButtonBase.texture);
         if (!visibility)
         {
             return;
@@ -142,14 +140,14 @@ public abstract class ButtonBase
         {
             sourceY += 20;
         }
-        module.drawImage(guiGraphics, gui, getBounds(), sourceX, sourceY);
+        module.drawImage(guiGraphics, ButtonBase.texture, gui, getBounds(), sourceX, sourceY);
         if (useTexture())
         {
-            module.drawImage(guiGraphics, gui, X() + 4, Y() + 4, textureX(), textureY(), 12, 12);
+            module.drawImage(guiGraphics, ButtonBase.texture, gui, X() + 4, Y() + 4, textureX(), textureY(), 12, 12);
         }
         if (hasBorder())
         {
-            module.drawImage(guiGraphics, gui, getBounds(), borderID() * 20, 0);
+            module.drawImage(guiGraphics, ButtonBase.texture, gui, getBounds(), borderID() * 20, 0);
         }
     }
 

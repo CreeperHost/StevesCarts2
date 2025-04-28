@@ -7,6 +7,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -119,11 +120,11 @@ public class ModuleDynamite extends ModuleBase
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/explosions.png");
-        drawImage(guiGraphics, gui, fuseStartX, fuseStartY + 3, 12, 0, 105, 4);
-        drawImage(guiGraphics, gui, fuseStartX + 105, fuseStartY - 4, 0, 10, 16, 16);
-        drawImage(guiGraphics, gui, fuseStartX + (int) (105.0f * (1.0f - (getFuseLength() - getFuse()) / 150.0f)), fuseStartY, isPrimed() ? 8 : 4, 0, 4, 10);
-        drawImage(guiGraphics, gui, getMovableMarker(), 0, 0);
+        ResourceLocation texture = ResourceHelper.getResource("/gui/explosions.png");
+        drawImage(guiGraphics, texture, gui, fuseStartX, fuseStartY + 3, 12, 0, 105, 4);
+        drawImage(guiGraphics, texture, gui, fuseStartX + 105, fuseStartY - 4, 0, 10, 16, 16);
+        drawImage(guiGraphics, texture, gui, fuseStartX + (int) (105.0f * (1.0f - (getFuseLength() - getFuse()) / 150.0f)), fuseStartY, isPrimed() ? 8 : 4, 0, 4, 10);
+        drawImage(guiGraphics, texture, gui, getMovableMarker(), 0, 0);
     }
 
     @Override

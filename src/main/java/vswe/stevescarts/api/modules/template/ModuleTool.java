@@ -69,22 +69,22 @@ public abstract class ModuleTool extends ModuleWorker
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/tool.png");
-        drawBox(guiGraphics, gui, 0, 0, 1.0f);
-        drawBox(guiGraphics, gui, 0, 8, useDurability() ? (((float) getCurrentDurability()) / ((float) getMaxDurability())) : 1.0f);
-        drawBox(guiGraphics, gui, 0, 16, ((float) remainingRepairUnits) / ((float) maximumRepairUnits));
+        ResourceLocation texture = ResourceHelper.getResource("/gui/tool.png");
+        drawBox(guiGraphics, texture, gui, 0, 0, 1.0f);
+        drawBox(guiGraphics, texture, gui, 0, 8, useDurability() ? (((float) getCurrentDurability()) / ((float) getMaxDurability())) : 1.0f);
+        drawBox(guiGraphics, texture, gui, 0, 16, ((float) remainingRepairUnits) / ((float) maximumRepairUnits));
         if (inRect(x, y, durabilityRect))
         {
-            drawBox(guiGraphics, gui, 0, 24, 1.0f);
+            drawBox(guiGraphics, texture, gui, 0, 24, 1.0f);
         }
     }
 
-    private void drawBox(GuiGraphics guiGraphics, GuiMinecart gui, final int u, final int v, final float mult)
+    private void drawBox(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int u, final int v, final float mult)
     {
         final int w = (int) (durabilityRect[2] * mult);
         if (w > 0)
         {
-            drawImage(guiGraphics, gui, durabilityRect[0], durabilityRect[1], u, v, w, durabilityRect[3]);
+            drawImage(guiGraphics, texture, gui, durabilityRect[0], durabilityRect[1], u, v, w, durabilityRect[3]);
         }
     }
 

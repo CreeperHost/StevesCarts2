@@ -3,6 +3,7 @@ package vswe.stevescarts.modules.addons;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -131,7 +132,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     @OnlyIn(Dist.CLIENT)
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/intelligence.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/intelligence.png");
         final int w = getDrillWidth();
         final int h = getDrillHeight();
         for (int i = 0; i < w; ++i)
@@ -143,22 +144,22 @@ public class ModuleDrillIntelligence extends ModuleAddon
 
                 int srcX = (!hasHeightController || (j != maxY && j != h - 1)) ? 0 : 8;
                 int srcY = 0;
-                drawImage(guiGraphics, gui, rect, srcX, srcY);
+                drawImage(guiGraphics, texture, gui, rect, srcX, srcY);
                 if (isRestricted(j * w + i))
                 {
                     srcX = 16;
                     srcY = 8;
-                    drawImage(guiGraphics, gui, rect, srcX, srcY);
+                    drawImage(guiGraphics, texture, gui, rect, srcX, srcY);
                 }
                 else if (isActive(j * w + i))
                 {
                     srcX = (isLocked(j * w + i) ? 8 : 0);
                     srcY = 8;
-                    drawImage(guiGraphics, gui, rect, srcX, srcY);
+                    drawImage(guiGraphics, texture, gui, rect, srcX, srcY);
                 }
                 srcX = (inRect(x, y, rect) ? 8 : 0);
                 srcY = 16;
-                drawImage(guiGraphics, gui, rect, srcX, srcY);
+                drawImage(guiGraphics, texture, gui, rect, srcX, srcY);
             }
         }
     }

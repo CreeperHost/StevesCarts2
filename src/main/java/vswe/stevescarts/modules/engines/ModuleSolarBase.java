@@ -8,6 +8,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.neoforged.api.distmarker.Dist;
@@ -131,14 +132,14 @@ public abstract class ModuleSolarBase extends ModuleEngine
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         super.drawBackground(guiGraphics, gui, x, y);
-        ResourceHelper.bindResource("/gui/solar.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/solar.png");
         int lightWidth = light.get() * 3;
         if (light.get() == 15)
         {
             lightWidth += 2;
         }
-        drawImage(guiGraphics, gui, 9, 20, 0, 0, 54, 18);
-        drawImage(guiGraphics, gui, 15, 21, 0, 18, lightWidth, 16);
+        drawImage(guiGraphics, texture, gui, 9, 20, 0, 0, 54, 18);
+        drawImage(guiGraphics, texture, gui, 15, 21, 0, 18, lightWidth, 16);
     }
 
     protected boolean isGoingDown()

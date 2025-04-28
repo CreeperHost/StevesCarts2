@@ -1,6 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
@@ -58,7 +59,7 @@ public class ModuleSeat extends ModuleBase
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/chair.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/chair.png");
         final int imageID = getState();
         int borderID = 0;
         if (inRect(x, y, buttonRect))
@@ -72,9 +73,9 @@ public class ModuleSeat extends ModuleBase
                 borderID = 1;
             }
         }
-        drawImage(guiGraphics, gui, buttonRect, 0, buttonRect[3] * borderID);
+        drawImage(guiGraphics, texture, gui, buttonRect, 0, buttonRect[3] * borderID);
         final int srcY = buttonRect[3] * 3 + imageID * (buttonRect[3] - 2);
-        drawImage(guiGraphics, gui, buttonRect[0] + 1, buttonRect[1] + 1, 0, srcY, buttonRect[2] - 2, buttonRect[3] - 2);
+        drawImage(guiGraphics, texture, gui, buttonRect[0] + 1, buttonRect[1] + 1, 0, srcY, buttonRect[2] - 2, buttonRect[3] - 2);
     }
 
     @OnlyIn(Dist.CLIENT)

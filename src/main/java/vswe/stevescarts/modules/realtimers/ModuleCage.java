@@ -3,6 +3,7 @@ package vswe.stevescarts.modules.realtimers;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ambient.Bat;
@@ -77,23 +78,23 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
     @Override
     public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/cage.png");
-        drawButton(guiGraphics, gui, x, y, autoRect, disablePickup ? 2 : 3);
-        drawButton(guiGraphics, gui, x, y, manualRect, isCageEmpty() ? 0 : 1);
+        ResourceLocation texture = ResourceHelper.getResource("/gui/cage.png");
+        drawButton(guiGraphics, texture, gui, x, y, autoRect, disablePickup ? 2 : 3);
+        drawButton(guiGraphics, texture, gui, x, y, manualRect, isCageEmpty() ? 0 : 1);
     }
 
-    private void drawButton(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y, final int[] coords, final int imageID)
+    private void drawButton(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y, final int[] coords, final int imageID)
     {
         if (inRect(x, y, coords))
         {
-            drawImage(guiGraphics, gui, coords, 0, coords[3]);
+            drawImage(guiGraphics, texture, gui, coords, 0, coords[3]);
         }
         else
         {
-            drawImage(guiGraphics, gui, coords, 0, 0);
+            drawImage(guiGraphics, texture, gui, coords, 0, 0);
         }
         final int srcY = coords[3] * 2 + imageID * (coords[3] - 2);
-        drawImage(guiGraphics, gui, coords[0] + 1, coords[1] + 1, 0, srcY, coords[2] - 2, coords[3] - 2);
+        drawImage(guiGraphics, texture, gui, coords[0] + 1, coords[1] + 1, 0, srcY, coords[2] - 2, coords[3] - 2);
     }
 
     @Override

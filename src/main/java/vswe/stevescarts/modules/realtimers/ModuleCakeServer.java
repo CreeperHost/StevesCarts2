@@ -6,6 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -149,18 +150,18 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/cake.png");
-        drawImage(guiGraphics, gui, rect, 0, inRect(x, y, rect) ? rect[3] : 0);
+        ResourceLocation texture = ResourceHelper.getResource("/gui/cake.png");
+        drawImage(guiGraphics, texture, gui, rect, 0, inRect(x, y, rect) ? rect[3] : 0);
         final int maxHeight = rect[3] - 2;
         int height = (int) (getCakes() / 10.0f * maxHeight);
         if (height > 0)
         {
-            drawImage(guiGraphics, gui, rect[0] + 1, rect[1] + 1 + maxHeight - height, rect[2], maxHeight - height, 7, height);
+            drawImage(guiGraphics, texture, gui, rect[0] + 1, rect[1] + 1 + maxHeight - height, rect[2], maxHeight - height, 7, height);
         }
         height = (int) (getSlices() / 6.0f * maxHeight);
         if (height > 0)
         {
-            drawImage(guiGraphics, gui, rect[0] + 9, rect[1] + 1 + maxHeight - height, rect[2] + 7, maxHeight - height, 3, height);
+            drawImage(guiGraphics, texture, gui, rect[0] + 9, rect[1] + 1 + maxHeight - height, rect[2] + 7, maxHeight - height, 3, height);
         }
     }
 

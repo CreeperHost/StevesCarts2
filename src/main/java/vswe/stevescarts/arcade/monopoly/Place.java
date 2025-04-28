@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.monopoly;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.EnumSet;
@@ -19,7 +20,7 @@ public class Place
         return -1;
     }
 
-    public void draw(GuiGraphics guiGraphics, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
+    public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
     {
         int t;
         int u;
@@ -36,9 +37,8 @@ public class Place
             u = getTextureId() % 3;
             v = getTextureId() % 6 / 3;
         }
-        game.loadTexture(gui, t);
         applyColorFilter(gui, states);
-        game.getModule().drawImage(guiGraphics, gui, 0, 0, 76 * u, 122 * v, 76, 122);
+        game.getModule().drawImage(guiGraphics, game.getTexture(gui, t), gui, 0, 0, 76 * u, 122 * v, 76, 122);
     }
 
     public void applyColorFilter(final GuiMinecart gui, final EnumSet<PLACE_STATE> states)
@@ -76,7 +76,7 @@ public class Place
     {
     }
 
-    public void drawPiece(GuiGraphics guiGraphics, GuiMinecart gui, final Piece piece, final int total, final int pos, final int area, final EnumSet<PLACE_STATE> states)
+    public void drawPiece(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final Piece piece, final int total, final int pos, final int area, final EnumSet<PLACE_STATE> states)
     {
         final int SIZE = 24;
         final int PADDING = 5;
@@ -95,7 +95,7 @@ public class Place
             startX = 5 + (allowedWidth - fullWidth) / 2;
             offSet = 26;
         }
-        game.getModule().drawImage(guiGraphics, gui, startX + offSet * pos, getPieceYPosition(area), 232, piece.getV() * 24, 24, 24);
+        game.getModule().drawImage(guiGraphics, texture, gui, startX + offSet * pos, getPieceYPosition(area), 232, piece.getV() * 24, 24, 24);
     }
 
     protected int getPieceYPosition(final int area)

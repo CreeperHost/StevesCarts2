@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -84,11 +85,11 @@ public class ModuleHeightControl extends ModuleAddon
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, int x, int y)
     {
-        ResourceHelper.bindResource("/gui/heightcontrol.png");
-        drawImage(guiGraphics, gui, levelNumberBoxX, levelNumberBoxY, 4, 36, 21, 15);
-        drawImage(guiGraphics, gui, arrowUp, 4, 12);
-        drawImage(guiGraphics, gui, arrowMiddle, 4, 21);
-        drawImage(guiGraphics, gui, arrowDown, 4, 27);
+        ResourceLocation texture = ResourceHelper.getResource("/gui/heightcontrol.png");
+        drawImage(guiGraphics, texture, gui, levelNumberBoxX, levelNumberBoxY, 4, 36, 21, 15);
+        drawImage(guiGraphics, texture, gui, arrowUp, 4, 12);
+        drawImage(guiGraphics, texture, gui, arrowMiddle, 4, 21);
+        drawImage(guiGraphics, texture, gui, arrowDown, 4, 27);
         for (int i = 0; i < HeightControlOre.ores.size(); ++i)
         {
             final HeightControlOre ore = HeightControlOre.ores.get(i);
@@ -113,30 +114,30 @@ public class ModuleHeightControl extends ModuleAddon
                         srcY += 4;
                     }
                 }
-                drawImage(guiGraphics, gui, oreMapX + i * 4, oreMapY + j * 4, srcX, srcY, 4, 4);
+                drawImage(guiGraphics, texture, gui, oreMapX + i * 4, oreMapY + j * 4, srcX, srcY, 4, 4);
             }
         }
         if (getYTarget() != (int) getCart().y())
         {
-            drawMarker(guiGraphics, gui, 5, false);
+            drawMarker(guiGraphics, texture, gui, 5, false);
         }
         int pos = getYTarget() + 5 - (int) getCart().y();
         if (pos >= 0 && pos < 11)
         {
-            drawMarker(guiGraphics, gui, pos, true);
+            drawMarker(guiGraphics, texture, gui, pos, true);
         }
     }
 
-    private void drawMarker(GuiGraphics guiGraphics, GuiMinecart gui, int pos, boolean isTargetLevel)
+    private void drawMarker(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, int pos, boolean isTargetLevel)
     {
         int srcX = 4;
         int srcY = isTargetLevel ? 6 : 0;
-        drawImage(guiGraphics, gui, oreMapX - 1, oreMapY + pos * 4 - 1, srcX, srcY, 1, 6);
+        drawImage(guiGraphics, texture, gui, oreMapX - 1, oreMapY + pos * 4 - 1, srcX, srcY, 1, 6);
         for (int i = 0; i < HeightControlOre.ores.size(); ++i)
         {
-            drawImage(guiGraphics, gui, oreMapX + i * 4, oreMapY + pos * 4 - 1, srcX + 1, srcY, 4, 6);
+            drawImage(guiGraphics, texture, gui, oreMapX + i * 4, oreMapY + pos * 4 - 1, srcX + 1, srcY, 4, 6);
         }
-        drawImage(guiGraphics, gui, oreMapX + HeightControlOre.ores.size() * 4, oreMapY + pos * 4 - 1, srcX + 5, srcY, 1, 6);
+        drawImage(guiGraphics, texture, gui, oreMapX + HeightControlOre.ores.size() * 4, oreMapY + pos * 4 - 1, srcX + 5, srcY, 1, 6);
     }
 
     @Override

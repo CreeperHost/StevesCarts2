@@ -123,15 +123,13 @@ public abstract class ModuleEngine extends ModuleBase
     @Override
     public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
-        //TODO Replace with updated texture handling
-        ResourceHelper.bindResource("/gui/engine.png");
         final int sourceX = 16 * getPriority();
         int sourceY = 0;
         if (inRect(x, y, priorityButton))
         {
             sourceY = 16;
         }
-        drawImage(guiGraphics, gui, priorityButton, sourceX, sourceY);
+        drawImage(guiGraphics, ResourceHelper.getResource("/gui/engine.png"), gui, priorityButton, sourceX, sourceY);
     }
 
     @Override

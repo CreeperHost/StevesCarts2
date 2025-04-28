@@ -3,6 +3,7 @@ package vswe.stevescarts.modules.realtimers;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -105,20 +106,20 @@ public class ModuleArcade extends ModuleBase
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/arcade.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/arcade.png");
         afkTimer = 0;
         if (isGameActive())
         {
             final int[] rect = getExitArea();
             final int srcX = 0;
             final int srcY = 104 + (inRect(x, y, rect) ? 16 : 0);
-            drawImage(guiGraphics, gui, rect, srcX, srcY);
+            drawImage(guiGraphics, texture, gui, rect, srcX, srcY);
             currentGame.drawBackground(guiGraphics, gui, x, y);
         }
         else
         {
             final int[] rect = getListArea();
-            drawImage(guiGraphics, gui, rect, 0, 0);
+            drawImage(guiGraphics, texture, gui, rect, 0, 0);
             for (int i = 0; i < games.size(); ++i)
             {
                 final int[] button = getButtonGraphicArea(i);
@@ -126,9 +127,9 @@ public class ModuleArcade extends ModuleBase
                 final int srcY2 = 136 + (inRect(x, y, getButtonBoundsArea(i)) ? button[3] : 0);
                 if (button[3] > 0)
                 {
-                    drawImage(guiGraphics, gui, button, srcX2, srcY2);
+                    drawImage(guiGraphics, texture, gui, button, srcX2, srcY2);
                     final int[] icon = getButtonIconArea(i);
-                    drawImage(guiGraphics, gui, icon, i * 16, rect[3]);
+                    drawImage(guiGraphics, texture, gui, icon, i * 16, rect[3]);
                 }
             }
         }

@@ -3,6 +3,7 @@ package vswe.stevescarts.arcade.monopoly;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public abstract class Card
@@ -14,13 +15,11 @@ public abstract class Card
         this.message = message;
     }
 
-    public void render(final ArcadeMonopoly game, GuiGraphics guiGraphics, final GuiMinecart gui, final int[] rect, final boolean isFront)
+    public void render(final ArcadeMonopoly game, GuiGraphics guiGraphics, ResourceLocation texture, final GuiMinecart gui, final int[] rect, final boolean isFront)
     {
-        PoseStack matrixStack = guiGraphics.pose();
         if (isFront)
         {
-            game.loadTexture(gui, 1);
-            game.getModule().drawImage(guiGraphics, gui, rect, 67, 177);
+            game.getModule().drawImage(guiGraphics, game.getTexture(gui, 1), gui, rect, 67, 177);
             game.getModule().drawSplitString(guiGraphics, gui, message, rect[0] + gui.getGuiLeft() + 5, rect[1] + gui.getGuiTop() + 5, rect[2] - 10, true, 4210752);
             if (getNote() != null)
             {
@@ -40,7 +39,7 @@ public abstract class Card
         }
         else
         {
-            game.getModule().drawImage(guiGraphics, gui, rect, 0, rect[3] * getBackgroundV());
+            game.getModule().drawImage(guiGraphics, texture, gui, rect, 0, rect[3] * getBackgroundV());
         }
     }
 

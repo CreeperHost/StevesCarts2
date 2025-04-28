@@ -4,6 +4,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
@@ -90,12 +91,12 @@ public class ModulePowerObserver extends ModuleAddon
                 drawEngine(guiGraphics, gui, i, getEngineRect(i));
             }
         }
-        ResourceHelper.bindResource("/gui/observer.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/observer.png");
         for (int i = 0; i < 4; ++i) {
             int[] rect = getAreaRect(i);
-            drawImage(guiGraphics, gui, rect, 18, 22 * i);
+            drawImage(guiGraphics, texture, gui, rect, 18, 22 * i);
             if (inRect(x, y, rect)) {
-                drawImage(guiGraphics, gui, rect, 18, 22 * (i + 4));
+                drawImage(guiGraphics, texture, gui, rect, 18, 22 * (i + 4));
             }
             int count = 0;
             for (int j = 0; j < getCart().engines().size(); ++j) {
@@ -104,15 +105,14 @@ public class ModulePowerObserver extends ModuleAddon
                     ++count;
                 }
             }
-            ResourceHelper.bindResource("/gui/observer.png");
             rect = getPowerRect(i);
             if (isAreaActive(i)) {
-                drawImage(guiGraphics, gui, rect, 122, 0);
+                drawImage(guiGraphics, texture, gui, rect, 122, 0);
             } else {
-                drawImage(guiGraphics, gui, rect, 122 + rect[2], 0);
+                drawImage(guiGraphics, texture, gui, rect, 122 + rect[2], 0);
             }
             if (inRect(x, y, rect)) {
-                drawImage(guiGraphics, gui, rect, 122 + rect[2] * 2, 0);
+                drawImage(guiGraphics, texture, gui, rect, 122 + rect[2] * 2, 0);
             }
         }
         if (currentEngine != -1) {

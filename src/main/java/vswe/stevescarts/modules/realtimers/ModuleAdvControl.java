@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -67,40 +68,40 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     @OnlyIn(Dist.CLIENT)
     public void renderOverlay(GuiGraphics render, float partialTicks) {
         Minecraft mc = Minecraft.getInstance();
-        ResourceHelper.bindResource("/gui/drive.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/drive.png");
         if (engineInformation != null)
         {
             for (int i = 0; i < getCart().engines().size(); ++i) {
-                drawImage(5, i * 15, 0, 0, 66, 15);
+                drawImage(render, texture, 5, i * 15, 0, 0, 66, 15);
                 int upperBarLength = engineInformation[i * 2] & 0x3F;
                 int lowerBarLength = engineInformation[i * 2 + 1] & 0x3F;
                 ModuleEngine engine = getCart().engines().get(i);
                 float[] rgb = engine.getGuiBarColor();
                 RenderSystem.setShaderColor(rgb[0], rgb[1], rgb[2], 1.0f);
-                drawImage(7, i * 15 + 2, 66, 0, upperBarLength, 5);
-                drawImage(7, i * 15 + 2 + 6, 66, 6, lowerBarLength, 5);
+                drawImage(render, texture, 7, i * 15 + 2, 66, 0, upperBarLength, 5);
+                drawImage(render, texture, 7, i * 15 + 2 + 6, 66, 6, lowerBarLength, 5);
                 RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-                drawImage(5, i * 15, 66 + engine.getPriority() * 7, 11, 7, 15);
+                drawImage(render, texture, 5, i * 15, 66 + engine.getPriority() * 7, 11, 7, 15);
             }
         }
         int enginesEndAt = getCart().engines().size() * 15;
-        drawImage(5, enginesEndAt, 0, 15, 32, 32);
+        drawImage(render, texture, 5, enginesEndAt, 0, 15, 32, 32);
         if (mc.options.keyUp.isDown()) {
-            drawImage(15, enginesEndAt + 5, 42, 20, 12, 6);
+            drawImage(render, texture, 15, enginesEndAt + 5, 42, 20, 12, 6);
         } else if (mc.options.keyLeft.isDown()) {
-            drawImage(7, enginesEndAt + 13, 34, 28, 6, 12);
+            drawImage(render, texture, 7, enginesEndAt + 13, 34, 28, 6, 12);
         } else if (mc.options.keyRight.isDown()) {
-            drawImage(29, enginesEndAt + 13, 56, 28, 6, 12);
+            drawImage(render, texture, 29, enginesEndAt + 13, 56, 28, 6, 12);
         }
         int speedGraphicHeight = getSpeedSetting() * 2;
-        drawImage(14, enginesEndAt + 13 + 12 - speedGraphicHeight, 41, 40 - speedGraphicHeight, 14, speedGraphicHeight);
-        drawImage(0, 0, 0, 67, 5, 130);
+        drawImage(render, texture, 14, enginesEndAt + 13 + 12 - speedGraphicHeight, 41, 40 - speedGraphicHeight, 14, speedGraphicHeight);
+        drawImage(render, texture, 0, 0, 0, 67, 5, 130);
 
         double pos = map(getCart().y(), mc.level.getMinY() + 1, mc.level.getMaxY(), 127D, 0D);
-        drawImage(1, 1 + (int) pos, 5, 67, 5, 1);
-        drawImage(5, enginesEndAt + 32, 0, 47, 32, 20);
-        drawImage(5, enginesEndAt + 52, 0, 47, 32, 20);
-        drawImage(5, enginesEndAt + 72, 0, 47, 32, 20);
+        drawImage(render, texture, 1, 1 + (int) pos, 5, 67, 5, 1);
+        drawImage(render, texture, 5, enginesEndAt + 32, 0, 47, 32, 20);
+        drawImage(render, texture, 5, enginesEndAt + 52, 0, 47, 32, 20);
+        drawImage(render, texture, 5, enginesEndAt + 72, 0, 47, 32, 20);
 
         render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0x909090);
         render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0x909090);
@@ -382,11 +383,11 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
 
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
-        ResourceHelper.bindResource("/gui/advlever.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/advlever.png");
         if (inRect(x, y, buttonRect)) {
-            drawImage(guiGraphics, gui, buttonRect, 0, buttonRect[3]);
+            drawImage(guiGraphics, texture, gui, buttonRect, 0, buttonRect[3]);
         } else {
-            drawImage(guiGraphics, gui, buttonRect, 0, 0);
+            drawImage(guiGraphics, texture, gui, buttonRect, 0, 0);
         }
     }
 

@@ -7,6 +7,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.interfaces.ILeverModule;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
@@ -62,23 +63,23 @@ public class ModuleBrake extends ModuleAddon implements ILeverModule
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/lever.png");
-        drawButton(guiGraphics, gui, x, y, startstopRect, isForceStopping() ? 2 : 1);
-        drawButton(guiGraphics, gui, x, y, turnbackRect, 0);
+        ResourceLocation texture = ResourceHelper.getResource("/gui/lever.png");
+        drawButton(guiGraphics, texture, gui, x, y, startstopRect, isForceStopping() ? 2 : 1);
+        drawButton(guiGraphics, texture, gui, x, y, turnbackRect, 0);
     }
 
-    private void drawButton(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y, final int[] coords, final int imageID)
+    private void drawButton(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y, final int[] coords, final int imageID)
     {
         if (inRect(x, y, coords))
         {
-            drawImage(guiGraphics, gui, coords, 0, coords[3]);
+            drawImage(guiGraphics, texture, gui, coords, 0, coords[3]);
         }
         else
         {
-            drawImage(guiGraphics, gui, coords, 0, 0);
+            drawImage(guiGraphics, texture, gui, coords, 0, 0);
         }
         final int srcY = coords[3] * 2 + imageID * (coords[3] - 2);
-        drawImage(guiGraphics, gui, coords[0] + 1, coords[1] + 1, 0, srcY, coords[2] - 2, coords[3] - 2);
+        drawImage(guiGraphics, texture, gui, coords[0] + 1, coords[1] + 1, 0, srcY, coords[2] - 2, coords[3] - 2);
     }
 
     @Override

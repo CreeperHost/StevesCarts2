@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.invaders;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class Player extends Unit
@@ -21,15 +22,15 @@ public class Player extends Unit
     }
 
     @Override
-    public void draw(GuiGraphics guiGraphics, GuiMinecart gui)
+    public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui)
     {
         if (ready || targetY == y)
         {
-            game.drawImageInArea(guiGraphics, gui, x, y, 16, 16, 16, 16);
+            game.drawImageInArea(guiGraphics, texture, gui, x, y, 16, 16, 16, 16);
         }
         else
         {
-            game.drawImageInArea(guiGraphics, gui, x, y, 16, 16, 16, 16, 3, 0, 1000, 1000);
+            game.drawImageInArea(guiGraphics, texture, gui, x, y, 16, 16, 16, 16, 3, 0, 1000, 1000);
         }
     }
 

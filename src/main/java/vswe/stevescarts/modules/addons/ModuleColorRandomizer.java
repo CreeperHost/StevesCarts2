@@ -3,6 +3,7 @@ package vswe.stevescarts.modules.addons;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -62,17 +63,17 @@ public class ModuleColorRandomizer extends ModuleAddon
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/color_randomizer.png");
-        drawImage(guiGraphics, gui, 50, 20, 0, 16, 28, 28);
+        ResourceLocation texture = ResourceHelper.getResource("/gui/color_randomizer.png");
+        drawImage(guiGraphics, texture, gui, 50, 20, 0, 16, 28, 28);
         if (inRect(x, y, button))
         {
-            drawImage(guiGraphics, gui, 10, 26, 32, 0, 16, 16);
+            drawImage(guiGraphics, texture, gui, 10, 26, 32, 0, 16, 16);
         }
         else
         {
-            drawImage(guiGraphics, gui, 10, 26, 16, 0, 16, 16);
+            drawImage(guiGraphics, texture, gui, 10, 26, 16, 0, 16, 16);
         }
-        drawImage(guiGraphics, gui, 10, 26, 0, 0, 16, 16);
+        drawImage(guiGraphics, texture, gui, 10, 26, 0, 0, 16, 16);
     }
 
     @Override

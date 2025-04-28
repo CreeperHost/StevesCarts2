@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -56,27 +57,27 @@ public abstract class ModuleRecipe extends ModuleAddon
         if (canUseAdvancedFeatures())
         {
             final int[] area = getArea();
-            ResourceHelper.bindResource("/gui/recipe.png");
-            drawImage(guiGraphics, gui, area[0] - 2, area[1] - 2, 0, 0, 20, 20);
+            ResourceLocation texture = ResourceHelper.getResource("/gui/recipe.png");
+            drawImage(guiGraphics, texture, gui, area[0] - 2, area[1] - 2, 0, 0, 20, 20);
             if (mode.get() == 1)
             {
                 for (int i = 0; i < 3; ++i)
                 {
-                    drawControlRect(guiGraphics, gui, x, y, i);
+                    drawControlRect(guiGraphics, texture, gui, x, y, i);
                 }
             }
             else
             {
-                drawControlRect(guiGraphics, gui, x, y, 1);
+                drawControlRect(guiGraphics, texture, gui, x, y, 1);
             }
         }
     }
 
-    private void drawControlRect(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y, final int i)
+    private void drawControlRect(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y, final int i)
     {
         final int v = i * 11;
         final int[] rect = getControlRect(i);
-        drawImage(guiGraphics, gui, rect, 20 + (inRect(x, y, rect) ? 22 : 0), v);
+        drawImage(guiGraphics, texture, gui, rect, 20 + (inRect(x, y, rect) ? 22 : 0), v);
     }
 
     private int[] getControlRect(final int i)

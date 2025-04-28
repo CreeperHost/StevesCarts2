@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -99,12 +100,12 @@ public class ModuleShooterAdv extends ModuleShooter
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceHelper.bindResource("/gui/mobdetector.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/mobdetector.png");
         for (int i = 0; i < detectors.size(); ++i)
         {
             final int srcX = isOptionActive(i) ? 0 : 8;
             final int srcY = inRect(x, y, getSelectionBox(i)) ? 8 : 0;
-            drawImage(guiGraphics, gui, getSelectionBox(i), srcX, srcY);
+            drawImage(guiGraphics, texture, gui, getSelectionBox(i), srcX, srcY);
         }
     }
 

@@ -1,6 +1,7 @@
 package vswe.stevescarts.arcade.invaders;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public abstract class Unit
@@ -19,7 +20,7 @@ public abstract class Unit
         health = 1;
     }
 
-    public abstract void draw(GuiGraphics guiGraphics, GuiMinecart p0);
+    public abstract void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart p0);
 
     public UPDATE_RESULT update()
     {

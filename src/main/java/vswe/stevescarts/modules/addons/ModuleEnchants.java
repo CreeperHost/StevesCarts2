@@ -4,6 +4,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -159,13 +160,13 @@ public class ModuleEnchants extends ModuleAddon {
     @Override
     @OnlyIn (Dist.CLIENT)
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
-        ResourceHelper.bindResource("/gui/enchant.png");
+        ResourceLocation texture = ResourceHelper.getResource("/gui/enchant.png");
         for (int i = 0; i < 3; ++i) {
             int[] box = getBoxRect(i);
             if (inRect(x, y, box)) {
-                drawImage(guiGraphics, gui, box, 65, 0);
+                drawImage(guiGraphics, texture, gui, box, 65, 0);
             } else {
-                drawImage(guiGraphics, gui, box, 0, 0);
+                drawImage(guiGraphics, texture, gui, box, 0, 0);
             }
             EnchantmentData data = getEnchant(i);
             if (data.getEnchantHolder() == null) continue;
@@ -177,7 +178,7 @@ public class ModuleEnchants extends ModuleAddon {
             for (int j = 0; j < maxlevel; ++j) {
                 int[] bar = getBarRect(i, j, maxlevel);
                 if (j != maxlevel - 1) {
-                    drawImage(guiGraphics, gui, bar[0] + bar[2], bar[1], 61 + j, 1, 1, bar[3]);
+                    drawImage(guiGraphics, texture, gui, bar[0] + bar[2], bar[1], 61 + j, 1, 1, bar[3]);
                 }
                 int levelmaxvalue = ModularEnchantments.getValue(optkey.get(), j + 1);
                 if (value > 0) {
@@ -186,7 +187,7 @@ public class ModuleEnchants extends ModuleAddon {
                         mult = 1.0f;
                     }
                     bar[2] *= mult;
-                    drawImage(guiGraphics, gui, bar, 1, 13 + 11 * j);
+                    drawImage(guiGraphics, texture, gui, bar, 1, 13 + 11 * j);
                 }
                 value -= levelmaxvalue;
             }
