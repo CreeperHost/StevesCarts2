@@ -358,6 +358,6 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     @OnlyIn(Dist.CLIENT)
     @Override
     public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour) {
-        drawImage(guiGraphics, (GuiMinecart) gui, sprite, targetX, targetY, width, height);
+        drawImage(guiGraphics, (GuiMinecart) gui, sprite, targetX, targetY, width, height, colour);
     }
 }

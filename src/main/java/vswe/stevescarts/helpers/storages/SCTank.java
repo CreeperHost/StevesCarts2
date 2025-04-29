@@ -156,8 +156,6 @@ public class SCTank extends FluidTank {
         TextureAtlasSprite icon = FluidStackHooks.getStillTexture(fluid.getFluid());
         if (icon == null) return;
 
-        //TODO sort out fluid tank rendering
-//        RenderSystem.setShaderTexture(0, BLOCK_ATLAS);
         int fluidColor = FluidStackHooks.getColor(fluid.getFluid());
         for (int y = 0; y < 3; y++) {
             int pixels = fluidLevel - (2 - y) * 16;
