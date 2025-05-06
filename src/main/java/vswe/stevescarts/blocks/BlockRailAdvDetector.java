@@ -71,8 +71,7 @@ public class BlockRailAdvDetector extends BaseRailBlock
         return false;
     }
 
-    @Override
-    public void onMinecartPass(BlockState state, Level world, BlockPos pos, AbstractMinecart entityMinecart)
+    public void onMinecartPassSC(BlockState state, Level world, BlockPos pos, AbstractMinecart entityMinecart)
     {
         if (world.isClientSide || !(entityMinecart instanceof EntityMinecartModular cart))
         {

@@ -60,6 +60,7 @@ import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
+import vswe.stevescarts.blocks.BlockRailAdvDetector;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.containers.ContainerMinecart;
 import vswe.stevescarts.helpers.ActivatorOption;
@@ -1091,6 +1092,10 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 pushX = motion.x;
                 pushZ = motion.z;
             }
+        }
+
+        if (state.getBlock() instanceof BlockRailAdvDetector advDetector) {
+            advDetector.onMinecartPassSC(state, level(), pos, this);
         }
     }
 
