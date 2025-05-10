@@ -443,7 +443,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
 
     public boolean isLeavesHandler(BlockState blockState, BlockPos pos)
     {
-        return blockState.is(BlockTags.LEAVES);
+        return blockState.is(BlockTags.LEAVES) || blockState.is(BlockTags.BEEHIVES);
     }
 
     public boolean isWoodHandler(BlockState blockState, BlockPos pos)
