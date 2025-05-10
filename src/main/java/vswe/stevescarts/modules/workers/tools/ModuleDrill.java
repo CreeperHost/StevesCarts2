@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -27,6 +28,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.IFluidBlock;
+import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
@@ -367,7 +369,17 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         {
             return null;
         }
-        if ((holeX != 0 || holeY > 0) && (block == Blocks.TORCH || block == Blocks.REDSTONE_WIRE || block == Blocks.REDSTONE_TORCH || block == Blocks.REPEATER || block == Blocks.COMPARATOR || block == ModBlocks.MODULE_TOGGLER.get()))
+        if ((holeX != 0 || holeY > 0) && (blockState.is(Blocks.TORCH) ||
+                                          blockState.is(Blocks.WALL_TORCH) ||
+                                          blockState.is(Blocks.SOUL_TORCH) ||
+                                          blockState.is(Blocks.SOUL_WALL_TORCH) ||
+                                          blockState.is(Blocks.REDSTONE_WIRE) ||
+                                          blockState.is(Blocks.REDSTONE_TORCH) ||
+                                          blockState.is(Blocks.REDSTONE_WALL_TORCH) ||
+                                          blockState.is(Blocks.REPEATER) ||
+                                          blockState.is(Blocks.COMPARATOR) ||
+                                          blockState.is(ModBlocks.MODULE_TOGGLER.get()))
+        )
         {
             return null;
         }
