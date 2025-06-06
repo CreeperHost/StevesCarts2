@@ -1,8 +1,13 @@
 package vswe.stevescarts.api.modules.data;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.ModuleType;
+
+import java.util.List;
+import java.util.function.Consumer;
 
 public class ModuleDataHull extends ModuleData
 {
@@ -58,5 +63,38 @@ public class ModuleDataHull extends ModuleData
     public int getComplexityMax()
     {
         return complexityMax;
+    }
+
+    @Override
+    public void addExtraMessage(Consumer<Component> consumer) {
+        super.addExtraMessage(consumer);
+        consumer.accept(Component.translatable("gui.stevescarts.hullCapacity")
+                .append(": ")
+                .withStyle(ChatFormatting.BLUE)
+                .append(Component.literal(String.valueOf(getCapacity()))
+                        .withStyle(ChatFormatting.WHITE)
+                )
+        );
+        consumer.accept(Component.translatable("gui.stevescarts.complexityCap")
+                .append(": ")
+                .withStyle(ChatFormatting.BLUE)
+                .append(Component.literal(String.valueOf(getComplexityMax()))
+                        .withStyle(ChatFormatting.WHITE)
+                )
+        );
+        consumer.accept(Component.translatable("gui.stevescarts.max_addons")
+                .append(": ")
+                .withStyle(ChatFormatting.BLUE)
+                .append(Component.literal(String.valueOf(getAddonMax()))
+                        .withStyle(ChatFormatting.WHITE)
+                )
+        );
+        consumer.accept(Component.translatable("gui.stevescarts.max_engines")
+                .append(": ")
+                .withStyle(ChatFormatting.BLUE)
+                .append(Component.literal(String.valueOf(getEngineMax()))
+                        .withStyle(ChatFormatting.WHITE)
+                )
+        );
     }
 }
