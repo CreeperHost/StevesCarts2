@@ -23,6 +23,8 @@ public class GeneratorLanguage extends LanguageProvider
         add("gui.stevescarts.invalidHullError", "The Cart Hull added to the Hull Slot is not a valid Hull. This should not be possible so you've probably done something strange.");
         add("gui.stevescarts.hullCapacity", "Hull capacity");
         add("gui.stevescarts.complexityCap", "Complexity cap");
+        add("gui.stevescarts.max_addons", "Max Addons");
+        add("gui.stevescarts.max_engines", "Max Engines");
         add("gui.stevescarts.totalCost", "Total cost");
         add("gui.stevescarts.totalTime", "Total Time");
         add("gui.stevescarts.readyMessage", "Ready to assemble cart!");
