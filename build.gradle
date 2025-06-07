@@ -158,6 +158,10 @@ dependencies {
     implementation fg.deobf("net.creeperhost:polylib-forge:${rootProject.polylib_version}")
     implementation fg.deobf("curse.maven:railcraft-reborn-901491:4708018")
 
+    compileOnly fg.deobf("curse.maven:ftb-chunks-forge-314906:6431735")
+    compileOnly fg.deobf("curse.maven:ftb-library-forge-404465:6164053")
+    compileOnly fg.deobf("curse.maven:ftb-teams-forge-404468:6130786")
+
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
