@@ -17,6 +17,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotBridge;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.integration.Integration;
 
 public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
     private EntityDataAccessor<Boolean> BRIDGE;
@@ -77,6 +78,9 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
 
     private boolean tryBuildBridge(Level world, BlockPos pos, final boolean doPlace) {
         final Block blockAtPos = world.getBlockState(pos).getBlock();
+        if (!Integration.canEditBlock(getFakePlayer(), pos)) {
+            return false;
+        }
         if ((countsAsAir(pos) || blockAtPos instanceof IFluidBlock) && isValidForTrack(pos.above(), false)) {
             for (int slot = 0; slot < getInventorySize(); ++slot) {
                 ItemStack stack = getStack(slot);

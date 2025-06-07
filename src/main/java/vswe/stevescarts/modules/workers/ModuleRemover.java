@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.integration.Integration;
 
 import javax.annotation.Nonnull;
 
@@ -81,7 +82,7 @@ public class ModuleRemover extends ModuleWorker implements IActivatorModule {
         if (flag) {
             BlockState blockState = world.getBlockState(pos);
             if (RailBlock.isRail(blockState)) {
-                if (isRemovingEnabled()) {
+                if (isRemovingEnabled() && Integration.canEditBlock(getFakePlayer(), pos)) {
                     if (doPreWork()) {
                         startWorking(12);
                         return true;

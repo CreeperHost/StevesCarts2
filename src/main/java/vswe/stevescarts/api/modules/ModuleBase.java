@@ -33,6 +33,7 @@ import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import net.neoforged.neoforge.common.I18nExtension;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.data.ModuleData;
@@ -1725,7 +1726,7 @@ public abstract class ModuleBase
 
     protected FakePlayer getFakePlayer()
     {
-        return FakePlayerFactory.getMinecraft((ServerLevel) getCart().level());
+        return FakePlayerFactory.get((ServerLevel) getCart().level(), StevesCarts.FAKE_PLAYER);
     }
 
     public boolean disableStandardKeyFunctionality()

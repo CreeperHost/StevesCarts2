@@ -1,5 +1,6 @@
 package vswe.stevescarts;
 
+import com.mojang.authlib.GameProfile;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.DistExecutor;
@@ -22,9 +23,12 @@ import vswe.stevescarts.init.*;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
 
+import java.util.UUID;
+
 @Mod(Constants.MOD_ID)
 public class StevesCarts
 {
+    public static final GameProfile FAKE_PLAYER = new GameProfile(UUID.fromString("5e8636cc-6b51-4f8f-952c-beedf20347b0"), "[StevesCarts]");
     public static StevesCarts INSTANCE;
 
     public static Logger LOGGER = LogManager.getLogger();
