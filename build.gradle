@@ -124,6 +124,10 @@ dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
     implementation "net.creeperhost:polylib-neoforge:${polylib_version}"
 
+    compileOnly("curse.maven:ftb-chunks-forge-314906:6504893")
+    compileOnly("curse.maven:ftb-library-forge-404465:6466106")
+    compileOnly("curse.maven:ftb-teams-forge-404468:6119437")
+
 //    implementation fg.deobf("curse.maven:railcraft-reborn-901491:4708018")
 
 //    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))

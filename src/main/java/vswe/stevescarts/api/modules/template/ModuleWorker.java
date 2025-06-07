@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.integration.Integration;
 
 public abstract class ModuleWorker extends ModuleBase
 {
@@ -114,6 +115,9 @@ public abstract class ModuleWorker extends ModuleBase
 
     protected boolean isValidForTrack(BlockPos pos, boolean checkBellow)
     {
+        if (!Integration.canEditBlock(getFakePlayer(), pos)) {
+            return false;
+        }
         boolean result = countsAsAir(pos) && (!checkBellow || Block.canSupportRigidBlock(getCart().level(), pos.below()));
         if (result)
         {

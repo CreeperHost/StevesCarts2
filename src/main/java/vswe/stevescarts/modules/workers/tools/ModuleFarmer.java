@@ -29,6 +29,7 @@ import vswe.stevescarts.containers.slots.SlotSeed;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.polylib.EntityData;
+import vswe.stevescarts.integration.Integration;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -114,6 +115,9 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
             for (int j = -getRange(); j <= getRange(); ++j)
             {
                 BlockPos coord = next.offset(i, -1, j);
+                if (!Integration.canEditBlock(getFakePlayer(), coord)) {
+                    continue;
+                }
                 if (farm(world, coord))
                 {
                     return true;

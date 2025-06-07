@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.IShearable;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.EntityMinecartModular;
+import vswe.stevescarts.integration.Integration;
 
 import java.util.List;
 
@@ -89,7 +90,7 @@ public class ModuleFlowerRemover extends ModuleBase {
 
     private boolean isMowable(BlockPos pos) {
         BlockState blockState = getCart().level().getBlockState(pos);
-        return blockState.is(BlockTags.FLOWERS) || blockState.is(BlockTags.REPLACEABLE);
+        return Integration.canEditBlock(getFakePlayer(), pos) && (blockState.is(BlockTags.FLOWERS) || blockState.is(BlockTags.REPLACEABLE));
     }
 
     private void addStuff(List<ItemStack> stuff) {

@@ -26,6 +26,7 @@ import vswe.stevescarts.containers.slots.SlotTorch;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
+import vswe.stevescarts.integration.Integration;
 
 import javax.annotation.Nonnull;
 
@@ -103,7 +104,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
                     }
                 }
 
-                if (world.getBlockState(pos).isAir() && canPlace) {
+                if (world.getBlockState(pos).isAir() && canPlace && Integration.canEditBlock(getFakePlayer(), pos)) {
                     int i = 0;
                     while (i < getInventorySize()) {
                         if (!getStack(i).isEmpty() && Block.byItem(getStack(i).getItem()) == Blocks.TORCH) {

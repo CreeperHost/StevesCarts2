@@ -31,6 +31,7 @@ import vswe.stevescarts.containers.slots.SlotSapling;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.BlockPosHelpers;
 import vswe.stevescarts.helpers.Localization;
+import vswe.stevescarts.integration.Integration;
 import vswe.stevescarts.modules.addons.plants.ModulePlantSize;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -241,6 +242,9 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         {
             return false;
         }
+        if (!Integration.canEditBlock(getFakePlayer(), pos)) {
+            return false;
+        }
         Block block = Block.byItem(stack.getItem());
         if (block instanceof SaplingBlock blockSapling)
         {
@@ -280,6 +284,9 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
 
     private boolean removeAt(Level world, BlockPos here, final ArrayList<BlockPos> checked)
     {
+        if (!Integration.canEditBlock(getFakePlayer(), here)) {
+            return false;
+        }
         checked.add(here);
         BlockState blockState = world.getBlockState(here);
         if (world.isEmptyBlock(here))
