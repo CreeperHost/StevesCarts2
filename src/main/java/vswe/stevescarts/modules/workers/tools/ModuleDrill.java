@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -39,6 +38,7 @@ import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModBlocks;
+import vswe.stevescarts.integration.Integration;
 import vswe.stevescarts.modules.addons.*;
 
 import javax.annotation.Nonnull;
@@ -372,6 +372,9 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
                                           blockState.is(ModBlocks.MODULE_TOGGLER.get()))
         )
         {
+            return null;
+        }
+        if (!Integration.canEditBlock(getFakePlayer(), pos)) {
             return null;
         }
         if (block instanceof BaseEntityBlock)
