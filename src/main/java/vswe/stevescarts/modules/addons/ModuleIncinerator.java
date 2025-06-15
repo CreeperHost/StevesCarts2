@@ -21,15 +21,7 @@ public class ModuleIncinerator extends ModuleAddon
     {
         if (isItemValid(item))
         {
-            if (getIncinerationCost() != 0)
-            {
-                int amount = item.getCount() * getIncinerationCost();
-                item.shrink(amount);
-            }
-            else
-            {
-                item.setCount(0);
-            }
+            item.setCount(0);
         }
     }
 
