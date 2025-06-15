@@ -366,7 +366,7 @@ public class StevesCartsModules
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "firework_display"), "Firework display", ModuleFirework.class, ModuleType.ADDON, 45));
 
         INCINERATOR = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "incinerator"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "incinerator"), "Incinerator", ModuleIncinerator.class, ModuleType.ADDON, 23).addRequirement(DefaultModuleGroups.TANK_GROUP).addRequirement(DefaultModuleGroups.DRILL_GROUP));
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "incinerator"), "Incinerator", ModuleIncinerator.class, ModuleType.ADDON, 23).addRequirement(DefaultModuleGroups.DRILL_GROUP));
 
         CLEANER_LIQUID = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "liquid_cleaner"),
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "liquid_cleaner"), "Liquid Cleaner", ModuleLiquidDrainer.class, ModuleType.ADDON, 30).addSide(ModuleData.SIDE.CENTER).addParent(LIQUID_SENSORS).addRequirement(DefaultModuleGroups.TANK_GROUP));
