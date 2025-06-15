@@ -225,7 +225,7 @@ public class StevesCartsModules
                 new ModuleData(new ResourceLocation(Constants.MOD_ID, "front_chest"), "Front Chest", ModuleFrontChest.class, ModuleType.STORAGE, 6).addSides(new ModuleData.SIDE[]{ModuleData.SIDE.FRONT}));
 
         INTERNAL_STORAGE = StevesCartsAPI.registerModule(new ResourceLocation(Constants.MOD_ID, "internal_storage"),
-                new ModuleData(new ResourceLocation(Constants.MOD_ID, "internal_storage"), "Internal Storage", ModuleInternalStorage.class, ModuleType.STORAGE, 6));
+                new ModuleData(new ResourceLocation(Constants.MOD_ID, "internal_storage"), "Internal Storage", ModuleInternalStorage.class, ModuleType.STORAGE, 6)).setAllowDuplicate();
 
 
         //TOOLS
