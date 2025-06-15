@@ -1595,6 +1595,10 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         {
             data.writeResourceLocation(b);
         }
+
+        //TODO, this is a hack, Our data watcher implementation is not compatible with 1.20+
+        getDataManager().isDirty = true;
+        getDataManager().itemsById.values().forEach(e -> e.setDirty(true));
     }
 
     @Override
