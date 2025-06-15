@@ -11,13 +11,13 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.network.DataSerializers;
-import vswe.stevescarts.network.DataSerializers.ShortArray;
+import vswe.stevescarts.init.ModSerializers;
+import vswe.stevescarts.init.ModSerializers.ShortArray;
 
 public class ModulePowerObserver extends ModuleAddon
 {
-    private final EntityDataAccessor<ShortArray> AREA_DATA = createDw(DataSerializers.SHORT_ARRAY);
-    private final EntityDataAccessor<ShortArray> POWER_LEVEL = createDw(DataSerializers.SHORT_ARRAY);
+    private final EntityDataAccessor<ShortArray> AREA_DATA = createDw(ModSerializers.SHORT_ARRAY.get());
+    private final EntityDataAccessor<ShortArray> POWER_LEVEL = createDw(ModSerializers.SHORT_ARRAY.get());
 
 //    private short[] areaData;
 //    private short[] powerLevel;

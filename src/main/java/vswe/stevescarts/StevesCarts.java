@@ -44,6 +44,7 @@ public class StevesCarts
         ModBlocks.TILES_ENTITIES.register(iEventBus);
         ModContainers.CONTAINERS.register(iEventBus);
         iEventBus.addListener(this::creativeTabBuildEvent);
+        ModSerializers.init(iEventBus);
 
         iEventBus.addListener(this::clientInit);
 
