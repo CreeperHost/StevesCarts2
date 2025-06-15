@@ -38,12 +38,16 @@ public class ContainerCartAssembler extends ContainerBase
         {
             for (int k = 0; k < 9; ++k)
             {
-                addSlot(new Slot(invPlayer, k + i * 9 + 9, offsetX() + k * 18, i * 18 + offsetY()));
+                if (invPlayer != null) {
+                    addSlot(new Slot(invPlayer, k + i * 9 + 9, offsetX() + k * 18, i * 18 + offsetY()));
+                }
             }
         }
         for (int j = 0; j < 9; ++j)
         {
-            addSlot(new Slot(invPlayer, j, offsetX() + j * 18, 58 + offsetY()));
+            if (invPlayer != null) {
+                addSlot(new Slot(invPlayer, j, offsetX() + j * 18, 58 + offsetY()));
+            }
         }
         addDataSlots(data);
     }
