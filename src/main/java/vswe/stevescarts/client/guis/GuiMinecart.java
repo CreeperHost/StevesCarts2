@@ -586,7 +586,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder buff = tessellator.getBuilder();
         buff.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        float zLevel = 1F;
+        float zLevel = 0;//1F; //Ether everything needs to be on the same z level, or we need to go through and properly order *everything*
 
         buff.vertex((x), y + h, zLevel).uv((float) pt1[0], (float) pt1[1]).endVertex();
         buff.vertex((x + w), y + h, zLevel).uv((float) pt2[0], (float) pt2[1]).endVertex();

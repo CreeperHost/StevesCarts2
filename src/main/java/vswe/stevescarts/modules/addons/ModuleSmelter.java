@@ -174,7 +174,7 @@ public class ModuleSmelter extends ModuleRecipe
     {
         if (y == 0)
         {
-            return new SlotFurnaceInput(getCart(), slotId, 10 + 18 * x, 15 + 18 * y);
+            return new SlotFurnaceInput(getCart(), getCart().level(), slotId, 10 + 18 * x, 15 + 18 * y);
         }
         return new SlotCartCrafterResult(getCart(), slotId, 10 + 18 * x, 15 + 18 * y);
     }
