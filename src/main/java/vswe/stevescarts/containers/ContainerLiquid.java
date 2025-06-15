@@ -45,13 +45,16 @@ public class ContainerLiquid extends ContainerBase
         {
             for (int j1 = 0; j1 < 9; ++j1)
             {
-                Slot s = new Slot(playerInventory, j1 + k * 9 + 9, j1 * 18 + offsetX(), 104 + k * 18 + 36);
-                addSlot(s);
+                if (playerInventory != null) {
+                    addSlot(new Slot(playerInventory, j1 + k * 9 + 9, j1 * 18 + offsetX(), 104 + k * 18 + 36));
+                }
             }
         }
         for (int l = 0; l < 9; ++l)
         {
-            addSlot(new Slot(playerInventory, l, l * 18 + offsetX(), 198));
+            if (playerInventory != null) {
+                addSlot(new Slot(playerInventory, l, l * 18 + offsetX(), 198));
+            }
         }
         addDataSlots(data);
     }
