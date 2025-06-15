@@ -13,13 +13,13 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.EntityMinecartModular;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.init.ModSerializers;
+import vswe.stevescarts.init.ModSerializers.BoolArray;
 import vswe.stevescarts.modules.workers.tools.ModuleDrill;
-import vswe.stevescarts.network.DataSerializers;
-import vswe.stevescarts.network.DataSerializers.BoolArray;
 
 public class ModuleDrillIntelligence extends ModuleAddon
 {
-    private final EntityDataAccessor<BoolArray> DISABLED_ARRAY = createDw(DataSerializers.BOOL_ARRAY);
+    private final EntityDataAccessor<BoolArray> DISABLED_ARRAY = createDw(ModSerializers.BOOL_ARRAY.get());
     private ModuleDrill drill;
     private boolean hasHeightController;
     private int guiW;

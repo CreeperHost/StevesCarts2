@@ -1,18 +1,26 @@
-package vswe.stevescarts.network;
+package vswe.stevescarts.init;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataSerializer;
-import net.minecraft.network.syncher.EntityDataSerializers;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import vswe.stevescarts.Constants;
 import vswe.stevescarts.helpers.EnchantmentData;
 
-/**
- * Created by brandon3055 on 27/02/2023
- */
-public class DataSerializers {
+public class ModSerializers
+{
+    public static final DeferredRegister<EntityDataSerializer<?>> SERIAL_REGISTER = DeferredRegister.create(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, Constants.MOD_ID);
 
-    public static final EntityDataSerializer<BoolArray> BOOL_ARRAY = EntityDataSerializer.simple((buf, boolArray) -> boolArray.write(buf), BoolArray::read);
-    public static final EntityDataSerializer<ShortArray> SHORT_ARRAY = EntityDataSerializer.simple((buf, shortArray) -> shortArray.write(buf), ShortArray::read);
-    public static final EntityDataSerializer<EnchantmentData> ENCHANT_DATA = EntityDataSerializer.simple((buf, data) -> data.write(buf), EnchantmentData::read);
+    public static void init(IEventBus bus) {
+        SERIAL_REGISTER.register(bus);
+    }
+
+    public static DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<int[]>> INT_ARRAY = SERIAL_REGISTER.register("int_array", () -> EntityDataSerializer.simple(FriendlyByteBuf::writeVarIntArray, FriendlyByteBuf::readVarIntArray));
+    public static DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<BoolArray>> BOOL_ARRAY = SERIAL_REGISTER.register("bool_array", () -> EntityDataSerializer.simple((buf, bools) -> bools.write(buf), BoolArray::read));
+    public static DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<ShortArray>> SHORT_ARRAY = SERIAL_REGISTER.register("short_array", () -> EntityDataSerializer.simple((buf, shorts) -> shorts.write(buf), ShortArray::read));
+    public static DeferredHolder<EntityDataSerializer<?>, EntityDataSerializer<EnchantmentData>> ENCHANT_DATA = SERIAL_REGISTER.register("enchant_data", () -> EntityDataSerializer.simple((buf, data) -> data.write(buf), EnchantmentData::read));
 
     public static class BoolArray {
         private final byte[] storage;
@@ -95,12 +103,5 @@ public class DataSerializers {
         public short[] getArray() {
             return storage;
         }
-    }
-
-
-    static {
-        EntityDataSerializers.registerSerializer(BOOL_ARRAY);
-        EntityDataSerializers.registerSerializer(SHORT_ARRAY);
-        EntityDataSerializers.registerSerializer(ENCHANT_DATA);
     }
 }
