@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.TriState;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -159,8 +160,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
                 {
                     BlockState cropblock = getCropFromSeedHandler(getStack(i), world, pos);
                     if (cropblock != null && world.getBlockState(pos.above()).isAir()) {
-                        TriState state = soilblock.canSustainPlant(soilState, world, pos, Direction.UP, cropblock);
-                        if (state.isTrue() || state.isDefault()) {
+                        if (cropblock.canSurvive(world, pos.above())) {
                             hasSeeds = i;
                             break;
                         }
@@ -245,7 +245,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
 
     public boolean isSeedValidHandler(@Nonnull ItemStack seed)
     {
-        return seed.is(Tags.Items.SEEDS) || plantModules.stream().anyMatch(e -> e.isSeedValid(seed));
+        return seed.is(Tags.Items.SEEDS) || seed.is(ItemTags.VILLAGER_PLANTABLE_SEEDS) || plantModules.stream().anyMatch(e -> e.isSeedValid(seed));
     }
 
     protected BlockState getCropFromSeedHandler(@Nonnull ItemStack seed, Level level, BlockPos pos)
