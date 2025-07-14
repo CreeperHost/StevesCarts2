@@ -1,6 +1,8 @@
 package vswe.stevescarts.api.upgrades;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 
 public abstract class BaseUpgradeEffect
@@ -25,5 +27,5 @@ public abstract class BaseUpgradeEffect
     {
     }
 
-    public abstract String getName();
+    public abstract Component getName();
 }

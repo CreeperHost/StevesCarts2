@@ -35,7 +35,7 @@ public enum ComponentTypes
     ENTITY_SCANNER("entity_scanner"),
     ENTITY_ANALYZER("entity_analyzer"),
     EMPTY_DISK("empty_disk"),
-    TRI_TORCH("tri-torch"),
+    TRI_TORCH("tri_torch"),
     CHEST_PANE("chest_pane"),
     LARGE_CHEST_PANE("large_chest_pane"),
     HUGE_CHEST_PANE("huge_chest_pane"),

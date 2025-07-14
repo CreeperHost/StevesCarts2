@@ -1,14 +1,14 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.helpers.Localization;
 
 public class Redstone extends BaseUpgradeEffect
 {
     @Override
-    public String getName()
+    public Component getName()
     {
-        return I18n.get("info.stevescarts.effectRedstone");
+        return Localization.translate("info.stevescarts.effectRedstone");
     }
 }

@@ -1,6 +1,6 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -18,9 +18,9 @@ public class ThermalFuel extends TankUpgradeEffect
     }
 
     @Override
-    public String getName()
+    public Component getName()
     {
-        return I18n.get("info.stevescarts.effectThermal");
+        return Localization.translate("info.stevescarts.effectThermal");
     }
 
     @Override
