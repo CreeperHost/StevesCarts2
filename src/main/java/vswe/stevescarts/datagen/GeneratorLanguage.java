@@ -414,6 +414,35 @@ public class GeneratorLanguage extends LanguageProvider
         add("block.stevescarts.upgrade_entropy", "Upgrade: Entropy");
         add("block.stevescarts.upgrade_solar_panel", "Upgrade: Solar Panel");
         add("block.stevescarts.upgrade_thermal_engine", "Upgrade: Thermal Engine");
+
+        add("item.stevescarts.blockcargomanager", "Cargo Manager");
+        add("item.stevescarts.blockjunction", "Junction Rail");
+        add("item.stevescarts.blockadvdetector", "Advanced Detector Rail");
+        add("item.stevescarts.blockcartassembler", "Cart Assembler");
+        add("item.stevescarts.blockactivator", "Module Toggler");
+        add("item.stevescarts.blockdistributor", "External Distributor");
+        add("item.stevescarts.blockliquidmanager", "Liquid Manager");
+        add("item.stevescarts.upgrade_batteries", "Upgrade: Batteries");
+        add("item.stevescarts.upgrade_power_crystal", "Upgrade: Power Crystal");
+        add("item.stevescarts.upgrade_module_knowledge", "Upgrade: Module knowledge");
+        add("item.stevescarts.upgrade_industrial_espionage", "Upgrade: Industrial espionage");
+        add("item.stevescarts.upgrade_experienced_assembler", "Upgrade: Experienced assembler");
+        add("item.stevescarts.upgrade_new_era", "Upgrade: New Era");
+        add("item.stevescarts.upgrade_cotwo_friendly", "Upgrade: CO2 friendly");
+        add("item.stevescarts.upgrade_generic_engine", "Upgrade: Generic engine");
+        add("item.stevescarts.upgrade_module_input", "Upgrade: Module input");
+        add("item.stevescarts.upgrade_production_line", "Upgrade: Production line");
+        add("item.stevescarts.upgrade_cart_deployer", "Upgrade: Cart Deployer");
+        add("item.stevescarts.upgrade_cart_modifier", "Upgrade: Cart Modifier");
+        add("item.stevescarts.upgrade_cart_crane", "Upgrade: Cart Crane");
+        add("item.stevescarts.upgrade_redstone_control", "Upgrade: Redstone Control");
+        add("item.stevescarts.upgrade_creative_mode", "Upgrade: Creative Mode");
+        add("item.stevescarts.upgrade_quick_demolisher", "Upgrade: Quick Demolisher");
+        add("item.stevescarts.upgrade_manager_bridge", "Upgrade: Manager Bridge");
+        add("item.stevescarts.upgrade_entropy", "Upgrade: Entropy");
+        add("item.stevescarts.upgrade_solar_panel", "Upgrade: Solar Panel");
+        add("item.stevescarts.upgrade_thermal_engine", "Upgrade: Thermal Engine");
+
         add("item.stevescarts.BlockDetector0", "Detector Manager");
         add("item.stevescarts.BlockDetector1", "Detector Unit");
         add("item.stevescarts.BlockDetector2", "Detector Station");

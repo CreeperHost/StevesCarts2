@@ -1,12 +1,14 @@
 package vswe.stevescarts.upgrades;
 
+import net.minecraft.network.chat.Component;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
+import vswe.stevescarts.helpers.Localization;
 
 public class Transposer extends BaseUpgradeEffect
 {
     @Override
-    public String getName()
+    public Component getName()
     {
-        return "info.stevescarts.effectTransposer";
+        return Localization.translate("info.stevescarts.effectTransposer");
     }
 }

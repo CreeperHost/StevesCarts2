@@ -1,5 +1,6 @@
 package vswe.stevescarts.upgrades;
 
+import net.minecraft.network.chat.Component;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.helpers.Localization;
 
@@ -13,9 +14,9 @@ public class TimeFlatCart extends BaseUpgradeEffect
     }
 
     @Override
-    public String getName()
+    public Component getName()
     {
-        return Localization.UPGRADES.CART_FLAT.translate(((getSeconds() >= 0) ? "+" : "") + getSeconds(), String.valueOf(getSeconds()));
+        return Component.literal(Localization.UPGRADES.CART_FLAT.translate(((getSeconds() >= 0) ? "+" : "") + getSeconds(), String.valueOf(getSeconds())));
     }
 
     protected int getSeconds()
