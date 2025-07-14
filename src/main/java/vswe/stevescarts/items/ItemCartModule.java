@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.data.ModuleData;
+import vswe.stevescarts.helpers.Localization;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,7 +28,7 @@ public class ItemCartModule extends Item implements IModuleItem
     @Override
     public @NotNull Component getName(@NotNull ItemStack stack)
     {
-        return Component.translatable("item.stevescarts." + moduleData.getRawName());
+        return Localization.translate("item.stevescarts." + moduleData.getRawName());
     }
 
     @Override

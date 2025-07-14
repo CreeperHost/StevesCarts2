@@ -374,7 +374,7 @@ public abstract class ModuleBase
      */
     public int getYTarget()
     {
-        return -1;
+        return Integer.MIN_VALUE;
     }
 
     /**

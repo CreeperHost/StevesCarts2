@@ -1,12 +1,15 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.common.I18nExtension;
+
+import java.util.Arrays;
 
 public final class Localization
 {
     private static String doTranslate(final String name, final String... vars)
     {
-        String result = I18n.get(name);
+        String result = I18nExtension.getPattern(name);
         for (int i = 0; i < vars.length; ++i)
         {
             final String pluralCheck = "[%" + (i + 1) + ":";
@@ -55,6 +58,10 @@ public final class Localization
         }
         //TODO look into this at some point
         return result.replace("Format error: ", "");
+    }
+
+    public static Component translate(String name, Object... vars) {
+        return Component.literal(doTranslate(name, Arrays.stream(vars).map(String::valueOf).toArray(String[]::new)));
     }
 
     public static class GUI
