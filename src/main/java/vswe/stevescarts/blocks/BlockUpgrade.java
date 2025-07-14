@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -32,13 +33,13 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
+import vswe.stevescarts.items.TooltipBlock;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.function.Consumer;
 
-public class BlockUpgrade extends BlockContainerBase
-{
+public class BlockUpgrade extends BlockContainerBase implements TooltipBlock {
     //TODO, Figure out this codec stuff....
     public static final MapCodec<BlockUpgrade> CODEC = simpleCodec(BlockUpgrade::new);
 
@@ -48,8 +49,7 @@ public class BlockUpgrade extends BlockContainerBase
     private static final VoxelShape[] BBS = new VoxelShape[6];
     private final AssemblerUpgrade assemblerUpgrade;
 
-    static
-    {
+    static {
         float thickness = 2.0F;
         BBS[Direction.UP.ordinal()] = Block.box(0, 0, 0, 16, thickness, 16);
         BBS[Direction.DOWN.ordinal()] = Block.box(0, 16 - thickness, 0, 16, 16, 16);
@@ -63,60 +63,50 @@ public class BlockUpgrade extends BlockContainerBase
         this(properties, null);
     }
 
-    public BlockUpgrade(Block.Properties properties, AssemblerUpgrade assemblerUpgrade)
-    {
+    public BlockUpgrade(Block.Properties properties, AssemblerUpgrade assemblerUpgrade) {
         super(properties);
         this.assemblerUpgrade = assemblerUpgrade;
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(CONNECTED, false));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, CONNECTED);
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter blockReader, @NotNull BlockPos blockPos, @NotNull CollisionContext selectionContext)
-    {
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter blockReader, @NotNull BlockPos blockPos, @NotNull CollisionContext selectionContext) {
         return BBS[state.getValue(FACING).getOpposite().ordinal()];
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext blockItemUseContext)
-    {
+    public BlockState getStateForPlacement(BlockPlaceContext blockItemUseContext) {
         return this.defaultBlockState().setValue(FACING, blockItemUseContext.getHorizontalDirection()).setValue(CONNECTED, false);
     }
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState)
-    {
+    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
         return new TileEntityUpgrade(assemblerUpgrade, blockPos, blockState);
     }
 
 
-    @SuppressWarnings("deprication")
+    @SuppressWarnings ("deprication")
     @Override
-    public boolean canSurvive(@NotNull BlockState blockState, LevelReader iWorldReader, BlockPos blockPos)
-    {
+    public boolean canSurvive(@NotNull BlockState blockState, LevelReader iWorldReader, BlockPos blockPos) {
         BlockPos offset = blockPos.relative(getFacing(blockState));
         return iWorldReader.getBlockEntity(offset) != null && iWorldReader.getBlockEntity(offset) instanceof TileEntityCartAssembler;
     }
 
-    public Direction getFacing(BlockState blockState)
-    {
+    public Direction getFacing(BlockState blockState) {
         return blockState.getValue(FACING);
     }
 
     @Override
-    public void randomTick(@NotNull BlockState blockState, @NotNull ServerLevel serverWorld, @NotNull BlockPos blockPos, @NotNull RandomSource p_225542_4_)
-    {
-        if (!canSurvive(blockState, serverWorld, blockPos))
-        {
-            if (serverWorld.removeBlock(blockPos, true))
-            {
+    public void randomTick(@NotNull BlockState blockState, @NotNull ServerLevel serverWorld, @NotNull BlockPos blockPos, @NotNull RandomSource p_225542_4_) {
+        if (!canSurvive(blockState, serverWorld, blockPos)) {
+            if (serverWorld.removeBlock(blockPos, true)) {
                 ItemEntity item = new ItemEntity(serverWorld, blockPos.getX(), blockPos.getY(), blockPos.getZ(), new ItemStack(this));
                 serverWorld.addFreshEntity(item);
             }
@@ -125,12 +115,9 @@ public class BlockUpgrade extends BlockContainerBase
     }
 
     @Override
-    public @NotNull InteractionResult useWithoutItem(@NotNull BlockState blockState, Level world, @NotNull BlockPos blockPos, @NotNull Player playerEntity, BlockHitResult result)
-    {
-        if (!world.isClientSide)
-        {
-            if (!playerEntity.isCrouching())
-            {
+    public @NotNull InteractionResult useWithoutItem(@NotNull BlockState blockState, Level world, @NotNull BlockPos blockPos, @NotNull Player playerEntity, BlockHitResult result) {
+        if (!world.isClientSide) {
+            if (!playerEntity.isCrouching()) {
                 playerEntity.openMenu((MenuProvider) world.getBlockEntity(blockPos), blockPos);
                 return InteractionResult.SUCCESS;
             }
@@ -138,18 +125,14 @@ public class BlockUpgrade extends BlockContainerBase
         return InteractionResult.SUCCESS;
     }
 
-    //TODO, may need custom itemblock?
-//    @Override
-//    public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Item.TooltipContext iBlockReader, @NotNull List<Component> tooltip, @NotNull TooltipFlag iTooltipFlag)
-//    {
-//        if (assemblerUpgrade != null)
-//        {
-//            for (final BaseUpgradeEffect effect : assemblerUpgrade.getEffects())
-//            {
-//                tooltip.add(effect.getName());
-//            }
-//        }
-//    }
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> consumer, TooltipFlag tooltipFlag) {
+        if (assemblerUpgrade != null) {
+            for (final BaseUpgradeEffect effect : assemblerUpgrade.getEffects()) {
+                consumer.accept(effect.getName());
+            }
+        }
+    }
 
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
