@@ -1,6 +1,9 @@
 package vswe.stevescarts.helpers;
 
+import net.minecraft.network.chat.Component;
 import net.neoforged.fml.i18n.FMLTranslations;
+
+import java.util.Arrays;
 
 public final class Localization
 {
@@ -59,6 +62,10 @@ public final class Localization
         }
         //TODO look into this at some point
         return result.replace("Format error: ", "");
+    }
+
+    public static Component translate(String name, Object... vars) {
+        return Component.literal(doTranslate(name, Arrays.stream(vars).map(String::valueOf).toArray(String[]::new)));
     }
 
     public static class GUI

@@ -146,7 +146,7 @@ public class BlockUpgrade extends BlockContainerBase
         {
             for (final BaseUpgradeEffect effect : assemblerUpgrade.getEffects())
             {
-                tooltip.add(Component.translatable(effect.getName()));
+                tooltip.add(effect.getName());
             }
         }
     }

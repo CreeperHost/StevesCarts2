@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
+import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.helpers.ResourceHelper;
@@ -30,6 +31,14 @@ public class ModelSeat extends ModelCartbase
 
     @Override
     public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll) {
-        this.root.yRot = ((module == null) ? 1.5707964f : (((ModuleSeat) module).getChairAngle() + (((ModuleSeat) module).useRelativeRender() ? 0.0f : ((yaw + 180) * -0.0174532F))));
+        if (module == null) {
+            root.yRot = 1.5707964f;
+        } else {
+            float angle = ((ModuleSeat) module).getChairAngle();
+            this.root.yRot = angle;
+            if (!((ModuleSeat) module).useRelativeRender()) {
+                this.root.yRot = angle + (float) Math.toRadians(yaw + 180);
+            }
+        }
     }
 }
