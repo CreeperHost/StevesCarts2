@@ -3,6 +3,7 @@ package vswe.stevescarts.containers.slots;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 
@@ -23,7 +24,7 @@ public class SlotBridge extends SlotStevesCarts implements ISpecialItemTransferV
 
     public static boolean isBridgeMaterial(@Nonnull ItemStack itemstack)
     {
-        return itemstack.is(ItemTags.PLANKS) || itemstack.is(ItemTags.STONE_BRICKS);
+        return itemstack.is(ItemTags.PLANKS) || itemstack.is(ItemTags.STONE_BRICKS) || itemstack.is(Items.STONE) || itemstack.is(Items.BRICKS);
     }
 
     @Override
