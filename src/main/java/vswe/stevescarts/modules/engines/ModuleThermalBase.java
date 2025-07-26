@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -84,36 +85,38 @@ public abstract class ModuleThermalBase extends ModuleEngine
     @Override
     protected void loadFuel()
     {
-        final int consumption = getCart().getConsumption(true) * 2;
+        int consumption = getCart().getConsumption(true) * 2;
         while (getFuelLevel() <= consumption)
         {
-            final int amount = getCart().drain(Fluids.LAVA, 1, IFluidHandler.FluidAction.SIMULATE);
-            if (amount <= 0)
+            FluidStack amount = getCart().drain(new FluidStack(Fluids.LAVA, 1), IFluidHandler.FluidAction.SIMULATE);
+            if (amount.isEmpty())
             {
                 break;
             }
-            getCart().drain(Fluids.LAVA, amount, IFluidHandler.FluidAction.EXECUTE);
-            setFuelLevel(getFuelLevel() + amount * getEfficiency());
+            getCart().drain(amount, IFluidHandler.FluidAction.EXECUTE);
+            setFuelLevel(getFuelLevel() + amount.getAmount() * getEfficiency());
         }
         while (requiresCoolant() && getCoolantLevel() <= consumption)
         {
-            final int amount = getCart().drain(Fluids.WATER, 1, IFluidHandler.FluidAction.SIMULATE);
-            if (amount <= 0)
+            FluidStack amount = getCart().drain(new FluidStack(Fluids.WATER, 1), IFluidHandler.FluidAction.SIMULATE);
+            if (amount.isEmpty())
             {
                 break;
             }
-            getCart().drain(Fluids.WATER, amount, IFluidHandler.FluidAction.EXECUTE);
-            setCoolantLevel(getCoolantLevel() + amount * getCoolantEfficiency());
+            getCart().drain(amount, IFluidHandler.FluidAction.EXECUTE);
+            setCoolantLevel(getCoolantLevel() + amount.getAmount() * getCoolantEfficiency());
         }
     }
 
     @Override
     public int getTotalFuel()
     {
-        final int totalfuel = getFuelLevel() + getCart().drain(Fluids.LAVA, Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE) * getEfficiency();
+        FluidStack allLava = getCart().drain(new FluidStack(Fluids.LAVA, Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE);
+        int totalfuel = getFuelLevel() + allLava.getAmount() * getEfficiency();
         if (requiresCoolant())
         {
-            final int totalcoolant = getCoolantLevel() + getCart().drain(Fluids.WATER, Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE) * getCoolantEfficiency();
+            FluidStack allWater = getCart().drain(new FluidStack(Fluids.WATER, Integer.MAX_VALUE), IFluidHandler.FluidAction.SIMULATE);
+            int totalcoolant = getCoolantLevel() + allWater.getAmount() * getCoolantEfficiency();
             return Math.min(totalcoolant, totalfuel);
         }
         return totalfuel;

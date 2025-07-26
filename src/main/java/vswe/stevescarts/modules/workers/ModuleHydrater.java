@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
@@ -68,18 +69,18 @@ public class ModuleHydrater extends ModuleWorker
             int moisture = state.getValue(FarmBlock.MOISTURE);
             if (moisture != 7)
             {
-                int waterCost = 7 - moisture;
-                waterCost = getCart().drain(Fluids.WATER, waterCost, IFluidHandler.FluidAction.SIMULATE);
-                if (waterCost > 0)
+                FluidStack waterCost = new FluidStack(Fluids.WATER, 7 - moisture);
+                FluidStack drained = getCart().drain(waterCost, IFluidHandler.FluidAction.SIMULATE);
+                if (drained.getAmount() > 0)
                 {
                     if (doPreWork())
                     {
-                        startWorking(2 + waterCost);
+                        startWorking(2 + drained.getAmount());
                         return true;
                     }
                     stopWorking();
-                    getCart().drain(Fluids.WATER, waterCost, IFluidHandler.FluidAction.EXECUTE);
-                    world.setBlock(pos, state.setValue(FarmBlock.MOISTURE, moisture + waterCost), 3);
+                    getCart().drain(drained, IFluidHandler.FluidAction.EXECUTE);
+                    world.setBlock(pos, state.setValue(FarmBlock.MOISTURE, moisture + drained.getAmount()), 3);
                 }
             }
         }

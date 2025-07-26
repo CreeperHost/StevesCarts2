@@ -5,6 +5,7 @@ import net.creeperhost.polylib.client.modulargui.lib.GuiRender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -52,6 +53,9 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.capabilities.Capabilities;
+import net.neoforged.neoforge.common.capabilities.Capability;
+import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.entity.IEntityAdditionalSpawnData;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -68,10 +72,7 @@ import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.containers.ContainerMinecart;
-import vswe.stevescarts.helpers.ActivatorOption;
-import vswe.stevescarts.helpers.ForceChunkHelper;
-import vswe.stevescarts.helpers.GuiAllocationHelper;
-import vswe.stevescarts.helpers.ModuleCountPair;
+import vswe.stevescarts.helpers.*;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModEntities;
@@ -218,6 +219,16 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         this(world);
         setPlaceholder(assembler);
         loadPlaceHolderModules(data);
+    }
+
+    @Override
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @org.jetbrains.annotations.Nullable Direction side) {
+        if (cap == Capabilities.ITEM_HANDLER) {
+            return (LazyOptional<T>) LazyOptional.of(() -> new CartInvWrapper(this));
+        }else if (cap == Capabilities.FLUID_HANDLER) {
+            return (LazyOptional<T>) LazyOptional.of(() -> this);
+        }
+        return super.getCapability(cap, side);
     }
 
     @Override
@@ -1007,15 +1018,14 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public @NotNull ItemStack removeItem(int i, int p_70298_2_)
-    {
-        if (!getItem(i).isEmpty())
-        {
-            @Nonnull ItemStack var2 = getItem(i);
-            setItem(i, ItemStack.EMPTY);
-            return var2;
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack stack = getItem(slot);
+        if (stack.isEmpty() || amount == 0) {
+            return ItemStack.EMPTY;
         }
-        return ItemStack.EMPTY;
+        stack = stack.split(amount);
+        setChanged();
+        return stack;
     }
 
     @Override
@@ -1724,83 +1734,19 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     }
 
     @Override
-    public int fill(FluidStack resource, FluidAction action)
-    {
-        int amount = 0;
-        if (resource != null && resource.getAmount() > 0)
-        {
-            final FluidStack fluid = resource.copy();
-            for (int i = 0; i < tankModules.size(); ++i)
-            {
-                final int tempAmount = tankModules.get(i).fill(fluid, action);
-                amount += tempAmount;
-                fluid.shrink(tempAmount);
-                if (fluid.getAmount() <= 0)
-                {
-                    break;
-                }
-            }
+    public int fill(FluidStack resource, FluidAction action) {
+        if (resource.isEmpty()) {
+            return 0;
         }
-        return amount;
-    }
 
-    private FluidStack drain(final FluidStack resource, int maxDrain, final FluidAction doDrain)
-    {
-        FluidStack ret = resource;
-        if (ret != null)
-        {
-            ret = ret.copy();
-            ret.setAmount(0);
-        }
-        for (int i = 0; i < tankModules.size(); ++i)
-        {
-            FluidStack temp = null;
-            temp = tankModules.get(i).drain(maxDrain, doDrain);
-            if (temp != null && (ret == null || ret.isFluidEqual(temp)))
-            {
-                if (ret == null)
-                {
-                    ret = temp;
-                }
-                else
-                {
-                    ret.grow(temp.getAmount());
-                }
-                maxDrain -= temp.getAmount();
-                if (maxDrain <= 0)
-                {
-                    break;
-                }
-            }
-        }
-        if (ret != null && ret.getAmount() == 0)
-        {
-            return null;
-        }
-        return ret;
-    }
-
-    public int drain(final Fluid type, int maxDrain, final FluidAction doDrain)
-    {
         int amount = 0;
-        if (type != null && maxDrain > 0)
-        {
-            for (final ModuleTank tank : tankModules)
-            {
-                final FluidStack drained = tank.drain(maxDrain, doDrain);
-                if (!drained.isEmpty() && type.isSame(drained.getFluid()))
-                {
-                    amount += drained.getAmount();
-                    maxDrain -= drained.getAmount();
-                    if (doDrain == FluidAction.EXECUTE)
-                    {
-                        tank.drain(drained.getAmount(), doDrain);
-                    }
-                    if (maxDrain <= 0)
-                    {
-                        break;
-                    }
-                }
+        FluidStack fluid = resource.copy();
+        for (ModuleTank tank : tankModules) {
+            int filled = tank.fill(fluid, action);
+            amount += filled;
+            fluid.shrink(filled);
+            if (fluid.isEmpty()) {
+                break;
             }
         }
         return amount;
@@ -1808,16 +1754,47 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
 
     @Nonnull
     @Override
-    public FluidStack drain(FluidStack resource, FluidAction action)
-    {
-        return drain(resource, (!resource.isEmpty()) ? 0 : resource.getAmount(), action);
+    public FluidStack drain(FluidStack resource, FluidAction action) {
+        if (resource.isEmpty()) {
+            return FluidStack.EMPTY;
+        }
+
+        FluidStack toDrain = resource.copy();
+        for (ModuleTank tank : tankModules) {
+            FluidStack fromTank = tank.drain(resource, action);
+            if (fromTank.isEmpty() || !fromTank.isFluidEqual(toDrain)) {
+                continue;
+            }
+            toDrain.shrink(fromTank.getAmount());
+        }
+        FluidStack returnStack = resource.copy();
+        returnStack.setAmount(resource.getAmount() - toDrain.getAmount());
+        return returnStack;
     }
 
     @Nonnull
     @Override
-    public FluidStack drain(int maxDrain, FluidAction action)
-    {
-        return drain(maxDrain, action);
+    public FluidStack drain(int maxDrain, FluidAction action) {
+        if (maxDrain <= 0) {
+            return FluidStack.EMPTY;
+        }
+
+        int toDrain = maxDrain;
+        FluidStack drained = FluidStack.EMPTY;
+        for (ModuleTank tank : tankModules) {
+            FluidStack fromTank = drained.isEmpty() ? tank.drain(toDrain, action) : tank.drain(new FluidStack(drained, toDrain), action);
+            if (fromTank.isEmpty() || (!drained.isEmpty() && !fromTank.isFluidEqual(drained))) {
+                continue;
+            }
+            if (drained.isEmpty()) {
+                drained = fromTank.copy();
+            } else {
+                drained.grow(fromTank.getAmount());
+            }
+
+            toDrain -= fromTank.getAmount();
+        }
+        return drained;
     }
 
     @Override
