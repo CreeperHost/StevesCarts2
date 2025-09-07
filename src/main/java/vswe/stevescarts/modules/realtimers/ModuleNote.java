@@ -13,6 +13,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -783,36 +785,32 @@ public class ModuleNote extends ModuleBase
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
         short headerInfo = (short) tracks.size();
         headerInfo |= (short) (speedSetting << maximumTracksPerModuleBitCount);
-        tagCompound.putShort(generateNBTName("Header", id), headerInfo);
-        for (int i = 0; i < tracks.size(); ++i)
-        {
-            final Track track = tracks.get(i);
-            tagCompound.putShort(generateNBTName("Track" + i, id), track.getInfo());
-            for (int j = 0; j < track.notes.size(); ++j)
-            {
-                final Note note = track.notes.get(j);
-                tagCompound.putShort(generateNBTName("Note" + i + ":" + j, id), note.getInfo());
+        output.putShort(generateNBTName("Header", id), headerInfo);
+        for (int i = 0; i < tracks.size(); ++i) {
+            Track track = tracks.get(i);
+            output.putShort(generateNBTName("Track" + i, id), track.getInfo());
+            for (int j = 0; j < track.notes.size(); ++j) {
+                Note note = track.notes.get(j);
+                output.putShort(generateNBTName("Note" + i + ":" + j, id), note.getInfo());
             }
         }
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        final short headerInfo = tagCompound.getShortOr(generateNBTName("Header", id), (short) 0);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        short headerInfo = (short) input.getShortOr(generateNBTName("Header", id), (short) 0);
         receiveGuiData(0, headerInfo);
-        for (int i = 0; i < tracks.size(); ++i)
-        {
-            final short trackInfo = tagCompound.getShortOr(generateNBTName("Track" + i, id), (short) 0);
+        for (int i = 0; i < tracks.size(); ++i) {
+            short trackInfo = (short) input.getShortOr(generateNBTName("Track" + i, id), (short) 0);
             receiveGuiData(1 + (maximumNotesPerTrack + 1) * i, trackInfo);
-            final Track track = tracks.get(i);
-            for (int j = 0; j < track.notes.size(); ++j)
-            {
-                final short noteInfo = tagCompound.getShortOr(generateNBTName("Note" + i + ":" + j, id), (short) 0);
+            Track track = tracks.get(i);
+            for (int j = 0; j < track.notes.size(); ++j) {
+                short noteInfo = (short) input.getShortOr(generateNBTName("Note" + i + ":" + j, id), (short) 0);
                 receiveGuiData(1 + (maximumNotesPerTrack + 1) * i + 1 + j, noteInfo);
             }
         }

@@ -9,6 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.SCConfig;
@@ -275,19 +277,19 @@ public abstract class ModuleTool extends ModuleWorker
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putInt(generateNBTName("Durability", id), getCurrentDurability());
-        tagCompound.putShort(generateNBTName("Repair", id), (short) remainingRepairUnits);
-        tagCompound.putShort(generateNBTName("MaxRepair", id), (short) maximumRepairUnits);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putInt(generateNBTName("Durability", id), getCurrentDurability());
+        output.putShort(generateNBTName("Repair", id), (short) remainingRepairUnits);
+        output.putShort(generateNBTName("MaxRepair", id), (short) maximumRepairUnits);
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        setDurability(tagCompound.getIntOr(generateNBTName("Durability", id), 0));
-        remainingRepairUnits = tagCompound.getShortOr(generateNBTName("Repair", id), (short) 0);
-        maximumRepairUnits = tagCompound.getShortOr(generateNBTName("MaxRepair", id), (short) 0);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setDurability(input.getIntOr(generateNBTName("Durability", id), 0));
+        remainingRepairUnits = input.getShortOr(generateNBTName("Repair", id), (short) 0);
+        maximumRepairUnits = input.getShortOr(generateNBTName("MaxRepair", id), (short) 0);
     }
 
     public void setDurability(int amount)

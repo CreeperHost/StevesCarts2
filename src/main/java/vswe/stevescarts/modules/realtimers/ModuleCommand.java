@@ -8,6 +8,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -113,14 +115,14 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putString(generateNBTName("Command", id), command);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putString(generateNBTName("Command", id), command);
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        command = tagCompound.getStringOr(generateNBTName("Command", id), "");
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        command = input.getStringOr(generateNBTName("Command", id), "");
     }
 }

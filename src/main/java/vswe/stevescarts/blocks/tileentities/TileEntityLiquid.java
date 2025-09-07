@@ -2,6 +2,7 @@ package vswe.stevescarts.blocks.tileentities;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -19,6 +20,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -169,7 +172,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     @OnlyIn(Dist.CLIENT)
     public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour)
     {
-        guiGraphics.blitSprite(RenderType::guiTextured, sprite, targetX, targetY, width, height, colour);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, targetX, targetY, width, height, colour);
     }
 
     @Override
@@ -341,27 +344,21 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     }
 
     @Override
-    protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        super.loadAdditional(compoundTag, provider);
-        for (int i = 0; i < 4; ++i)
-        {
-            tanks[i].setFluid(FluidStack.parseOptional(provider, compoundTag.getCompoundOrEmpty("Fluid" + i)));
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        for (int i = 0; i < 4; ++i) {
+            tanks[i].deserialize(input.childOrEmpty("Fluid" + i));
         }
-        setWorkload(compoundTag.getShortOr("workload", (short) 0));
+        setWorkload(input.getShortOr("workload", (short) 0));
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag compoundTag, HolderLookup.Provider provider)
-    {
-        super.saveAdditional(compoundTag, provider);
-        for (int i = 0; i < 4; ++i)
-        {
-            if (!tanks[i].getFluid().isEmpty())
-            {
-                compoundTag.put("Fluid" + i, tanks[i].getFluid().save(provider, new CompoundTag()));
-            }
+    public void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        for (int i = 0; i < 4; ++i) {
+            tanks[i].serialize(output.child("Fluid" + i));
         }
-        compoundTag.putShort("workload", (short) getWorkload());
+        output.putShort("workload", (short) getWorkload());
     }
 
     @SuppressWarnings("unused")

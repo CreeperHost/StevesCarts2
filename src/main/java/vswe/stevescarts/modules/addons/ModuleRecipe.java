@@ -10,6 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -322,24 +324,22 @@ public abstract class ModuleRecipe extends ModuleAddon
     }
 
     @Override
-    protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
-    {
-        if (canUseAdvancedFeatures())
-        {
-            target.load(generateNBTName("Target", id), tag, provider);
-            mode.load(generateNBTName("Mode", id), tag, provider);
-            maxItemCount.load(generateNBTName("MaxItems", id), tag, provider);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        if (canUseAdvancedFeatures()) {
+            target.load(generateNBTName("Target", id), input);
+            mode.load(generateNBTName("Mode", id), input);
+            maxItemCount.load(generateNBTName("MaxItems", id), input);
         }
     }
 
     @Override
-    protected void save(CompoundTag tag, int id, HolderLookup.Provider provider)
-    {
-        if (canUseAdvancedFeatures())
-        {
-            target.save(generateNBTName("Target", id), tag, provider);
-            mode.save(generateNBTName("Mode", id), tag, provider);
-            maxItemCount.save(generateNBTName("MaxItems", id), tag, provider);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        if (canUseAdvancedFeatures()) {
+            target.save(generateNBTName("Target", id), output);
+            mode.save(generateNBTName("Mode", id), output);
+            maxItemCount.save(generateNBTName("MaxItems", id), output);
         }
     }
 

@@ -13,6 +13,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -22,6 +23,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.IModuleItem;
@@ -1200,91 +1203,48 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @Override
-    public void loadAdditional(@NotNull CompoundTag tagCompound, HolderLookup.Provider provider)
-    {
-        super.loadAdditional(tagCompound, provider);
-        ListTag itemList = tagCompound.getListOrEmpty("Items");
-        for (int i = 0; i < itemList.size(); ++i) {
-            CompoundTag itemTag = itemList.getCompoundOrEmpty(i);
-            int slot = itemTag.getByteOr("Slot", (byte) 0) & 0xFF;
-            if (slot < getContainerSize()) {
-                setItem(slot, ItemStack.parse(provider, itemTag).orElse(ItemStack.EMPTY));
-            }
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+
+        for(ItemStackWithSlot itemstackwithslot : input.listOrEmpty("Items", ItemStackWithSlot.CODEC)) {
+            setItem(itemstackwithslot.slot(), itemstackwithslot.stack());
         }
 
-        ListTag spares = tagCompound.getListOrEmpty("Spares");
         spareModules.clear();
-        for (int j = 0; j < spares.size(); ++j)
-        {
-            CompoundTag item2 = spares.getCompoundOrEmpty(j);
-            ItemStack iStack = ItemStack.parse(provider, item2).orElse(ItemStack.EMPTY);
-            spareModules.add(iStack);
+        for(ItemStack stack : input.listOrEmpty("Spares", ItemStack.OPTIONAL_CODEC)) {
+            spareModules.add(stack);
         }
-        CompoundTag outputTag = (CompoundTag) tagCompound.get("Output");
-        if (outputTag != null)
-        {
-            outputItem = ItemStack.parse(provider, outputTag).orElse(ItemStack.EMPTY);
-        }
-        if (tagCompound.contains("Fuel"))
-        {
-            setFuelLevel(tagCompound.getShortOr("Fuel", (short) 0));
-        }
-        else
-        {
-            setFuelLevel(tagCompound.getIntOr("IntFuel", 0));
-        }
-        maxAssemblingTime = tagCompound.getIntOr("maxTime", 0);
-        setAssemblingTime(tagCompound.getIntOr("currentTime", 0));
-        isAssembling = tagCompound.getBooleanOr("isAssembling", false);
+
+        outputItem = input.read("Output", ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
+        setFuelLevel(input.getShortOr("Fuel", (short) 0));
+        maxAssemblingTime = input.getIntOr("maxTime", 0);
+        setAssemblingTime(input.getIntOr("currentTime", 0));
+        isAssembling = input.getBooleanOr("isAssembling", false);
     }
 
-
     @Override
-    public void saveAdditional(final @NotNull CompoundTag tagCompound, HolderLookup.Provider provider)
-    {
-        super.saveAdditional(tagCompound, provider);
-        ListTag itemList = new ListTag();
-        for (int i = 0; i < getContainerSize(); ++i) {
-            ItemStack stack = getItem(i);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+
+        ValueOutput.TypedOutputList<ItemStackWithSlot> typedoutputlist = output.list("Items", ItemStackWithSlot.CODEC);
+        for(int i = 0; i < getContainerSize(); ++i) {
+            ItemStack itemstack = getItem(i);
+            if (!itemstack.isEmpty()) {
+                typedoutputlist.add(new ItemStackWithSlot(i, itemstack));
+            }
+        }
+
+        for (ItemStack stack : spareModules) {
             if (!stack.isEmpty()) {
-                CompoundTag itemTag = new CompoundTag();
-                itemTag.putByte("Slot", (byte) i);
-                itemList.add(stack.save(provider, itemTag));
+                output.list("Spares", ItemStack.OPTIONAL_CODEC).add(stack);
             }
         }
-        tagCompound.put("Items", itemList);
 
-        final ListTag spares = new ListTag();
-        for (ItemStack iStack2 : spareModules)
-        {
-            if (!iStack2.isEmpty())
-            {
-                final CompoundTag item2 = new CompoundTag();
-                spares.add(iStack2.save(provider, item2));
-            }
-        }
-        tagCompound.put("Spares", spares);
-        if (!outputItem.isEmpty())
-        {
-            final CompoundTag outputTag = new CompoundTag();
-            tagCompound.put("Output", outputItem.save(provider, outputTag));
-        }
-        tagCompound.putInt("IntFuel", getFuelLevel());
-        tagCompound.putInt("maxTime", maxAssemblingTime);
-        tagCompound.putInt("currentTime", getAssemblingTime());
-        tagCompound.putBoolean("isAssembling", isAssembling);
-    }
-
-    @Override
-    public void handleUpdateTag(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider lookupProvider)
-    {
-        loadAdditional(tag, lookupProvider);
-    }
-
-    @Override
-    public void onDataPacket(@NotNull Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.@NotNull Provider lookupProvider)
-    {
-        if(pkt.getTag() != null) loadAdditional(pkt.getTag(), lookupProvider);
+        output.store("Output", ItemStack.OPTIONAL_CODEC, outputItem);
+        output.putInt("Fuel", getFuelLevel());
+        output.putInt("maxTime", maxAssemblingTime);
+        output.putInt("currentTime", getAssemblingTime());
+        output.putBoolean("isAssembling", isAssembling);
     }
 
     @SuppressWarnings("unused")

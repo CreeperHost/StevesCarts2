@@ -10,6 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -110,15 +112,15 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putShort(generateNBTName("Cake", id), (short) getCakeBuffer());
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putShort(generateNBTName("Cake", id), (short) getCakeBuffer());
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        setCakeBuffer(tagCompound.getShortOr(generateNBTName("Cake", id), (short) 0));
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setCakeBuffer(input.getShortOr(generateNBTName("Cake", id), (short) 0));
     }
 
     @OnlyIn(Dist.CLIENT)

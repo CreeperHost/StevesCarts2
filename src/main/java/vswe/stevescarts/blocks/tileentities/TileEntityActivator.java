@@ -14,6 +14,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.containers.ContainerActivator;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -68,20 +70,18 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider
     }
 
     @Override
-    protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        super.loadAdditional(compoundTag, provider);
-        for (final ActivatorOption option : options) {
-            option.setOption(compoundTag.getByteOr(option.getName(), (byte) 0));
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        for (ActivatorOption option : options) {
+            option.setOption(input.getByteOr(option.getName(), (byte) 0));
         }
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag compoundNBT, HolderLookup.Provider provider)
-    {
-        super.saveAdditional(compoundNBT, provider);
-        for (final ActivatorOption option : options)
-        {
-            compoundNBT.putByte(option.getName(), (byte) option.getOption());
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        for (ActivatorOption option : options) {
+            output.putByte(option.getName(), (byte) option.getOption());
         }
     }
 

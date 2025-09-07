@@ -5,6 +5,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
@@ -336,20 +338,16 @@ public class ArcadeSweeper extends ArcadeGame
     }
 
     @Override
-    public void Save(final CompoundTag tagCompound, final int id)
-    {
-        for (int i = 0; i < 3; ++i)
-        {
-            tagCompound.putShort(getModule().generateNBTName("HighscoreSweeper" + i, id), (short) highscore[i]);
+    public void Save(ValueOutput output, int id) {
+        for (int i = 0; i < 3; ++i) {
+            output.putShort(getModule().generateNBTName("HighscoreSweeper" + i, id), (short) highscore[i]);
         }
     }
 
     @Override
-    public void Load(final CompoundTag tagCompound, final int id)
-    {
-        for (int i = 0; i < 3; ++i)
-        {
-            highscore[i] = tagCompound.getShortOr(getModule().generateNBTName("HighscoreSweeper" + i, id), (short) 0);
+    public void Load(ValueInput input, int id) {
+        for (int i = 0; i < 3; ++i) {
+            highscore[i] = input.getShortOr(getModule().generateNBTName("HighscoreSweeper" + i, id), (short) 0);
         }
     }
 

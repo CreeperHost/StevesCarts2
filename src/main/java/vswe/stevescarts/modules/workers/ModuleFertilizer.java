@@ -13,6 +13,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.Tags;
@@ -219,15 +221,15 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     }
 
     @Override
-    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putShort(generateNBTName("Fert", id), (short) getFertAmount());
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putShort(generateNBTName("Fert", id), (short) getFertAmount());
     }
 
     @Override
-    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
-    {
-        setFertAmount(tagCompound.getShortOr(generateNBTName("Fert", id), (short) 0));
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setFertAmount(input.getShortOr(generateNBTName("Fert", id), (short) 0));
     }
 
     @Override

@@ -17,6 +17,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.TorchBlock;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
@@ -275,13 +277,15 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     }
 
     @Override
-    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider) {
-        tagCompound.putByte(generateNBTName("lightLimit", id), (byte) lightLimit);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putByte(generateNBTName("lightLimit", id), (byte) lightLimit);
     }
 
     @Override
-    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider) {
-        lightLimit = tagCompound.getByteOr(generateNBTName("lightLimit", id), (byte) 0);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        lightLimit = input.getByteOr(generateNBTName("lightLimit", id), (byte) 0);
         calculateTorches();
     }
 

@@ -3,6 +3,8 @@ package vswe.stevescarts.api.upgrades;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 
@@ -20,11 +22,11 @@ public abstract class BaseUpgradeEffect
     {
     }
 
-    public void load(final TileEntityUpgrade tileEntityUpgrade, final CompoundTag compound, @NotNull HolderLookup.Provider provider)
+    public void load(final TileEntityUpgrade tileEntityUpgrade, ValueInput input)
     {
     }
 
-    public void save(final TileEntityUpgrade tileEntityUpgrade, final CompoundTag compound, @NotNull HolderLookup.Provider provider)
+    public void save(final TileEntityUpgrade tileEntityUpgrade, ValueOutput output)
     {
     }
 

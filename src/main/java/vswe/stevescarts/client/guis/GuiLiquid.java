@@ -3,6 +3,7 @@ package vswe.stevescarts.client.guis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
@@ -38,7 +39,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float p_230450_2_, int mouseX, int mouseY)
     {
-        guiGraphics.blit(RenderType::guiTextured, GuiLiquid.texture, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.texture, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
         if (getLiquid().getTanks() != null)
         {
             for (int i = 0; i < 4; ++i)
@@ -100,13 +101,13 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
         renderTooltip(guiGraphics, mouseX, mouseY);
         int[] coords = getMiddleCoords();
 
-        guiGraphics.drawString(Minecraft.getInstance().font, getManagerName(), leftPos + coords[0] - 34, topPos + 4, 16777215);
-        guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.MANAGER.TITLE.translate(), leftPos + coords[0] + coords[2], topPos + 4, 16777215);
+        guiGraphics.drawString(Minecraft.getInstance().font, getManagerName(), leftPos + coords[0] - 34, topPos + 4, 0xFFffffff);
+        guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.MANAGER.TITLE.translate(), leftPos + coords[0] + coords[2], topPos + 4, 0xFFffffff);
         for (int i = 0; i < 4; ++i)
         {
             coords = getTextCoords(i);
             final String str = getMaxSizeText(i);
-            guiGraphics.drawString(Minecraft.getInstance().font, str, leftPos + coords[0], topPos + coords[1], 16777215);
+            guiGraphics.drawString(Minecraft.getInstance().font, str, leftPos + coords[0], topPos + coords[1], 0xFFffffff);
         }
         for (int i = 0; i < 4; ++i)
         {
@@ -127,7 +128,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
         if (inRect(x - getGuiLeft(), y - getGuiTop(), rect))
         {
             List<Component> toolTip = Arrays.stream(str.split("\n")).map(Component::literal).collect(Collectors.toList());
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, toolTip, Optional.empty(), x, y);
+            guiGraphics.setTooltipForNextFrame(Minecraft.getInstance().font, toolTip, Optional.empty(), x, y);
         }
     }
 
@@ -205,7 +206,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
         final int targetY = getArrowCoords(id)[1];
         int sizeX = 28;
         int sizeY = 28;
-        guiGraphics.blit(RenderType::guiTextured, GuiLiquid.textureExtra, left + targetX, top + targetY, sourceX, sourceY, sizeX, sizeY, 256, 256);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + targetX, top + targetY, sourceX, sourceY, sizeX, sizeY, 256, 256);
         if (id == getLiquid().getLastSetting() && containerLiquid.getColor()[id] != 5)
         {
             sourceY -= 28;
@@ -246,7 +247,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
                     offsetX = 28 - sizeX;
                 }
             }
-            guiGraphics.blit(RenderType::guiTextured, GuiLiquid.textureExtra, left + targetX + offsetX, top + targetY + offsetY, sourceX + offsetX, sourceY + offsetY, sizeX, sizeY, 256, 256);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + targetX + offsetX, top + targetY + offsetY, sourceX + offsetX, sourceY + offsetY, sizeX, sizeY, 256, 256);
             offsetY = (offsetX = 0);
             sizeY = (sizeX = 28);
             if (scaledProgress > 19)
@@ -284,7 +285,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
                         offsetY = 6;
                     }
                 }
-                guiGraphics.blit(RenderType::guiTextured, GuiLiquid.textureExtra, left + targetX + offsetX, top + targetY + offsetY, sourceX + offsetX, sourceY + offsetY, sizeX, sizeY, 256, 256);
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + targetX + offsetX, top + targetY + offsetY, sourceX + offsetX, sourceY + offsetY, sizeX, sizeY, 256, 256);
             }
         }
     }
@@ -354,13 +355,13 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
         try
         {
             int[] coords = getReturnCoords(id);
-            guiGraphics.blit(RenderType::guiTextured, GuiLiquid.textureExtra, left + coords[0], top + coords[1], getColorSourceX() + (containerLiquid.doReturn()[containerLiquid.getColor()[id] - 1] ? 8 : 0), 80 + 8 * color, 8, 8, 256, 256);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + coords[0], top + coords[1], getColorSourceX() + (containerLiquid.doReturn()[containerLiquid.getColor()[id] - 1] ? 8 : 0), 80 + 8 * color, 8, 8, 256, 256);
             coords = getBoxCoords(id);
-            guiGraphics.blit(RenderType::guiTextured, GuiLiquid.textureExtra, left + coords[0] - 2, top + coords[1] - 2, getColorSourceX(), 20 * color, 20, 20, 256, 256);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + coords[0] - 2, top + coords[1] - 2, getColorSourceX(), 20 * color, 20, 20, 256, 256);
             if (containerLiquid.getLayoutType() == 2)
             {
                 final int[] coords2 = getTankCoords(id);
-                guiGraphics.blit(RenderType::guiTextured, GuiLiquid.textureExtra, left + coords2[0], top + coords2[1], 36, 51 * color, 36, 51, 256, 256);
+                guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + coords2[0], top + coords2[1], 36, 51 * color, 36, 51, 256, 256);
             }
         } catch (Exception e)
         {

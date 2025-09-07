@@ -140,8 +140,8 @@ dependencies {
 //    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
 //    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
 //    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
-    runtimeOnly "curse.maven:roughly-enough-items-310111:6414282"
-    runtimeOnly "curse.maven:cloth-config-348521:6351757"
+    runtimeOnly "curse.maven:roughly-enough-items-310111:6833149"
+    runtimeOnly "curse.maven:cloth-config-348521:6669837"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -14,6 +14,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -127,22 +129,24 @@ public class EnchantmentData {
         return data;
     }
 
-    public CompoundTag save(HolderLookup.Provider provider) {
-        CompoundTag tag = new CompoundTag();
-        if (enchant == null) return tag;
-        tag.putString("key", enchant.getRegisteredName());
-        tag.putInt("value", getLevel());
-        return tag;
+    public void save(ValueOutput output) {
+        if (enchant == null) return;
+        output.putString("key", enchant.getRegisteredName());
+        output.putInt("value", getLevel());
     }
 
     @Nullable
-    public static EnchantmentData load(CompoundTag tag, HolderLookup.Provider provider) {
-        if (!tag.contains("key")) return null;
-        ResourceLocation key = ResourceLocation.parse(tag.getStringOr("key", ""));
+    public static EnchantmentData load(ValueInput input) {
+        String keyString = input.getStringOr("key", "");
+        if (keyString.isEmpty()) {
+            return null;
+        }
+
+        ResourceLocation key = ResourceLocation.parse(keyString);
         ResourceKey<Enchantment> resKey = ResourceKey.create(Registries.ENCHANTMENT, key);
-        Holder<Enchantment> enchant = provider.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(resKey);
+        Holder<Enchantment> enchant = input.lookup().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(resKey);
         EnchantmentData data = new EnchantmentData(enchant);
-        data.setValue(tag.getIntOr("value", 0));
+        data.setValue(input.getIntOr("value", 0));
         return data;
     }
 

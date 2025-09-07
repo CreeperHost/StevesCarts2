@@ -1,7 +1,9 @@
 package vswe.stevescarts.blocks.tileentities;
 
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -9,7 +11,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -24,6 +25,8 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -118,6 +121,10 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
         return comp;
     }
 
+    public void setComp(CompoundTag comp) {
+        this.comp = comp;
+    }
+
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider provider) {
         return saveWithoutMetadata(provider);
@@ -141,31 +148,30 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
-        setType(tag.getByteOr("Type", (byte) 0));
-        ContainerHelper.loadAllItems(tag, inventoryStacks, provider);
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        setType(input.getByteOr("Type", (byte) 0));
+        ContainerHelper.loadAllItems(input, inventoryStacks);
         setChanged();
         final AssemblerUpgrade upgrade = getUpgrade();
         if (upgrade != null)
         {
-            upgrade.load(this, tag, provider);
+            upgrade.load(this, input);
         }
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag compoundNBT, HolderLookup.Provider provider)
-    {
-        super.saveAdditional(compoundNBT, provider);
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
         if (inventoryStacks != null)
         {
-            ContainerHelper.saveAllItems(compoundNBT, inventoryStacks, provider);
+            ContainerHelper.saveAllItems(output, inventoryStacks);
         }
-        compoundNBT.putByte("Type", (byte) type);
+        output.putByte("Type", (byte) type);
         final AssemblerUpgrade upgrade = getUpgrade();
         if (upgrade != null)
         {
-            upgrade.save(this, compoundNBT, provider);
+            upgrade.save(this, output);
         }
     }
 
@@ -322,7 +328,7 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     @Override
     public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour)
     {
-        guiGraphics.blitSprite(RenderType::guiTextured, sprite, gui.getGuiLeft() + targetX, gui.getGuiTop() + targetY, width, height, colour);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, gui.getGuiLeft() + targetX, gui.getGuiTop() + targetY, width, height, colour);
     }
 
     public void setCreativeBroken()

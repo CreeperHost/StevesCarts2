@@ -55,7 +55,7 @@ public class Note
         game.drawImageInArea(guiGraphics, game.getTexture(gui, 1), gui, x, y, 76 + u * 16, 38 + v * 16, 16, 16);
         if (x + 16 < 443)
         {
-            game.getModule().drawString(guiGraphics, gui, String.valueOf(amount), x + gui.getGuiLeft(), y + 17 + gui.getGuiTop(), 16, true, 4210752);
+            game.getModule().drawString(guiGraphics, gui, String.valueOf(amount), x + gui.getGuiLeft(), y + 17 + gui.getGuiTop(), 16, true, 0xFF404040);
         }
     }
 

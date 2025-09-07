@@ -4,6 +4,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -94,17 +96,15 @@ public class ModuleCheatTank extends ModuleTank
     }
 
     @Override
-    protected void save(CompoundTag tag, int id, HolderLookup.Provider provider)
-    {
-        super.save(tag, id, provider);
-        tag.putByte(generateNBTName("mode", id), (byte) mode);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putByte(generateNBTName("mode", id), (byte) mode);
     }
 
     @Override
-    protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
-    {
-        super.load(tag, id, provider);
-        mode = tag.getByteOr(generateNBTName("mode", id), (byte) 0);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        mode = input.getByteOr(generateNBTName("mode", id), (byte) 0);
     }
 
     private void updateAmount()

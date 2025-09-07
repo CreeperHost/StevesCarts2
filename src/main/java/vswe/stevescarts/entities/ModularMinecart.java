@@ -1,5 +1,6 @@
 package vswe.stevescarts.entities;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.*;
@@ -32,6 +33,9 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
@@ -39,6 +43,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import vswe.stevescarts.StevesCarts;
+import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.events.CartEvents;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
@@ -50,6 +55,7 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModEntities;
+import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.polylib.DataEntity;
 import vswe.stevescarts.polylib.EntityData;
@@ -128,8 +134,42 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
 
     public ModularMinecart(Level world, double x, double y, double z, CompoundTag data) {
         this(world, x, y, z);
-        loadModules(data);
+        _oldLoadModules(data);
     }
+
+    // Old Module Load
+
+    private void _oldLoadModules(CompoundTag info) {
+        List<CompoundTag> modules = new ArrayList<>();
+        if (info == null) return;
+
+        List<ResourceLocation> names = new ArrayList<>();
+        ListTag listTag = (ListTag) info.get("modules");
+        for (int i = 0; i < listTag.size(); i++) {
+            Tag tag = listTag.get(i);
+            modules.add((CompoundTag) tag);
+            names.add(ResourceLocation.parse(((CompoundTag) tag).getStringOr(String.valueOf(i), "")));
+        }
+
+        if (!names.isEmpty()) {
+            getCart().moduleLoadingData = names;
+        }
+        _oldLoadModules(modules);
+    }
+
+    private void _oldLoadModules(List<CompoundTag> data) {
+        modules().clear();
+        if (data != null) {
+            for (int i = 0; i < data.size(); i++) {
+                CompoundTag tag = data.get(i);
+                ResourceLocation name = ResourceLocation.parse(tag.getStringOr(String.valueOf(i), ""));
+                doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(name), tag);
+            }
+        }
+        initModules();
+    }
+
+    // ===============
 
     public ModularMinecart(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -193,8 +233,8 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     }
 
     @Override
-    public boolean canBeCollidedWith() {
-        return !isPlaceholder() && super.canBeCollidedWith();
+    public boolean canBeCollidedWith(@Nullable Entity entity) {
+        return !isPlaceholder() && super.canBeCollidedWith(entity);
     }
 
     @Override
@@ -480,20 +520,12 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         super.removeVehicle();
     }
 
-
-    public void writeModulesToNbt(CompoundTag compoundTag) {
-        ListTag listTag = new ListTag();
-        for (int i = 0; i < modules.size(); i++) {
-            CompoundTag compoundTag1 = new CompoundTag();
-            compoundTag1.putString(String.valueOf(i), modules.get(i).getModuleId().toString());
-            listTag.add(i, compoundTag1);
-        }
-        compoundTag.put("modules", listTag);
-    }
-
     @Override
     public void writeSpawnData(RegistryFriendlyByteBuf data) {
-        if (moduleLoadingData == null) return;
+        if (moduleLoadingData == null) {
+            data.writeByte(0);
+            return;
+        }
         data.writeByte(moduleLoadingData.size());
         for (ResourceLocation b : moduleLoadingData) {
             data.writeResourceLocation(b);
@@ -506,6 +538,9 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     @Override
     public void readSpawnData(RegistryFriendlyByteBuf data) {
         byte length = data.readByte();
+        if (length == 0) {
+            return;
+        }
         List<ResourceLocation> list = new ArrayList<>();
         for (int i = 0; i < length; i++) {
             list.add(data.readResourceLocation());
@@ -517,45 +552,81 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tagCompound) {
-        super.addAdditionalSaveData(tagCompound);
-        if (name != null) tagCompound.putString("cartName", name.getString());
-        tagCompound.putBoolean("engine_burning", isEngineBurning());
-        tagCompound.putBoolean("disabled", isDisabled());
-
+    protected void addAdditionalSaveData(ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        if (name != null) output.putString("cartName", name.getString());
+        output.putBoolean("engine_burning", isEngineBurning());
+        output.putBoolean("disabled", isDisabled());
         if (preStopVelocity != null) {
-            tagCompound.put("preStopVel", newDoubleList(preStopVelocity.x(), preStopVelocity.y(), preStopVelocity.z()));
+            output.putDouble("preStopVelX", preStopVelocity.x());
+            output.putDouble("preStopVelY", preStopVelocity.y());
+            output.putDouble("preStopVelZ", preStopVelocity.z());
         }
-        tagCompound.putShort("workingTime", (short) workingTime);
-        writeModulesToNbt(tagCompound);
-        for (int i = 0; i < modules.size(); ++i) {
-            ModuleBase module = modules.get(i);
-            module.writeToNBT(tagCompound, i, registryAccess());
-        }
+        output.putShort("workingTime", (short) workingTime);
         if (disabledPos != null) {
-            tagCompound.put("disabled_pos", writeBlockPos(disabledPos));
+            output.store("disabled_pos", BlockPos.CODEC, disabledPos);
+        }
+
+        ValueOutput list = output.child("modules");
+        list.putInt("count", modules.size());
+        for (int i = 0; i < modules.size(); i++) {
+            ModuleBase module = modules.get(i);
+            list.putString(String.valueOf(i), modules.get(i).getModuleId().toString());
+            module.writeToNBT(list, i);
         }
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tagCompound) {
-        super.readAdditionalSaveData(tagCompound);
-        name = Localization.translate(tagCompound.getStringOr("cartName", ""));
-        setEngineBurning(tagCompound.getBooleanOr("engine_burning", false));
-        setIsDisabled(tagCompound.getBooleanOr("disabled", false));
-        preStopVelocity = null;
-        if (tagCompound.contains("preStopVel")) {
-            ListTag list = tagCompound.getListOrEmpty("preStopVel");
-            preStopVelocity = new Vec3(list.getDoubleOr(0, 0), list.getDoubleOr(1, 0), list.getDoubleOr(1, 0));
+    protected void readAdditionalSaveData(ValueInput input) {
+        super.readAdditionalSaveData(input);
+        name = Localization.translate(input.getStringOr("cartName", ""));
+        setEngineBurning(input.getBooleanOr("engine_burning", false));
+        setIsDisabled(input.getBooleanOr("disabled", false));
+        preStopVelocity = new Vec3(input.getDoubleOr("preStopVelX", 0), input.getDoubleOr("preStopVelY", 0), input.getDoubleOr("preStopVelZ", 0));
+        workingTime = input.getShortOr("workingTime", (short) 0);
+        disabledPos = input.read("disabled_pos", BlockPos.CODEC).orElse(null);
+
+        loadModules(input);
+    }
+
+    public void loadModules(ValueInput input) {
+        List<ResourceLocation> names = new ArrayList<>();
+
+        //Data Migration
+        ValueInput.ValueInputList migration = input.childrenListOrEmpty("modules");
+        if (!migration.isEmpty()) {
+            int i = 0;
+            for (ValueInput in : migration) {
+                String name = in.getStringOr(String.valueOf(i), "");
+                if (name.isEmpty()) continue;
+                ResourceLocation moduleName = ResourceLocation.parse(name);
+                names.add(moduleName);
+                i++;
+            }
         }
-        workingTime = tagCompound.getShortOr("workingTime", (short) 0);
-        loadModules(tagCompound);
+
+        ValueInput list = input.childOrEmpty("modules");
+        int count = list.getIntOr("count", 0);
+        for (int i = 0; i < count; i++) {
+            String name = list.getStringOr(String.valueOf(i), "");
+            if (name.isEmpty()) continue;
+            ResourceLocation moduleName = ResourceLocation.parse(name);
+            names.add(moduleName);
+        }
+
+        if (!names.isEmpty()) {
+            getCart().moduleLoadingData = names;
+        }
+
+        modules().clear();
+        for (ResourceLocation name : names) {
+            doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(name), null);
+        }
+        initModules();
+
         for (int i = 0; i < modules.size(); ++i) {
             ModuleBase module = modules.get(i);
-            module.readFromNBT(tagCompound, i, registryAccess());
-        }
-        if (tagCompound.contains("disabled_pos")) {
-            disabledPos = readBlockPos(tagCompound, "disabled_pos").orElse(null);
+            module.readFromNBT(list, i);
         }
     }
 
@@ -564,17 +635,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         return aint.length == 3 ? Optional.of(new BlockPos(aint[0], aint[1], aint[2])) : Optional.empty();
     }
 
-    public static Tag writeBlockPos(BlockPos pos) {
-        return new IntArrayTag(new int[]{pos.getX(), pos.getY(), pos.getZ()});
-    }
-
-    protected ListTag newDoubleList(double... numbers) {
-        ListTag listtag = new ListTag();
-        for(double d0 : numbers) {
-            listtag.add(DoubleTag.valueOf(d0));
-        }
-        return listtag;
-    }
 
     @Override
     public List<EntityData<?>> getEntityDataList() {

@@ -6,6 +6,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -174,24 +176,20 @@ public abstract class ModuleThermalBase extends ModuleEngine
     }
 
     @Override
-    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
-    {
-        super.save(tagCompound, id, provider);
-        tagCompound.putShort(generateNBTName("Fuel", id), (short) getFuelLevel());
-        if (requiresCoolant())
-        {
-            tagCompound.putShort(generateNBTName("Coolant", id), (short) getCoolantLevel());
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putShort(generateNBTName("Fuel", id), (short) getFuelLevel());
+        if (requiresCoolant()) {
+            output.putShort(generateNBTName("Coolant", id), (short) getCoolantLevel());
         }
     }
 
     @Override
-    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
-    {
-        super.load(tagCompound, id, provider);
-        setFuelLevel(tagCompound.getShortOr(generateNBTName("Fuel", id), (short) 0));
-        if (requiresCoolant())
-        {
-            setCoolantLevel(tagCompound.getShortOr(generateNBTName("Coolant", id), (short) 0));
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setFuelLevel(input.getShortOr(generateNBTName("Fuel", id), (short) 0));
+        if (requiresCoolant()) {
+            setCoolantLevel(input.getShortOr(generateNBTName("Coolant", id), (short) 0));
         }
     }
 }

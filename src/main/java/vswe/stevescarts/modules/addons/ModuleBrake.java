@@ -9,6 +9,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.modules.interfaces.ILeverModule;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -155,14 +157,14 @@ public class ModuleBrake extends ModuleAddon implements ILeverModule
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putBoolean(generateNBTName("ForceStop", id), isForceStopping());
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putBoolean(generateNBTName("ForceStop", id), isForceStopping());
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        setForceStopping(tagCompound.getBooleanOr(generateNBTName("ForceStop", id), false));
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setForceStopping(input.getBooleanOr(generateNBTName("ForceStop", id), false));
     }
 }

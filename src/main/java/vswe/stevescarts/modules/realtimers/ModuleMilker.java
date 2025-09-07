@@ -7,6 +7,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -127,14 +129,14 @@ public class ModuleMilker extends ModuleBase
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putShort(generateNBTName("Milk", id), (short) milkbuffer);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putShort(generateNBTName("Milk", id), (short) milkbuffer);
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        milkbuffer = tagCompound.getShortOr(generateNBTName("Milk", id), (short) 0);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        milkbuffer = input.getShortOr(generateNBTName("Milk", id), (short) 0);
     }
 }

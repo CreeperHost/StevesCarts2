@@ -1,9 +1,11 @@
 package vswe.stevescarts.api.modules;
 
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -15,6 +17,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -26,6 +30,8 @@ import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.VineBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.i18n.FMLTranslations;
@@ -519,9 +525,9 @@ public abstract class ModuleBase
                 gui.pushScissor();
             }
             if (center) {
-                guiGraphics.drawString(mc.font, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX() + left, rect[1] + getY() + dif + top, c);
+                guiGraphics.drawString(mc.font, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX() + left, rect[1] + getY() + dif + top, 0xFF000000 | c);
             } else {
-                guiGraphics.drawString(mc.font, str, rect[0] + getX() + left, rect[1] + getY() + dif + top, 16777215);
+                guiGraphics.drawString(mc.font, str, rect[0] + getX() + left, rect[1] + getY() + dif + top, 0XFFFFFFFF);
             }
             if (!stealInterface) {
                 gui.popScissor();
@@ -541,7 +547,7 @@ public abstract class ModuleBase
         }
         if (rect[3] == 8)
         {
-            guiGraphics.drawString(Minecraft.getInstance().font, str, rect[0] + getX(), rect[1] + getY(), c);
+            guiGraphics.drawString(Minecraft.getInstance().font, str, rect[0] + getX(), rect[1] + getY(), 0xFF000000 | c);
         }
     }
 
@@ -562,13 +568,12 @@ public abstract class ModuleBase
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void drawSplitString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c)
-    {
-        //		final List newlines = gui.getFontRenderer().listFormattedStringToWidth(str, w);
-        //		for (int i = 0; i < newlines.size(); ++i) {
-        //			final String line = newlines.get(i).toString();
-        //			drawString(gui, line, x, y + i * 8, w, center, c);
-        //		}
+    public void drawSplitString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c) {
+        List<FormattedCharSequence> newlines = gui.getFont().split(Component.literal(str), w);
+        for (int i = 0; i < newlines.size(); ++i) {
+            String line = newlines.get(i).toString();
+            drawString(guiGraphics, gui, line, x, y + i * 8, w, center, c);
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -596,41 +601,43 @@ public abstract class ModuleBase
     @OnlyIn(Dist.CLIENT)
     public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY)
     {
-        drawImage(guiGraphics, texture, gui, targetX, targetY, srcX, srcY, sizeX, sizeY, GuiMinecart.RENDER_ROTATION.NORMAL);
+//        drawImage(guiGraphics, texture, gui, targetX, targetY, srcX, srcY, sizeX, sizeY/*, GuiMinecart.RENDER_ROTATION.NORMAL*/);
+        drawImage(guiGraphics, texture, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY/*, rotation*/);
+
     }
 
-    /**
-     * Draw an image in the given interface, using the current texture and using the given dimensions.
-     *
-     * @param gui      The gui to draw it on
-     * @param targetX  The local x coordinate to draw it on
-     * @param targetY  The local y coordinate to draw it on
-     * @param srcX     The x coordinate in the source file
-     * @param srcY     The y coordinate in the source file
-     * @param sizeX    The width of the image
-     * @param sizeY    The height of the image
-     * @param rotation The rotation this will be drawn with
-     */
-    @OnlyIn(Dist.CLIENT)
-    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY, final GuiMinecart.RENDER_ROTATION rotation)
-    {
-        drawImage(guiGraphics, texture, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY, rotation);
-    }
+//    /**
+//     * Draw an image in the given interface, using the current texture and using the given dimensions.
+//     *
+//     * @param gui      The gui to draw it on
+//     * @param targetX  The local x coordinate to draw it on
+//     * @param targetY  The local y coordinate to draw it on
+//     * @param srcX     The x coordinate in the source file
+//     * @param srcY     The y coordinate in the source file
+//     * @param sizeX    The width of the image
+//     * @param sizeY    The height of the image
+//     * @param rotation The rotation this will be drawn with
+//     */
+//    @OnlyIn(Dist.CLIENT)
+//    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, int targetX, int targetY, int srcX, int srcY, int sizeX, int sizeY, final GuiMinecart.RENDER_ROTATION rotation)
+//    {
+//        drawImage(guiGraphics, texture, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY/*, rotation*/);
+//    }
 
 
-    /**
-     * Draw an image in the given interface, using the current texture and using the given dimentiosn.
-     *
-     * @param gui  The gui to draw it on
-     * @param rect The rectangle indicating where to draw it {targetX, targetY, sizeX, sizeY}
-     * @param srcX The x coordinate in the source file
-     * @param srcY They y coordinate in the source file
-     */
-    @OnlyIn(Dist.CLIENT)
-    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, final GuiMinecart gui, final int[] rect, final int srcX, final int srcY)
-    {
-        drawImage(guiGraphics, texture, gui, rect, srcX, srcY, GuiMinecart.RENDER_ROTATION.NORMAL);
-    }
+//    /**
+//     * Draw an image in the given interface, using the current texture and using the given dimentiosn.
+//     *
+//     * @param gui  The gui to draw it on
+//     * @param rect The rectangle indicating where to draw it {targetX, targetY, sizeX, sizeY}
+//     * @param srcX The x coordinate in the source file
+//     * @param srcY They y coordinate in the source file
+//     */
+//    @OnlyIn(Dist.CLIENT)
+//    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, int[] rect, int srcX, int srcY)
+//    {
+//        drawImage(guiGraphics, texture, gui, rect, srcX, srcY/*, GuiMinecart.RENDER_ROTATION.NORMAL*/);
+//    }
 
     /**
      * Draw an image in the given interface, using the current texture and using the given dimentiosn.
@@ -639,10 +646,10 @@ public abstract class ModuleBase
      * @param rect     The rectangle indicating where to draw it {targetX, targetY, sizeX, sizeY}
      * @param srcX     The x coordinate in the source file
      * @param srcY     They y coordinate in the source file
-     * @param rotation The rotation this will be drawn with
+//     * @param rotation The rotation this will be drawn with
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, final GuiMinecart gui, int[] rect, final int srcX, int srcY, final GuiMinecart.RENDER_ROTATION rotation)
+    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, int[] rect, int srcX, int srcY/*, final GuiMinecart.RENDER_ROTATION rotation*/)
     {
         if (rect.length < 4)
         {
@@ -655,7 +662,7 @@ public abstract class ModuleBase
         }
         if (rect[3] > 0)
         {
-            gui.drawTexturedModalRect(guiGraphics, texture, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), srcX, srcY, rect[2], rect[3], rotation);
+            gui.drawTexturedModalRect(guiGraphics, texture, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), srcX, srcY, rect[2], rect[3]/*, rotation*/);
         }
     }
 
@@ -682,7 +689,7 @@ public abstract class ModuleBase
             this.handleScroll(rect);
         }
         if (rect[3] > 0) {
-            guiGraphics.blitSprite(RenderType::guiTextured, icon, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), rect[2], rect[3], 0xFFFFFFFF);
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, icon, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), rect[2], rect[3], 0xFFFFFFFF);
         }
     }
 
@@ -699,7 +706,7 @@ public abstract class ModuleBase
             this.handleScroll(rect);
         }
         if (rect[3] > 0) {
-            guiGraphics.blitSprite(RenderType::guiTextured, icon, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), rect[2], rect[3], colour);
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, icon, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), rect[2], rect[3], colour);
         }
     }
 
@@ -819,61 +826,50 @@ public abstract class ModuleBase
     /**
      * Handles the writing of the NBT data when the world is being saved
      *
-     * @param tagCompound The tag compound to write the data to
+//     * @param tagCompound The tag compound to write the data to
      * @param id          The number of this module
      */
-    public final void writeToNBT(final CompoundTag tagCompound, final int id, @NotNull HolderLookup.Provider provider) {
-        if (getInventorySize() > 0) {
-            ListTag items = new ListTag();
-            for (int i = 0; i < getInventorySize(); ++i) {
-                ItemStack stack = getStack(i);
-                if (stack.isEmpty()) continue;
-                CompoundTag itemTag = new CompoundTag();
-                itemTag.putByte("Slot", (byte) i);
-                items.add(stack.save(provider, itemTag));
+    public final void writeToNBT(ValueOutput output, int id) {
+        ValueOutput.TypedOutputList<ItemStackWithSlot> typedoutputlist = output.list(generateNBTName("Items", id), ItemStackWithSlot.CODEC);
+        for(int i = 0; i < getInventorySize(); ++i) {
+            ItemStack itemstack = getStack(i);
+            if (!itemstack.isEmpty()) {
+                typedoutputlist.add(new ItemStackWithSlot(i, itemstack));
             }
-            tagCompound.put(generateNBTName("Items", id), items);
         }
-        save(tagCompound, id, provider);
+        save(output, id);
     }
 
     /**
      * Allows a module to save specific data when world is saved
      *
-     * @param tagCompound The NBT tag compound to write to
+//     * @param tagCompound The NBT tag compound to write to
      * @param id          The number of the module
      */
-    protected void save(final CompoundTag tagCompound, final int id, @NotNull HolderLookup.Provider provider)
+    protected void save(ValueOutput output, int id)
     {
     }
 
     /**
      * Handles the reading of the NBT data when the world is being loaded
      *
-     * @param tagCompound The tag compound to read the data from
+//     * @param tagCompound The tag compound to read the data from
      * @param id          The number of this module
      */
-    public final void readFromNBT(final CompoundTag tagCompound, final int id, @NotNull HolderLookup.Provider provider) {
-        if (getInventorySize() > 0) {
-            ListTag items = tagCompound.getListOrEmpty(generateNBTName("Items", id));
-            for (int i = 0; i < items.size(); ++i) {
-                CompoundTag item = items.getCompoundOrEmpty(i);
-                int slot = item.getByteOr("Slot", (byte) 0) & 0xFF;
-                if (slot < getInventorySize()) {
-                    setStack(slot, ItemStack.parse(provider, item).orElse(ItemStack.EMPTY));
-                }
-            }
+    public final void readFromNBT(ValueInput input, int id) {
+        for(ItemStackWithSlot itemstackwithslot : input.listOrEmpty(generateNBTName("Items", id), ItemStackWithSlot.CODEC)) {
+            setStack(itemstackwithslot.slot(), itemstackwithslot.stack());
         }
-        load(tagCompound, id, provider);
+        load(input, id);
     }
 
     /**
      * Allows a module to load specific data when world is loaded
      *
-     * @param tagCompound The NBT tag compound to read from
+//     * @param tagCompound The NBT tag compound to read from
      * @param id          The number of the module
      */
-    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
+    protected void load(ValueInput input, int id)
     {
     }
 
@@ -1561,6 +1557,10 @@ public abstract class ModuleBase
 //        drawImage(rect[0], rect[1], sourceX, sourceY, rect[2], rect[3]);
 //    }
 
+    protected void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, int targetX, int targetY, int sourceX, int sourceY, int width, int height) {
+        drawImage(guiGraphics, texture, targetX, targetY, sourceX, sourceY, width, height, 0xFFFFFFFF);
+    }
+
     /**
      * Draws an image overlay on the screen. Observe that this is not when a special interface is open.
      *
@@ -1571,20 +1571,10 @@ public abstract class ModuleBase
      * @param width   The width of the image
      * @param height  The height of the image
      */
-    protected void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, int targetX, int targetY, int sourceX, int sourceY, int width, int height)
+    protected void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, int targetX, int targetY, int sourceX, int sourceY, int width, int height, int colour)
     {
-        final float var7 = 0.00390625f;
-        final float var8 = 0.00390625f;
-
-        guiGraphics.drawSpecial(buffer -> {
-            VertexConsumer consumer = buffer.getBuffer(RenderType.guiTextured(texture));
-            //formatter:off
-            consumer.addVertex(targetX,           targetY + height, 	-90F).setUv((float) sourceX * var7,            (float)(sourceY + height) * var8).setColor(0xFFFFFFFF);
-            consumer.addVertex(targetX + width,   targetY + height, 	-90F).setUv((float)(sourceX + width) * var7,   (float)(sourceY + height) * var8).setColor(0xFFFFFFFF);
-            consumer.addVertex(targetX + width,   targetY, 			    -90F).setUv((float)(sourceX + width) * var7,   (float) sourceY * var8).setColor(0xFFFFFFFF);
-            consumer.addVertex(targetX,           targetY, 			    -90F).setUv((float) sourceX * var7,            (float) sourceY * var8).setColor(0xFFFFFFFF);
-            //formatter:on
-        });
+        //TODO Image Draw
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, targetX, targetY, sourceX, sourceY, width, height, 256, 256, colour);
     }
 
     @OnlyIn(Dist.CLIENT)

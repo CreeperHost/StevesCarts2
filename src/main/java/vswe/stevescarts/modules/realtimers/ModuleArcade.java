@@ -5,6 +5,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -231,20 +233,18 @@ public class ModuleArcade extends ModuleBase
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        for (final ArcadeGame game : games)
-        {
-            game.Save(tagCompound, id);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        for (final ArcadeGame game : games) {
+            game.Save(output, id);
         }
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        for (final ArcadeGame game : games)
-        {
-            game.Load(tagCompound, id);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        for (final ArcadeGame game : games) {
+            game.Load(input, id);
         }
     }
 

@@ -5,6 +5,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.Objects;
@@ -49,13 +51,15 @@ public class FluidDataNeo extends AbstractDataStore<FluidStack> {
     }
 
     @Override
-    public Tag toTag(HolderLookup.Provider provider) {
-        return value.saveOptional(provider);
+    public void toTag(ValueOutput output) {
+        if (!value.isEmpty()) {
+            output.store("Fluid", FluidStack.CODEC, value);
+        }
     }
 
     @Override
-    public void fromTag(HolderLookup.Provider provider, Tag tag) {
-        value = validValue(FluidStack.parseOptional(provider, (CompoundTag) tag), value);
+    public void fromTag(ValueInput input) {
+        value = input.read("Fluid", FluidStack.CODEC).orElse(FluidStack.EMPTY);
     }
 
     @Override

@@ -6,6 +6,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -171,19 +173,16 @@ public abstract class ModuleCoalBase extends ModuleEngine
     }
 
     @Override
-    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
-    {
-        super.save(tagCompound, id, provider);
-        tagCompound.putShort(generateNBTName("Fuel", id), (short) getFuelLevel());
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putShort(generateNBTName("Fuel", id), (short) getFuelLevel());
     }
 
     @Override
-    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
-    {
-        super.load(tagCompound, id, provider);
-        setFuelLevel(tagCompound.getShortOr(generateNBTName("Fuel", id), (short) 0));
-        if (getFuelLevel() < 0)
-        {
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setFuelLevel(input.getShortOr(generateNBTName("Fuel", id), (short) 0));
+        if (getFuelLevel() < 0) {
             setFuelLevel(getFuelLevel() + 65536);
         }
     }

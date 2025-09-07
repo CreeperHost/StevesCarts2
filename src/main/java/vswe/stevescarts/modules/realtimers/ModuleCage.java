@@ -14,6 +14,8 @@ import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -238,15 +240,15 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putBoolean(generateNBTName("disablePickup", id), disablePickup);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putBoolean(generateNBTName("disablePickup", id), disablePickup);
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        disablePickup = tagCompound.getBooleanOr(generateNBTName("disablePickup", id), false);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        disablePickup = input.getBooleanOr(generateNBTName("disablePickup", id), false);
     }
 
     @Override

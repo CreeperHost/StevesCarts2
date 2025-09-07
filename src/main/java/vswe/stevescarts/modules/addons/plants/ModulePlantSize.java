@@ -5,6 +5,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
@@ -138,14 +140,14 @@ public class ModulePlantSize extends ModuleAddon
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putByte(generateNBTName("size", id), (byte) size);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putByte(generateNBTName("size", id), (byte) size);
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        size = tagCompound.getByteOr(generateNBTName("size", id), (byte) 0);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        size = input.getByteOr(generateNBTName("size", id), (byte) 0);
     }
 }

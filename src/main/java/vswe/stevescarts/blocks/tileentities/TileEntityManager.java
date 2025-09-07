@@ -7,10 +7,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.storages.TransferManager;
@@ -67,28 +70,23 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
     }
 
     @Override
-    protected void loadAdditional(CompoundTag compoundTag, @NotNull HolderLookup.Provider provider) {
-        super.loadAdditional(compoundTag, provider);
-        final ListTag nbttaglist = compoundTag.getListOrEmpty("Items");
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
         cargoItemStacks = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
-        for (int i = 0; i < nbttaglist.size(); ++i)
-        {
-            final CompoundTag nbttagcompound2 = nbttaglist.getCompoundOrEmpty(i);
-            final byte byte0 = nbttagcompound2.getByteOr("Slot", (byte) 0);
-            if (byte0 >= 0 && byte0 < cargoItemStacks.size())
-            {
-                cargoItemStacks.set(byte0, ItemStack.parse(provider, nbttagcompound2).orElse(ItemStack.EMPTY));
-            }
+
+        for(ItemStackWithSlot itemstackwithslot : input.listOrEmpty("Items", ItemStackWithSlot.CODEC)) {
+            cargoItemStacks.set(itemstackwithslot.slot(), itemstackwithslot.stack());
         }
-        moveTime = compoundTag.getByteOr("movetime", (byte) 0);
-        setLowestSetting(compoundTag.getByteOr("lowestNumber", (byte) 0));
-        layoutType = compoundTag.getByteOr("layout", (byte) 0);
-        final byte temp = compoundTag.getByteOr("tocart", (byte) 0);
-        final byte temp2 = compoundTag.getByteOr("doReturn", (byte) 0);
+
+        moveTime = input.getByteOr("movetime", (byte) 0);
+        setLowestSetting(input.getByteOr("lowestNumber", (byte) 0));
+        layoutType = input.getByteOr("layout", (byte) 0);
+        final byte temp = input.getByteOr("tocart", (byte) 0);
+        final byte temp2 = input.getByteOr("doReturn", (byte) 0);
         for (int j = 0; j < 4; ++j)
         {
-            amount[j] = compoundTag.getByteOr("amount" + j, (byte) 0);
-            color[j] = compoundTag.getByteOr("color" + j, (byte) 0);
+            amount[j] = input.getByteOr("amount" + j, (byte) 0);
+            color[j] = input.getByteOr("color" + j, (byte) 0);
             if (color[j] == 0)
             {
                 color[j] = j + 1;
@@ -99,18 +97,18 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag compoundTag, HolderLookup.Provider provider)
+    public void saveAdditional(ValueOutput output)
     {
-        super.saveAdditional(compoundTag, provider);
-        compoundTag.putByte("movetime", (byte) moveTime);
-        compoundTag.putByte("lowestNumber", (byte) getLowestSetting());
-        compoundTag.putByte("layout", (byte) layoutType);
+        super.saveAdditional(output);
+        output.putByte("movetime", (byte) moveTime);
+        output.putByte("lowestNumber", (byte) getLowestSetting());
+        output.putByte("layout", (byte) layoutType);
         byte temp = 0;
         byte temp2 = 0;
         for (int i = 0; i < 4; ++i)
         {
-            compoundTag.putByte("amount" + i, (byte) amount[i]);
-            compoundTag.putByte("color" + i, (byte) color[i]);
+            output.putByte("amount" + i, (byte) amount[i]);
+            output.putByte("color" + i, (byte) color[i]);
             if (toCart[i])
             {
                 temp |= (byte) (1 << i);
@@ -120,19 +118,16 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
                 temp2 |= (byte) (1 << i);
             }
         }
-        compoundTag.putByte("tocart", temp);
-        compoundTag.putByte("doReturn", temp2);
-        final ListTag nbttaglist = new ListTag();
-        for (int j = 0; j < cargoItemStacks.size(); ++j)
-        {
-            if (!cargoItemStacks.get(j).isEmpty())
-            {
-                final CompoundTag nbttagcompound2 = new CompoundTag();
-                nbttagcompound2.putByte("Slot", (byte) j);
-                nbttaglist.add(cargoItemStacks.get(j).save(provider, nbttagcompound2));
+        output.putByte("tocart", temp);
+        output.putByte("doReturn", temp2);
+
+        ValueOutput.TypedOutputList<ItemStackWithSlot> typedoutputlist = output.list("Items", ItemStackWithSlot.CODEC);
+        for(int i = 0; i < cargoItemStacks.size(); ++i) {
+            ItemStack itemstack = cargoItemStacks.get(i);
+            if (!itemstack.isEmpty()) {
+                typedoutputlist.add(new ItemStackWithSlot(i, itemstack));
             }
         }
-        compoundTag.put("Items", nbttaglist);
     }
 
     public ModularMinecart getCart()

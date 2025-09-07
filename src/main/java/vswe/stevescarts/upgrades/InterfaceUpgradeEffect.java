@@ -35,7 +35,7 @@ public abstract class InterfaceUpgradeEffect extends BaseUpgradeEffect
     {
         if (gui.inRect(x - gui.getGuiLeft(), y - gui.getGuiTop(), rect))
         {
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.literal(str), x, y);
+            guiGraphics.setTooltipForNextFrame(Minecraft.getInstance().font, Component.literal(str), x, y);
         }
     }
 }

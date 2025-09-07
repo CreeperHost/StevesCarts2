@@ -15,6 +15,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -209,27 +211,24 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
     }
 
     @Override
-    protected void loadAdditional(CompoundTag compoundTag, HolderLookup.@NotNull Provider provider) {
-        super.loadAdditional(compoundTag, provider);
-        setWorkload(compoundTag.getByteOr("workload", (byte) 0));
-        for (int i = 0; i < 4; ++i)
-        {
-            target[i] = compoundTag.getByteOr("target" + i, (byte) 0);
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        setWorkload(input.getByteOr("workload", (byte) 0));
+        for (int i = 0; i < 4; ++i) {
+            target[i] = input.getByteOr("target" + i, (byte) 0);
         }
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag compoundTag, HolderLookup.Provider provider)
-    {
-        super.saveAdditional(compoundTag, provider);
-        compoundTag.putByte("workload", (byte) getWorkload());
-        for (int i = 0; i < 4; ++i)
-        {
-            compoundTag.putByte("target" + i, (byte) target[i]);
+    public void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        output.putByte("workload", (byte) getWorkload());
+        for (int i = 0; i < 4; ++i) {
+            output.putByte("target" + i, (byte) target[i]);
         }
     }
 
-//    @Override
+    @Override
     public void receivePacket(final int id, final byte[] data, final Player player)
     {
         if (id == 0)

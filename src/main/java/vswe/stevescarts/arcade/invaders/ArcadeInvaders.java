@@ -4,6 +4,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
@@ -379,15 +381,13 @@ public class ArcadeInvaders extends ArcadeGame
     }
 
     @Override
-    public void Save(final CompoundTag tagCompound, final int id)
-    {
-        tagCompound.putShort(getModule().generateNBTName("HighscoreGhast", id), (short) highscore);
+    public void Save(ValueOutput output, int id) {
+        output.putShort(getModule().generateNBTName("HighscoreGhast", id), (short) highscore);
     }
 
     @Override
-    public void Load(final CompoundTag tagCompound, final int id)
-    {
-        highscore = tagCompound.getShortOr(getModule().generateNBTName("HighscoreGhast", id), (short) 0);
+    public void Load(ValueInput input, int id) {
+        highscore = input.getShortOr(getModule().generateNBTName("HighscoreGhast", id), (short) 0);
     }
 
     static

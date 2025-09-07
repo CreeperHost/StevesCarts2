@@ -17,6 +17,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -534,28 +536,24 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     }
 
     @Override
-    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putByte(generateNBTName("Pipes", id), getActivePipes());
-        tagCompound.putByte(generateNBTName("Interval", id), (byte) getInterval());
-        saveTick(tagCompound, id);
+    protected void save(ValueOutput output, int id) {
+        output.putByte(generateNBTName("Pipes", id), getActivePipes());
+        output.putByte(generateNBTName("Interval", id), (byte) getInterval());
+        saveTick(output, id);
     }
 
     @Override
-    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
-    {
-        setActivePipes(tagCompound.getByteOr(generateNBTName("Pipes", id), (byte) 0));
-        setInterval(tagCompound.getByteOr(generateNBTName("Interval", id), (byte) 0));
-        loadTick(tagCompound, id);
+    protected void load(ValueInput input, int id) {
+        setActivePipes(input.getByteOr(generateNBTName("Pipes", id), (byte) 0));
+        setInterval(input.getByteOr(generateNBTName("Interval", id), (byte) 0));
+        loadTick(input, id);
     }
 
-    protected void saveTick(final CompoundTag tagCompound, final int id)
-    {
+    protected void saveTick(ValueOutput tagCompound, final int id) {
         tagCompound.putByte(generateNBTName("Tick", id), (byte) arrowTick);
     }
 
-    protected void loadTick(final CompoundTag tagCompound, final int id)
-    {
+    protected void loadTick(ValueInput tagCompound, final int id) {
         arrowTick = tagCompound.getByteOr(generateNBTName("Tick", id), (byte) 0);
     }
 

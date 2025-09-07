@@ -21,7 +21,7 @@ public class TetrisBlock
     {
         if (y >= 0)
         {
-            game.getModule().drawImage(guiGraphics, texture, gui, 189 + x * 10, 9 + y * 10, u, v, 10, 10, r);
+//            game.getModule().drawImage(guiGraphics, texture, gui, 189 + x * 10, 9 + y * 10, u, v, 10, 10, r);
         }
     }
 

@@ -1,11 +1,6 @@
 package vswe.stevescarts.client.models.storages.tanks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
-import net.creeperhost.polylib.client.render.RenderUtils;
-import net.creeperhost.polylib.client.render.fluid.FluidRenderHelper;
-import net.creeperhost.polylib.client.render.rendertypes.FluidTankRenderType;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;

@@ -9,6 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -196,14 +198,14 @@ public class ModuleExperience extends ModuleBase
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        setExperienceAmount(tagCompound.getShortOr(generateNBTName("Experience", id), (short) 0));
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setExperienceAmount(input.getShortOr(generateNBTName("Experience", id), (short) 0));
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putShort(generateNBTName("Experience", id), (short) getExperienceAmount());
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putShort(generateNBTName("Experience", id), (short) getExperienceAmount());
     }
 }

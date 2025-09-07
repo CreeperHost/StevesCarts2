@@ -10,6 +10,8 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
@@ -209,17 +211,15 @@ public class ModuleSmelter extends ModuleRecipe
     }
 
     @Override
-    protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
-    {
-        super.load(tag, id, provider);
-        energyBuffer = tag.getByteOr(generateNBTName("Buffer", id), (byte) 0);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        energyBuffer = input.getByteOr(generateNBTName("Buffer", id), (byte) 0);
     }
 
     @Override
-    protected void save(CompoundTag tag, int id, HolderLookup.Provider provider)
-    {
-        super.save(tag, id, provider);
-        tag.putByte(generateNBTName("Buffer", id), (byte) energyBuffer);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putByte(generateNBTName("Buffer", id), (byte) energyBuffer);
     }
 
     @Override

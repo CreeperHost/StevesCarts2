@@ -6,6 +6,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -79,11 +81,11 @@ public class EntityData<T> {
         dataStore.fromBytes(buffer);
     }
 
-    public void save(String name, CompoundTag tag, HolderLookup.Provider provider) {
-        tag.put(name, dataStore.toTag(provider));
+    public void save(String name, ValueOutput output) {
+        dataStore.toTag(output.child(name));
     }
 
-    public void load(String name, CompoundTag tag, HolderLookup.Provider provider) {
-        dataStore.fromTag(provider, tag.get(name));
+    public void load(String name, ValueInput input) {
+        dataStore.fromTag(input.childOrEmpty(name));
     }
 }

@@ -23,6 +23,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.api.distmarker.Dist;
@@ -549,17 +551,15 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        super.save(tagCompound, id, provider);
-        tagCompound.putBoolean(generateNBTName("DrillEnabled", id), isDrillEnabled());
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putBoolean(generateNBTName("DrillEnabled", id), isDrillEnabled());
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        super.load(tagCompound, id, provider);
-        setDrillEnabled(tagCompound.getBooleanOr(generateNBTName("DrillEnabled", id), false));
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setDrillEnabled(input.getBooleanOr(generateNBTName("DrillEnabled", id), false));
     }
 
     @Override

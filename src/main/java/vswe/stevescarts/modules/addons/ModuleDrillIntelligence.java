@@ -1,12 +1,16 @@
 package vswe.stevescarts.modules.addons;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.apache.commons.lang3.ArrayUtils;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
@@ -18,6 +22,8 @@ import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModSerializers.BoolArray;
 import vswe.stevescarts.modules.workers.tools.ModuleDrill;
 import vswe.stevescarts.polylib.EntityData;
+
+import java.util.Arrays;
 
 public class ModuleDrillIntelligence extends ModuleAddon
 {
@@ -261,19 +267,22 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putByteArray(generateNBTName("enabled_data", id), getDisabledArray().getBytes());
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.store(generateNBTName("enabled_data", id), Codec.BYTE.listOf(), Arrays.asList(ArrayUtils.toObject(getDisabledArray().getBytes())));
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
         int baseSize = getDrillWidth() * getDrillHeight();
-        BoolArray loaded = BoolArray.fromBytes(tagCompound.getByteArray(generateNBTName("enabled_data", id)).orElseGet(() -> new byte[0]));
-        if (loaded.getBytes().length * 8 >= baseSize) {
-            setDisabledArray(loaded);
-        }
+
+        input.read(generateNBTName("enabled_data", id), Codec.BYTE.listOf()).ifPresent(bytes -> {
+            BoolArray loaded = BoolArray.fromBytes(bytes.toArray(new Byte[0]));
+            if (loaded.getBytes().length * 8 >= baseSize) {
+                setDisabledArray(loaded);
+            }
+        });
     }
 
     @Override

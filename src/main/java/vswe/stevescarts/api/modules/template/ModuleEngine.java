@@ -5,6 +5,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -179,14 +181,12 @@ public abstract class ModuleEngine extends ModuleBase
     }
 
     @Override
-    protected void save(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putByte(generateNBTName("Priority", id), (byte) getPriority());
+    protected void save(ValueOutput output, int id) {
+        output.putByte(generateNBTName("Priority", id), (byte) getPriority());
     }
 
     @Override
-    protected void load(final CompoundTag tagCompound, final int id, HolderLookup.Provider provider)
-    {
-        setPriority(tagCompound.getByteOr(generateNBTName("Priority", id), (byte) 0));
+    protected void load(ValueInput input, int id) {
+        setPriority(input.getByteOr(generateNBTName("Priority", id), (byte) 0));
     }
 }

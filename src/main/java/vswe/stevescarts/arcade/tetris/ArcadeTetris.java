@@ -5,6 +5,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
@@ -294,15 +296,15 @@ public class ArcadeTetris extends ArcadeGame
     }
 
     @Override
-    public void Save(final CompoundTag tagCompound, final int id)
+    public void Save(ValueOutput output, int id)
     {
-        tagCompound.putShort(getModule().generateNBTName("Highscore", id), (short) highscore);
+        output.putShort(getModule().generateNBTName("Highscore", id), (short) highscore);
     }
 
     @Override
-    public void Load(final CompoundTag tagCompound, final int id)
+    public void Load(ValueInput input, int id)
     {
-        highscore = tagCompound.getShortOr(getModule().generateNBTName("Highscore", id), (short) 0);
+        highscore = input.getShortOr(getModule().generateNBTName("Highscore", id), (short) 0);
     }
 
     static

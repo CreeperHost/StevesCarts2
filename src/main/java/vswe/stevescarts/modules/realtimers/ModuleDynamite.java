@@ -12,6 +12,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -303,17 +305,17 @@ public class ModuleDynamite extends ModuleBase
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putShort(generateNBTName("FuseLength", id), (short) getFuseLength());
-        tagCompound.putShort(generateNBTName("Fuse", id), (short) getFuse());
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putShort(generateNBTName("FuseLength", id), (short) getFuseLength());
+        output.putShort(generateNBTName("Fuse", id), (short) getFuse());
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        setFuseLength(tagCompound.getShortOr(generateNBTName("FuseLength", id), (short) 0));
-        setFuse(tagCompound.getShortOr(generateNBTName("Fuse", id), (short) 0));
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setFuseLength(input.getShortOr(generateNBTName("FuseLength", id), (short) 0));
+        setFuse(input.getShortOr(generateNBTName("Fuse", id), (short) 0));
         createExplosives();
     }
 }

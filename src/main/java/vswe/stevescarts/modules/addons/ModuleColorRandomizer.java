@@ -5,6 +5,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -172,18 +174,18 @@ public class ModuleColorRandomizer extends ModuleAddon
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putByte(generateNBTName("Red", id), (byte) getColorVal(0));
-        tagCompound.putByte(generateNBTName("Green", id), (byte) getColorVal(1));
-        tagCompound.putByte(generateNBTName("Blue", id), (byte) getColorVal(2));
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putByte(generateNBTName("Red", id), (byte) getColorVal(0));
+        output.putByte(generateNBTName("Green", id), (byte) getColorVal(1));
+        output.putByte(generateNBTName("Blue", id), (byte) getColorVal(2));
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        setColorVal(0, tagCompound.getByteOr(generateNBTName("Red", id), (byte) 0));
-        setColorVal(1, tagCompound.getByteOr(generateNBTName("Green", id), (byte) 0));
-        setColorVal(2, tagCompound.getByteOr(generateNBTName("Blue", id), (byte) 0));
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setColorVal(0, input.getByteOr(generateNBTName("Red", id), (byte) 0));
+        setColorVal(1, input.getByteOr(generateNBTName("Green", id), (byte) 0));
+        setColorVal(2, input.getByteOr(generateNBTName("Blue", id), (byte) 0));
     }
 }

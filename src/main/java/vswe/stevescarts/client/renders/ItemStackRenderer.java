@@ -10,14 +10,20 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.ValueInput;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
+
+import java.util.Set;
 
 public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer.Data> {
 
@@ -36,7 +42,7 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
 
             if (transformType == ItemDisplayContext.GUI) {
                 matrixStack.translate(-1, 0, 0);
-                matrixStack.scale(lowestMult, lowestMult, lowestMult);
+//                matrixStack.scale(lowestMult, lowestMult, lowestMult);
             } else {
                 matrixStack.translate(-0.5, -0.5, 0.5);
             }
@@ -56,6 +62,11 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
             }
         }
         matrixStack.popPose();
+    }
+
+    @Override
+    public void getExtents(Set<Vector3f> set) {
+        set.add(new Vector3f());
     }
 
     @Nullable

@@ -13,6 +13,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -253,22 +255,17 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     }
 
     @Override
-    protected void save(CompoundTag tag, int id, HolderLookup.Provider provider)
+    protected void save(ValueOutput output, int id)
     {
-        final CompoundTag compound = new CompoundTag();
-        if (!tank.getFluid().isEmpty()) {
-            tank.getFluid().save(provider, compound);
-        }
-        tag.put(generateNBTName("Fluid", id), compound);
-        locked.save(generateNBTName("LockedStack", id), tag, provider);
+        tank.serialize(output.child(generateNBTName("Fluid", id)));
+        locked.save(generateNBTName("LockedStack", id), output);
     }
 
     @Override
-    protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
+    protected void load(ValueInput input, int id)
     {
-        FluidStack fluidStack = FluidStack.parse(provider, tag.getCompoundOrEmpty(generateNBTName("Fluid", id))).orElse(FluidStack.EMPTY);
-        tank.setFluid(fluidStack);
-        locked.load(generateNBTName("LockedStack", id), tag, provider);
+        tank.deserialize(input.childOrEmpty(generateNBTName("Fluid", id)));
+        locked.load(generateNBTName("LockedStack", id), input);
         updateData();
     }
 

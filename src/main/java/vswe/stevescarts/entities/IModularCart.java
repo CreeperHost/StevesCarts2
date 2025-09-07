@@ -18,6 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -567,32 +569,23 @@ public interface IModularCart extends Container, IFluidHandler {
             ModuleBase module = moduleConstructor.newInstance(this);
             module.setModuleId(moduleData.getID());
             modules().add(module);
-            if (data != null && data.contains("data")) {
-                module.readExtraData(data.getCompoundOrEmpty("data"));
-            }
+//            if (data != null && data.contains("data")) { Currently not used so can just comment out for now.
+//                module.readExtraData(data.getCompoundOrEmpty("data"));
+//            }
         } catch (Exception e) {
             StevesCarts.LOGGER.error("Failed to load module with ID " + moduleData.getID() + "! More info below.");
             e.printStackTrace();
         }
     }
 
-    default void loadModules(CompoundTag info) {
-        List<CompoundTag> modules = new ArrayList<>();
-        if (info == null) return;
+//    default void writeModulesToNbt(ValueOutput output) {
+//        ValueOutput list = output.child("modules");
+//        list.putInt("count", modules.size());
+//        for (int i = 0; i < modules.size(); i++) {
+//            list.putString(String.valueOf(i), modules.get(i).getModuleId().toString());
+//        }
+//    }
 
-        List<ResourceLocation> names = new ArrayList<>();
-        ListTag listTag = (ListTag) info.get("modules");
-        for (int i = 0; i < listTag.size(); i++) {
-            Tag tag = listTag.get(i);
-            modules.add((CompoundTag) tag);
-            names.add(ResourceLocation.parse(((CompoundTag) tag).getStringOr(String.valueOf(i), "")));
-        }
-
-        if (!names.isEmpty()) {
-            getCart().moduleLoadingData = names;
-        }
-        loadModules(modules);
-    }
 
     default void updateSimulationModules(List<ResourceLocation> data) {
         if (!isPlaceholder()) {
@@ -600,18 +593,6 @@ public interface IModularCart extends Container, IFluidHandler {
         } else {
             loadPlaceHolderModules(data);
         }
-    }
-
-    default void loadModules(List<CompoundTag> data) {
-        modules().clear();
-        if (data != null) {
-            for (int i = 0; i < data.size(); i++) {
-                CompoundTag tag = data.get(i);
-                ResourceLocation name = ResourceLocation.parse(tag.getStringOr(String.valueOf(i), ""));
-                doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(name), tag);
-            }
-        }
-        initModules();
     }
 
     default void loadModulesFromNames(List<ResourceLocation> data) {

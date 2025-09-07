@@ -16,6 +16,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.IFluidTank;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -128,20 +130,18 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    protected void loadAdditional(@NotNull CompoundTag compoundTag, @NotNull HolderLookup.Provider provider) {
-        super.loadAdditional(compoundTag, provider);
-        for (final DistributorSide side : getSides())
-        {
-            side.setData(compoundTag.getIntOr("Side" + side.getId(), 0));
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        for (DistributorSide side : getSides()) {
+            side.setData(input.getIntOr("Side" + side.getId(), 0));
         }
     }
 
     @Override
-    protected void saveAdditional(@NotNull CompoundTag compoundTag, @NotNull HolderLookup.Provider provider) {
-        super.saveAdditional(compoundTag, provider);
-        for (final DistributorSide side : getSides())
-        {
-            compoundTag.putInt("Side" + side.getId(), side.getData());
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        for (DistributorSide side : getSides()) {
+            output.putInt("Side" + side.getId(), side.getData());
         }
     }
 
@@ -188,9 +188,8 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     }
 
     @Override
-    public void onDataPacket(@NotNull Connection net, @NotNull ClientboundBlockEntityDataPacket pkt, @NotNull HolderLookup.Provider provider) {
-        super.onDataPacket(net, pkt, provider);
-        handleUpdateTag(pkt.getTag(), provider);
+    public void onDataPacket(Connection net, ValueInput valueInput) {
+        super.onDataPacket(net, valueInput);
     }
 
     public TileEntityManager[] getInventories()

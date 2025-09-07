@@ -8,6 +8,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import org.apache.commons.lang3.ArrayUtils;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.helpers.EnchantmentData;
 
@@ -113,6 +114,10 @@ public class ModSerializers {
         public static BoolArray fromBytes(byte[] bytes) {
             return new BoolArray(bytes);
         }
+
+        public static BoolArray fromBytes(Byte[] bytes) {
+            return new BoolArray(ArrayUtils.toPrimitive(bytes));
+        }
     }
 
     public static class ShortArray {
@@ -120,6 +125,10 @@ public class ModSerializers {
 
         public ShortArray(short[] storage) {
             this.storage = storage;
+        }
+
+        public ShortArray(Short[] storage) {
+            this.storage = ArrayUtils.toPrimitive(storage);
         }
 
         public ShortArray(int size) {

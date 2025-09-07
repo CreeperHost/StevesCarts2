@@ -8,6 +8,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -224,23 +226,24 @@ public class ModuleEnchants extends ModuleAddon {
     }
 
     @Override
-    protected void save(CompoundTag nbt, int id, @NotNull HolderLookup.Provider provider) {
-        super.save(nbt, id, provider);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
         for (int i = 0; i < 3; ++i) {
             EnchantmentData data = getEnchant(i);
             if (data.getEnchant() == null) continue;
-
-            nbt.put(generateNBTName("enchant" + i, id), data.save(provider));
+            data.save(output.child(generateNBTName("enchant" + i, id)));
         }
     }
 
     @Override
-    protected void load(CompoundTag nbt, int id, @NotNull HolderLookup.Provider provider) {
-        super.load(nbt, id, provider);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
         for (int i = 0; i < 3; ++i) {
-            if (!nbt.contains(generateNBTName("enchant" + i, id))) continue;
-            EnchantmentData data = EnchantmentData.load(nbt.getCompoundOrEmpty(generateNBTName("enchant" + i, id)), provider);
-            setEnchant(i, data);
+            int finalI = i;
+            input.child(generateNBTName("enchant" + i, id)).ifPresent(e -> {
+                EnchantmentData data = EnchantmentData.load(e);
+                setEnchant(finalI, data);
+            });
         }
     }
 

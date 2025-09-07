@@ -5,6 +5,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.SCConfig;
@@ -72,11 +74,11 @@ public abstract class ArcadeGame
     {
     }
 
-    public void Save(final CompoundTag tagCompound, final int id)
+    public void Save(ValueOutput output, int id)
     {
     }
 
-    public void Load(final CompoundTag tagCompound, final int id)
+    public void Load(ValueInput input, int id)
     {
     }
 

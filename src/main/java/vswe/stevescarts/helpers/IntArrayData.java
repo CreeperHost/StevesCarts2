@@ -1,10 +1,9 @@
 package vswe.stevescarts.helpers;
 
 import net.creeperhost.polylib.data.serializable.AbstractDataStore;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.IntArrayTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 /**
  * Created by brandon3055 on 09/09/2023
@@ -26,12 +25,12 @@ public class IntArrayData extends AbstractDataStore<int[]> {
     }
 
     @Override
-    public Tag toTag(HolderLookup.Provider provider) {
-        return new IntArrayTag(value);
+    public void toTag(ValueOutput output) {
+        output.putIntArray("value", value);
     }
 
     @Override
-    public void fromTag(HolderLookup.Provider provider, Tag tag) {
-        value = validValue(((IntArrayTag) tag).getAsIntArray(), value);
+    public void fromTag(ValueInput input) {
+        value = input.getIntArray("value").orElse(value);
     }
 }

@@ -11,6 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RailBlock;
+import net.minecraft.world.level.storage.ValueInput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.util.FakePlayer;
@@ -179,7 +180,8 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, final int id, HolderLookup.Provider provider) {
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
         calculateRails();
     }
 

@@ -4,6 +4,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.Constants;
@@ -377,7 +379,7 @@ public class ArcadeTracks extends ArcadeGame
             }
             for (final Track track : tracks)
             {
-                getModule().drawImage(guiGraphics, texture, gui, getTrackArea(track.getX(), track.getY()), 16 * track.getU(), 16 * track.getV(), track.getRotation());
+//                getModule().drawImage(guiGraphics, texture, gui, getTrackArea(track.getX(), track.getY()), 16 * track.getU(), 16 * track.getV(), track.getRotation());
             }
             if (isUsingEditor())
             {
@@ -409,11 +411,11 @@ public class ArcadeTracks extends ArcadeGame
             }
             if (isUsingEditor() && !isRunning)
             {
-                getModule().drawImage(guiGraphics, texture, gui, 5 + playerStartX * 16, 5 + playerStartY * 16, 162, 212, 8, 8, playerStartDirection.getRenderRotation());
+//                getModule().drawImage(guiGraphics, texture, gui, 5 + playerStartX * 16, 5 + playerStartY * 16, 162, 212, 8, 8, playerStartDirection.getRenderRotation());
             }
             if (!isMenuOpen && editorTrack != null)
             {
-                getModule().drawImage(guiGraphics, texture, gui, x - 8, y - 8, 16 * editorTrack.getU(), 16 * editorTrack.getV(), 16, 16, editorTrack.getRotation());
+//                getModule().drawImage(guiGraphics, texture, gui, x - 8, y - 8, 16 * editorTrack.getU(), 16 * editorTrack.getV(), 16, 16, editorTrack.getRotation());
             }
             if (isSaveMenuOpen)
             {
@@ -884,20 +886,16 @@ public class ArcadeTracks extends ArcadeGame
     }
 
     @Override
-    public void Save(final CompoundTag tagCompound, final int id)
-    {
-        for (int i = 0; i < unlockedLevels.length; ++i)
-        {
-            tagCompound.putByte(getModule().generateNBTName("Unlocked" + i, id), (byte) unlockedLevels[i]);
+    public void Save(ValueOutput output, int id) {
+        for (int i = 0; i < unlockedLevels.length; ++i) {
+            output.putByte(getModule().generateNBTName("Unlocked" + i, id), (byte) unlockedLevels[i]);
         }
     }
 
     @Override
-    public void Load(final CompoundTag tagCompound, final int id)
-    {
-        for (int i = 0; i < unlockedLevels.length; ++i)
-        {
-            unlockedLevels[i] = tagCompound.getByteOr(getModule().generateNBTName("Unlocked" + i, id), (byte) 0);
+    public void Load(ValueInput input, int id) {
+        for (int i = 0; i < unlockedLevels.length; ++i) {
+            unlockedLevels[i] = input.getByteOr(getModule().generateNBTName("Unlocked" + i, id), (byte) 0);
         }
         loadStories();
     }

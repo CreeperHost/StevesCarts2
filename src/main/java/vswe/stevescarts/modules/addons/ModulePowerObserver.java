@@ -6,6 +6,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -334,20 +336,22 @@ public class ModulePowerObserver extends ModuleAddon
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider) {
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
         for (int i = 0; i < 4; ++i) {
-            tagCompound.putShort(generateNBTName("AreaData" + i, id), getAreaData()[i]);
-            tagCompound.putShort(generateNBTName("PowerLevel" + i, id), getPowerLevel()[i]);
+            output.putShort(generateNBTName("AreaData" + i, id), getAreaData()[i]);
+            output.putShort(generateNBTName("PowerLevel" + i, id), getPowerLevel()[i]);
         }
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider) {
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
         short[] areaData = new short[4];
         short[] powerLevel = new short[4];
         for (int i = 0; i < 4; ++i) {
-            areaData[i] = tagCompound.getShortOr(generateNBTName("AreaData" + i, id), (short) 0);
-            powerLevel[i] = tagCompound.getShortOr(generateNBTName("PowerLevel" + i, id), (short) 0);
+            areaData[i] = (short) input.getShortOr(generateNBTName("AreaData" + i, id), (short) 0);
+            powerLevel[i] = (short) input.getShortOr(generateNBTName("PowerLevel" + i, id), (short) 0);
         }
         setAreaData(areaData);
         setPowerLevel(powerLevel);

@@ -1,11 +1,14 @@
 package vswe.stevescarts.upgrades;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -68,7 +71,7 @@ public abstract class TankUpgradeEffect extends InventoryUpgradeEffect
             TankUpgradeEffect.texture = ResourceHelper.getResource("/gui/tank.png");
         }
         upgrade.tank.drawFluid(guiGraphics, gui, tankInterfaceX, tankInterfaceY);
-        guiGraphics.blit(RenderType::guiTextured, TankUpgradeEffect.texture, gui.getGuiLeft() + tankInterfaceX, gui.getGuiTop() + tankInterfaceY, 0, 0, 36, 51, 256, 256);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TankUpgradeEffect.texture, gui.getGuiLeft() + tankInterfaceX, gui.getGuiTop() + tankInterfaceY, 0, 0, 36, 51, 256, 256);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -102,29 +105,21 @@ public abstract class TankUpgradeEffect extends InventoryUpgradeEffect
     }
 
     @Override
-    public void load(final TileEntityUpgrade upgrade, final CompoundTag compound, @NotNull HolderLookup.Provider provider)
-    {
-        if (compound.getByteOr("Exists", (byte) 0) != 0)
-        {
-            upgrade.tank.setFluid(FluidStack.parseOptional(provider, compound));
-        }
-        else
-        {
+    public void load(TileEntityUpgrade upgrade, ValueInput input) {
+        if (input.getByteOr("Exists", (byte) 0) != 0) {
+            upgrade.tank.deserialize(input);
+        } else {
             upgrade.tank.setFluid(FluidStack.EMPTY);
         }
     }
 
     @Override
-    public void save(final TileEntityUpgrade upgrade, final CompoundTag compound, @NotNull HolderLookup.Provider provider)
-    {
-        if (upgrade.tank.getFluid().isEmpty())
-        {
-            compound.putByte("Exists", (byte) 0);
-        }
-        else
-        {
-            compound.putByte("Exists", (byte) 1);
-            upgrade.tank.getFluid().save(provider, compound);
+    public void save(TileEntityUpgrade upgrade, ValueOutput output) {
+        if (upgrade.tank.getFluid().isEmpty()) {
+            output.putByte("Exists", (byte) 0);
+        } else {
+            output.putByte("Exists", (byte) 1);
+            upgrade.tank.serialize(output);
         }
     }
 }

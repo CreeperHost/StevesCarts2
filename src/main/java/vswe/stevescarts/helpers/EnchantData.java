@@ -1,10 +1,9 @@
 package vswe.stevescarts.helpers;
 
 import net.creeperhost.polylib.data.serializable.AbstractDataStore;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 /**
  * Created by brandon3055 on 09/09/2023
@@ -26,12 +25,12 @@ public class EnchantData extends AbstractDataStore<EnchantmentData> {
     }
 
     @Override
-    public Tag toTag(HolderLookup.Provider provider) {
-        return value.save(provider);
+    public void toTag(ValueOutput output) {
+        value.save(output);
     }
 
     @Override
-    public void fromTag(HolderLookup.Provider provider, Tag tag) {
-        value = validValue(EnchantmentData.load((CompoundTag) tag, provider), value);
+    public void fromTag(ValueInput input) {
+        value = validValue(EnchantmentData.load(input), value);
     }
 }

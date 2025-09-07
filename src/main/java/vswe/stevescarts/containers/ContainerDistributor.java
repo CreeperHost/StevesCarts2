@@ -11,6 +11,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityDistributor;
 import vswe.stevescarts.helpers.DistributorSide;
@@ -73,13 +75,13 @@ public class ContainerDistributor extends ModularGuiContainerMenu {
         }
 
         @Override
-        public Tag toTag(HolderLookup.Provider provider) {
-            return IntTag.valueOf(value.getData());
+        public void toTag(ValueOutput output) {
+            output.putInt("value", value.getData());
         }
 
         @Override
-        public void fromTag(HolderLookup.Provider provider, Tag tag) {
-            value.setData(((IntTag) tag).value());
+        public void fromTag(ValueInput input) {
+            value.setData(input.getIntOr("value", 0));
         }
 
         @Override

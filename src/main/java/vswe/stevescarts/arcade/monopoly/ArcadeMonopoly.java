@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.joml.Matrix3x2fStack;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.helpers.Localization;
@@ -588,7 +589,7 @@ public class ArcadeMonopoly extends ArcadeGame
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        PoseStack matrixStack = guiGraphics.pose();
+        Matrix3x2fStack matrixStack = guiGraphics.pose();
         ResourceLocation texture = getTexture(gui, 1);
         die.draw(guiGraphics, texture, gui, 20, 20);
         die2.draw(guiGraphics, texture, gui, 50, 20);
@@ -755,22 +756,22 @@ public class ArcadeMonopoly extends ArcadeGame
         cardRotation = 540;
     }
 
-    private void drawCard(GuiGraphics guiGraphics, PoseStack matrixStack, GuiMinecart gui, final boolean isFront)
+    private void drawCard(GuiGraphics guiGraphics, Matrix3x2fStack matrixStack, GuiMinecart gui, final boolean isFront)
     {
-        matrixStack.pushPose();
+        matrixStack.pushMatrix();
         final int x = 150;
         final int y = 44;
         final float s = cardScale;
         final float posX = gui.getGuiLeft() + 71;
         final float posY = gui.getGuiTop() + 40;
-        matrixStack.translate(0.0f, 0.0f, 100.0f);
-        matrixStack.translate(posX + x, posY + y, 0.0f);
-        matrixStack.scale(s, s, 1.0f);
+//        matrixStack.translate(0.0f, 0.0f, 100.0f);
+        matrixStack.translate(posX + x, posY + y);
+        matrixStack.scale(s, s);
 //        matrixStack.mulPose(cardRotation + (isFront ? 0 : 180), 0.0f, 1.0f, 0.0f);
-        matrixStack.translate(-posX, -posY, 0.0f);
+        matrixStack.translate(-posX, -posY);
         final int[] rect = {0, 0, 142, 80};
         currentCard.render(this, guiGraphics, getTexture(gui, 0), gui, rect, isFront);
-        matrixStack.popPose();
+        matrixStack.popMatrix();
     }
 
     @OnlyIn(Dist.CLIENT)

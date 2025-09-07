@@ -8,9 +8,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -77,10 +80,11 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
                 int lowerBarLength = engineInformation[i * 2 + 1] & 0x3F;
                 ModuleEngine engine = getCart().engines().get(i);
                 float[] rgb = engine.getGuiBarColor();
-                RenderSystem.setShaderColor(rgb[0], rgb[1], rgb[2], 1.0f);
-                drawImage(render, texture, 7, i * 15 + 2, 66, 0, upperBarLength, 5);
-                drawImage(render, texture, 7, i * 15 + 2 + 6, 66, 6, lowerBarLength, 5);
-                RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+                int args = ARGB.colorFromFloat(1F, rgb[0], rgb[1], rgb[2]);
+//                RenderSystem.setShaderColor(rgb[0], rgb[1], rgb[2], 1.0f);
+                drawImage(render, texture, 7, i * 15 + 2, 66, 0, upperBarLength, 5, args);
+                drawImage(render, texture, 7, i * 15 + 2 + 6, 66, 6, lowerBarLength, 5, args);
+//                RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
                 drawImage(render, texture, 5, i * 15, 66 + engine.getPriority() * 7, 11, 7, 15);
             }
         }
@@ -103,11 +107,11 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         drawImage(render, texture, 5, enginesEndAt + 52, 0, 47, 32, 20);
         drawImage(render, texture, 5, enginesEndAt + 72, 0, 47, 32, 20);
 
-        render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0x909090);
-        render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0x909090);
-        render.drawString(mc.font, distToString(odo), 7, enginesEndAt + 52 + 11, 0x909090);
-        render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.TRIP.translate(), 7, enginesEndAt + 52 + 22, 0x909090);
-        render.drawString(mc.font, distToString(trip), 7, enginesEndAt + 52 + 31, 0x909090);
+        render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0xFF909090);
+        render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0xFF909090);
+        render.drawString(mc.font, distToString(odo), 7, enginesEndAt + 52 + 11, 0xFF909090);
+        render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.TRIP.translate(), 7, enginesEndAt + 52 + 22, 0xFF909090);
+        render.drawString(mc.font, distToString(trip), 7, enginesEndAt + 52 + 31, 0xFF909090);
 
         drawItem(render, new ItemStack(Items.CLOCK), 5, enginesEndAt + 32 + 3);
         drawItem(render, new ItemStack(Items.COMPASS), 21, enginesEndAt + 32 + 3);
@@ -409,17 +413,19 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider) {
-        tagCompound.putByte(generateNBTName("Speed", id), (byte) getSpeedSetting());
-        tagCompound.putDouble(generateNBTName("ODO", id), odo);
-        tagCompound.putDouble(generateNBTName("TRIP", id), trip);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putByte(generateNBTName("Speed", id), (byte) getSpeedSetting());
+        output.putDouble(generateNBTName("ODO", id), odo);
+        output.putDouble(generateNBTName("TRIP", id), trip);
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider) {
-        setSpeedSetting(tagCompound.getByteOr(generateNBTName("Speed", id), (byte) 0));
-        odo = tagCompound.getDoubleOr(generateNBTName("ODO", id), 0);
-        trip = tagCompound.getDoubleOr(generateNBTName("TRIP", id), 0);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setSpeedSetting(input.getByteOr(generateNBTName("Speed", id), (byte) 0));
+        odo = input.getDoubleOr(generateNBTName("ODO", id), 0);
+        trip = input.getDoubleOr(generateNBTName("TRIP", id), 0);
     }
 
     public float getWheelAngle() {

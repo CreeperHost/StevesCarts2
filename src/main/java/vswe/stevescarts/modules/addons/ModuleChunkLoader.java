@@ -6,6 +6,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -159,15 +161,15 @@ public class ModuleChunkLoader extends ModuleAddon implements IActivatorModule
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putBoolean(generateNBTName("ChunkLoading", id), isLoadingChunk());
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putBoolean(generateNBTName("ChunkLoading", id), isLoadingChunk());
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        setChunkLoading(tagCompound.getBooleanOr(generateNBTName("ChunkLoading", id), false));
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setChunkLoading(input.getBooleanOr(generateNBTName("ChunkLoading", id), false));
     }
 
     @Override

@@ -3,10 +3,16 @@ package vswe.stevescarts.upgrades;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
+import org.apache.commons.lang3.NotImplementedException;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
@@ -65,8 +71,7 @@ public class Disassemble extends InventoryUpgradeEffect
     }
 
     @Override
-    public void load(final TileEntityUpgrade upgrade, final CompoundTag compound, HolderLookup.Provider provider)
-    {
+    public void load(TileEntityUpgrade upgrade, ValueInput input) {
         this.setLastCart(upgrade, upgrade.getItem(0));
     }
 
@@ -133,20 +138,20 @@ public class Disassemble extends InventoryUpgradeEffect
         }
     }
 
-    private void setLastCart(final TileEntityUpgrade upgrade, final ItemStack cart)
-    {
-        if (!cart.isEmpty())
-        {
-            cart.save(upgrade.getLevel().registryAccess(), upgrade.getCompound());
+    private void setLastCart(TileEntityUpgrade upgrade, ItemStack cart) {
+        if (!cart.isEmpty()) {
+            upgrade.setComp(new CompoundTag());
+            ItemStack.CODEC.encodeStart(upgrade.getLevel().registryAccess().createSerializationContext(NbtOps.INSTANCE), cart).result().ifPresent(tag -> {
+                upgrade.setComp((CompoundTag) tag);
+            });
         }
     }
 
-    private ItemStack getLastCart(final TileEntityUpgrade upgrade)
-    {
+    private ItemStack getLastCart(TileEntityUpgrade upgrade) {
         if (upgrade.getCompound().isEmpty()) {
             return ItemStack.EMPTY;
         }
-        return ItemStack.parse(upgrade.getLevel().registryAccess(), upgrade.getCompound()).orElse(ItemStack.EMPTY);
+        return ItemStack.CODEC.parse(upgrade.getLevel().registryAccess().createSerializationContext(NbtOps.INSTANCE), upgrade.getCompound()).result().orElse(ItemStack.EMPTY);
     }
 
     private boolean updateCart(final TileEntityUpgrade upgrade, final ItemStack cart)

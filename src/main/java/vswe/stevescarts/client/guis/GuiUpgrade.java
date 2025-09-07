@@ -3,7 +3,7 @@ package vswe.stevescarts.client.guis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -53,7 +53,7 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
-        guiGraphics.blit(RenderType::guiTextured, GuiUpgrade.texture, j, k, 0, 0, imageWidth, imageHeight, 256, 256);
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiUpgrade.texture, j, k, 0, 0, imageWidth, imageHeight, 256, 256);
         if (upgrade.getUpgrade() != null)
         {
             final InventoryUpgradeEffect inventory = upgrade.getUpgrade().getInventoryEffect();
@@ -61,7 +61,7 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
             {
                 for (int i = 0; i < inventory.getInventorySize(); ++i)
                 {
-                    guiGraphics.blit(RenderType::guiTextured, GuiUpgrade.texture, j + inventory.getSlotX(i) - 1, k + inventory.getSlotY(i) - 1, 0, imageHeight, 18, 18, 256, 256);
+                    guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiUpgrade.texture, j + inventory.getSlotX(i) - 1, k + inventory.getSlotY(i) - 1, 0, imageHeight, 18, 18, 256, 256);
                 }
             }
             final InterfaceUpgradeEffect gui = upgrade.getUpgrade().getInterfaceEffect();
@@ -75,7 +75,7 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int p_230451_2_, int p_230451_3_)
     {
-        guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable(upgrade.getUpgrade().getName()), 8, 6, 16777215);
+        guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable(upgrade.getUpgrade().getName()), 8, 6, 0xFFffffff);
     }
 
     static

@@ -8,6 +8,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
@@ -349,14 +351,12 @@ public class ModuleLabel extends ModuleAddon
     }
 
     @Override
-    protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
-    {
-        active.load(generateNBTName("Active", id), tag, provider);
+    protected void load(ValueInput input, int id) {
+        active.load(generateNBTName("Active", id), input);
     }
 
     @Override
-    protected void save(CompoundTag tag, int id, HolderLookup.Provider provider)
-    {
-        active.save(generateNBTName("Active", id), tag, provider);
+    protected void save(ValueOutput output, int id) {
+        active.save(generateNBTName("Active", id), output);
     }
 }

@@ -5,6 +5,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,12 +33,12 @@ public class StringData extends AbstractDataStore<String> {
     }
 
     @Override
-    public Tag toTag(HolderLookup.Provider provider) {
-        return StringTag.valueOf(value);
+    public void toTag(ValueOutput output) {
+        output.putString("value", value);
     }
 
     @Override
-    public void fromTag(HolderLookup.Provider provider, Tag tag) {
-        value = validValue(tag.asString().orElse(""), value);
+    public void fromTag(ValueInput input) {
+        value = validValue(input.getStringOr("value", ""), value);
     }
 }

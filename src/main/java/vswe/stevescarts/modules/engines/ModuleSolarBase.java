@@ -11,6 +11,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
@@ -220,19 +222,17 @@ public abstract class ModuleSolarBase extends ModuleEngine
     protected abstract void setAnimDone();
 
     @Override
-    protected void save(CompoundTag tag, int id, HolderLookup.Provider provider)
-    {
-        super.save(tag, id, provider);
-        tag.putInt(generateNBTName("Fuel", id), getFuelLevel());
-        upState.save(generateNBTName("Up", id), tag, provider);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putInt(generateNBTName("Fuel", id), getFuelLevel());
+        upState.save(generateNBTName("Up", id), output);
     }
 
     @Override
-    protected void load(CompoundTag tag, int id, HolderLookup.Provider provider)
-    {
-        super.load(tag, id, provider);
-        setFuelLevel(tag.getIntOr(generateNBTName("Fuel", id), 0));
-        upState.load(generateNBTName("Up", id), tag, provider);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setFuelLevel(input.getIntOr(generateNBTName("Fuel", id), 0));
+        upState.load(generateNBTName("Up", id), input);
         if (upState.get()) {
             setAnimDone();
         }

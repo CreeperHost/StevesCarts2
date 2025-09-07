@@ -12,6 +12,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -311,17 +313,17 @@ public class ModuleShooterAdv extends ModuleShooter
     }
 
     @Override
-    protected void save(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        tagCompound.putByte(generateNBTName("Options", id), selectedOptions());
-        saveTick(tagCompound, id);
+    protected void save(ValueOutput output, int id) {
+        super.save(output, id);
+        output.putByte(generateNBTName("Options", id), selectedOptions());
+        saveTick(output, id);
     }
 
     @Override
-    protected void load(CompoundTag tagCompound, int id, HolderLookup.Provider provider)
-    {
-        setOptions(tagCompound.getByteOr(generateNBTName("Options", id), (byte) 0));
-        loadTick(tagCompound, id);
+    protected void load(ValueInput input, int id) {
+        super.load(input, id);
+        setOptions(input.getByteOr(generateNBTName("Options", id), (byte) 0));
+        loadTick(input, id);
     }
 
     private static class EntityNearestTarget implements Comparator<Entity>
