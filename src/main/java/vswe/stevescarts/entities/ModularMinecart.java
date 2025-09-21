@@ -557,6 +557,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         if (name != null) output.putString("cartName", name.getString());
         output.putBoolean("engine_burning", isEngineBurning());
         output.putBoolean("disabled", isDisabled());
+        output.putBoolean("stopped", preStopVelocity != null);
         if (preStopVelocity != null) {
             output.putDouble("preStopVelX", preStopVelocity.x());
             output.putDouble("preStopVelY", preStopVelocity.y());
@@ -582,7 +583,11 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         name = Localization.translate(input.getStringOr("cartName", ""));
         setEngineBurning(input.getBooleanOr("engine_burning", false));
         setIsDisabled(input.getBooleanOr("disabled", false));
-        preStopVelocity = new Vec3(input.getDoubleOr("preStopVelX", 0), input.getDoubleOr("preStopVelY", 0), input.getDoubleOr("preStopVelZ", 0));
+        if (input.getBooleanOr("stopped", false)) {
+            preStopVelocity = new Vec3(input.getDoubleOr("preStopVelX", 0), input.getDoubleOr("preStopVelY", 0), input.getDoubleOr("preStopVelZ", 0));
+        } else {
+            preStopVelocity = null;
+        }
         workingTime = input.getShortOr("workingTime", (short) 0);
         disabledPos = input.read("disabled_pos", BlockPos.CODEC).orElse(null);
 

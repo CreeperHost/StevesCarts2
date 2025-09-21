@@ -71,12 +71,12 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
         renderTooltip(guiGraphics, mouseX, mouseY);
         mouseX -= getGuiLeft();
         mouseY -= getGuiTop();
-        guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.TOGGLER.TITLE.translate(), getGuiLeft() + 8, getGuiTop() + 6, 0xFF404040);
+        guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.TOGGLER.TITLE.translate(), getGuiLeft() + 8, getGuiTop() + 6, 0xFF404040, false);
         for (int i = 0; i < activator.getOptions().size(); ++i)
         {
             final ActivatorOption option = activator.getOptions().get(i);
             final int[] box = getBoxRect(i);
-            guiGraphics.drawString(Minecraft.getInstance().font, option.getName(), getGuiLeft() + box[0] + box[2] + 6, getGuiTop() + box[1] + 4, 0xFF404040);
+            guiGraphics.drawString(Minecraft.getInstance().font, option.getName(), getGuiLeft() + box[0] + box[2] + 6, getGuiTop() + box[1] + 4, 0xFF404040, false);
         }
         for (int i = 0; i < activator.getOptions().size(); ++i)
         {
