@@ -39,6 +39,7 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
+import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.data.ModuleData;
@@ -1178,7 +1179,7 @@ public abstract class ModuleBase
      */
     public void sendPacket(int id, byte[] data)
     {
-        PacketHandler.sendToServer(new PacketMinecartButton(cart.getId(), getPacketStart() + id, data));
+        StevesCartsClient.sendToServer(new PacketMinecartButton(cart.getId(), getPacketStart() + id, data));
     }
 
     /**

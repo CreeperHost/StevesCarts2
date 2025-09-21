@@ -23,7 +23,7 @@ public class PacketHandler {
 
         //@formatter:off
         registrar.playToServer(PacketCreateCart.TYPE,               StreamCodec.of((buff, packet) -> packet.write(buff), PacketCreateCart::read),       new PacketCreateCart.Handler());
-        registrar.playBidirectional(PacketMinecartButton.TYPE,      StreamCodec.of((buff, packet) -> packet.write(buff), PacketMinecartButton::read),   new PacketMinecartButton.Handler());
+        registrar.playBidirectional(PacketMinecartButton.TYPE,      StreamCodec.of((buff, packet) -> packet.write(buff), PacketMinecartButton::read),   new PacketMinecartButton.ServerHandler(), new PacketMinecartButton.ClientHandler());
         registrar.playToServer(PacketCargpManager.TYPE,             StreamCodec.of((buff, packet) -> packet.write(buff), PacketCargpManager::read),     new PacketCargpManager.Handler());
         registrar.playToServer(PacketDistributorTile.TYPE,          StreamCodec.of((buff, packet) -> packet.write(buff), PacketDistributorTile::read),  new PacketDistributorTile.Handler());
         registrar.playToServer(PacketActivator.TYPE,                StreamCodec.of((buff, packet) -> packet.write(buff), PacketActivator::read),        new PacketActivator.Handler());
@@ -32,12 +32,6 @@ public class PacketHandler {
         registrar.playToClient(PacketGuiData.TYPE,                  StreamCodec.of((buff, packet) -> packet.write(buff), PacketGuiData::read),          new PacketGuiData.Handler());
         registrar.playToClient(PacketEntityData.TYPE,               StreamCodec.of((buff, packet) -> packet.write(buff), PacketEntityData::read),       new PacketEntityData.Handler());
         //@formatter:on
-    }
-
-    @Deprecated
-    public static void sendToServer(CustomPacketPayload msg) {
-        PacketDistributor.sendToServer(msg);
-//        PacketDistributor.SERVER.noArg().send(msg);
     }
 
     @Deprecated

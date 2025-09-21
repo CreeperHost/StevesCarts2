@@ -2,13 +2,16 @@ package vswe.stevescarts;
 
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.SimpleMapCodec;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import vswe.stevescarts.client.models.*;
 import vswe.stevescarts.client.models.engines.*;
 import vswe.stevescarts.client.models.pig.ModelPigHead;
@@ -113,5 +116,10 @@ public class StevesCartsClient
 
     public static void registerItemExtensions(RegisterSpecialModelRendererEvent event) {
         event.register(ModItems.CARTS.getId(), ItemStackRenderer.Unbaked.MAP_CODEC);
+    }
+
+    @Deprecated
+    public static void sendToServer(CustomPacketPayload msg) {
+        Minecraft.getInstance().level.sendPacketToServer(msg.toVanillaServerbound());
     }
 }

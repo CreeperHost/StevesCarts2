@@ -42,16 +42,17 @@ public class PacketMinecartButton implements CustomPacketPayload {
         return new PacketMinecartButton(buffer.readInt(), buffer.readInt(), buffer.readByteArray());
     }
 
-    public static class Handler implements IPayloadHandler<PacketMinecartButton> {
+    public static class ClientHandler implements IPayloadHandler<PacketMinecartButton> {
         @Override
         public void handle(PacketMinecartButton msg, IPayloadContext ctx) {
-            ctx.enqueueWork(() -> {
-                if (ctx.flow() == PacketFlow.CLIENTBOUND) {
-                    handleClientSide(msg, ctx);
-                } else {
-                    handleServerSide(msg, ctx);
-                }
-            });
+            ctx.enqueueWork(() -> handleClientSide(msg, ctx));
+        }
+    }
+
+    public static class ServerHandler implements IPayloadHandler<PacketMinecartButton> {
+        @Override
+        public void handle(PacketMinecartButton msg, IPayloadContext ctx) {
+            ctx.enqueueWork(() -> handleServerSide(msg, ctx));
         }
     }
 

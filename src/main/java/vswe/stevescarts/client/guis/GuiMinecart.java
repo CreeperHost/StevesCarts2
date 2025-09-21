@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix4f;
+import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.ContainerMinecart;
@@ -281,7 +282,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
             }
             if (inRect((int) x - getGuiLeft(), (int) y - getGuiTop(), returnButton))
             {
-                PacketHandler.sendToServer(new PacketMinecartTurn(cart.getId()));
+                StevesCartsClient.sendToServer(new PacketMinecartTurn(cart.getId()));
             }
         }
         return super.mouseClicked(x, y, button);

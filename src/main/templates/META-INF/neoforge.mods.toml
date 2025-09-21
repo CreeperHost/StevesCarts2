@@ -70,7 +70,7 @@ description='''${mod_description}'''
 [[dependencies.stevescarts]]
     modId = "polylib"
     type="required"
-    versionRange = "[2106.1.0,)"
+    versionRange = "[2107.1.0,)"
     ordering = "AFTER"
     side = "BOTH"
 

@@ -23,6 +23,7 @@ import net.neoforged.neoforge.fluids.IFluidTank;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.containers.ContainerDistributor;
 import vswe.stevescarts.helpers.DistributorSetting;
 import vswe.stevescarts.helpers.DistributorSide;
@@ -163,7 +164,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
 
     public void sendPacket(final int id, final byte[] data)
     {
-        PacketHandler.sendToServer(new PacketDistributorTile(getBlockPos(), id, data));
+        StevesCartsClient.sendToServer(new PacketDistributorTile(getBlockPos(), id, data));
     }
 
     public void receivePacket(final int id, final byte[] data, final ServerPlayer player)

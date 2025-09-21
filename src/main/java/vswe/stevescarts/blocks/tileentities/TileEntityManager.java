@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.storages.TransferManager;
 import vswe.stevescarts.network.PacketHandler;
@@ -266,7 +267,7 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
 
     public void sendPacket(final int id, final byte[] data)
     {
-        PacketHandler.sendToServer(new PacketCargpManager(this.getBlockPos(), id, data));
+        StevesCartsClient.sendToServer(new PacketCargpManager(this.getBlockPos(), id, data));
     }
 
     public void receivePacket(final int id, final byte[] data, final Player player)

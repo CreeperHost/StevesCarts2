@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import vswe.stevescarts.StevesCarts;
+import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.data.ModuleDataHull;
@@ -570,7 +571,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         int y = (int) (y0 - getGuiTop());
         if (inRect(x, y, assembleRect))
         {
-            PacketHandler.sendToServer(new PacketCreateCart(this.assembler.getBlockPos(), 0, new byte[0]));
+            StevesCartsClient.sendToServer(new PacketCreateCart(this.assembler.getBlockPos(), 0, new byte[0]));
             return true;
         }
         else if (inRect(x, y, blackBackground))
@@ -608,7 +609,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                 final int size = 18;
                 if (inRect(x, y, new int[]{targetX, targetY, size, size}) && !slot.getItem().isEmpty() && TileEntityCartAssembler.getSlotStatus(slot.getItem()) <= 0)
                 {
-                    PacketHandler.sendToServer(new PacketCreateCart(this.assembler.getBlockPos(), 1, new byte[] { (byte) i }));
+                    StevesCartsClient.sendToServer(new PacketCreateCart(this.assembler.getBlockPos(), 1, new byte[] { (byte) i }));
                     return true;
                 }
             }

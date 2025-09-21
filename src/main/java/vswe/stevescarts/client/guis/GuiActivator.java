@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 import vswe.stevescarts.containers.ContainerActivator;
 import vswe.stevescarts.helpers.ActivatorOption;
@@ -71,12 +72,12 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
         renderTooltip(guiGraphics, mouseX, mouseY);
         mouseX -= getGuiLeft();
         mouseY -= getGuiTop();
-        guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.TOGGLER.TITLE.translate(), getGuiLeft() + 8, getGuiTop() + 6, 0xFF404040);
+        guiGraphics.drawString(Minecraft.getInstance().font, Localization.GUI.TOGGLER.TITLE.translate(), getGuiLeft() + 8, getGuiTop() + 6, 0xFF404040, false);
         for (int i = 0; i < activator.getOptions().size(); ++i)
         {
             final ActivatorOption option = activator.getOptions().get(i);
             final int[] box = getBoxRect(i);
-            guiGraphics.drawString(Minecraft.getInstance().font, option.getName(), getGuiLeft() + box[0] + box[2] + 6, getGuiTop() + box[1] + 4, 0xFF404040);
+            guiGraphics.drawString(Minecraft.getInstance().font, option.getName(), getGuiLeft() + box[0] + box[2] + 6, getGuiTop() + box[1] + 4, 0xFF404040, false);
         }
         for (int i = 0; i < activator.getOptions().size(); ++i)
         {
@@ -121,7 +122,7 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
                 byte data = (byte) ((button != 0) ? 1 : 0);
                 data |= (byte) (i << 1);
                 activator.getOptions().get(i).changeOption(button == 0);
-                PacketHandler.sendToServer(new PacketActivator(activator.getBlockPos(), 0, new byte[]{data}));
+                StevesCartsClient.sendToServer(new PacketActivator(activator.getBlockPos(), 0, new byte[]{data}));
             }
         }
         return true;
