@@ -198,10 +198,6 @@ publishing {
     }
 }
 
-jar {
-
-}
-
 unifiedPublishing {
     project {
         displayName = "$rootProject.mod_version"
