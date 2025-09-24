@@ -198,6 +198,10 @@ publishing {
     }
 }
 
+jar {
+
+}
+
 unifiedPublishing {
     project {
         displayName = "$rootProject.mod_version"
@@ -205,7 +209,7 @@ unifiedPublishing {
         changelog = ""
         gameVersions = ["$rootProject.minecraft_version"]
         gameLoaders = ["neoforge"]
-        mainPublication tasks.remapJar
+        mainPublication tasks.jar
         relations {
             depends {
                 curseforge = "polylib"
