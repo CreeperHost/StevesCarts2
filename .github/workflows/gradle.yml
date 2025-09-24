@@ -30,4 +30,4 @@ jobs:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         run: |
           chmod +x ./gradlew
-          ./gradlew build publish publishUnified --stacktrace --no-daemon
+          ./gradlew --no-configuration-cache build publish publishUnified --stacktrace --no-daemon
