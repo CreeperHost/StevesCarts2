@@ -34,4 +34,4 @@ jobs:
         with:
           name: Upload Artifacts
           path: |
-            build/libs/*.jar
+            ./build/libs/
