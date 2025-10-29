@@ -32,8 +32,8 @@ public class ModBlocks
     public static final DeferredHolder<Block, Block> MODULE_TOGGLER = BLOCKS.registerBlock("blockactivator", BlockActivator::new, BlockBehaviour.Properties.of().strength(2.0F));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TileEntityActivator>> MODULE_TOGGLER_TILE = TILES_ENTITIES.register("blockactivator", () -> new BlockEntityType<>(TileEntityActivator::new, ModBlocks.MODULE_TOGGLER.get()));
 
-    public static final DeferredHolder<Block, Block> JUNCTION = BLOCKS.registerBlock("blockjunction", BlockRailJunction::new, BlockBehaviour.Properties.of().noCollission().strength(0.7F).sound(SoundType.METAL));
-    public static final DeferredHolder<Block, Block> ADVANCED_DETECTOR = BLOCKS.registerBlock("blockadvdetector", BlockRailAdvDetector::new, BlockBehaviour.Properties.of().noCollission().strength(0.7F).sound(SoundType.METAL));
+    public static final DeferredHolder<Block, Block> JUNCTION = BLOCKS.registerBlock("blockjunction", BlockRailJunction::new, BlockBehaviour.Properties.of().noCollision().strength(0.7F).sound(SoundType.METAL));
+    public static final DeferredHolder<Block, Block> ADVANCED_DETECTOR = BLOCKS.registerBlock("blockadvdetector", BlockRailAdvDetector::new, BlockBehaviour.Properties.of().noCollision().strength(0.7F).sound(SoundType.METAL));
 
     //Metal blocks
     public static final DeferredHolder<Block, Block> REINFORCED_METAL = BLOCKS.registerBlock("reinforced_metal", BlockMetalStorage::new, BlockBehaviour.Properties.of().strength(2.0F));

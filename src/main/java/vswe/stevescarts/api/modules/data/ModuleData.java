@@ -1,6 +1,7 @@
 package vswe.stevescarts.api.modules.data;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -11,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -525,7 +527,7 @@ public class ModuleData
                 consumer.accept(Component.literal(ChatFormatting.WHITE + extradatainfo));
             }
         }
-        if (Screen.hasShiftDown())
+        if (StevesCartsClient.hasShiftDown())
         {
             if (getRenderingSides() == null || getRenderingSides().size() == 0)
             {

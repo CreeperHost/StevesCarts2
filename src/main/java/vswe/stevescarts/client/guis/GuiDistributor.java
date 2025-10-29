@@ -4,6 +4,7 @@ import net.creeperhost.polylib.client.modulargui.lib.container.DataSync;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
@@ -162,11 +163,10 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
     }
 
     @Override
-    public boolean mouseClicked(double x, double y, int button)
-    {
-        x -= getGuiLeft();
-        y -= getGuiTop();
-        if (button == 0)
+    public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
+        double x = event.x() - getGuiLeft();
+        double y = event.y() - getGuiTop();
+        if (event.button() == 0)
         {
             for (final DistributorSetting setting : DistributorSetting.settings)
             {
@@ -203,7 +203,7 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
                 }
             }
         }
-        else if (button == 1)
+        else if (event.button() == 1)
         {
             int id = 0;
             final ArrayList<DataSync<DistributorSide>> sides = containerDistributor.sideSyncs;
@@ -234,7 +234,7 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
                 }
             }
         }
-        return super.mouseClicked(x, y, button);
+        return super.mouseClicked(event, isDoubleClick);
     }
 
     static

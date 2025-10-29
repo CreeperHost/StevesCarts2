@@ -121,7 +121,7 @@ public class ArcadeTracks extends ArcadeGame
             unlockedLevels[i] = -1;
         }
         loadStories();
-        if (getModule().getCart().level().isClientSide)
+        if (getModule().getCart().level().isClientSide())
         {
             loadUserMaps();
         }
@@ -751,7 +751,7 @@ public class ArcadeTracks extends ArcadeGame
             case 9:
             {
                 userList.clear();
-                if (getModule().getCart().level().isClientSide)
+                if (getModule().getCart().level().isClientSide())
                 {
                     loadUserMaps();
                     break;

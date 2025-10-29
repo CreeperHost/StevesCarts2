@@ -82,7 +82,7 @@ public class ModuleInvisible extends ModuleAddon implements IActivatorModule
     public void update()
     {
         super.update();
-        if (!isVisible() && !getCart().hasFuelForModule() && !getCart().level().isClientSide)
+        if (!isVisible() && !getCart().hasFuelForModule() && !getCart().level().isClientSide())
         {
             setIsVisible(true);
         }

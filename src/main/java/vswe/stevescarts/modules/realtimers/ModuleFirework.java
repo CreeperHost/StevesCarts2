@@ -87,7 +87,7 @@ public class ModuleFirework extends ModuleBase {
     }
 
     public void fire() {
-        if (getCart().level().isClientSide) {
+        if (getCart().level().isClientSide()) {
             return;
         }
         @Nonnull ItemStack firework = getFirework();

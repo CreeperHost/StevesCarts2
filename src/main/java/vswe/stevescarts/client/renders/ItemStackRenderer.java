@@ -8,7 +8,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -28,7 +30,7 @@ import java.util.Set;
 public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer.Data> {
 
     @Override
-    public void render(@Nullable ItemStackRenderer.Data data, ItemDisplayContext transformType, PoseStack matrixStack, MultiBufferSource iRenderTypeBuffer, int light, int overlay, boolean b) {
+    public void submit(@Nullable ItemStackRenderer.Data data, ItemDisplayContext transformType, PoseStack matrixStack, SubmitNodeCollector nodeCollector, int light, int overlay, boolean b, int i2) {
         ItemStack stack = data.stack;
         if (stack.getItem() != ModItems.CARTS.get()) {
             return;
@@ -53,9 +55,8 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
                 for (ModuleBase module : cart.modules()) {
                     if (module.getModels() != null) {
                         for (ModelCartbase model : module.getModels()) {
-                            VertexConsumer buffer = iRenderTypeBuffer.getBuffer(model.getRenderType(module));
-                            model.applyEffects(module, matrixStack, iRenderTypeBuffer, 0, 0, 0);
-                            model.renderToBuffer(matrixStack, buffer, light, overlay, 0xFFFFFFFF);
+                            model.applyEffects(module, matrixStack, 0, 0, 0);
+                            nodeCollector.submitModel(model, null, matrixStack, model.getRenderType(module), 240, OverlayTexture.NO_OVERLAY, 0, null);
                         }
                     }
                 }
@@ -82,17 +83,17 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
         }
     }
 
-    public static record Unbaked() implements SpecialModelRenderer.Unbaked {
-        public static final MapCodec<ItemStackRenderer.Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec((builder) -> {
-            return builder.stable(new ItemStackRenderer.Unbaked());
-        });
-
-        public MapCodec<ItemStackRenderer.Unbaked> type() {
-            return MAP_CODEC;
-        }
-
-        public SpecialModelRenderer<?> bake(EntityModelSet p_387681_) {
-            return new ItemStackRenderer();
-        }
-    }
+//    public static record Unbaked() implements SpecialModelRenderer.Unbaked {
+//        public static final MapCodec<ItemStackRenderer.Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec((builder) -> {
+//            return builder.stable(new ItemStackRenderer.Unbaked());
+//        });
+//
+//        public MapCodec<ItemStackRenderer.Unbaked> type() {
+//            return MAP_CODEC;
+//        }
+//
+//        public SpecialModelRenderer<?> bake(EntityModelSet p_387681_) {
+//            return new ItemStackRenderer();
+//        }
+//    }
 }

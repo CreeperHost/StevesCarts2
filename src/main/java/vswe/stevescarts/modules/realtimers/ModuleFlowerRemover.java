@@ -27,7 +27,7 @@ public class ModuleFlowerRemover extends ModuleBase {
     @Override
     public void update() {
         super.update();
-        if (getCart().level().isClientSide) {
+        if (getCart().level().isClientSide()) {
             bladeangle += getBladeSpeed();
             if (getCart().hasFuel()) {
                 bladespeed = Math.min(1.0f, bladespeed + 0.005f);

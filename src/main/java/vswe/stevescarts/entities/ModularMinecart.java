@@ -180,7 +180,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
 
     @Override
     public void tick() {
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             entityDataList.forEach(EntityData::detectAndSend);
             if (isDisabled() && disabledPos != null) {
                 if (!fullStop) {
@@ -197,14 +197,14 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         }
         flipped = true;
         onCartUpdate();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             updateSounds();
         }
 
         double lastYRot = this.getYRot();
         Vec3 lastPos = this.position();
         super.tick();
-        if (this.level().isClientSide && lastPos.distanceTo(this.position()) > 0.01) {
+        if (this.level().isClientSide() && lastPos.distanceTo(this.position()) > 0.01) {
             this.rotationOffset += (float) ((this.getYRot() - lastYRot) % 360.0);
             this.rotationOffset %= 360.0F;
         }
@@ -498,7 +498,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         NeoForge.EVENT_BUS.post(event);
         if (event.isCanceled()) return;
 
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             for (int var1 = 0; var1 < getContainerSize(); ++var1) {
                 setItem(var1, ItemStack.EMPTY);
             }
@@ -512,7 +512,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
 
     @Override
     public void removeVehicle() {
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             if (!isRemoved()) {
                 level().addFreshEntity(new ItemEntity(level(), blockPosition().getX() + 0.5, blockPosition().getY() + 0.5, blockPosition().getZ() + 0.5, getCartItem()));
             }
@@ -663,7 +663,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     @Override
     protected void positionRider(Entity passenger, Entity.MoveFunction moveFunction) {
         super.positionRider(passenger, moveFunction);
-        if (this.level().isClientSide && passenger instanceof Player player) {
+        if (this.level().isClientSide() && passenger instanceof Player player) {
             if (player.shouldRotateWithMinecart() /* && useExperimentalMovement(this.level())*/) {
                 //TODO, Figure out if we want this, and get seat rendering working properly.
 //            if (true /*player.shouldRotateWithMinecart() && useExperimentalMovement(this.level())*/) {

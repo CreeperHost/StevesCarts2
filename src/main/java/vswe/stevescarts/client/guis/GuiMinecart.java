@@ -8,6 +8,8 @@ import net.creeperhost.polylib.client.modulargui.sprite.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
@@ -260,47 +262,47 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         return id / 8 * 18 + 182;
     }
 
-    @Override
-    public boolean mouseClicked(double x, double y, int button)
-    {
+        @Override
+    public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
+
         ModuleBase thief = cart.getInterfaceThief();
         if (thief != null)
         {
-            handleModuleMouseClicked(thief, (int) x, (int) y, button);
+            handleModuleMouseClicked(thief, (int) event.x(), (int) event.y(), event.button());
         }
         else if (cart.modules() != null)
         {
-            if (inRect((int) x - getGuiLeft(), (int) y - getGuiTop(), scrollBox[0], scrollBox[1], scrollBox[2], scrollBox[3]))
+            if (inRect((int) event.x() - getGuiLeft(), (int) event.y() - getGuiTop(), scrollBox[0], scrollBox[1], scrollBox[2], scrollBox[3]))
             {
-                scrollToMouse(y);
+                scrollToMouse(event.y());
                 isScrolling = true;
                 return true;
             }
             for (ModuleBase module : cart.modules())
             {
-                handleModuleMouseClicked(module, (int) x, (int) y, button);
+                handleModuleMouseClicked(module, (int) event.x(), (int) event.y(), event.button());
             }
-            if (inRect((int) x - getGuiLeft(), (int) y - getGuiTop(), returnButton))
+            if (inRect((int) event.x() - getGuiLeft(), (int) event.y() - getGuiTop(), returnButton))
             {
                 StevesCartsClient.sendToServer(new PacketMinecartTurn(cart.getId()));
             }
         }
-        return super.mouseClicked(x, y, button);
+        return super.mouseClicked(event, isDoubleClick);
     }
 
     @Override
-    public boolean mouseReleased(double x, double y, int button) {
+    public boolean mouseReleased(MouseButtonEvent event) {
         ModuleBase thief = cart.getInterfaceThief();
         if (thief != null) {
-            handleModuleMouseReleased(thief, (int) x, (int) y, button);
+            handleModuleMouseReleased(thief, (int) event.x(), (int) event.y(), event.button());
         } else if (cart.modules() != null) {
             for (ModuleBase module : cart.modules()) {
-                handleModuleMouseReleased(module, (int) x, (int) y, button);
+                handleModuleMouseReleased(module, (int) event.x(), (int) event.y(), event.button());
             }
         }
 
         isScrolling = false;
-        return super.mouseReleased(x, y, button);
+        return super.mouseReleased(event);
     }
 
     protected boolean inRect(final int x, final int y, final int x1, final int y1, final int sizeX, final int sizeY)
@@ -314,11 +316,11 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     }
 
     @Override
-    public boolean mouseDragged(double x, double y, int button, double moveX, double moveY) {
-        if (super.mouseDragged(x, y, button, moveX, moveY)) return true;
+    public boolean mouseDragged(MouseButtonEvent event, double mouseX, double mouseY) {
+        if (super.mouseDragged(event, mouseX, mouseY)) return true;
         if (isScrolling)
         {
-            scrollToMouse(y);
+            scrollToMouse(event.y());
             return true;
         }
         return false;
@@ -356,21 +358,20 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
     }
 
     @Override
-    public boolean keyPressed(int p_231046_1_, int id, int p_231046_3_)
-    {
-        super.keyPressed(p_231046_1_, id, p_231046_3_);
+    public boolean keyPressed(KeyEvent event) {
+        super.keyPressed(event);
         if (cart.modules() != null)
         {
             final ModuleBase thief = cart.getInterfaceThief();
             if (thief != null)
             {
-                handleModuleKeyPress(thief, id, p_231046_3_);
+                handleModuleKeyPress(thief, event.key(), event.modifiers());
             }
             else
             {
                 for (final ModuleBase module : cart.modules())
                 {
-                    handleModuleKeyPress(module, id, p_231046_3_);
+                    handleModuleKeyPress(module, event.key(), event.modifiers());
                 }
             }
         }

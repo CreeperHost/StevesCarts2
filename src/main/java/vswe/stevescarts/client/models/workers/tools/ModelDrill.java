@@ -31,7 +31,7 @@ public class ModelDrill extends ModelCartbase {
     }
 
     @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll) {
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, final float yaw, final float pitch, final float roll) {
         root.xRot = ((module == null) ? 0.0f : ((ModuleDrill) module).getDrillRotation());
     }
 }

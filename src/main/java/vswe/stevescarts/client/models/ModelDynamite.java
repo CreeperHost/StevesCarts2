@@ -112,7 +112,7 @@ public class ModelDynamite extends ModelCartbase {
     }
 
     @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll) {
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, final float yaw, final float pitch, final float roll) {
         if (module == null) {
             sizemult = 0.5f + 1.0f;
             for (ModelPart dynamite : dynamites) {

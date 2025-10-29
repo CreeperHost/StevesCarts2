@@ -1,5 +1,6 @@
 package vswe.stevescarts;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.SimpleMapCodec;
 import net.minecraft.client.Minecraft;
@@ -115,11 +116,21 @@ public class StevesCartsClient
     }
 
     public static void registerItemExtensions(RegisterSpecialModelRendererEvent event) {
-        event.register(ModItems.CARTS.getId(), ItemStackRenderer.Unbaked.MAP_CODEC);
+//        event.register(ModItems.CARTS.getId(), ItemStackRenderer.Unbaked.MAP_CODEC);
     }
 
     @Deprecated
     public static void sendToServer(CustomPacketPayload msg) {
         Minecraft.getInstance().level.sendPacketToServer(msg.toVanillaServerbound());
+    }
+
+    @Deprecated
+    public static boolean hasShiftDown() {
+        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 340) || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 344);
+    }
+
+    @Deprecated
+    public static boolean hasControlDown() {
+        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 341) || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 345);
     }
 }

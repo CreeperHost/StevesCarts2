@@ -99,7 +99,7 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource
 
     private void executeCommand()
     {
-        if (!getCart().level().isClientSide)
+        if (!getCart().level().isClientSide())
         {
             //TODO
         }

@@ -55,7 +55,7 @@ public class ModuleCakeServerDynamite extends ModuleCakeServer
     public void update()
     {
         super.update();
-        if (!getCart().level().isClientSide)
+        if (!getCart().level().isClientSide())
         {
             //TODO
             @Nonnull ItemStack item = getStack(0);

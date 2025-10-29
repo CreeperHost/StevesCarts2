@@ -49,7 +49,7 @@ public class ModelShield extends ModelCartbase {
     }
 
     @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, float yaw, float pitch, float roll) {
+    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll) {
         float shieldDistance = (module == null) ? 18.0f : ((ModuleShield) module).getShieldDistance();
         enabled = module == null || ((ModuleShield) module).hasShield();
         if (!enabled) return;

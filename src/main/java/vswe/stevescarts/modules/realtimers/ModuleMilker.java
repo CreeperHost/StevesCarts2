@@ -40,7 +40,7 @@ public class ModuleMilker extends ModuleBase
         super.update();
         if (cooldown <= 0)
         {
-            if (!getCart().level().isClientSide && getCart().hasFuel())
+            if (!getCart().level().isClientSide() && getCart().hasFuel())
             {
                 generateMilk();
                 depositeMilk();

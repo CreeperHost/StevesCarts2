@@ -149,7 +149,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
     }
 
     private void calculateRails() {
-        if (getCart().level().isClientSide) {
+        if (getCart().level().isClientSide()) {
             return;
         }
         byte valid = 0;

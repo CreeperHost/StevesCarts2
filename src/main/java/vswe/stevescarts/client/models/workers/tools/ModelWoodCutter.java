@@ -50,9 +50,9 @@ public class ModelWoodCutter extends ModelCartbase
     }
 
     @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, float yaw, float pitch, float roll)
+    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll)
     {
-        super.applyEffects(module, matrixStack, rtb, yaw, pitch, roll);
+        super.applyEffects(module, matrixStack, yaw, pitch, roll);
         final float commonAngle = (module == null) ? 0.0f : ((ModuleWoodcutter) module).getCutterAngle();
         for (int i = 0; i < anchors.length; ++i)
         {

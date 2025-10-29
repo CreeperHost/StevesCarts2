@@ -1,6 +1,7 @@
 package vswe.stevescarts.helpers.storages;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import dev.architectury.hooks.client.fluid.ClientFluidStackHooks;
 import dev.architectury.hooks.fluid.FluidStackHooks;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -153,10 +154,10 @@ public class SCTank extends FluidTank {
         if (fluid.isEmpty()) return;
         int fluidLevel = (int) (48 * ((float) fluid.getAmount() / (float) capacity));
 
-        TextureAtlasSprite icon = FluidStackHooks.getStillTexture(fluid.getFluid());
+        TextureAtlasSprite icon = ClientFluidStackHooks.getStillTexture(fluid.getFluid());
         if (icon == null) return;
 
-        int fluidColor = FluidStackHooks.getColor(fluid.getFluid());
+        int fluidColor = ClientFluidStackHooks.getColor(fluid.getFluid());
         for (int y = 0; y < 3; y++) {
             int pixels = fluidLevel - (2 - y) * 16;
 

@@ -151,7 +151,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
 
     public void updateSolarModel()
     {
-        if (getCart().level().isClientSide)
+        if (getCart().level().isClientSide())
         {
             updateDataForModel();
             if (!setup)

@@ -118,7 +118,7 @@ public class ModuleEnchants extends ModuleAddon {
     @Override
     public void update() {
         super.update();
-        if (getCart().level().isClientSide) return;
+        if (getCart().level().isClientSide()) return;
 
         for (int i = 0; i < 3; ++i) {
             if (!getStack(i).isEmpty() && getStack(i).getCount() > 0) {

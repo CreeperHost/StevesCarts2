@@ -53,7 +53,7 @@ public class ModelMobDetector extends ModelCartbase {
     }
 
     @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, float yaw, float pitch, float roll) {
+    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll) {
         root.yRot = ((module == null) ? 0.0f : (((ModuleShooterAdv) module).getDetectorAngle() + yaw));
     }
 }

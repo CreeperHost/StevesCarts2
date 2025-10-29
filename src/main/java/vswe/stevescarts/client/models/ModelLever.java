@@ -43,7 +43,7 @@ public class ModelLever extends ModelCartbase
     }
 
     @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll)
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, final float yaw, final float pitch, final float roll)
     {
         lever.zRot = ((module == null) ? 0.0f : (0.3926991f - ((ILeverModule) module).getLeverState() * 3.1415927f / 4.0f));
     }

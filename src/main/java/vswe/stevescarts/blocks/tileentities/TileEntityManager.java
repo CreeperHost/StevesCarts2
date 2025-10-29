@@ -198,7 +198,7 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
     {
         if(level == null) return;
 
-        if (level.isClientSide)
+        if (level.isClientSide())
         {
             updateLayout();
             return;

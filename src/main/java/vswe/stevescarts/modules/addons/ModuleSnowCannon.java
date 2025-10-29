@@ -17,7 +17,7 @@ public class ModuleSnowCannon extends ModuleAddon {
     @Override
     public void update() {
         super.update();
-        if (getCart().level().isClientSide) {
+        if (getCart().level().isClientSide()) {
             return;
         }
         if (getCart().hasFuel()) {

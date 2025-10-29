@@ -119,7 +119,7 @@ public class ModelFarmer extends ModelCartbase {
     }
 
     @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, float yaw, float pitch, float roll) {
+    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll) {
         mainAnchor.zRot = ((module == null) ? 3.926991f : (-((ModuleFarmer) module).getRigAngle()));
         float farmAngle = (module == null) ? 0.0f : ((ModuleFarmer) module).getFarmAngle();
         anchor.zRot = -farmAngle;

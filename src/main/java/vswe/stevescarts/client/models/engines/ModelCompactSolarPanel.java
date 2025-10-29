@@ -119,7 +119,7 @@ public class ModelCompactSolarPanel extends ModelCartbase {
     }
 
     @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, float yaw, float pitch, float roll) {
+    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll) {
         generateModels();
         if (module == null) {
             for (int i = 0; i < 2; ++i) {

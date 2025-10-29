@@ -30,7 +30,7 @@ public class ModelSeat extends ModelCartbase
     }
 
     @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll) {
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, final float yaw, final float pitch, final float roll) {
         if (module == null) {
             root.yRot = 1.5707964f;
         } else {

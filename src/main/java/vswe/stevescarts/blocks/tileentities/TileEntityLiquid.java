@@ -111,7 +111,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
         if (tick-- <= 0)
         {
             tick = 5;
-            if (!level.isClientSide)
+            if (!level.isClientSide())
             {
                 for (int i = 0; i < 4; ++i)
                 {
@@ -427,7 +427,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player)
     {
-        if (level != null && !level.isClientSide)
+        if (level != null && !level.isClientSide())
         {
             syncTanks();
         }

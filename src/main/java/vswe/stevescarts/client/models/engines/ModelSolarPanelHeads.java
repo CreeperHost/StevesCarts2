@@ -61,9 +61,9 @@ public class ModelSolarPanelHeads extends ModelCartbase
     }
 
     @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll)
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, final float yaw, final float pitch, final float roll)
     {
-        super.applyEffects(module, matrixStack, rtb, yaw, pitch, roll);
+        super.applyEffects(module, matrixStack, yaw, pitch, roll);
         for (final ModelPart panel : panels)
         {
             panel.xRot = ((module == null) ? 0.0f : (-((ModuleSolarTop) module).getInnerRotation()));

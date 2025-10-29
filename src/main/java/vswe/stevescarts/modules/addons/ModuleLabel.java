@@ -212,7 +212,7 @@ public class ModuleLabel extends ModuleAddon
     @Override
     public void update()
     {
-        if (!isPlaceholder() && !getCart().level().isClientSide)
+        if (!isPlaceholder() && !getCart().level().isClientSide())
         {
             if (delay <= 0)
             {

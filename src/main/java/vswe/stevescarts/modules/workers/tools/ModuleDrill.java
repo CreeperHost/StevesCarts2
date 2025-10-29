@@ -415,7 +415,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     public void update()
     {
         super.update();
-        if (getCart().level().isClientSide && !setup)
+        if (getCart().level().isClientSide() && !setup)
         {
             if (isPlaceholder() || !isMining.get())
             {
@@ -436,7 +436,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
                 ++miningCoolDown;
             }
         }
-        if (!getCart().level().isClientSide && liquidsensors != null)
+        if (!getCart().level().isClientSide() && liquidsensors != null)
         {
             byte data = sensorLight;
             if (isDrillSpinning())

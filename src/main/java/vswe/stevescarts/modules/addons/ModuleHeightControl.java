@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -162,7 +163,7 @@ public class ModuleHeightControl extends ModuleAddon
                     }
                     packetData |= 0x2;
                 }
-                if (Screen.hasShiftDown())
+                if (StevesCartsClient.hasShiftDown())
                 {
                     packetData |= 0x4;
                 }

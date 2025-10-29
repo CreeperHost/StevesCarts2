@@ -79,7 +79,7 @@ public class ModuleNote extends ModuleBase
         veryLongTrack = false;
         speedSetting = 5;
         tracks = new ArrayList<>();
-        if (getCart().level().isClientSide)
+        if (getCart().level().isClientSide())
         {
             buttons = new ArrayList<>();
             createTrack = new Button(notemapX - 60, notemapY - 20);
@@ -110,7 +110,7 @@ public class ModuleNote extends ModuleBase
 
     private void updateSpeedButton()
     {
-        if (getCart().level().isClientSide)
+        if (getCart().level().isClientSide())
         {
             speedButton.imageID = 14 - speedSetting;
             speedButton.text = Localization.MODULES.ATTACHMENTS.NOTE_DELAY.translate(String.valueOf(getTickDelay()));
@@ -197,7 +197,7 @@ public class ModuleNote extends ModuleBase
     public void update()
     {
         super.update();
-        if (getCart().level().isClientSide)
+        if (getCart().level().isClientSide())
         {
             tooLongTrack = false;
             veryLongTrack = false;
@@ -326,7 +326,7 @@ public class ModuleNote extends ModuleBase
                 }
                 if (!found)
                 {
-                    if (!getCart().level().isClientSide)
+                    if (!getCart().level().isClientSide())
                     {
                         setPlaying(false);
                     }
@@ -992,7 +992,7 @@ public class ModuleNote extends ModuleBase
             {
                 return;
             }
-            if (!getCart().level().isClientSide)
+            if (!getCart().level().isClientSide())
             {
                 if (volume > 0.0f)
                 {
@@ -1049,7 +1049,7 @@ public class ModuleNote extends ModuleBase
         {
             notes = new ArrayList<>();
             volume = 3;
-            if (getCart().level().isClientSide)
+            if (getCart().level().isClientSide())
             {
                 final int ID = tracks.size() + 1;
                 addButton = new TrackButton(notemapX - 60, ID - 1);
@@ -1097,7 +1097,7 @@ public class ModuleNote extends ModuleBase
                 notes.remove(notes.size() - 1);
             }
             volume = (val & ~maximumNotesPerTrack) >> maximumNotesPerTrackBitCount;
-            if (getCart().level().isClientSide)
+            if (getCart().level().isClientSide())
             {
                 volumeButton.imageID = 4 + volume;
                 volumeButton.text = getVolumeText();

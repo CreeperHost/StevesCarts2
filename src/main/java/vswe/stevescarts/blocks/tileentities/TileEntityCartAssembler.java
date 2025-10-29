@@ -866,7 +866,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                 {
                     setItem(outputSlot.getSlotIndex(), outputItem);
                 }
-                if (!level.isClientSide)
+                if (!level.isClientSide())
                 {
                     deployCart();
                     outputItem = ItemStack.EMPTY;
@@ -980,7 +980,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     {
         if(level == null) return;
 
-        if (level.isClientSide)
+        if (level.isClientSide())
         {
             if (placeholder == null)
             {

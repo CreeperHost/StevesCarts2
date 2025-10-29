@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -283,7 +284,7 @@ public class ModulePowerObserver extends ModuleAddon
             final int[] rect = getPowerRect(i);
             if (inRect(x, y, rect))
             {
-                sendPacket(2, new byte[]{(byte) i, (byte) (button | (Screen.hasShiftDown() ? 2 : 0))});
+                sendPacket(2, new byte[]{(byte) i, (byte) (button | (StevesCartsClient.hasShiftDown() ? 2 : 0))});
                 break;
             }
         }

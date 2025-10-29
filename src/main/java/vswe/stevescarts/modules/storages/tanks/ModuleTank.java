@@ -21,6 +21,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.IFluidTank;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.StevesCarts;
+import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.modules.template.ModuleStorage;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -118,7 +119,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
         if (tick-- <= 0)
         {
             tick = 5;
-            if (!getCart().level().isClientSide)
+            if (!getCart().level().isClientSide())
             {
                 tank.containerTransfer(locked.get());
             }
@@ -174,7 +175,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     @Override
     public void onFluidUpdated(final int tankid)
     {
-        if (getCart().level().isClientSide)
+        if (getCart().level().isClientSide())
         {
             return;
         }
@@ -344,7 +345,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
         if (inRect(x, y, tankBounds))
         {
             byte data = (byte) button;
-            if (Screen.hasShiftDown())
+            if (StevesCartsClient.hasShiftDown())
             {
                 data |= 0x2;
             }

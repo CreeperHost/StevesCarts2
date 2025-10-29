@@ -6,13 +6,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.client.event.RenderNameTagEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -29,12 +33,12 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
     }
 
     @Override
-    public void render(ModularCartRenderState state, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
+    public void submit(ModularCartRenderState state, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
         if (state.isInvisible) {
             return;
         }
 
-        super.render(state, poseStack, bufferSource, light);
+        super.submit(state, poseStack, nodeCollector, cameraRenderState);
 
         poseStack.pushPose();
         long offsetSeed = state.offsetSeed;
@@ -59,33 +63,78 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
             if (!module.haveModels()) continue;
             for (ModelCartbase model : module.getModels()) {
                 if (model.getRenderType(module) == null) continue;
-                model.applyEffects(module, poseStack, bufferSource, state.yRot, state.xRot, 0);
-                model.renderToBuffer(poseStack, bufferSource.getBuffer(model.getRenderType(module)), light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+                model.applyEffects(module, poseStack, state.yRot, state.xRot, 0);
+                nodeCollector.submitModel(model, null, poseStack, model.getRenderType(module), 240, OverlayTexture.NO_OVERLAY, 0, null);
             }
         }
 
+
         poseStack.popPose();
 
-        renderTag(state.label, poseStack, bufferSource, light);
+        renderTag(state.label, poseStack, nodeCollector, 240, cameraRenderState, state.distanceToCameraSq);
     }
 
-    protected void renderTag(List<Component> label, PoseStack poseStack, MultiBufferSource source, int light) {
+//    @Override
+//    protected @Nullable Component getNameTag(ModularMinecart entity) {
+//        return super.getNameTag(entity);
+//    }
+//
+//    @Override
+//    protected void submitNameTag(ModularCartRenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
+//        super.submitNameTag(renderState, poseStack, nodeCollector, cameraRenderState);
+//    }
+
+    //    @Override
+//    public void render(ModularCartRenderState state, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
+//        if (state.isInvisible) {
+//            return;
+//        }
+//
+//        super.render(state, poseStack, bufferSource, light);
+//
+//        poseStack.pushPose();
+//        long offsetSeed = state.offsetSeed;
+//        float xOffset = (((float) (offsetSeed >> 16 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
+//        float yOffset = (((float) (offsetSeed >> 20 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
+//        float zOffset = (((float) (offsetSeed >> 24 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
+//        poseStack.translate(xOffset, yOffset, zOffset);
+//
+//        //New render transforms
+//        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot));
+//        poseStack.mulPose(Axis.ZP.rotationDegrees(-state.xRot));
+//        poseStack.translate(0.0F, 0.375F, 0.0F);
+//
+//        float f3 = state.hurtTime;
+//        if (f3 > 0.0F) {
+//            poseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f3) * f3 * state.damageTime / 10.0F * (float) state.hurtDir));
+//        }
+//
+//        poseStack.scale(-1.0F, -1.0F, 1.0F);
+//
+//        for (ModuleBase module : state.modules) {
+//            if (!module.haveModels()) continue;
+//            for (ModelCartbase model : module.getModels()) {
+//                if (model.getRenderType(module) == null) continue;
+//                model.applyEffects(module, poseStack, bufferSource, state.yRot, state.xRot, 0);
+//                model.renderToBuffer(poseStack, bufferSource.getBuffer(model.getRenderType(module)), light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+//            }
+//        }
+//
+//        poseStack.popPose();
+//
+//        renderTag(state.label, poseStack, bufferSource, light);
+//    }
+
+    protected void renderTag(List<Component> label, PoseStack poseStack, SubmitNodeCollector nodeCollector, int light, CameraRenderState cameraRenderState, double distanceToCameraSq) {
         boolean throughWalls = true;
         poseStack.pushPose();
-        poseStack.translate(0, 1.2, 0);
-        poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-        poseStack.scale(0.025F, -0.025F, 0.025F);
-        Matrix4f matrix4f = poseStack.last().pose();
+        poseStack.translate(0, 0.5, 0);
         Font font = this.getFont();
-        int rowOffset = -((label.size() - 1) * (font.lineHeight + 1));
+        double lineHeight = 0.3;
+        double rowOffset = label.size() * lineHeight;
         for (Component component : label) {
-            float f = (float) (-font.width(component)) / 2.0F;
-            int j = (int) (Minecraft.getInstance().options.getBackgroundOpacity(0.25F) * 255.0F) << 24;
-            font.drawInBatch(component, f, rowOffset, -2130706433, false, matrix4f, source, throughWalls ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL, j, light);
-            if (throughWalls) {
-                font.drawInBatch(component, f, rowOffset, -1, false, matrix4f, source, Font.DisplayMode.NORMAL, 0, LightTexture.lightCoordsWithEmission(light, 2));
-            }
-            rowOffset += font.lineHeight + 1;
+            nodeCollector.submitNameTag(poseStack, new Vec3(0, rowOffset, 0), 0, component, throughWalls, light, distanceToCameraSq, cameraRenderState);
+            rowOffset -= lineHeight;
         }
         poseStack.popPose();
     }

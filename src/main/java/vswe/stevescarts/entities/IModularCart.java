@@ -248,7 +248,7 @@ public interface IModularCart extends Container, IFluidHandler {
             ModuleEngine engine = getCurrentEngine();
             if (engine != null) {
                 engine.consumeFuel(consumption);
-                if (!isPlaceholder() && getCart().level().isClientSide && getCart().isEngineBurning()) {
+                if (!isPlaceholder() && getCart().level().isClientSide() && getCart().isEngineBurning()) {
                     engine.smoke();
                 }
             }
@@ -373,7 +373,7 @@ public interface IModularCart extends Container, IFluidHandler {
         if (isPlaceholder()) {
             return;
         }
-        if (!getCart().level().isClientSide && hasFuel()) {
+        if (!getCart().level().isClientSide() && hasFuel()) {
             if (getCart().workingTime <= 0) {
                 ModuleWorker oldComponent = getCart().workingComponent;
                 if (getCart().workingComponent != null) {
@@ -482,7 +482,7 @@ public interface IModularCart extends Container, IFluidHandler {
         moduleTanks().clear();
         int guidata = 0;
         int packets = 0;
-        if (getCart().level().isClientSide) {
+        if (getCart().level().isClientSide()) {
             generateModels();
         }
         for (ModuleBase module2 : modules()) {

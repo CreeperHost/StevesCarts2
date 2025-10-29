@@ -95,7 +95,7 @@ public class ModelLawnMower extends ModelCartbase {
     }
 
     @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, float yaw, float pitch, float roll) {
+    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll) {
         genModel();
         int partialtime = 0;
         float angle = (module == null) ? 0.0f : (((ModuleFlowerRemover) module).getBladeAngle() + partialtime * ((ModuleFlowerRemover) module).getBladeSpeed());

@@ -32,7 +32,7 @@ public class ModelSniperRifle extends ModelCartbase {
 	}
 
 		@Override
-	public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll) {
+	public void applyEffects(final ModuleBase module, PoseStack matrixStack, final float yaw, final float pitch, final float roll) {
 		//This does not perfectly match the original behavior. But its close enough. I dont feel like spending hours screwing with the new model system.
 		root.zRot = ((module == null) ? 0.0f : ((ModuleShooterAdv) module).getPipeRotation(0) * 0.75F);
 		root.yRot = root.zRot != 0 ? 0 : ((module == null) ? 0.0f : ((float)Math.PI + ((ModuleShooterAdv) module).getRifleDirection() + ((yaw + 180) * -0.0174532F)));

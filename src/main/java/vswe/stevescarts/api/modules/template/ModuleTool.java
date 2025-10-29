@@ -176,12 +176,12 @@ public abstract class ModuleTool extends ModuleWorker
     public void update()
     {
         super.update();
-        if (initialDurability != -1 && !getCart().level().isClientSide) {
+        if (initialDurability != -1 && !getCart().level().isClientSide()) {
             setDurability(initialDurability);
             initialDurability = -1;
         }
 
-        if (!getCart().level().isClientSide && useDurability())
+        if (!getCart().level().isClientSide() && useDurability())
         {
             if (isActuallyRepairing())
             {

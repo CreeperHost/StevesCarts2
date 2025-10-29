@@ -3,6 +3,7 @@ package vswe.stevescarts.client.guis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -430,23 +431,22 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
-    {
-        super.mouseClicked(mouseX, mouseY, button);
-        int x = (int) mouseX;
-        int y = (int) mouseY;
+    public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
+        super.mouseClicked(event, isDoubleClick);
+        int x = (int) event.x();
+        int y = (int) event.y();
         x -= getGuiLeft();
         y -= getGuiTop();
         if (inRect(x, y, getMiddleCoords()))
         {
-            getLiquid().sendPacket(5, (byte) ((button == 0) ? 1 : -1));
+            getLiquid().sendPacket(5, (byte) ((event.button() == 0) ? 1 : -1));
         }
         else
         {
             for (int i = 0; i < 4; ++i)
             {
                 byte data = (byte) i;
-                data |= (byte) (button << 2);
+                data |= (byte) (event.button() << 2);
                 if (inRect(x, y, getArrowCoords(i)))
                 {
                     getLiquid().sendPacket(0, (byte) i);

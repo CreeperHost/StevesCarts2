@@ -97,7 +97,7 @@ public abstract class TankUpgradeEffect extends InventoryUpgradeEffect
         if (upgrade.getCompound().getByteOr("Tick", (byte) 0) <= 0)
         {
             upgrade.getCompound().putByte("Tick", (byte) 5);
-            if (!upgrade.getLevel().isClientSide && slots != null && slots.size() >= 2)
+            if (!upgrade.getLevel().isClientSide() && slots != null && slots.size() >= 2)
             {
                 upgrade.tank.containerTransfer();
             }

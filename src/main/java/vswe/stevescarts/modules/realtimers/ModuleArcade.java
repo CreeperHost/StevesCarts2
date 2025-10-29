@@ -40,7 +40,7 @@ public class ModuleArcade extends ModuleBase
 
     private boolean isGameActive()
     {
-        return getCart().level().isClientSide && currentGame != null;
+        return getCart().level().isClientSide() && currentGame != null;
     }
 
     @Override

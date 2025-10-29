@@ -36,7 +36,7 @@ public class ModelFrontChest extends ModelCartbase
     }
 
     @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll)
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, final float yaw, final float pitch, final float roll)
     {
         lid.xRot = ((module == null) ? 0.0f : (-((ModuleChest) module).getChestAngle()));
     }

@@ -22,7 +22,7 @@ public class ModuleCleaner extends ModuleBase
     public void update()
     {
         super.update();
-        if (getCart().level().isClientSide)
+        if (getCart().level().isClientSide())
         {
             return;
         }

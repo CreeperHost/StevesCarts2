@@ -265,7 +265,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     @Override
     public void update()
     {
-        if (!getCart().level().isClientSide)
+        if (!getCart().level().isClientSide())
         {
             if (arrowTick > 0)
             {

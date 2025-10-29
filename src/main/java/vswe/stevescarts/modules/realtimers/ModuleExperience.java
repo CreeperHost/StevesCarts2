@@ -13,6 +13,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -34,7 +35,7 @@ public class ModuleExperience extends ModuleBase
 
     @Override
     public void update() {
-        if (getCart().level().isClientSide) return;
+        if (getCart().level().isClientSide()) return;
 
         List<Entity> list = getCart().level().getEntities(getCart(), getCart().getBoundingBox().inflate(3.0, 1.0, 3.0));
         for (Entity entity : list) {
@@ -155,7 +156,7 @@ public class ModuleExperience extends ModuleBase
     {
         if (inRect(x, y, getContainerRect()))
         {
-            sendPacket(0, (byte) (Screen.hasShiftDown() ? 1 : 0));
+            sendPacket(0, (byte) (StevesCartsClient.hasShiftDown() ? 1 : 0));
         }
     }
 

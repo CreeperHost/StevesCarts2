@@ -14,6 +14,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
@@ -223,11 +224,11 @@ public abstract class ModuleRecipe extends ModuleAddon
                         break;
                     }
                     byte encodedData = (byte) ((i != 0) ? 1 : 0);
-                    if (Screen.hasControlDown())
+                    if (StevesCartsClient.hasControlDown())
                     {
                         encodedData |= 0x2;
                     }
-                    else if (Screen.hasShiftDown())
+                    else if (StevesCartsClient.hasShiftDown())
                     {
                         encodedData |= 0x4;
                     }

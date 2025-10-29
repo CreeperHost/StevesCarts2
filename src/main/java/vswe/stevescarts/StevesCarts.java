@@ -56,7 +56,7 @@ public class StevesCarts
         ModSerializers.init(modBus);
         ModItemData.init();
 
-        if(FMLEnvironment.dist.isClient())
+        if(FMLEnvironment.getDist().isClient())
         {
             OverlayEventHandler.init(modBus);
             StevesCartsClient.init(modBus);

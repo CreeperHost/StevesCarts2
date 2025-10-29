@@ -42,7 +42,7 @@ public class ModelCake extends ModelCartbase {
     }
 
     @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, float yaw, float pitch, float roll) {
+    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll) {
         int count;
         if (module != null) {
             count = ((ModuleCakeServer) module).getRenderSliceCount();
@@ -52,6 +52,6 @@ public class ModelCake extends ModelCartbase {
         for (int i = 0; i < cakes.length; ++i) {
             cakes[i].visible = 6 - i == count;
         }
-        super.applyEffects(module, matrixStack, rtb, yaw, pitch, roll);
+        super.applyEffects(module, matrixStack, yaw, pitch, roll);
     }
 }

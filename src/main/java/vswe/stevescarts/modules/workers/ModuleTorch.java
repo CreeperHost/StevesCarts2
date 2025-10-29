@@ -259,7 +259,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     }
 
     private void calculateTorches() {
-        if (getCart().level().isClientSide) {
+        if (getCart().level().isClientSide()) {
             return;
         }
         int val = 0;

@@ -41,9 +41,9 @@ public class ModelFrontTank extends ModelCartbase
     }
 
     @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, float yaw, float pitch, float roll)
+    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll)
     {
-        super.applyEffects(module, matrixStack, rtb, yaw, pitch, roll);
+        super.applyEffects(module, matrixStack, yaw, pitch, roll);
         ModuleTank moduleTank = (ModuleTank) module;
         FluidStack fluidStack = moduleTank.getFluid();
         int light = 15;

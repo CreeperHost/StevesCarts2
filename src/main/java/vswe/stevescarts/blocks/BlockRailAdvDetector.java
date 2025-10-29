@@ -70,7 +70,7 @@ public class BlockRailAdvDetector extends BaseRailBlock
     //TODO, Switch back to forge's onMinecartPass if it gets fixed.
     public void onMinecartPassSC(BlockState state, Level world, BlockPos pos, AbstractMinecart entityMinecart)
     {
-        if (world.isClientSide || !(entityMinecart instanceof ModularMinecart cart))
+        if (world.isClientSide() || !(entityMinecart instanceof ModularMinecart cart))
         {
             return;
         }

@@ -46,7 +46,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
     public void update()
     {
         super.update();
-        if (!getCart().level().isClientSide)
+        if (!getCart().level().isClientSide())
         {
             if (getCart().hasCreativeSupplies())
             {
@@ -184,7 +184,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
     {
         if (getCakeBuffer() > 0)
         {
-            if (!getCart().level().isClientSide && entityplayer.canEat(false))
+            if (!getCart().level().isClientSide() && entityplayer.canEat(false))
             {
                 setCakeBuffer(getCakeBuffer() - 1);
                 entityplayer.getFoodData().eat(2, 0.1F);

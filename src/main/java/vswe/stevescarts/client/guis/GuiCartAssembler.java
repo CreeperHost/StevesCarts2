@@ -6,6 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -510,11 +511,10 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
     }
 
     @Override
-    public boolean mouseDragged(double x0, double y0, int button, double p_231045_6_, double p_231045_8_)
-    {
-        super.mouseMoved(x0, y0);
-        final int x = (int) (x0 - getGuiLeft());
-        final int y = (int) (y0 - getGuiTop());
+    public boolean mouseDragged(MouseButtonEvent event, double mouseX, double mouseY) {
+        super.mouseMoved(event.x(), event.y());
+        final int x = (int) (event.x() - getGuiLeft());
+        final int y = (int) (event.y() - getGuiTop());
         if (dropdownX != -1 && dropdownY != -1)
         {
             final ArrayList<DropDownMenuItem> items = assembler.getDropDown();
@@ -547,7 +547,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         }
         if (isScrolling)
         {
-            if (button != -1)
+            if (event.button() != -1)
             {
                 isScrolling = false;
                 assembler.setSpinning(true);
@@ -564,11 +564,10 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
     }
 
     @Override
-    public boolean mouseClicked(double x0, double y0, int button)
-    {
-        super.mouseClicked(x0, y0, button);
-        int x = (int) (x0 - getGuiLeft());
-        int y = (int) (y0 - getGuiTop());
+    public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
+        super.mouseClicked(event, isDoubleClick);
+        int x = (int) (event.x() - getGuiLeft());
+        int y = (int) (event.y() - getGuiTop());
         if (inRect(x, y, assembleRect))
         {
             StevesCartsClient.sendToServer(new PacketCreateCart(this.assembler.getBlockPos(), 0, new byte[0]));
@@ -576,7 +575,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         }
         else if (inRect(x, y, blackBackground))
         {
-            if (button == 0)
+            if (event.button() == 0)
             {
                 if (!isScrolling)
                 {
@@ -587,7 +586,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                     return true;
                 }
             }
-            else if (button == 1)
+            else if (event.button() == 1)
             {
                 dropdownX = x;
                 dropdownY = y;
@@ -614,7 +613,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                 }
             }
         }
-        if (button == 0 && dropdownX != -1 && dropdownY != -1)
+        if (event.button() == 0 && dropdownX != -1 && dropdownY != -1)
         {
             boolean anyLargeItem = false;
             final ArrayList<DropDownMenuItem> items = assembler.getDropDown();

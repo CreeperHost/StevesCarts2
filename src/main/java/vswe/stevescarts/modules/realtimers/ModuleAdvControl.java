@@ -200,7 +200,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     @Override
     public void update() {
         super.update();
-        if (!getCart().level().isClientSide && getCart().getCartRider() != null && getCart().getCartRider() instanceof Player) {
+        if (!getCart().level().isClientSide() && getCart().getCartRider() != null && getCart().getCartRider() instanceof Player) {
             if (enginePacketTimer == 0) {
                 sendEnginePacket((Player) getCart().getCartRider());
                 enginePacketTimer = 15;
@@ -218,7 +218,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
             tripPacketTimer = 0;
         }
 
-        if (getCart().level().isClientSide) {
+        if (getCart().level().isClientSide()) {
             encodeKeys();
         }
         if (!lastBackKey && isBackKeyDown()) {
@@ -226,7 +226,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         }
         lastBackKey = isBackKeyDown();
 
-        if (!getCart().level().isClientSide) {
+        if (!getCart().level().isClientSide()) {
             if (speedChangeCooldown == 0) {
                 if (!isJumpKeyDown() || !isControlKeyDown()) {
                     if (isJumpKeyDown()) {
@@ -450,7 +450,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
 
     @Override
     public void postUpdate() {
-        if (this.getCart().level().isClientSide && this.getCart().getCartRider() != null && this.getCart().getCartRider() instanceof Player && this.getCart().getCartRider() == this.getClientPlayer()) {
+        if (this.getCart().level().isClientSide() && this.getCart().getCartRider() != null && this.getCart().getCartRider() instanceof Player && this.getCart().getCartRider() == this.getClientPlayer()) {
             //TODO
             //			KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode(), false);
             //			KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), false);

@@ -3,6 +3,7 @@ package vswe.stevescarts.client.guis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
@@ -109,19 +110,18 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button)
-    {
-        super.mouseClicked(mouseX, mouseY, button);
-        mouseX -= getGuiLeft();
-        mouseY -= getGuiTop();
+    public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
+        super.mouseClicked(event, isDoubleClick);
+        double mouseX = event.x() - getGuiLeft();
+        double mouseY = event.y() - getGuiTop();
         for (int i = 0; i < activator.getOptions().size(); ++i)
         {
             final int[] box = getBoxRect(i);
             if (inRect((int) mouseX, (int) mouseY, box))
             {
-                byte data = (byte) ((button != 0) ? 1 : 0);
+                byte data = (byte) ((event.button() != 0) ? 1 : 0);
                 data |= (byte) (i << 1);
-                activator.getOptions().get(i).changeOption(button == 0);
+                activator.getOptions().get(i).changeOption(event.button() == 0);
                 StevesCartsClient.sendToServer(new PacketActivator(activator.getBlockPos(), 0, new byte[]{data}));
             }
         }

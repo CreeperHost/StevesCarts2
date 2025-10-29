@@ -116,7 +116,7 @@ public class BlockUpgrade extends BlockContainerBase implements TooltipBlock {
 
     @Override
     public @NotNull InteractionResult useWithoutItem(@NotNull BlockState blockState, Level world, @NotNull BlockPos blockPos, @NotNull Player playerEntity, BlockHitResult result) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             if (!playerEntity.isCrouching()) {
                 playerEntity.openMenu((MenuProvider) world.getBlockEntity(blockPos), blockPos);
                 return InteractionResult.SUCCESS;

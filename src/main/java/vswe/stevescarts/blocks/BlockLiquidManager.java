@@ -27,7 +27,7 @@ public class BlockLiquidManager extends BlockContainerBase
     @Override
     public @NotNull InteractionResult useWithoutItem(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player playerEntity, BlockHitResult result)
     {
-        if (!level.isClientSide)
+        if (!level.isClientSide())
         {
             playerEntity.openMenu((MenuProvider) level.getBlockEntity(blockPos), blockPos);
             return InteractionResult.SUCCESS;

@@ -10,7 +10,7 @@ public abstract class RechargerBaseUpgrade extends BaseUpgradeEffect
     {
         if(tileEntityUpgrade.getLevel() == null) return;
 
-        if (!tileEntityUpgrade.getLevel().isClientSide && canGenerate(tileEntityUpgrade))
+        if (!tileEntityUpgrade.getLevel().isClientSide() && canGenerate(tileEntityUpgrade))
         {
             final CompoundTag comp = tileEntityUpgrade.getCompound();
             if (comp == null)

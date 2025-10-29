@@ -48,7 +48,7 @@ public class SlotAssembler extends Slot
     {
         if(assembler.getLevel() == null) return;
 
-        if (!assembler.getLevel().isClientSide)
+        if (!assembler.getLevel().isClientSide())
         {
             if (!isValid() && hasItem())
             {

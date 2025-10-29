@@ -176,7 +176,7 @@ public class ModuleShooterAdv extends ModuleShooter
             setRifleDirection((float) Math.atan2(disZ, disX));
 
             projectile.setPos(getCart().getX(), posY, getCart().getZ());
-            projectile.forceSetRotation(theta, phi);
+            projectile.forceSetRotation(theta, false, phi, false);
 
             float disD5 = (float) dis * 0.2f;
             setHeading(projectile, disX, disY + (double) disD5, disZ, 1.6f, 0.0f);

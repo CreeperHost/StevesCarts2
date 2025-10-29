@@ -184,7 +184,7 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
 
     private void pickUpCreature(final int searchDistance)
     {
-        if (getCart().level().isClientSide || !isCageEmpty())
+        if (getCart().level().isClientSide() || !isCageEmpty())
         {
             return;
         }

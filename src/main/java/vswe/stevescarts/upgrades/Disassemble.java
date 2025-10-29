@@ -101,7 +101,7 @@ public class Disassemble extends InventoryUpgradeEffect
             }
             if (needsToPuke)
             {
-                if (!upgrade.getLevel().isClientSide)
+                if (!upgrade.getLevel().isClientSide())
                 {
                     upgrade.getMaster().puke(upgrade.getItem(0).copy());
                 }
@@ -128,7 +128,7 @@ public class Disassemble extends InventoryUpgradeEffect
                 }
                 else if (full)
                 {
-                    if (!master.getLevel().isClientSide)
+                    if (!master.getLevel().isClientSide())
                     {
                         master.puke(master.getItem(i).copy());
                     }

@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.107'
+    id 'net.neoforged.moddev' version '2.0.115'
     id 'idea'
     id "me.shedaniel.unified-publishing" version "0.1.+"
 }
@@ -142,8 +142,8 @@ dependencies {
 //    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
 //    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
 //    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
-    runtimeOnly "curse.maven:roughly-enough-items-310111:6833149"
-    runtimeOnly "curse.maven:cloth-config-348521:6669837"
+//    runtimeOnly "curse.maven:roughly-enough-items-310111:6833149"
+//    runtimeOnly "curse.maven:cloth-config-348521:6669837"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -179,7 +179,7 @@ publishing {
     publications {
         register('mavenJava', MavenPublication) {
             groupId "net.creeperhost"
-            artifactId rootProject.archivesBaseName
+//            artifactId rootProject.archivesBaseName
             version version
             from components.java
         }

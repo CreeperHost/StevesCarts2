@@ -62,14 +62,14 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     @Override
     public void update() {
         super.update();
-        if (getCart().level().isClientSide && !setup) {
+        if (getCart().level().isClientSide() && !setup) {
             if (isPlaceholder() || !status.get()) {
                 shieldDistance = 0;
                 shield = false;
             }
             setup = true;
         }
-        if (hasShield() && !getCart().hasFuelForModule() && !getCart().level().isClientSide) {
+        if (hasShield() && !getCart().hasFuelForModule() && !getCart().level().isClientSide()) {
             setShieldStatus(false);
         }
         if (hasShield()) {

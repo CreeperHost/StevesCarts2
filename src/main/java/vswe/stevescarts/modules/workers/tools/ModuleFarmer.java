@@ -301,7 +301,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     public void update()
     {
         super.update();
-        if (!getCart().level().isClientSide)
+        if (!getCart().level().isClientSide())
         {
             setFarming(farming - 1);
         }

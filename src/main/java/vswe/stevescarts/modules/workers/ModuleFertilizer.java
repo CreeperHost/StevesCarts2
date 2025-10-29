@@ -197,7 +197,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
 
     private void loadSupplies()
     {
-        if (getCart().level().isClientSide) {
+        if (getCart().level().isClientSide()) {
             return;
         }
         ItemStack stack = getStack(0);

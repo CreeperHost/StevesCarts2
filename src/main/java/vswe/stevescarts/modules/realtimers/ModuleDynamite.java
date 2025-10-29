@@ -171,7 +171,7 @@ public class ModuleDynamite extends ModuleBase
 
     private void explode()
     {
-        if (getCart().level().isClientSide) return;
+        if (getCart().level().isClientSide()) return;
 
         if (isPlaceholder())
         {
@@ -218,7 +218,7 @@ public class ModuleDynamite extends ModuleBase
 
     public void createExplosives()
     {
-        if (isPlaceholder() || getCart().level().isClientSide)
+        if (isPlaceholder() || getCart().level().isClientSide())
         {
             return;
         }

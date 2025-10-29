@@ -67,7 +67,7 @@ public class ModuleChunkLoader extends ModuleAddon implements IActivatorModule
         }
         if (isLoadingChunk())
         {
-            if(!getCart().hasFuelForModule() && !getCart().level().isClientSide)
+            if(!getCart().hasFuelForModule() && !getCart().level().isClientSide())
             {
                 setChunkLoading(false);
                 return;
@@ -81,7 +81,7 @@ public class ModuleChunkLoader extends ModuleAddon implements IActivatorModule
         if (!isPlaceholder())
         {
             loadingChunk.set(val);
-            if (!getCart().level().isClientSide && rdyToInit)
+            if (!getCart().level().isClientSide() && rdyToInit)
             {
                 if (val)
                 {

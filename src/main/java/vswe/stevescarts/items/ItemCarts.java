@@ -52,7 +52,7 @@ public class ItemCarts extends MinecartItem
         Level world = itemUseContext.getLevel();
         ItemStack stack = player.getItemInHand(itemUseContext.getHand());
         BlockPos pos = itemUseContext.getClickedPos();
-        if (!world.isClientSide)
+        if (!world.isClientSide())
         {
             BlockState blockstate = world.getBlockState(pos);
             if (blockstate.is(BlockTags.RAILS))

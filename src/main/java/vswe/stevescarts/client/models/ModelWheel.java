@@ -134,7 +134,7 @@ public class ModelWheel extends ModelCartbase {
     }
 
     @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll) {
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, final float yaw, final float pitch, final float roll) {
         anchor.xRot = ((module == null) ? 0.0f : ((ModuleAdvControl) module).getWheelAngle());
     }
 

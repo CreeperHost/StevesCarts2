@@ -63,7 +63,7 @@ public class ModelLiquidSensors extends ModelCartbase {
     }
 
     @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll) {
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, final float yaw, final float pitch, final float roll) {
         sensorLeft[activeColour].yRot = ((module == null) ? 0.0f : (-((ModuleLiquidSensors) module).getSensorRotation()));
         sensorRight[activeColour].yRot = ((module == null) ? 0.0f : ((ModuleLiquidSensors) module).getSensorRotation());
         activeColour = ((module == null) ? 2 : ((ModuleLiquidSensors) module).getLight()) - 1;

@@ -54,7 +54,7 @@ public abstract class ModelCartbase extends Model
         return texture;
     }
 
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, MultiBufferSource rtb, final float yaw, final float pitch, final float roll)
+    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll)
     {
     }
 
