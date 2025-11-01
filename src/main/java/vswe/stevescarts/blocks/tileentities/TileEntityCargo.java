@@ -1,5 +1,6 @@
 package vswe.stevescarts.blocks.tileentities;
 
+import net.minecraft.client.gui.screens.worldselection.WorldCreationContextMapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -21,6 +22,10 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
+import net.neoforged.neoforge.transfer.item.WorldlyContainerWrapper;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.slots.SlotChest;
 import vswe.stevescarts.blocks.BlockCargoManager;
@@ -416,14 +421,14 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider
         return latestTransferToBeUsed;
     }
 
-    public @NotNull IItemHandlerModifiable createHandler()
+    public ResourceHandler<ItemResource> createHandler()
     {
         BlockState state = this.getBlockState();
         if (!(state.getBlock() instanceof BlockCargoManager))
         {
-            return new ItemStackHandler(0);
+            return null;
         }
-        return new InvWrapper(this);
+        return VanillaContainerWrapper.of(this);
     }
 
     @Override

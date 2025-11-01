@@ -19,11 +19,17 @@ import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.ValueInput;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.api.modules.template.ModuleHull;
+import vswe.stevescarts.client.models.ModelHull;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
+import vswe.stevescarts.init.StevesCartsModules;
+import vswe.stevescarts.modules.hull.ModuleReinforced;
+import vswe.stevescarts.modules.hull.ModuleStandard;
 
 import java.util.Set;
 
@@ -37,19 +43,20 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
         }
         matrixStack.pushPose();
         matrixStack.scale(-1.0f, -1.0f, 1.0f);
+
+        if (transformType == ItemDisplayContext.GUI) {
+            matrixStack.translate(-1, 0, 0);
+//                matrixStack.scale(lowestMult, lowestMult, lowestMult);
+        } else {
+            matrixStack.translate(-0.5, -0.5, 0.5);
+        }
+        matrixStack.mulPose(Axis.ZP.rotationDegrees(180));
+        matrixStack.mulPose(Axis.XP.rotationDegrees(180));
+
         CompoundTag info = ModItemData.getTagCopy(stack);
         if (info.contains("modules")) {
             float lowestMult = 1.0f;
             ModularMinecart cart = new ModularMinecart(Minecraft.getInstance().level, 0, 0, 0, info);
-
-            if (transformType == ItemDisplayContext.GUI) {
-                matrixStack.translate(-1, 0, 0);
-//                matrixStack.scale(lowestMult, lowestMult, lowestMult);
-            } else {
-                matrixStack.translate(-0.5, -0.5, 0.5);
-            }
-            matrixStack.mulPose(Axis.ZP.rotationDegrees(180));
-            matrixStack.mulPose(Axis.XP.rotationDegrees(180));
 
             if (cart.modules() != null) {
                 for (ModuleBase module : cart.modules()) {
@@ -60,6 +67,13 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
                         }
                     }
                 }
+            }
+        } else {
+            //Fallback Render
+            ModuleHull hull = new ModuleReinforced(null);
+            for (ModelCartbase model : StevesCartsModules.REINFORCED_HULL.getModels(true).values()) {
+                model.applyEffects(hull, matrixStack, 0, 0, 0);
+                nodeCollector.submitModel(model, null, matrixStack, model.getRenderType(hull), 240, OverlayTexture.NO_OVERLAY, 0, null);
             }
         }
         matrixStack.popPose();
@@ -83,17 +97,18 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
         }
     }
 
-//    public static record Unbaked() implements SpecialModelRenderer.Unbaked {
-//        public static final MapCodec<ItemStackRenderer.Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec((builder) -> {
-//            return builder.stable(new ItemStackRenderer.Unbaked());
-//        });
-//
-//        public MapCodec<ItemStackRenderer.Unbaked> type() {
-//            return MAP_CODEC;
-//        }
-//
-//        public SpecialModelRenderer<?> bake(EntityModelSet p_387681_) {
-//            return new ItemStackRenderer();
-//        }
-//    }
+    public record Unbaked() implements SpecialModelRenderer.Unbaked {
+        public static final MapCodec<ItemStackRenderer.Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec((builder) -> {
+            return builder.stable(new ItemStackRenderer.Unbaked());
+        });
+
+        @Override
+        public SpecialModelRenderer<?> bake(BakingContext bakingContext) {
+            return new ItemStackRenderer();
+        }
+
+        public MapCodec<ItemStackRenderer.Unbaked> type() {
+            return MAP_CODEC;
+        }
+    }
 }

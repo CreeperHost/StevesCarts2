@@ -21,8 +21,12 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.api.modules.template.ModuleHull;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.entities.ModularMinecartBehavior;
+import vswe.stevescarts.init.StevesCartsModules;
+import vswe.stevescarts.modules.hull.ModuleReinforced;
+import vswe.stevescarts.modules.hull.ModuleStandard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,21 +72,19 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
             }
         }
 
+        if (state.modules.isEmpty()) {
+            //Fallback Render
+            ModuleHull hull = new ModuleReinforced(null);
+            for (ModelCartbase model : StevesCartsModules.REINFORCED_HULL.getModels(true).values()) {
+                model.applyEffects(hull, poseStack, 0, 0, 0);
+                nodeCollector.submitModel(model, null, poseStack, model.getRenderType(hull), 240, OverlayTexture.NO_OVERLAY, 0, null);
+            }
+        }
 
         poseStack.popPose();
 
         renderTag(state.label, poseStack, nodeCollector, 240, cameraRenderState, state.distanceToCameraSq);
     }
-
-//    @Override
-//    protected @Nullable Component getNameTag(ModularMinecart entity) {
-//        return super.getNameTag(entity);
-//    }
-//
-//    @Override
-//    protected void submitNameTag(ModularCartRenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
-//        super.submitNameTag(renderState, poseStack, nodeCollector, cameraRenderState);
-//    }
 
     //    @Override
 //    public void render(ModularCartRenderState state, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
