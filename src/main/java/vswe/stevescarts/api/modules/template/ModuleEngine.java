@@ -7,8 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -121,7 +119,6 @@ public abstract class ModuleEngine extends ModuleBase
         return 50;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {

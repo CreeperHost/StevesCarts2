@@ -21,8 +21,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
@@ -791,7 +789,6 @@ public interface IModularCart extends Container, IFluidHandler {
 
     //=== Client / GUI Stuff ===//
 
-    @OnlyIn (Dist.CLIENT)
     private void generateModels() {
         ArrayList<String> invalid = new ArrayList<>();
         for (ModuleBase module : modules()) {
@@ -818,7 +815,6 @@ public interface IModularCart extends Container, IFluidHandler {
         }
     }
 
-    @OnlyIn (Dist.CLIENT) //TODO, Why does this exist? What ism mit supposed to do?
     default void updateSounds() {
     }
 
@@ -839,7 +835,6 @@ public interface IModularCart extends Container, IFluidHandler {
         return (int) ((getCart().modularSpaceHeight - ModularMinecart.MODULAR_SPACE_HEIGHT) / 198.0f * getScrollY());
     }
 
-    @OnlyIn (Dist.CLIENT)
     default void renderOverlay(GuiGraphics render, float partialTicks) {
         for (ModuleBase module : modules()) {
             module.renderOverlay(render, partialTicks);

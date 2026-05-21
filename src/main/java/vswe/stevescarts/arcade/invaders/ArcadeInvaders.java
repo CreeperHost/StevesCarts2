@@ -6,8 +6,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.arcade.tracks.TrackStory;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -88,7 +86,6 @@ public class ArcadeInvaders extends ArcadeGame
         moveDown = 0;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void update()
     {
@@ -230,7 +227,6 @@ public class ArcadeInvaders extends ArcadeGame
         return false;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
@@ -265,7 +261,6 @@ public class ArcadeInvaders extends ArcadeGame
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
@@ -278,7 +273,6 @@ public class ArcadeInvaders extends ArcadeGame
         getModule().drawString(guiGraphics, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 330, 220, 4210752);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void keyPress(final GuiMinecart gui, final int character, final int extraInformation)
     {

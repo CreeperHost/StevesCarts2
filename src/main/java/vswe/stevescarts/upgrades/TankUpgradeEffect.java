@@ -9,8 +9,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
@@ -62,7 +60,6 @@ public abstract class TankUpgradeEffect extends InventoryUpgradeEffect
         return 24 * (id + 1);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
     {
@@ -70,11 +67,10 @@ public abstract class TankUpgradeEffect extends InventoryUpgradeEffect
         {
             TankUpgradeEffect.texture = ResourceHelper.getResource("/gui/tank.png");
         }
-        upgrade.tank.drawFluid(guiGraphics, gui, tankInterfaceX, tankInterfaceY);
+        upgrade.tank.drawFluid(guiGraphics, gui.getGuiLeft(), gui.getGuiTop(), tankInterfaceX, tankInterfaceY);
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, TankUpgradeEffect.texture, gui.getGuiLeft() + tankInterfaceX, gui.getGuiTop() + tankInterfaceY, 0, 0, 36, 51, 256, 256);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawMouseOver(GuiGraphics guiGraphics, TileEntityUpgrade upgrade, final GuiUpgrade gui, final int x, final int y)
     {

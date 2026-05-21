@@ -17,8 +17,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix4f;
 import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -378,7 +376,6 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         return true;
     }
 
-    @OnlyIn(Dist.CLIENT)
     private void drawModuleForeground(GuiGraphics guiGraphics, ModuleBase module)
     {
         if (module.hasGui())
@@ -391,7 +388,6 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     private void drawModuleMouseOver(GuiGraphics guiGraphics, ModuleBase module, final int x, final int y)
     {
         if (module.hasGui())

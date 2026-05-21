@@ -8,8 +8,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.ArrayUtils;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -90,7 +88,6 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         drawString(guiGraphics, gui, getModuleName(), 8, 6, 0x404040);
@@ -135,7 +132,6 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         Identifier texture = ResourceHelper.getResource("/gui/intelligence.png");

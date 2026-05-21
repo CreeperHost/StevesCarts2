@@ -1,20 +1,15 @@
 package vswe.stevescarts.network.packets;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import vswe.stevescarts.Constants;
-import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
-import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
+import vswe.stevescarts.client.network.ClientPacketHandlers;
 
 public class PacketFluidSync implements CustomPacketPayload {
     public static final Type<PacketFluidSync> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "fluid_sync"));
@@ -52,17 +47,7 @@ public class PacketFluidSync implements CustomPacketPayload {
         @Override
         public void handle(PacketFluidSync msg, IPayloadContext ctx) {
             if (ctx.flow() != PacketFlow.CLIENTBOUND) return;
-
-            ctx.enqueueWork(() -> {
-                ClientLevel level = Minecraft.getInstance().level;
-                if (level == null) return;
-                BlockEntity tile = level.getBlockEntity(msg.pos);
-                if (tile instanceof TileEntityLiquid entityLiquid) {
-                    entityLiquid.tanks[msg.tankID].setFluid(msg.fluidStack);
-                } else if (tile instanceof TileEntityUpgrade entityUpgrade) {
-                    entityUpgrade.tank.setFluid(msg.fluidStack);
-                }
-            });
+            ctx.enqueueWork(() -> ClientPacketHandlers.handleFluidSync(msg.fluidStack, msg.pos, msg.tankID));
         }
     }
 }

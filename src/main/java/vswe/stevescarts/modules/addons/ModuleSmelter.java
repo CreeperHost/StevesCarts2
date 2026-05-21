@@ -12,8 +12,6 @@ import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotCartCrafterResult;
@@ -183,7 +181,6 @@ public class ModuleSmelter extends ModuleRecipe
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {

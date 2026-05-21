@@ -4,8 +4,6 @@ import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.slots.SlotChest;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -41,7 +39,6 @@ public abstract class ModuleChest extends ModuleStorage
         return new SlotChest(getCart(), slotId, 8 + x * 18, 16 + y * 18);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {

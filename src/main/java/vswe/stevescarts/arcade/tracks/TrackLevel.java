@@ -1,8 +1,6 @@
 package vswe.stevescarts.arcade.tracks;
 
 import net.minecraft.client.Minecraft;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.helpers.Localization;
 
 import java.io.*;
@@ -27,7 +25,6 @@ public class TrackLevel
         return 0;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static ArrayList<TrackLevel> loadMapsFromFolder()
     {
         final ArrayList<TrackLevel> maps = new ArrayList<>();
@@ -57,7 +54,6 @@ public class TrackLevel
         return maps;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static TrackLevel loadMap(final String filename)
     {
         try
@@ -117,7 +113,6 @@ public class TrackLevel
         return map;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static boolean saveMap(String name, int playerX, int playerY, TrackOrientation.DIRECTION playerDir, int itemX, int itemY, ArrayList<Track> tracks)
     {
         try
@@ -131,7 +126,6 @@ public class TrackLevel
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static String saveMapToString(String name, int playerX, int playerY, TrackOrientation.DIRECTION playerDir, int itemX, int itemY, ArrayList<Track> tracks)
     {
         try
@@ -154,7 +148,6 @@ public class TrackLevel
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static byte[] saveMapData(final String name, final int playerX, final int playerY, final TrackOrientation.DIRECTION playerDir, final int itemX, final int itemY, final ArrayList<Track> tracks) throws IOException
     {
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -187,7 +180,6 @@ public class TrackLevel
         return stream.toByteArray();
     }
 
-    @OnlyIn(Dist.CLIENT)
     private static void writeToFile(final File file, final byte[] bytes) throws IOException
     {
         createFolder(file.getParentFile());
@@ -196,7 +188,6 @@ public class TrackLevel
         writer.close();
     }
 
-    @OnlyIn(Dist.CLIENT)
     private static byte[] readFromFile(final File file) throws IOException
     {
         createFolder(file.getParentFile());
@@ -207,7 +198,6 @@ public class TrackLevel
         return bytes;
     }
 
-    @OnlyIn(Dist.CLIENT)
     private static void createFolder(final File dir) throws IOException
     {
         if (dir == null)

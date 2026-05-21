@@ -9,8 +9,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -121,7 +119,6 @@ public class ModuleMilker extends ModuleBase
         return new SlotMilker(getCart(), slotId, 8 + x * 18, 23 + y * 18);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {

@@ -9,8 +9,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RailBlock;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -41,7 +39,6 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
         return new SlotBridge(getCart(), slotId, 8 + x * 18, 23 + y * 18);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
         drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);

@@ -4,8 +4,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -48,14 +46,12 @@ public class ModuleSeat extends ModuleBase
         return 35;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
@@ -78,7 +74,6 @@ public class ModuleSeat extends ModuleBase
         drawImage(guiGraphics, texture, gui, buttonRect[0] + 1, buttonRect[1] + 1, 0, srcY, buttonRect[2] - 2, buttonRect[3] - 2);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {

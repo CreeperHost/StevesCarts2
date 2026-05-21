@@ -1,7 +1,6 @@
 package vswe.stevescarts.blocks.tileentities;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -22,8 +21,6 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.IFluidTank;
@@ -169,8 +166,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
-    public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour)
+    public void drawImage(GuiGraphics guiGraphics, int tankid, int guiLeft, int guiTop, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour)
     {
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, targetX, targetY, width, height, colour);
     }

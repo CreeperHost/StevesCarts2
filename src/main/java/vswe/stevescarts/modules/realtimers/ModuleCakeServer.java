@@ -12,8 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -104,7 +102,6 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
         return new SlotCake(getCart(), slotId, 8 + x * 18, 38 + y * 18);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
@@ -123,7 +120,6 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
         setCakeBuffer(input.getShortOr(generateNBTName("Cake", id), (short) 0));
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
@@ -148,7 +144,6 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
         return getCakeBuffer() % 6;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {

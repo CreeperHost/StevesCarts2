@@ -6,8 +6,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -164,7 +162,6 @@ public class ArcadeTracks extends ArcadeGame
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     private void loadUserMaps()
     {
         userList.clearList();
@@ -1170,7 +1167,6 @@ public class ArcadeTracks extends ArcadeGame
         return isSaveMenuOpen;
     }
 
-    @OnlyIn(Dist.CLIENT)
     private boolean save(String name)
     {
         if (TrackLevel.saveMap(name, playerStartX, playerStartY, playerStartDirection, itemX, itemY, tracks))

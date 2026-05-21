@@ -1,18 +1,15 @@
 package vswe.stevescarts.network.packets;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.client.network.ClientPacketHandlers;
 import vswe.stevescarts.entities.ModularMinecart;
 
 public class PacketMinecartButton implements CustomPacketPayload {
@@ -45,7 +42,7 @@ public class PacketMinecartButton implements CustomPacketPayload {
     public static class ClientHandler implements IPayloadHandler<PacketMinecartButton> {
         @Override
         public void handle(PacketMinecartButton msg, IPayloadContext ctx) {
-            ctx.enqueueWork(() -> handleClientSide(msg, ctx));
+            ctx.enqueueWork(() -> ClientPacketHandlers.handleMinecartButton(msg, ctx));
         }
     }
 
@@ -56,20 +53,12 @@ public class PacketMinecartButton implements CustomPacketPayload {
         }
     }
 
-    @OnlyIn (Dist.CLIENT)
-    private static void handleClientSide(PacketMinecartButton msg, IPayloadContext ctx) {
-        Minecraft mc = Minecraft.getInstance();
-        Level level = mc.level;
-        Player player = mc.player;
-        handle(msg, level, player);
-    }
-
     private static void handleServerSide(PacketMinecartButton msg, IPayloadContext ctx) {
         Player player = ctx.player();
         handle(msg, player.level(), player);
     }
 
-    private static void handle(PacketMinecartButton msg, Level level, Player player) {
+    public static void handle(PacketMinecartButton msg, Level level, Player player) {
         if (level.getEntity(msg.cartID) == null) return;
         if (level.getEntity(msg.cartID) instanceof ModularMinecart ModularMinecart) {
             int id = msg.id;

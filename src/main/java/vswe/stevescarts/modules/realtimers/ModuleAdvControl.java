@@ -14,8 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ILeverModule;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
@@ -68,7 +66,6 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void renderOverlay(GuiGraphics render, float partialTicks) {
         Minecraft mc = Minecraft.getInstance();
         Identifier texture = ResourceHelper.getResource("/gui/drive.png");
@@ -117,7 +114,6 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         drawItem(render, new ItemStack(Items.COMPASS), 21, enginesEndAt + 32 + 3);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void drawItem(GuiGraphics guiGraphics, ItemStack icon, final int targetX, final int targetY) {
         guiGraphics.renderItem(getClientPlayer(), icon, targetX, targetY, targetX + targetX * guiWidth());
     }

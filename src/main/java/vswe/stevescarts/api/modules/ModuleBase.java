@@ -32,8 +32,6 @@ import net.minecraft.world.level.block.VineBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.i18n.FMLTranslations;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
@@ -469,7 +467,6 @@ public abstract class ModuleBase
      *
      * @param gui The GUI that will draw the interface
      */
-    @OnlyIn(Dist.CLIENT)
     public void drawForeground(GuiGraphics guiGraphics, final GuiMinecart gui)
     {
     }
@@ -482,7 +479,6 @@ public abstract class ModuleBase
      * @param rect The rectangle
      * @param c    The color to be used
      */
-    @OnlyIn(Dist.CLIENT)
     public void drawString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int[] rect, final int c)
     {
         if (rect.length < 4)
@@ -501,13 +497,11 @@ public abstract class ModuleBase
      * @param y   The local y coordinate
      * @param c   The color to be used
      */
-    @OnlyIn(Dist.CLIENT)
     public void drawString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int c)
     {
         drawString(guiGraphics, gui, str, x, y, -1, false, c);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void drawString(GuiGraphics guiGraphics, GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c)
     {
         Minecraft mc = Minecraft.getInstance();
@@ -536,7 +530,6 @@ public abstract class ModuleBase
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void drawStringWithShadow(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int c)
     {
         final int j = gui.getGuiLeft();
@@ -562,13 +555,11 @@ public abstract class ModuleBase
      * @param w   The maximum width of the text area
      * @param c   The color to be used
      */
-    @OnlyIn(Dist.CLIENT)
     public void drawSplitString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int w, final int c)
     {
         drawSplitString(guiGraphics, gui, str, x, y, w, false, c);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void drawSplitString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c) {
         List<FormattedCharSequence> newlines = gui.getFont().split(Component.literal(str), w);
         for (int i = 0; i < newlines.size(); ++i) {
@@ -577,7 +568,6 @@ public abstract class ModuleBase
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void drawItemInInterface(GuiGraphics guiGraphics, final GuiMinecart gui, @Nonnull ItemStack item, final int x, final int y)
     {
         final int[] rect = {x, y, 16, 16};
@@ -599,7 +589,6 @@ public abstract class ModuleBase
      * @param sizeX   The width of the image
      * @param sizeY   The height of the image
      */
-    @OnlyIn(Dist.CLIENT)
     public void drawImage(GuiGraphics guiGraphics, Identifier texture, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY)
     {
 //        drawImage(guiGraphics, texture, gui, targetX, targetY, srcX, srcY, sizeX, sizeY/*, GuiMinecart.RENDER_ROTATION.NORMAL*/);
@@ -619,8 +608,7 @@ public abstract class ModuleBase
 //     * @param sizeY    The height of the image
 //     * @param rotation The rotation this will be drawn with
 //     */
-//    @OnlyIn(Dist.CLIENT)
-//    public void drawImage(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, int targetX, int targetY, int srcX, int srcY, int sizeX, int sizeY, final GuiMinecart.RENDER_ROTATION rotation)
+////    public void drawImage(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, int targetX, int targetY, int srcX, int srcY, int sizeX, int sizeY, final GuiMinecart.RENDER_ROTATION rotation)
 //    {
 //        drawImage(guiGraphics, texture, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY/*, rotation*/);
 //    }
@@ -634,8 +622,7 @@ public abstract class ModuleBase
 //     * @param srcX The x coordinate in the source file
 //     * @param srcY They y coordinate in the source file
 //     */
-//    @OnlyIn(Dist.CLIENT)
-//    public void drawImage(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, int[] rect, int srcX, int srcY)
+////    public void drawImage(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, int[] rect, int srcX, int srcY)
 //    {
 //        drawImage(guiGraphics, texture, gui, rect, srcX, srcY/*, GuiMinecart.RENDER_ROTATION.NORMAL*/);
 //    }
@@ -649,7 +636,6 @@ public abstract class ModuleBase
      * @param srcY     They y coordinate in the source file
 //     * @param rotation The rotation this will be drawn with
      */
-    @OnlyIn(Dist.CLIENT)
     public void drawImage(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, int[] rect, int srcX, int srcY/*, final GuiMinecart.RENDER_ROTATION rotation*/)
     {
         if (rect.length < 4)
@@ -677,12 +663,10 @@ public abstract class ModuleBase
      * @param sizeX   The width of the image
      * @param sizeY   The height of the image
      */
-    @OnlyIn(Dist.CLIENT)
     public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, final int targetX, final int targetY, final int sizeX, final int sizeY) {
         this.drawImage(guiGraphics, gui, icon, new int[]{targetX, targetY, sizeX, sizeY});
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect) {
         if (rect.length < 4) return;
         rect = this.cloneRect(rect);
@@ -694,12 +678,10 @@ public abstract class ModuleBase
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, final int targetX, final int targetY, final int sizeX, final int sizeY, int colour) {
         this.drawImage(guiGraphics, gui, icon, new int[]{targetX, targetY, sizeX, sizeY}, colour);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect, int colour) {
         if (rect.length < 4) return;
         rect = this.cloneRect(rect);
@@ -879,7 +861,6 @@ public abstract class ModuleBase
      *
      * @param gui The gui to draw on
      */
-    @OnlyIn(Dist.CLIENT)
     public final void drawButtonText(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         for (final ButtonBase button : buttons)
@@ -895,7 +876,6 @@ public abstract class ModuleBase
      * @param x   The x coordinate of the mouse
      * @param y   The y coordinate of the mouse
      */
-    @OnlyIn(Dist.CLIENT)
     public final void drawButtons(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
         for (final ButtonBase button : buttons)
@@ -911,7 +891,6 @@ public abstract class ModuleBase
      * @param x   The x coordinate of the mouse
      * @param y   The y coordinate of the mouse
      */
-    @OnlyIn(Dist.CLIENT)
     public final void drawButtonOverlays(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         for (final ButtonBase button : buttons)
@@ -931,7 +910,6 @@ public abstract class ModuleBase
      * @param y           The y coordinate of the mouse
      * @param mousebutton The button which was pressed
      */
-    @OnlyIn(Dist.CLIENT)
     public final void mouseClickedButton(final GuiMinecart gui, final int x, final int y, final int mousebutton)
     {
         for (final ButtonBase button : buttons)
@@ -962,12 +940,10 @@ public abstract class ModuleBase
      * @param x   The x coordinate of the mouse
      * @param y   The y coordinate of the mouse
      */
-    @OnlyIn(Dist.CLIENT)
     public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void drawBackgroundItems(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
     }
@@ -980,7 +956,6 @@ public abstract class ModuleBase
      * @param y      The y coordinate of the mouse
      * @param button The button that was pressed on the mouse
      */
-    @OnlyIn(Dist.CLIENT)
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
     {
     }
@@ -994,7 +969,6 @@ public abstract class ModuleBase
      * @param button The button that was released, or -1 if the cursor is just being moved
      */
     @Deprecated //This is dumb. Use mouseMoved and/or mouseReleased
-    @OnlyIn(Dist.CLIENT)
     public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button)
     {
     }
@@ -1007,7 +981,6 @@ public abstract class ModuleBase
      * @param y      The y coordinate of the mouse
      * @param button The button that was pressed on the mouse
      */
-    @OnlyIn(Dist.CLIENT)
     public void mouseReleased(final GuiMinecart gui, final int x, final int y, final int button)
     {
     }
@@ -1019,7 +992,6 @@ public abstract class ModuleBase
      * @param x      The x coordinate of the mouse
      * @param y      The y coordinate of the mouse
      */
-    @OnlyIn(Dist.CLIENT)
     public void mouseMoved(final GuiMinecart gui, final int x, final int y)
     {
     }
@@ -1519,7 +1491,6 @@ public abstract class ModuleBase
      * @param w   The width of the rectangle
      * @param h   The height of the rectangle
      */
-    @OnlyIn(Dist.CLIENT)
     public final void drawStringOnMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final String str, final int x, final int y, final int x1, final int y1, final int w, final int h)
     {
         drawStringOnMouseOver(guiGraphics, gui, str, x, y, new int[]{x1, y1, w, h});
@@ -1534,7 +1505,6 @@ public abstract class ModuleBase
      * @param y    The y coordinate of the mouse
      * @param rect The rectangle that the mouse has to be in, defin as {x,y,width,height}
      */
-    @OnlyIn(Dist.CLIENT)
     public final void drawStringOnMouseOver(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, int x, int y, final int[] rect)
     {
         if (!inRect(x, y, rect))
@@ -1578,17 +1548,15 @@ public abstract class ModuleBase
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, targetX, targetY, sourceX, sourceY, width, height, 256, 256, colour);
     }
 
-    @OnlyIn(Dist.CLIENT)
     protected Player getClientPlayer()
     {
         if (Minecraft.getInstance() != null)
         {
-            return Minecraft.getInstance().player;
+            return StevesCartsClient.getClientPlayer();
         }
         return null;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void renderOverlay(GuiGraphics render, float partialTicks)
     {
     }

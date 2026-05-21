@@ -27,8 +27,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -514,14 +512,12 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         return true;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         drawString(guiGraphics, gui, Localization.MODULES.TOOLS.DRILL.translate(), 8, 6, 4210752);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {

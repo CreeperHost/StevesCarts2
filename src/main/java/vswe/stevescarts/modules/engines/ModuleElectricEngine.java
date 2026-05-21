@@ -5,8 +5,7 @@
 //import net.minecraft.network.datasync.DataParameter;
 //import net.minecraft.network.datasync.DataSerializers;
 //import net.neoforged.api.distmarker.Dist;
-//import net.neoforged.api.distmarker.OnlyIn;
-//import vswe.stevescarts.client.guis.GuiMinecart;
+////import vswe.stevescarts.client.guis.GuiMinecart;
 //import vswe.stevescarts.compat.ftbic.SlotElectricEngine;
 //import vswe.stevescarts.api.slots.SlotBase;
 //import vswe.stevescarts.entitys.ModularMinecart;
@@ -103,8 +102,7 @@
 //        return new SlotElectricEngine(getCart(), slotId, 8 + x * 18, 23 + 18 * y);
 //    }
 //
-//    @OnlyIn(Dist.CLIENT)
-//    @Override
+////    @Override
 //    public void drawForeground(MatrixStack matrixStack, GuiMinecart gui)
 //    {
 //        drawString(matrixStack, gui, "Electric Engine", 8, 6, 4210752);

@@ -46,7 +46,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid>
             for (int i = 0; i < 4; ++i)
             {
                 final int[] coords = getTankCoords(i);
-                getLiquid().getTanks()[i].drawFluid(guiGraphics, this, getGuiLeft() + coords[0], getGuiTop() + coords[1]);
+                getLiquid().getTanks()[i].drawFluid(guiGraphics, getGuiLeft(), getGuiTop(), getGuiLeft() + coords[0], getGuiTop() + coords[1]);
             }
         }
         int version;

@@ -7,8 +7,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.arcade.tracks.TrackStory;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -59,7 +57,6 @@ public class ArcadeSweeper extends ArcadeGame
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void update()
     {
@@ -144,7 +141,6 @@ public class ArcadeSweeper extends ArcadeGame
         return (168 - tiles[0].length * 10) / 2;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
@@ -158,7 +154,6 @@ public class ArcadeSweeper extends ArcadeGame
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void mouseClicked(final GuiMinecart gui, int x, int y, final int button)
     {
@@ -269,7 +264,6 @@ public class ArcadeSweeper extends ArcadeGame
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void keyPress(final GuiMinecart gui, final int character, final int extraInformation)
     {
@@ -283,7 +277,6 @@ public class ArcadeSweeper extends ArcadeGame
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {

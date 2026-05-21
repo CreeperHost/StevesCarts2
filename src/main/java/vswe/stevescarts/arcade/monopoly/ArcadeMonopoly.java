@@ -3,8 +3,6 @@ package vswe.stevescarts.arcade.monopoly;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.Identifier;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix3x2fStack;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -474,7 +472,6 @@ public class ArcadeMonopoly extends ArcadeGame
         return die.getNumber() == die2.getNumber();
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void update()
     {
@@ -585,7 +582,6 @@ public class ArcadeMonopoly extends ArcadeGame
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
@@ -774,7 +770,6 @@ public class ArcadeMonopoly extends ArcadeGame
         matrixStack.popMatrix();
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
@@ -1072,7 +1067,6 @@ public class ArcadeMonopoly extends ArcadeGame
         place.drawText(guiGraphics, gui, states);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int b)
     {

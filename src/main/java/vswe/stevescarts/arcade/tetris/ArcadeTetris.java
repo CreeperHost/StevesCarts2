@@ -7,8 +7,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.arcade.tracks.TrackStory;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -66,7 +64,6 @@ public class ArcadeTetris extends ArcadeGame
         piece = TetrisPiece.createPiece(getModule().getCart().getRandom().nextInt(7));
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void update()
     {
@@ -160,7 +157,6 @@ public class ArcadeTetris extends ArcadeGame
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
@@ -192,7 +188,6 @@ public class ArcadeTetris extends ArcadeGame
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void keyPress(final GuiMinecart gui, final int character, final int extraInformation)
     {
@@ -221,7 +216,6 @@ public class ArcadeTetris extends ArcadeGame
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
     {
@@ -231,7 +225,6 @@ public class ArcadeTetris extends ArcadeGame
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {

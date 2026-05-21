@@ -124,6 +124,10 @@ public class StevesCartsClient
         Minecraft.getInstance().level.sendPacketToServer(msg.toVanillaServerbound());
     }
 
+    public static net.minecraft.world.entity.player.Player getClientPlayer() {
+        return Minecraft.getInstance().player;
+    }
+
     @Deprecated
     public static boolean hasShiftDown() {
         return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 340) || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 344);

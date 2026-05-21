@@ -12,8 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RailBlock;
 import net.minecraft.world.level.storage.ValueInput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
@@ -46,7 +44,6 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
         return new SlotBuilder(getCart(), slotId, 8 + x * 18, 23 + y * 18);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
         drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.RAILER.translate(), 8, 6, 4210752);

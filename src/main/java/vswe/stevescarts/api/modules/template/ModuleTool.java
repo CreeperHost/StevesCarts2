@@ -11,8 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
@@ -67,7 +65,6 @@ public abstract class ModuleTool extends ModuleWorker
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
@@ -125,7 +122,6 @@ public abstract class ModuleTool extends ModuleWorker
         return 50;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {

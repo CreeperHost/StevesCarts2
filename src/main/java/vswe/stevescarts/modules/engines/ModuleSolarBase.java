@@ -13,8 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -129,7 +127,6 @@ public abstract class ModuleSolarBase extends ModuleEngine
         drawString(guiGraphics, gui, strfuel, 8, 42, 4210752);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {

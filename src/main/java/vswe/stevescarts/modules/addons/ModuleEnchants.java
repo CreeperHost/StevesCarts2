@@ -10,8 +10,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
@@ -160,7 +158,6 @@ public class ModuleEnchants extends ModuleAddon {
     }
 
     @Override
-    @OnlyIn (Dist.CLIENT)
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/enchant.png");
         for (int i = 0; i < 3; ++i) {

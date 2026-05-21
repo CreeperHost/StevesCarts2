@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.architectury.hooks.client.fluid.ClientFluidStackHooks;
 import dev.architectury.hooks.fluid.FluidStackHooks;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
@@ -12,8 +11,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.FluidActionResult;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -149,8 +146,7 @@ public class SCTank extends FluidTank {
     }
 
     //I spent a couple of hours trying to find a way to make this work with ScreenFluidRenderer. But without overhauling the SC GUI system i could not find a good solution.
-    @OnlyIn(Dist.CLIENT)
-    public void drawFluid(GuiGraphics guiGraphics, AbstractContainerScreen<?> gui, final int startX, final int startY) {
+    public void drawFluid(GuiGraphics guiGraphics, int guiLeft, int guiTop, final int startX, final int startY) {
         if (fluid.isEmpty()) return;
         int fluidLevel = (int) (48 * ((float) fluid.getAmount() / (float) capacity));
 
@@ -168,7 +164,7 @@ public class SCTank extends FluidTank {
             }
 
             for (int x = 0; x < 2; x++) {
-                owner.drawImage(guiGraphics, tankid, gui, icon, startX + 2 + 16 * x, startY + 1 + 16 * y + (16 - pixels)/*, 0, (16 - pixels)*/, 16, pixels, fluidColor);
+                owner.drawImage(guiGraphics, tankid, guiLeft, guiTop, icon, startX + 2 + 16 * x, startY + 1 + 16 * y + (16 - pixels), 16, pixels, fluidColor);
             }
         }
     }

@@ -14,8 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
@@ -44,7 +42,6 @@ public class ModuleDynamite extends ModuleBase
         fuseStartY = 27;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
@@ -118,7 +115,6 @@ public class ModuleDynamite extends ModuleBase
         return new int[]{fuseStartX + (int) (105.0f * (1.0f - getFuseLength() / 150.0f)), fuseStartY, 4, 10};
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {

@@ -7,8 +7,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.helpers.Localization;
@@ -35,7 +33,6 @@ public abstract class ArcadeGame
         return module;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void update()
     {
         if (SCConfig.CLIENT.useArcadeSounds.get())
@@ -44,32 +41,26 @@ public abstract class ArcadeGame
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
     {
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button)
     {
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void keyPress(final GuiMinecart gui, final int id, final int extraInformation)
     {
     }
@@ -99,7 +90,6 @@ public abstract class ArcadeGame
         return false;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public static void playSound(SoundEvent sound, float volume, float pitch)
     {
         if (SCConfig.CLIENT.useArcadeSounds.get() && sound != null)

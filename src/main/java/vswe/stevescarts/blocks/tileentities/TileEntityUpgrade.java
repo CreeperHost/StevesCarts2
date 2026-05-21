@@ -2,7 +2,6 @@ package vswe.stevescarts.blocks.tileentities;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -27,8 +26,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.blocks.BlockUpgrade;
@@ -324,11 +321,10 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     {
     }
 
-    @OnlyIn (Dist.CLIENT)
     @Override
-    public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour)
+    public void drawImage(GuiGraphics guiGraphics, int tankid, int guiLeft, int guiTop, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour)
     {
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, gui.getGuiLeft() + targetX, gui.getGuiTop() + targetY, width, height, colour);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, guiLeft + targetX, guiTop + targetY, width, height, colour);
     }
 
     public void setCreativeBroken()

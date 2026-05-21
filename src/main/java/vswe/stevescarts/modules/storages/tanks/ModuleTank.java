@@ -3,7 +3,7 @@ package vswe.stevescarts.modules.storages.tanks;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -15,8 +15,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.IFluidTank;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -76,7 +74,6 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
         return new SlotLiquidOutput(getCart(), slotId, 8 + x * 18, 24 + y * 24);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, final GuiMinecart gui)
     {
@@ -182,15 +179,13 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
         updateData();
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
-        tank.drawFluid(guiGraphics, gui, tankBounds[0], tankBounds[1]);
+        tank.drawFluid(guiGraphics, gui.getGuiLeft(), gui.getGuiTop(), tankBounds[0], tankBounds[1]);
         drawImage(guiGraphics, ResourceHelper.getResource("/gui/tank.png"), gui, tankBounds, 0, 0);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
@@ -353,9 +348,14 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
-    public void drawImage(GuiGraphics guiGraphics, int tankid, AbstractContainerScreen<?> gui, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour) {
-        drawImage(guiGraphics, (GuiMinecart) gui, sprite, targetX, targetY, width, height, colour);
+    public void drawImage(GuiGraphics guiGraphics, int tankid, int guiLeft, int guiTop, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour) {
+        int[] rect = cloneRect(new int[]{targetX, targetY, width, height});
+        if (!doStealInterface()) {
+            handleScroll(rect);
+        }
+        if (rect[3] > 0) {
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, guiLeft + rect[0] + getX(), guiTop + rect[1] + getY(), rect[2], rect[3], colour);
+        }
     }
 }

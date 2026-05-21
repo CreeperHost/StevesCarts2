@@ -9,8 +9,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -110,7 +108,6 @@ public abstract class ModuleCoalBase extends ModuleEngine
         return new SlotFuel(getCart(), slotId, 8 + x * 18, 23 + 18 * y);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {

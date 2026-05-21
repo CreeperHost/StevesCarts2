@@ -20,8 +20,6 @@ import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -73,14 +71,12 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
         return 35;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
         drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {

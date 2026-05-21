@@ -11,8 +11,6 @@ import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -88,7 +86,6 @@ public class ModuleExperience extends ModuleBase
 //        registerDw(EXPERIENCE, 0);
 //    }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
@@ -104,7 +101,6 @@ public class ModuleExperience extends ModuleBase
         return 1;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {
@@ -124,7 +120,6 @@ public class ModuleExperience extends ModuleBase
         return new int[]{cont[0] + 2, cont[1] + 2 + normalHeight - currentHeight, cont[2] - 4, currentHeight, normalHeight};
     }
 
-    @OnlyIn(Dist.CLIENT)
     private void drawContent(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y, final int id)
     {
         final int lowerLevel = id * 1500 / 3;
@@ -139,7 +134,6 @@ public class ModuleExperience extends ModuleBase
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         Identifier texture = ResourceHelper.getResource("/gui/experience.png");
@@ -151,7 +145,6 @@ public class ModuleExperience extends ModuleBase
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
     {
         if (inRect(x, y, getContainerRect()))

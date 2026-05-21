@@ -10,8 +10,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.StevesCartsAPI;
@@ -41,9 +39,7 @@ public class ModuleData
     private boolean isLocked;
     private boolean defaultLock;
     private ArrayList<Localization.MODULE_INFO> message;
-    @OnlyIn(Dist.CLIENT)
     private HashMap<String, ModelCartbase> models;
-    @OnlyIn(Dist.CLIENT)
     private HashMap<String, ModelCartbase> modelsPlaceholder;
     private ArrayList<String> removedModels;
     private float modelMult;
@@ -208,20 +204,17 @@ public class ModuleData
     }
 
     @SuppressWarnings("unused")
-    @OnlyIn(Dist.CLIENT)
     public float getModelMult()
     {
         return modelMult;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public ModuleData setModelMult(final float val)
     {
         modelMult = val;
         return this;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public ModuleData addModel(final String tag, final ModelCartbase model)
     {
         addModel(tag, model, false);
@@ -229,7 +222,6 @@ public class ModuleData
         return this;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public ModuleData addModel(final String tag, final ModelCartbase model, final boolean placeholder)
     {
         if (placeholder)
@@ -251,7 +243,6 @@ public class ModuleData
         return this;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public HashMap<String, ModelCartbase> getModels(final boolean placeholder)
     {
         if (placeholder)
@@ -261,7 +252,6 @@ public class ModuleData
         return models;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public boolean haveModels(final boolean placeholder)
     {
         if (placeholder)
@@ -473,7 +463,6 @@ public class ModuleData
         return true;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void addExtraMessage(Consumer<Component> consumer)
     {
         if (message != null)
@@ -509,13 +498,11 @@ public class ModuleData
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     private void addExtraMessage(Consumer<Component> consumer, final String str)
     {
         consumer.accept(Component.literal(ChatFormatting.DARK_GRAY + (ChatFormatting.ITALIC + str + ChatFormatting.RESET)));
     }
 
-    @OnlyIn(Dist.CLIENT)
     public final void addInformation(Consumer<Component> consumer, final CompoundTag compound)
     {
         consumer.accept(Component.literal(ChatFormatting.GRAY + Localization.MODULE_INFO.MODULAR_COST.translate() + ": " + modularCost));

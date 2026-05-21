@@ -15,8 +15,6 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
@@ -82,7 +80,6 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
@@ -93,14 +90,12 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
         drawImage(guiGraphics, texture, gui, tankPosX + 2, tankPosY + 2 + (23 - size), 18, 23 - size, 14, size);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         drawStringOnMouseOver(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.FERTILIZERS.translate() + ": " + getFertAmount() + " / " + getMaxFert(), x, y, tankPosX, tankPosY, 18, 27);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {

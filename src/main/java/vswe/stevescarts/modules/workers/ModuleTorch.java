@@ -19,8 +19,6 @@ import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
@@ -62,7 +60,6 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
         return new SlotTorch(getCart(), slotId, 8 + x * 18, 23 + y * 18);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
         drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
@@ -141,7 +138,6 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
         return false;
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/torch.png");

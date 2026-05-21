@@ -8,8 +8,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -114,7 +112,6 @@ public abstract class ModuleThermalBase extends ModuleEngine
         return new float[]{1.0f, 0.0f, 0.0f};
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {

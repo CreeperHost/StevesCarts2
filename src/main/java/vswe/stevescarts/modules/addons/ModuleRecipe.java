@@ -12,8 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
@@ -88,7 +86,6 @@ public abstract class ModuleRecipe extends ModuleAddon
         return new int[]{getLimitStartX(), getLimitStartY() + 12 * i, 22, 11};
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
     {

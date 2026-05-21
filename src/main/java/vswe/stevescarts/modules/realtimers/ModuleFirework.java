@@ -15,8 +15,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.component.FireworkExplosion.Shape;
 import net.minecraft.world.item.component.Fireworks;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
@@ -60,7 +58,6 @@ public class ModuleFirework extends ModuleBase {
         return new SlotFirework(getCart(), slotId, 8 + x * 18, 16 + y * 18);
     }
 
-    @OnlyIn (Dist.CLIENT)
     @Override
     public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
         drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);

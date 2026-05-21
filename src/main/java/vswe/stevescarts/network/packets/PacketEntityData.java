@@ -2,21 +2,15 @@ package vswe.stevescarts.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import net.creeperhost.polylib.data.serializable.AbstractDataStore;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import vswe.stevescarts.Constants;
-import vswe.stevescarts.polylib.DataEntity;
-import vswe.stevescarts.polylib.EntityData;
+import vswe.stevescarts.client.network.ClientPacketHandlers;
 
-import java.util.List;
 
 public class PacketEntityData implements CustomPacketPayload {
     public static final Type<PacketEntityData> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "entity_data"));
@@ -58,33 +52,16 @@ public class PacketEntityData implements CustomPacketPayload {
         return new PacketEntityData(entityId, index, new RegistryFriendlyByteBuf(copy, buffer.registryAccess()));
     }
 
+    public int getEntityId() { return entityId; }
+    public int getIndex() { return index; }
+    public RegistryFriendlyByteBuf getBuffer() { return buffer; }
+    public AbstractDataStore<?> getData() { return data; }
+
     public static class Handler implements IPayloadHandler<PacketEntityData> {
         @Override
         public void handle(PacketEntityData msg, IPayloadContext ctx) {
             if (ctx.flow() != PacketFlow.CLIENTBOUND) return;
-            ctx.enqueueWork(() -> handleClientSide(msg, ctx));
+            ctx.enqueueWork(() -> ClientPacketHandlers.handleEntityData(msg, ctx));
         }
-    }
-
-    @OnlyIn (Dist.CLIENT)
-    private static void handleClientSide(PacketEntityData msg, IPayloadContext ctx) {
-        Level level = Minecraft.getInstance().level;
-        if (level == null) return;
-
-        if (!(level.getEntity(msg.entityId) instanceof DataEntity dataEntity)) return;
-
-        List<EntityData<?>> list = dataEntity.getEntityDataList();
-        if (msg.index < 0 || msg.index >= list.size()) return;
-
-        EntityData<?> data = list.get(msg.index);
-        if (msg.buffer != null){
-            data.fromBytes(msg.buffer);
-        } else {
-            data.set(cast(msg.data.get()));
-        }
-    }
-
-    private static <T> T cast(Object object) {
-        return (T) object;
     }
 }
