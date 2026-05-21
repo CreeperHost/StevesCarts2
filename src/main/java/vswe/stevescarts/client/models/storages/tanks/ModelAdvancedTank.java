@@ -5,7 +5,8 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.helpers.ResourceHelper;
@@ -33,6 +34,6 @@ public class ModelAdvancedTank extends ModelCartbase
     @Override
     public RenderType getRenderType(ModuleBase moduleBase)
     {
-        return RenderType.entityCutout(getTexture());
+        return RenderTypes.entityCutout(getTexture());
     }
 }

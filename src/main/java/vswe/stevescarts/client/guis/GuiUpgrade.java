@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerUpgrade;
@@ -15,7 +15,7 @@ import vswe.stevescarts.upgrades.InventoryUpgradeEffect;
 
 public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade>
 {
-    private static ResourceLocation texture;
+    private static Identifier texture;
     private final TileEntityUpgrade upgrade;
 
     public GuiUpgrade(ContainerUpgrade containerUpgrade, Inventory playerInventory, Component iTextComponent)

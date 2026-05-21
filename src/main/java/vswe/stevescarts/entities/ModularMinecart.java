@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -23,13 +23,13 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
@@ -86,7 +86,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     protected final List<ChunkPos> forcedChunks = new ArrayList<>();
 
     protected TileEntityCartAssembler placeholderAsssembler;
-    protected List<ResourceLocation> moduleLoadingData;
+    protected List<Identifier> moduleLoadingData;
     protected ModuleWorker workingComponent;
     protected boolean hasCreativeSupplies;
     protected boolean isPlaceholder;
@@ -126,7 +126,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         this(ModEntities.MODULAR_CART.get(), level);
     }
 
-    public ModularMinecart(Level world, TileEntityCartAssembler assembler, ArrayList<ResourceLocation> data) {
+    public ModularMinecart(Level world, TileEntityCartAssembler assembler, ArrayList<Identifier> data) {
         this(world);
         setPlaceholder(assembler);
         loadPlaceHolderModules(data);
@@ -143,12 +143,12 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         List<CompoundTag> modules = new ArrayList<>();
         if (info == null) return;
 
-        List<ResourceLocation> names = new ArrayList<>();
+        List<Identifier> names = new ArrayList<>();
         ListTag listTag = (ListTag) info.get("modules");
         for (int i = 0; i < listTag.size(); i++) {
             Tag tag = listTag.get(i);
             modules.add((CompoundTag) tag);
-            names.add(ResourceLocation.parse(((CompoundTag) tag).getStringOr(String.valueOf(i), "")));
+            names.add(Identifier.parse(((CompoundTag) tag).getStringOr(String.valueOf(i), "")));
         }
 
         if (!names.isEmpty()) {
@@ -162,7 +162,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         if (data != null) {
             for (int i = 0; i < data.size(); i++) {
                 CompoundTag tag = data.get(i);
-                ResourceLocation name = ResourceLocation.parse(tag.getStringOr(String.valueOf(i), ""));
+                Identifier name = Identifier.parse(tag.getStringOr(String.valueOf(i), ""));
                 doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(name), tag);
             }
         }
@@ -256,7 +256,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     @Override
     protected void destroy(ServerLevel level, DamageSource damageSource) {
         this.kill(level);
-        if (level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS) && dropOnDeath()) {
+        if (level.getGameRules().get(GameRules.ENTITY_DROPS) && dropOnDeath()) {
             ItemStack itemstack = getCartItem();
             if (this.hasCustomName()) {
                 itemstack.set(DataComponents.CUSTOM_NAME, getCustomName());
@@ -285,7 +285,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     }
 
     @Override
-    public void activateMinecart(int x, int y, int z, boolean active) {
+    public void activateMinecart(ServerLevel level, int x, int y, int z, boolean active) {
         for (ModuleBase module : modules()) {
             module.activatedByRail(x, y, z, active);
         }
@@ -493,7 +493,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     //=== Data ===//
 
     @Override
-    public void remove(@NotNull RemovalReason removalReason) {
+    public void remove(@NotNull Entity.RemovalReason removalReason) {
         CartEvents.CartRemovedEvent event = new CartEvents.CartRemovedEvent(this);
         NeoForge.EVENT_BUS.post(event);
         if (event.isCanceled()) return;
@@ -527,8 +527,8 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
             return;
         }
         data.writeByte(moduleLoadingData.size());
-        for (ResourceLocation b : moduleLoadingData) {
-            data.writeResourceLocation(b);
+        for (Identifier b : moduleLoadingData) {
+            data.writeIdentifier(b);
         }
         entityDataList.forEach(e -> e.toBytes(data));
         data.writeBoolean(isEngineBurning());
@@ -541,9 +541,9 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         if (length == 0) {
             return;
         }
-        List<ResourceLocation> list = new ArrayList<>();
+        List<Identifier> list = new ArrayList<>();
         for (int i = 0; i < length; i++) {
-            list.add(data.readResourceLocation());
+            list.add(data.readIdentifier());
         }
         loadModulesFromNames(list);
         entityDataList.forEach(e -> e.fromBytes(data));
@@ -595,7 +595,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     }
 
     public void loadModules(ValueInput input) {
-        List<ResourceLocation> names = new ArrayList<>();
+        List<Identifier> names = new ArrayList<>();
 
         //Data Migration
         ValueInput.ValueInputList migration = input.childrenListOrEmpty("modules");
@@ -604,7 +604,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
             for (ValueInput in : migration) {
                 String name = in.getStringOr(String.valueOf(i), "");
                 if (name.isEmpty()) continue;
-                ResourceLocation moduleName = ResourceLocation.parse(name);
+                Identifier moduleName = Identifier.parse(name);
                 names.add(moduleName);
                 i++;
             }
@@ -615,7 +615,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         for (int i = 0; i < count; i++) {
             String name = list.getStringOr(String.valueOf(i), "");
             if (name.isEmpty()) continue;
-            ResourceLocation moduleName = ResourceLocation.parse(name);
+            Identifier moduleName = Identifier.parse(name);
             names.add(moduleName);
         }
 
@@ -624,7 +624,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         }
 
         modules().clear();
-        for (ResourceLocation name : names) {
+        for (Identifier name : names) {
             doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(name), null);
         }
         initModules();

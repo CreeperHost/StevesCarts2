@@ -6,7 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -152,7 +152,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/cake.png");
+        Identifier texture = ResourceHelper.getResource("/gui/cake.png");
         drawImage(guiGraphics, texture, gui, rect, 0, inRect(x, y, rect) ? rect[3] : 0);
         final int maxHeight = rect[3] - 2;
         int height = (int) (getCakes() / 10.0f * maxHeight);

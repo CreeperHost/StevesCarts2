@@ -1,7 +1,7 @@
 package vswe.stevescarts.arcade.monopoly;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class Die
@@ -17,7 +17,7 @@ public class Die
         randomize();
     }
 
-    public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y)
+    public void draw(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y)
     {
         game.getModule().drawImage(guiGraphics, texture, gui, x, y, 256 - 24 * (graphicalId + 1), 232, 24, 24);
         switch (number)
@@ -61,7 +61,7 @@ public class Die
         }
     }
 
-    private void drawEye(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y)
+    private void drawEye(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y)
     {
         game.getModule().drawImage(guiGraphics, texture, gui, x, y, 256 - 6 * (graphicalId + 1), 226, 6, 6);
     }

@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -17,7 +17,7 @@ import vswe.stevescarts.modules.workers.tools.ModuleWoodcutter;
 public class ModelWoodCutter extends ModelCartbase
 {
     private static ModelPart[] anchors;
-    public ModelWoodCutter(final ResourceLocation resource)
+    public ModelWoodCutter(final Identifier resource)
     {
         super(null, resource);
         MeshDefinition modelData = new MeshDefinition();

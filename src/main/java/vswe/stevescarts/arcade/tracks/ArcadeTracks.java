@@ -2,7 +2,7 @@ package vswe.stevescarts.arcade.tracks;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -347,7 +347,7 @@ public class ArcadeTracks extends ArcadeGame
     {
         if (!isSaveMenuOpen && isMenuOpen)
         {
-            ResourceLocation texture = ResourceHelper.getResource(ArcadeTracks.textureMenu);
+            Identifier texture = ResourceHelper.getResource(ArcadeTracks.textureMenu);
             getModule().drawImage(guiGraphics, texture, gui, getMenuArea(), 0, 0);
             for (int i = 0; i < 3; ++i)
             {
@@ -366,7 +366,7 @@ public class ArcadeTracks extends ArcadeGame
         }
         else if (currentMap != null)
         {
-            ResourceLocation texture = ResourceHelper.getResource(ArcadeTracks.textureGame);
+            Identifier texture = ResourceHelper.getResource(ArcadeTracks.textureGame);
             if (isUsingEditor() && !isRunning)
             {
                 for (int i = 0; i < trackMap.length; ++i)
@@ -423,7 +423,7 @@ public class ArcadeTracks extends ArcadeGame
                 getModule().drawImage(guiGraphics, texture, gui, rect2, 0, 144);
             }
         }
-        ResourceLocation texture =  ResourceHelper.getResource(ArcadeTracks.textureGame);
+        Identifier texture =  ResourceHelper.getResource(ArcadeTracks.textureGame);
         for (int i = 0; i < 14; ++i)
         {
             if (isButtonVisible(i))

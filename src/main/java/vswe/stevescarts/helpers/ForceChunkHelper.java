@@ -1,6 +1,6 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.world.chunk.RegisterTicketControllersEvent;
 import net.neoforged.neoforge.common.world.chunk.TicketController;
@@ -11,7 +11,7 @@ import vswe.stevescarts.Constants;
  */
 public class ForceChunkHelper {
 
-    public static final TicketController CONTROLLER = new TicketController(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "ticket_controller"));
+    public static final TicketController CONTROLLER = new TicketController(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "ticket_controller"));
 
     public static void init(IEventBus iEventBus) {
         iEventBus.addListener(ForceChunkHelper::registerTicketController);

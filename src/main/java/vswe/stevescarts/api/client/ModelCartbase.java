@@ -5,8 +5,9 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.modules.ModuleBase;
 
@@ -15,19 +16,19 @@ import java.util.function.Function;
 
 public abstract class ModelCartbase extends Model
 {
-    protected final ResourceLocation texture;
+    protected final Identifier texture;
     protected ModelPart root;
 
-    public ModelCartbase(Function<ResourceLocation, RenderType> layerFactory, ResourceLocation texture, ModelPart root)
+    public ModelCartbase(Function<Identifier, RenderType> layerFactory, Identifier texture, ModelPart root)
     {
         super(new ModelPart(Collections.emptyList(), Collections.emptyMap()), layerFactory);
         this.texture = texture;
         this.root = root;
     }
 
-    public ModelCartbase(ModelPart root, ResourceLocation texture)
+    public ModelCartbase(ModelPart root, Identifier texture)
     {
-        this(RenderType::entityCutoutNoCull, texture, root);
+        this(RenderTypes::entityCutoutNoCull, texture, root);
     }
 
     @Override
@@ -39,7 +40,7 @@ public abstract class ModelCartbase extends Model
         }
     }
 
-    public ResourceLocation getTexture()
+    public Identifier getTexture()
     {
         return texture;
     }
@@ -49,7 +50,7 @@ public abstract class ModelCartbase extends Model
         return root;
     }
 
-    public ResourceLocation getResource(final ModuleBase module)
+    public Identifier getResource(final ModuleBase module)
     {
         return texture;
     }
@@ -60,6 +61,6 @@ public abstract class ModelCartbase extends Model
 
     public RenderType getRenderType(ModuleBase moduleBase)
     {
-        return RenderType.entitySolid(getResource(moduleBase));
+        return RenderTypes.entitySolid(getResource(moduleBase));
     }
 }

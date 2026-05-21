@@ -1,12 +1,12 @@
 package vswe.stevescarts.client.models.engines;
 
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.api.client.ModelCartbase;
 
 public abstract class ModelEngineBase extends ModelCartbase
 {
-    public ModelEngineBase(ModelPart root, ResourceLocation texture)
+    public ModelEngineBase(ModelPart root, Identifier texture)
     {
         super(root, texture);
         root.setPos(10.5f, 0.5f, -0.0f);

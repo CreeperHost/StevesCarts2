@@ -5,9 +5,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -21,8 +21,8 @@ import vswe.stevescarts.init.ModBlocks;
 
 public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
 {
-    private static ResourceLocation[] texturesLeft;
-    private static ResourceLocation[] texturesRight;
+    private static Identifier[] texturesLeft;
+    private static Identifier[] texturesRight;
     private final ContainerCargo containerCargo;
     private final TileEntityCargo manager;
 
@@ -107,7 +107,7 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
         drawMouseOver(guiGraphics, getLayoutString() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getLayoutOption(containerCargo.getLayoutType()), mouseX, mouseY, getMiddleCoords());
     }
 
-    protected void drawColors(GuiGraphics guiGraphics, ResourceLocation resourceLocation,  final int id, final int color, final int left, final int top)
+    protected void drawColors(GuiGraphics guiGraphics, Identifier resourceLocation,  final int id, final int color, final int left, final int top)
     {
         try
         {
@@ -136,7 +136,7 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
         return new int[]{xCoord, yCoord, 8, 8};
     }
 
-    private void drawArrow(GuiGraphics guiGraphics, ResourceLocation resourceLocation, final int id, final int left, final int top)
+    private void drawArrow(GuiGraphics guiGraphics, Identifier resourceLocation, final int id, final int left, final int top)
     {
         int sourceX = getArrowSourceX();
         int sourceY = 28;
@@ -504,7 +504,7 @@ public class GuiCargo extends AbstractContainerScreen<ContainerCargo>
 
     static
     {
-        GuiCargo.texturesLeft = new ResourceLocation[]{ResourceHelper.getResource("/gui/cargoVersion0Part1.png"), ResourceHelper.getResource("/gui/cargoVersion1Part1.png")};
-        GuiCargo.texturesRight = new ResourceLocation[]{ResourceHelper.getResource("/gui/cargoVersion0Part2.png"), ResourceHelper.getResource("/gui/cargoVersion1Part2.png")};
+        GuiCargo.texturesLeft = new Identifier[]{ResourceHelper.getResource("/gui/cargoVersion0Part1.png"), ResourceHelper.getResource("/gui/cargoVersion1Part1.png")};
+        GuiCargo.texturesRight = new Identifier[]{ResourceHelper.getResource("/gui/cargoVersion0Part2.png"), ResourceHelper.getResource("/gui/cargoVersion1Part2.png")};
     }
 }

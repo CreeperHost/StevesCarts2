@@ -1,7 +1,7 @@
 package vswe.stevescarts.arcade.invaders;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import vswe.stevescarts.arcade.ArcadeGame;
@@ -29,7 +29,7 @@ public class InvaderGhast extends Unit
     }
 
     @Override
-    public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui)
+    public void draw(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui)
     {
         if (isPahighast)
         {

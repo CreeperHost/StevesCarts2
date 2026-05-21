@@ -9,7 +9,7 @@
 //import net.minecraft.data.loot.BlockLootSubProvider;
 //import net.minecraft.data.loot.LootTableProvider;
 //import net.minecraft.resources.ResourceKey;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //import net.minecraft.tags.BlockTags;
 //import net.minecraft.world.flag.FeatureFlags;
 //import net.minecraft.world.level.block.Block;
@@ -68,14 +68,14 @@
 //        }
 //
 //        public void registerSidedBlock(Block block, String folder) {
-//            horizontalBlock(block, models().orientableWithBottom(getResourceLocation(block).getPath(),
+//            horizontalBlock(block, models().orientableWithBottom(getIdentifier(block).getPath(),
 //                    modLoc("block/" + folder + "/side"),
 //                    modLoc("block/" + folder + "/front"),
 //                    modLoc("block/" + folder + "/bottom"),
 //                    modLoc("block/" + folder + "/top")));
 //        }
 //
-//        public ResourceLocation getResourceLocation(Block block) {
+//        public Identifier getIdentifier(Block block) {
 //            return BuiltInRegistries.BLOCK.getKey(block);
 //        }
 //    }

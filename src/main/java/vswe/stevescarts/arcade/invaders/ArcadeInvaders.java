@@ -2,7 +2,7 @@ package vswe.stevescarts.arcade.invaders;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -234,7 +234,7 @@ public class ArcadeInvaders extends ArcadeGame
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource(ArcadeInvaders.texture);
+        Identifier texture = ResourceHelper.getResource(ArcadeInvaders.texture);
         for (int i = 0; i < 27; ++i)
         {
             getModule().drawImage(guiGraphics, texture, gui, 5 + i * 16, 150, 16, 32, 16, 16);

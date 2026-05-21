@@ -1,7 +1,7 @@
 package vswe.stevescarts.arcade.sweeper;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class Tile
@@ -31,7 +31,7 @@ public class Tile
         return nearbyCreepers == 9;
     }
 
-    public void draw(GuiGraphics guiGraphics, ResourceLocation texture, ArcadeSweeper game, final GuiMinecart gui, final int x, final int y, final int mx, final int my)
+    public void draw(GuiGraphics guiGraphics, Identifier texture, ArcadeSweeper game, final GuiMinecart gui, final int x, final int y, final int mx, final int my)
     {
         final int[] rect = {x, y, 10, 10};
         if (isCreeper() && game.hasFinished)

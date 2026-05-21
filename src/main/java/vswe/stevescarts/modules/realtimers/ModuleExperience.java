@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
@@ -125,7 +125,7 @@ public class ModuleExperience extends ModuleBase
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void drawContent(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y, final int id)
+    private void drawContent(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y, final int id)
     {
         final int lowerLevel = id * 1500 / 3;
         final int currentLevel = getExperienceAmount() - lowerLevel;
@@ -142,7 +142,7 @@ public class ModuleExperience extends ModuleBase
     @OnlyIn(Dist.CLIENT)
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/experience.png");
+        Identifier texture = ResourceHelper.getResource("/gui/experience.png");
         for (int i = 0; i < 3; ++i)
         {
             drawContent(guiGraphics, texture, gui, x, y, i);

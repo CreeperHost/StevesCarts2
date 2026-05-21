@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.hull;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -70,7 +70,7 @@ public class ModulePig extends ModuleHull
         return !item.isEmpty() && item.getEquipmentSlot() == EquipmentSlot.HEAD;
     }
 
-    public ResourceLocation getHelmetResource(final boolean isOverlay)
+    public Identifier getHelmetResource(final boolean isOverlay)
     {
         if (!hasHelment())
         {
@@ -81,7 +81,7 @@ public class ModulePig extends ModuleHull
         {
             return null;
         }
-        return ResourceLocation.parse("");
+        return Identifier.parse("");
         //		return fakeArmorLayer.getArmorResource((Entity) null, item, EntityEquipmentSlot.HEAD, isOverlay ? "overlay" : null);
     }
 

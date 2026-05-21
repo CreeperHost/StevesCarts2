@@ -1,7 +1,7 @@
 package vswe.stevescarts.arcade.monopoly;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.EnumSet;
@@ -25,7 +25,7 @@ public class Station extends Property
     }
 
     @Override
-    public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
+    public void draw(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
     {
         super.draw(guiGraphics, texture, gui, states);
         drawValue(guiGraphics, gui);

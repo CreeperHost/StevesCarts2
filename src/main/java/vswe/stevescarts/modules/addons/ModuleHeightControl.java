@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -88,7 +88,7 @@ public class ModuleHeightControl extends ModuleAddon
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, int x, int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/heightcontrol.png");
+        Identifier texture = ResourceHelper.getResource("/gui/heightcontrol.png");
         drawImage(guiGraphics, texture, gui, levelNumberBoxX, levelNumberBoxY, 4, 36, 21, 15);
         drawImage(guiGraphics, texture, gui, arrowUp, 4, 12);
         drawImage(guiGraphics, texture, gui, arrowMiddle, 4, 21);
@@ -131,7 +131,7 @@ public class ModuleHeightControl extends ModuleAddon
         }
     }
 
-    private void drawMarker(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, int pos, boolean isTargetLevel)
+    private void drawMarker(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, int pos, boolean isTargetLevel)
     {
         int srcX = 4;
         int srcY = isTargetLevel ? 6 : 0;

@@ -1,7 +1,7 @@
 package vswe.stevescarts.arcade.tracks;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class ScrollableList
     {
     }
 
-    public void drawBackground(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y)
+    public void drawBackground(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y)
     {
         if (!isVisible())
         {

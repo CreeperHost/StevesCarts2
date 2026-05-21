@@ -1,7 +1,7 @@
 package vswe.stevescarts.arcade.tracks;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class Cart
@@ -89,7 +89,7 @@ public class Cart
     {
     }
 
-    public void render(GuiGraphics guiGraphics, ResourceLocation texture, ArcadeTracks game, final GuiMinecart gui, final int tick)
+    public void render(GuiGraphics guiGraphics, Identifier texture, ArcadeTracks game, final GuiMinecart gui, final int tick)
     {
         if (!enabled)
         {

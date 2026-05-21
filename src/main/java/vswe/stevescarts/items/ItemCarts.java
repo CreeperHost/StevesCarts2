@@ -7,7 +7,7 @@ import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.InteractionResult;
@@ -112,7 +112,7 @@ public class ItemCarts extends MinecartItem
             if (moduleListTag != null && !moduleListTag.isEmpty()) {
                 for (int i = 0; i < moduleListTag.size(); i++) {
                     CompoundTag moduleTag = (CompoundTag) moduleListTag.get(i);
-                    ResourceLocation resourceLocation = ResourceLocation.parse(moduleTag.getStringOr(String.valueOf(i), ""));
+                    Identifier resourceLocation = Identifier.parse(moduleTag.getStringOr(String.valueOf(i), ""));
                     ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(resourceLocation);
                     if (moduleData != null) consumer.accept(Component.literal(ChatFormatting.GOLD + moduleData.getDisplayName()));
                 }

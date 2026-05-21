@@ -7,7 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -144,7 +144,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/torch.png");
+        Identifier texture = ResourceHelper.getResource("/gui/torch.png");
         int barLength = 3 * light;
         if (light == 15) {
             --barLength;

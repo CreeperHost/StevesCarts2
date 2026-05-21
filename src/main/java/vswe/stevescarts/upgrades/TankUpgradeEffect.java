@@ -2,10 +2,10 @@ package vswe.stevescarts.upgrades;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -24,7 +24,7 @@ public abstract class TankUpgradeEffect extends InventoryUpgradeEffect
 {
     private static final int tankInterfaceX = 35;
     private static final int tankInterfaceY = 20;
-    private static ResourceLocation texture;
+    private static Identifier texture;
 
     public abstract int getTankSize();
 

@@ -2,7 +2,7 @@ package vswe.stevescarts.arcade.sweeper;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
@@ -148,7 +148,7 @@ public class ArcadeSweeper extends ArcadeGame
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource(ArcadeSweeper.textureMenu);
+        Identifier texture = ResourceHelper.getResource(ArcadeSweeper.textureMenu);
         for (int i = 0; i < tiles.length; ++i)
         {
             for (int j = 0; j < tiles[0].length; ++j)

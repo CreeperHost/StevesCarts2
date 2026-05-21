@@ -7,7 +7,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -17,7 +17,7 @@ import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 
 public class PacketFluidSync implements CustomPacketPayload {
-    public static final Type<PacketFluidSync> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "fluid_sync"));
+    public static final Type<PacketFluidSync> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "fluid_sync"));
     private FluidStack fluidStack;
     private BlockPos pos;
     private int tankID;

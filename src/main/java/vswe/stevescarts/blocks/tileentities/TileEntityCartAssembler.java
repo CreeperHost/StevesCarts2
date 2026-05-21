@@ -10,7 +10,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.ItemStackWithSlot;
@@ -1109,9 +1109,9 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @SuppressWarnings("all")
-    private ArrayList<ResourceLocation> getModularInfo()
+    private ArrayList<Identifier> getModularInfo()
     {
-        final ArrayList<ResourceLocation> datalist = new ArrayList<>();
+        final ArrayList<Identifier> datalist = new ArrayList<>();
         for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i)
         {
             if (!getItem(i).isEmpty())

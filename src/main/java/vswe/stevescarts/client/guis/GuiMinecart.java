@@ -11,9 +11,9 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -34,9 +34,9 @@ import java.util.*;
 
 public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 {
-    private static ResourceLocation textureLeft;
-    private static ResourceLocation textureRight;
-    private static ResourceLocation textureReturn;
+    private static Identifier textureLeft;
+    private static Identifier textureRight;
+    private static Identifier textureReturn;
     private boolean isScrolling;
     private final int[] scrollBox;
     private ModularMinecart cart;
@@ -404,7 +404,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         }
     }
 
-    private void drawModuleSlots(GuiGraphics guiGraphics, ResourceLocation texture, final ModuleBase module)
+    private void drawModuleSlots(GuiGraphics guiGraphics, Identifier texture, final ModuleBase module)
     {
         if (module.hasGui() && module.hasSlots())
         {
@@ -515,7 +515,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
         GuiHelper.popScissor();
     }
 
-    public void drawTexturedModalRect(GuiGraphics guiGraphics, ResourceLocation texture, int x, int y, int u, int v, int w, int h) //}, RENDER_ROTATION rotation)
+    public void drawTexturedModalRect(GuiGraphics guiGraphics, Identifier texture, int x, int y, int u, int v, int w, int h) //}, RENDER_ROTATION rotation)
     {
 //        final float fw = 0.00390625f;
 //        final float fy = 0.00390625f;
@@ -584,7 +584,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart>
 //            }
 //        }
 
-//        public void blit(RenderPipeline pipeline, ResourceLocation atlas, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
+//        public void blit(RenderPipeline pipeline, Identifier atlas, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
 
 
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, x, y, (float) u, (float) v, w, h, 256, 256);

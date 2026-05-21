@@ -10,7 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -115,14 +115,14 @@ public class EnchantmentData {
     public void write(RegistryFriendlyByteBuf buf) {
         buf.writeVarInt(enchant == null ? -1 : value);
         if (enchant != null){
-            buf.writeResourceLocation(Objects.requireNonNull(ResourceLocation.parse(enchant.getRegisteredName())));
+            buf.writeIdentifier(Objects.requireNonNull(Identifier.parse(enchant.getRegisteredName())));
         }
     }
 
     public static EnchantmentData read(RegistryFriendlyByteBuf buf) {
         int value = buf.readVarInt();
         if (value == -1) return new EnchantmentData(null);
-        ResourceKey<Enchantment> resKey = ResourceKey.create(Registries.ENCHANTMENT, buf.readResourceLocation());
+        ResourceKey<Enchantment> resKey = ResourceKey.create(Registries.ENCHANTMENT, buf.readIdentifier());
         Holder<Enchantment> enchantment = buf.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(resKey);
         EnchantmentData data = new EnchantmentData(enchantment);
         data.setValue(value);
@@ -142,7 +142,7 @@ public class EnchantmentData {
             return null;
         }
 
-        ResourceLocation key = ResourceLocation.parse(keyString);
+        Identifier key = Identifier.parse(keyString);
         ResourceKey<Enchantment> resKey = ResourceKey.create(Registries.ENCHANTMENT, key);
         Holder<Enchantment> enchant = input.lookup().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(resKey);
         EnchantmentData data = new EnchantmentData(enchant);

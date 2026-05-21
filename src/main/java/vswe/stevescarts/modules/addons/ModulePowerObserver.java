@@ -4,7 +4,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -94,7 +94,7 @@ public class ModulePowerObserver extends ModuleAddon
                 drawEngine(guiGraphics, gui, i, getEngineRect(i));
             }
         }
-        ResourceLocation texture = ResourceHelper.getResource("/gui/observer.png");
+        Identifier texture = ResourceHelper.getResource("/gui/observer.png");
         for (int i = 0; i < 4; ++i) {
             int[] rect = getAreaRect(i);
             drawImage(guiGraphics, texture, gui, rect, 18, 22 * i);

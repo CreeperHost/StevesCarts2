@@ -3,7 +3,7 @@ package vswe.stevescarts.network.packets;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -12,7 +12,7 @@ import vswe.stevescarts.Constants;
 import vswe.stevescarts.entities.ModularMinecart;
 
 public class PacketMinecartTurn implements CustomPacketPayload {
-    public static final Type<PacketMinecartTurn> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "cart_turn"));
+    public static final Type<PacketMinecartTurn> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "cart_turn"));
     private final int cartID;
 
     public PacketMinecartTurn(int cartID) {

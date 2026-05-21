@@ -8,8 +8,9 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -19,8 +20,8 @@ import vswe.stevescarts.modules.engines.ModuleSolarCompact;
 import java.util.function.Consumer;
 
 public class ModelCompactSolarPanel extends ModelCartbase {
-    private static ResourceLocation texture = ResourceHelper.getResource("/models/panelModelSideActive.png");
-    private static ResourceLocation texture2 = ResourceHelper.getResource("/models/panelModelSideIdle.png");
+    private static Identifier texture = ResourceHelper.getResource("/models/panelModelSideActive.png");
+    private static Identifier texture2 = ResourceHelper.getResource("/models/panelModelSideIdle.png");
     private ModelPart modelLeft;
     private ModelPart modelRight;
     private ModelPart[][] modelParts;
@@ -33,9 +34,9 @@ public class ModelCompactSolarPanel extends ModelCartbase {
     @Override
     public RenderType getRenderType(ModuleBase module) {
         if (module != null && ((ModuleSolarCompact) module).getLight() == 15) {
-            return RenderType.entitySolid(texture);
+            return RenderTypes.entitySolid(texture);
         }
-        return RenderType.entitySolid(texture2);
+        return RenderTypes.entitySolid(texture2);
     }
 
     private void generateModels() {

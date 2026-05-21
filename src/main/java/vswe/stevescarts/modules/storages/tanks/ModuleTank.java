@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
@@ -133,7 +133,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
                 {
                     try
                     {
-                        Fluid fluid = BuiltInRegistries.FLUID.getValue(ResourceLocation.parse(fluidName.get().toLowerCase(Locale.ROOT)));
+                        Fluid fluid = BuiltInRegistries.FLUID.getValue(Identifier.parse(fluidName.get().toLowerCase(Locale.ROOT)));
                         if (fluid != null && fluid != Fluids.EMPTY)
                         {
                             tank.setFluid(new FluidStack(fluid, fluidAmount.get()));

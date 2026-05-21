@@ -4,7 +4,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -162,7 +162,7 @@ public class ModuleEnchants extends ModuleAddon {
     @Override
     @OnlyIn (Dist.CLIENT)
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/enchant.png");
+        Identifier texture = ResourceHelper.getResource("/gui/enchant.png");
         for (int i = 0; i < 3; ++i) {
             int[] box = getBoxRect(i);
             if (inRect(x, y, box)) {

@@ -6,7 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.Container;
@@ -526,7 +526,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         super.drawBackground(guiGraphics, gui, x, y);
-        ResourceLocation texture = ResourceHelper.getResource("/gui/drill.png");
+        Identifier texture = ResourceHelper.getResource("/gui/drill.png");
         final int imageID = isDrillEnabled() ? 1 : 0;
         int borderID = 0;
         if (inRect(x, y, buttonRect))

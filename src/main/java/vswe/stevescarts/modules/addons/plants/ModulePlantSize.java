@@ -3,7 +3,7 @@ package vswe.stevescarts.modules.addons.plants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -63,7 +63,7 @@ public class ModulePlantSize extends ModuleAddon
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/plantsize.png");
+        Identifier texture = ResourceHelper.getResource("/gui/plantsize.png");
         final int srcX = (size - 1) % 5 * 44;
         final int srcY = ((size - 1) / 5 + 1) * 44;
         drawImage(guiGraphics, texture, gui, boxrect, srcX, srcY);

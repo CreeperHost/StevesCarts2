@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.handling.IPayloadHandler;
@@ -12,7 +12,7 @@ import vswe.stevescarts.Constants;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 
 public class PacketCreateCart implements CustomPacketPayload {
-    public static final Type<PacketCreateCart> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "create_cart"));
+    public static final Type<PacketCreateCart> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "create_cart"));
     private final BlockPos blockPos;
     private final int id;
     private final byte[] data;

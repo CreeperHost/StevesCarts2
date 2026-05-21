@@ -3,7 +3,7 @@ package vswe.stevescarts.modules.addons;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -73,7 +73,7 @@ public class ModuleColorizer extends ModuleAddon
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/color.png");
+        Identifier texture = ResourceHelper.getResource("/gui/color.png");
         for (int i = 0; i < 3; ++i)
         {
             drawMarker(guiGraphics, texture, gui, x, y, i);
@@ -91,7 +91,7 @@ public class ModuleColorizer extends ModuleAddon
         }
     }
 
-    private void drawMarker(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y, final int id)
+    private void drawMarker(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y, final int id)
     {
         final float[] colorArea = new float[3];
         final float[] colorMarker = new float[3];

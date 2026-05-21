@@ -8,7 +8,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -361,7 +361,7 @@ public class ModuleNote extends ModuleBase
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/note.png");
+        Identifier texture = ResourceHelper.getResource("/gui/note.png");
         for (int i = getScrollY(); i < Math.min(tracks.size(), getScrollY() + tracksInView); ++i)
         {
             final Track track = tracks.get(i);
@@ -840,7 +840,7 @@ public class ModuleNote extends ModuleBase
         }
 
         @Override
-        public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y)
+        public void draw(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y)
         {
             if (isValid())
             {
@@ -902,7 +902,7 @@ public class ModuleNote extends ModuleBase
             }
         }
 
-        public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y)
+        public void draw(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y)
         {
             if (!inRect(x, y, getRect()))
             {
@@ -951,7 +951,7 @@ public class ModuleNote extends ModuleBase
             drawString(guiGraphics, gui, str, rect[0] + 3, rect[1] + 6, instrumentColors[instrumentId]);
         }
 
-        public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y, final int trackID, final int noteID)
+        public void draw(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y, final int trackID, final int noteID)
         {
             int srcX = 0;
             if (instrumentId == 0)

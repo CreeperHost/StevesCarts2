@@ -1,6 +1,6 @@
 package vswe.stevescarts.modules.workers.tools;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -19,7 +19,7 @@ public class ModuleFarmerGalgadorian extends ModuleFarmer
     }
 
     @Override
-    public ResourceLocation getRepairItem() {
+    public Identifier getRepairItem() {
         return null;
     }
 

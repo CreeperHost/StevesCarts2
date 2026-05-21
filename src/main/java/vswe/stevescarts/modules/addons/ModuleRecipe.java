@@ -6,7 +6,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -60,7 +60,7 @@ public abstract class ModuleRecipe extends ModuleAddon
         if (canUseAdvancedFeatures())
         {
             final int[] area = getArea();
-            ResourceLocation texture = ResourceHelper.getResource("/gui/recipe.png");
+            Identifier texture = ResourceHelper.getResource("/gui/recipe.png");
             drawImage(guiGraphics, texture, gui, area[0] - 2, area[1] - 2, 0, 0, 20, 20);
             if (mode.get() == 1)
             {
@@ -76,7 +76,7 @@ public abstract class ModuleRecipe extends ModuleAddon
         }
     }
 
-    private void drawControlRect(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y, final int i)
+    private void drawControlRect(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y, final int i)
     {
         final int v = i * 11;
         final int[] rect = getControlRect(i);

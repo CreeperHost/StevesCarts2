@@ -4,7 +4,7 @@ import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
@@ -148,7 +148,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/shield.png");
+        Identifier texture = ResourceHelper.getResource("/gui/shield.png");
         final int imageID = getShieldStatus() ? 1 : 0;
         int borderID = 0;
         if (inRect(x, y, buttonRect))

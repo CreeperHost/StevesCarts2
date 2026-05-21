@@ -8,7 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 
 public class ModuleData
 {
-    private final ResourceLocation id;
+    private final Identifier id;
     private final Class<? extends ModuleBase> moduleClass;
     private final String name;
     private final int modularCost;
@@ -53,7 +53,7 @@ public class ModuleData
 
     private final ModuleType moduleType;
 
-    public ModuleData(final ResourceLocation id, final String name, final Class<? extends ModuleBase> moduleClass, ModuleType moduleType, final int modularCost)
+    public ModuleData(final Identifier id, final String name, final Class<? extends ModuleBase> moduleClass, ModuleType moduleType, final int modularCost)
     {
         this.nemesis = null;
         this.requirement = null;
@@ -304,7 +304,7 @@ public class ModuleData
         return "module_" + getRawName();
     }
 
-    public ResourceLocation getID()
+    public Identifier getID()
     {
         return id;
     }
@@ -349,7 +349,7 @@ public class ModuleData
                     CompoundTag moduleTag = (CompoundTag) tag;
                     //If this ever explodes, then someone please slap whoever decided to use the arbitrary index of the module used as the key for the id field. WTF...
                     String regName = moduleTag.getStringOr(String.valueOf(i), "");
-                    ModuleData data = StevesCartsAPI.MODULE_REGISTRY.get(ResourceLocation.parse(regName));
+                    ModuleData data = StevesCartsAPI.MODULE_REGISTRY.get(Identifier.parse(regName));
                     ItemStack module = data.getItemStack();
                     if (moduleTag.contains("data")) {
                         ModItemData.modifyTag(module, t -> t.put("data", moduleTag.getCompoundOrEmpty("data")));

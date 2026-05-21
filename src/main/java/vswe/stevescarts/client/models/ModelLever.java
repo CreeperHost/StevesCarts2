@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ILeverModule;
@@ -17,7 +17,7 @@ public class ModelLever extends ModelCartbase
 {
     ModelPart lever;
 
-    public ModelLever(final ResourceLocation resource)
+    public ModelLever(final Identifier resource)
     {
         super(getTexturedModelData().bakeRoot(), resource);
         lever = getRoot().getChild("base").getChild("lever");

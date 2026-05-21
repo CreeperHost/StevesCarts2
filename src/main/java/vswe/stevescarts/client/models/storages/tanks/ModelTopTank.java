@@ -7,7 +7,8 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.neoforged.neoforge.fluids.FluidStack;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -37,7 +38,7 @@ public class ModelTopTank extends ModelCartbase
     @Override
     public RenderType getRenderType(ModuleBase moduleBase)
     {
-        return RenderType.entityCutout(getTexture());
+        return RenderTypes.entityCutout(getTexture());
     }
 
     @Override

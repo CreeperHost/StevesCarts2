@@ -5,9 +5,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
@@ -20,7 +20,7 @@ import vswe.stevescarts.network.packets.PacketActivator;
 
 public class GuiActivator extends AbstractContainerScreen<ContainerActivator>
 {
-    private static ResourceLocation texture;
+    private static Identifier texture;
     TileEntityActivator activator;
     Inventory invPlayer;
 

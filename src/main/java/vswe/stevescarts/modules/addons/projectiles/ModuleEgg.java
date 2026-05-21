@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.addons.projectiles;
 
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.projectile.ThrownEgg;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrownEgg;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import vswe.stevescarts.entities.ModularMinecart;

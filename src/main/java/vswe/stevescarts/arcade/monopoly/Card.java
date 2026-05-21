@@ -3,7 +3,7 @@ package vswe.stevescarts.arcade.monopoly;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public abstract class Card
@@ -15,7 +15,7 @@ public abstract class Card
         this.message = message;
     }
 
-    public void render(final ArcadeMonopoly game, GuiGraphics guiGraphics, ResourceLocation texture, final GuiMinecart gui, final int[] rect, final boolean isFront)
+    public void render(final ArcadeMonopoly game, GuiGraphics guiGraphics, Identifier texture, final GuiMinecart gui, final int[] rect, final boolean isFront)
     {
         if (isFront)
         {

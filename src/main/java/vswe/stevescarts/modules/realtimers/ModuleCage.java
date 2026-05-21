@@ -3,16 +3,20 @@ package vswe.stevescarts.modules.realtimers;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.FlyingAnimal;
-import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.animal.WaterAnimal;
+import net.minecraft.world.entity.animal.golem.IronGolem;
+import net.minecraft.world.entity.animal.fish.WaterAnimal;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.skeleton.Skeleton;
+import net.minecraft.world.entity.monster.spider.CaveSpider;
+import net.minecraft.world.entity.monster.spider.Spider;
+import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -80,12 +84,12 @@ public class ModuleCage extends ModuleBase implements IActivatorModule
     @Override
     public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/cage.png");
+        Identifier texture = ResourceHelper.getResource("/gui/cage.png");
         drawButton(guiGraphics, texture, gui, x, y, autoRect, disablePickup ? 2 : 3);
         drawButton(guiGraphics, texture, gui, x, y, manualRect, isCageEmpty() ? 0 : 1);
     }
 
-    private void drawButton(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y, final int[] coords, final int imageID)
+    private void drawButton(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y, final int[] coords, final int imageID)
     {
         if (inRect(x, y, coords))
         {

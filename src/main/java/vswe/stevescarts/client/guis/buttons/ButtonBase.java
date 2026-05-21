@@ -1,7 +1,7 @@
 package vswe.stevescarts.client.guis.buttons;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -14,7 +14,7 @@ public abstract class ButtonBase
     private boolean lastVisibility;
     private int currentID;
     private int moduleID;
-    private static ResourceLocation texture;
+    private static Identifier texture;
 
     public ButtonBase(final ModuleBase module, final LOCATION loc)
     {

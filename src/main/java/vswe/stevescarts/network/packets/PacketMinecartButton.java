@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
@@ -16,7 +16,7 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.ModularMinecart;
 
 public class PacketMinecartButton implements CustomPacketPayload {
-    public static final Type<PacketMinecartButton> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "cart_button"));
+    public static final Type<PacketMinecartButton> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "cart_button"));
     private final int cartID;
     private final int id;
     private final byte[] array;

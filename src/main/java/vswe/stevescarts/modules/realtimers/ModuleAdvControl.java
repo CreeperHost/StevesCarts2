@@ -7,7 +7,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -71,7 +71,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     @OnlyIn(Dist.CLIENT)
     public void renderOverlay(GuiGraphics render, float partialTicks) {
         Minecraft mc = Minecraft.getInstance();
-        ResourceLocation texture = ResourceHelper.getResource("/gui/drive.png");
+        Identifier texture = ResourceHelper.getResource("/gui/drive.png");
         if (engineInformation != null)
         {
             for (int i = 0; i < getCart().engines().size(); ++i) {
@@ -387,7 +387,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
 
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/advlever.png");
+        Identifier texture = ResourceHelper.getResource("/gui/advlever.png");
         if (inRect(x, y, buttonRect)) {
             drawImage(guiGraphics, texture, gui, buttonRect, 0, buttonRect[3]);
         } else {

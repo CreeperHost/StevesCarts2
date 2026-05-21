@@ -2,7 +2,7 @@ package vswe.stevescarts.api.modules.data;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.ModuleType;
 
@@ -16,7 +16,7 @@ public class ModuleDataHull extends ModuleData
     private int addonMaxCount;
     private int complexityMax;
 
-    public ModuleDataHull(final ResourceLocation id, final String name, final Class<? extends ModuleBase> moduleClass, ModuleType moduleType)
+    public ModuleDataHull(final Identifier id, final String name, final Class<? extends ModuleBase> moduleClass, ModuleType moduleType)
     {
         super(id, name, moduleClass, moduleType, 0);
     }

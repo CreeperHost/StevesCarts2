@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
@@ -550,10 +550,10 @@ public interface IModularCart extends Container, IFluidHandler {
         }
     }
 
-    default void loadPlaceHolderModules(List<ResourceLocation> data) {
+    default void loadPlaceHolderModules(List<Identifier> data) {
         modules().clear();
-        for (ResourceLocation moduleResourceLocation : data) {
-            ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(moduleResourceLocation);
+        for (Identifier moduleIdentifier : data) {
+            ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(moduleIdentifier);
             doLoadModules(moduleData, null);
         }
 
@@ -587,7 +587,7 @@ public interface IModularCart extends Container, IFluidHandler {
 //    }
 
 
-    default void updateSimulationModules(List<ResourceLocation> data) {
+    default void updateSimulationModules(List<Identifier> data) {
         if (!isPlaceholder()) {
             StevesCarts.LOGGER.error("You're stupid! This is not a placeholder cart.");
         } else {
@@ -595,10 +595,10 @@ public interface IModularCart extends Container, IFluidHandler {
         }
     }
 
-    default void loadModulesFromNames(List<ResourceLocation> data) {
+    default void loadModulesFromNames(List<Identifier> data) {
         modules().clear();
         if (data != null) {
-            for (ResourceLocation name : data) {
+            for (Identifier name : data) {
                 doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(name), null);
             }
         }

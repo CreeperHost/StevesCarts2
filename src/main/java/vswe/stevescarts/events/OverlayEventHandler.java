@@ -1,7 +1,7 @@
 package vswe.stevescarts.events;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
@@ -18,7 +18,7 @@ public class OverlayEventHandler {
     }
 
     private static void registerOverlay(RegisterGuiLayersEvent event) {
-        event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "cart_overlay"), (graphics, deltaTracker) -> {
+        event.registerAboveAll(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "cart_overlay"), (graphics, deltaTracker) -> {
             Player player = Minecraft.getInstance().player;
             if (Minecraft.getInstance().screen == null && player != null && player.getVehicle() instanceof ModularMinecart cart) {
                 cart.renderOverlay(graphics, deltaTracker.getGameTimeDeltaPartialTick(false));

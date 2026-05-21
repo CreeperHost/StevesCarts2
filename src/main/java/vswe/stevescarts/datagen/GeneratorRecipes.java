@@ -6,7 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -102,8 +102,8 @@ public class GeneratorRecipes extends RecipeProvider {
     }
 
     private ResourceKey<Recipe<?>> recipeFolder(ItemLike result, String folder) {
-        ResourceLocation key = BuiltInRegistries.ITEM.getKey(result.asItem());
-        return ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath("stevescarts", folder + "/" + key.getPath()));
+        Identifier key = BuiltInRegistries.ITEM.getKey(result.asItem());
+        return ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("stevescarts", folder + "/" + key.getPath()));
     }
 
     protected <T extends AbstractCookingRecipe> void oreCooking(RecipeSerializer<T> serializer, AbstractCookingRecipe.Factory<T> recipeFactory, ItemLike input, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, String suffix) {
@@ -111,7 +111,7 @@ public class GeneratorRecipes extends RecipeProvider {
     }
 
     private Item itemFromName(String name) {
-        return BuiltInRegistries.ITEM.get(ResourceLocation.parse(name)).get().value();
+        return BuiltInRegistries.ITEM.get(Identifier.parse(name)).get().value();
     }
 
     private ItemStack getStackFromModule(ModuleData moduleData) {
@@ -1493,7 +1493,7 @@ public class GeneratorRecipes extends RecipeProvider {
                 .define('X', Ingredient.of(itemFromName("stevescarts:component_oak_twig"), itemFromName("stevescarts:component_spruce_twig"), itemFromName("stevescarts:component_birch_twig"), itemFromName("stevescarts:component_jungle_twig")))
                 .group("stevescarts")
                 .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
-                .save(output, ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath("stevescarts",  "component/stick")));
+                .save(output, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("stevescarts",  "component/stick")));
 
         shaped(RecipeCategory.MISC, itemFromName("stevescarts:component_iron_pane"), 8)
                 .pattern("###")

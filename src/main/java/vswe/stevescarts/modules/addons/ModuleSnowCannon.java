@@ -49,7 +49,7 @@ public class ModuleSnowCannon extends ModuleAddon {
             for (int z = -getBlocksOnSide(); z <= getBlocksOnSide(); ++z) {
                 for (int y = -getBlocksFromLevel(); y <= getBlocksFromLevel(); ++y) {
                     BlockPos pos = cartPos.offset(x, y, z);
-                    if (countsAsAir(pos) && !getCart().level().getBiome(pos).is(BiomeTags.SNOW_GOLEM_MELTS) && snowState.canSurvive(getCart().level(), pos)) {
+                    if (countsAsAir(pos) && !getCart().level().getBiome(pos).is(BiomeTags.SPAWNS_SNOW_FOXES) && snowState.canSurvive(getCart().level(), pos)) {
                         getCart().level().setBlock(pos, snowState, 3);
                     }
                 }

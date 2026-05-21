@@ -1,7 +1,7 @@
 package vswe.stevescarts.arcade.monopoly;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.EnumSet;
@@ -20,7 +20,7 @@ public class Place
         return -1;
     }
 
-    public void draw(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
+    public void draw(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
     {
         int t;
         int u;
@@ -76,7 +76,7 @@ public class Place
     {
     }
 
-    public void drawPiece(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final Piece piece, final int total, final int pos, final int area, final EnumSet<PLACE_STATE> states)
+    public void drawPiece(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final Piece piece, final int total, final int pos, final int area, final EnumSet<PLACE_STATE> states)
     {
         final int SIZE = 24;
         final int PADDING = 5;

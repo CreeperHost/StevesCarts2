@@ -1,6 +1,6 @@
 package vswe.stevescarts.helpers;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.Constants;
 
 import java.util.Locale;
@@ -8,13 +8,13 @@ import java.util.Locale;
 @Deprecated
 public class ResourceHelper
 {
-    public static ResourceLocation getResource(final String path)
+    public static Identifier getResource(final String path)
     {
-        return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "textures" + path.toLowerCase(Locale.ROOT));
+        return Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures" + path.toLowerCase(Locale.ROOT));
     }
 
-    public static ResourceLocation getResourceFromPath(final String path)
+    public static Identifier getResourceFromPath(final String path)
     {
-        return ResourceLocation.withDefaultNamespace("textures" + path.toLowerCase(Locale.ROOT));
+        return Identifier.withDefaultNamespace("textures" + path.toLowerCase(Locale.ROOT));
     }
 }

@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -86,7 +86,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/fertilize.png");
+        Identifier texture = ResourceHelper.getResource("/gui/fertilize.png");
         drawImage(guiGraphics, texture, gui, tankPosX, tankPosY, 0, 0, 18, 27);
         float percentage = getFertAmount() / (float) getMaxFert();
         int size = (int) (percentage * 23.0f);

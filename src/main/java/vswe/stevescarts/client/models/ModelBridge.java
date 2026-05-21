@@ -7,7 +7,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.helpers.ResourceHelper;
@@ -15,12 +15,12 @@ import vswe.stevescarts.modules.workers.ModuleBridge;
 
 public class ModelBridge extends ModelCartbase
 {
-    private static ResourceLocation normal;
-    private static ResourceLocation down;
-    private static ResourceLocation up;
-    private static ResourceLocation normalWarning;
-    private static ResourceLocation downWarning;
-    private static ResourceLocation upWarning;
+    private static Identifier normal;
+    private static Identifier down;
+    private static Identifier up;
+    private static Identifier normalWarning;
+    private static Identifier downWarning;
+    private static Identifier upWarning;
     private ModelPart drillAnchor;
 
     public ModelBridge()
@@ -48,7 +48,7 @@ public class ModelBridge extends ModelCartbase
     }
 
 //    @Override
-//    public ResourceLocation getResource(final ModuleBase module)
+//    public Identifier getResource(final ModuleBase module)
 //    {
 //        if (module == null)
 //        {

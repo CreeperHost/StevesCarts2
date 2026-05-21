@@ -19,6 +19,7 @@ import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.level.storage.ValueInput;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -32,6 +33,7 @@ import vswe.stevescarts.modules.hull.ModuleReinforced;
 import vswe.stevescarts.modules.hull.ModuleStandard;
 
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer.Data> {
 
@@ -80,9 +82,10 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
     }
 
     @Override
-    public void getExtents(Set<Vector3f> set) {
-        set.add(new Vector3f());
+    public void getExtents(Consumer<Vector3fc> consumer) {
+        consumer.accept(new Vector3f());
     }
+
 
     @Nullable
     @Override

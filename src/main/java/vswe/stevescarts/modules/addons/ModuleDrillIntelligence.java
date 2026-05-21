@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -138,7 +138,7 @@ public class ModuleDrillIntelligence extends ModuleAddon
     @OnlyIn(Dist.CLIENT)
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/intelligence.png");
+        Identifier texture = ResourceHelper.getResource("/gui/intelligence.png");
         final int w = getDrillWidth();
         final int h = getDrillHeight();
         for (int i = 0; i < w; ++i)

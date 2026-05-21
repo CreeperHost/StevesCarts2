@@ -2,7 +2,7 @@ package vswe.stevescarts.arcade.tetris;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
@@ -164,7 +164,7 @@ public class ArcadeTetris extends ArcadeGame
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource(ArcadeTetris.texture);
+        Identifier texture = ResourceHelper.getResource(ArcadeTetris.texture);
         getModule().drawImage(guiGraphics, texture, gui, 187, 7, 0, 40, 104, 154);
         for (int i = 0; i < board.length; ++i)
         {

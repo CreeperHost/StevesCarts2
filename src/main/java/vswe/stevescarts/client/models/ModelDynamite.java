@@ -9,7 +9,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -21,7 +21,7 @@ public class ModelDynamite extends ModelCartbase {
     private float sizemult;
 
 
-    public ModelDynamite(final ResourceLocation resource) {
+    public ModelDynamite(final Identifier resource) {
         super(null, resource);
         buildModels();
     }

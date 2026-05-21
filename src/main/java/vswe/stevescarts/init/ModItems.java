@@ -1,6 +1,6 @@
 package vswe.stevescarts.init;
 
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;

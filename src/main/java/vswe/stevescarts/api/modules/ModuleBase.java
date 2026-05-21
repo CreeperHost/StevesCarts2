@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -14,7 +14,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.FormattedCharSequence;
@@ -78,7 +78,7 @@ public abstract class ModuleBase
     private int packetOffset;
     private ArrayList<ButtonBase> buttons;
     protected int slotGlobalStart;
-    private ResourceLocation moduleId;
+    private Identifier moduleId;
     private ArrayList<ModelCartbase> models;
     protected ArrayList<SlotStevesCarts> slotList;
     private int moduleButtonId;
@@ -150,7 +150,7 @@ public abstract class ModuleBase
      *
      * @param val The module id
      */
-    public void setModuleId(final ResourceLocation val)
+    public void setModuleId(final Identifier val)
     {
         moduleId = val;
     }
@@ -160,7 +160,7 @@ public abstract class ModuleBase
      *
      * @return The module id
      */
-    public ResourceLocation getModuleId()
+    public Identifier getModuleId()
     {
         return moduleId;
     }
@@ -600,7 +600,7 @@ public abstract class ModuleBase
      * @param sizeY   The height of the image
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY)
+    public void drawImage(GuiGraphics guiGraphics, Identifier texture, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY)
     {
 //        drawImage(guiGraphics, texture, gui, targetX, targetY, srcX, srcY, sizeX, sizeY/*, GuiMinecart.RENDER_ROTATION.NORMAL*/);
         drawImage(guiGraphics, texture, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY/*, rotation*/);
@@ -620,7 +620,7 @@ public abstract class ModuleBase
 //     * @param rotation The rotation this will be drawn with
 //     */
 //    @OnlyIn(Dist.CLIENT)
-//    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, int targetX, int targetY, int srcX, int srcY, int sizeX, int sizeY, final GuiMinecart.RENDER_ROTATION rotation)
+//    public void drawImage(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, int targetX, int targetY, int srcX, int srcY, int sizeX, int sizeY, final GuiMinecart.RENDER_ROTATION rotation)
 //    {
 //        drawImage(guiGraphics, texture, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY/*, rotation*/);
 //    }
@@ -635,7 +635,7 @@ public abstract class ModuleBase
 //     * @param srcY They y coordinate in the source file
 //     */
 //    @OnlyIn(Dist.CLIENT)
-//    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, int[] rect, int srcX, int srcY)
+//    public void drawImage(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, int[] rect, int srcX, int srcY)
 //    {
 //        drawImage(guiGraphics, texture, gui, rect, srcX, srcY/*, GuiMinecart.RENDER_ROTATION.NORMAL*/);
 //    }
@@ -650,7 +650,7 @@ public abstract class ModuleBase
 //     * @param rotation The rotation this will be drawn with
      */
     @OnlyIn(Dist.CLIENT)
-    public void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, int[] rect, int srcX, int srcY/*, final GuiMinecart.RENDER_ROTATION rotation*/)
+    public void drawImage(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, int[] rect, int srcX, int srcY/*, final GuiMinecart.RENDER_ROTATION rotation*/)
     {
         if (rect.length < 4)
         {
@@ -1558,7 +1558,7 @@ public abstract class ModuleBase
 //        drawImage(rect[0], rect[1], sourceX, sourceY, rect[2], rect[3]);
 //    }
 
-    protected void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, int targetX, int targetY, int sourceX, int sourceY, int width, int height) {
+    protected void drawImage(GuiGraphics guiGraphics, Identifier texture, int targetX, int targetY, int sourceX, int sourceY, int width, int height) {
         drawImage(guiGraphics, texture, targetX, targetY, sourceX, sourceY, width, height, 0xFFFFFFFF);
     }
 
@@ -1572,7 +1572,7 @@ public abstract class ModuleBase
      * @param width   The width of the image
      * @param height  The height of the image
      */
-    protected void drawImage(GuiGraphics guiGraphics, ResourceLocation texture, int targetX, int targetY, int sourceX, int sourceY, int width, int height, int colour)
+    protected void drawImage(GuiGraphics guiGraphics, Identifier texture, int targetX, int targetY, int sourceX, int sourceY, int width, int height, int colour)
     {
         //TODO Image Draw
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, targetX, targetY, sourceX, sourceY, width, height, 256, 256, colour);

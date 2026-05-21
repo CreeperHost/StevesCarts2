@@ -1,7 +1,7 @@
 package vswe.stevescarts.arcade.tracks;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
@@ -112,7 +112,7 @@ public class Track
     {
     }
 
-    public void drawOverlay(GuiGraphics guiGraphics, ResourceLocation texture, ModuleArcade module, final GuiMinecart gui, final int x, final int y, final boolean isRunning)
+    public void drawOverlay(GuiGraphics guiGraphics, Identifier texture, ModuleArcade module, final GuiMinecart gui, final int x, final int y, final boolean isRunning)
     {
     }
 

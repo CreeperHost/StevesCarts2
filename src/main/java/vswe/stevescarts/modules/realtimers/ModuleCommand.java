@@ -5,7 +5,7 @@ import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -53,7 +53,7 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/command.png");
+        Identifier texture = ResourceHelper.getResource("/gui/command.png");
         drawImage(guiGraphics, texture, gui, textbox, 0, 0);
     }
 

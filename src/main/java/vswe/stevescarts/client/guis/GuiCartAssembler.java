@@ -8,12 +8,12 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -45,10 +45,10 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
     private ArrayList<TextWithColor> statusLog;
     private boolean hasErrors;
     private boolean firstLoad;
-    private static ResourceLocation[] backgrounds;
-    private static final ResourceLocation textureLeft;
-    private static final ResourceLocation textureRight;
-    private static final ResourceLocation textureExtra;
+    private static Identifier[] backgrounds;
+    private static final Identifier textureLeft;
+    private static final Identifier textureRight;
+    private static final Identifier textureExtra;
     private final int[] assembleRect;
     private final String validChars;
     private int dropdownX;
@@ -371,11 +371,12 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
         EntityRenderer<? super Entity, ?> entityrenderer = entityrenderdispatcher.getRenderer(entity);
         EntityRenderState entityrenderstate = entityrenderer.createRenderState(entity, 1.0F);
-        entityrenderstate.hitboxesRenderState = null;
+        //TODO
+//        entityrenderstate.hitboxesRenderState = null;
         guiGraphics.submitEntityRenderState(entityrenderstate, scale, translation, rotation, overrideCameraAngle, x1, y1, x2, y2);
     }
 
-    private void renderDropDownMenu(GuiGraphics guiGraphics, ResourceLocation resourceLocation, final int x, final int y)
+    private void renderDropDownMenu(GuiGraphics guiGraphics, Identifier resourceLocation, final int x, final int y)
     {
         final int j = getGuiLeft();
         final int k = getGuiTop();
@@ -436,7 +437,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         }
     }
 
-    private void drawString(GuiGraphics guiGraphics, ResourceLocation resourceLocation, String str, final int x, final int y)
+    private void drawString(GuiGraphics guiGraphics, Identifier resourceLocation, String str, final int x, final int y)
     {
         str = str.toUpperCase();
         for (int i = 0; i < str.length(); ++i)
@@ -455,7 +456,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         return 2 + (int) (20.0f + (id - count / 2.0f) * 10.0f);
     }
 
-    private void drawDigit(GuiGraphics guiGraphics, ResourceLocation resourceLocation, int digit, int offset, int targetX, int targetY)
+    private void drawDigit(GuiGraphics guiGraphics, Identifier resourceLocation, int digit, int offset, int targetX, int targetY)
     {
         final int srcX = digit * 8;
         final int srcY = 172;
@@ -463,17 +464,17 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, resourceLocation, getGuiLeft() + targetX, getGuiTop() + targetY, srcX, srcY, 6, 7, 256, 256);
     }
 
-    private void drawIncreamentBox(GuiGraphics guiGraphics, ResourceLocation resourceLocation, int mouseX, int mouseY, int x, int y)
+    private void drawIncreamentBox(GuiGraphics guiGraphics, Identifier resourceLocation, int mouseX, int mouseY, int x, int y)
     {
         drawStandardBox(guiGraphics, resourceLocation, mouseX, mouseY, x, y, 10);
     }
 
-    private void drawDecreamentBox(GuiGraphics guiGraphics, ResourceLocation resourceLocation, int mouseX, int mouseY, int x, int y)
+    private void drawDecreamentBox(GuiGraphics guiGraphics, Identifier resourceLocation, int mouseX, int mouseY, int x, int y)
     {
         drawStandardBox(guiGraphics, resourceLocation, mouseX, mouseY, x, y, 20);
     }
 
-    private void drawBooleanBox(GuiGraphics guiGraphics, ResourceLocation resourceLocation, int mouseX, int mouseY, int x, int y, boolean itemvalue)
+    private void drawBooleanBox(GuiGraphics guiGraphics, Identifier resourceLocation, int mouseX, int mouseY, int x, int y, boolean itemvalue)
     {
         drawStandardBox(guiGraphics, resourceLocation, mouseX, mouseY, x, y, 0);
         if (itemvalue)
@@ -487,7 +488,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         return coords != null && x >= coords[0] && x < coords[0] + coords[2] && y >= coords[1] && y < coords[1] + coords[3];
     }
 
-    private void drawStandardBox(GuiGraphics guiGraphics, ResourceLocation resourceLocation, int mouseX, int mouseY, int x, int y, int srcX)
+    private void drawStandardBox(GuiGraphics guiGraphics, Identifier resourceLocation, int mouseX, int mouseY, int x, int y, int srcX)
     {
         final int targetX = getGuiLeft() + x;
         final int targetY = getGuiTop() + y;
@@ -679,7 +680,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
 
     static
     {
-        GuiCartAssembler.backgrounds = new ResourceLocation[4];
+        GuiCartAssembler.backgrounds = new Identifier[4];
         for (int i = 0; i < GuiCartAssembler.backgrounds.length; ++i)
         {
             GuiCartAssembler.backgrounds[i] = ResourceHelper.getResource("/gui/garageBackground" + i + ".png");

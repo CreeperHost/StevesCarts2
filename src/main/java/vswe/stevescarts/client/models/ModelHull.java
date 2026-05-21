@@ -5,12 +5,12 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.api.client.ModelCartbase;
 
 public class ModelHull extends ModelCartbase
 {
-    public ModelHull(ResourceLocation texture)
+    public ModelHull(Identifier texture)
     {
         super(createBodyLayer().bakeRoot(), texture);
     }

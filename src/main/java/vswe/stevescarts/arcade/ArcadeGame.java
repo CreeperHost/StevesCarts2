@@ -2,7 +2,7 @@ package vswe.stevescarts.arcade;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
@@ -127,12 +127,12 @@ public abstract class ArcadeGame
         }
     }
 
-    public void drawImageInArea(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y, final int u, final int v, final int w, final int h)
+    public void drawImageInArea(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y, final int u, final int v, final int w, final int h)
     {
         drawImageInArea(guiGraphics, texture, gui, x, y, u, v, w, h, 5, 4, 443, 168);
     }
 
-    public void drawImageInArea(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, int x, int y, int u, int v, int w, int h, final int x1, final int y1, final int x2, final int y2)
+    public void drawImageInArea(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, int x, int y, int u, int v, int w, int h, final int x1, final int y1, final int x2, final int y2)
     {
         if (x < x1)
         {

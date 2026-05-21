@@ -1,7 +1,7 @@
 package vswe.stevescarts.arcade.tetris;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 public class TetrisBlock
@@ -17,7 +17,7 @@ public class TetrisBlock
         r = GuiMinecart.RENDER_ROTATION.NORMAL;
     }
 
-    public void render(GuiGraphics guiGraphics, ResourceLocation texture, ArcadeTetris game, final GuiMinecart gui, final int x, final int y)
+    public void render(GuiGraphics guiGraphics, Identifier texture, ArcadeTetris game, final GuiMinecart gui, final int x, final int y)
     {
         if (y >= 0)
         {

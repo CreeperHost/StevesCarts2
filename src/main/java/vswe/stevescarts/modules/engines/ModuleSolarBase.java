@@ -8,7 +8,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.storage.ValueInput;
@@ -134,7 +134,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         super.drawBackground(guiGraphics, gui, x, y);
-        ResourceLocation texture = ResourceHelper.getResource("/gui/solar.png");
+        Identifier texture = ResourceHelper.getResource("/gui/solar.png");
         int lightWidth = light.get() * 3;
         if (light.get() == 15)
         {

@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -19,7 +19,7 @@ public class ModelFarmer extends ModelCartbase {
     private ModelPart anchor;
     private ModelPart[] outers = new ModelPart[6];
 
-    public ModelFarmer(final ResourceLocation resource) {
+    public ModelFarmer(final Identifier resource) {
         super(null, resource);
         buildModels();
     }

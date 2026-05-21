@@ -7,7 +7,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -65,12 +65,12 @@ public class ModuleBrake extends ModuleAddon implements ILeverModule
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/lever.png");
+        Identifier texture = ResourceHelper.getResource("/gui/lever.png");
         drawButton(guiGraphics, texture, gui, x, y, startstopRect, isForceStopping() ? 2 : 1);
         drawButton(guiGraphics, texture, gui, x, y, turnbackRect, 0);
     }
 
-    private void drawButton(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int x, final int y, final int[] coords, final int imageID)
+    private void drawButton(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y, final int[] coords, final int imageID)
     {
         if (inRect(x, y, coords))
         {

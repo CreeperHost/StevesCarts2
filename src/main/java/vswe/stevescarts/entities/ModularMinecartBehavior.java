@@ -3,7 +3,7 @@ package vswe.stevescarts.entities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.vehicle.NewMinecartBehavior;
+import net.minecraft.world.entity.vehicle.minecart.NewMinecartBehavior;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PoweredRailBlock;
@@ -47,7 +47,7 @@ public class ModularMinecartBehavior extends NewMinecartBehavior {
                 if (block instanceof PoweredRailBlock) {
                     PoweredRailBlock poweredRail = (PoweredRailBlock)block;
                     if (poweredRail.isActivatorRail()) {
-                        this.minecart.activateMinecart(blockpos.getX(), blockpos.getY(), blockpos.getZ(), (Boolean)blockstate.getValue(PoweredRailBlock.POWERED));
+                        this.minecart.activateMinecart(serverLevel, blockpos.getX(), blockpos.getY(), blockpos.getZ(), (Boolean)blockstate.getValue(PoweredRailBlock.POWERED));
                     }
                 }
 

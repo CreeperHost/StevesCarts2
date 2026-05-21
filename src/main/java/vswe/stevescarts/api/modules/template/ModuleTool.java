@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -45,7 +45,7 @@ public abstract class ModuleTool extends ModuleWorker
 
     public abstract int getMaxDurability();
 
-    public abstract ResourceLocation getRepairItem();
+    public abstract Identifier getRepairItem();
 
     public abstract int getRepairItemUnits(@Nonnull ItemStack p0);
 
@@ -71,7 +71,7 @@ public abstract class ModuleTool extends ModuleWorker
     @Override
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
-        ResourceLocation texture = ResourceHelper.getResource("/gui/tool.png");
+        Identifier texture = ResourceHelper.getResource("/gui/tool.png");
         drawBox(guiGraphics, texture, gui, 0, 0, 1.0f);
         drawBox(guiGraphics, texture, gui, 0, 8, useDurability() ? (((float) getCurrentDurability()) / ((float) getMaxDurability())) : 1.0f);
         drawBox(guiGraphics, texture, gui, 0, 16, ((float) remainingRepairUnits) / ((float) maximumRepairUnits));
@@ -81,7 +81,7 @@ public abstract class ModuleTool extends ModuleWorker
         }
     }
 
-    private void drawBox(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final int u, final int v, final float mult)
+    private void drawBox(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int u, final int v, final float mult)
     {
         final int w = (int) (durabilityRect[2] * mult);
         if (w > 0)

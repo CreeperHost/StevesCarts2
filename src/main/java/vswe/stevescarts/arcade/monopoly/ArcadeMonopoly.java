@@ -2,7 +2,7 @@ package vswe.stevescarts.arcade.monopoly;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix3x2fStack;
@@ -590,7 +590,7 @@ public class ArcadeMonopoly extends ArcadeGame
     public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
     {
         Matrix3x2fStack matrixStack = guiGraphics.pose();
-        ResourceLocation texture = getTexture(gui, 1);
+        Identifier texture = getTexture(gui, 1);
         die.draw(guiGraphics, texture, gui, 20, 20);
         die2.draw(guiGraphics, texture, gui, 50, 20);
         final float smallgridX = x / 0.17f - 686.94116f;
@@ -620,7 +620,7 @@ public class ArcadeMonopoly extends ArcadeGame
         {
             final Piece piece = pieces.get(i);
             final int[] menu = piece.getMenuRect(i);
-            ResourceLocation texture2 = getTexture(gui, 1);
+            Identifier texture2 = getTexture(gui, 1);
             getModule().drawImage(guiGraphics, texture2, gui, menu, 0, 122);
             for (int j = 0; j < 3; ++j)
             {
@@ -663,7 +663,7 @@ public class ArcadeMonopoly extends ArcadeGame
             }
             piece.updateExtending(getModule().inRect(x, y, menu));
         }
-        ResourceLocation texture3 = getTexture(gui, 1);
+        Identifier texture3 = getTexture(gui, 1);
         int id = 0;
         for (final Button button : buttons)
         {
@@ -812,7 +812,7 @@ public class ArcadeMonopoly extends ArcadeGame
 
     private void drawStreetRent(GuiGraphics guiGraphics, GuiMinecart gui, final Street street, final int structures)
     {
-        ResourceLocation texture = getTexture(gui, 1);
+        Identifier texture = getTexture(gui, 1);
         int graphicalStructures = structures;
         int u = 0;
         if (graphicalStructures == 5)
@@ -830,7 +830,7 @@ public class ArcadeMonopoly extends ArcadeGame
 
     private void drawStationRent(GuiGraphics guiGraphics, GuiMinecart gui, final Station station, final int ownedStations)
     {
-        ResourceLocation texture = getTexture(gui, 1);
+        Identifier texture = getTexture(gui, 1);
         final int yPos = 181 + (ownedStations - 1) * 17;
         for (int i = 0; i < ownedStations; ++i)
         {
@@ -841,7 +841,7 @@ public class ArcadeMonopoly extends ArcadeGame
 
     private void drawUtilityRent(GuiGraphics guiGraphics, GuiMinecart gui, final Utility utility, final int utils)
     {
-        ResourceLocation texture = getTexture(gui, 1);
+        Identifier texture = getTexture(gui, 1);
         final int yPos = 181 + (utils - 1) * 17;
         for (int i = 0; i < utils; ++i)
         {
@@ -940,7 +940,7 @@ public class ArcadeMonopoly extends ArcadeGame
         }
     }
 
-    private void drawPropertyOnBoard(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final Place place, final int id, final int side, int i, final boolean hover)
+    private void drawPropertyOnBoard(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final Place place, final int id, final int side, int i, final boolean hover)
     {
         int offX = 0;
         int offY = 0;
@@ -1019,7 +1019,7 @@ public class ArcadeMonopoly extends ArcadeGame
         drawPropertyOnBoardWithPositionRotationAndScale(guiGraphics, texture, gui, place, id, false, hover, offX, offY, rotation, 0.17f);
     }
 
-    private void drawPropertyOnBoardWithPositionRotationAndScale(GuiGraphics guiGraphics, ResourceLocation texture, GuiMinecart gui, final Place place, final int id, final boolean zoom, final boolean hover, final int x, final int y, final int r, final float s)
+    private void drawPropertyOnBoardWithPositionRotationAndScale(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final Place place, final int id, final boolean zoom, final boolean hover, final int x, final int y, final int r, final float s)
     {
         final EnumSet<Place.PLACE_STATE> states = EnumSet.noneOf(Place.PLACE_STATE.class);
         if (zoom)
@@ -1125,7 +1125,7 @@ public class ArcadeMonopoly extends ArcadeGame
         selectedPlace = -1;
     }
 
-    public ResourceLocation getTexture(final GuiMinecart gui, final int number)
+    public Identifier getTexture(final GuiMinecart gui, final int number)
     {
         return ResourceHelper.getResource(ArcadeMonopoly.textures[number]);
     }

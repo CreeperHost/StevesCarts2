@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.workers.tools;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.SCConfig;
@@ -39,9 +39,9 @@ public class ModuleDrillHardened extends ModuleDrill
     }
 
     @Override
-    public ResourceLocation getRepairItem() {
+    public Identifier getRepairItem() {
         String item = SCConfig.COMMON.drillRepairHardened.get();
-        return item.isEmpty() ? null : ResourceLocation.parse(item);
+        return item.isEmpty() ? null : Identifier.parse(item);
     }
 
     @Override

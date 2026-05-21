@@ -1,6 +1,6 @@
 package vswe.stevescarts.api;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.farms.ICropModule;
 import vswe.stevescarts.api.farms.ITreeModule;
@@ -13,11 +13,11 @@ import java.util.Map;
 
 public class StevesCartsAPI
 {
-    public static final Map<ResourceLocation, ModuleData> MODULE_REGISTRY = new HashMap<>();
+    public static final Map<Identifier, ModuleData> MODULE_REGISTRY = new HashMap<>();
     public static final List<ITreeModule> TREE_MODULES = new ArrayList<>();
     public static final List<ICropModule> CROP_MODULES = new ArrayList<>();
 
-    public static ModuleData registerModule(ResourceLocation resourceLocation, ModuleData moduleData)
+    public static ModuleData registerModule(Identifier resourceLocation, ModuleData moduleData)
     {
         if(!MODULE_REGISTRY.containsKey(resourceLocation))
         {

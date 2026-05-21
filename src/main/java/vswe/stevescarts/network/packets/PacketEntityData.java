@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -19,7 +19,7 @@ import vswe.stevescarts.polylib.EntityData;
 import java.util.List;
 
 public class PacketEntityData implements CustomPacketPayload {
-    public static final Type<PacketEntityData> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "entity_data"));
+    public static final Type<PacketEntityData> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "entity_data"));
     private final int entityId;
     private final int index;
     private final AbstractDataStore<?> data;
