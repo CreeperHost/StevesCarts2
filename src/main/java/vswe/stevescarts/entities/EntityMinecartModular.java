@@ -839,7 +839,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         }
         if (fixedRailPos != null && !fixedRailPos.equals(pos)) {
             fixedRailDirection = null;
-            fixedRailPos = new BlockPos(fixedRailPos.getX(), -1, fixedRailPos.getZ());
+            fixedRailPos = null;
         }
     }
 

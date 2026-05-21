@@ -48,7 +48,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     public boolean hasTop;
     public boolean hasBot;
 
-    private final Map<Direction, IFluidHandler> fluidHandlerMap;
+    private final Map<Direction, LazyOptional<IFluidHandler>> fluidCapabilityMap;
 
     public TileEntityDistributor(BlockPos blockPos, BlockState blockState)
     {
@@ -60,49 +60,54 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
         sides.add(new DistributorSide(3, Localization.GUI.DISTRIBUTOR.SIDE_GREEN, Direction.WEST));
         sides.add(new DistributorSide(4, Localization.GUI.DISTRIBUTOR.SIDE_BLUE, Direction.SOUTH));
         sides.add(new DistributorSide(5, Localization.GUI.DISTRIBUTOR.SIDE_RED, Direction.EAST));
-        fluidHandlerMap = new HashMap<>();
+        fluidCapabilityMap = new HashMap<>();
         for (Direction facing : Direction.values())
         {
-            fluidHandlerMap.put(facing, new IFluidHandler()
+            fluidCapabilityMap.put(facing, LazyOptional.of(() -> new IFluidHandler()
             {
                 @Override
                 public int getTanks()
                 {
-                    return 4;
+                    return TileEntityDistributor.this.getTanks(facing).length;
                 }
 
                 @Nonnull
                 @Override
                 public FluidStack getFluidInTank(int tank)
                 {
-                    final IFluidTank[] tanks = TileEntityDistributor.this.getTanks(facing);
-                    return tanks[tank].getFluid();
+                    final SCTank[] tanks = TileEntityDistributor.this.getTanks(facing);
+                    return tank < tanks.length ? tanks[tank].getFluid() : FluidStack.EMPTY;
                 }
 
                 @Override
                 public int getTankCapacity(int tank)
                 {
-                    final IFluidTank[] tanks = TileEntityDistributor.this.getTanks(facing);
-                    return tanks[tank].getCapacity();
+                    final SCTank[] tanks = TileEntityDistributor.this.getTanks(facing);
+                    return tank < tanks.length ? tanks[tank].getCapacity() : 0;
                 }
 
                 @Override
                 public boolean isFluidValid(int tank, @Nonnull FluidStack stack)
                 {
-                    final IFluidTank[] tanks = TileEntityDistributor.this.getTanks(facing);
-                    return tanks[tank].isFluidValid(stack);
+                    final SCTank[] tanks = TileEntityDistributor.this.getTanks(facing);
+                    return tank < tanks.length && tanks[tank].isFluidValid(stack);
                 }
 
                 @Override
                 public int fill(FluidStack resource, FluidAction action)
                 {
-                    final IFluidTank[] tanks = TileEntityDistributor.this.getTanks(facing);
-                    int amount = 0;
-                    for (final IFluidTank tank : tanks)
+                    if (resource.isEmpty()) return 0;
+                    final SCTank[] tanks = TileEntityDistributor.this.getTanks(facing);
+                    FluidStack remaining = resource.copy();
+                    int totalFilled = 0;
+                    for (final SCTank tank : tanks)
                     {
-                        amount += tank.fill(resource, action);
+                        if (remaining.isEmpty()) break;
+                        int filled = tank.fill(remaining, action);
+                        remaining.shrink(filled);
+                        totalFilled += filled;
                     }
-                    return amount;
+                    return totalFilled;
                 }
 
                 @Nonnull
@@ -118,7 +123,7 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
                 {
                     return TileEntityDistributor.this.drain(facing, FluidStack.EMPTY, maxDrain, action);
                 }
-            });
+            }));
         }
     }
 
@@ -388,11 +393,6 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
         return totalDrained;
     }
 
-    private boolean hasAnyTank(Direction facing)
-    {
-        return facing != null && getInventories().length > 0 && getTanks(facing).length > 0;
-    }
-
     public SCTank[] getTanks(final Direction direction)
     {
         final TileEntityManager[] invs = getInventories();
@@ -532,11 +532,18 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
                         case WEST -> handlers[5].cast();
                     };
         }
-        if (capability == ForgeCapabilities.FLUID_HANDLER && hasAnyTank(facing))
+        if (capability == ForgeCapabilities.FLUID_HANDLER && facing != null)
         {
-            return (LazyOptional<T>) LazyOptional.of(() -> fluidHandlerMap.get(facing));
+            return fluidCapabilityMap.get(facing).cast();
         }
         return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public void invalidateCaps()
+    {
+        super.invalidateCaps();
+        fluidCapabilityMap.values().forEach(LazyOptional::invalidate);
     }
 
     @Override

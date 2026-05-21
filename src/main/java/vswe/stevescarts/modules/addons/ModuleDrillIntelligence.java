@@ -208,9 +208,9 @@ public class ModuleDrillIntelligence extends ModuleAddon
     {
         if (!isRestricted(id) && !isLocked(id))
         {
-            BoolArray array = getDisabledArray();
-            array.set(id, !array.get(id));
-            setDisabledArray(array);
+            BoolArray newArray = BoolArray.fromBytes(getDisabledArray().getBytes().clone());
+            newArray.set(id, !newArray.get(id));
+            setDisabledArray(newArray);
         }
     }
 

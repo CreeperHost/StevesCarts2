@@ -112,7 +112,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
         super.update();
         if (tick-- <= 0)
         {
-            tick = 5;
+            tick = 2;
             if (!getCart().level().isClientSide)
             {
                 tank.containerTransfer();

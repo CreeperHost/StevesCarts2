@@ -29,7 +29,7 @@ public class ModuleDrillIron extends ModuleDrill
     @Override
     protected float getTimeMult()
     {
-        return 40.0f;
+        return 20.0f;
     }
 
     @Override
