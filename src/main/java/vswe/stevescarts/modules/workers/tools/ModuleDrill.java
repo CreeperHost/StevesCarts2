@@ -71,6 +71,20 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     }
 
     @Override
+    public float getMaxSpeed()
+    {
+        if (isDrillEnabled() && !getCart().level().isClientSide)
+        {
+            BlockPos next = getNextblock();
+            if (!BaseRailBlock.isRail(getCart().level(), next) && !BaseRailBlock.isRail(getCart().level(), next.below()))
+            {
+                return 0.0f;
+            }
+        }
+        return super.getMaxSpeed();
+    }
+
+    @Override
     public void init()
     {
         super.init();
@@ -156,6 +170,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         return false;
     }
 
+
     private int[] mineRange()
     {
         BlockPos next = getNextblock();
@@ -164,13 +179,16 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         {
             return new int[]{0, blocksOnTop() - 1, 1};
         }
-        if (next.getY() > yTarget)
+        if (intelligence != null)
         {
-            return new int[]{-1, blocksOnTop() - 1, 1};
-        }
-        if (next.getY() < yTarget)
-        {
-            return new int[]{1, blocksOnTop() + 1, 0};
+            if (next.getY() > yTarget)
+            {
+                return new int[]{-1, blocksOnTop() - 1, 1};
+            }
+            if (next.getY() < yTarget)
+            {
+                return new int[]{1, blocksOnTop() + 1, 0};
+            }
         }
         return new int[]{0, blocksOnTop() - 1, 1};
     }

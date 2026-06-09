@@ -749,7 +749,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 }
             }
         }
-        return (int) y();
+        return y();
     }
 
     public ModuleBase getInterfaceThief()
@@ -1097,6 +1097,8 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             } else {
                 pushX = motion.x;
                 pushZ = motion.z;
+                temppushX = motion.x;
+                temppushZ = motion.z;
             }
         }
     }
