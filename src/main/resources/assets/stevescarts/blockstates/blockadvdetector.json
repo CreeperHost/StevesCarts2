@@ -1,11 +1,16 @@
 {
   "variants": {
-    "shape=east_west": {
-      "model": "stevescarts:block/advanced_detector_rail",
-      "y": 90
-    },
-    "shape=north_south": {
-      "model": "stevescarts:block/advanced_detector_rail"
-    }
+    "shape=ascending_east,waterlogged=false": { "model": "stevescarts:block/advanced_detector_rail_raised_ne", "y": 90 },
+    "shape=ascending_east,waterlogged=true": { "model": "stevescarts:block/advanced_detector_rail_raised_ne", "y": 90 },
+    "shape=ascending_north,waterlogged=false": { "model": "stevescarts:block/advanced_detector_rail_raised_ne" },
+    "shape=ascending_north,waterlogged=true": { "model": "stevescarts:block/advanced_detector_rail_raised_ne" },
+    "shape=ascending_south,waterlogged=false": { "model": "stevescarts:block/advanced_detector_rail_raised_sw" },
+    "shape=ascending_south,waterlogged=true": { "model": "stevescarts:block/advanced_detector_rail_raised_sw" },
+    "shape=ascending_west,waterlogged=false": { "model": "stevescarts:block/advanced_detector_rail_raised_sw", "y": 90 },
+    "shape=ascending_west,waterlogged=true": { "model": "stevescarts:block/advanced_detector_rail_raised_sw", "y": 90 },
+    "shape=east_west,waterlogged=false": { "model": "stevescarts:block/advanced_detector_rail", "y": 90 },
+    "shape=east_west,waterlogged=true": { "model": "stevescarts:block/advanced_detector_rail", "y": 90 },
+    "shape=north_south,waterlogged=false": { "model": "stevescarts:block/advanced_detector_rail" },
+    "shape=north_south,waterlogged=true": { "model": "stevescarts:block/advanced_detector_rail" }
   }
 }

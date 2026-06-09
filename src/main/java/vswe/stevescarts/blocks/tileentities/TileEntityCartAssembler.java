@@ -169,7 +169,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
             slots.add(slot);
             funcSlots.add(slot);
         }
-        for (int i = 0; i < 4; ++i)
+        for (int i = 0; i < 6; ++i)
         {
             final SlotAssembler slot = new SlotAssembler(this, slotID++, storageBox.getX() + 2 + 18 * i, storageBox.getY(), ModuleType.STORAGE, false, i);
             slot.invalidate();

@@ -749,7 +749,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 }
             }
         }
-        return (int) y();
+        return y();
     }
 
     public ModuleBase getInterfaceThief()
@@ -839,7 +839,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         }
         if (fixedRailPos != null && !fixedRailPos.equals(pos)) {
             fixedRailDirection = null;
-            fixedRailPos = new BlockPos(fixedRailPos.getX(), -1, fixedRailPos.getZ());
+            fixedRailPos = null;
         }
     }
 
@@ -1097,6 +1097,8 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
             } else {
                 pushX = motion.x;
                 pushZ = motion.z;
+                temppushX = motion.x;
+                temppushZ = motion.z;
             }
         }
     }

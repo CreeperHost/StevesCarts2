@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/rail_raised_ne",
+  "render_type": "cutout",
+  "textures": {
+    "rail": "stevescarts:block/junction_rail"
+  }
+}
