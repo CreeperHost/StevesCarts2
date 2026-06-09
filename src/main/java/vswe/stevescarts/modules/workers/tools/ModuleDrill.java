@@ -99,6 +99,12 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     public boolean work()
     {
         Level world = getCart().level();
+        if(!getCart().isOnRails())
+        {
+            stopDrill();
+            stopWorking();
+            return false;
+        }
         if (!isDrillEnabled())
         {
             stopDrill();
