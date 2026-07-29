@@ -3,28 +3,23 @@ package vswe.stevescarts.modules.engines;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.entities.ModularMinecart;
 
-public class ModuleSolarStandard extends ModuleSolarTop
-{
-    public ModuleSolarStandard(ModularMinecart cart)
-    {
+public class ModuleSolarStandard extends ModuleSolarTop {
+    public ModuleSolarStandard(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    protected int getPanelCount()
-    {
+    protected int getPanelCount() {
         return 4;
     }
 
     @Override
-    protected int getMaxCapacity()
-    {
+    protected int getMaxCapacity() {
         return 80000;
     }
 
     @Override
-    protected int getGenSpeed()
-    {
+    protected int getGenSpeed() {
         return SCConfig.COMMON.standard_solar_production.get();
     }
 }

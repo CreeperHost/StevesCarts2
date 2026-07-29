@@ -1,8 +1,7 @@
 package vswe.stevescarts.api.modules.template;
 
 import net.creeperhost.polylib.data.serializable.IntData;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
@@ -25,17 +24,15 @@ import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 
-public abstract class ModuleTool extends ModuleWorker
-{
+public abstract class ModuleTool extends ModuleWorker {
+    private final int[] durabilityRect;
+    private final EntityData<Integer> durability = new EntityData<>(getCart(), new IntData(getMaxDurability()));
+    protected ModuleEnchants enchanter;
     private int initialDurability = -1;
     private int remainingRepairUnits;
     private int maximumRepairUnits;
-    protected ModuleEnchants enchanter;
-    private final int[] durabilityRect;
-    private final EntityData<Integer> durability = new EntityData<>(getCart(), new IntData(getMaxDurability()));
 
-    public ModuleTool(ModularMinecart cart)
-    {
+    public ModuleTool(ModularMinecart cart) {
         super(cart);
         maximumRepairUnits = 1;
         durabilityRect = new int[]{10, 15, 52, 8};
@@ -52,13 +49,10 @@ public abstract class ModuleTool extends ModuleWorker
     public abstract boolean useDurability();
 
     @Override
-    public void init()
-    {
+    public void init() {
         super.init();
-        for (final ModuleBase module : getCart().modules())
-        {
-            if (module instanceof ModuleEnchants)
-            {
+        for (final ModuleBase module : getCart().modules()) {
+            if (module instanceof ModuleEnchants) {
                 (enchanter = (ModuleEnchants) module).addType(ModularEnchantments.EnchantmentType.TOOL);
                 break;
             }
@@ -66,141 +60,110 @@ public abstract class ModuleTool extends ModuleWorker
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/tool.png");
-        drawBox(guiGraphics, texture, gui, 0, 0, 1.0f);
-        drawBox(guiGraphics, texture, gui, 0, 8, useDurability() ? (((float) getCurrentDurability()) / ((float) getMaxDurability())) : 1.0f);
-        drawBox(guiGraphics, texture, gui, 0, 16, ((float) remainingRepairUnits) / ((float) maximumRepairUnits));
-        if (inRect(x, y, durabilityRect))
-        {
-            drawBox(guiGraphics, texture, gui, 0, 24, 1.0f);
+        drawBox(GuiGraphicsExtractor, texture, gui, 0, 0, 1.0f);
+        drawBox(GuiGraphicsExtractor, texture, gui, 0, 8, useDurability() ? (((float) getCurrentDurability()) / ((float) getMaxDurability())) : 1.0f);
+        drawBox(GuiGraphicsExtractor, texture, gui, 0, 16, ((float) remainingRepairUnits) / ((float) maximumRepairUnits));
+        if (inRect(x, y, durabilityRect)) {
+            drawBox(GuiGraphicsExtractor, texture, gui, 0, 24, 1.0f);
         }
     }
 
-    private void drawBox(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int u, final int v, final float mult)
-    {
+    private void drawBox(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, GuiMinecart gui, final int u, final int v, final float mult) {
         final int w = (int) (durabilityRect[2] * mult);
-        if (w > 0)
-        {
-            drawImage(guiGraphics, texture, gui, durabilityRect[0], durabilityRect[1], u, v, w, durabilityRect[3]);
+        if (w > 0) {
+            drawImage(GuiGraphicsExtractor, texture, gui, durabilityRect[0], durabilityRect[1], u, v, w, durabilityRect[3]);
         }
     }
 
-    public boolean isValidRepairMaterial(@Nonnull ItemStack item)
-    {
+    public boolean isValidRepairMaterial(@Nonnull ItemStack item) {
         return getRepairItemUnits(item) > 0;
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
-    {
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y) {
         return new SlotRepair(this, getCart(), slotId, 76, 8);
     }
 
     @Override
-    protected int getInventoryWidth()
-    {
+    protected int getInventoryWidth() {
         return 1;
     }
 
     @Override
-    public int guiWidth()
-    {
+    public int guiWidth() {
         return 100;
     }
 
     @Override
-    public int guiHeight()
-    {
+    public int guiHeight() {
         return 50;
     }
 
     @Override
-    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         String str;
-        if (useDurability())
-        {
+        if (useDurability()) {
             str = Localization.MODULES.TOOLS.DURABILITY.translate() + ": " + getCurrentDurability() + "/" + getMaxDurability();
-            if (isBroken())
-            {
+            if (isBroken()) {
                 str = str + " [" + Localization.MODULES.TOOLS.BROKEN.translate() + "]";
-            }
-            else
-            {
+            } else {
                 str = str + " [" + 100 * getCurrentDurability() / getMaxDurability() + "%]";
             }
             str += "\n";
-            if (isRepairing())
-            {
-                if (isActuallyRepairing())
-                {
+            if (isRepairing()) {
+                if (isActuallyRepairing()) {
                     str = str + " [" + getRepairPercentage() + "%]";
-                }
-                else if (!SCConfig.COMMON.allowCartToRunWithRepairItems.get())
-                {
+                } else if (!SCConfig.COMMON.allowCartToRunWithRepairItems.get()) {
                     str += Localization.MODULES.TOOLS.DECENT.translate();
                 }
-            }
-            else
-            {
+            } else {
                 Item item = BuiltInRegistries.ITEM.getValue(getRepairItem());
-                if (item != Items.AIR){
+                if (item != Items.AIR) {
                     str += Localization.MODULES.TOOLS.INSTRUCTION.translate(item.getName(new ItemStack(item)).getString());
                 }
             }
-        }
-        else
-        {
+        } else {
             str = Localization.MODULES.TOOLS.UNBREAKABLE.translate();
-            if (isRepairing() && !isActuallyRepairing())
-            {
+            if (isRepairing() && !isActuallyRepairing()) {
                 str = str + " " + Localization.MODULES.TOOLS.UNBREAKABLE_REPAIR.translate();
             }
         }
-        drawStringOnMouseOver(guiGraphics, gui, str, x, y, durabilityRect);
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, str, x, y, durabilityRect);
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
         if (initialDurability != -1 && !getCart().level().isClientSide()) {
             setDurability(initialDurability);
             initialDurability = -1;
         }
 
-        if (!getCart().level().isClientSide() && useDurability())
-        {
-            if (isActuallyRepairing())
-            {
+        if (!getCart().level().isClientSide() && useDurability()) {
+            if (isActuallyRepairing()) {
                 final int dif = 1;
                 remainingRepairUnits -= dif;
                 setDurability(getCurrentDurability() + dif * getRepairSpeed());
-                if (getCurrentDurability() > getMaxDurability())
-                {
+                if (getCurrentDurability() > getMaxDurability()) {
                     setDurability(getCurrentDurability());
                 }
             }
-            if (!isActuallyRepairing())
-            {
+            if (!isActuallyRepairing()) {
                 final int units = getRepairItemUnits(getStack(0));
-                if (units > 0 && units <= getMaxDurability() - getCurrentDurability())
-                {
+                if (units > 0 && units <= getMaxDurability() - getCurrentDurability()) {
                     final int n = units / getRepairSpeed();
                     remainingRepairUnits = n;
                     maximumRepairUnits = n;
                     @Nonnull ItemStack stack = getStack(0);
                     stack.shrink(1);
-                    if (getStack(0).getCount() <= 0)
-                    {
+                    if (getStack(0).getCount() <= 0) {
                         setStack(0, ItemStack.EMPTY);
                     }
                 }
@@ -209,65 +172,48 @@ public abstract class ModuleTool extends ModuleWorker
     }
 
     @Override
-    public boolean stopEngines()
-    {
+    public boolean stopEngines() {
         return isRepairing();
     }
 
-    public boolean isRepairing()
-    {
+    public boolean isRepairing() {
         return (!getStack(0).isEmpty() && !SCConfig.COMMON.allowCartToRunWithRepairItems.get()) || isActuallyRepairing();
     }
 
-    public boolean isActuallyRepairing()
-    {
+    public boolean isActuallyRepairing() {
         return remainingRepairUnits > 0;
     }
 
-    public boolean isBroken()
-    {
+    public boolean isBroken() {
         return getCurrentDurability() == 0 && useDurability();
     }
 
-    public void damageTool(final int val)
-    {
+    public void damageTool(final int val) {
         final int unbreaking = (enchanter != null) ? enchanter.getUnbreakingLevel() : 0;
-        if (getCart().getRandom().nextInt(100) < 100 / (unbreaking + 1))
-        {
+        if (getCart().getRandom().nextInt(100) < 100 / (unbreaking + 1)) {
             setDurability(getCurrentDurability() - val);
-            if (getCurrentDurability() < 0)
-            {
+            if (getCurrentDurability() < 0) {
                 setDurability(0);
             }
         }
-        if (enchanter != null)
-        {
+        if (enchanter != null) {
             enchanter.damageEnchant(ModularEnchantments.EnchantmentType.TOOL, val);
         }
     }
 
     @Override
-    public void receiveGuiData(final int id, final short data)
-    {
+    public void receiveGuiData(final int id, final short data) {
         int dataint = data;
-        if (dataint < 0)
-        {
+        if (dataint < 0) {
             dataint += 65536;
         }
-        if (id == 0)
-        {
+        if (id == 0) {
             setDurability(((getCurrentDurability() & 0xFFFF0000) | dataint));
-        }
-        else if (id == 1)
-        {
+        } else if (id == 1) {
             setDurability(((getCurrentDurability() & 0xFFFF) | dataint << 16));
-        }
-        else if (id == 2)
-        {
+        } else if (id == 2) {
             remainingRepairUnits = data;
-        }
-        else if (id == 3)
-        {
+        } else if (id == 3) {
             maximumRepairUnits = data;
         }
     }
@@ -288,18 +234,15 @@ public abstract class ModuleTool extends ModuleWorker
         maximumRepairUnits = input.getShortOr(generateNBTName("MaxRepair", id), (short) 0);
     }
 
-    public void setDurability(int amount)
-    {
+    public void setDurability(int amount) {
         durability.set(amount);
     }
 
-    public int getCurrentDurability()
-    {
+    public int getCurrentDurability() {
         return durability.get();
     }
 
-    public int getRepairPercentage()
-    {
+    public int getRepairPercentage() {
         return 100 - 100 * remainingRepairUnits / maximumRepairUnits;
     }
 

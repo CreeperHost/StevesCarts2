@@ -14,37 +14,30 @@ import vswe.stevescarts.init.ModContainers;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ContainerCartAssembler extends ContainerBase
-{
-    private TileEntityCartAssembler assembler;
-    private SimpleContainerData data;
+public class ContainerCartAssembler extends ContainerBase {
+    private final TileEntityCartAssembler assembler;
+    private final SimpleContainerData data;
 
-    public ContainerCartAssembler(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
-    {
+    public ContainerCartAssembler(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer) {
         this(id, playerInventory, (TileEntityCartAssembler) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new SimpleContainerData(7));
     }
 
-    public ContainerCartAssembler(int id, Inventory invPlayer, TileEntityCartAssembler assembler, SimpleContainerData data)
-    {
+    public ContainerCartAssembler(int id, Inventory invPlayer, TileEntityCartAssembler assembler, SimpleContainerData data) {
         super(ModContainers.CONTAINER_CART_ASSEMBLER.get(), id);
         this.data = data;
         this.assembler = assembler;
         final ArrayList<SlotAssembler> slots = assembler.getSlots();
-        for (final SlotAssembler slot : slots)
-        {
+        for (final SlotAssembler slot : slots) {
             addSlot(slot);
         }
-        for (int i = 0; i < 3; ++i)
-        {
-            for (int k = 0; k < 9; ++k)
-            {
+        for (int i = 0; i < 3; ++i) {
+            for (int k = 0; k < 9; ++k) {
                 if (invPlayer != null) {
                     addSlot(new Slot(invPlayer, k + i * 9 + 9, offsetX() + k * 18, i * 18 + offsetY()));
                 }
             }
         }
-        for (int j = 0; j < 9; ++j)
-        {
+        for (int j = 0; j < 9; ++j) {
             if (invPlayer != null) {
                 addSlot(new Slot(invPlayer, j, offsetX() + j * 18, 58 + offsetY()));
             }
@@ -52,45 +45,37 @@ public class ContainerCartAssembler extends ContainerBase
         addDataSlots(data);
     }
 
-    public TileEntityCartAssembler getAssembler()
-    {
+    public TileEntityCartAssembler getAssembler() {
         return assembler;
     }
 
 
-    protected int offsetX()
-    {
+    protected int offsetX() {
         return 176;
     }
 
-    protected int offsetY()
-    {
+    protected int offsetY() {
         return 174;
     }
 
-    public int getFuel()
-    {
-        return assembler.getIntFromShorts((short)data.get(5), (short)data.get(6));
+    public int getFuel() {
+        return assembler.getIntFromShorts((short) data.get(5), (short) data.get(6));
     }
 
-    public int getAssemblingTime()
-    {
-        return assembler.getIntFromShorts((short)data.get(2), (short)data.get(3));
+    public int getAssemblingTime() {
+        return assembler.getIntFromShorts((short) data.get(2), (short) data.get(3));
     }
 
-    public int getMaxAssemblingTime()
-    {
-        return assembler.getIntFromShorts((short)data.get(0), (short)data.get(1));
+    public int getMaxAssemblingTime() {
+        return assembler.getIntFromShorts((short) data.get(0), (short) data.get(1));
     }
 
-    public boolean getIsAssembling()
-    {
+    public boolean getIsAssembling() {
         return data.get(4) == 1;
     }
 
     @Override
-    public boolean stillValid(@NotNull Player player)
-    {
+    public boolean stillValid(@NotNull Player player) {
         return assembler.isUsableByPlayer(player);
     }
 }

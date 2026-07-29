@@ -1,27 +1,21 @@
 package vswe.stevescarts.helpers.storages;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import dev.architectury.hooks.client.fluid.ClientFluidStackHooks;
-import dev.architectury.hooks.fluid.FluidStackHooks;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
+import net.minecraft.world.level.material.FluidState;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraft.resources.Identifier;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.FluidActionResult;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import vswe.stevescarts.helpers.Localization;
 
 import java.text.NumberFormat;
@@ -84,7 +78,7 @@ public class SCTank extends FluidTank {
                         FluidUtil.tryEmptyContainer(itemStack, this, FluidType.BUCKET_VOLUME, null, true);
 
                         itemStack.shrink(1);
-                        if (itemStack.isEmpty()){
+                        if (itemStack.isEmpty()) {
                             owner.setInputContainer(tankid, ItemStack.EMPTY);
                         }
                     }
@@ -100,7 +94,7 @@ public class SCTank extends FluidTank {
                             FluidUtil.tryFillContainer(itemStack, this, FluidType.BUCKET_VOLUME, null, true);
 
                             itemStack.shrink(1);
-                            if (itemStack.isEmpty()){
+                            if (itemStack.isEmpty()) {
                                 owner.setInputContainer(tankid, ItemStack.EMPTY);
                             }
                         }
@@ -146,14 +140,18 @@ public class SCTank extends FluidTank {
     }
 
     //I spent a couple of hours trying to find a way to make this work with ScreenFluidRenderer. But without overhauling the SC GUI system i could not find a good solution.
-    public void drawFluid(GuiGraphics guiGraphics, int guiLeft, int guiTop, final int startX, final int startY) {
+    public void drawFluid(GuiGraphicsExtractor GuiGraphicsExtractor, int guiLeft, int guiTop, final int startX, final int startY) {
         if (fluid.isEmpty()) return;
         int fluidLevel = (int) (48 * ((float) fluid.getAmount() / (float) capacity));
 
-        TextureAtlasSprite icon = ClientFluidStackHooks.getStillTexture(fluid.getFluid());
+        FluidState fluidState = fluid.getFluid().defaultFluidState();
+        FluidModel model = Minecraft.getInstance().getModelManager().getFluidStateModelSet().get(fluidState);
+        Material.Baked material = model.stillMaterial();
+
+        TextureAtlasSprite icon = material.sprite();
         if (icon == null) return;
 
-        int fluidColor = ClientFluidStackHooks.getColor(fluid.getFluid());
+        int fluidColor = model.fluidTintSource().color(fluidState);
         for (int y = 0; y < 3; y++) {
             int pixels = fluidLevel - (2 - y) * 16;
 
@@ -164,7 +162,7 @@ public class SCTank extends FluidTank {
             }
 
             for (int x = 0; x < 2; x++) {
-                owner.drawImage(guiGraphics, tankid, guiLeft, guiTop, icon, startX + 2 + 16 * x, startY + 1 + 16 * y + (16 - pixels), 16, pixels, fluidColor);
+                owner.drawImage(GuiGraphicsExtractor, tankid, guiLeft, guiTop, icon, startX + 2 + 16 * x, startY + 1 + 16 * y + (16 - pixels), 16, pixels, fluidColor);
             }
         }
     }

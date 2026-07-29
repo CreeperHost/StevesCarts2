@@ -6,9 +6,8 @@ import vswe.stevescarts.items.ItemCartComponent;
 
 import javax.annotation.Nonnull;
 
-public enum ComponentTypes
-{
-    WOODEN_WHEELS( "wooden_wheels"),
+public enum ComponentTypes {
+    WOODEN_WHEELS("wooden_wheels"),
     IRON_WHEELS("iron_wheels"),
     RED_PIGMENT("red_pigment"),
     GREEN_PIGMENT("green_pigment"),
@@ -49,75 +48,70 @@ public enum ComponentTypes
     CLEANING_FAN("cleaning_fan"),
     CLEANING_CORE("cleaning_core"),
     CLEANING_TUBE("cleaning_tube"),
-    FUSE( "fuse"),
+    FUSE("fuse"),
     SOLAR_PANEL("solar_panel_component"),
     EYE_OF_GALGADOR("eye_of_galgador"),
-    LUMP_OF_GALGADOR( "lump_of_galgador"),
+    LUMP_OF_GALGADOR("lump_of_galgador"),
     GALGADORIAN_METAL("galgadorian_metal"),
     LARGE_LUMP_OF_GALGADOR("large_lump_of_galgador"),
-    ENHANCED_GALGADORIAN_METAL( "enhanced_galgadorian_metal"),
-    STOLEN_PRESENT( "stolen_present"),
+    ENHANCED_GALGADORIAN_METAL("enhanced_galgadorian_metal"),
+    STOLEN_PRESENT("stolen_present"),
     GREEN_WRAPPING_PAPER("green_wrapping_paper"),
     RED_WRAPPING_PAPER("red_wrapping_paper"),
-    WARM_HAT( "warm_hat"),
+    WARM_HAT("warm_hat"),
     RED_GIFT_RIBBON("red_gift_ribbon"),
-    YELLOW_GIFT_RIBBON( "yellow_gift_ribbon"),
-    SOCK( "sock"),
-    STUFFED_SOCK( "stuffed_sock"),
+    YELLOW_GIFT_RIBBON("yellow_gift_ribbon"),
+    SOCK("sock"),
+    STUFFED_SOCK("stuffed_sock"),
     ADVANCED_SOLAR_PANEL("advanced_solar_panel"),
     BLANK_UPGRADE("blank_upgrade"),
-    TANK_VALVE( "sctank_valve"),
-    TANK_PANE( "sctank_pane"),
+    TANK_VALVE("sctank_valve"),
+    TANK_PANE("sctank_pane"),
     LARGE_TANK_PANE("large_sctank_pane"),
     HUGE_TANK_PANE("huge_sctank_pane"),
     LIQUID_CLEANING_CORE("liquid_cleaning_core"),
     LIQUID_CLEANING_TUBE("liquid_cleaning_tube"),
     EXPLOSIVE_EASTER_EGG("explosive_easter_egg"),
-    BURNING_EASTER_EGG( "burning_easter_egg"),
+    BURNING_EASTER_EGG("burning_easter_egg"),
     GLISTERING_EASTER_EGG("glistering_easter_egg"),
-    CHOCOLATE_EASTER_EGG( "chocolate_easter_egg"),
+    CHOCOLATE_EASTER_EGG("chocolate_easter_egg"),
     PAINTED_EASTER_EGG("painted_easter_egg"),
     BASKET("basket"),
     OAK_LOG("oak_log"),
     OAK_TWIG("oak_twig"),
     SPRUCE_LOG("spruce_log"),
-    SPRUCE_TWIG( "spruce_twig"),
-    BIRCH_LOG( "birch_log"),
-    BIRCH_TWIG( "birch_twig"),
+    SPRUCE_TWIG("spruce_twig"),
+    BIRCH_LOG("birch_log"),
+    BIRCH_TWIG("birch_twig"),
     JUNGLE_LOG("jungle_log"),
-    JUNGLE_TWIG( "jungle_twig"),
-    HARDENED_SAW_BLADE( "hardened_saw_blade"),
-    GALGADORIAN_SAW_BLADE( "galgadorian_saw_blade"),
-    GALGADORIAN_WHEELS( "galgadorian_wheels"),
+    JUNGLE_TWIG("jungle_twig"),
+    HARDENED_SAW_BLADE("hardened_saw_blade"),
+    GALGADORIAN_SAW_BLADE("galgadorian_saw_blade"),
+    GALGADORIAN_WHEELS("galgadorian_wheels"),
     IRON_BLADE("iron_blade"),
     BLADE_ARM("blade_arm");
 
     private final String name;
 
-    ComponentTypes(final String name)
-    {
+    ComponentTypes(final String name) {
         this.name = name;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public String getRawName()
-    {
+    public String getRawName() {
         return name;
 //        return name.replace(":", "").replace("'", "").replace(" ", "_").replace("-", "_").toLowerCase();
     }
 
     @Nonnull
-    public ItemStack getItemStack()
-    {
+    public ItemStack getItemStack() {
         return new ItemStack(ModItems.COMPONENTS.get(this).get());
     }
 
-    public boolean isStackOfType(@Nonnull ItemStack itemstack)
-    {
+    public boolean isStackOfType(@Nonnull ItemStack itemstack) {
         return !itemstack.isEmpty() && itemstack.getItem() instanceof ItemCartComponent;
     }
 }

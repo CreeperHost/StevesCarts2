@@ -8,22 +8,18 @@ import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
-public class ModuleSnowball extends ModuleProjectile
-{
-    public ModuleSnowball(ModularMinecart cart)
-    {
+public class ModuleSnowball extends ModuleProjectile {
+    public ModuleSnowball(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public boolean isValidProjectile(@Nonnull ItemStack item)
-    {
+    public boolean isValidProjectile(@Nonnull ItemStack item) {
         return item.getItem() == Items.SNOWBALL;
     }
 
     @Override
-    public Entity createProjectile(final Entity target, @Nonnull ItemStack item)
-    {
+    public Entity createProjectile(final Entity target, @Nonnull ItemStack item) {
         return new Snowball(getCart().level(), 0, 0, 0, item);
     }
 }

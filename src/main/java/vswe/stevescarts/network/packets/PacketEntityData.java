@@ -32,6 +32,15 @@ public class PacketEntityData implements CustomPacketPayload {
         this.data = null;
     }
 
+    public static PacketEntityData read(RegistryFriendlyByteBuf buffer) {
+        int entityId = buffer.readVarInt();
+        int index = buffer.readVarInt();
+        ByteBuf copy = buffer.copy();
+        //TODO, Need to find a better way to handle this packet.
+        while (buffer.readableBytes() > 0) buffer.readByte();
+        return new PacketEntityData(entityId, index, new RegistryFriendlyByteBuf(copy, buffer.registryAccess()));
+    }
+
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
@@ -43,19 +52,21 @@ public class PacketEntityData implements CustomPacketPayload {
         data.toBytes(buf);
     }
 
-    public static PacketEntityData read(RegistryFriendlyByteBuf buffer) {
-        int entityId = buffer.readVarInt();
-        int index = buffer.readVarInt();
-        ByteBuf copy = buffer.copy();
-        //TODO, Need to find a better way to handle this packet.
-        while (buffer.readableBytes() > 0) buffer.readByte();
-        return new PacketEntityData(entityId, index, new RegistryFriendlyByteBuf(copy, buffer.registryAccess()));
+    public int getEntityId() {
+        return entityId;
     }
 
-    public int getEntityId() { return entityId; }
-    public int getIndex() { return index; }
-    public RegistryFriendlyByteBuf getBuffer() { return buffer; }
-    public AbstractDataStore<?> getData() { return data; }
+    public int getIndex() {
+        return index;
+    }
+
+    public RegistryFriendlyByteBuf getBuffer() {
+        return buffer;
+    }
+
+    public AbstractDataStore<?> getData() {
+        return data;
+    }
 
     public static class Handler implements IPayloadHandler<PacketEntityData> {
         @Override

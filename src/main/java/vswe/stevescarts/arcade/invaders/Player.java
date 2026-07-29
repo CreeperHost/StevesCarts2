@@ -1,102 +1,76 @@
 package vswe.stevescarts.arcade.invaders;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
-public class Player extends Unit
-{
+public class Player extends Unit {
     protected boolean ready;
     private int targetX;
     private int targetY;
 
-    public Player(final ArcadeInvaders game, final int x, final int y)
-    {
+    public Player(final ArcadeInvaders game, final int x, final int y) {
         super(game, x, y);
     }
 
-    public Player(final ArcadeInvaders game)
-    {
+    public Player(final ArcadeInvaders game) {
         this(game, 200, 150);
         ready = true;
     }
 
     @Override
-    public void draw(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui)
-    {
-        if (ready || targetY == y)
-        {
-            game.drawImageInArea(guiGraphics, texture, gui, x, y, 16, 16, 16, 16);
-        }
-        else
-        {
-            game.drawImageInArea(guiGraphics, texture, gui, x, y, 16, 16, 16, 16, 3, 0, 1000, 1000);
+    public void draw(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, GuiMinecart gui) {
+        if (ready || targetY == y) {
+            game.drawImageInArea(GuiGraphicsExtractor, texture, gui, x, y, 16, 16, 16, 16);
+        } else {
+            game.drawImageInArea(GuiGraphicsExtractor, texture, gui, x, y, 16, 16, 16, 16, 3, 0, 1000, 1000);
         }
     }
 
-    protected void setTarget(final int x, final int y)
-    {
+    protected void setTarget(final int x, final int y) {
         targetX = x;
         targetY = y;
     }
 
     @Override
-    public UPDATE_RESULT update()
-    {
-        if (!ready)
-        {
-            if (targetY == y && targetX == x)
-            {
+    public UPDATE_RESULT update() {
+        if (!ready) {
+            if (targetY == y && targetX == x) {
                 ready = true;
-            }
-            else if (targetY == y)
-            {
+            } else if (targetY == y) {
                 x = Math.min(targetX, x + 8);
-            }
-            else if (x == -15)
-            {
+            } else if (x == -15) {
                 y = Math.max(targetY, y - 8);
-            }
-            else
-            {
+            } else {
                 x = Math.max(-15, x - 8);
             }
-        }
-        else if (super.update() == UPDATE_RESULT.DEAD)
-        {
+        } else if (super.update() == UPDATE_RESULT.DEAD) {
             return UPDATE_RESULT.DEAD;
         }
         return UPDATE_RESULT.DONE;
     }
 
-    public void move(final int dir)
-    {
+    public void move(final int dir) {
         x += dir * 5;
-        if (x < 10)
-        {
+        if (x < 10) {
             x = 10;
-        }
-        else if (x > 417)
-        {
+        } else if (x > 417) {
             x = 417;
         }
     }
 
     @Override
-    protected boolean isPlayer()
-    {
+    protected boolean isPlayer() {
         return true;
     }
 
     @Override
-    protected int getHitboxWidth()
-    {
+    protected int getHitboxWidth() {
         return 16;
     }
 
     @Override
-    protected int getHitboxHeight()
-    {
+    protected int getHitboxHeight() {
         return 16;
     }
 }

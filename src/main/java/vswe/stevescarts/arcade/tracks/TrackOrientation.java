@@ -4,8 +4,7 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.ArrayList;
 
-public abstract class TrackOrientation
-{
+public abstract class TrackOrientation {
     public static ArrayList<TrackOrientation> ALL;
     public static TrackOrientation JUNCTION_4WAY;
     public static TrackOrientation STRAIGHT_HORIZONTAL;
@@ -38,63 +37,12 @@ public abstract class TrackOrientation
     public static TrackOrientation JUNCTION_3WAY_STRAIGHT_TURN_HORIZONTAL_CORNER_DOWN_LEFT;
     public static TrackOrientation JUNCTION_3WAY_STRAIGHT_TURN_HORIZONTAL_CORNER_UP_LEFT;
     public static TrackOrientation JUNCTION_3WAY_STRAIGHT_TURN_HORIZONTAL_CORNER_UP_RIGHT;
-    private int v;
-    private GuiMinecart.RENDER_ROTATION rotation;
-    private TrackOrientation opposite;
-    private int val;
 
-    TrackOrientation(final int v, final GuiMinecart.RENDER_ROTATION rotation)
-    {
-        this.v = v;
-        this.rotation = rotation;
-        val = TrackOrientation.ALL.size();
-        TrackOrientation.ALL.add(this);
-    }
-
-    protected TrackOrientation setOpposite(final TrackOrientation opposite)
-    {
-        this.opposite = opposite;
-        if (this.opposite.opposite != null)
-        {
-            this.opposite.opposite.opposite = this;
-        }
-        else
-        {
-            this.opposite.opposite = this;
-        }
-        return this;
-    }
-
-    public int getV()
-    {
-        return v;
-    }
-
-    public GuiMinecart.RENDER_ROTATION getRotation()
-    {
-        return rotation;
-    }
-
-    public TrackOrientation getOpposite()
-    {
-        return opposite;
-    }
-
-    public int toInteger()
-    {
-        return val;
-    }
-
-    public abstract DIRECTION travel(final DIRECTION p0);
-
-    static
-    {
+    static {
         TrackOrientation.ALL = new ArrayList<>();
-        TrackOrientation.JUNCTION_4WAY = new TrackOrientation(5, GuiMinecart.RENDER_ROTATION.NORMAL)
-        {
+        TrackOrientation.JUNCTION_4WAY = new TrackOrientation(5, GuiMinecart.RENDER_ROTATION.NORMAL) {
             @Override
-            public DIRECTION travel(final DIRECTION in)
-            {
+            public DIRECTION travel(final DIRECTION in) {
                 return in.getOpposite();
             }
         };
@@ -130,226 +78,217 @@ public abstract class TrackOrientation
         TrackOrientation.JUNCTION_3WAY_STRAIGHT_TURN_HORIZONTAL_CORNER_UP_RIGHT = new TrackOrientation3Way(3, GuiMinecart.RENDER_ROTATION.ROTATE_270, DIRECTION.RIGHT, DIRECTION.UP).setOpposite(TrackOrientation.JUNCTION_3WAY_STRAIGHT_FORWARD_HORIZONTAL_CORNER_UP_RIGHT);
     }
 
-    private static class TrackOrientationStraight extends TrackOrientation
-    {
-        private DIRECTION base;
+    private final int v;
+    private final GuiMinecart.RENDER_ROTATION rotation;
+    private TrackOrientation opposite;
+    private final int val;
 
-        TrackOrientationStraight(final int v, final GuiMinecart.RENDER_ROTATION rotation, final DIRECTION base)
-        {
+    TrackOrientation(final int v, final GuiMinecart.RENDER_ROTATION rotation) {
+        this.v = v;
+        this.rotation = rotation;
+        val = TrackOrientation.ALL.size();
+        TrackOrientation.ALL.add(this);
+    }
+
+    public int getV() {
+        return v;
+    }
+
+    public GuiMinecart.RENDER_ROTATION getRotation() {
+        return rotation;
+    }
+
+    public TrackOrientation getOpposite() {
+        return opposite;
+    }
+
+    protected TrackOrientation setOpposite(final TrackOrientation opposite) {
+        this.opposite = opposite;
+        if (this.opposite.opposite != null) {
+            this.opposite.opposite.opposite = this;
+        } else {
+            this.opposite.opposite = this;
+        }
+        return this;
+    }
+
+    public int toInteger() {
+        return val;
+    }
+
+    public abstract DIRECTION travel(final DIRECTION p0);
+
+    public enum DIRECTION {
+        UP(0, 0, -1), DOWN(1, 0, 1), LEFT(2, -1, 0), RIGHT(3, 1, 0), STILL(-1, 0, 0);
+
+        ArrayList<DIRECTION> ALL;
+        private final int x;
+        private final int y;
+        private final int val;
+
+        DIRECTION(final int val, final int x, final int y) {
+            this.val = val;
+            this.x = x;
+            this.y = y;
+        }
+
+        public static DIRECTION fromInteger(final int i) {
+            for (final DIRECTION dir : values()) {
+                if (dir.val == i) {
+                    return dir;
+                }
+            }
+            return null;
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public DIRECTION getOpposite() {
+            switch (this) {
+                case UP: {
+                    return DIRECTION.DOWN;
+                }
+                case DOWN: {
+                    return DIRECTION.UP;
+                }
+                case LEFT: {
+                    return DIRECTION.RIGHT;
+                }
+                case RIGHT: {
+                    return DIRECTION.LEFT;
+                }
+                default: {
+                    return DIRECTION.STILL;
+                }
+            }
+        }
+
+        public DIRECTION getLeft() {
+            switch (this) {
+                case UP: {
+                    return DIRECTION.RIGHT;
+                }
+                case DOWN: {
+                    return DIRECTION.LEFT;
+                }
+                case LEFT: {
+                    return DIRECTION.UP;
+                }
+                case RIGHT: {
+                    return DIRECTION.DOWN;
+                }
+                default: {
+                    return DIRECTION.STILL;
+                }
+            }
+        }
+
+        public DIRECTION getRight() {
+            switch (this) {
+                case UP: {
+                    return DIRECTION.LEFT;
+                }
+                case DOWN: {
+                    return DIRECTION.RIGHT;
+                }
+                case LEFT: {
+                    return DIRECTION.DOWN;
+                }
+                case RIGHT: {
+                    return DIRECTION.UP;
+                }
+                default: {
+                    return DIRECTION.STILL;
+                }
+            }
+        }
+
+        public GuiMinecart.RENDER_ROTATION getRenderRotation() {
+            switch (this) {
+                case UP: {
+                    return GuiMinecart.RENDER_ROTATION.NORMAL;
+                }
+                case RIGHT: {
+                    return GuiMinecart.RENDER_ROTATION.ROTATE_90;
+                }
+                case DOWN: {
+                    return GuiMinecart.RENDER_ROTATION.ROTATE_180;
+                }
+                case LEFT: {
+                    return GuiMinecart.RENDER_ROTATION.ROTATE_270;
+                }
+                default: {
+                    return GuiMinecart.RENDER_ROTATION.NORMAL;
+                }
+            }
+        }
+
+        public int toInteger() {
+            return val;
+        }
+    }
+
+    private static class TrackOrientationStraight extends TrackOrientation {
+        private final DIRECTION base;
+
+        TrackOrientationStraight(final int v, final GuiMinecart.RENDER_ROTATION rotation, final DIRECTION base) {
             super(v, rotation);
             this.base = base;
         }
 
         @Override
-        public DIRECTION travel(final DIRECTION in)
-        {
-            if (in.equals(base))
-            {
+        public DIRECTION travel(final DIRECTION in) {
+            if (in.equals(base)) {
                 return base.getOpposite();
             }
             return base;
         }
     }
 
-    private static class TrackOrientationCorner extends TrackOrientation
-    {
-        private DIRECTION dir1;
-        private DIRECTION dir2;
+    private static class TrackOrientationCorner extends TrackOrientation {
+        private final DIRECTION dir1;
+        private final DIRECTION dir2;
 
-        TrackOrientationCorner(final int v, final GuiMinecart.RENDER_ROTATION rotation, final DIRECTION dir1, final DIRECTION dir2)
-        {
+        TrackOrientationCorner(final int v, final GuiMinecart.RENDER_ROTATION rotation, final DIRECTION dir1, final DIRECTION dir2) {
             super(v, rotation);
             this.dir1 = dir1;
             this.dir2 = dir2;
         }
 
         @Override
-        public DIRECTION travel(final DIRECTION in)
-        {
-            if (in.equals(dir1))
-            {
+        public DIRECTION travel(final DIRECTION in) {
+            if (in.equals(dir1)) {
                 return dir2;
             }
-            if (in.equals(dir2))
-            {
+            if (in.equals(dir2)) {
                 return dir1;
             }
             return in.getOpposite();
         }
     }
 
-    private static class TrackOrientation3Way extends TrackOrientation
-    {
-        private DIRECTION entrance;
-        private DIRECTION active;
+    private static class TrackOrientation3Way extends TrackOrientation {
+        private final DIRECTION entrance;
+        private final DIRECTION active;
 
-        TrackOrientation3Way(final int v, final GuiMinecart.RENDER_ROTATION rotation, final DIRECTION entrance, final DIRECTION active)
-        {
+        TrackOrientation3Way(final int v, final GuiMinecart.RENDER_ROTATION rotation, final DIRECTION entrance, final DIRECTION active) {
             super(v, rotation);
             this.entrance = entrance;
             this.active = active;
         }
 
         @Override
-        public DIRECTION travel(final DIRECTION in)
-        {
-            if (in.equals(entrance))
-            {
+        public DIRECTION travel(final DIRECTION in) {
+            if (in.equals(entrance)) {
                 return active;
             }
             return entrance;
-        }
-    }
-
-    public enum DIRECTION
-    {
-        UP(0, 0, -1), DOWN(1, 0, 1), LEFT(2, -1, 0), RIGHT(3, 1, 0), STILL(-1, 0, 0);
-
-        ArrayList<DIRECTION> ALL;
-        private int x;
-        private int y;
-        private int val;
-
-        DIRECTION(final int val, final int x, final int y)
-        {
-            this.val = val;
-            this.x = x;
-            this.y = y;
-        }
-
-        public int getX()
-        {
-            return x;
-        }
-
-        public int getY()
-        {
-            return y;
-        }
-
-        public DIRECTION getOpposite()
-        {
-            switch (this)
-            {
-                case UP:
-                {
-                    return DIRECTION.DOWN;
-                }
-                case DOWN:
-                {
-                    return DIRECTION.UP;
-                }
-                case LEFT:
-                {
-                    return DIRECTION.RIGHT;
-                }
-                case RIGHT:
-                {
-                    return DIRECTION.LEFT;
-                }
-                default:
-                {
-                    return DIRECTION.STILL;
-                }
-            }
-        }
-
-        public DIRECTION getLeft()
-        {
-            switch (this)
-            {
-                case UP:
-                {
-                    return DIRECTION.RIGHT;
-                }
-                case DOWN:
-                {
-                    return DIRECTION.LEFT;
-                }
-                case LEFT:
-                {
-                    return DIRECTION.UP;
-                }
-                case RIGHT:
-                {
-                    return DIRECTION.DOWN;
-                }
-                default:
-                {
-                    return DIRECTION.STILL;
-                }
-            }
-        }
-
-        public DIRECTION getRight()
-        {
-            switch (this)
-            {
-                case UP:
-                {
-                    return DIRECTION.LEFT;
-                }
-                case DOWN:
-                {
-                    return DIRECTION.RIGHT;
-                }
-                case LEFT:
-                {
-                    return DIRECTION.DOWN;
-                }
-                case RIGHT:
-                {
-                    return DIRECTION.UP;
-                }
-                default:
-                {
-                    return DIRECTION.STILL;
-                }
-            }
-        }
-
-        public GuiMinecart.RENDER_ROTATION getRenderRotation()
-        {
-            switch (this)
-            {
-                case UP:
-                {
-                    return GuiMinecart.RENDER_ROTATION.NORMAL;
-                }
-                case RIGHT:
-                {
-                    return GuiMinecart.RENDER_ROTATION.ROTATE_90;
-                }
-                case DOWN:
-                {
-                    return GuiMinecart.RENDER_ROTATION.ROTATE_180;
-                }
-                case LEFT:
-                {
-                    return GuiMinecart.RENDER_ROTATION.ROTATE_270;
-                }
-                default:
-                {
-                    return GuiMinecart.RENDER_ROTATION.NORMAL;
-                }
-            }
-        }
-
-        public int toInteger()
-        {
-            return val;
-        }
-
-        public static DIRECTION fromInteger(final int i)
-        {
-            for (final DIRECTION dir : values())
-            {
-                if (dir.val == i)
-                {
-                    return dir;
-                }
-            }
-            return null;
         }
     }
 }

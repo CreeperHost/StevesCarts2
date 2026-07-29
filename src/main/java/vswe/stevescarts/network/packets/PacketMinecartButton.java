@@ -24,33 +24,8 @@ public class PacketMinecartButton implements CustomPacketPayload {
         this.array = array;
     }
 
-    @Override
-    public Type<? extends CustomPacketPayload> type() {
-        return TYPE;
-    }
-
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(cartID);
-        buf.writeInt(id);
-        buf.writeByteArray(array);
-    }
-
     public static PacketMinecartButton read(FriendlyByteBuf buffer) {
         return new PacketMinecartButton(buffer.readInt(), buffer.readInt(), buffer.readByteArray());
-    }
-
-    public static class ClientHandler implements IPayloadHandler<PacketMinecartButton> {
-        @Override
-        public void handle(PacketMinecartButton msg, IPayloadContext ctx) {
-            ctx.enqueueWork(() -> ClientPacketHandlers.handleMinecartButton(msg, ctx));
-        }
-    }
-
-    public static class ServerHandler implements IPayloadHandler<PacketMinecartButton> {
-        @Override
-        public void handle(PacketMinecartButton msg, IPayloadContext ctx) {
-            ctx.enqueueWork(() -> handleServerSide(msg, ctx));
-        }
     }
 
     private static void handleServerSide(PacketMinecartButton msg, IPayloadContext ctx) {
@@ -68,6 +43,31 @@ public class PacketMinecartButton implements CustomPacketPayload {
                     break;
                 }
             }
+        }
+    }
+
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
+    public void write(FriendlyByteBuf buf) {
+        buf.writeInt(cartID);
+        buf.writeInt(id);
+        buf.writeByteArray(array);
+    }
+
+    public static class ClientHandler implements IPayloadHandler<PacketMinecartButton> {
+        @Override
+        public void handle(PacketMinecartButton msg, IPayloadContext ctx) {
+            ctx.enqueueWork(() -> ClientPacketHandlers.handleMinecartButton(msg, ctx));
+        }
+    }
+
+    public static class ServerHandler implements IPayloadHandler<PacketMinecartButton> {
+        @Override
+        public void handle(PacketMinecartButton msg, IPayloadContext ctx) {
+            ctx.enqueueWork(() -> handleServerSide(msg, ctx));
         }
     }
 }

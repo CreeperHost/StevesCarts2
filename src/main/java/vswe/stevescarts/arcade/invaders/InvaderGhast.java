@@ -1,130 +1,101 @@
 package vswe.stevescarts.arcade.invaders;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
-public class InvaderGhast extends Unit
-{
-    private int tentacleTextureId;
-    private int shooting;
+public class InvaderGhast extends Unit {
     protected boolean isPahighast;
+    private final int tentacleTextureId;
+    private int shooting;
     private boolean hasTarget;
     private int targetX;
     private int targetY;
 
-    public InvaderGhast(final ArcadeInvaders game, final int x, final int y)
-    {
+    public InvaderGhast(final ArcadeInvaders game, final int x, final int y) {
         super(game, x, y);
         tentacleTextureId = game.getModule().getCart().getRandom().nextInt(4);
         shooting = -10;
-        if (game.canSpawnPahighast && !game.hasPahighast && game.getModule().getCart().getRandom().nextInt(1000) == 0)
-        {
+        if (game.canSpawnPahighast && !game.hasPahighast && game.getModule().getCart().getRandom().nextInt(1000) == 0) {
             isPahighast = true;
             game.hasPahighast = true;
         }
     }
 
     @Override
-    public void draw(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui)
-    {
-        if (isPahighast)
-        {
-            game.drawImageInArea(guiGraphics, texture, gui, x, y, 32, 32, 16, 16);
+    public void draw(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, GuiMinecart gui) {
+        if (isPahighast) {
+            game.drawImageInArea(GuiGraphicsExtractor, texture, gui, x, y, 32, 32, 16, 16);
+        } else {
+            game.drawImageInArea(GuiGraphicsExtractor, texture, gui, x, y, (shooting > -10) ? 16 : 0, 0, 16, 16);
         }
-        else
-        {
-            game.drawImageInArea(guiGraphics, texture, gui, x, y, (shooting > -10) ? 16 : 0, 0, 16, 16);
-        }
-        game.drawImageInArea(guiGraphics, texture, gui, x, y + 16, 0, 16 + 8 * tentacleTextureId, 16, 8);
+        game.drawImageInArea(GuiGraphicsExtractor, texture, gui, x, y + 16, 0, 16 + 8 * tentacleTextureId, 16, 8);
     }
 
     @Override
-    public UPDATE_RESULT update()
-    {
-        if (hasTarget)
-        {
+    public UPDATE_RESULT update() {
+        if (hasTarget) {
             boolean flag = false;
-            if (x != targetX)
-            {
-                if (x > targetX)
-                {
+            if (x != targetX) {
+                if (x > targetX) {
                     x = Math.max(targetX, x - 4);
-                }
-                else
-                {
+                } else {
                     x = Math.min(targetX, x + 4);
                 }
                 flag = true;
             }
-            if (y != targetY)
-            {
-                if (y > targetY)
-                {
+            if (y != targetY) {
+                if (y > targetY) {
                     y = Math.max(targetY, y - 4);
-                }
-                else
-                {
+                } else {
                     y = Math.min(targetY, y + 4);
                 }
                 flag = true;
             }
             return flag ? UPDATE_RESULT.TARGET : UPDATE_RESULT.DONE;
         }
-        if (super.update() == UPDATE_RESULT.DEAD)
-        {
+        if (super.update() == UPDATE_RESULT.DEAD) {
             return UPDATE_RESULT.DEAD;
         }
-        if (shooting > -10)
-        {
-            if (shooting == 0)
-            {
+        if (shooting > -10) {
+            if (shooting == 0) {
                 RandomSource random = game.getModule().getCart().getRandom();
                 ArcadeGame.playSound(SoundEvents.GHAST_HURT, 0.1f, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
                 this.game.projectiles.add(new Projectile(this.game, x + 8 - 3, y + 8 - 3, false));
             }
             --shooting;
         }
-        if (game.moveDown > 0)
-        {
+        if (game.moveDown > 0) {
             ++y;
-        }
-        else
-        {
+        } else {
             x += game.moveDirection * game.moveSpeed;
-            if (y > 130)
-            {
+            if (y > 130) {
                 return UPDATE_RESULT.GAME_OVER;
             }
-            if (x > 417 || x < 10)
-            {
+            if (x > 417 || x < 10) {
                 return UPDATE_RESULT.TURN_BACK;
             }
         }
-        if (!isPahighast && shooting == -10 && game.getModule().getCart().getRandom().nextInt(300) == 0)
-        {
+        if (!isPahighast && shooting == -10 && game.getModule().getCart().getRandom().nextInt(300) == 0) {
             shooting = 10;
         }
         return UPDATE_RESULT.DONE;
     }
 
     @Override
-    protected int getHitboxWidth()
-    {
+    protected int getHitboxWidth() {
         return 16;
     }
 
     @Override
-    protected int getHitboxHeight()
-    {
+    protected int getHitboxHeight() {
         return 24;
     }
 
-    public void setTarget(final int x, final int y)
-    {
+    public void setTarget(final int x, final int y) {
         hasTarget = true;
         targetX = x;
         targetY = y;

@@ -1,49 +1,39 @@
 package vswe.stevescarts.arcade.monopoly;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
-public class NoteAnimation
-{
-    private Note note;
+public class NoteAnimation {
+    private final Note note;
     private int animation;
-    private boolean isNew;
+    private final boolean isNew;
 
-    public NoteAnimation(final Note note, final int start, final boolean isNew)
-    {
+    public NoteAnimation(final Note note, final int start, final boolean isNew) {
         this.note = note;
         animation = start;
         this.isNew = isNew;
     }
 
-    public boolean draw(GuiGraphics guiGraphics, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y)
-    {
-        if (animation >= 0)
-        {
-            if (isNew)
-            {
-                note.draw(guiGraphics, game, gui, x, y - 10 + animation / 2);
-            }
-            else
-            {
-                note.draw(guiGraphics, game, gui, x, y + animation);
+    public boolean draw(GuiGraphicsExtractor GuiGraphicsExtractor, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y) {
+        if (animation >= 0) {
+            if (isNew) {
+                note.draw(GuiGraphicsExtractor, game, gui, x, y - 10 + animation / 2);
+            } else {
+                note.draw(GuiGraphicsExtractor, game, gui, x, y + animation);
             }
         }
         return ++animation > 20;
     }
 
-    public Note getNote()
-    {
+    public Note getNote() {
         return note;
     }
 
-    public int getAnimation()
-    {
+    public int getAnimation() {
         return animation;
     }
 
-    public boolean isNew()
-    {
+    public boolean isNew() {
         return isNew;
     }
 }

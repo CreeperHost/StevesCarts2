@@ -4,32 +4,30 @@ import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.AnimationRig;
 import vswe.stevescarts.helpers.AnimationRigVal;
 
-public class ModuleShooterAdvSide extends ModuleShooterAdv
-{
-    private AnimationRig rig;
-    private AnimationRigVal handlePos;
-    private AnimationRigVal basePos;
-    private AnimationRigVal handleRot;
-    private AnimationRigVal gunRot;
-    private AnimationRigVal backPos;
-    private AnimationRigVal backRot;
-    private AnimationRigVal attacherRot;
-    private AnimationRigVal stabalizerOut;
-    private AnimationRigVal stabalizerDown;
-    private AnimationRigVal standOut;
-    private AnimationRigVal standUp;
-    private AnimationRigVal standSlide;
-    private AnimationRigVal armBasePos;
-    private AnimationRigVal armPos;
-    private AnimationRigVal armRot;
-    private AnimationRigVal missilePos;
-    private AnimationRigVal missileRot;
-    private AnimationRigVal armBasePos2;
-    private AnimationRigVal armPos2;
-    private AnimationRigVal armRot2;
+public class ModuleShooterAdvSide extends ModuleShooterAdv {
+    private final AnimationRig rig;
+    private final AnimationRigVal handlePos;
+    private final AnimationRigVal basePos;
+    private final AnimationRigVal handleRot;
+    private final AnimationRigVal gunRot;
+    private final AnimationRigVal backPos;
+    private final AnimationRigVal backRot;
+    private final AnimationRigVal attacherRot;
+    private final AnimationRigVal stabalizerOut;
+    private final AnimationRigVal stabalizerDown;
+    private final AnimationRigVal standOut;
+    private final AnimationRigVal standUp;
+    private final AnimationRigVal standSlide;
+    private final AnimationRigVal armBasePos;
+    private final AnimationRigVal armPos;
+    private final AnimationRigVal armRot;
+    private final AnimationRigVal missilePos;
+    private final AnimationRigVal missileRot;
+    private final AnimationRigVal armBasePos2;
+    private final AnimationRigVal armPos2;
+    private final AnimationRigVal armRot2;
 
-    public ModuleShooterAdvSide(ModularMinecart cart)
-    {
+    public ModuleShooterAdvSide(ModularMinecart cart) {
         super(cart);
         rig = new AnimationRig();
         handlePos = new AnimationRigVal(rig, 8.55f, 9.4f, 0.0f);
@@ -65,89 +63,72 @@ public class ModuleShooterAdvSide extends ModuleShooterAdv
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
         rig.update(!isPipeActive(0));
     }
 
-    public float getHandlePos(final int mult)
-    {
+    public float getHandlePos(final int mult) {
         return handlePos.getVal() * mult;
     }
 
-    public float getBasePos(final int mult)
-    {
+    public float getBasePos(final int mult) {
         return basePos.getVal() * mult;
     }
 
-    public float getHandleRot(final int mult)
-    {
+    public float getHandleRot(final int mult) {
         return handleRot.getVal();
     }
 
-    public float getGunRot(final int mult)
-    {
+    public float getGunRot(final int mult) {
         return gunRot.getVal();
     }
 
-    public float getBackPos(final int mult)
-    {
+    public float getBackPos(final int mult) {
         return backPos.getVal();
     }
 
-    public float getBackRot(final int mult)
-    {
+    public float getBackRot(final int mult) {
         return backRot.getVal() * mult;
     }
 
-    public float getAttacherRot(final int mult)
-    {
+    public float getAttacherRot(final int mult) {
         return attacherRot.getVal() * mult;
     }
 
-    public float getStabalizerOut(final int mult)
-    {
+    public float getStabalizerOut(final int mult) {
         return stabalizerOut.getVal() * mult;
     }
 
-    public float getStabalizerDown(final int mult)
-    {
+    public float getStabalizerDown(final int mult) {
         return stabalizerDown.getVal();
     }
 
-    public float getStandOut(final int mult, final int i, final int j)
-    {
+    public float getStandOut(final int mult, final int i, final int j) {
         return standOut.getVal() * j + mult * i * 0.5f + 0.003f;
     }
 
-    public float getStandUp(final int mult, final int i, final int j)
-    {
+    public float getStandUp(final int mult, final int i, final int j) {
         return standUp.getVal() - standSlide.getVal() * (i * 2 - 1) * j * mult;
     }
 
-    public float getArmBasePos(final int mult, final boolean fake)
-    {
+    public float getArmBasePos(final int mult, final boolean fake) {
         return armBasePos.getVal() - (fake ? 0.0f : armBasePos2.getVal());
     }
 
-    public float getArmRot(final int mult, final boolean fake)
-    {
+    public float getArmRot(final int mult, final boolean fake) {
         return (armRot.getVal() - (fake ? 0.0f : armRot2.getVal())) * mult;
     }
 
-    public float getArmPos(final int mult, final boolean fake)
-    {
+    public float getArmPos(final int mult, final boolean fake) {
         return armPos.getVal() - (fake ? 0.0f : armPos2.getVal());
     }
 
-    public float getMissilePos(final int mult)
-    {
+    public float getMissilePos(final int mult) {
         return missilePos.getVal();
     }
 
-    public float getMissileRot(final int mult)
-    {
+    public float getMissileRot(final int mult) {
         return missileRot.getVal() * mult;
     }
 }

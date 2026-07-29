@@ -23,6 +23,10 @@ public class PacketActivator implements CustomPacketPayload {
         this.array = array;
     }
 
+    public static PacketActivator read(FriendlyByteBuf buffer) {
+        return new PacketActivator(buffer.readBlockPos(), buffer.readInt(), buffer.readByteArray());
+    }
+
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
@@ -32,10 +36,6 @@ public class PacketActivator implements CustomPacketPayload {
         buf.writeBlockPos(blockPos);
         buf.writeInt(id);
         buf.writeByteArray(array);
-    }
-
-    public static PacketActivator read(FriendlyByteBuf buffer) {
-        return new PacketActivator(buffer.readBlockPos(), buffer.readInt(), buffer.readByteArray());
     }
 
     public static class Handler implements IPayloadHandler<PacketActivator> {

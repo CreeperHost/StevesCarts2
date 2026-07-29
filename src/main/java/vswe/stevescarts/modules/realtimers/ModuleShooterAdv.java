@@ -1,10 +1,8 @@
 package vswe.stevescarts.modules.realtimers;
 
 import net.creeperhost.polylib.data.serializable.ByteData;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -28,94 +26,76 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class ModuleShooterAdv extends ModuleShooter
-{
-    private ArrayList<ModuleMobdetector> detectors;
-    private EntityNearestTarget sorter;
-    private float detectorAngle;
+public class ModuleShooterAdv extends ModuleShooter {
     private final EntityData<Byte> option = new EntityData<>(getCart(), new ByteData((byte) 0));
     private final EntityData<Byte> rifleDirection = new EntityData<>(getCart(), new ByteData((byte) 0));
+    private ArrayList<ModuleMobdetector> detectors;
+    private final EntityNearestTarget sorter;
+    private float detectorAngle;
 
-    public ModuleShooterAdv(ModularMinecart cart)
-    {
+    public ModuleShooterAdv(ModularMinecart cart) {
         super(cart);
         sorter = new EntityNearestTarget(getCart());
     }
 
     @Override
-    public void preInit()
-    {
+    public void preInit() {
         super.preInit();
         detectors = new ArrayList<>();
-        for (final ModuleBase module : getCart().modules())
-        {
-            if (module instanceof ModuleMobdetector)
-            {
+        for (final ModuleBase module : getCart().modules()) {
+            if (module instanceof ModuleMobdetector) {
                 detectors.add((ModuleMobdetector) module);
             }
         }
     }
 
     @Override
-    protected void generatePipes(final ArrayList<Integer> list)
-    {
+    protected void generatePipes(final ArrayList<Integer> list) {
         list.add(1);
     }
 
     @Override
-    protected int guiExtraWidth()
-    {
+    protected int guiExtraWidth() {
         return 100;
     }
 
     @Override
-    protected int guiRequiredHeight()
-    {
+    protected int guiRequiredHeight() {
         return 10 + 10 * detectors.size();
     }
 
-    private int[] getSelectionBox(final int id)
-    {
+    private int[] getSelectionBox(final int id) {
         return new int[]{90, id * 10 + (guiHeight() - 10 * detectors.size()) / 2, 8, 8};
     }
 
     @Override
-    protected void generateInterfaceRegions()
-    {
+    protected void generateInterfaceRegions() {
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.SHOOTER.translate(), 8, 6, 4210752);
-        for (int i = 0; i < detectors.size(); ++i)
-        {
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.SHOOTER.translate(), 8, 6, 4210752);
+        for (int i = 0; i < detectors.size(); ++i) {
             final int[] box = getSelectionBox(i);
-            drawString(guiGraphics, gui, detectors.get(i).getName(), box[0] + 12, box[1], 4210752);
+            drawString(GuiGraphicsExtractor, gui, detectors.get(i).getName(), box[0] + 12, box[1], 4210752);
         }
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/mobdetector.png");
-        for (int i = 0; i < detectors.size(); ++i)
-        {
+        for (int i = 0; i < detectors.size(); ++i) {
             final int srcX = isOptionActive(i) ? 0 : 8;
             final int srcY = inRect(x, y, getSelectionBox(i)) ? 8 : 0;
-            drawImage(guiGraphics, texture, gui, getSelectionBox(i), srcX, srcY);
+            drawImage(GuiGraphicsExtractor, texture, gui, getSelectionBox(i), srcX, srcY);
         }
     }
 
     @Override
-    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
-    {
-        if (button == 0)
-        {
-            for (int i = 0; i < detectors.size(); ++i)
-            {
-                if (inRect(x, y, getSelectionBox(i)))
-                {
+    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
+        if (button == 0) {
+            for (int i = 0; i < detectors.size(); ++i) {
+                if (inRect(x, y, getSelectionBox(i))) {
                     sendPacket(0, (byte) i);
                     break;
                 }
@@ -124,19 +104,16 @@ public class ModuleShooterAdv extends ModuleShooter
     }
 
     @Override
-    public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button)
-    {
+    public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button) {
     }
 
     @Override
-    public int numberOfGuiData()
-    {
+    public int numberOfGuiData() {
         return 0;
     }
 
     @Override
-    protected void checkGuiData(final Object[] info)
-    {
+    protected void checkGuiData(final Object[] info) {
     }
 
     @Override
@@ -189,8 +166,7 @@ public class ModuleShooterAdv extends ModuleShooter
         damageEnchant();
     }
 
-    protected int getTargetDistance()
-    {
+    protected int getTargetDistance() {
         return 16;
     }
 
@@ -219,93 +195,75 @@ public class ModuleShooterAdv extends ModuleShooter
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final Player player)
-    {
-        if (id == 0)
-        {
+    protected void receivePacket(final int id, final byte[] data, final Player player) {
+        if (id == 0) {
             switchOption(data[0]);
         }
     }
 
     @Override
-    public int numberOfPackets()
-    {
+    public int numberOfPackets() {
         return 1;
     }
 
-    private void switchOption(int id)
-    {
+    private void switchOption(int id) {
         byte val = option.get();
         val ^= (byte) (1 << id);
         option.set(val);
     }
 
-    public void setOptions(byte val)
-    {
+    public void setOptions(byte val) {
         option.set(val);
     }
 
-    public byte selectedOptions()
-    {
+    public byte selectedOptions() {
         return option.get();
     }
 
-    private boolean isOptionActive(final int id)
-    {
+    private boolean isOptionActive(final int id) {
         return (selectedOptions() & 1 << id) != 0x0;
     }
 
     @Override
-    protected boolean isPipeActive(final int id)
-    {
-        if (isPlaceholder())
-        {
+    protected boolean isPipeActive(final int id) {
+        if (isPlaceholder()) {
             return getSimInfo().getIsPipeActive();
         }
         return selectedOptions() != 0;
     }
 
-    public float getDetectorAngle()
-    {
+    public float getDetectorAngle() {
         return detectorAngle;
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (isPipeActive(0))
-        {
+        if (isPipeActive(0)) {
             detectorAngle = (float) ((detectorAngle + 0.1f) % (Math.PI * 2));
         }
     }
 
-    private void setRifleDirection(float val)
-    {
-        val /= 2 * (float) Math.PI;
-        val *= 256.0f;
-        val %= 256.0f;
-        if (val < 0)
-        {
-            val += 256.0f;
-        }
-        rifleDirection.set((byte) val);
-    }
-
-    public float getRifleDirection()
-    {
+    public float getRifleDirection() {
         float val;
-        if (isPlaceholder())
-        {
+        if (isPlaceholder()) {
             val = 0.0f;
-        }
-        else
-        {
+        } else {
             val = rifleDirection.get();
         }
         val /= 256.0f;
         val *= (float) Math.PI * 2;
         return val;
+    }
+
+    private void setRifleDirection(float val) {
+        val /= 2 * (float) Math.PI;
+        val *= 256.0f;
+        val %= 256.0f;
+        if (val < 0) {
+            val += 256.0f;
+        }
+        rifleDirection.set((byte) val);
     }
 
     @Override
@@ -322,25 +280,21 @@ public class ModuleShooterAdv extends ModuleShooter
         loadTick(input, id);
     }
 
-    private static class EntityNearestTarget implements Comparator<Entity>
-    {
-        private Entity entity;
+    private static class EntityNearestTarget implements Comparator<Entity> {
+        private final Entity entity;
 
-        public EntityNearestTarget(final Entity entity)
-        {
+        public EntityNearestTarget(final Entity entity) {
             this.entity = entity;
         }
 
-        public int compareDistanceSq(final Entity entity1, final Entity entity2)
-        {
+        public int compareDistanceSq(final Entity entity1, final Entity entity2) {
             final double distance1 = entity.distanceTo(entity1);
             final double distance2 = entity.distanceTo(entity2);
             return (distance1 < distance2) ? -1 : ((distance1 > distance2) ? 1 : 0);
         }
 
         @Override
-        public int compare(Entity o1, Entity o2)
-        {
+        public int compare(Entity o1, Entity o2) {
             return compareDistanceSq(o1, o2);
         }
     }

@@ -7,7 +7,6 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +15,8 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.realtimers.ModuleDynamite;
 
 public class ModelDynamite extends ModelCartbase {
-    private ModelPart[] dynamites = new ModelPart[54];
-    private float[] yPos = new float[54];
+    private final ModelPart[] dynamites = new ModelPart[54];
+    private final float[] yPos = new float[54];
     private float sizemult;
 
 
@@ -105,7 +104,7 @@ public class ModelDynamite extends ModelCartbase {
 
         for (ModelPart dynamite : dynamites) {
             if (!dynamite.visible) continue;
-            dynamite.render(poseStack, vertexConsumers, light, OverlayTexture.pack(OverlayTexture.u((sizemult -1) * 2), 10), colour);
+            dynamite.render(poseStack, vertexConsumers, light, OverlayTexture.pack(OverlayTexture.u((sizemult - 1) * 2), 10), colour);
         }
 
         poseStack.popPose();

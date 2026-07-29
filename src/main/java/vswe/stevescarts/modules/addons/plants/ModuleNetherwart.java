@@ -14,22 +14,18 @@ import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
-public class ModuleNetherwart extends ModuleAddon implements ICropModule
-{
-    public ModuleNetherwart(ModularMinecart cart)
-    {
+public class ModuleNetherwart extends ModuleAddon implements ICropModule {
+    public ModuleNetherwart(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public boolean isSeedValid(@Nonnull ItemStack seed)
-    {
+    public boolean isSeedValid(@Nonnull ItemStack seed) {
         return seed.getItem() == Items.NETHER_WART;
     }
 
     @Override
-    public BlockState getCropFromSeed(@Nonnull ItemStack seed, Level world, BlockPos pos)
-    {
+    public BlockState getCropFromSeed(@Nonnull ItemStack seed, Level world, BlockPos pos) {
         Block cropBlock = Block.byItem(seed.getItem());
         BlockState state = cropBlock.defaultBlockState();
         if (state.is(Blocks.NETHER_WART)) {
@@ -39,8 +35,7 @@ public class ModuleNetherwart extends ModuleAddon implements ICropModule
     }
 
     @Override
-    public boolean isReadyToHarvest(Level world, BlockPos pos)
-    {
+    public boolean isReadyToHarvest(Level world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
         return blockState.getBlock() == Blocks.NETHER_WART && blockState.getValue(NetherWartBlock.AGE) == 3;
     }

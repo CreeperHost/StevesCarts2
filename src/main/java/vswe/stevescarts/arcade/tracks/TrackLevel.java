@@ -5,88 +5,90 @@ import vswe.stevescarts.helpers.Localization;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-public class TrackLevel
-{
+public class TrackLevel {
     public static final TrackLevel editor;
     private static String MAP_FOLDER_PATH;
-    private String name;
-    private int playerX;
-    private int playerY;
-    private TrackOrientation.DIRECTION playerDir;
-    private int itemX;
-    private int itemY;
-    private ArrayList<Track> tracks;
-    private ArrayList<LevelMessage> messages;
 
-    private static byte getFileVersion()
-    {
+    static {
+        editor = new TrackLevel(Localization.STORIES.THE_BEGINNING.MAP_EDITOR, 0, 0, TrackOrientation.DIRECTION.RIGHT, 26, 9);
+        TrackLevel.MAP_FOLDER_PATH = "sc2/arcade/trackoperator/";
+    }
+
+    private String name;
+    private final int playerX;
+    private final int playerY;
+    private final TrackOrientation.DIRECTION playerDir;
+    private final int itemX;
+    private final int itemY;
+    private final ArrayList<Track> tracks;
+    private final ArrayList<LevelMessage> messages;
+
+    public TrackLevel(Localization.STORIES.THE_BEGINNING name, final int playerX, final int playerY, final TrackOrientation.DIRECTION playerDir, final int itemX, final int itemY) {
+        if (name != null) this.name = name.translate();
+        this.playerX = playerX;
+        this.playerY = playerY;
+        this.playerDir = playerDir;
+        this.itemX = itemX;
+        this.itemY = itemY;
+        tracks = new ArrayList<>();
+        messages = new ArrayList<>();
+    }
+
+    private static byte getFileVersion() {
         return 0;
     }
 
-    public static ArrayList<TrackLevel> loadMapsFromFolder()
-    {
+    public static ArrayList<TrackLevel> loadMapsFromFolder() {
         final ArrayList<TrackLevel> maps = new ArrayList<>();
-        try
-        {
+        try {
             File dir = new File(Minecraft.getInstance().gameDirectory, TrackLevel.MAP_FOLDER_PATH);
             File[] children = dir.listFiles();
-            if (children != null)
-            {
-                for (final File child : children)
-                {
-                    if (child.isFile())
-                    {
+            if (children != null) {
+                for (final File child : children) {
+                    if (child.isFile()) {
                         final String name = child.getName();
                         final TrackLevel map = loadMap(name);
-                        if (map != null)
-                        {
+                        if (map != null) {
                             maps.add(map);
                         }
                     }
                 }
             }
-        } catch (Exception exception)
-        {
+        } catch (Exception exception) {
             System.out.println("Failed to load the maps");
         }
         return maps;
     }
 
-    public static TrackLevel loadMap(final String filename)
-    {
-        try
-        {
+    public static TrackLevel loadMap(final String filename) {
+        try {
             final byte[] bytes = readFromFile(new File(Minecraft.getInstance().gameDirectory, TrackLevel.MAP_FOLDER_PATH + filename));
             return loadMapData(bytes);
-        } catch (Exception exception)
-        {
+        } catch (Exception exception) {
             exception.printStackTrace();
             return null;
         }
     }
 
-    public static TrackLevel loadMap(final byte[] bytes)
-    {
-        try
-        {
+    public static TrackLevel loadMap(final byte[] bytes) {
+        try {
             return loadMapData(bytes);
-        } catch (Exception exception)
-        {
+        } catch (Exception exception) {
             exception.printStackTrace();
             return null;
         }
     }
 
-    public static TrackLevel loadMapData(final byte[] bytes) throws IOException
-    {
+    public static TrackLevel loadMapData(final byte[] bytes) throws IOException {
         final ByteArrayInputStream data = new ByteArrayInputStream(bytes);
         final int version = data.read();
         final int namelength = data.read();
         final byte[] namebytes = new byte[namelength];
         data.read(namebytes, 0, namelength);
-        final String name = new String(namebytes, Charset.forName("UTF-8"));
+        final String name = new String(namebytes, StandardCharsets.UTF_8);
         final int header = data.read() << 24 | data.read() << 16 | data.read() << 8 | data.read() << 0;
         final int playerX = header & 0x1F;
         final int playerY = header >> 5 & 0xF;
@@ -96,8 +98,7 @@ public class TrackLevel
         final int tracksize = header >> 20 & 0x1FF;
         final TrackLevel map = new TrackLevel(null, playerX, playerY, playerDir, itemX, itemY);
         if (!name.isEmpty()) map.setName(name);
-        for (int i = 0; i < tracksize; ++i)
-        {
+        for (int i = 0; i < tracksize; ++i) {
             final int trackdata = data.read() << 16 | data.read() << 8 | data.read() << 0;
             final int trackX = trackdata & 0x1F;
             final int trackY = trackdata >> 5 & 0xF;
@@ -113,43 +114,34 @@ public class TrackLevel
         return map;
     }
 
-    public static boolean saveMap(String name, int playerX, int playerY, TrackOrientation.DIRECTION playerDir, int itemX, int itemY, ArrayList<Track> tracks)
-    {
-        try
-        {
+    public static boolean saveMap(String name, int playerX, int playerY, TrackOrientation.DIRECTION playerDir, int itemX, int itemY, ArrayList<Track> tracks) {
+        try {
             final byte[] bytes = saveMapData(name, playerX, playerY, playerDir, itemX, itemY, tracks);
             writeToFile(new File(Minecraft.getInstance().gameDirectory, "sc2/arcade/trackoperator/" + name.replace(" ", "_") + ".dat"), bytes);
             return true;
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             return false;
         }
     }
 
-    public static String saveMapToString(String name, int playerX, int playerY, TrackOrientation.DIRECTION playerDir, int itemX, int itemY, ArrayList<Track> tracks)
-    {
-        try
-        {
+    public static String saveMapToString(String name, int playerX, int playerY, TrackOrientation.DIRECTION playerDir, int itemX, int itemY, ArrayList<Track> tracks) {
+        try {
             final byte[] bytes = saveMapData(name, playerX, playerY, playerDir, itemX, itemY, tracks);
             String str = "TrackLevel.loadMap(new byte[] {";
-            for (int i = 0; i < bytes.length; ++i)
-            {
-                if (i != 0)
-                {
+            for (int i = 0; i < bytes.length; ++i) {
+                if (i != 0) {
                     str += ",";
                 }
                 str += bytes[i];
             }
             str += "});";
             return str;
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             return "";
         }
     }
 
-    public static byte[] saveMapData(final String name, final int playerX, final int playerY, final TrackOrientation.DIRECTION playerDir, final int itemX, final int itemY, final ArrayList<Track> tracks) throws IOException
-    {
+    public static byte[] saveMapData(final String name, final int playerX, final int playerY, final TrackOrientation.DIRECTION playerDir, final int itemX, final int itemY, final ArrayList<Track> tracks) throws IOException {
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();
         final DataOutputStream data = new DataOutputStream(stream);
         data.writeByte(getFileVersion());
@@ -163,8 +155,7 @@ public class TrackLevel
         header |= itemY << 16;
         header |= tracks.size() << 20;
         data.writeInt(header);
-        for (final Track track : tracks)
-        {
+        for (final Track track : tracks) {
             int trackdata = 0;
             final byte[] extraData = track.getExtraInfo();
             trackdata |= track.getX();
@@ -180,16 +171,14 @@ public class TrackLevel
         return stream.toByteArray();
     }
 
-    private static void writeToFile(final File file, final byte[] bytes) throws IOException
-    {
+    private static void writeToFile(final File file, final byte[] bytes) throws IOException {
         createFolder(file.getParentFile());
         final FileOutputStream writer = new FileOutputStream(file);
         writer.write(bytes);
         writer.close();
     }
 
-    private static byte[] readFromFile(final File file) throws IOException
-    {
+    private static byte[] readFromFile(final File file) throws IOException {
         createFolder(file.getParentFile());
         final FileInputStream reader = new FileInputStream(file);
         final byte[] bytes = new byte[(int) file.length()];
@@ -198,90 +187,58 @@ public class TrackLevel
         return bytes;
     }
 
-    private static void createFolder(final File dir) throws IOException
-    {
-        if (dir == null)
-        {
+    private static void createFolder(final File dir) throws IOException {
+        if (dir == null) {
             return;
         }
         final File parent = dir.getParentFile();
         createFolder(parent);
-        if (!dir.isDirectory())
-        {
+        if (!dir.isDirectory()) {
             dir.mkdirs();
         }
     }
 
-    public TrackLevel(Localization.STORIES.THE_BEGINNING name, final int playerX, final int playerY, final TrackOrientation.DIRECTION playerDir, final int itemX, final int itemY)
-    {
-        if (name != null) this.name = name.translate();
-        this.playerX = playerX;
-        this.playerY = playerY;
-        this.playerDir = playerDir;
-        this.itemX = itemX;
-        this.itemY = itemY;
-        tracks = new ArrayList<>();
-        messages = new ArrayList<>();
-    }
-
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(Localization.STORIES.THE_BEGINNING name)
-    {
+    public void setName(Localization.STORIES.THE_BEGINNING name) {
         this.name = name.translate();
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public int getPlayerStartX()
-    {
+    public int getPlayerStartX() {
         return playerX;
     }
 
-    public int getPlayerStartY()
-    {
+    public int getPlayerStartY() {
         return playerY;
     }
 
-    public TrackOrientation.DIRECTION getPlayerStartDirection()
-    {
+    public TrackOrientation.DIRECTION getPlayerStartDirection() {
         return playerDir;
     }
 
-    public int getItemX()
-    {
+    public int getItemX() {
         return itemX;
     }
 
-    public int getItemY()
-    {
+    public int getItemY() {
         return itemY;
     }
 
-    public ArrayList<Track> getTracks()
-    {
+    public ArrayList<Track> getTracks() {
         return tracks;
     }
 
-    public ArrayList<LevelMessage> getMessages()
-    {
+    public ArrayList<LevelMessage> getMessages() {
         return messages;
     }
 
-    public void addMessage(final LevelMessage levelMessage)
-    {
+    public void addMessage(final LevelMessage levelMessage) {
         messages.add(levelMessage);
-    }
-
-    static
-    {
-        editor = new TrackLevel(Localization.STORIES.THE_BEGINNING.MAP_EDITOR, 0, 0, TrackOrientation.DIRECTION.RIGHT, 26, 9);
-        TrackLevel.MAP_FOLDER_PATH = "sc2/arcade/trackoperator/";
     }
 }

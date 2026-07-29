@@ -1,10 +1,8 @@
 package vswe.stevescarts.modules.addons;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -94,8 +92,8 @@ public class ModuleEnchants extends ModuleAddon {
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
-        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
@@ -150,7 +148,7 @@ public class ModuleEnchants extends ModuleAddon {
             EnchantmentData data = getEnchant(i);
             if (data.getEnchantHolder() != null) {
                 var optkey = data.getEnchantHolder().unwrapKey();
-                if (optkey.isPresent() && ModularEnchantments.getType(optkey.get()) == type){
+                if (optkey.isPresent() && ModularEnchantments.getType(optkey.get()) == type) {
                     data.damageEnchant(dmg);
                 }
             }
@@ -158,14 +156,14 @@ public class ModuleEnchants extends ModuleAddon {
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/enchant.png");
         for (int i = 0; i < 3; ++i) {
             int[] box = getBoxRect(i);
             if (inRect(x, y, box)) {
-                drawImage(guiGraphics, texture, gui, box, 65, 0);
+                drawImage(GuiGraphicsExtractor, texture, gui, box, 65, 0);
             } else {
-                drawImage(guiGraphics, texture, gui, box, 0, 0);
+                drawImage(GuiGraphicsExtractor, texture, gui, box, 0, 0);
             }
             EnchantmentData data = getEnchant(i);
             if (data.getEnchantHolder() == null) continue;
@@ -177,7 +175,7 @@ public class ModuleEnchants extends ModuleAddon {
             for (int j = 0; j < maxlevel; ++j) {
                 int[] bar = getBarRect(i, j, maxlevel);
                 if (j != maxlevel - 1) {
-                    drawImage(guiGraphics, texture, gui, bar[0] + bar[2], bar[1], 61 + j, 1, 1, bar[3]);
+                    drawImage(GuiGraphicsExtractor, texture, gui, bar[0] + bar[2], bar[1], 61 + j, 1, 1, bar[3]);
                 }
                 int levelmaxvalue = ModularEnchantments.getValue(optkey.get(), j + 1);
                 if (value > 0) {
@@ -186,7 +184,7 @@ public class ModuleEnchants extends ModuleAddon {
                         mult = 1.0f;
                     }
                     bar[2] *= mult;
-                    drawImage(guiGraphics, texture, gui, bar, 1, 13 + 11 * j);
+                    drawImage(GuiGraphicsExtractor, texture, gui, bar, 1, 13 + 11 * j);
                 }
                 value -= levelmaxvalue;
             }
@@ -195,7 +193,7 @@ public class ModuleEnchants extends ModuleAddon {
     }
 
     @Override
-    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
+    public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         for (int i = 0; i < 3; ++i) {
             EnchantmentData data = getEnchant(i);
             String str;
@@ -204,7 +202,7 @@ public class ModuleEnchants extends ModuleAddon {
             } else {
                 str = Localization.MODULES.ADDONS.ENCHANT_INSTRUCTION.translate();
             }
-            drawStringOnMouseOver(guiGraphics, gui, str, x, y, getBoxRect(i));
+            drawStringOnMouseOver(GuiGraphicsExtractor, gui, str, x, y, getBoxRect(i));
         }
     }
 

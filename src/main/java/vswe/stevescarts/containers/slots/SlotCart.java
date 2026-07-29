@@ -6,16 +6,13 @@ import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
 
-public class SlotCart extends Slot
-{
-    public SlotCart(final Container iinventory, final int i, final int j, final int k)
-    {
+public class SlotCart extends Slot {
+    public SlotCart(final Container iinventory, final int i, final int j, final int k) {
         super(iinventory, i, j, k);
     }
 
     @Override
-    public boolean mayPlace(ItemStack itemstack)
-    {
+    public boolean mayPlace(ItemStack itemstack) {
         return !itemstack.isEmpty() && itemstack.getItem() == ModItems.CARTS.get() && !ModItemData.getTagCopy(itemstack).contains("maxTime");
     }
 }

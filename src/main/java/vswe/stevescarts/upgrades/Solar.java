@@ -1,34 +1,28 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import vswe.stevescarts.api.upgrades.RechargerBaseUpgrade;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.helpers.Localization;
 
-public class Solar extends RechargerBaseUpgrade
-{
+public class Solar extends RechargerBaseUpgrade {
     @Override
-    protected int getAmount(final TileEntityUpgrade upgrade)
-    {
-        if (upgrade.getBlockPos().getY() > upgrade.getMaster().getBlockPos().getY())
-        {
+    protected int getAmount(final TileEntityUpgrade upgrade) {
+        if (upgrade.getBlockPos().getY() > upgrade.getMaster().getBlockPos().getY()) {
             return 400;
         }
         return 240;
     }
 
     @Override
-    protected boolean canGenerate(final TileEntityUpgrade upgrade)
-    {
-        if(upgrade.getLevel() == null) return false;
+    protected boolean canGenerate(final TileEntityUpgrade upgrade) {
+        if (upgrade.getLevel() == null) return false;
 
         return upgrade.getLevel().canSeeSky(upgrade.getBlockPos()) && upgrade.getLevel().isBrightOutside();
     }
 
     @Override
-    public Component getName()
-    {
+    public Component getName() {
         return Localization.translate("info.stevescarts.effectSolar");
     }
 }

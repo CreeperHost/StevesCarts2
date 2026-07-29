@@ -7,36 +7,29 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.engines.ModuleSolarTop;
 
-public class ModelSolarPanelHeads extends ModelCartbase
-{
+public class ModelSolarPanelHeads extends ModelCartbase {
     private final ModelPart[] panels;
 
-    public ModelSolarPanelHeads(int count)
-    {
+    public ModelSolarPanelHeads(int count) {
         super(getTexturedModelData(count).bakeRoot(), ResourceHelper.getResource("/models/panelModelActive.png"));
         this.panels = new ModelPart[count];
-        for (int i = 0; i < count; i++)
-        {
+        for (int i = 0; i < count; i++) {
             this.panels[i] = this.getRoot().getChild("panel" + i);
         }
     }
 
-    public static LayerDefinition getTexturedModelData(int count)
-    {
+    public static LayerDefinition getTexturedModelData(int count) {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
-        for (int i = 0; i < count; i++)
-        {
+        for (int i = 0; i < count; i++) {
             float rotation;
             float f;
-            switch (i)
-            {
+            switch (i) {
                 case 0 -> {
                     rotation = 0.0f;
                     f = -1.5f;
@@ -61,11 +54,9 @@ public class ModelSolarPanelHeads extends ModelCartbase
     }
 
     @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, final float yaw, final float pitch, final float roll)
-    {
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, final float yaw, final float pitch, final float roll) {
         super.applyEffects(module, matrixStack, yaw, pitch, roll);
-        for (final ModelPart panel : panels)
-        {
+        for (final ModelPart panel : panels) {
             panel.xRot = ((module == null) ? 0.0f : (-((ModuleSolarTop) module).getInnerRotation()));
             panel.y = ((module == null) ? -4.0f : ((ModuleSolarTop) module).getMovingLevel());
         }

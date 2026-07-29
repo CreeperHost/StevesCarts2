@@ -15,3 +15,4 @@
 !/build.conf
 !Jenkinsfile
 !settings.gradle
+/src/generated/resources/.cache/

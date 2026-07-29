@@ -16,42 +16,35 @@ import vswe.stevescarts.init.ModContainers;
 
 import java.util.Objects;
 
-public class ContainerLiquid extends ContainerBase
-{
+public class ContainerLiquid extends ContainerBase {
+    private final TileEntityLiquid tileEntityLiquid;
     public FluidStack[] oldLiquids;
     public SimpleContainerData data;
-    private final TileEntityLiquid tileEntityLiquid;
 
-    public ContainerLiquid(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
-    {
+    public ContainerLiquid(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer) {
         this(id, playerInventory, (TileEntityLiquid) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new SimpleContainerData(17));
     }
 
-    public ContainerLiquid(int id, Inventory playerInventory, TileEntityLiquid tileEntityLiquid, SimpleContainerData data)
-    {
+    public ContainerLiquid(int id, Inventory playerInventory, TileEntityLiquid tileEntityLiquid, SimpleContainerData data) {
         super(ModContainers.CONTAINER_LIQUID.get(), id);
         oldLiquids = new FluidStack[4];
         this.tileEntityLiquid = tileEntityLiquid;
         this.data = data;
-        for (int i = 0; i < 4; ++i)
-        {
+        for (int i = 0; i < 4; ++i) {
             final int x = i % 2;
             final int y = i / 2;
             addSlot(new SlotLiquidManagerInput(tileEntityLiquid, i, i * 3, (x == 0) ? 6 : 208, (y == 0) ? 17 : 80));
             addSlot(new SlotLiquidOutput(tileEntityLiquid, i * 3 + 1, (x == 0) ? 6 : 208, (y == 0) ? 42 : 105));
             addSlot(new SlotLiquidFilter(tileEntityLiquid, i * 3 + 2, (x == 0) ? 66 : 148, (y == 0) ? 12 : 110));
         }
-        for (int k = 0; k < 3; ++k)
-        {
-            for (int j1 = 0; j1 < 9; ++j1)
-            {
+        for (int k = 0; k < 3; ++k) {
+            for (int j1 = 0; j1 < 9; ++j1) {
                 if (playerInventory != null) {
                     addSlot(new Slot(playerInventory, j1 + k * 9 + 9, j1 * 18 + offsetX(), 104 + k * 18 + 36));
                 }
             }
         }
-        for (int l = 0; l < 9; ++l)
-        {
+        for (int l = 0; l < 9; ++l) {
             if (playerInventory != null) {
                 addSlot(new Slot(playerInventory, l, l * 18 + offsetX(), 198));
             }
@@ -59,40 +52,32 @@ public class ContainerLiquid extends ContainerBase
         addDataSlots(data);
     }
 
-    public int getLayoutType()
-    {
+    public int getLayoutType() {
         return data.get(0);
     }
 
-    public int[] getColor()
-    {
+    public int[] getColor() {
         return new int[]{data.get(1), data.get(2), data.get(3), data.get(4)};
     }
 
-    public boolean[] toCart()
-    {
+    public boolean[] toCart() {
         return new boolean[]{data.get(5) == 1, data.get(6) == 1, data.get(7) == 1, data.get(8) == 1};
     }
 
-    public boolean[] doReturn()
-    {
+    public boolean[] doReturn() {
         return new boolean[]{data.get(9) == 1, data.get(10) == 1, data.get(11) == 1, data.get(12) == 1};
     }
 
-    private int[] getAmounts()
-    {
+    private int[] getAmounts() {
         return new int[]{data.get(13), data.get(14), data.get(15), data.get(16)};
     }
 
-    public int getMaxAmount(final int id)
-    {
+    public int getMaxAmount(final int id) {
         return (int) (getMaxAmountBuckets(id) * 1000);
     }
 
-    public float getMaxAmountBuckets(final int id)
-    {
-        return switch (getAmounts()[id])
-        {
+    public float getMaxAmountBuckets(final int id) {
+        return switch (getAmounts()[id]) {
             case 1 -> 0.25f;
             case 2 -> 0.5f;
             case 3 -> 0.75f;
@@ -107,19 +92,16 @@ public class ContainerLiquid extends ContainerBase
         };
     }
 
-    protected int offsetX()
-    {
+    protected int offsetX() {
         return 35;
     }
 
-    public TileEntityLiquid getTileEntityLiquid()
-    {
+    public TileEntityLiquid getTileEntityLiquid() {
         return tileEntityLiquid;
     }
 
     @Override
-    public boolean stillValid(@NotNull Player playerEntity)
-    {
+    public boolean stillValid(@NotNull Player playerEntity) {
         return true;
     }
 }

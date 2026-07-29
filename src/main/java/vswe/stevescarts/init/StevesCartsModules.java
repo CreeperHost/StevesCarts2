@@ -24,8 +24,7 @@ import vswe.stevescarts.modules.storages.tanks.*;
 import vswe.stevescarts.modules.workers.*;
 import vswe.stevescarts.modules.workers.tools.*;
 
-public class StevesCartsModules
-{
+public class StevesCartsModules {
     //HULLS
     public static ModuleData WOODEN_HULL;
     public static ModuleData STANDARD_HULL;
@@ -129,8 +128,7 @@ public class StevesCartsModules
 
     public static ModuleData CHUNK_LOADER;
 
-    public static void init()
-    {
+    public static void init() {
         setupDefaultGroups();
 
         //Hulls
@@ -420,8 +418,7 @@ public class StevesCartsModules
                 new ModuleData(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "chunk_loader"), "Chunk Loader", ModuleChunkLoader.class, ModuleType.ADDON, 10));
     }
 
-    public static void setupDefaultGroups()
-    {
+    public static void setupDefaultGroups() {
         DefaultModuleGroups.ENGINE_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.ENGINE_GROUP);
         DefaultModuleGroups.DRILL_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.DRILL_GROUP);
         DefaultModuleGroups.FARMER_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.FARMER_GROUP);

@@ -2,8 +2,7 @@ package vswe.stevescarts.api.modules;
 
 import vswe.stevescarts.api.modules.data.ModuleDataGroup;
 
-public class DefaultModuleGroups
-{
+public class DefaultModuleGroups {
     /**
      * Default modules used by StevesCarts, Feel free to create your own using ModuleDataGroup
      */

@@ -1,9 +1,7 @@
 package vswe.stevescarts.blocks.tileentities;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,8 +35,7 @@ import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.upgrades.AssemblerUpgrade;
 import vswe.stevescarts.upgrades.InventoryUpgradeEffect;
 
-public class TileEntityUpgrade extends TileEntityBase implements WorldlyContainer, ITankHolder, MenuProvider
-{
+public class TileEntityUpgrade extends TileEntityBase implements WorldlyContainer, ITankHolder, MenuProvider {
     public SCTank tank = new SCTank(this, 0, 0);
     private TileEntityCartAssembler master;
     private int type;
@@ -48,73 +45,58 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     private int[] slotsForSide;
     private boolean isCreativeBroken;
 
-    public TileEntityUpgrade(BlockPos blockPos, BlockState blockState)
-    {
+    public TileEntityUpgrade(BlockPos blockPos, BlockState blockState) {
         super(ModBlocks.UPGRADE_TILE.get(), blockPos, blockState);
     }
 
-    public TileEntityUpgrade(AssemblerUpgrade assemblerUpgrade, BlockPos blockPos, BlockState blockState)
-    {
+    public TileEntityUpgrade(AssemblerUpgrade assemblerUpgrade, BlockPos blockPos, BlockState blockState) {
         super(ModBlocks.UPGRADE_TILE.get(), blockPos, blockState);
         this.type = assemblerUpgrade.getId();
         setType(assemblerUpgrade.getId());
     }
 
-    public void setMaster(final TileEntityCartAssembler master, Direction side)
-    {
+    public void setMaster(final TileEntityCartAssembler master, Direction side) {
         this.master = master;
-        if(level == null) return;
-        if (level.getBlockState(getBlockPos()).getBlock() instanceof BlockUpgrade)
-        {
-            if (side != null)
-            {
+        if (level == null) return;
+        if (level.getBlockState(getBlockPos()).getBlock() instanceof BlockUpgrade) {
+            if (side != null) {
                 level.getBlockState(getBlockPos()).setValue(BlockUpgrade.CONNECTED, master != null);
             }
             setChanged();
         }
     }
 
-    public Direction getSide()
-    {
-        if(level == null) return Direction.NORTH;
+    public Direction getSide() {
+        if (level == null) return Direction.NORTH;
         return level.getBlockState(getBlockPos()).getValue(BlockUpgrade.FACING);
     }
 
-    public TileEntityCartAssembler getMaster()
-    {
+    public TileEntityCartAssembler getMaster() {
         return master;
     }
 
-    public void setType(final int type)
-    {
+    public void setType(final int type) {
         this.type = type;
-        if (!initialized)
-        {
+        if (!initialized) {
             initialized = true;
             final AssemblerUpgrade upgrade = getUpgrade();
-            if (upgrade != null)
-            {
+            if (upgrade != null) {
                 comp = new CompoundTag();
                 slotsForSide = new int[upgrade.getInventorySize()];
                 upgrade.init(this);
-                if (upgrade.getInventorySize() > 0)
-                {
+                if (upgrade.getInventorySize() > 0) {
                     inventoryStacks = NonNullList.withSize(upgrade.getInventorySize(), ItemStack.EMPTY);
-                    for (int i = 0; i < slotsForSide.length; ++i)
-                    {
+                    for (int i = 0; i < slotsForSide.length; ++i) {
                         slotsForSide[i] = i;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 inventoryStacks = null;
             }
         }
     }
 
-    public CompoundTag getCompound()
-    {
+    public CompoundTag getCompound() {
         return comp;
     }
 
@@ -133,14 +115,12 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    public AssemblerUpgrade getUpgrade()
-    {
+    public AssemblerUpgrade getUpgrade() {
         return AssemblerUpgrade.getUpgrade(type);
     }
 
     @SuppressWarnings("unused")
-    public boolean hasInventory()
-    {
+    public boolean hasInventory() {
         return inventoryStacks != null;
     }
 
@@ -151,8 +131,7 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
         ContainerHelper.loadAllItems(input, inventoryStacks);
         setChanged();
         final AssemblerUpgrade upgrade = getUpgrade();
-        if (upgrade != null)
-        {
+        if (upgrade != null) {
             upgrade.load(this, input);
         }
     }
@@ -160,48 +139,38 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     @Override
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        if (inventoryStacks != null)
-        {
+        if (inventoryStacks != null) {
             ContainerHelper.saveAllItems(output, inventoryStacks);
         }
         output.putByte("Type", (byte) type);
         final AssemblerUpgrade upgrade = getUpgrade();
-        if (upgrade != null)
-        {
+        if (upgrade != null) {
             upgrade.save(this, output);
         }
     }
 
     @Override
-    public void tick()
-    {
-        if (getUpgrade() != null && getMaster() != null)
-        {
+    public void tick() {
+        if (getUpgrade() != null && getMaster() != null) {
             getUpgrade().update(this);
         }
     }
 
     @Override
-    public int getContainerSize()
-    {
-        if (inventoryStacks != null)
-        {
+    public int getContainerSize() {
+        if (inventoryStacks != null) {
             return inventoryStacks.size();
         }
-        if (master == null)
-        {
+        if (master == null) {
             return 0;
         }
         return master.getContainerSize();
     }
 
     @Override
-    public boolean isEmpty()
-    {
-        for (ItemStack stack : inventoryStacks)
-        {
-            if (!stack.isEmpty())
-            {
+    public boolean isEmpty() {
+        for (ItemStack stack : inventoryStacks) {
+            if (!stack.isEmpty()) {
                 return false;
             }
         }
@@ -209,20 +178,14 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     }
 
     @Override
-    public @NotNull ItemStack getItem(int i)
-    {
-        if (inventoryStacks == null)
-        {
-            if (master == null)
-            {
+    public @NotNull ItemStack getItem(int i) {
+        if (inventoryStacks == null) {
+            if (master == null) {
                 return ItemStack.EMPTY;
             }
             return master.getItem(i);
-        }
-        else
-        {
-            if (i < 0 || i >= getContainerSize())
-            {
+        } else {
+            if (i < 0 || i >= getContainerSize()) {
                 return ItemStack.EMPTY;
             }
             return inventoryStacks.get(i);
@@ -230,47 +193,35 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     }
 
     @Override
-    public @NotNull ItemStack removeItem(int id, int amount)
-    {
+    public @NotNull ItemStack removeItem(int id, int amount) {
         ItemStack itemStack = ContainerHelper.removeItem(this.inventoryStacks, id, amount);
         if (!itemStack.isEmpty()) this.setChanged();
         return itemStack;
     }
 
     @Override
-    public @NotNull ItemStack removeItemNoUpdate(int id)
-    {
+    public @NotNull ItemStack removeItemNoUpdate(int id) {
         ItemStack itemStack = this.inventoryStacks.get(id);
-        if (itemStack.isEmpty())
-        {
+        if (itemStack.isEmpty()) {
             return ItemStack.EMPTY;
-        }
-        else
-        {
+        } else {
             this.inventoryStacks.set(id, ItemStack.EMPTY);
             return itemStack;
         }
     }
 
     @Override
-    public void setItem(int i, @NotNull ItemStack itemstack)
-    {
-        if (inventoryStacks == null)
-        {
-            if (master != null)
-            {
+    public void setItem(int i, @NotNull ItemStack itemstack) {
+        if (inventoryStacks == null) {
+            if (master != null) {
                 master.setItem(i, itemstack);
             }
-        }
-        else
-        {
-            if (i < 0 || i >= getContainerSize())
-            {
+        } else {
+            if (i < 0 || i >= getContainerSize()) {
                 return;
             }
             inventoryStacks.set(i, itemstack);
-            if (!itemstack.isEmpty() && itemstack.getCount() > getMaxStackSize())
-            {
+            if (!itemstack.isEmpty() && itemstack.getCount() > getMaxStackSize()) {
                 itemstack.setCount(getMaxStackSize());
             }
             setChanged();
@@ -278,100 +229,83 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     }
 
     @Override
-    public void setChanged()
-    {
+    public void setChanged() {
         super.setChanged();
-        if (getUpgrade() != null)
-        {
+        if (getUpgrade() != null) {
             final InventoryUpgradeEffect inv = getUpgrade().getInventoryEffect();
-            if (inv != null)
-            {
+            if (inv != null) {
                 inv.onInventoryChanged(this);
             }
         }
     }
 
     @Override
-    public boolean stillValid(@NotNull Player player)
-    {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 
     @Override
     @NotNull
-    public ItemStack getInputContainer(final int tankid)
-    {
+    public ItemStack getInputContainer(final int tankid) {
         return getItem(0);
     }
 
     @Override
-    public void setInputContainer(final int tankid, ItemStack stack)
-    {
+    public void setInputContainer(final int tankid, ItemStack stack) {
         setItem(0, stack);
     }
 
     @Override
-    public void addToOutputContainer(final int tankid, @NotNull ItemStack item)
-    {
+    public void addToOutputContainer(final int tankid, @NotNull ItemStack item) {
         TransferHandler.TransferItem(item, this, 1, 1, new ContainerUpgrade(0, null, this, new SimpleContainerData(0)), Slot.class, null, -1);
     }
 
     @Override
-    public void onFluidUpdated(final int tankid)
-    {
+    public void onFluidUpdated(final int tankid) {
     }
 
     @Override
-    public void drawImage(GuiGraphics guiGraphics, int tankid, int guiLeft, int guiTop, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour)
-    {
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, guiLeft + targetX, guiTop + targetY, width, height, colour);
+    public void drawImage(GuiGraphicsExtractor GuiGraphicsExtractor, int tankid, int guiLeft, int guiTop, TextureAtlasSprite sprite, int targetX, int targetY, int width, int height, int colour) {
+        GuiGraphicsExtractor.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, guiLeft + targetX, guiTop + targetY, width, height, colour);
     }
 
-    public void setCreativeBroken()
-    {
+    public void setCreativeBroken() {
         isCreativeBroken = true;
     }
 
-    public boolean isCreativeBroken()
-    {
+    public boolean isCreativeBroken() {
         return isCreativeBroken;
     }
 
     //ISided
     @Override
-    public int @NotNull [] getSlotsForFace(@NotNull Direction direction)
-    {
+    public int @NotNull [] getSlotsForFace(@NotNull Direction direction) {
         return new int[0];
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int id, @NotNull ItemStack itemStack, @Nullable Direction direction)
-    {
+    public boolean canPlaceItemThroughFace(int id, @NotNull ItemStack itemStack, @Nullable Direction direction) {
         return false;
     }
 
     @Override
-    public boolean canTakeItemThroughFace(int p_180461_1_, @NotNull ItemStack itemStack, @NotNull Direction direction)
-    {
+    public boolean canTakeItemThroughFace(int p_180461_1_, @NotNull ItemStack itemStack, @NotNull Direction direction) {
         return false;
     }
 
     @Override
-    public void clearContent()
-    {
+    public void clearContent() {
     }
 
 
     @Override
-    public @NotNull Component getDisplayName()
-    {
+    public @NotNull Component getDisplayName() {
         return Component.translatable(getUpgrade().getName());
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player)
-    {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
         return new ContainerUpgrade(id, playerInventory, this, new SimpleContainerData(0));
     }
 }

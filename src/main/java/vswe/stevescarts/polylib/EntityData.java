@@ -1,8 +1,6 @@
 package vswe.stevescarts.polylib;
 
 import net.creeperhost.polylib.data.serializable.AbstractDataStore;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;

@@ -2,14 +2,10 @@ package vswe.stevescarts.blocks.tileentities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
@@ -50,31 +46,40 @@ import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.items.ItemCarts;
 import vswe.stevescarts.polylib.FuelHelper;
-import vswe.stevescarts.polylib.NBTHelper;
 import vswe.stevescarts.upgrades.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Objects;
 
-public class TileEntityCartAssembler extends TileEntityBase implements WorldlyContainer, MenuProvider
-{
-    private int maxAssemblingTime;
-    private float currentAssemblingTime;
-    private int fuelCheckTimer;
-    @Nonnull
-    protected ItemStack outputItem = ItemStack.EMPTY;
-    protected NonNullList<ItemStack> spareModules;
-    private boolean isAssembling;
-    public boolean isErrorListOutdated;
+public class TileEntityCartAssembler extends TileEntityBase implements WorldlyContainer, MenuProvider {
+    public static final String MODIFY_STATUS = "ModifyStatus";
+    protected final SimpleContainerData dataAccess = new SimpleContainerData(0) {
+        public int get(int id) {
+            return switch (id) {
+                case 0 -> getShortFromInt(true, maxAssemblingTime);
+                case 1 -> getShortFromInt(false, maxAssemblingTime);
+                case 2 -> getShortFromInt(true, getAssemblingTime());
+                case 3 -> getShortFromInt(false, getAssemblingTime());
+                case 4 -> (short) (isAssembling ? 1 : 0);
+                case 5 -> getShortFromInt(true, getFuelLevel());
+                case 6 -> getShortFromInt(false, getFuelLevel());
+                default -> throw new IllegalArgumentException("Invalid index: " + id);
+            };
+        }
+
+        public void set(int p_221477_1_, int p_221477_2_) {
+            throw new IllegalStateException("Cannot set values through IIntArray");
+        }
+
+        public int getCount() {
+            return 7;
+        }
+    };
     private final ArrayList<TitleBox> titleBoxes;
     private final ArrayList<DropDownMenuItem> dropDownItems;
     private final SimulationInfo info;
-    private boolean shouldSpin;
-    private ModularMinecart placeholder;
-    private float yaw;
-    private float roll;
-    private boolean rolldown;
     private final ArrayList<SlotAssembler> slots;
     private final ArrayList<SlotAssembler> engineSlots;
     private final ArrayList<SlotAssembler> addonSlots;
@@ -88,45 +93,28 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     private final int[] topbotSlots;
     @SuppressWarnings("all")
     private final int[] sideSlots;
+    private final ArrayList<TileEntityUpgrade> upgrades;
+    public boolean isErrorListOutdated;
+    public boolean isDead;
+    @Nonnull
+    protected ItemStack outputItem = ItemStack.EMPTY;
+    protected NonNullList<ItemStack> spareModules;
+    NonNullList<ItemStack> inventoryStacks;
+    private int maxAssemblingTime;
+    private float currentAssemblingTime;
+    private int fuelCheckTimer;
+    private boolean isAssembling;
+    private boolean shouldSpin;
+    private ModularMinecart placeholder;
+    private float yaw;
+    private float roll;
+    private boolean rolldown;
     @Nonnull
     private ItemStack lastHull = ItemStack.EMPTY;
     private float fuelLevel;
-    private final ArrayList<TileEntityUpgrade> upgrades;
-    public boolean isDead;
     private boolean loaded;
-    NonNullList<ItemStack> inventoryStacks;
-    protected final SimpleContainerData dataAccess = new SimpleContainerData(0)
-    {
-        public int get(int id)
-        {
-            return switch (id)
-                    {
-                        case 0 -> getShortFromInt(true, maxAssemblingTime);
-                        case 1 -> getShortFromInt(false, maxAssemblingTime);
-                        case 2 -> getShortFromInt(true, getAssemblingTime());
-                        case 3 -> getShortFromInt(false, getAssemblingTime());
-                        case 4 -> (short) (isAssembling ? 1 : 0);
-                        case 5 -> getShortFromInt(true, getFuelLevel());
-                        case 6 -> getShortFromInt(false, getFuelLevel());
-                        default -> throw new IllegalArgumentException("Invalid index: " + id);
-                    };
-        }
 
-        public void set(int p_221477_1_, int p_221477_2_)
-        {
-            throw new IllegalStateException("Cannot set values through IIntArray");
-        }
-
-        public int getCount()
-        {
-            return 7;
-        }
-    };
-
-    public static final String MODIFY_STATUS = "ModifyStatus";
-
-    public TileEntityCartAssembler(BlockPos blockPos, BlockState blockState)
-    {
+    public TileEntityCartAssembler(BlockPos blockPos, BlockState blockState) {
         super(ModBlocks.CART_ASSEMBLER_TILE.get(), blockPos, blockState);
         currentAssemblingTime = -1.0f;
         shouldSpin = true;
@@ -157,8 +145,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         titleBoxes.add(storageBox);
         titleBoxes.add(addonBox);
         titleBoxes.add(infoBox);
-        for (int i = 0; i < 5; ++i)
-        {
+        for (int i = 0; i < 5; ++i) {
             final SlotAssembler slot = new SlotAssembler(this, slotID++, engineBox.getX() + 2 + 18 * i, engineBox.getY(), ModuleType.ENGINE, false, i);
             slot.invalidate();
             slots.add(slot);
@@ -167,22 +154,19 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         toolSlot = new SlotAssembler(this, slotID++, toolBox.getX() + 2, toolBox.getY(), ModuleType.TOOL, false, 0);
         slots.add(toolSlot);
         toolSlot.invalidate();
-        for (int i = 0; i < 6; ++i)
-        {
+        for (int i = 0; i < 6; ++i) {
             final SlotAssembler slot = new SlotAssembler(this, slotID++, attachBox.getX() + 2 + 18 * i, attachBox.getY(), ModuleType.ATTACHMENT, false, i);
             slot.invalidate();
             slots.add(slot);
             funcSlots.add(slot);
         }
-        for (int i = 0; i < 4; ++i)
-        {
+        for (int i = 0; i < 4; ++i) {
             final SlotAssembler slot = new SlotAssembler(this, slotID++, storageBox.getX() + 2 + 18 * i, storageBox.getY(), ModuleType.STORAGE, false, i);
             slot.invalidate();
             slots.add(slot);
             chestSlots.add(slot);
         }
-        for (int i = 0; i < 12; ++i)
-        {
+        for (int i = 0; i < 12; ++i) {
             final SlotAssembler slot = new SlotAssembler(this, slotID++, addonBox.getX() + 2 + 18 * (i % 6), addonBox.getY() + 18 * (i / 6), ModuleType.ADDON, false, i);
             slot.invalidate();
             slots.add(slot);
@@ -199,178 +183,12 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         sideSlots = new int[]{getContainerSize() - nonModularSlots() + 1};
     }
 
-    public void clearUpgrades()
-    {
-        upgrades.clear();
-    }
-
-    public void addUpgrade(final TileEntityUpgrade upgrade)
-    {
-        upgrades.add(upgrade);
-    }
-
-    public void removeUpgrade(final TileEntityUpgrade upgrade)
-    {
-        upgrades.remove(upgrade);
-    }
-
-    public ArrayList<TileEntityUpgrade> getUpgradeTiles()
-    {
-        return upgrades;
-    }
-
-    public ArrayList<AssemblerUpgrade> getUpgrades()
-    {
-        final ArrayList<AssemblerUpgrade> lst = new ArrayList<>();
-        for (final TileEntityUpgrade tile : upgrades)
-        {
-            lst.add(tile.getUpgrade());
-        }
-        return lst;
-    }
-
-    public ArrayList<BaseUpgradeEffect> getEffects()
-    {
-        final ArrayList<BaseUpgradeEffect> lst = new ArrayList<>();
-        for (final TileEntityUpgrade tile : upgrades)
-        {
-            final AssemblerUpgrade upgrade = tile.getUpgrade();
-            if (upgrade != null)
-            {
-                lst.addAll(upgrade.getEffects());
-            }
-        }
-        return lst;
-    }
-
-    public SimulationInfo getSimulationInfo()
-    {
-        return info;
-    }
-
-    public ArrayList<DropDownMenuItem> getDropDown()
-    {
-        return dropDownItems;
-    }
-
-    public ArrayList<TitleBox> getTitleBoxes()
-    {
-        return titleBoxes;
-    }
-
-    public static int getRemovedSize()
-    {
+    public static int getRemovedSize() {
         return -1;
     }
 
-    public static int getKeepSize()
-    {
+    public static int getKeepSize() {
         return 0;
-    }
-
-    public ArrayList<SlotAssembler> getSlots()
-    {
-        return slots;
-    }
-
-    public ArrayList<SlotAssembler> getEngines()
-    {
-        return engineSlots;
-    }
-
-    public ArrayList<SlotAssembler> getChests()
-    {
-        return chestSlots;
-    }
-
-    public ArrayList<SlotAssembler> getAddons()
-    {
-        return addonSlots;
-    }
-
-    public ArrayList<SlotAssembler> getFuncs()
-    {
-        return funcSlots;
-    }
-
-    public SlotAssembler getToolSlot()
-    {
-        return toolSlot;
-    }
-
-    @SuppressWarnings("all")
-    public int getMaxAssemblingTime()
-    {
-        return maxAssemblingTime;
-    }
-
-    public int getAssemblingTime()
-    {
-        return (int) currentAssemblingTime;
-    }
-
-    private void setAssemblingTime(final int val)
-    {
-        currentAssemblingTime = val;
-    }
-
-    public boolean getIsAssembling()
-    {
-        return isAssembling;
-    }
-
-    public void doAssemble()
-    {
-        if (!hasErrors())
-        {
-            maxAssemblingTime = generateAssemblingTime();
-            createCartFromModules();
-            isAssembling = true;
-            for (final TileEntityUpgrade tile : getUpgradeTiles())
-            {
-                if (tile.getUpgrade() != null)
-                {
-                    for (final BaseUpgradeEffect effect : tile.getUpgrade().getEffects())
-                    {
-                        if (effect instanceof Disassemble)
-                        {
-                            @Nonnull ItemStack oldcart = tile.getItem(0);
-                            if (!oldcart.isEmpty() && !outputItem.isEmpty() && oldcart.getItem() instanceof ItemCarts && outputItem.getItem() instanceof ItemCarts)
-                            {
-                                outputItem.set(DataComponents.CUSTOM_NAME, oldcart.getDisplayName());
-                            }
-                            tile.setItem(0, ItemStack.EMPTY);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public void receivePacket(final int id, final byte[] data, @org.jetbrains.annotations.Nullable ServerPlayer sender)
-    {
-        if (id == 0)
-        {
-            doAssemble();
-        }
-        else if (id == 1)
-        {
-            final int slotId = data[0];
-            if (slotId >= 1 && slotId < getSlots().size())
-            {
-                final SlotAssembler slot = getSlots().get(slotId);
-                if (!slot.getItem().isEmpty())
-                {
-                    CompoundTag tag = ModItemData.getTagCopy(slot.getItem());
-                    if (tag.getIntOr(MODIFY_STATUS, 0) == getKeepSize()) {
-                        tag.putInt(MODIFY_STATUS, getRemovedSize());
-                    } else {
-                        tag.putInt(MODIFY_STATUS, getKeepSize());
-                    }
-                    ModItemData.setTag(slot.getItem(), tag);
-                }
-            }
-        }
     }
 
     public static int getSlotStatus(ItemStack stack) {
@@ -383,8 +201,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
 
     public static ItemStack removeModify(ItemStack stack) {
         CompoundTag tag = ModItemData.getTagCopy(stack);
-        if (tag.contains(MODIFY_STATUS))
-        {
+        if (tag.contains(MODIFY_STATUS)) {
             tag.remove(MODIFY_STATUS);
             if (tag.size() <= 0) {
                 ModItemData.removeTag(stack);
@@ -395,127 +212,225 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         return stack;
     }
 
-    public void onUpgradeUpdate()
-    {
+    public void clearUpgrades() {
+        upgrades.clear();
     }
 
-    public int generateAssemblingTime()
-    {
-        if (SCConfig.COMMON.disableTimedCrafting.get())
-        {
+    public void addUpgrade(final TileEntityUpgrade upgrade) {
+        upgrades.add(upgrade);
+    }
+
+    public void removeUpgrade(final TileEntityUpgrade upgrade) {
+        upgrades.remove(upgrade);
+    }
+
+    public ArrayList<TileEntityUpgrade> getUpgradeTiles() {
+        return upgrades;
+    }
+
+    public ArrayList<AssemblerUpgrade> getUpgrades() {
+        final ArrayList<AssemblerUpgrade> lst = new ArrayList<>();
+        for (final TileEntityUpgrade tile : upgrades) {
+            lst.add(tile.getUpgrade());
+        }
+        return lst;
+    }
+
+    public ArrayList<BaseUpgradeEffect> getEffects() {
+        final ArrayList<BaseUpgradeEffect> lst = new ArrayList<>();
+        for (final TileEntityUpgrade tile : upgrades) {
+            final AssemblerUpgrade upgrade = tile.getUpgrade();
+            if (upgrade != null) {
+                lst.addAll(upgrade.getEffects());
+            }
+        }
+        return lst;
+    }
+
+    public SimulationInfo getSimulationInfo() {
+        return info;
+    }
+
+    public ArrayList<DropDownMenuItem> getDropDown() {
+        return dropDownItems;
+    }
+
+    public ArrayList<TitleBox> getTitleBoxes() {
+        return titleBoxes;
+    }
+
+    public ArrayList<SlotAssembler> getSlots() {
+        return slots;
+    }
+
+    public ArrayList<SlotAssembler> getEngines() {
+        return engineSlots;
+    }
+
+    public ArrayList<SlotAssembler> getChests() {
+        return chestSlots;
+    }
+
+    public ArrayList<SlotAssembler> getAddons() {
+        return addonSlots;
+    }
+
+    public ArrayList<SlotAssembler> getFuncs() {
+        return funcSlots;
+    }
+
+    public SlotAssembler getToolSlot() {
+        return toolSlot;
+    }
+
+    @SuppressWarnings("all")
+    public int getMaxAssemblingTime() {
+        return maxAssemblingTime;
+    }
+
+    public int getAssemblingTime() {
+        return (int) currentAssemblingTime;
+    }
+
+    private void setAssemblingTime(final int val) {
+        currentAssemblingTime = val;
+    }
+
+    public boolean getIsAssembling() {
+        return isAssembling;
+    }
+
+    public void doAssemble() {
+        if (!hasErrors()) {
+            maxAssemblingTime = generateAssemblingTime();
+            createCartFromModules();
+            isAssembling = true;
+            for (final TileEntityUpgrade tile : getUpgradeTiles()) {
+                if (tile.getUpgrade() != null) {
+                    for (final BaseUpgradeEffect effect : tile.getUpgrade().getEffects()) {
+                        if (effect instanceof Disassemble) {
+                            @Nonnull ItemStack oldcart = tile.getItem(0);
+                            if (!oldcart.isEmpty() && !outputItem.isEmpty() && oldcart.getItem() instanceof ItemCarts && outputItem.getItem() instanceof ItemCarts) {
+                                outputItem.set(DataComponents.CUSTOM_NAME, oldcart.getDisplayName());
+                            }
+                            tile.setItem(0, ItemStack.EMPTY);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void receivePacket(final int id, final byte[] data, @org.jetbrains.annotations.Nullable ServerPlayer sender) {
+        if (id == 0) {
+            doAssemble();
+        } else if (id == 1) {
+            final int slotId = data[0];
+            if (slotId >= 1 && slotId < getSlots().size()) {
+                final SlotAssembler slot = getSlots().get(slotId);
+                if (!slot.getItem().isEmpty()) {
+                    CompoundTag tag = ModItemData.getTagCopy(slot.getItem());
+                    if (tag.getIntOr(MODIFY_STATUS, 0) == getKeepSize()) {
+                        tag.putInt(MODIFY_STATUS, getRemovedSize());
+                    } else {
+                        tag.putInt(MODIFY_STATUS, getKeepSize());
+                    }
+                    ModItemData.setTag(slot.getItem(), tag);
+                }
+            }
+        }
+    }
+
+    public void onUpgradeUpdate() {
+    }
+
+    public int generateAssemblingTime() {
+        if (SCConfig.COMMON.disableTimedCrafting.get()) {
             return 1;
         }
 
         return generateAssemblingTime(getModules(true, new int[]{getKeepSize(), getRemovedSize()}), getModules(true, new int[]{getKeepSize(), 1}));
     }
 
-    private int generateAssemblingTime(final ArrayList<ModuleData> modules, final ArrayList<ModuleData> removed)
-    {
+    private int generateAssemblingTime(final ArrayList<ModuleData> modules, final ArrayList<ModuleData> removed) {
         int timeRequired = 100;
-        for (final ModuleData module : modules)
-        {
+        for (final ModuleData module : modules) {
             timeRequired += getAssemblingTime(module, false);
         }
-        for (final ModuleData module : removed)
-        {
+        for (final ModuleData module : removed) {
             timeRequired += getAssemblingTime(module, true);
         }
-        for (final BaseUpgradeEffect effect : getEffects())
-        {
-            if (effect instanceof TimeFlatCart)
-            {
+        for (final BaseUpgradeEffect effect : getEffects()) {
+            if (effect instanceof TimeFlatCart) {
                 timeRequired += ((TimeFlatCart) effect).getTicks();
             }
         }
         return Math.max(0, timeRequired);
     }
 
-    private int getAssemblingTime(final ModuleData module, final boolean isRemoved)
-    {
+    private int getAssemblingTime(final ModuleData module, final boolean isRemoved) {
         int time = (int) (5.0 * Math.pow(module.getCost(), 2.2));
         time += getTimeDecreased(isRemoved);
         return Math.max(0, time);
     }
 
     @Nonnull
-    public ItemStack getCartFromModules(final boolean isSimulated)
-    {
+    public ItemStack getCartFromModules(final boolean isSimulated) {
         final NonNullList<ItemStack> items = NonNullList.create();
-        for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i)
-        {
+        for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i) {
             @Nonnull ItemStack item = getItem(i);
-            if (!item.isEmpty())
-            {
-                if (getSlotStatus(item) != getRemovedSize())
-                {
+            if (!item.isEmpty()) {
+                if (getSlotStatus(item) != getRemovedSize()) {
                     items.add(item);
-                }
-                else if (!isSimulated)
-                {
+                } else if (!isSimulated) {
                     @Nonnull ItemStack spare = item.copy();
                     spare.setCount(1);
                     spareModules.add(spare);
                 }
             }
         }
-        if (items.size() == 1)
-        {
+        if (items.size() == 1) {
             return removeModify(items.get(0));
         }
         return ModuleData.createModularCartFromItems(items);
     }
 
-    private void createCartFromModules()
-    {
+    private void createCartFromModules() {
         spareModules.clear();
         outputItem = getCartFromModules(false);
-        if (!outputItem.isEmpty())
-        {
-            for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i)
-            {
+        if (!outputItem.isEmpty()) {
+            for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i) {
                 setItem(i, ItemStack.EMPTY);
             }
-        }
-        else
-        {
+        } else {
             spareModules.clear();
         }
     }
 
-    public ArrayList<ModuleData> getNonHullModules()
-    {
+    public ArrayList<ModuleData> getNonHullModules() {
         return getModules(false);
     }
 
-    public ArrayList<ModuleData> getModules(final boolean includeHull)
-    {
+    public ArrayList<ModuleData> getModules(final boolean includeHull) {
         return getModules(includeHull, new int[]{getRemovedSize()});
     }
 
-    public ArrayList<ModuleData> getModules(final boolean includeHull, final int[] invalid)
-    {
+    public ArrayList<ModuleData> getModules(final boolean includeHull, final int[] invalid) {
         final ArrayList<ModuleData> modules = new ArrayList<>();
-        for (int i = includeHull ? 0 : 1; i < getContainerSize() - nonModularSlots(); ++i)
-        {
+        for (int i = includeHull ? 0 : 1; i < getContainerSize() - nonModularSlots(); ++i) {
             @Nonnull ItemStack item = getItem(i);
-            if (!item.isEmpty())
-            {
+            if (!item.isEmpty()) {
                 boolean validSize = true;
-                for (int k : invalid)
-                {
-                    if (k == getSlotStatus(item) || (k > 0 && getSlotStatus(item) > 0))
-                    {
+                for (int k : invalid) {
+                    if (k == getSlotStatus(item) || (k > 0 && getSlotStatus(item) > 0)) {
                         validSize = false;
                         break;
                     }
                 }
-                if (validSize)
-                {
-                    if (item.getItem() instanceof IModuleItem itemCartModule)
-                    {
+                if (validSize) {
+                    if (item.getItem() instanceof IModuleItem itemCartModule) {
                         final ModuleData module = itemCartModule.getModuleData();
-                        if (module != null)
-                        {
+                        if (module != null) {
                             modules.add(module);
                         }
                     }
@@ -525,16 +440,12 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         return modules;
     }
 
-    public ModuleDataHull getHullModule()
-    {
-        if (!getItem(0).isEmpty())
-        {
+    public ModuleDataHull getHullModule() {
+        if (!getItem(0).isEmpty()) {
             ItemStack stack = getItem(0);
-            if (stack.getItem() instanceof IModuleItem itemCartModule)
-            {
+            if (stack.getItem() instanceof IModuleItem itemCartModule) {
                 final ModuleData hulldata = itemCartModule.getModuleData();
-                if (hulldata instanceof ModuleDataHull)
-                {
+                if (hulldata instanceof ModuleDataHull) {
                     return (ModuleDataHull) hulldata;
                 }
             }
@@ -542,52 +453,37 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         return null;
     }
 
-    private boolean hasErrors()
-    {
+    private boolean hasErrors() {
         return getErrors().size() > 0;
     }
 
-    public ArrayList<String> getErrors()
-    {
+    public ArrayList<String> getErrors() {
         final ArrayList<String> errors = new ArrayList<>();
-        if (hullSlot.getItem().isEmpty())
-        {
+        if (hullSlot.getItem().isEmpty()) {
             errors.add(Localization.GUI.ASSEMBLER.HULL_ERROR.translate());
-        }
-        else
-        {
+        } else {
             IModuleItem itemCartModule = (IModuleItem) getItem(0).getItem();
             final ModuleData hulldata = itemCartModule.getModuleData();
-            if (!(hulldata instanceof ModuleDataHull))
-            {
+            if (!(hulldata instanceof ModuleDataHull)) {
                 errors.add(Localization.GUI.ASSEMBLER.INVALID_HULL_SHORT.translate());
-            }
-            else
-            {
-                if (isAssembling)
-                {
+            } else {
+                if (isAssembling) {
                     errors.add(Localization.GUI.ASSEMBLER.BUSY.translate());
-                }
-                else if (outputSlot != null && !outputSlot.getItem().isEmpty())
-                {
+                } else if (outputSlot != null && !outputSlot.getItem().isEmpty()) {
                     errors.add(Localization.GUI.ASSEMBLER.DEPARTURE_BAY.translate());
                 }
                 final ArrayList<ModuleData> modules = new ArrayList<>();
-                for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i)
-                {
-                    if (!getItem(i).isEmpty())
-                    {
+                for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i) {
+                    if (!getItem(i).isEmpty()) {
                         IModuleItem itemCartModule1 = (IModuleItem) getItem(i).getItem();
                         final ModuleData data = itemCartModule1.getModuleData();
-                        if (data != null)
-                        {
+                        if (data != null) {
                             modules.add(data);
                         }
                     }
                 }
                 final String error = ModuleData.checkForErrors((ModuleDataHull) hulldata, modules);
-                if (error != null)
-                {
+                if (error != null) {
                     errors.add(error);
                 }
             }
@@ -596,16 +492,12 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @SuppressWarnings("all")
-    public int getTotalCost()
-    {
+    public int getTotalCost() {
         final ArrayList<ModuleData> modules = new ArrayList<>();
-        for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i)
-        {
-            if (!getItem(i).isEmpty() && getItem(i).getItem() instanceof IModuleItem itemCartModule)
-            {
+        for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i) {
+            if (!getItem(i).isEmpty() && getItem(i).getItem() instanceof IModuleItem itemCartModule) {
                 final ModuleData data = itemCartModule.getModuleData();
-                if (data != null)
-                {
+                if (data != null) {
                     modules.add(data);
                 }
             }
@@ -613,52 +505,39 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         return ModuleData.getTotalCost(modules);
     }
 
-    private void invalidateAll()
-    {
-        for (int i = 0; i < getEngines().size(); ++i)
-        {
+    private void invalidateAll() {
+        for (int i = 0; i < getEngines().size(); ++i) {
             getEngines().get(i).invalidate();
         }
-        for (int i = 0; i < getAddons().size(); ++i)
-        {
+        for (int i = 0; i < getAddons().size(); ++i) {
             getAddons().get(i).invalidate();
         }
-        for (int i = 0; i < getChests().size(); ++i)
-        {
+        for (int i = 0; i < getChests().size(); ++i) {
             getChests().get(i).invalidate();
         }
-        for (int i = 0; i < getFuncs().size(); ++i)
-        {
+        for (int i = 0; i < getFuncs().size(); ++i) {
             getFuncs().get(i).invalidate();
         }
         getToolSlot().invalidate();
     }
 
-    private void validateAll()
-    {
-        if (hullSlot == null)
-        {
+    private void validateAll() {
+        if (hullSlot == null) {
             return;
         }
         final ArrayList<SlotAssembler> slots = getValidSlotFromHullItem(hullSlot.getItem());
-        if (slots != null)
-        {
-            for (final SlotAssembler slot : slots)
-            {
+        if (slots != null) {
+            for (final SlotAssembler slot : slots) {
                 slot.validate();
             }
         }
     }
 
-    public ArrayList<SlotAssembler> getValidSlotFromHullItem(@Nonnull ItemStack hullitem)
-    {
-        if (!hullitem.isEmpty())
-        {
-            if (hullitem.getItem() instanceof IModuleItem itemCartModule)
-            {
+    public ArrayList<SlotAssembler> getValidSlotFromHullItem(@Nonnull ItemStack hullitem) {
+        if (!hullitem.isEmpty()) {
+            if (hullitem.getItem() instanceof IModuleItem itemCartModule) {
                 ModuleData moduleData = itemCartModule.getModuleData();
-                if (moduleData instanceof ModuleDataHull moduleDataHull)
-                {
+                if (moduleData instanceof ModuleDataHull moduleDataHull) {
                     return getValidSlotFromHull(moduleDataHull);
                 }
             }
@@ -666,15 +545,12 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         return null;
     }
 
-    private ArrayList<SlotAssembler> getValidSlotFromHull(final ModuleDataHull hull)
-    {
+    private ArrayList<SlotAssembler> getValidSlotFromHull(final ModuleDataHull hull) {
         final ArrayList<SlotAssembler> slots = new ArrayList<>();
-        for (int i = 0; i < hull.getEngineMax(); ++i)
-        {
+        for (int i = 0; i < hull.getEngineMax(); ++i) {
             slots.add(getEngines().get(i));
         }
-        for (int i = 0; i < hull.getAddonMax(); ++i)
-        {
+        for (int i = 0; i < hull.getAddonMax(); ++i) {
             slots.add(getAddons().get(i));
         }
         slots.addAll(getChests());
@@ -683,66 +559,49 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         return slots;
     }
 
-    public int getMaxFuelLevel()
-    {
+    public int getMaxFuelLevel() {
         int capacity = 4000;
-        for (final BaseUpgradeEffect effect : getEffects())
-        {
-            if (effect instanceof FuelCapacity)
-            {
+        for (final BaseUpgradeEffect effect : getEffects()) {
+            if (effect instanceof FuelCapacity) {
                 capacity += ((FuelCapacity) effect).getFuelCapacity();
             }
         }
-        if (capacity > 200000)
-        {
+        if (capacity > 200000) {
             capacity = 200000;
-        }
-        else if (capacity < 1)
-        {
+        } else if (capacity < 1) {
             capacity = 1;
         }
         return capacity;
     }
 
     @SuppressWarnings("unused")
-    public boolean isCombustionFuelValid()
-    {
-        for (final BaseUpgradeEffect effect : getEffects())
-        {
-            if (effect instanceof CombustionFuel)
-            {
+    public boolean isCombustionFuelValid() {
+        for (final BaseUpgradeEffect effect : getEffects()) {
+            if (effect instanceof CombustionFuel) {
                 return true;
             }
         }
         return false;
     }
 
-    public int getFuelLevel()
-    {
+    public int getFuelLevel() {
         return (int) fuelLevel;
     }
 
-    public void setFuelLevel(final int val)
-    {
+    public void setFuelLevel(final int val) {
         fuelLevel = val;
     }
 
-    private int getTimeDecreased(final boolean isRemoved)
-    {
+    private int getTimeDecreased(final boolean isRemoved) {
         int timeDecr = 0;
-        for (final BaseUpgradeEffect effect : getEffects())
-        {
-            if (effect instanceof TimeFlat && !(effect instanceof TimeFlatRemoved))
-            {
+        for (final BaseUpgradeEffect effect : getEffects()) {
+            if (effect instanceof TimeFlat && !(effect instanceof TimeFlatRemoved)) {
                 timeDecr += ((TimeFlat) effect).getTicks();
             }
         }
-        if (isRemoved)
-        {
-            for (final BaseUpgradeEffect effect : getEffects())
-            {
-                if (effect instanceof TimeFlatRemoved)
-                {
+        if (isRemoved) {
+            for (final BaseUpgradeEffect effect : getEffects()) {
+                if (effect instanceof TimeFlatRemoved) {
                     timeDecr += ((TimeFlat) effect).getTicks();
                 }
             }
@@ -750,52 +609,38 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         return timeDecr;
     }
 
-    private float getFuelCost()
-    {
+    private float getFuelCost() {
         float cost = 1.0f;
-        for (final BaseUpgradeEffect effect : getEffects())
-        {
-            if (effect instanceof FuelCost)
-            {
+        for (final BaseUpgradeEffect effect : getEffects()) {
+            if (effect instanceof FuelCost) {
                 cost += ((FuelCost) effect).getCost();
             }
         }
         return cost;
     }
 
-    public float getEfficiency()
-    {
+    public float getEfficiency() {
         float efficiency = 1.0f;
-        for (final BaseUpgradeEffect effect : getEffects())
-        {
-            if (effect instanceof WorkEfficiency)
-            {
+        for (final BaseUpgradeEffect effect : getEffects()) {
+            if (effect instanceof WorkEfficiency) {
                 efficiency += ((WorkEfficiency) effect).getEfficiency();
             }
         }
         return efficiency;
     }
 
-    private void deployCart()
-    {
+    private void deployCart() {
     }
 
-    private void deploySpares()
-    {
-        for (final TileEntityUpgrade tile : getUpgradeTiles())
-        {
-            if (tile.getUpgrade() != null)
-            {
-                for (final BaseUpgradeEffect effect : tile.getUpgrade().getEffects())
-                {
-                    if (effect instanceof Disassemble)
-                    {
-                        for (@Nonnull ItemStack item : spareModules)
-                        {
+    private void deploySpares() {
+        for (final TileEntityUpgrade tile : getUpgradeTiles()) {
+            if (tile.getUpgrade() != null) {
+                for (final BaseUpgradeEffect effect : tile.getUpgrade().getEffects()) {
+                    if (effect instanceof Disassemble) {
+                        for (@Nonnull ItemStack item : spareModules) {
                             item = removeModify(item);
                             TransferHandler.TransferItem(item, tile, new ContainerUpgrade(0, null, tile, new SimpleContainerData(0)), 1);
-                            if (item.getCount() > 0)
-                            {
+                            if (item.getCount() > 0) {
                                 puke(item);
                             }
                         }
@@ -805,31 +650,25 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         }
     }
 
-    public void puke(@Nonnull ItemStack item)
-    {
-        if(level == null) return;
+    public void puke(@Nonnull ItemStack item) {
+        if (level == null) return;
 
         final ItemEntity entityitem = new ItemEntity(level, getBlockPos().getX(), getBlockPos().getY() + 0.25, getBlockPos().getZ(), item);
         level.addFreshEntity(entityitem);
     }
 
     @Override
-    public void tick()
-    {
-        if(level == null) return;
-        if (!loaded)
-        {
+    public void tick() {
+        if (level == null) return;
+        if (!loaded) {
             ((BlockCartAssembler) ModBlocks.CART_ASSEMBLER.get()).updateMultiBlock(level, getBlockPos());
             loaded = true;
         }
-        if (!isAssembling && outputSlot != null && !outputSlot.getItem().isEmpty())
-        {
+        if (!isAssembling && outputSlot != null && !outputSlot.getItem().isEmpty()) {
             @Nonnull ItemStack itemInSlot = outputSlot.getItem();
-            if (itemInSlot.getItem() == ModItems.CARTS.get())
-            {
+            if (itemInSlot.getItem() == ModItems.CARTS.get()) {
                 CompoundTag tag = ModItemData.getTagCopy(itemInSlot);
-                if (tag.contains("maxTime"))
-                {
+                if (tag.contains("maxTime")) {
                     @Nonnull ItemStack newItem = new ItemStack(ModItems.CARTS.get());
                     final CompoundTag save = new CompoundTag();
                     save.putByteArray("Modules", tag.getByteArray("Modules").orElseGet(() -> new byte[0]));
@@ -846,28 +685,22 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                 }
             }
         }
-        if (getFuelLevel() > getMaxFuelLevel())
-        {
+        if (getFuelLevel() > getMaxFuelLevel()) {
             setFuelLevel(getMaxFuelLevel());
         }
-        if (isAssembling && outputSlot != null && getFuelLevel() >= getFuelCost())
-        {
+        if (isAssembling && outputSlot != null && getFuelLevel() >= getFuelCost()) {
             currentAssemblingTime += getEfficiency();
             fuelLevel -= getFuelCost();
-            if (getFuelLevel() <= 0)
-            {
+            if (getFuelLevel() <= 0) {
                 setFuelLevel(0);
             }
-            if (getAssemblingTime() >= maxAssemblingTime)
-            {
+            if (getAssemblingTime() >= maxAssemblingTime) {
                 isAssembling = false;
                 setAssemblingTime(0);
-                if (!outputItem.isEmpty())
-                {
+                if (!outputItem.isEmpty()) {
                     setItem(outputSlot.getSlotIndex(), outputItem);
                 }
-                if (!level.isClientSide())
-                {
+                if (!level.isClientSide()) {
                     deployCart();
                     outputItem = ItemStack.EMPTY;
                     deploySpares();
@@ -875,29 +708,21 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                 }
             }
         }
-        if (!level.isClientSide() && fuelCheckTimer-- <= 0 && fuelSlot != null && !fuelSlot.getItem().isEmpty() && getFuelLevel() < getMaxFuelLevel())
-        {
+        if (!level.isClientSide() && fuelCheckTimer-- <= 0 && fuelSlot != null && !fuelSlot.getItem().isEmpty() && getFuelLevel() < getMaxFuelLevel()) {
             final int fuel = fuelSlot.getFuelLevel(fuelSlot.getItem());
-            if (fuel > 0 && getFuelLevel() + fuel <= getMaxFuelLevel())
-            {
+            if (fuel > 0 && getFuelLevel() + fuel <= getMaxFuelLevel()) {
                 setFuelLevel(getFuelLevel() + fuel);
-                ItemStack remainder = fuelSlot.getItem().getCraftingRemainder();
-                if (!remainder.isEmpty())
-                {
+                ItemStack remainder = fuelSlot.getItem().getCraftingRemainder() != null ? fuelSlot.getItem().getCraftingRemainder().create() : ItemStack.EMPTY;
+                if (!remainder.isEmpty()) {
                     fuelSlot.set(remainder);
-                }
-                else
-                {
+                } else {
                     @Nonnull ItemStack stack = fuelSlot.getItem();
                     stack.shrink(1);
                 }
-                if (fuelSlot.getItem().getCount() <= 0)
-                {
+                if (fuelSlot.getItem().getCount() <= 0) {
                     fuelSlot.set(ItemStack.EMPTY);
                 }
-            }
-            else
-            {
+            } else {
                 fuelCheckTimer = 20;
             }
         }
@@ -905,127 +730,94 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         handlePlaceholder();
     }
 
-    public void updateSlots()
-    {
-        if (hullSlot != null)
-        {
-            if (!lastHull.isEmpty() && hullSlot.getItem().isEmpty())
-            {
+    public void updateSlots() {
+        if (hullSlot != null) {
+            if (!lastHull.isEmpty() && hullSlot.getItem().isEmpty()) {
                 invalidateAll();
-            }
-            else if (lastHull.isEmpty() && !hullSlot.getItem().isEmpty())
-            {
+            } else if (lastHull.isEmpty() && !hullSlot.getItem().isEmpty()) {
                 validateAll();
-            }
-            else if (lastHull != hullSlot.getItem())
-            {
+            } else if (lastHull != hullSlot.getItem()) {
                 invalidateAll();
                 validateAll();
             }
             lastHull = hullSlot.getItem();
         }
-        for (final SlotAssembler slot : slots)
-        {
+        for (final SlotAssembler slot : slots) {
             slot.setChanged();
         }
     }
 
-    public void resetPlaceholder()
-    {
+    public void resetPlaceholder() {
         placeholder = null;
     }
 
-    public ModularMinecart getPlaceholder()
-    {
+    public ModularMinecart getPlaceholder() {
         return placeholder;
     }
 
-    public float getYaw()
-    {
+    public float getYaw() {
         return yaw;
     }
 
-    public float getRoll()
-    {
-        return roll;
-    }
-
-    public void setYaw(final float val)
-    {
+    public void setYaw(final float val) {
         yaw = val;
     }
 
-    public void setRoll(final float val)
-    {
+    public float getRoll() {
+        return roll;
+    }
+
+    public void setRoll(final float val) {
         roll = val;
     }
 
-    public void setSpinning(final boolean val)
-    {
+    public void setSpinning(final boolean val) {
         shouldSpin = val;
     }
 
     @SuppressWarnings("unused")
-    public boolean shouldSpin()
-    {
+    public boolean shouldSpin() {
         return shouldSpin;
     }
 
-    public int nonModularSlots()
-    {
+    public int nonModularSlots() {
         return 2;
     }
 
-    private void handlePlaceholder()
-    {
-        if(level == null) return;
+    private void handlePlaceholder() {
+        if (level == null) return;
 
-        if (level.isClientSide())
-        {
-            if (placeholder == null)
-            {
+        if (level.isClientSide()) {
+            if (placeholder == null) {
                 return;
             }
             final int minRoll = -5;
             final int maxRoll = 25;
-            if (shouldSpin)
-            {
+            if (shouldSpin) {
                 yaw += 2.0f;
                 roll %= 360.0f;
-                if (!rolldown)
-                {
-                    if (roll < minRoll - 3)
-                    {
+                if (!rolldown) {
+                    if (roll < minRoll - 3) {
                         roll += 5.0f;
-                    }
-                    else
-                    {
+                    } else {
                         roll += 0.2f;
                     }
-                    if (roll > maxRoll)
-                    {
+                    if (roll > maxRoll) {
                         rolldown = true;
                     }
-                }
-                else
-                {
-                    if (roll > maxRoll + 3)
-                    {
+                } else {
+                    if (roll > maxRoll + 3) {
                         roll -= 5.0f;
-                    }
-                    else
-                    {
+                    } else {
                         roll -= 0.2f;
                     }
-                    if (roll < minRoll)
-                    {
+                    if (roll < minRoll) {
                         rolldown = false;
                     }
                 }
             }
             placeholder.onCartUpdate();
-            if (placeholder == null)
-            {
+            if (placeholder == null) {
                 return;
             }
             placeholder.updateFuel();
@@ -1033,73 +825,56 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @Override
-    public int @NotNull [] getSlotsForFace(@NotNull Direction direction)
-    {
+    public int @NotNull [] getSlotsForFace(@NotNull Direction direction) {
         return new int[]{fuelSlot.getSlotIndex()};
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int id, @NotNull ItemStack itemStack, @Nullable Direction direction)
-    {
-        if(id == fuelSlot.getSlotIndex() && FuelHelper.isItemFuel(itemStack, level)) return true;
+    public boolean canPlaceItemThroughFace(int id, @NotNull ItemStack itemStack, @Nullable Direction direction) {
+        return id == fuelSlot.getSlotIndex() && FuelHelper.isItemFuel(itemStack, level);
+    }
+
+    @Override
+    public boolean canTakeItemThroughFace(int id, @NotNull ItemStack itemStack, @NotNull Direction direction) {
         return false;
     }
 
     @Override
-    public boolean canTakeItemThroughFace(int id, @NotNull ItemStack itemStack, @NotNull Direction direction)
-    {
-        return false;
-    }
-
-    @Override
-    public @NotNull Component getDisplayName()
-    {
+    public @NotNull Component getDisplayName() {
         return Component.literal("tile.cart.assembler");
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player)
-    {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
         return new ContainerCartAssembler(id, playerInventory, this, this.dataAccess);
     }
 
-    public void createPlaceholder()
-    {
-        if (placeholder == null)
-        {
+    public void createPlaceholder() {
+        if (placeholder == null) {
             placeholder = new ModularMinecart(level, this, getModularInfo());
             updateRenderMenu();
             isErrorListOutdated = true;
         }
     }
 
-    public void updatePlaceholder()
-    {
-        if (placeholder != null)
-        {
+    public void updatePlaceholder() {
+        if (placeholder != null) {
             placeholder.updateSimulationModules(getModularInfo());
             updateRenderMenu();
             isErrorListOutdated = true;
         }
     }
 
-    private void updateRenderMenu()
-    {
+    private void updateRenderMenu() {
         final ArrayList<DropDownMenuItem> list = info.getList();
         dropDownItems.clear();
-        for (final DropDownMenuItem item : list)
-        {
-            if (item.getModuleClass() == null)
-            {
+        for (final DropDownMenuItem item : list) {
+            if (item.getModuleClass() == null) {
                 dropDownItems.add(item);
-            }
-            else
-            {
-                for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i)
-                {
-                    if (!getItem(i).isEmpty() && ModuleData.isItemOfModularType(getItem(i), item.getModuleClass()) && (item.getExcludedClass() == null || !ModuleData.isItemOfModularType(getItem(i), item.getExcludedClass())))
-                    {
+            } else {
+                for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i) {
+                    if (!getItem(i).isEmpty() && ModuleData.isItemOfModularType(getItem(i), item.getModuleClass()) && (item.getExcludedClass() == null || !ModuleData.isItemOfModularType(getItem(i), item.getExcludedClass()))) {
                         dropDownItems.add(item);
                         break;
                     }
@@ -1109,18 +884,13 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @SuppressWarnings("all")
-    private ArrayList<Identifier> getModularInfo()
-    {
+    private ArrayList<Identifier> getModularInfo() {
         final ArrayList<Identifier> datalist = new ArrayList<>();
-        for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i)
-        {
-            if (!getItem(i).isEmpty())
-            {
-                if (getItem(i).getItem() instanceof IModuleItem itemCartModule)
-                {
+        for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i) {
+            if (!getItem(i).isEmpty()) {
+                if (getItem(i).getItem() instanceof IModuleItem itemCartModule) {
                     final ModuleData data = itemCartModule.getModuleData();
-                    if (data != null)
-                    {
+                    if (data != null) {
                         datalist.add(data.getID());
                     }
                 }
@@ -1129,12 +899,9 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         return datalist;
     }
 
-    public boolean getIsDisassembling()
-    {
-        for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i)
-        {
-            if (!getItem(i).isEmpty() && getSlotStatus(getItem(i)) <= 0)
-            {
+    public boolean getIsDisassembling() {
+        for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i) {
+            if (!getItem(i).isEmpty() && getSlotStatus(getItem(i)) <= 0) {
                 return true;
             }
         }
@@ -1142,62 +909,51 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @Override
-    public int getContainerSize()
-    {
+    public int getContainerSize() {
         return inventoryStacks.size();
     }
 
     @Override
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return false;
     }
 
     @Override
-    public @NotNull ItemStack getItem(int i)
-    {
+    public @NotNull ItemStack getItem(int i) {
         return i >= 0 && i < this.inventoryStacks.size() ? this.inventoryStacks.get(i) : ItemStack.EMPTY;
     }
 
     @Override
-    public @NotNull ItemStack removeItem(int i, int j)
-    {
+    public @NotNull ItemStack removeItem(int i, int j) {
         ItemStack itemStack = ContainerHelper.removeItem(this.inventoryStacks, i, j);
         if (!itemStack.isEmpty()) this.setChanged();
         return itemStack;
     }
 
     @Override
-    public @NotNull ItemStack removeItemNoUpdate(int i)
-    {
+    public @NotNull ItemStack removeItemNoUpdate(int i) {
         ItemStack itemStack = this.inventoryStacks.get(i);
-        if (itemStack.isEmpty())
-        {
+        if (itemStack.isEmpty()) {
             return ItemStack.EMPTY;
-        }
-        else
-        {
+        } else {
             this.inventoryStacks.set(i, ItemStack.EMPTY);
             return itemStack;
         }
     }
 
     @Override
-    public void setItem(int i, @NotNull ItemStack itemStack)
-    {
+    public void setItem(int i, @NotNull ItemStack itemStack) {
         this.inventoryStacks.set(i, itemStack);
         this.setChanged();
     }
 
     @Override
-    public boolean stillValid(@NotNull Player player)
-    {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 
     @Override
-    public void clearContent()
-    {
+    public void clearContent() {
         inventoryStacks.clear();
         this.setChanged();
     }
@@ -1206,12 +962,12 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
 
-        for(ItemStackWithSlot itemstackwithslot : input.listOrEmpty("Items", ItemStackWithSlot.CODEC)) {
+        for (ItemStackWithSlot itemstackwithslot : input.listOrEmpty("Items", ItemStackWithSlot.CODEC)) {
             setItem(itemstackwithslot.slot(), itemstackwithslot.stack());
         }
 
         spareModules.clear();
-        for(ItemStack stack : input.listOrEmpty("Spares", ItemStack.OPTIONAL_CODEC)) {
+        for (ItemStack stack : input.listOrEmpty("Spares", ItemStack.OPTIONAL_CODEC)) {
             spareModules.add(stack);
         }
 
@@ -1227,7 +983,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         super.saveAdditional(output);
 
         ValueOutput.TypedOutputList<ItemStackWithSlot> typedoutputlist = output.list("Items", ItemStackWithSlot.CODEC);
-        for(int i = 0; i < getContainerSize(); ++i) {
+        for (int i = 0; i < getContainerSize(); ++i) {
             ItemStack itemstack = getItem(i);
             if (!itemstack.isEmpty()) {
                 typedoutputlist.add(new ItemStackWithSlot(i, itemstack));
@@ -1248,24 +1004,19 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     }
 
     @SuppressWarnings("unused")
-    public CompoundTag getOutputInfoCopy()
-    {
-        if (outputItem.isEmpty())
-        {
+    public CompoundTag getOutputInfoCopy() {
+        if (outputItem.isEmpty()) {
             return null;
         }
-        if (!ModItemData.hasTag(outputItem))
-        {
+        if (!ModItemData.hasTag(outputItem)) {
             return null;
         }
         return ModItemData.getTagCopy(outputItem);
     }
 
-    public void increaseFuel(final int val)
-    {
+    public void increaseFuel(final int val) {
         fuelLevel += val;
-        if (fuelLevel > getMaxFuelLevel())
-        {
+        if (fuelLevel > getMaxFuelLevel()) {
             fuelLevel = getMaxFuelLevel();
         }
     }

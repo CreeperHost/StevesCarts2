@@ -8,8 +8,7 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import vswe.stevescarts.entities.ModularMinecart;
 
 @Deprecated(forRemoval = true)
-public interface ITreeModule
-{
+public interface ITreeModule {
 
     /**
      * @param blockState

@@ -11,52 +11,42 @@ import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
-public class ModuleCakeServerDynamite extends ModuleCakeServer
-{
+public class ModuleCakeServerDynamite extends ModuleCakeServer {
     private int dynamiteCount;
 
-    private int getMaxDynamiteCount()
-    {
-        return Math.min(SCConfig.COMMON.maxDynamites.get(), 25);
-    }
-
-    public ModuleCakeServerDynamite(ModularMinecart cart)
-    {
+    public ModuleCakeServerDynamite(ModularMinecart cart) {
         super(cart);
     }
 
+    private int getMaxDynamiteCount() {
+        return Math.min(SCConfig.COMMON.maxDynamites.get(), 25);
+    }
+
     @Override
-    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
-    {
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y) {
         return new SlotCakeDynamite(getCart(), slotId, 8 + x * 18, 38 + y * 18);
     }
 
     @Override
-    public boolean dropOnDeath()
-    {
+    public boolean dropOnDeath() {
         return dynamiteCount == 0;
     }
 
     @Override
-    public void onDeath()
-    {
-        if (dynamiteCount > 0)
-        {
+    public void onDeath() {
+        if (dynamiteCount > 0) {
             explode();
         }
     }
 
-    private void explode()
-    {
+    private void explode() {
         getCart().level().explode(null, getCart().blockPosition().getX(), getCart().blockPosition().getY(), getCart().blockPosition().getZ(), dynamiteCount * .08f, Level.ExplosionInteraction.NONE);
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (!getCart().level().isClientSide())
-        {
+        if (!getCart().level().isClientSide()) {
             //TODO
             @Nonnull ItemStack item = getStack(0);
             //			if (!item.isEmpty() && item.getItem().equals(ModItems.COMPONENTS.get()) && dynamiteCount < getMaxDynamiteCount()) {
@@ -73,10 +63,8 @@ public class ModuleCakeServerDynamite extends ModuleCakeServer
     }
 
     @Override
-    public boolean onInteractFirst(final Player entityplayer)
-    {
-        if (dynamiteCount > 0)
-        {
+    public boolean onInteractFirst(final Player entityplayer) {
+        if (dynamiteCount > 0) {
             explode();
             getCart().remove(Entity.RemovalReason.KILLED);
             return true;

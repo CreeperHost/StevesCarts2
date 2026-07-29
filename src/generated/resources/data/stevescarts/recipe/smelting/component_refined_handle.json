@@ -6,7 +6,6 @@
   "group": "stevescarts",
   "ingredient": "stevescarts:component_raw_handle",
   "result": {
-    "count": 1,
     "id": "stevescarts:component_refined_handle"
   }
 }

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "stevescarts:block/upgrade_redstone_control"
+    }
+  }
+}

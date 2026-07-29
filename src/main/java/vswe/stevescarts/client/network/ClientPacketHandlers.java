@@ -8,11 +8,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerBase;
-import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.network.packets.PacketEntityData;
 import vswe.stevescarts.network.packets.PacketGuiData;
 import vswe.stevescarts.network.packets.PacketMinecartButton;
@@ -32,8 +30,8 @@ public class ClientPacketHandlers {
 
     public static void handleGuiData(PacketGuiData msg, IPayloadContext ctx) {
         Player player = Minecraft.getInstance().player;
-        if (player != null && player.containerMenu instanceof ContainerBase menu && menu.containerId == msg.getContainerId()) {
-            menu.receiveGuiData(msg.getDataId(), msg.getData());
+        if (player != null && player.containerMenu instanceof ContainerBase menu && menu.containerId == msg.containerId()) {
+            menu.receiveGuiData(msg.dataId(), msg.data());
         }
     }
 

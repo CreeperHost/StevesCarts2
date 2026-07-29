@@ -1,7 +1,6 @@
 package vswe.stevescarts.arcade.tetris;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
@@ -14,11 +13,20 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
-public class ArcadeTetris extends ArcadeGame
-{
+public class ArcadeTetris extends ArcadeGame {
+    public static final int BOARD_START_X = 189;
+    public static final int BOARD_START_Y = 9;
+    private static SoundEvent[] removalSounds;
+    private static String texture;
+
+    static {
+        //TODO bring back sounds
+        //        ArcadeTetris.removalSounds = new SoundEvent[]{SoundHandler.LINES_1, SoundHandler.LINES_2, SoundHandler.LINES_3, SoundHandler.LINES_4};
+        ArcadeTetris.texture = "/gui/tetris.png";
+    }
+
     private TetrisBlock[][] board;
     private TetrisPiece piece;
-    private static SoundEvent[] removalSounds;
     private int ticks;
     private boolean isPlaying;
     private boolean quickMove;
@@ -30,12 +38,8 @@ public class ArcadeTetris extends ArcadeGame
     private int delay;
     private int piecesSinceDelayChange;
     private boolean newHighScore;
-    public static final int BOARD_START_X = 189;
-    public static final int BOARD_START_Y = 9;
-    private static String texture;
 
-    public ArcadeTetris(final ModuleArcade module)
-    {
+    public ArcadeTetris(final ModuleArcade module) {
         super(module, Localization.ARCADE.STACKER);
         ticks = 0;
         isPlaying = true;
@@ -44,8 +48,7 @@ public class ArcadeTetris extends ArcadeGame
         newgame();
     }
 
-    private void newgame()
-    {
+    private void newgame() {
         board = new TetrisBlock[10][15];
         generatePiece();
         isPlaying = true;
@@ -59,43 +62,31 @@ public class ArcadeTetris extends ArcadeGame
         newHighScore = false;
     }
 
-    private void generatePiece()
-    {
+    private void generatePiece() {
         piece = TetrisPiece.createPiece(getModule().getCart().getRandom().nextInt(7));
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (isPlaying)
-        {
-            if (ticks == 0 || quickMove)
-            {
-                if (piece != null)
-                {
+        if (isPlaying) {
+            if (ticks == 0 || quickMove) {
+                if (piece != null) {
                     final TetrisPiece.MOVE_RESULT result = piece.move(this, board, 0, 1, true);
-                    if (result == TetrisPiece.MOVE_RESULT.FAIL)
-                    {
+                    if (result == TetrisPiece.MOVE_RESULT.FAIL) {
                         piece = null;
                         int removedCount = 0;
-                        for (int y = 0; y < board[0].length; ++y)
-                        {
+                        for (int y = 0; y < board[0].length; ++y) {
                             boolean valid = true;
-                            for (int x = 0; x < board.length; ++x)
-                            {
-                                if (board[x][y] == null)
-                                {
+                            for (int x = 0; x < board.length; ++x) {
+                                if (board[x][y] == null) {
                                     valid = false;
                                     break;
                                 }
                             }
-                            if (valid)
-                            {
-                                for (int y2 = y; y2 >= 0; --y2)
-                                {
-                                    for (int x2 = 0; x2 < board.length; ++x2)
-                                    {
+                            if (valid) {
+                                for (int y2 = y; y2 >= 0; --y2) {
+                                    for (int x2 = 0; x2 < board.length; ++x2) {
                                         final TetrisBlock value = (y2 == 0) ? null : board[x2][y2 - 1];
                                         board[x2][y2] = value;
                                     }
@@ -103,8 +94,7 @@ public class ArcadeTetris extends ArcadeGame
                                 ++removedCount;
                             }
                         }
-                        if (removedCount > 0)
-                        {
+                        if (removedCount > 0) {
                             removed += removedCount;
                             final int[] removedByAmount = this.removedByAmount;
                             final int n = removedCount - 1;
@@ -114,17 +104,13 @@ public class ArcadeTetris extends ArcadeGame
                         }
                         quickMove = false;
                         ++piecesSinceDelayChange;
-                        if (piecesSinceDelayChange == 8)
-                        {
+                        if (piecesSinceDelayChange == 8) {
                             piecesSinceDelayChange = 0;
-                            if (delay > 0)
-                            {
+                            if (delay > 0) {
                                 --delay;
                             }
                         }
-                    }
-                    else if (result == TetrisPiece.MOVE_RESULT.GAME_OVER)
-                    {
+                    } else if (result == TetrisPiece.MOVE_RESULT.GAME_OVER) {
                         piece = null;
                         isPlaying = false;
                         quickMove = false;
@@ -133,24 +119,16 @@ public class ArcadeTetris extends ArcadeGame
                         //TODO bring back sounds
 //                        ArcadeGame.playSound(SoundHandler.GAME_OVER, 1.0f, 1.0f);
                     }
-                }
-                else
-                {
+                } else {
                     generatePiece();
                 }
                 ticks = delay;
-            }
-            else
-            {
+            } else {
                 --ticks;
             }
-        }
-        else if (gameOverTicks < 170)
-        {
+        } else if (gameOverTicks < 170) {
             gameOverTicks = Math.min(170, gameOverTicks + 5);
-        }
-        else if (newHighScore)
-        {
+        } else if (newHighScore) {
             //TODO bring back sounds
 //            ArcadeGame.playSound(SoundHandler.HIGH_SCORE, 1.0f, 1.0f);
             newHighScore = false;
@@ -158,94 +136,71 @@ public class ArcadeTetris extends ArcadeGame
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource(ArcadeTetris.texture);
-        getModule().drawImage(guiGraphics, texture, gui, 187, 7, 0, 40, 104, 154);
-        for (int i = 0; i < board.length; ++i)
-        {
-            for (int j = 0; j < board[0].length; ++j)
-            {
+        getModule().drawImage(GuiGraphicsExtractor, texture, gui, 187, 7, 0, 40, 104, 154);
+        for (int i = 0; i < board.length; ++i) {
+            for (int j = 0; j < board[0].length; ++j) {
                 final TetrisBlock b = board[i][j];
-                if (b != null)
-                {
-                    b.render(guiGraphics, texture, this, gui, i, j);
+                if (b != null) {
+                    b.render(GuiGraphicsExtractor, texture, this, gui, i, j);
                 }
             }
         }
-        if (piece != null)
-        {
-            piece.render(guiGraphics, texture, this, gui);
+        if (piece != null) {
+            piece.render(GuiGraphicsExtractor, texture, this, gui);
         }
-        if (!isPlaying)
-        {
+        if (!isPlaying) {
             final int graphicalValue = Math.min(gameOverTicks, 150);
-            getModule().drawImage(guiGraphics, texture, gui, 189, 159 - graphicalValue, 104, 40, 100, graphicalValue);
-            if (graphicalValue == 150 && getModule().inRect(x, y, new int[]{189, 9, 100, 150}))
-            {
-                getModule().drawImage(guiGraphics, texture, gui, 213, 107, 0, 194, 54, 34);
+            getModule().drawImage(GuiGraphicsExtractor, texture, gui, 189, 159 - graphicalValue, 104, 40, 100, graphicalValue);
+            if (graphicalValue == 150 && getModule().inRect(x, y, new int[]{189, 9, 100, 150})) {
+                getModule().drawImage(GuiGraphicsExtractor, texture, gui, 213, 107, 0, 194, 54, 34);
             }
         }
     }
 
     @Override
-    public void keyPress(final GuiMinecart gui, final int character, final int extraInformation)
-    {
-        if (piece != null)
-        {
-            if (character == 19)
-            {
+    public void keyPress(final GuiMinecart gui, final int character, final int extraInformation) {
+        if (piece != null) {
+            if (character == 19) {
                 piece.rotate(board);
-            }
-            else if (character == 30)
-            {
+            } else if (character == 30) {
                 piece.move(this, board, -1, 0, false);
-            }
-            else if (character == 32)
-            {
+            } else if (character == 32) {
                 piece.move(this, board, 1, 0, false);
-            }
-            else if (character == 31)
-            {
+            } else if (character == 31) {
                 quickMove = true;
             }
         }
-        if (character == 19)
-        {
+        if (character == 19) {
             newgame();
         }
     }
 
     @Override
-    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
-    {
-        if (button == 0 && !isPlaying && gameOverTicks >= 150 && getModule().inRect(x, y, new int[]{189, 9, 100, 150}))
-        {
+    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
+        if (button == 0 && !isPlaying && gameOverTicks >= 150 && getModule().inRect(x, y, new int[]{189, 9, 100, 150})) {
             newgame();
         }
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        getModule().drawString(guiGraphics, gui, Localization.ARCADE.HIGH_SCORE.translate(String.valueOf(highscore)), 10, 20, 4210752);
-        getModule().drawString(guiGraphics, gui, Localization.ARCADE.SCORE.translate(String.valueOf(score)), 10, 40, 4210752);
-        getModule().drawString(guiGraphics, gui, Localization.ARCADE.REMOVED_LINES.translate(String.valueOf(removed)), 10, 60, 4210752);
-        for (int i = 0; i < 4; ++i)
-        {
-            getModule().drawString(guiGraphics, gui, Localization.ARCADE.REMOVED_LINES_COMBO.translate(String.valueOf(i), String.valueOf(removedByAmount[i])), 10, 80 + i * 10, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.HIGH_SCORE.translate(String.valueOf(highscore)), 10, 20, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.SCORE.translate(String.valueOf(score)), 10, 40, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.REMOVED_LINES.translate(String.valueOf(removed)), 10, 60, 4210752);
+        for (int i = 0; i < 4; ++i) {
+            getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.REMOVED_LINES_COMBO.translate(String.valueOf(i), String.valueOf(removedByAmount[i])), 10, 80 + i * 10, 4210752);
         }
-        getModule().drawString(guiGraphics, gui, "W - " + Localization.ARCADE.INSTRUCTION_ROTATE.translate(), 340, 20, 4210752);
-        getModule().drawString(guiGraphics, gui, "A - " + Localization.ARCADE.INSTRUCTION_LEFT.translate(), 340, 30, 4210752);
-        getModule().drawString(guiGraphics, gui, "S - " + Localization.ARCADE.INSTRUCTION_DROP.translate(), 340, 40, 4210752);
-        getModule().drawString(guiGraphics, gui, "D - " + Localization.ARCADE.INSTRUCTION_RIGHT.translate(), 340, 50, 4210752);
-        getModule().drawString(guiGraphics, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 340, 70, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "W - " + Localization.ARCADE.INSTRUCTION_ROTATE.translate(), 340, 20, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "A - " + Localization.ARCADE.INSTRUCTION_LEFT.translate(), 340, 30, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "S - " + Localization.ARCADE.INSTRUCTION_DROP.translate(), 340, 40, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "D - " + Localization.ARCADE.INSTRUCTION_RIGHT.translate(), 340, 50, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 340, 70, 4210752);
     }
 
-    private void newHighScore()
-    {
-        if (score > highscore)
-        {
+    private void newHighScore() {
+        if (score > highscore) {
             final int val = score / 100;
             final byte byte1 = (byte) (val & 0xFF);
             final byte byte2 = (byte) ((val & 0xFF00) >> 8);
@@ -255,18 +210,14 @@ public class ArcadeTetris extends ArcadeGame
     }
 
     @Override
-    public void receivePacket(final int id, final byte[] data, final Player player)
-    {
-        if (id == 1)
-        {
+    public void receivePacket(final int id, final byte[] data, final Player player) {
+        if (id == 1) {
             short data2 = data[0];
             short data3 = data[1];
-            if (data2 < 0)
-            {
+            if (data2 < 0) {
                 data2 += 256;
             }
-            if (data3 < 0)
-            {
+            if (data3 < 0) {
                 data3 += 256;
             }
             highscore = (data2 | data3 << 8) * 100;
@@ -274,36 +225,24 @@ public class ArcadeTetris extends ArcadeGame
     }
 
     @Override
-    public void checkGuiData(final Object[] info)
-    {
+    public void checkGuiData(final Object[] info) {
         getModule().updateGuiData(info, TrackStory.stories.size(), (short) (highscore / 100));
     }
 
     @Override
-    public void receiveGuiData(final int id, final short data)
-    {
-        if (id == TrackStory.stories.size())
-        {
+    public void receiveGuiData(final int id, final short data) {
+        if (id == TrackStory.stories.size()) {
             highscore = data * 100;
         }
     }
 
     @Override
-    public void Save(ValueOutput output, int id)
-    {
+    public void Save(ValueOutput output, int id) {
         output.putShort(getModule().generateNBTName("Highscore", id), (short) highscore);
     }
 
     @Override
-    public void Load(ValueInput input, int id)
-    {
+    public void Load(ValueInput input, int id) {
         highscore = input.getShortOr(getModule().generateNBTName("Highscore", id), (short) 0);
-    }
-
-    static
-    {
-        //TODO bring back sounds
-        //        ArcadeTetris.removalSounds = new SoundEvent[]{SoundHandler.LINES_1, SoundHandler.LINES_2, SoundHandler.LINES_3, SoundHandler.LINES_4};
-        ArcadeTetris.texture = "/gui/tetris.png";
     }
 }

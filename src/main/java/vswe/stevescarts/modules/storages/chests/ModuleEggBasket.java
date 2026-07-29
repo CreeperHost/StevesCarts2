@@ -3,40 +3,33 @@ package vswe.stevescarts.modules.storages.chests;
 import vswe.stevescarts.api.modules.template.ModuleChest;
 import vswe.stevescarts.entities.ModularMinecart;
 
-public class ModuleEggBasket extends ModuleChest
-{
-    public ModuleEggBasket(ModularMinecart cart)
-    {
+public class ModuleEggBasket extends ModuleChest {
+    public ModuleEggBasket(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    protected int getInventoryWidth()
-    {
+    protected int getInventoryWidth() {
         return 6;
     }
 
     @Override
-    protected int getInventoryHeight()
-    {
+    protected int getInventoryHeight() {
         return 4;
     }
 
     @Override
-    protected boolean playChestSound()
-    {
+    protected boolean playChestSound() {
         return false;
     }
 
     @Override
-    protected float getLidSpeed()
-    {
+    protected float getLidSpeed() {
         return 0.02094395f;
     }
 
     @Override
-    protected float chestFullyOpenAngle()
-    {
+    protected float chestFullyOpenAngle() {
         return 0.3926991f;
     }
 }

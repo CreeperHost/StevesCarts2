@@ -5,28 +5,23 @@ import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
-public class ModuleCreativeIncinerator extends ModuleIncinerator
-{
-    public ModuleCreativeIncinerator(ModularMinecart cart)
-    {
+public class ModuleCreativeIncinerator extends ModuleIncinerator {
+    public ModuleCreativeIncinerator(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    protected int getIncinerationCost()
-    {
+    protected int getIncinerationCost() {
         return 0;
     }
 
     @Override
-    protected boolean isItemValid(@Nonnull ItemStack item)
-    {
+    protected boolean isItemValid(@Nonnull ItemStack item) {
         return !item.isEmpty();
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return false;
     }
 }

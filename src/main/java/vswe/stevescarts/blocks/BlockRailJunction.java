@@ -8,7 +8,6 @@ import net.minecraft.world.entity.vehicle.minecart.NewMinecartBehavior;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -16,36 +15,32 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nullable;
 
-public class BlockRailJunction extends BaseRailBlock
-{
+public class BlockRailJunction extends BaseRailBlock {
     public static final MapCodec<BlockRailJunction> CODEC = simpleCodec(BlockRailJunction::new);
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
 
-    public BlockRailJunction(Properties builder)
-    {
+    public BlockRailJunction(Properties builder) {
         super(true, builder);
         this.registerDefaultState(this.stateDefinition.any().setValue(SHAPE, RailShape.NORTH_SOUTH).setValue(WATERLOGGED, Boolean.FALSE));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(SHAPE, WATERLOGGED);
     }
 
     @Override
-    public @NotNull Property<RailShape> getShapeProperty()
-    {
+    public @NotNull Property<RailShape> getShapeProperty() {
         return SHAPE;
     }
 
     @Override
-    public boolean canMakeSlopes(BlockState state, BlockGetter world, BlockPos pos)
-    {
+    public boolean canMakeSlopes(@NonNull BlockState state, @NonNull BlockGetter world, @NonNull BlockPos pos) {
         return false;
     }
 
@@ -75,7 +70,7 @@ public class BlockRailJunction extends BaseRailBlock
     }
 
     @Override
-    protected MapCodec<? extends BaseRailBlock> codec() {
+    protected @NonNull MapCodec<? extends BaseRailBlock> codec() {
         return CODEC;
     }
 }

@@ -1,6 +1,5 @@
 package vswe.stevescarts.api.modules.interfaces;
 
-public interface ISuppliesModule
-{
+public interface ISuppliesModule {
     boolean haveSupplies();
 }

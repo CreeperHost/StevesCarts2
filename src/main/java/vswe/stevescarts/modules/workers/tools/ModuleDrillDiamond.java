@@ -7,34 +7,28 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.entities.ModularMinecart;
 
-public class ModuleDrillDiamond extends ModuleDrill
-{
-    public ModuleDrillDiamond(ModularMinecart cart)
-    {
+public class ModuleDrillDiamond extends ModuleDrill {
+    public ModuleDrillDiamond(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    protected int blocksOnTop()
-    {
+    protected int blocksOnTop() {
         return 3;
     }
 
     @Override
-    protected int blocksOnSide()
-    {
+    protected int blocksOnSide() {
         return 1;
     }
 
     @Override
-    protected float getTimeMult()
-    {
+    protected float getTimeMult() {
         return 8.0f;
     }
 
     @Override
-    public int getMaxDurability()
-    {
+    public int getMaxDurability() {
         return SCConfig.COMMON.drillDurabilityDiamond.get();
     }
 
@@ -53,14 +47,12 @@ public class ModuleDrillDiamond extends ModuleDrill
     }
 
     @Override
-    public int getRepairSpeed()
-    {
+    public int getRepairSpeed() {
         return 50;
     }
 
     @Override
-    public boolean useDurability()
-    {
+    public boolean useDurability() {
         return true;
     }
 }

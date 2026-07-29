@@ -23,6 +23,10 @@ public class PacketCreateCart implements CustomPacketPayload {
         this.data = data;
     }
 
+    public static PacketCreateCart read(FriendlyByteBuf buffer) {
+        return new PacketCreateCart(buffer.readBlockPos(), buffer.readInt(), buffer.readByteArray());
+    }
+
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
@@ -32,10 +36,6 @@ public class PacketCreateCart implements CustomPacketPayload {
         buf.writeBlockPos(blockPos);
         buf.writeInt(id);
         buf.writeByteArray(data);
-    }
-
-    public static PacketCreateCart read(FriendlyByteBuf buffer) {
-        return new PacketCreateCart(buffer.readBlockPos(), buffer.readInt(), buffer.readByteArray());
     }
 
     public static class Handler implements IPayloadHandler<PacketCreateCart> {

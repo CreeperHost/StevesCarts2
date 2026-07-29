@@ -5,22 +5,18 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.entities.ModularMinecart;
 
-public class ModuleWoodcutterGalgadorian extends ModuleWoodcutter
-{
-    public ModuleWoodcutterGalgadorian(ModularMinecart cart)
-    {
+public class ModuleWoodcutterGalgadorian extends ModuleWoodcutter {
+    public ModuleWoodcutterGalgadorian(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public int getPercentageDropChance()
-    {
+    public int getPercentageDropChance() {
         return 125;
     }
 
     @Override
-    public int getMaxDurability()
-    {
+    public int getMaxDurability() {
         return 1;
     }
 
@@ -30,20 +26,17 @@ public class ModuleWoodcutterGalgadorian extends ModuleWoodcutter
     }
 
     @Override
-    public int getRepairItemUnits(@NotNull ItemStack item)
-    {
+    public int getRepairItemUnits(@NotNull ItemStack item) {
         return 0;
     }
 
     @Override
-    public boolean useDurability()
-    {
+    public boolean useDurability() {
         return false;
     }
 
     @Override
-    public int getRepairSpeed()
-    {
+    public int getRepairSpeed() {
         return 1;
     }
 }

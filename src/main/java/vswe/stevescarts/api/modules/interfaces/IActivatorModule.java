@@ -1,7 +1,6 @@
 package vswe.stevescarts.api.modules.interfaces;
 
-public interface IActivatorModule
-{
+public interface IActivatorModule {
     boolean isActive(final int p0);
 
     void doActivate(final int p0);

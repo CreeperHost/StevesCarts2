@@ -1,45 +1,37 @@
 package vswe.stevescarts.arcade.invaders;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
-public abstract class Unit
-{
+public abstract class Unit {
     protected int x;
     protected int y;
     protected ArcadeInvaders game;
     protected boolean dead;
     protected int health;
 
-    public Unit(final ArcadeInvaders game, final int x, final int y)
-    {
+    public Unit(final ArcadeInvaders game, final int x, final int y) {
         this.x = x;
         this.y = y;
         this.game = game;
         health = 1;
     }
 
-    public abstract void draw(GuiGraphics guiGraphics, Identifier texture, GuiMinecart p0);
+    public abstract void draw(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, GuiMinecart p0);
 
-    public UPDATE_RESULT update()
-    {
-        if (!dead)
-        {
+    public UPDATE_RESULT update() {
+        if (!dead) {
             hitCalculation();
         }
         return dead ? UPDATE_RESULT.DEAD : UPDATE_RESULT.DONE;
     }
 
-    protected void hitCalculation()
-    {
-        for (final Projectile projectile : game.projectiles)
-        {
-            if (!projectile.dead && (isObstacle() || projectile.playerProjectile != isPlayer()) && collidesWith(projectile))
-            {
+    protected void hitCalculation() {
+        for (final Projectile projectile : game.projectiles) {
+            if (!projectile.dead && (isObstacle() || projectile.playerProjectile != isPlayer()) && collidesWith(projectile)) {
                 --health;
-                if (health == 0)
-                {
+                if (health == 0) {
                     dead = true;
                 }
                 projectile.dead = true;
@@ -47,23 +39,19 @@ public abstract class Unit
         }
     }
 
-    protected boolean collidesWith(final Unit unit)
-    {
+    protected boolean collidesWith(final Unit unit) {
         return isUnitAinUnitB(this, unit) || isUnitAinUnitB(unit, this);
     }
 
-    private boolean isUnitAinUnitB(final Unit a, final Unit b)
-    {
+    private boolean isUnitAinUnitB(final Unit a, final Unit b) {
         return ((a.x >= b.x && a.x <= b.x + b.getHitboxWidth()) || (a.x + a.getHitboxWidth() >= b.x && a.x + a.getHitboxWidth() <= b.x + b.getHitboxWidth())) && ((a.y >= b.y && a.y <= b.y + b.getHitboxHeight()) || (a.y + a.getHitboxHeight() >= b.y && a.y + a.getHitboxHeight() <= b.y + b.getHitboxHeight()));
     }
 
-    protected boolean isPlayer()
-    {
+    protected boolean isPlayer() {
         return false;
     }
 
-    protected boolean isObstacle()
-    {
+    protected boolean isObstacle() {
         return false;
     }
 
@@ -71,8 +59,7 @@ public abstract class Unit
 
     protected abstract int getHitboxHeight();
 
-    public enum UPDATE_RESULT
-    {
+    public enum UPDATE_RESULT {
         DONE, TURN_BACK, DEAD, GAME_OVER, TARGET
     }
 }

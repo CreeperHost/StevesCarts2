@@ -8,22 +8,18 @@ import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
-public class ModulePotion extends ModuleProjectile
-{
-    public ModulePotion(ModularMinecart cart)
-    {
+public class ModulePotion extends ModuleProjectile {
+    public ModulePotion(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public boolean isValidProjectile(@Nonnull ItemStack item)
-    {
+    public boolean isValidProjectile(@Nonnull ItemStack item) {
         return item.getItem() == Items.SPLASH_POTION;
     }
 
     @Override
-    public Entity createProjectile(final Entity target, @Nonnull ItemStack item)
-    {
+    public Entity createProjectile(final Entity target, @Nonnull ItemStack item) {
         ThrownSplashPotion potionEntity = new ThrownSplashPotion(getCart().level(), 0, 0, 0, item);
         potionEntity.setItem(item);
         return potionEntity;

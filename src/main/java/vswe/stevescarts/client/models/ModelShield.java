@@ -8,8 +8,6 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -24,6 +22,10 @@ public class ModelShield extends ModelCartbase {
     public ModelShield() {
         super(null, ResourceHelper.getResource("/models/shieldModel.png"));
         buildModels();
+    }
+
+    public static float interpolate(float a, float b, float d) {
+        return a + (b - a) * d;
     }
 
     public void buildModels() {
@@ -66,9 +68,5 @@ public class ModelShield extends ModelCartbase {
             part.x = (float) Math.sin(angularPos) * shieldDistance;
             part.z = (float) Math.cos(angularPos) * shieldDistance;
         }
-    }
-
-    public static float interpolate(float a, float b, float d) {
-        return a + (b - a) * d;
     }
 }

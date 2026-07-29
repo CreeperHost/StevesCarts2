@@ -7,7 +7,6 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
@@ -20,8 +19,8 @@ import vswe.stevescarts.modules.engines.ModuleSolarCompact;
 import java.util.function.Consumer;
 
 public class ModelCompactSolarPanel extends ModelCartbase {
-    private static Identifier texture = ResourceHelper.getResource("/models/panelModelSideActive.png");
-    private static Identifier texture2 = ResourceHelper.getResource("/models/panelModelSideIdle.png");
+    private static final Identifier texture = ResourceHelper.getResource("/models/panelModelSideActive.png");
+    private static final Identifier texture2 = ResourceHelper.getResource("/models/panelModelSideIdle.png");
     private ModelPart modelLeft;
     private ModelPart modelRight;
     private ModelPart[][] modelParts;

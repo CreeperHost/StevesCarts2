@@ -1,8 +1,5 @@
 package vswe.stevescarts.blocks;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.Container;
-import net.minecraft.world.Containers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -12,29 +9,25 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 import vswe.stevescarts.blocks.tileentities.TileEntityBase;
 
-public abstract class BlockContainerBase extends BaseEntityBlock
-{
-    public BlockContainerBase(Block.Properties properties)
-    {
+public abstract class BlockContainerBase extends BaseEntityBlock {
+    public BlockContainerBase(Block.Properties properties) {
         super(properties);
     }
 
     @Override
-    public @NotNull RenderShape getRenderShape(@NotNull BlockState state)
-    {
+    public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type)
-    {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
         return (level1, blockPos, blockState, t) ->
         {
-            if (t instanceof TileEntityBase tile)
-            {
+            if (t instanceof TileEntityBase tile) {
                 tile.tick();
             }
         };

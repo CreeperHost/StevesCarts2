@@ -7,10 +7,8 @@ import vswe.stevescarts.helpers.storages.TransferHandler;
 
 import javax.annotation.Nonnull;
 
-public abstract class SlotFake extends SlotStevesCarts implements ISpecialItemTransferValidator
-{
-    public SlotFake(final Container iinventory, final int i, final int j, final int k)
-    {
+public abstract class SlotFake extends SlotStevesCarts implements ISpecialItemTransferValidator {
+    public SlotFake(final Container iinventory, final int i, final int j, final int k) {
         super(iinventory, i, j, k);
     }
 
@@ -53,8 +51,7 @@ public abstract class SlotFake extends SlotStevesCarts implements ISpecialItemTr
     //	}
 
     @Override
-    public boolean isItemValidForTransfer(@Nonnull ItemStack item, final TransferHandler.TRANSFER_TYPE type)
-    {
+    public boolean isItemValidForTransfer(@Nonnull ItemStack item, final TransferHandler.TRANSFER_TYPE type) {
         return false;
     }
 }

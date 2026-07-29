@@ -1,33 +1,27 @@
 package vswe.stevescarts.polylib;
 
-public class Pair<A, B>
-{
+public class Pair<A, B> {
     private final A first;
     private final B second;
 
-    protected Pair(A first, B second)
-    {
+    protected Pair(A first, B second) {
         this.first = first;
         this.second = second;
     }
 
-    public static <A, B> Pair<A, B> of(A a, B b)
-    {
+    public static <A, B> Pair<A, B> of(A a, B b) {
         return new Pair<>(a, b);
     }
 
-    public A first()
-    {
+    public A first() {
         return this.first;
     }
 
-    public B second()
-    {
+    public B second() {
         return this.second;
     }
 
-    public String mkString(String separator)
-    {
+    public String mkString(String separator) {
         return String.format("%s%s%s", this.first, separator, this.second);
     }
 }

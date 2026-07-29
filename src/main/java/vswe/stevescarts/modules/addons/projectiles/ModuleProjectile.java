@@ -7,10 +7,8 @@ import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
-public abstract class ModuleProjectile extends ModuleAddon
-{
-    public ModuleProjectile(ModularMinecart cart)
-    {
+public abstract class ModuleProjectile extends ModuleAddon {
+    public ModuleProjectile(ModularMinecart cart) {
         super(cart);
     }
 

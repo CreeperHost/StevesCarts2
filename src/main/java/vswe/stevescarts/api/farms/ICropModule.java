@@ -6,8 +6,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Deprecated(forRemoval = true)
-public interface ICropModule
-{
+public interface ICropModule {
     boolean isSeedValid(ItemStack itemStack);
 
     BlockState getCropFromSeed(ItemStack itemStack, Level world, BlockPos pos);

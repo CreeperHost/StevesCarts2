@@ -2,14 +2,12 @@ package vswe.stevescarts.items;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -19,8 +17,6 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.TagValueInput;
-import net.minecraft.world.level.storage.ValueInput;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -29,13 +25,10 @@ import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.init.ModEntities;
 import vswe.stevescarts.init.ModItemData;
 
-import java.util.List;
 import java.util.function.Consumer;
 
-public class ItemCarts extends MinecartItem
-{
-    public ItemCarts(Properties props)
-    {
+public class ItemCarts extends MinecartItem {
+    public ItemCarts(Properties props) {
         super(ModEntities.MODULAR_CART.get(), props);
     }
 
@@ -46,42 +39,32 @@ public class ItemCarts extends MinecartItem
 //    }
 
     @Override
-    public InteractionResult useOn(UseOnContext itemUseContext)
-    {
+    public InteractionResult useOn(UseOnContext itemUseContext) {
         Player player = itemUseContext.getPlayer();
         Level world = itemUseContext.getLevel();
         ItemStack stack = player.getItemInHand(itemUseContext.getHand());
         BlockPos pos = itemUseContext.getClickedPos();
-        if (!world.isClientSide())
-        {
+        if (!world.isClientSide()) {
             BlockState blockstate = world.getBlockState(pos);
-            if (blockstate.is(BlockTags.RAILS))
-            {
-                try
-                {
+            if (blockstate.is(BlockTags.RAILS)) {
+                try {
                     CompoundTag info = ModItemData.getTagCopy(stack);
-                    if (!info.contains("maxTime"))
-                    {
-                        try
-                        {
+                    if (!info.contains("maxTime")) {
+                        try {
                             ModularMinecart cart = new ModularMinecart(world, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, info);
                             cart.setYRot(-(player.getDirection().toYRot() + 90) + 360);
                             world.addFreshEntity(cart);
-                        } catch (Exception e)
-                        {
+                        } catch (Exception e) {
                             e.printStackTrace();
-                            player.displayClientMessage(Component.literal("The cart failed to be placed into the world, this is due to an issue with one or more modules. " + "Please post your log on the issue tracker here: " + ChatFormatting.BLUE + " https://github.com/modmuss50/SC2/issues"), false);
+                            player.sendSystemMessage(Component.literal("The cart failed to be placed into the world, this is due to an issue with one or more modules. " + "Please post your log on the issue tracker here: " + ChatFormatting.BLUE + " https://github.com/modmuss50/SC2/issues"));
                             StevesCarts.LOGGER.error(" --------------- Broken cart info --------------- ");
                             StevesCarts.LOGGER.error(info);
                             ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
-                            for (final byte id : moduleIDTag.getAsByteArray())
-                            {
-                                try
-                                {
+                            for (final byte id : moduleIDTag.getAsByteArray()) {
+                                try {
                                     final Class<? extends ModuleBase> moduleClass = StevesCartsAPI.MODULE_REGISTRY.get(id).getModuleClass();
                                     StevesCarts.LOGGER.error("--- " + moduleClass.getCanonicalName());
-                                } catch (Exception ex)
-                                {
+                                } catch (Exception ex) {
                                     StevesCarts.LOGGER.error("Failed to load module with ID " + id + "! More info below.");
                                     e.printStackTrace();
                                 }
@@ -90,8 +73,7 @@ public class ItemCarts extends MinecartItem
                             return InteractionResult.FAIL;
                         }
                     }
-                } catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                     return InteractionResult.FAIL;
                 }
@@ -114,7 +96,8 @@ public class ItemCarts extends MinecartItem
                     CompoundTag moduleTag = (CompoundTag) moduleListTag.get(i);
                     Identifier resourceLocation = Identifier.parse(moduleTag.getStringOr(String.valueOf(i), ""));
                     ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(resourceLocation);
-                    if (moduleData != null) consumer.accept(Component.literal(ChatFormatting.GOLD + moduleData.getDisplayName()));
+                    if (moduleData != null)
+                        consumer.accept(Component.literal(ChatFormatting.GOLD + moduleData.getDisplayName()));
                 }
             } else {
                 consumer.accept(Component.literal(ChatFormatting.RED + "No modules loaded"));

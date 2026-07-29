@@ -2,18 +2,11 @@ package vswe.stevescarts.helpers;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +22,31 @@ public class EnchantmentData {
     public EnchantmentData(Holder<Enchantment> enchant) {
         this.enchant = enchant;
         value = 0;
+    }
+
+    public static EnchantmentData read(RegistryFriendlyByteBuf buf) {
+        int value = buf.readVarInt();
+        if (value == -1) return new EnchantmentData(null);
+        ResourceKey<Enchantment> resKey = ResourceKey.create(Registries.ENCHANTMENT, buf.readIdentifier());
+        Holder<Enchantment> enchantment = buf.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(resKey);
+        EnchantmentData data = new EnchantmentData(enchantment);
+        data.setValue(value);
+        return data;
+    }
+
+    @Nullable
+    public static EnchantmentData load(ValueInput input) {
+        String keyString = input.getStringOr("key", "");
+        if (keyString.isEmpty()) {
+            return null;
+        }
+
+        Identifier key = Identifier.parse(keyString);
+        ResourceKey<Enchantment> resKey = ResourceKey.create(Registries.ENCHANTMENT, key);
+        Holder<Enchantment> enchant = input.lookup().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(resKey);
+        EnchantmentData data = new EnchantmentData(enchant);
+        data.setValue(input.getIntOr("value", 0));
+        return data;
     }
 
     public int getValue() {
@@ -114,40 +132,15 @@ public class EnchantmentData {
 
     public void write(RegistryFriendlyByteBuf buf) {
         buf.writeVarInt(enchant == null ? -1 : value);
-        if (enchant != null){
+        if (enchant != null) {
             buf.writeIdentifier(Objects.requireNonNull(Identifier.parse(enchant.getRegisteredName())));
         }
-    }
-
-    public static EnchantmentData read(RegistryFriendlyByteBuf buf) {
-        int value = buf.readVarInt();
-        if (value == -1) return new EnchantmentData(null);
-        ResourceKey<Enchantment> resKey = ResourceKey.create(Registries.ENCHANTMENT, buf.readIdentifier());
-        Holder<Enchantment> enchantment = buf.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(resKey);
-        EnchantmentData data = new EnchantmentData(enchantment);
-        data.setValue(value);
-        return data;
     }
 
     public void save(ValueOutput output) {
         if (enchant == null) return;
         output.putString("key", enchant.getRegisteredName());
         output.putInt("value", getLevel());
-    }
-
-    @Nullable
-    public static EnchantmentData load(ValueInput input) {
-        String keyString = input.getStringOr("key", "");
-        if (keyString.isEmpty()) {
-            return null;
-        }
-
-        Identifier key = Identifier.parse(keyString);
-        ResourceKey<Enchantment> resKey = ResourceKey.create(Registries.ENCHANTMENT, key);
-        Holder<Enchantment> enchant = input.lookup().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(resKey);
-        EnchantmentData data = new EnchantmentData(enchant);
-        data.setValue(input.getIntOr("value", 0));
-        return data;
     }
 
     public boolean isDirty() {

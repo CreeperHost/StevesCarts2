@@ -8,15 +8,12 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.helpers.ResourceHelper;
 
-public class ModelExtractingChests extends ModelCartbase
-{
-    public ModelExtractingChests()
-    {
+public class ModelExtractingChests extends ModelCartbase {
+    public ModelExtractingChests() {
         super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/sideChestsModel.png"));
     }
 
-    public static LayerDefinition getTexturedModelData()
-    {
+    public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         modelPartData.addOrReplaceChild("base_left", CubeListBuilder.create().texOffs(0, 7).addBox(8.0f, 3.0f, 2.0f, 16, 6, 4), PartPose.offset(-16.0f, -5.5f, -14.0f));

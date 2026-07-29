@@ -5,19 +5,17 @@ import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.AnimationRig;
 import vswe.stevescarts.helpers.AnimationRigVal;
 
-public class ModuleSolarCompact extends ModuleSolarBase
-{
-    private AnimationRig rig;
-    private AnimationRigVal extraction;
-    private AnimationRigVal topbot;
-    private AnimationRigVal leftright;
-    private AnimationRigVal corner;
-    private AnimationRigVal angle;
-    private AnimationRigVal extraction2;
-    private AnimationRigVal innerextraction;
+public class ModuleSolarCompact extends ModuleSolarBase {
+    private final AnimationRig rig;
+    private final AnimationRigVal extraction;
+    private final AnimationRigVal topbot;
+    private final AnimationRigVal leftright;
+    private final AnimationRigVal corner;
+    private final AnimationRigVal angle;
+    private final AnimationRigVal extraction2;
+    private final AnimationRigVal innerextraction;
 
-    public ModuleSolarCompact(ModularMinecart cart)
-    {
+    public ModuleSolarCompact(ModularMinecart cart) {
         super(cart);
         rig = new AnimationRig();
         extraction = new AnimationRigVal(rig, 0.4f, 2.0f, 0.1f);
@@ -31,57 +29,47 @@ public class ModuleSolarCompact extends ModuleSolarBase
     }
 
     @Override
-    protected int getMaxCapacity()
-    {
+    protected int getMaxCapacity() {
         return 25000;
     }
 
     @Override
-    protected int getGenSpeed()
-    {
+    protected int getGenSpeed() {
         return SCConfig.COMMON.compact_solar_production.get();
     }
 
     @Override
-    public boolean updatePanels()
-    {
+    public boolean updatePanels() {
         return rig.update(isGoingDown());
     }
 
     @Override
-    protected void setAnimDone()
-    {
+    protected void setAnimDone() {
         rig.setAnimDone();
         down = false;
     }
 
-    public float getExtractionDist()
-    {
+    public float getExtractionDist() {
         return extraction.getVal() + extraction2.getVal();
     }
 
-    public float getTopBotExtractionDist()
-    {
+    public float getTopBotExtractionDist() {
         return topbot.getVal();
     }
 
-    public float getLeftRightExtractionDist()
-    {
+    public float getLeftRightExtractionDist() {
         return leftright.getVal();
     }
 
-    public float getCornerExtractionDist()
-    {
+    public float getCornerExtractionDist() {
         return corner.getVal();
     }
 
-    public float getPanelAngle()
-    {
+    public float getPanelAngle() {
         return angle.getVal();
     }
 
-    public float getInnerExtraction()
-    {
+    public float getInnerExtraction() {
         return innerextraction.getVal();
     }
 }

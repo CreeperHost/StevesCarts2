@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "stevescarts:block/experienced_assembler_icon"
-  }
-}

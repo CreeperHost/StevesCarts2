@@ -14,7 +14,7 @@ import java.util.LinkedList;
  */
 public class GuiHelper {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static LinkedList<ScissorState> prevStates = new LinkedList<>();
+    private static final LinkedList<ScissorState> prevStates = new LinkedList<>();
     private static ScissorState currentState = null;
 
     public static void pushGuiScissor(Minecraft mc, double x, double y, double width, double height, int guiWidth, int guiHeight) {
@@ -55,7 +55,7 @@ public class GuiHelper {
     }
 
     private static class ScissorState {
-        private boolean enabled;
+        private final boolean enabled;
         private int x;
         private int y;
         private int xMax;
@@ -85,7 +85,11 @@ public class GuiHelper {
         }
 
         private ScissorState apply() {
-            if (enabled) { GL11.glEnable(GL11.GL_SCISSOR_TEST); } else { GL11.glDisable(GL11.GL_SCISSOR_TEST); }
+            if (enabled) {
+                GL11.glEnable(GL11.GL_SCISSOR_TEST);
+            } else {
+                GL11.glDisable(GL11.GL_SCISSOR_TEST);
+            }
             GL11.glScissor(x, y, xMax - x, yMax - y);
             return this;
         }

@@ -1,11 +1,9 @@
 package vswe.stevescarts.modules.workers;
 
 import net.creeperhost.polylib.data.serializable.ByteData;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,9 +23,9 @@ import vswe.stevescarts.polylib.EntityData;
 import java.util.ArrayList;
 
 public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
+    private final EntityData<Byte> rails = new EntityData<>(getCart(), new ByteData());
     private boolean hasGeneratedAngles;
     private float[] railAngles;
-    private final EntityData<Byte> rails = new EntityData<>(getCart(), new ByteData());
 
     public ModuleRailer(ModularMinecart cart) {
         super(cart);
@@ -45,8 +43,8 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
-        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.RAILER.translate(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.RAILER.translate(), 8, 6, 4210752);
     }
 
     @Override

@@ -1,10 +1,8 @@
 package vswe.stevescarts.entities;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -18,8 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -397,9 +393,9 @@ public interface IModularCart extends Container, IFluidHandler {
         }
     }
 
-    void setWorker(ModuleWorker worker);
-
     ModuleWorker getWorker();
+
+    void setWorker(ModuleWorker worker);
 
     void setWorkingTime(int val);
 
@@ -426,7 +422,7 @@ public interface IModularCart extends Container, IFluidHandler {
         //If disabled then just un-force all chunks.
         if (!loadingEnabled) {
             getCart().forcedChunks.forEach(pos -> {
-                if (ForceChunkHelper.CONTROLLER.forceChunk(level, getCart(), pos.x, pos.z, false, true)) {
+                if (ForceChunkHelper.CONTROLLER.forceChunk(level, getCart(), pos.x(), pos.z(), false, true)) {
                     removed.add(pos);
                 }
             });
@@ -440,14 +436,14 @@ public interface IModularCart extends Container, IFluidHandler {
         loadArea.forEach(pos -> {
             if (forcedCopy.contains(pos)) {
                 forcedCopy.remove(pos);
-            } else if (ForceChunkHelper.CONTROLLER.forceChunk(level, getCart(), pos.x, pos.z, true, true)) {
+            } else if (ForceChunkHelper.CONTROLLER.forceChunk(level, getCart(), pos.x(), pos.z(), true, true)) {
                 getCart().forcedChunks.add(pos);
             }
         });
 
         //The copy should now only contain chunks that are out of range, so unload them.
         forcedCopy.forEach(pos -> {
-            if (ForceChunkHelper.CONTROLLER.forceChunk(level, getCart(), pos.x, pos.z, false, true)) {
+            if (ForceChunkHelper.CONTROLLER.forceChunk(level, getCart(), pos.x(), pos.z(), false, true)) {
                 removed.add(pos);
             }
         });
@@ -818,12 +814,6 @@ public interface IModularCart extends Container, IFluidHandler {
     default void updateSounds() {
     }
 
-    default void setScrollY(int val) {
-        if (getCart().canScrollModules) {
-            getCart().scrollY = val;
-        }
-    }
-
     default int getScrollY() {
         if (getInterfaceThief() != null) {
             return 0;
@@ -831,11 +821,17 @@ public interface IModularCart extends Container, IFluidHandler {
         return getCart().scrollY;
     }
 
+    default void setScrollY(int val) {
+        if (getCart().canScrollModules) {
+            getCart().scrollY = val;
+        }
+    }
+
     default int getRealScrollY() {
         return (int) ((getCart().modularSpaceHeight - ModularMinecart.MODULAR_SPACE_HEIGHT) / 198.0f * getScrollY());
     }
 
-    default void renderOverlay(GuiGraphics render, float partialTicks) {
+    default void renderOverlay(GuiGraphicsExtractor render, float partialTicks) {
         for (ModuleBase module : modules()) {
             module.renderOverlay(render, partialTicks);
         }

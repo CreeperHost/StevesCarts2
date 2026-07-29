@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.workers.tools;
 
 import net.creeperhost.polylib.data.serializable.BooleanData;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -22,8 +22,8 @@ import vswe.stevescarts.api.farms.ITreeModule;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleTool;
-import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotRepair;
 import vswe.stevescarts.containers.slots.SlotSapling;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -36,49 +36,41 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesModule
-{
+public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesModule {
+    private final EntityData<Boolean> isCutting = new EntityData<>(getCart(), new BooleanData(false));
     private ArrayList<ITreeModule> treeModules;
     private ModulePlantSize plantSize;
     private boolean isPlanting;
     private float cutterAngle;
-    private final EntityData<Boolean> isCutting = new EntityData<>(getCart(), new BooleanData(false));
 
-    public ModuleWoodcutter(ModularMinecart cart)
-    {
+    public ModuleWoodcutter(ModularMinecart cart) {
         super(cart);
         cutterAngle = 0.7853982f;
     }
 
     @Override
-    public byte getWorkPriority()
-    {
+    public byte getWorkPriority() {
         return 80;
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        drawString(guiGraphics, gui, Localization.MODULES.TOOLS.CUTTER.translate(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.TOOLS.CUTTER.translate(), 8, 6, 4210752);
     }
 
     @Override
-    protected int getInventoryWidth()
-    {
+    protected int getInventoryWidth() {
         return super.getInventoryWidth() + 3;
     }
 
     @Override
-    protected SlotStevesCarts getSlot(final int slotId, int x, final int y)
-    {
-        if (x == 0)
-        {
+    protected SlotStevesCarts getSlot(final int slotId, int x, final int y) {
+        if (x == 0) {
             return super.getSlot(slotId, x, y);
         }
         --x;
@@ -86,26 +78,19 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
     }
 
     @Override
-    public boolean useDurability()
-    {
+    public boolean useDurability() {
         return true;
     }
 
     @Override
-    public void init()
-    {
+    public void init() {
         super.init();
         treeModules = new ArrayList<>();
-        for (final ModuleBase module : getCart().modules())
-        {
-            if (module instanceof ITreeModule)
-            {
+        for (final ModuleBase module : getCart().modules()) {
+            if (module instanceof ITreeModule) {
                 treeModules.add((ITreeModule) module);
-            }
-            else
-            {
-                if (!(module instanceof ModulePlantSize))
-                {
+            } else {
+                if (!(module instanceof ModulePlantSize)) {
                     continue;
                 }
                 plantSize = (ModulePlantSize) module;
@@ -116,25 +101,19 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
 
     public abstract int getPercentageDropChance();
 
-    public NonNullList<ItemStack> getTierDrop(List<ItemStack> baseItems)
-    {
+    public NonNullList<ItemStack> getTierDrop(List<ItemStack> baseItems) {
         NonNullList<ItemStack> nerfedItems = NonNullList.create();
-        for (@Nonnull ItemStack item : baseItems)
-        {
-            if (!item.isEmpty())
-            {
+        for (@Nonnull ItemStack item : baseItems) {
+            if (!item.isEmpty()) {
                 dropItemByMultiplierChance(nerfedItems, item, getPercentageDropChance());
             }
         }
         return nerfedItems;
     }
 
-    private void dropItemByMultiplierChance(List<ItemStack> items, @Nonnull ItemStack item, int percentage)
-    {
-        while (percentage > 0)
-        {
-            if (getCart().getRandom().nextInt(100) < percentage)
-            {
+    private void dropItemByMultiplierChance(List<ItemStack> items, @Nonnull ItemStack item, int percentage) {
+        while (percentage > 0) {
+            if (getCart().getRandom().nextInt(100) < percentage) {
                 items.add(item.copy());
             }
             percentage -= 100;
@@ -142,39 +121,30 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
     }
 
     @Override
-    public boolean work()
-    {
+    public boolean work() {
         Level world = getCart().level();
         BlockPos next = getNextblock();
         final int size = getPlantSize();
         destroyLeaveBlockOnTrack(world, next);
         destroyLeaveBlockOnTrack(world, next.above());
-        for (int i = -size; i <= size; ++i)
-        {
-            if (i != 0)
-            {
+        for (int i = -size; i <= size; ++i) {
+            if (i != 0) {
                 int i2 = i;
-                if (i2 < 0)
-                {
+                if (i2 < 0) {
                     i2 = -size - i2 - 1;
                 }
                 BlockPos plant = next.offset(((getCart().z() != next.getZ()) ? i2 : 0), -1, ((getCart().x() != next.getX()) ? i2 : 0));
-                if (plant(size, plant, next.getX(), next.getZ()))
-                {
+                if (plant(size, plant, next.getX(), next.getZ())) {
                     setCutting(false);
                     return true;
                 }
             }
         }
-        if (!isPlanting)
-        {
-            for (int i = -1; i <= 1; ++i)
-            {
-                for (int j = -1; j <= 1; ++j)
-                {
+        if (!isPlanting) {
+            for (int i = -1; i <= 1; ++i) {
+                for (int j = -1; j <= 1; ++j) {
                     BlockPos farm = next.offset(i, -1, j);
-                    if (farm(world, farm))
-                    {
+                    if (farm(world, farm)) {
                         setCutting(true);
                         return true;
                     }
@@ -185,37 +155,26 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         return false;
     }
 
-    private boolean plant(final int size, BlockPos pos, final int cx, final int cz)
-    {
-        if (size == 1)
-        {
-            if ((pos.getX() + pos.getZ()) % 2 == 0)
-            {
+    private boolean plant(final int size, BlockPos pos, final int cx, final int cz) {
+        if (size == 1) {
+            if ((pos.getX() + pos.getZ()) % 2 == 0) {
                 return false;
             }
-        }
-        else if ((pos.getX() == cx && pos.getX() / size % 2 == 0) || (pos.getZ() == cz && pos.getZ() / size % 2 == 0))
-        {
+        } else if ((pos.getX() == cx && pos.getX() / size % 2 == 0) || (pos.getZ() == cz && pos.getZ() / size % 2 == 0)) {
             return false;
         }
         @Nonnull ItemStack sapling = ItemStack.EMPTY;
-        for (int i = 0; i < getInventorySize(); ++i)
-        {
+        for (int i = 0; i < getInventorySize(); ++i) {
             final SlotStevesCarts slot = getSlots().get(i);
-            if (slot.containsValidItem() && !(slot instanceof SlotRepair))
-            {
+            if (slot.containsValidItem() && !(slot instanceof SlotRepair)) {
                 sapling = getStack(i);
                 break;
             }
         }
-        if (!sapling.isEmpty())
-        {
-            if (doPreWork())
-            {
-                if (isSaplingHandler(sapling))
-                {
-                    if (plantSapling(getCart().level(), pos, sapling, getFakePlayer()))
-                    {
+        if (!sapling.isEmpty()) {
+            if (doPreWork()) {
+                if (isSaplingHandler(sapling)) {
+                    if (plantSapling(getCart().level(), pos, sapling, getFakePlayer())) {
                         sapling.shrink(1);
                         startWorking(25);
                         return isPlanting = true;
@@ -223,9 +182,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
                 }
                 stopWorking();
                 isPlanting = false;
-            }
-            else
-            {
+            } else {
                 stopWorking();
                 isPlanting = false;
             }
@@ -233,21 +190,15 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         return false;
     }
 
-    public boolean plantSapling(Level world, BlockPos pos, ItemStack stack, FakePlayer fakePlayer)
-    {
-        if (stack.isEmpty())
-        {
+    public boolean plantSapling(Level world, BlockPos pos, ItemStack stack, FakePlayer fakePlayer) {
+        if (stack.isEmpty()) {
             return false;
         }
         Block block = Block.byItem(stack.getItem());
-        if (block instanceof SaplingBlock blockSapling)
-        {
-            if (blockSapling.defaultBlockState().canSurvive(world, pos.above()))
-            {
-                if (fakePlayer.mayUseItemAt(pos.above(), Direction.UP, stack))
-                {
-                    if (world.getBlockState(pos.above()).isAir())
-                    {
+        if (block instanceof SaplingBlock blockSapling) {
+            if (blockSapling.defaultBlockState().canSurvive(world, pos.above())) {
+                if (fakePlayer.mayUseItemAt(pos.above(), Direction.UP, stack)) {
+                    if (world.getBlockState(pos.above()).isAir()) {
                         world.setBlock(pos.above(), blockSapling.defaultBlockState(), 3);
                         return true;
                     }
@@ -257,17 +208,13 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         return false;
     }
 
-    private boolean farm(Level world, BlockPos pos)
-    {
-        if (!isBroken())
-        {
+    private boolean farm(Level world, BlockPos pos) {
+        if (!isBroken()) {
             pos = pos.above();
             BlockState state = world.getBlockState(pos);
-            if (isWoodHandler(state, pos))
-            {
+            if (isWoodHandler(state, pos)) {
                 final ArrayList<BlockPos> checked = new ArrayList<>();
-                if (removeAt(world, pos, checked))
-                {
+                if (removeAt(world, pos, checked)) {
                     return true;
                 }
                 stopWorking();
@@ -276,50 +223,34 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         return false;
     }
 
-    private boolean removeAt(Level world, BlockPos here, final ArrayList<BlockPos> checked)
-    {
+    private boolean removeAt(Level world, BlockPos here, final ArrayList<BlockPos> checked) {
         checked.add(here);
         BlockState blockState = world.getBlockState(here);
-        if (world.isEmptyBlock(here))
-        {
+        if (world.isEmptyBlock(here)) {
             return false;
         }
-        if (checked.size() < 125 && BlockPosHelpers.getHorizontalDistToCartSquared(here, getCart()) < 175.0)
-        {
-            for (int type = 0; type < 2; ++type)
-            {
+        if (checked.size() < 125 && BlockPosHelpers.getHorizontalDistToCartSquared(here, getCart()) < 175.0) {
+            for (int type = 0; type < 2; ++type) {
                 boolean hitWood = false;
-                if (isLeavesHandler(blockState, here))
-                {
+                if (isLeavesHandler(blockState, here)) {
                     type = 1;
-                }
-                else if (type == 1)
-                {
+                } else if (type == 1) {
                     hitWood = true;
                 }
-                for (int x = -1; x <= 1; ++x)
-                {
-                    for (int y = 1; y >= 0; --y)
-                    {
-                        for (int z = -1; z <= 1; ++z)
-                        {
+                for (int x = -1; x <= 1; ++x) {
+                    for (int y = 1; y >= 0; --y) {
+                        for (int z = -1; z <= 1; ++z) {
                             BlockPos pos = here.offset(x, y, z);
                             BlockState currentState = world.getBlockState(pos);
-                            if (!currentState.isAir())
-                            {
-                                if (hitWood)
-                                {
-                                    if (!isWoodHandler(currentState, pos))
-                                    {
+                            if (!currentState.isAir()) {
+                                if (hitWood) {
+                                    if (!isWoodHandler(currentState, pos)) {
                                         continue;
                                     }
-                                }
-                                else if (!isLeavesHandler(currentState, pos))
-                                {
+                                } else if (!isLeavesHandler(currentState, pos)) {
                                     continue;
                                 }
-                                if (!checked.contains(pos))
-                                {
+                                if (!checked.contains(pos)) {
                                     return removeAt(world, pos, checked);
                                 }
                             }
@@ -344,10 +275,8 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
 
         stuff = blockState.getDrops(builder);
         List<ItemStack> dropList = new ArrayList<>();
-        for (ItemStack drop : dropList)
-        { //Here to filter out any bad itemstacks, the mod I was testing with returned stacks with a size of 0
-            if (!drop.isEmpty() && drop.getCount() > 0)
-            {
+        for (ItemStack drop : dropList) { //Here to filter out any bad itemstacks, the mod I was testing with returned stacks with a size of 0
+            if (!drop.isEmpty() && drop.getCount() > 0) {
                 stuff.add(drop);
             }
         }
@@ -363,23 +292,18 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
 //        }
 
         List<ItemStack> nerfedstuff = getTierDrop(stuff);
-        for (@Nonnull ItemStack iStack : nerfedstuff)
-        {
+        for (@Nonnull ItemStack iStack : nerfedstuff) {
             getCart().addItemToChest(iStack);
-            if (iStack.getCount() != 0)
-            {
+            if (iStack.getCount() != 0) {
                 return false;
             }
         }
         world.removeBlock(here, false);
         int basetime;
-        if (isLeavesHandler(blockState, here))
-        {
+        if (isLeavesHandler(blockState, here)) {
             basetime = 2;
             damageTool(1);
-        }
-        else
-        {
+        } else {
             basetime = 25;
             damageTool(5);
         }
@@ -388,87 +312,66 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         return true;
     }
 
-    private void setCutting(boolean val)
-    {
-        isCutting.set(val);
-    }
-
-    protected boolean isCutting()
-    {
-        if (isPlaceholder())
-        {
+    protected boolean isCutting() {
+        if (isPlaceholder()) {
             return getSimInfo().getIsCutting();
         }
         return isCutting.get();
     }
 
-    public float getCutterAngle()
-    {
+    private void setCutting(boolean val) {
+        isCutting.set(val);
+    }
+
+    public float getCutterAngle() {
         return cutterAngle;
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
         final boolean cuttingflag = isCutting();
-        if (cuttingflag || cutterAngle != 0.7853982f)
-        {
-            boolean flag = false;
-            if (!cuttingflag && cutterAngle < 0.7853982f)
-            {
-                flag = true;
-            }
+        if (cuttingflag || cutterAngle != 0.7853982f) {
+            boolean flag = !cuttingflag && cutterAngle < 0.7853982f;
             cutterAngle = (float) ((cutterAngle + 0.9f) % 6.283185307179586);
-            if (!cuttingflag && cutterAngle > 0.7853982f && flag)
-            {
+            if (!cuttingflag && cutterAngle > 0.7853982f && flag) {
                 cutterAngle = 0.7853982f;
             }
         }
     }
 
     @Override
-    public boolean haveSupplies()
-    {
-        for (int i = 0; i < getInventorySize(); ++i)
-        {
-            if (getSlots().get(i).containsValidItem())
-            {
+    public boolean haveSupplies() {
+        for (int i = 0; i < getInventorySize(); ++i) {
+            if (getSlots().get(i).containsValidItem()) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isLeavesHandler(BlockState blockState, BlockPos pos)
-    {
+    public boolean isLeavesHandler(BlockState blockState, BlockPos pos) {
         return blockState.is(BlockTags.LEAVES) || blockState.is(BlockTags.BEEHIVES);
     }
 
-    public boolean isWoodHandler(BlockState blockState, BlockPos pos)
-    {
+    public boolean isWoodHandler(BlockState blockState, BlockPos pos) {
         return blockState.is(BlockTags.LOGS);
     }
 
-    public boolean isSaplingHandler(@Nonnull ItemStack sapling)
-    {
+    public boolean isSaplingHandler(@Nonnull ItemStack sapling) {
         return sapling.is(ItemTags.SAPLINGS);
     }
 
-    private int getPlantSize()
-    {
-        if (plantSize != null)
-        {
+    private int getPlantSize() {
+        if (plantSize != null) {
             return plantSize.getSize();
         }
         return 1;
     }
 
-    private void destroyLeaveBlockOnTrack(Level world, BlockPos pos)
-    {
+    private void destroyLeaveBlockOnTrack(Level world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
-        if (isLeavesHandler(state, pos))
-        {
+        if (isLeavesHandler(state, pos)) {
             world.removeBlock(pos, false);
         }
     }

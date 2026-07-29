@@ -13,14 +13,20 @@ import vswe.stevescarts.client.network.ClientPacketHandlers;
 
 public class PacketFluidSync implements CustomPacketPayload {
     public static final Type<PacketFluidSync> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "fluid_sync"));
-    private FluidStack fluidStack;
-    private BlockPos pos;
-    private int tankID;
+    private final FluidStack fluidStack;
+    private final BlockPos pos;
+    private final int tankID;
 
     public PacketFluidSync(FluidStack fluidStack, BlockPos pos, int tankID) {
         this.fluidStack = fluidStack;
         this.pos = pos;
         this.tankID = tankID;
+    }
+
+    public static PacketFluidSync read(RegistryFriendlyByteBuf buffer) {
+        boolean empty = buffer.readBoolean();
+        FluidStack fstack = empty ? FluidStack.EMPTY : FluidStack.STREAM_CODEC.decode(buffer);
+        return new PacketFluidSync(fstack, buffer.readBlockPos(), buffer.readInt());
     }
 
     @Override
@@ -35,12 +41,6 @@ public class PacketFluidSync implements CustomPacketPayload {
         }
         buf.writeBlockPos(pos);
         buf.writeInt(tankID);
-    }
-
-    public static PacketFluidSync read(RegistryFriendlyByteBuf buffer) {
-        boolean empty = buffer.readBoolean();
-        FluidStack fstack = empty ? FluidStack.EMPTY : FluidStack.STREAM_CODEC.decode(buffer);
-        return new PacketFluidSync(fstack, buffer.readBlockPos(), buffer.readInt());
     }
 
     public static class Handler implements IPayloadHandler<PacketFluidSync> {

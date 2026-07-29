@@ -1,7 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import com.google.common.collect.Lists;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -74,7 +74,7 @@ public class ModuleCrafter extends ModuleRecipe {
                     ItemStack stack = inputSlot.getItem();
                     if (!stack.isEmpty() && ItemStack.isSameItem(stack, recipe) && ItemStack.isSameItemSameComponents(stack, recipe)) {
                         edited = true;
-                        ItemStack remainder = stack.getCraftingRemainder();
+                        ItemStack remainder = stack.getCraftingRemainder() != null ? stack.getCraftingRemainder().create() : ItemStack.EMPTY;
                         if (!remainder.isEmpty()) {
                             containers.add(remainder);
                         }
@@ -132,7 +132,7 @@ public class ModuleCrafter extends ModuleRecipe {
         if (optional.isPresent()) {
             lastRecipe = optional.get();
             CraftingRecipe recipe = lastRecipe.value();
-            ItemStack result = recipe.assemble(input, level.registryAccess());
+            ItemStack result = recipe.assemble(input);
             if (result.isItemEnabled(level.enabledFeatures())) {
                 return result;
             }
@@ -169,10 +169,10 @@ public class ModuleCrafter extends ModuleRecipe {
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
-        super.drawForeground(guiGraphics, gui);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        super.drawForeground(GuiGraphicsExtractor, gui);
         setStack(9, outputDisplay.get());
-        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override

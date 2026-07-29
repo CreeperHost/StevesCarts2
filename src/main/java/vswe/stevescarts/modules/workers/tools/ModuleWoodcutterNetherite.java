@@ -7,22 +7,18 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.entities.ModularMinecart;
 
-public class ModuleWoodcutterNetherite extends ModuleWoodcutter
-{
-    public ModuleWoodcutterNetherite(ModularMinecart cart)
-    {
+public class ModuleWoodcutterNetherite extends ModuleWoodcutter {
+    public ModuleWoodcutterNetherite(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public int getPercentageDropChance()
-    {
+    public int getPercentageDropChance() {
         return 90;
     }
 
     @Override
-    public int getMaxDurability()
-    {
+    public int getMaxDurability() {
         return SCConfig.COMMON.woodcutterDurabilityNetherite.get();
     }
 
@@ -41,8 +37,7 @@ public class ModuleWoodcutterNetherite extends ModuleWoodcutter
     }
 
     @Override
-    public int getRepairSpeed()
-    {
+    public int getRepairSpeed() {
         return 250;
     }
 }

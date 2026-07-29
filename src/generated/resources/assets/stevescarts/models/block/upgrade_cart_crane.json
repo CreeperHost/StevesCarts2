@@ -1,0 +1,53 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#side"
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#front"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#side",
+          "uv": [
+            0.0,
+            3.0,
+            2.0,
+            13.0
+          ]
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#front"
+        }
+      },
+      "from": [
+        0,
+        3,
+        3
+      ],
+      "to": [
+        2,
+        13,
+        13
+      ]
+    }
+  ],
+  "textures": {
+    "front": "stevescarts:block/cart_crane_icon",
+    "particle": "stevescarts:block/upgrade_side_0_icon",
+    "side": "stevescarts:block/upgrade_side_0_icon"
+  }
+}

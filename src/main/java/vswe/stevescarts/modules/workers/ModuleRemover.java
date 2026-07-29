@@ -1,10 +1,7 @@
 package vswe.stevescarts.modules.workers;
 
 import net.creeperhost.polylib.data.serializable.BooleanData;
-import net.creeperhost.polylib.data.serializable.ByteData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RailBlock;
@@ -17,9 +14,9 @@ import vswe.stevescarts.polylib.EntityData;
 import javax.annotation.Nonnull;
 
 public class ModuleRemover extends ModuleWorker implements IActivatorModule {
+    private final EntityData<Boolean> isEnabled = new EntityData<>(getCart(), new BooleanData(true));
     @Nonnull
     private BlockPos remove;
-    private final EntityData<Boolean> isEnabled = new EntityData<>(getCart(), new BooleanData(true));
 
     public ModuleRemover(ModularMinecart cart) {
         super(cart);
@@ -55,13 +52,9 @@ public class ModuleRemover extends ModuleWorker implements IActivatorModule {
         if (!front) {
             if (back) {
                 turnback();
-                if (removeRail(world, cart.blockPosition(), false)) {
-                    return true;
-                }
+                return removeRail(world, cart.blockPosition(), false);
             }
-        } else if (!back && removeRail(world, cart.blockPosition(), false)) {
-            return true;
-        }
+        } else return !back && removeRail(world, cart.blockPosition(), false);
         return false;
     }
 

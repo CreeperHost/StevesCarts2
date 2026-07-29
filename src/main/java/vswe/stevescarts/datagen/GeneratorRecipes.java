@@ -5,15 +5,17 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
+import org.jspecify.annotations.NonNull;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.helpers.ComponentTypes;
@@ -39,11 +41,11 @@ public class GeneratorRecipes extends RecipeProvider {
     }
 
     private void addSmelting() {
-        oreCooking(RecipeSerializer.SMELTING_RECIPE, SmeltingRecipe::new, itemFromName("stevescarts:component_raw_hardener"), RecipeCategory.MISC, itemFromName("stevescarts:component_refined_hardener"), 0.7F, 200, "stevescarts", "_from_smelting");
-        oreCooking(RecipeSerializer.SMELTING_RECIPE, SmeltingRecipe::new, itemFromName("stevescarts:component_large_lump_of_galgador"), RecipeCategory.MISC, itemFromName("stevescarts:component_enhanced_galgadorian_metal"), 0.7F, 200, "stevescarts", "_from_smelting");
-        oreCooking(RecipeSerializer.SMELTING_RECIPE, SmeltingRecipe::new, itemFromName("stevescarts:component_stabilized_metal"), RecipeCategory.MISC, itemFromName("stevescarts:component_reinforced_metal"), 0.7F, 200, "stevescarts", "_from_smelting");
-        oreCooking(RecipeSerializer.SMELTING_RECIPE, SmeltingRecipe::new, itemFromName("stevescarts:component_raw_handle"), RecipeCategory.MISC, itemFromName("stevescarts:component_refined_handle"), 0.7F, 200, "stevescarts", "_from_smelting");
-        oreCooking(RecipeSerializer.SMELTING_RECIPE, SmeltingRecipe::new, itemFromName("stevescarts:component_lump_of_galgador"), RecipeCategory.MISC, itemFromName("stevescarts:component_galgadorian_metal"), 0.7F, 200, "stevescarts", "_from_smelting");
+        oreCooking(SmeltingRecipe::new, itemFromName("stevescarts:component_raw_hardener"), itemFromName("stevescarts:component_refined_hardener"));
+        oreCooking(SmeltingRecipe::new, itemFromName("stevescarts:component_large_lump_of_galgador"), itemFromName("stevescarts:component_enhanced_galgadorian_metal"));
+        oreCooking(SmeltingRecipe::new, itemFromName("stevescarts:component_stabilized_metal"), itemFromName("stevescarts:component_reinforced_metal"));
+        oreCooking(SmeltingRecipe::new, itemFromName("stevescarts:component_raw_handle"), itemFromName("stevescarts:component_refined_handle"));
+        oreCooking(SmeltingRecipe::new, itemFromName("stevescarts:component_lump_of_galgador"), itemFromName("stevescarts:component_galgadorian_metal"));
     }
 
     private void addBlockRecipes() {
@@ -78,7 +80,7 @@ public class GeneratorRecipes extends RecipeProvider {
     }
 
     private void addModuleRecipes() {
-        shaped(RecipeCategory.MISC, getStackFromModule(StevesCartsModules.CHUNK_LOADER).getItem())
+        shaped(RecipeCategory.MISC, getItemForModule(StevesCartsModules.CHUNK_LOADER))
                 .pattern("III")
                 .pattern("GEG")
                 .pattern("IDI")
@@ -94,11 +96,11 @@ public class GeneratorRecipes extends RecipeProvider {
     private void addSmithingTableRecipes() {
         SmithingTransformRecipeBuilder.smithing(
                         Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-                        Ingredient.of(getStackFromModule(StevesCartsModules.BASIC_WOOD_CUTTER).getItem()),
+                        Ingredient.of(getItemForModule(StevesCartsModules.BASIC_WOOD_CUTTER)),
                         Ingredient.of(Items.NETHERITE_INGOT),
                         RecipeCategory.MISC,
-                        getStackFromModule(StevesCartsModules.NETHERITE_WOOD_CUTTER).getItem()).unlocks("has_item", has(Tags.Items.INGOTS_NETHERITE))
-                .save(output, recipeFolder(getStackFromModule(StevesCartsModules.NETHERITE_WOOD_CUTTER).getItem(), "smithing"));
+                        getItemForModule(StevesCartsModules.NETHERITE_WOOD_CUTTER)).unlocks("has_item", has(Tags.Items.INGOTS_NETHERITE))
+                .save(output, recipeFolder(getItemForModule(StevesCartsModules.NETHERITE_WOOD_CUTTER), "smithing"));
     }
 
     private ResourceKey<Recipe<?>> recipeFolder(ItemLike result, String folder) {
@@ -106,35 +108,17 @@ public class GeneratorRecipes extends RecipeProvider {
         return ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("stevescarts", folder + "/" + key.getPath()));
     }
 
-    protected <T extends AbstractCookingRecipe> void oreCooking(RecipeSerializer<T> serializer, AbstractCookingRecipe.Factory<T> recipeFactory, ItemLike input, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, String suffix) {
-        SimpleCookingRecipeBuilder.generic(Ingredient.of(input), category, result, experience, cookingTime, serializer, recipeFactory).group(group).unlockedBy(getHasName(input), this.has(input)).save(this.output, recipeFolder(result, "smelting"));
+    protected <T extends AbstractCookingRecipe> void oreCooking(AbstractCookingRecipe.Factory<T> recipeFactory, ItemLike input, ItemLike result) {
+        SimpleCookingRecipeBuilder.generic(Ingredient.of(input), RecipeCategory.MISC, CookingBookCategory.MISC, result, 0.7F, 200, recipeFactory).group("stevescarts").unlockedBy(getHasName(input), this.has(input)).save(this.output, recipeFolder(result, "smelting"));
     }
 
     private Item itemFromName(String name) {
+        //noinspection OptionalGetWithoutIsPresent
         return BuiltInRegistries.ITEM.get(Identifier.parse(name)).get().value();
     }
 
-    private ItemStack getStackFromModule(ModuleData moduleData) {
-        if (moduleData == null) return ItemStack.EMPTY;
-        Supplier<Item> itemSupplier = ModItems.MODULES.get(moduleData);
-        if (itemSupplier == null || itemSupplier.get() == null) return ItemStack.EMPTY;
-        return new ItemStack(itemSupplier.get());
-    }
-
-    public static class Runner extends RecipeProvider.Runner {
-        public Runner(PackOutput p_365442_, CompletableFuture<HolderLookup.Provider> p_362168_) {
-            super(p_365442_, p_362168_);
-        }
-
-        @Override
-        protected RecipeProvider createRecipeProvider(HolderLookup.Provider p_364945_, RecipeOutput p_362956_) {
-            return new GeneratorRecipes(p_364945_, p_362956_);
-        }
-
-        @Override
-        public String getName() {
-            return "Steves Carts Recipes";
-        }
+    private Item getItemForModule(ModuleData moduleData) {
+        return ModItems.MODULES.get(moduleData).get();
     }
 
     private void shapedCrafting() {
@@ -1493,7 +1477,7 @@ public class GeneratorRecipes extends RecipeProvider {
                 .define('X', Ingredient.of(itemFromName("stevescarts:component_oak_twig"), itemFromName("stevescarts:component_spruce_twig"), itemFromName("stevescarts:component_birch_twig"), itemFromName("stevescarts:component_jungle_twig")))
                 .group("stevescarts")
                 .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
-                .save(output, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("stevescarts",  "component/stick")));
+                .save(output, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("stevescarts", "component/stick")));
 
         shaped(RecipeCategory.MISC, itemFromName("stevescarts:component_iron_pane"), 8)
                 .pattern("###")
@@ -2306,5 +2290,21 @@ public class GeneratorRecipes extends RecipeProvider {
                 .group("stevescarts")
                 .unlockedBy("has_item", has(Tags.Items.INGOTS_IRON))
                 .save(output, recipeFolder(itemFromName("stevescarts:module_crop_nether_wart"), "module"));
+    }
+
+    public static class Runner extends RecipeProvider.Runner {
+        public Runner(PackOutput p_365442_, CompletableFuture<HolderLookup.Provider> p_362168_) {
+            super(p_365442_, p_362168_);
+        }
+
+        @Override
+        protected @NonNull RecipeProvider createRecipeProvider(HolderLookup.@NonNull Provider provider, @NonNull RecipeOutput output) {
+            return new GeneratorRecipes(provider, output);
+        }
+
+        @Override
+        public @NonNull String getName() {
+            return "Steves Carts Recipes";
+        }
     }
 }

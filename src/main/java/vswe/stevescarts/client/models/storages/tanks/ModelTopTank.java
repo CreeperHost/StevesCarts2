@@ -6,7 +6,6 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -15,19 +14,15 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 
-public class ModelTopTank extends ModelCartbase
-{
-    public ModelTopTank()
-    {
+public class ModelTopTank extends ModelCartbase {
+    public ModelTopTank() {
         super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/tankModelTop.png"));
     }
 
-    public static LayerDefinition getTexturedModelData()
-    {
+    public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
-        for (int i = 0; i < 2; ++i)
-        {
+        for (int i = 0; i < 2; ++i) {
             modelPartData.addOrReplaceChild("side" + i, CubeListBuilder.create().texOffs(0, 13).addBox(-8.0f, -2.5f, -0.5f, 16, 5, 1), PartPose.offset(0.0f, -8.5f, -5.5f + i * 11));
             modelPartData.addOrReplaceChild("topbot" + i, CubeListBuilder.create().texOffs(0, 0).addBox(-8.0f, -6.0f, -0.5f, 16, 12, 1), PartPose.offsetAndRotation(0.0f, -5.5f - i * 6, 0.0f, 1.5707964f, 0.0F, 0.0F));
             modelPartData.addOrReplaceChild("frontback" + i, CubeListBuilder.create().texOffs(0, 19).addBox(-5.0f, -2.5f, -0.5f, 10, 5, 1), PartPose.offsetAndRotation(-7.5f + i * 15, -8.5f, 0.0f, 0.0F, 1.5707964f, 0.0F));
@@ -36,20 +31,17 @@ public class ModelTopTank extends ModelCartbase
     }
 
     @Override
-    public RenderType getRenderType(ModuleBase moduleBase)
-    {
+    public RenderType getRenderType(ModuleBase moduleBase) {
         return RenderTypes.entityCutout(getTexture());
     }
 
     @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll)
-    {
+    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll) {
         super.applyEffects(module, matrixStack, yaw, pitch, roll);
         ModuleTank moduleTank = (ModuleTank) module;
         FluidStack fluidStack = moduleTank.getFluid();
         int light = 15;
-        if(fluidStack != null && !fluidStack.isEmpty())
-        {
+        if (fluidStack != null && !fluidStack.isEmpty()) {
             //TODO fluid rendering
 
 //            matrixStack.pushPose();

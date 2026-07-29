@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "stevescarts:block/cart_assembler_bot",
+    "side": "stevescarts:block/cart_assembler_side_1",
+    "top": "stevescarts:block/cart_assembler_top"
+  }
+}

@@ -3,14 +3,12 @@ package vswe.stevescarts.modules.storages.chests;
 import vswe.stevescarts.api.modules.template.ModuleChest;
 import vswe.stevescarts.entities.ModularMinecart;
 
-public class ModuleExtractingChests extends ModuleChest
-{
+public class ModuleExtractingChests extends ModuleChest {
     private final float startOffset;
     private final float endOffset;
     private float chestOffset;
 
-    public ModuleExtractingChests(ModularMinecart cart)
-    {
+    public ModuleExtractingChests(ModularMinecart cart) {
         super(cart);
         startOffset = -14.0f;
         endOffset = -24.5f;
@@ -18,42 +16,32 @@ public class ModuleExtractingChests extends ModuleChest
     }
 
     @Override
-    protected int getInventoryWidth()
-    {
+    protected int getInventoryWidth() {
         return 18;
     }
 
     @Override
-    protected int getInventoryHeight()
-    {
+    protected int getInventoryHeight() {
         return 4;
     }
 
     @Override
-    protected float chestFullyOpenAngle()
-    {
+    protected float chestFullyOpenAngle() {
         return 1.5707964f;
     }
 
     @Override
-    protected void handleChest()
-    {
-        if (isChestActive() && lidClosed() && chestOffset > endOffset)
-        {
+    protected void handleChest() {
+        if (isChestActive() && lidClosed() && chestOffset > endOffset) {
             chestOffset -= 0.5f;
-        }
-        else if (!isChestActive() && lidClosed() && chestOffset < startOffset)
-        {
+        } else if (!isChestActive() && lidClosed() && chestOffset < startOffset) {
             chestOffset += 0.5f;
-        }
-        else
-        {
+        } else {
             super.handleChest();
         }
     }
 
-    public float getChestOffset()
-    {
+    public float getChestOffset() {
         return chestOffset;
     }
 }

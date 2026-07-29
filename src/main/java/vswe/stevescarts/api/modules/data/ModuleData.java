@@ -1,8 +1,6 @@
 package vswe.stevescarts.api.modules.data;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.KeyboardHandler;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -22,15 +20,19 @@ import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
 import java.util.function.Consumer;
 
-public class ModuleData
-{
+public class ModuleData {
+    private static final int MAX_MESSAGE_ROW_LENGTH = 30;
     private final Identifier id;
     private final Class<? extends ModuleBase> moduleClass;
     private final String name;
     private final int modularCost;
+    private final ModuleType moduleType;
     private ArrayList<SIDE> renderingSides;
     private boolean allowDuplicate;
     private ArrayList<ModuleData> nemesis;
@@ -45,12 +47,8 @@ public class ModuleData
     private float modelMult;
     private boolean useExtraData;
     private byte extraDataDefaultValue;
-    private static final int MAX_MESSAGE_ROW_LENGTH = 30;
 
-    private final ModuleType moduleType;
-
-    public ModuleData(final Identifier id, final String name, final Class<? extends ModuleBase> moduleClass, ModuleType moduleType, final int modularCost)
-    {
+    public ModuleData(final Identifier id, final String name, final Class<? extends ModuleBase> moduleClass, ModuleType moduleType, final int modularCost) {
         this.nemesis = null;
         this.requirement = null;
         this.parent = null;
@@ -62,271 +60,10 @@ public class ModuleData
         this.moduleType = moduleType;
     }
 
-    public Class<? extends ModuleBase> getModuleClass()
-    {
-        return moduleClass;
-    }
-
-    public ModuleType getModuleType()
-    {
-        return moduleType;
-    }
-
-    @Deprecated(forRemoval = true)
-    public boolean getIsValid()
-    {
-        return true;
-    }
-
-    @Deprecated(forRemoval = true)
-    public boolean getIsLocked()
-    {
-        return isLocked;
-    }
-
     @SuppressWarnings("unused")
-    protected ModuleData lock()
-    {
-        isLocked = true;
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    public boolean getEnabledByDefault()
-    {
-        return !defaultLock;
-    }
-
-    @SuppressWarnings("unused")
-    protected ModuleData lockByDefault()
-    {
-        defaultLock = true;
-        return this;
-    }
-
-    public ModuleData setAllowDuplicate()
-    {
-        allowDuplicate = true;
-        return this;
-    }
-
-    protected boolean getAllowDuplicate()
-    {
-        return allowDuplicate;
-    }
-
-    public ModuleData addSide(final SIDE side)
-    {
-        if (renderingSides == null)
-        {
-            renderingSides = new ArrayList<>();
-        }
-        renderingSides.add(side);
-        if (side == SIDE.TOP)
-        {
-            removeModel("Rails");
-        }
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    public ModuleData useExtraData(final byte defaultValue)
-    {
-        extraDataDefaultValue = defaultValue;
-        useExtraData = true;
-        return this;
-    }
-
-    public boolean isUsingExtraData()
-    {
-        return useExtraData;
-    }
-
-    public byte getDefaultExtraData()
-    {
-        return extraDataDefaultValue;
-    }
-
-    public ArrayList<SIDE> getRenderingSides()
-    {
-        return renderingSides;
-    }
-
-    public ModuleData addSides(final SIDE[] sides)
-    {
-        for (SIDE side : sides)
-        {
-            addSide(side);
-        }
-        return this;
-    }
-
-    public ModuleData addParent(final ModuleData parent)
-    {
-        this.parent = parent;
-        return this;
-    }
-
-    public ModuleData addMessage(final Localization.MODULE_INFO s)
-    {
-        if (message == null)
-        {
-            message = new ArrayList<>();
-        }
-        message.add(s);
-        return this;
-    }
-
-    protected void addNemesis(final ModuleData nemesis)
-    {
-        if (this.nemesis == null)
-        {
-            this.nemesis = new ArrayList<>();
-        }
-        this.nemesis.add(nemesis);
-    }
-
-    public ModuleData addRequirement(final ModuleDataGroup requirement)
-    {
-        if (this.requirement == null)
-        {
-            this.requirement = new ArrayList<>();
-        }
-        this.requirement.add(requirement);
-        return this;
-    }
-
-    @SuppressWarnings("unused")
-    protected static void addNemesis(final ModuleData m1, final ModuleData m2)
-    {
+    protected static void addNemesis(final ModuleData m1, final ModuleData m2) {
         m2.addNemesis(m1);
         m1.addNemesis(m2);
-    }
-
-    @SuppressWarnings("unused")
-    public float getModelMult()
-    {
-        return modelMult;
-    }
-
-    public ModuleData setModelMult(final float val)
-    {
-        modelMult = val;
-        return this;
-    }
-
-    public ModuleData addModel(final String tag, final ModelCartbase model)
-    {
-        addModel(tag, model, false);
-        addModel(tag, model, true);
-        return this;
-    }
-
-    public ModuleData addModel(final String tag, final ModelCartbase model, final boolean placeholder)
-    {
-        if (placeholder)
-        {
-            if (modelsPlaceholder == null)
-            {
-                modelsPlaceholder = new HashMap<>();
-            }
-            modelsPlaceholder.put(tag, model);
-        }
-        else
-        {
-            if (models == null)
-            {
-                models = new HashMap<>();
-            }
-            models.put(tag, model);
-        }
-        return this;
-    }
-
-    public HashMap<String, ModelCartbase> getModels(final boolean placeholder)
-    {
-        if (placeholder)
-        {
-            return modelsPlaceholder;
-        }
-        return models;
-    }
-
-    public boolean haveModels(final boolean placeholder)
-    {
-        if (placeholder)
-        {
-            return modelsPlaceholder != null;
-        }
-        return models != null;
-    }
-
-    public ModuleData removeModel(final String tag)
-    {
-        if (removedModels == null)
-        {
-            removedModels = new ArrayList<>();
-        }
-        if (!removedModels.contains(tag))
-        {
-            removedModels.add(tag);
-        }
-        return this;
-    }
-
-    public ArrayList<String> getRemovedModels()
-    {
-        return removedModels;
-    }
-
-    public boolean haveRemovedModels()
-    {
-        return removedModels != null;
-    }
-
-    public String getDisplayName()
-    {
-        return name;
-    }
-
-    public String getName()
-    {
-        return "module_" + getRawName();
-    }
-
-    public Identifier getID()
-    {
-        return id;
-    }
-
-    public int getCost()
-    {
-        return modularCost;
-    }
-
-    protected ModuleData getParent()
-    {
-        return parent;
-    }
-
-    protected ArrayList<ModuleData> getNemesis()
-    {
-        return nemesis;
-    }
-
-    protected ArrayList<ModuleDataGroup> getRequirement()
-    {
-        return requirement;
-    }
-
-    public String getModuleInfoText(final byte b)
-    {
-        return null;
-    }
-
-    public String getCartInfoText(final String name, CompoundTag extraData)
-    {
-        return name;
     }
 
     public static NonNullList<ItemStack> getModularItems(@Nonnull ItemStack cart) {
@@ -392,33 +129,16 @@ public class ModuleData
         return cart;
     }
 
-    public static boolean isItemOfModularType(@Nonnull ItemStack itemstack, final Class<? extends ModuleBase> validClass)
-    {
-        if(itemstack.getItem() instanceof IModuleItem iModuleItem)
-        {
+    public static boolean isItemOfModularType(@Nonnull ItemStack itemstack, final Class<? extends ModuleBase> validClass) {
+        if (itemstack.getItem() instanceof IModuleItem iModuleItem) {
             final ModuleData moduleData = iModuleItem.getModuleData();
             return moduleData != null && validClass.isAssignableFrom(moduleData.moduleClass);
         }
         return false;
     }
 
-    @Deprecated(forRemoval = true)
-    @Nonnull
-    public ItemStack getItemStack()
-    {
-        ItemStack stack = ItemStack.EMPTY;
-
-        if (ModItems.MODULES.get(this) != null)
-        {
-            stack = new ItemStack(ModItems.MODULES.get(this).get());
-        }
-        return stack;
-    }
-
-    public static boolean isValidModuleItem(final ModuleType moduleType, @Nonnull ItemStack itemstack)
-    {
-        if (itemstack.getItem() instanceof IModuleItem itemCartModule)
-        {
+    public static boolean isValidModuleItem(final ModuleType moduleType, @Nonnull ItemStack itemstack) {
+        if (itemstack.getItem() instanceof IModuleItem itemCartModule) {
             final ModuleData module = itemCartModule.getModuleData();
             return isValidModuleItem(moduleType, module);
         }
@@ -426,17 +146,14 @@ public class ModuleData
     }
 
     //TODO rewrite all of this
-    public static boolean isValidModuleItem(final ModuleType moduleType, final ModuleData module)
-    {
-        if (module != null)
-        {
+    public static boolean isValidModuleItem(final ModuleType moduleType, final ModuleData module) {
+        if (module != null) {
             return module.getModuleType() == moduleType;
         }
         return false;
     }
 
-    public static boolean isValidModuleCombo(final ModuleDataHull hull, final ArrayList<ModuleData> modules)
-    {
+    public static boolean isValidModuleCombo(final ModuleDataHull hull, final ArrayList<ModuleData> modules) {
         //TODO rewrite all of this
 
 //        final int[] max = {1, hull.getEngineMax(), 1, 4, hull.getAddonMax(), 6};
@@ -463,31 +180,352 @@ public class ModuleData
         return true;
     }
 
-    public void addExtraMessage(Consumer<Component> consumer)
-    {
-        if (message != null)
-        {
-            consumer.accept(Component.literal(""));
-            for (final Localization.MODULE_INFO m : message)
-            {
-                final String str = m.translate();
-                if (str.length() <= MAX_MESSAGE_ROW_LENGTH)
-                {
-                    addExtraMessage(consumer, str);
+    public static String checkForErrors(final ModuleDataHull hull, final ArrayList<ModuleData> modules) {
+        if (getTotalCost(modules) > hull.getCapacity()) {
+            return Localization.MODULE_INFO.CAPACITY_ERROR.translate();
+        }
+        if (!isValidModuleCombo(hull, modules)) {
+            return Localization.MODULE_INFO.COMBINATION_ERROR.translate();
+        }
+        for (int i = 0; i < modules.size(); ++i) {
+            final ModuleData mod1 = modules.get(i);
+            if (mod1.getCost() > hull.getComplexityMax()) {
+                return Localization.MODULE_INFO.COMPLEXITY_ERROR.translate(mod1.getName());
+            }
+            if (mod1.getParent() != null && !modules.contains(mod1.getParent())) {
+                return Localization.MODULE_INFO.PARENT_ERROR.translate(mod1.getName(), mod1.getParent().getName());
+            }
+            if (mod1.getNemesis() != null) {
+                for (final ModuleData nemesis : mod1.getNemesis()) {
+                    if (modules.contains(nemesis)) {
+                        return Localization.MODULE_INFO.NEMESIS_ERROR.translate(mod1.getName(), nemesis.getName());
+                    }
                 }
-                else
-                {
+            }
+            if (mod1.getRequirement() != null) {
+                for (final ModuleDataGroup group : mod1.getRequirement()) {
+                    int count = 0;
+                    for (final ModuleData mod2 : group.getModules()) {
+                        for (final ModuleData mod3 : modules) {
+                            if (mod2.equals(mod3)) {
+                                ++count;
+                            }
+                        }
+                    }
+                    if (count < group.getCount()) {
+                        return Localization.MODULE_INFO.PARENT_ERROR.translate(mod1.getName(), group.getCountName() + " " + group.getName());
+                    }
+                }
+            }
+            for (int j = i + 1; j < modules.size(); ++j) {
+                final ModuleData mod4 = modules.get(j);
+                if (mod1 == mod4) {
+                    if (!mod1.getAllowDuplicate()) {
+                        return Localization.MODULE_INFO.DUPLICATE_ERROR.translate(mod1.getName());
+                    }
+                } else if (mod1.getRenderingSides() != null && mod4.getRenderingSides() != null) {
+                    SIDE clash = SIDE.NONE;
+                    for (final SIDE side1 : mod1.getRenderingSides()) {
+                        for (final SIDE side2 : mod4.getRenderingSides()) {
+                            if (side1 == side2) {
+                                clash = side1;
+                                break;
+                            }
+                        }
+                        if (clash != SIDE.NONE) {
+                            break;
+                        }
+                    }
+                    if (clash != SIDE.NONE) {
+                        return Localization.MODULE_INFO.CLASH_ERROR.translate(mod1.getName(), mod4.getName(), clash.toString());
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static int getTotalCost(final ArrayList<ModuleData> modules) {
+        int currentCost = 0;
+        for (final ModuleData module : modules) {
+            currentCost += module.getCost();
+        }
+        return currentCost;
+    }
+
+    //TODO dead code
+    private static long calculateCombinations() {
+        long combinations = 0L;
+        final ArrayList<ModuleData> potential = new ArrayList<>();
+        for (final ModuleData module : StevesCartsAPI.MODULE_REGISTRY.values()) {
+            if (!(module instanceof ModuleDataHull)) {
+                potential.add(module);
+            }
+        }
+        for (final ModuleData module : StevesCartsAPI.MODULE_REGISTRY.values()) {
+            if (module instanceof ModuleDataHull) {
+                final ArrayList<ModuleData> modules = new ArrayList<>();
+                combinations += populateHull((ModuleDataHull) module, modules, (ArrayList<ModuleData>) potential.clone(), 0);
+                System.out.println("Hull added: " + combinations);
+            }
+        }
+        return combinations;
+    }
+
+    private static long populateHull(final ModuleDataHull hull, final ArrayList<ModuleData> attached, final ArrayList<ModuleData> potential, final int depth) {
+        if (checkForErrors(hull, attached) != null) {
+            return 0L;
+        }
+        long combinations = 1L;
+        final Iterator<ModuleData> itt = potential.iterator();
+        while (itt.hasNext()) {
+            final ModuleData module = itt.next();
+            final ArrayList<ModuleData> attachedCopy = (ArrayList<ModuleData>) attached.clone();
+            attachedCopy.add(module);
+            final ArrayList<ModuleData> potentialCopy = (ArrayList<ModuleData>) potential.clone();
+            itt.remove();
+            combinations += populateHull(hull, attachedCopy, potentialCopy, depth + 1);
+            if (depth < 3) {
+                System.out.println("Modular state[" + depth + "]: " + combinations);
+            }
+        }
+        return combinations;
+    }
+
+    public Class<? extends ModuleBase> getModuleClass() {
+        return moduleClass;
+    }
+
+    public ModuleType getModuleType() {
+        return moduleType;
+    }
+
+    @Deprecated(forRemoval = true)
+    public boolean getIsValid() {
+        return true;
+    }
+
+    @Deprecated(forRemoval = true)
+    public boolean getIsLocked() {
+        return isLocked;
+    }
+
+    @SuppressWarnings("unused")
+    protected ModuleData lock() {
+        isLocked = true;
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public boolean getEnabledByDefault() {
+        return !defaultLock;
+    }
+
+    @SuppressWarnings("unused")
+    protected ModuleData lockByDefault() {
+        defaultLock = true;
+        return this;
+    }
+
+    public ModuleData setAllowDuplicate() {
+        allowDuplicate = true;
+        return this;
+    }
+
+    protected boolean getAllowDuplicate() {
+        return allowDuplicate;
+    }
+
+    public ModuleData addSide(final SIDE side) {
+        if (renderingSides == null) {
+            renderingSides = new ArrayList<>();
+        }
+        renderingSides.add(side);
+        if (side == SIDE.TOP) {
+            removeModel("Rails");
+        }
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public ModuleData useExtraData(final byte defaultValue) {
+        extraDataDefaultValue = defaultValue;
+        useExtraData = true;
+        return this;
+    }
+
+    public boolean isUsingExtraData() {
+        return useExtraData;
+    }
+
+    public byte getDefaultExtraData() {
+        return extraDataDefaultValue;
+    }
+
+    public ArrayList<SIDE> getRenderingSides() {
+        return renderingSides;
+    }
+
+    public ModuleData addSides(final SIDE[] sides) {
+        for (SIDE side : sides) {
+            addSide(side);
+        }
+        return this;
+    }
+
+    public ModuleData addParent(final ModuleData parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    public ModuleData addMessage(final Localization.MODULE_INFO s) {
+        if (message == null) {
+            message = new ArrayList<>();
+        }
+        message.add(s);
+        return this;
+    }
+
+    protected void addNemesis(final ModuleData nemesis) {
+        if (this.nemesis == null) {
+            this.nemesis = new ArrayList<>();
+        }
+        this.nemesis.add(nemesis);
+    }
+
+    public ModuleData addRequirement(final ModuleDataGroup requirement) {
+        if (this.requirement == null) {
+            this.requirement = new ArrayList<>();
+        }
+        this.requirement.add(requirement);
+        return this;
+    }
+
+    @SuppressWarnings("unused")
+    public float getModelMult() {
+        return modelMult;
+    }
+
+    public ModuleData setModelMult(final float val) {
+        modelMult = val;
+        return this;
+    }
+
+    public ModuleData addModel(final String tag, final ModelCartbase model) {
+        addModel(tag, model, false);
+        addModel(tag, model, true);
+        return this;
+    }
+
+    public ModuleData addModel(final String tag, final ModelCartbase model, final boolean placeholder) {
+        if (placeholder) {
+            if (modelsPlaceholder == null) {
+                modelsPlaceholder = new HashMap<>();
+            }
+            modelsPlaceholder.put(tag, model);
+        } else {
+            if (models == null) {
+                models = new HashMap<>();
+            }
+            models.put(tag, model);
+        }
+        return this;
+    }
+
+    public HashMap<String, ModelCartbase> getModels(final boolean placeholder) {
+        if (placeholder) {
+            return modelsPlaceholder;
+        }
+        return models;
+    }
+
+    public boolean haveModels(final boolean placeholder) {
+        if (placeholder) {
+            return modelsPlaceholder != null;
+        }
+        return models != null;
+    }
+
+    public ModuleData removeModel(final String tag) {
+        if (removedModels == null) {
+            removedModels = new ArrayList<>();
+        }
+        if (!removedModels.contains(tag)) {
+            removedModels.add(tag);
+        }
+        return this;
+    }
+
+    public ArrayList<String> getRemovedModels() {
+        return removedModels;
+    }
+
+    public boolean haveRemovedModels() {
+        return removedModels != null;
+    }
+
+    public String getDisplayName() {
+        return name;
+    }
+
+    public String getName() {
+        return "module_" + getRawName();
+    }
+
+    public Identifier getID() {
+        return id;
+    }
+
+    public int getCost() {
+        return modularCost;
+    }
+
+    protected ModuleData getParent() {
+        return parent;
+    }
+
+    protected ArrayList<ModuleData> getNemesis() {
+        return nemesis;
+    }
+
+    protected ArrayList<ModuleDataGroup> getRequirement() {
+        return requirement;
+    }
+
+    public String getModuleInfoText(final byte b) {
+        return null;
+    }
+
+    public String getCartInfoText(final String name, CompoundTag extraData) {
+        return name;
+    }
+
+    @Deprecated(forRemoval = true)
+    @Nonnull
+    public ItemStack getItemStack() {
+        ItemStack stack = ItemStack.EMPTY;
+
+        if (ModItems.MODULES.get(this) != null) {
+            stack = new ItemStack(ModItems.MODULES.get(this).get());
+        }
+        return stack;
+    }
+
+    public void addExtraMessage(Consumer<Component> consumer) {
+        if (message != null) {
+            consumer.accept(Component.literal(""));
+            for (final Localization.MODULE_INFO m : message) {
+                final String str = m.translate();
+                if (str.length() <= MAX_MESSAGE_ROW_LENGTH) {
+                    addExtraMessage(consumer, str);
+                } else {
                     final String[] words = str.split(" ");
                     String row = "";
-                    for (final String word : words)
-                    {
+                    for (final String word : words) {
                         final String next = (row + " " + word).trim();
-                        if (next.length() <= MAX_MESSAGE_ROW_LENGTH)
-                        {
+                        if (next.length() <= MAX_MESSAGE_ROW_LENGTH) {
                             row = next;
-                        }
-                        else
-                        {
+                        } else {
                             addExtraMessage(consumer, row);
                             row = word;
                         }
@@ -498,255 +536,78 @@ public class ModuleData
         }
     }
 
-    private void addExtraMessage(Consumer<Component> consumer, final String str)
-    {
+    private void addExtraMessage(Consumer<Component> consumer, final String str) {
         consumer.accept(Component.literal(ChatFormatting.DARK_GRAY + (ChatFormatting.ITALIC + str + ChatFormatting.RESET)));
     }
 
-    public final void addInformation(Consumer<Component> consumer, final CompoundTag compound)
-    {
+    public final void addInformation(Consumer<Component> consumer, final CompoundTag compound) {
         consumer.accept(Component.literal(ChatFormatting.GRAY + Localization.MODULE_INFO.MODULAR_COST.translate() + ": " + modularCost));
-        if (compound != null && compound.contains("Data"))
-        {
+        if (compound != null && compound.contains("Data")) {
             final String extradatainfo = getModuleInfoText(compound.getByteOr("Data", (byte) 0));
-            if (extradatainfo != null)
-            {
+            if (extradatainfo != null) {
                 consumer.accept(Component.literal(ChatFormatting.WHITE + extradatainfo));
             }
         }
-        if (StevesCartsClient.hasShiftDown())
-        {
-            if (getRenderingSides() == null || getRenderingSides().size() == 0)
-            {
+        if (StevesCartsClient.hasShiftDown()) {
+            if (getRenderingSides() == null || getRenderingSides().size() == 0) {
                 consumer.accept(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.NO_SIDES.translate()));
-            }
-            else
-            {
+            } else {
                 StringBuilder sides = new StringBuilder();
-                for (int i = 0; i < getRenderingSides().size(); ++i)
-                {
+                for (int i = 0; i < getRenderingSides().size(); ++i) {
                     final SIDE side = getRenderingSides().get(i);
-                    if (i == 0)
-                    {
+                    if (i == 0) {
                         sides.append(side.toString());
-                    }
-                    else if (i == getRenderingSides().size() - 1)
-                    {
+                    } else if (i == getRenderingSides().size() - 1) {
                         sides.append(" ").append(Localization.MODULE_INFO.AND.translate()).append(" ").append(side.toString());
-                    }
-                    else
-                    {
+                    } else {
                         sides.append(", ").append(side.toString());
                     }
                 }
                 consumer.accept(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.OCCUPIED_SIDES.translate(sides.toString(), String.valueOf(getRenderingSides().size()))));
             }
-            if (getNemesis() != null && getNemesis().size() != 0)
-            {
-                if (getRenderingSides() == null || getRenderingSides().size() == 0)
-                {
+            if (getNemesis() != null && getNemesis().size() != 0) {
+                if (getRenderingSides() == null || getRenderingSides().size() == 0) {
                     consumer.accept(Component.literal(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_HOWEVER.translate() + ":"));
-                }
-                else
-                {
+                } else {
                     consumer.accept(Component.literal(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_ALSO.translate() + ":"));
                 }
-                for (final ModuleData module : getNemesis())
-                {
+                for (final ModuleData module : getNemesis()) {
                     consumer.accept(Component.literal(ChatFormatting.RED + module.getName()));
                 }
             }
-            if (parent != null)
-            {
+            if (parent != null) {
                 consumer.accept(Component.literal(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + parent.getName()));
             }
-            if (getRequirement() != null && getRequirement().size() != 0)
-            {
-                for (final ModuleDataGroup group : getRequirement())
-                {
+            if (getRequirement() != null && getRequirement().size() != 0) {
+                for (final ModuleDataGroup group : getRequirement()) {
                     consumer.accept(Component.literal(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + group.getCountName() + " " + group.getName()));
                 }
             }
-            if (getAllowDuplicate())
-            {
+            if (getAllowDuplicate()) {
                 consumer.accept(Component.literal(ChatFormatting.GREEN + Localization.MODULE_INFO.DUPLICATES.translate()));
             }
-        }
-        else
-        {
+        } else {
             consumer.accept(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.SHIFT_FOR_MORE.translate("SHIFT")));
         }
         consumer.accept(Component.literal(ChatFormatting.BLUE + "Module Type: " + ChatFormatting.WHITE + moduleType.name()));
         addExtraMessage(consumer);
     }
 
-    public static String checkForErrors(final ModuleDataHull hull, final ArrayList<ModuleData> modules)
-    {
-        if (getTotalCost(modules) > hull.getCapacity())
-        {
-            return Localization.MODULE_INFO.CAPACITY_ERROR.translate();
-        }
-        if (!isValidModuleCombo(hull, modules))
-        {
-            return Localization.MODULE_INFO.COMBINATION_ERROR.translate();
-        }
-        for (int i = 0; i < modules.size(); ++i)
-        {
-            final ModuleData mod1 = modules.get(i);
-            if (mod1.getCost() > hull.getComplexityMax())
-            {
-                return Localization.MODULE_INFO.COMPLEXITY_ERROR.translate(mod1.getName());
-            }
-            if (mod1.getParent() != null && !modules.contains(mod1.getParent()))
-            {
-                return Localization.MODULE_INFO.PARENT_ERROR.translate(mod1.getName(), mod1.getParent().getName());
-            }
-            if (mod1.getNemesis() != null)
-            {
-                for (final ModuleData nemesis : mod1.getNemesis())
-                {
-                    if (modules.contains(nemesis))
-                    {
-                        return Localization.MODULE_INFO.NEMESIS_ERROR.translate(mod1.getName(), nemesis.getName());
-                    }
-                }
-            }
-            if (mod1.getRequirement() != null)
-            {
-                for (final ModuleDataGroup group : mod1.getRequirement())
-                {
-                    int count = 0;
-                    for (final ModuleData mod2 : group.getModules())
-                    {
-                        for (final ModuleData mod3 : modules)
-                        {
-                            if (mod2.equals(mod3))
-                            {
-                                ++count;
-                            }
-                        }
-                    }
-                    if (count < group.getCount())
-                    {
-                        return Localization.MODULE_INFO.PARENT_ERROR.translate(mod1.getName(), group.getCountName() + " " + group.getName());
-                    }
-                }
-            }
-            for (int j = i + 1; j < modules.size(); ++j)
-            {
-                final ModuleData mod4 = modules.get(j);
-                if (mod1 == mod4)
-                {
-                    if (!mod1.getAllowDuplicate())
-                    {
-                        return Localization.MODULE_INFO.DUPLICATE_ERROR.translate(mod1.getName());
-                    }
-                }
-                else if (mod1.getRenderingSides() != null && mod4.getRenderingSides() != null)
-                {
-                    SIDE clash = SIDE.NONE;
-                    for (final SIDE side1 : mod1.getRenderingSides())
-                    {
-                        for (final SIDE side2 : mod4.getRenderingSides())
-                        {
-                            if (side1 == side2)
-                            {
-                                clash = side1;
-                                break;
-                            }
-                        }
-                        if (clash != SIDE.NONE)
-                        {
-                            break;
-                        }
-                    }
-                    if (clash != SIDE.NONE)
-                    {
-                        return Localization.MODULE_INFO.CLASH_ERROR.translate(mod1.getName(), mod4.getName(), clash.toString());
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public static int getTotalCost(final ArrayList<ModuleData> modules)
-    {
-        int currentCost = 0;
-        for (final ModuleData module : modules)
-        {
-            currentCost += module.getCost();
-        }
-        return currentCost;
-    }
-
-    //TODO dead code
-    private static long calculateCombinations()
-    {
-        long combinations = 0L;
-        final ArrayList<ModuleData> potential = new ArrayList<>();
-        for (final ModuleData module : StevesCartsAPI.MODULE_REGISTRY.values())
-        {
-            if (!(module instanceof ModuleDataHull))
-            {
-                potential.add(module);
-            }
-        }
-        for (final ModuleData module : StevesCartsAPI.MODULE_REGISTRY.values())
-        {
-            if (module instanceof ModuleDataHull)
-            {
-                final ArrayList<ModuleData> modules = new ArrayList<>();
-                combinations += populateHull((ModuleDataHull) module, modules, (ArrayList<ModuleData>) potential.clone(), 0);
-                System.out.println("Hull added: " + combinations);
-            }
-        }
-        return combinations;
-    }
-
-    private static long populateHull(final ModuleDataHull hull, final ArrayList<ModuleData> attached, final ArrayList<ModuleData> potential, final int depth)
-    {
-        if (checkForErrors(hull, attached) != null)
-        {
-            return 0L;
-        }
-        long combinations = 1L;
-        final Iterator<ModuleData> itt = potential.iterator();
-        while (itt.hasNext())
-        {
-            final ModuleData module = itt.next();
-            final ArrayList<ModuleData> attachedCopy = (ArrayList<ModuleData>) attached.clone();
-            attachedCopy.add(module);
-            final ArrayList<ModuleData> potentialCopy = (ArrayList<ModuleData>) potential.clone();
-            itt.remove();
-            combinations += populateHull(hull, attachedCopy, potentialCopy, depth + 1);
-            if (depth < 3)
-            {
-                System.out.println("Modular state[" + depth + "]: " + combinations);
-            }
-        }
-        return combinations;
-    }
-
-    public String getRawName()
-    {
+    public String getRawName() {
         return name.replace(":", "").replace("'", "").replace(" ", "_").replace("-", "_").toLowerCase(Locale.ROOT);
     }
 
-    public enum SIDE
-    {
+    public enum SIDE {
         NONE(Localization.MODULE_INFO.SIDE_NONE), TOP(Localization.MODULE_INFO.SIDE_TOP), CENTER(Localization.MODULE_INFO.SIDE_CENTER), BOTTOM(Localization.MODULE_INFO.SIDE_BOTTOM), BACK(Localization.MODULE_INFO.SIDE_BACK), LEFT(Localization.MODULE_INFO.SIDE_LEFT), RIGHT(Localization.MODULE_INFO.SIDE_RIGHT), FRONT(Localization.MODULE_INFO.SIDE_FRONT);
 
         private final Localization.MODULE_INFO name;
 
-        SIDE(final Localization.MODULE_INFO name)
-        {
+        SIDE(final Localization.MODULE_INFO name) {
             this.name = name;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return name.translate();
         }
     }

@@ -32,18 +32,15 @@ import vswe.stevescarts.modules.workers.tools.ModuleDrill;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-public class TileEntityActivator extends TileEntityBase implements MenuProvider
-{
+public class TileEntityActivator extends TileEntityBase implements MenuProvider {
     private ArrayList<ActivatorOption> options;
 
-    public TileEntityActivator(BlockPos blockPos, BlockState blockState)
-    {
+    public TileEntityActivator(BlockPos blockPos, BlockState blockState) {
         super(ModBlocks.MODULE_TOGGLER_TILE.get(), blockPos, blockState);
         loadOptions();
     }
 
-    private void loadOptions()
-    {
+    private void loadOptions() {
         (options = new ArrayList<>()).add(new ActivatorOption(Localization.GUI.TOGGLER.OPTION_DRILL, ModuleDrill.class));
         options.add(new ActivatorOption(Localization.GUI.TOGGLER.OPTION_SHIELD, ModuleShield.class));
         options.add(new ActivatorOption(Localization.GUI.TOGGLER.OPTION_INVISIBILITY, ModuleInvisible.class));
@@ -53,8 +50,7 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider
         options.add(new ActivatorOption(Localization.GUI.TOGGLER.OPTION_REMOVER, ModuleRemover.class));
     }
 
-    public ArrayList<ActivatorOption> getOptions()
-    {
+    public ArrayList<ActivatorOption> getOptions() {
         return options;
     }
 
@@ -85,41 +81,33 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider
         }
     }
 
-    public void receivePacket(final int id, final byte[] data, @org.jetbrains.annotations.Nullable ServerPlayer sender)
-    {
-        if (id == 0)
-        {
+    public void receivePacket(final int id, final byte[] data, @org.jetbrains.annotations.Nullable ServerPlayer sender) {
+        if (id == 0) {
             final boolean leftClick = (data[0] & 0x1) == 0x0;
             final int optionId = (data[0] & 0xFFFFFFFE) >> 1;
-            if (optionId >= 0 && optionId < options.size())
-            {
+            if (optionId >= 0 && optionId < options.size()) {
                 options.get(optionId).changeOption(leftClick);
                 setChanged();
             }
         }
     }
 
-    public void handleCart(ModularMinecart cart, final boolean isOrange)
-    {
-        for (final ActivatorOption option : options)
-        {
-            if (!option.isDisabled())
-            {
+    public void handleCart(ModularMinecart cart, final boolean isOrange) {
+        for (final ActivatorOption option : options) {
+            if (!option.isDisabled()) {
                 cart.handleActivator(option, isOrange);
             }
         }
     }
 
     @Override
-    public @NotNull Component getDisplayName()
-    {
+    public @NotNull Component getDisplayName() {
         return Component.translatable("container.activator");
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity)
-    {
+    public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
         return new ContainerActivator(id, playerInventory, this, new SimpleContainerData(0));
     }
 }

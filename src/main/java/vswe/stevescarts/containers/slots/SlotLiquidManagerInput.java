@@ -9,8 +9,8 @@ import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 import vswe.stevescarts.helpers.storages.SCTank;
 
 public class SlotLiquidManagerInput extends SlotStevesCarts {
-    private TileEntityLiquid manager;
-    private int tankid;
+    private final TileEntityLiquid manager;
+    private final int tankid;
 
     public SlotLiquidManagerInput(final TileEntityLiquid manager, final int tankid, final int i, final int j, final int k) {
         super(manager, i, j, k);

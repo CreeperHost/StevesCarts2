@@ -24,6 +24,6 @@ public class RecipeHelper {
     //This may break if given different input types for the same recipe type...
     public static <I extends RecipeInput, T extends Recipe<I>> Optional<RecipeHolder<T>> findRecipe(RecipeType<T> type, I input, ServerLevel level) {
         RecipeManager.CachedCheck<?, ?> cache = CACHES.computeIfAbsent(type, recipeType -> RecipeManager.createCheck(type));
-        return ((RecipeManager.CachedCheck<I, T>)cache).getRecipeFor(input, level);
+        return ((RecipeManager.CachedCheck<I, T>) cache).getRecipeFor(input, level);
     }
 }

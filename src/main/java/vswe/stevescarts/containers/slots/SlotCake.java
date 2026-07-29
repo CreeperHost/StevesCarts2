@@ -7,16 +7,13 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 
 import javax.annotation.Nonnull;
 
-public class SlotCake extends SlotStevesCarts
-{
-    public SlotCake(final Container iinventory, final int i, final int j, final int k)
-    {
+public class SlotCake extends SlotStevesCarts {
+    public SlotCake(final Container iinventory, final int i, final int j, final int k) {
         super(iinventory, i, j, k);
     }
 
     @Override
-    public boolean mayPlace(@Nonnull ItemStack itemstack)
-    {
+    public boolean mayPlace(@Nonnull ItemStack itemstack) {
         return !itemstack.isEmpty() && itemstack.getItem() == Items.CAKE;
     }
 }

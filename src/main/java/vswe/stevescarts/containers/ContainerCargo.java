@@ -14,42 +14,35 @@ import vswe.stevescarts.init.ModContainers;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ContainerCargo extends ContainerBase
-{
+public class ContainerCargo extends ContainerBase {
     public short lastTarget;
     public TileEntityCargo tileEntityCargo;
     public SimpleContainerData data;
 
-    public ContainerCargo(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
-    {
+    public ContainerCargo(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer) {
         this(id, playerInventory, (TileEntityCargo) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new SimpleContainerData(21));
     }
 
-    public ContainerCargo(int id, Inventory playerInventory, TileEntityCargo tileEntityCargo, SimpleContainerData data)
-    {
+    public ContainerCargo(int id, Inventory playerInventory, TileEntityCargo tileEntityCargo, SimpleContainerData data) {
         super(ModContainers.CONTAINER_CARGO.get(), id);
         this.tileEntityCargo = tileEntityCargo;
         this.tileEntityCargo.cargoSlots = new ArrayList<>();
         this.tileEntityCargo.lastLayout = -1;
         this.data = data;
-        for (int i = 0; i < 60; ++i)
-        {
+        for (int i = 0; i < 60; ++i) {
             final SlotCargo slot = new SlotCargo(tileEntityCargo, this, i);
             addSlot(slot);
             this.tileEntityCargo.cargoSlots.add(slot);
         }
 
-        for (int k = 0; k < 3; ++k)
-        {
-            for (int j1 = 0; j1 < 9; ++j1)
-            {
+        for (int k = 0; k < 3; ++k) {
+            for (int j1 = 0; j1 < 9; ++j1) {
                 if (playerInventory != null) {
                     addSlot(new Slot(playerInventory, j1 + k * 9 + 9, j1 * 18 + offsetX(), 104 + k * 18 + 36));
                 }
             }
         }
-        for (int l = 0; l < 9; ++l)
-        {
+        for (int l = 0; l < 9; ++l) {
             if (playerInventory != null) {
                 addSlot(new Slot(playerInventory, l, l * 18 + offsetX(), 198));
             }
@@ -57,26 +50,21 @@ public class ContainerCargo extends ContainerBase
         addDataSlots(data);
     }
 
-    public int getLayoutType()
-    {
+    public int getLayoutType() {
         return data.get(0);
     }
 
-    public int[] getColor()
-    {
+    public int[] getColor() {
         return new int[]{data.get(1), data.get(2), data.get(3), data.get(4)};
     }
 
-    private int[] getAmounts()
-    {
+    private int[] getAmounts() {
         return new int[]{data.get(17), data.get(18), data.get(19), data.get(20)};
     }
 
-    public int getAmount(final int id)
-    {
+    public int getAmount(final int id) {
         final int val = getAmounts()[id];
-        switch (val)
-        {
+        switch (val) {
             case 1, 7 -> {
                 return 1;
             }
@@ -107,43 +95,35 @@ public class ContainerCargo extends ContainerBase
         }
     }
 
-    public int getAmountType(final int id)
-    {
+    public int getAmountType(final int id) {
         final int val = getAmounts()[id];
-        if (val == 0)
-        {
+        if (val == 0) {
             return 0;
         }
-        if (val <= 6)
-        {
+        if (val <= 6) {
             return 1;
         }
         return 2;
     }
 
-    public boolean[] toCart()
-    {
+    public boolean[] toCart() {
         return new boolean[]{data.get(5) == 1, data.get(6) == 1, data.get(7) == 1, data.get(8) == 1};
     }
 
-    public int[] getTarget()
-    {
+    public int[] getTarget() {
         return new int[]{data.get(9), data.get(10), data.get(11), data.get(12)};
     }
 
-    public boolean[] doReturn()
-    {
+    public boolean[] doReturn() {
         return new boolean[]{data.get(13) == 1, data.get(14) == 1, data.get(15) == 1, data.get(16) == 1};
     }
 
-    protected int offsetX()
-    {
+    protected int offsetX() {
         return 73;
     }
 
     @Override
-    public boolean stillValid(@NotNull Player player)
-    {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 }

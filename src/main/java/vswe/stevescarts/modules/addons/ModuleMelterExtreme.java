@@ -5,25 +5,19 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import vswe.stevescarts.entities.ModularMinecart;
 
-public class ModuleMelterExtreme extends ModuleMelter
-{
-    public ModuleMelterExtreme(ModularMinecart cart)
-    {
+public class ModuleMelterExtreme extends ModuleMelter {
+    public ModuleMelterExtreme(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    protected boolean melt(final Block b, BlockPos pos)
-    {
-        if (!super.melt(b, pos))
-        {
-            if (b == Blocks.SNOW)
-            {
+    protected boolean melt(final Block b, BlockPos pos) {
+        if (!super.melt(b, pos)) {
+            if (b == Blocks.SNOW) {
                 getCart().level().removeBlock(pos, false);
                 return true;
             }
-            if (b == Blocks.ICE)
-            {
+            if (b == Blocks.ICE) {
                 getCart().level().setBlock(pos, Blocks.WATER.defaultBlockState(), 4);
                 return true;
             }

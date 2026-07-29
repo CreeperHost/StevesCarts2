@@ -1,7 +1,6 @@
 package vswe.stevescarts.arcade.monopoly;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import org.joml.Matrix3x2fStack;
 import vswe.stevescarts.arcade.ArcadeGame;
@@ -13,36 +12,7 @@ import vswe.stevescarts.modules.realtimers.ModuleArcade;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
-public class ArcadeMonopoly extends ArcadeGame
-{
-    private Die die;
-    private Die die2;
-    private ArrayList<Piece> pieces;
-    private int currentPiece;
-    private Place[] places;
-    private int selectedPlace;
-    private int diceTimer;
-    private int diceCount;
-    private int diceDelay;
-    private ArrayList<Button> buttons;
-    private Button roll;
-    private Button end;
-    private Button purchase;
-    private Button rent;
-    private Button bankrupt;
-    private Button bed;
-    private Button card;
-    private Button jail;
-    private Button mortgage;
-    private Button unmortgage;
-    private Button sellbed;
-    private boolean rolled;
-    private boolean controllable;
-    private boolean endable;
-    private boolean openedCard;
-    private Card currentCard;
-    private float cardScale;
-    private int cardRotation;
+public class ArcadeMonopoly extends ArcadeGame {
     public static final int PLACE_WIDTH = 76;
     public static final int PLACE_HEIGHT = 122;
     public static final int BOARD_WIDTH = 14;
@@ -52,18 +22,43 @@ public class ArcadeMonopoly extends ArcadeGame
     private static final int CARD_HEIGHT = 80;
     private static String[] textures;
 
-    protected Place getSelectedPlace()
-    {
-        return (selectedPlace == -1) ? null : places[selectedPlace];
+    static {
+        ArcadeMonopoly.textures = new String[5];
+        for (int i = 0; i < ArcadeMonopoly.textures.length; ++i) {
+            ArcadeMonopoly.textures[i] = "/gui/monopoly_" + i + ".png";
+        }
     }
 
-    protected Piece getCurrentPiece()
-    {
-        return pieces.get(currentPiece);
-    }
+    private final Die die;
+    private final Die die2;
+    private final ArrayList<Piece> pieces;
+    private int currentPiece;
+    private final Place[] places;
+    private int selectedPlace;
+    private int diceTimer;
+    private int diceCount;
+    private int diceDelay;
+    private final ArrayList<Button> buttons;
+    private final Button roll;
+    private final Button end;
+    private final Button purchase;
+    private final Button rent;
+    private final Button bankrupt;
+    private final Button bed;
+    private final Button card;
+    private final Button jail;
+    private final Button mortgage;
+    private final Button unmortgage;
+    private final Button sellbed;
+    private boolean rolled;
+    private boolean controllable;
+    private boolean endable;
+    private boolean openedCard;
+    private Card currentCard;
+    private float cardScale;
+    private int cardRotation;
 
-    public ArcadeMonopoly(final ModuleArcade module)
-    {
+    public ArcadeMonopoly(final ModuleArcade module) {
         super(module, Localization.ARCADE.MADNESS);
         selectedPlace = -1;
         (pieces = new ArrayList<>()).add(new Piece(this, 0, Piece.CONTROLLED_BY.PLAYER));
@@ -87,369 +82,307 @@ public class ArcadeMonopoly extends ArcadeGame
         ((Property) places[3]).setOwner(pieces.get(0));
         die = new Die(this, 0);
         die2 = new Die(this, 1);
-        (buttons = new ArrayList<>()).add(roll = new Button()
-        {
+        (buttons = new ArrayList<>()).add(roll = new Button() {
             @Override
-            public String getName()
-            {
+            public String getName() {
                 return "Roll";
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return true;
             }
 
             @Override
-            public boolean isEnabled()
-            {
+            public boolean isEnabled() {
                 return diceCount == 0 && diceTimer == 0 && !rolled;
             }
 
             @Override
-            public void onClick()
-            {
+            public void onClick() {
                 rolled = true;
                 throwDice();
             }
         });
-        buttons.add(end = new Button()
-        {
+        buttons.add(end = new Button() {
             @Override
-            public String getName()
-            {
+            public String getName() {
                 return "End Turn";
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return true;
             }
 
             @Override
-            public boolean isEnabled()
-            {
+            public boolean isEnabled() {
                 return controllable && endable;
             }
 
             @Override
-            public void onClick()
-            {
+            public void onClick() {
                 rolled = false;
                 controllable = false;
                 nextPiece();
                 endable = false;
                 openedCard = false;
-                if (useAI())
-                {
+                if (useAI()) {
                     roll.onClick();
                 }
             }
         });
-        buttons.add(purchase = new Button()
-        {
+        buttons.add(purchase = new Button() {
             @Override
-            public String getName()
-            {
+            public String getName() {
                 return "Purchase";
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return controllable && places[getCurrentPiece().getPosition()] instanceof Property && !((Property) places[getCurrentPiece().getPosition()]).hasOwner();
             }
 
             @Override
-            public boolean isEnabled()
-            {
+            public boolean isEnabled() {
                 final Property property = (Property) places[getCurrentPiece().getPosition()];
                 return getCurrentPiece().canAffordProperty(property);
             }
 
             @Override
-            public boolean isVisibleForPlayer()
-            {
+            public boolean isVisibleForPlayer() {
                 return getSelectedPlace() == null;
             }
 
             @Override
-            public void onClick()
-            {
+            public void onClick() {
                 getCurrentPiece().purchaseProperty((Property) places[getCurrentPiece().getPosition()]);
             }
         });
-        buttons.add(rent = new Button()
-        {
+        buttons.add(rent = new Button() {
             @Override
-            public String getName()
-            {
+            public String getName() {
                 return "Pay Rent";
             }
 
             @Override
-            public boolean isVisible()
-            {
-                if (controllable && places[getCurrentPiece().getPosition()] instanceof Property)
-                {
-                    final Property property = (Property) places[getCurrentPiece().getPosition()];
+            public boolean isVisible() {
+                if (controllable && places[getCurrentPiece().getPosition()] instanceof Property property) {
                     return property.hasOwner() && property.getOwner() != getCurrentPiece() && !property.isMortgaged();
                 }
                 return false;
             }
 
             @Override
-            public boolean isEnabled()
-            {
+            public boolean isEnabled() {
                 final Property property = (Property) places[getCurrentPiece().getPosition()];
                 return !endable && getCurrentPiece().canAffordRent(property);
             }
 
             @Override
-            public boolean isVisibleForPlayer()
-            {
+            public boolean isVisibleForPlayer() {
                 return getSelectedPlace() == null;
             }
 
             @Override
-            public void onClick()
-            {
+            public void onClick() {
                 getCurrentPiece().payPropertyRent((Property) places[getCurrentPiece().getPosition()]);
                 endable = true;
             }
         });
-        buttons.add(bankrupt = new Button()
-        {
+        buttons.add(bankrupt = new Button() {
             @Override
-            public String getName()
-            {
+            public String getName() {
                 return "Go Bankrupt";
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return !endable && rent.isVisible() && !rent.isEnabled();
             }
 
             @Override
-            public boolean isEnabled()
-            {
+            public boolean isEnabled() {
                 return true;
             }
 
             @Override
-            public boolean isVisibleForPlayer()
-            {
+            public boolean isVisibleForPlayer() {
                 return getSelectedPlace() == null;
             }
 
             @Override
-            public void onClick()
-            {
+            public void onClick() {
                 getCurrentPiece().bankrupt(((Property) places[getCurrentPiece().getPosition()]).getOwner());
                 endable = true;
             }
         });
-        buttons.add(bed = new Button()
-        {
+        buttons.add(bed = new Button() {
             @Override
-            public String getName()
-            {
+            public String getName() {
                 return "Buy Bed";
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return getSelectedPlace() != null && getSelectedPlace() instanceof Street;
             }
 
             @Override
-            public boolean isEnabled()
-            {
+            public boolean isEnabled() {
                 final Street street = (Street) getSelectedPlace();
                 return controllable && street.ownsAllInGroup(getCurrentPiece()) && street.getStructureCount() < 5 && getCurrentPiece().canAffordStructure(street) && !street.isMortgaged();
             }
 
             @Override
-            public void onClick()
-            {
+            public void onClick() {
                 getCurrentPiece().buyStructure((Street) getSelectedPlace());
             }
         });
-        buttons.add(card = new Button()
-        {
+        buttons.add(card = new Button() {
             @Override
-            public String getName()
-            {
+            public String getName() {
                 return "Pick a Card";
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return controllable && places[getCurrentPiece().getPosition()] instanceof CardPlace && (!openedCard || currentCard != null);
             }
 
             @Override
-            public boolean isEnabled()
-            {
+            public boolean isEnabled() {
                 return !openedCard;
             }
 
             @Override
-            public boolean isVisibleForPlayer()
-            {
+            public boolean isVisibleForPlayer() {
                 return getSelectedPlace() == null;
             }
 
             @Override
-            public void onClick()
-            {
+            public void onClick() {
                 openCard(((CardPlace) places[getCurrentPiece().getPosition()]).getCard());
             }
         });
-        buttons.add(jail = new Button()
-        {
+        buttons.add(jail = new Button() {
             @Override
-            public String getName()
-            {
+            public String getName() {
                 return "Pay for /tpx";
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return controllable && getCurrentPiece().isInJail();
             }
 
             @Override
-            public boolean isEnabled()
-            {
+            public boolean isEnabled() {
                 return getCurrentPiece().canAffordFine();
             }
 
             @Override
-            public boolean isVisibleForPlayer()
-            {
+            public boolean isVisibleForPlayer() {
                 return getSelectedPlace() == null;
             }
 
             @Override
-            public void onClick()
-            {
+            public void onClick() {
                 getCurrentPiece().payFine();
                 endable = true;
             }
         });
-        buttons.add(mortgage = new Button()
-        {
+        buttons.add(mortgage = new Button() {
             @Override
-            public String getName()
-            {
+            public String getName() {
                 return "Mortgage";
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return controllable && getSelectedPlace() != null && getSelectedPlace() instanceof Property && ((Property) getSelectedPlace()).getOwner() == getCurrentPiece() && !((Property) getSelectedPlace()).isMortgaged();
             }
 
             @Override
-            public boolean isEnabled()
-            {
+            public boolean isEnabled() {
                 return ((Property) getSelectedPlace()).canMortgage();
             }
 
             @Override
-            public void onClick()
-            {
+            public void onClick() {
                 getCurrentPiece().getMoneyFromMortgage((Property) getSelectedPlace());
             }
         });
-        buttons.add(unmortgage = new Button()
-        {
+        buttons.add(unmortgage = new Button() {
             @Override
-            public String getName()
-            {
+            public String getName() {
                 return "Unmortage";
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return controllable && getSelectedPlace() != null && getSelectedPlace() instanceof Property && ((Property) getSelectedPlace()).getOwner() == getCurrentPiece() && ((Property) getSelectedPlace()).isMortgaged();
             }
 
             @Override
-            public boolean isEnabled()
-            {
+            public boolean isEnabled() {
                 return getCurrentPiece().canAffordUnMortgage((Property) getSelectedPlace());
             }
 
             @Override
-            public void onClick()
-            {
+            public void onClick() {
                 getCurrentPiece().payUnMortgage((Property) getSelectedPlace());
             }
         });
-        buttons.add(sellbed = new Button()
-        {
+        buttons.add(sellbed = new Button() {
             @Override
-            public String getName()
-            {
+            public String getName() {
                 return "Sell Bed";
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return getSelectedPlace() != null && getSelectedPlace() instanceof Street;
             }
 
             @Override
-            public boolean isEnabled()
-            {
+            public boolean isEnabled() {
                 final Street street = (Street) getSelectedPlace();
                 return controllable && street.getStructureCount() > 0;
             }
 
             @Override
-            public void onClick()
-            {
+            public void onClick() {
                 getCurrentPiece().sellStructure((Street) getSelectedPlace());
             }
         });
-        if (getCurrentPiece().getController() == Piece.CONTROLLED_BY.COMPUTER)
-        {
+        if (getCurrentPiece().getController() == Piece.CONTROLLED_BY.COMPUTER) {
             roll.onClick();
         }
     }
 
-    private boolean useAI()
-    {
+    protected Place getSelectedPlace() {
+        return (selectedPlace == -1) ? null : places[selectedPlace];
+    }
+
+    protected Piece getCurrentPiece() {
+        return pieces.get(currentPiece);
+    }
+
+    private boolean useAI() {
         return getCurrentPiece().getController() == Piece.CONTROLLED_BY.COMPUTER;
     }
 
-    private void nextPiece()
-    {
+    private void nextPiece() {
         currentPiece = (currentPiece + 1) % pieces.size();
-        if (getCurrentPiece().isBankrupt())
-        {
+        if (getCurrentPiece().isBankrupt()) {
             nextPiece();
         }
     }
 
-    private void throwDice()
-    {
-        if (diceCount == 0)
-        {
-            if (diceTimer == 0)
-            {
+    private void throwDice() {
+        if (diceCount == 0) {
+            if (diceTimer == 0) {
                 diceTimer = 20;
             }
             die.randomize();
@@ -457,203 +390,147 @@ public class ArcadeMonopoly extends ArcadeGame
         }
     }
 
-    public void movePiece(final int steps)
-    {
+    public void movePiece(final int steps) {
         diceCount = steps;
     }
 
-    public int getTotalDieEyes()
-    {
+    public int getTotalDieEyes() {
         return die.getNumber() + die2.getNumber();
     }
 
-    public boolean hasDoubleDice()
-    {
+    public boolean hasDoubleDice() {
         return die.getNumber() == die2.getNumber();
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (diceDelay == 0)
-        {
-            if (diceTimer > 0)
-            {
+        if (diceDelay == 0) {
+            if (diceTimer > 0) {
                 throwDice();
-                if (--diceTimer == 0)
-                {
-                    if (getCurrentPiece().isInJail())
-                    {
+                if (--diceTimer == 0) {
+                    if (getCurrentPiece().isInJail()) {
                         controllable = true;
-                        if (hasDoubleDice())
-                        {
+                        if (hasDoubleDice()) {
                             getCurrentPiece().releaseFromJail();
                             endable = true;
-                            if (useAI())
-                            {
+                            if (useAI()) {
                                 end.onClick();
                             }
-                        }
-                        else
-                        {
+                        } else {
                             getCurrentPiece().increaseTurnsInJail();
-                            if (getCurrentPiece().getTurnsInJail() < 3)
-                            {
+                            if (getCurrentPiece().getTurnsInJail() < 3) {
                                 endable = true;
-                                if (useAI())
-                                {
+                                if (useAI()) {
                                     end.onClick();
                                 }
-                            }
-                            else if (useAI())
-                            {
-                                if (jail.isVisible() && jail.isEnabled())
-                                {
+                            } else if (useAI()) {
+                                if (jail.isVisible() && jail.isEnabled()) {
                                     jail.onClick();
-                                }
-                                else
-                                {
+                                } else {
                                     bankrupt.onClick();
                                 }
                                 end.onClick();
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         movePiece(getTotalDieEyes());
                     }
                 }
-            }
-            else if (diceCount != 0)
-            {
-                if (diceCount > 0)
-                {
+            } else if (diceCount != 0) {
+                if (diceCount > 0) {
                     getCurrentPiece().move(1);
                     places[getCurrentPiece().getPosition()].onPiecePass(getCurrentPiece());
                     --diceCount;
-                }
-                else
-                {
+                } else {
                     getCurrentPiece().move(-1);
                     ++diceCount;
                 }
-                if (diceCount == 0)
-                {
-                    if (places[getCurrentPiece().getPosition()].onPieceStop(getCurrentPiece()))
-                    {
+                if (diceCount == 0) {
+                    if (places[getCurrentPiece().getPosition()].onPieceStop(getCurrentPiece())) {
                         endable = true;
                     }
                     controllable = true;
-                    if (useAI())
-                    {
-                        if (purchase.isVisible() && purchase.isEnabled())
-                        {
+                    if (useAI()) {
+                        if (purchase.isVisible() && purchase.isEnabled()) {
                             purchase.onClick();
-                        }
-                        else if (card.isVisible() && card.isEnabled())
-                        {
+                        } else if (card.isVisible() && card.isEnabled()) {
                             card.onClick();
-                        }
-                        else if (rent.isVisible())
-                        {
-                            if (rent.isEnabled())
-                            {
+                        } else if (rent.isVisible()) {
+                            if (rent.isEnabled()) {
                                 rent.onClick();
-                            }
-                            else
-                            {
+                            } else {
                                 bankrupt.onClick();
                             }
                         }
-                        if (end.isVisible() && end.isEnabled())
-                        {
+                        if (end.isVisible() && end.isEnabled()) {
                             end.onClick();
                         }
                     }
                 }
             }
             diceDelay = 3;
-        }
-        else
-        {
+        } else {
             --diceDelay;
         }
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
-        Matrix3x2fStack matrixStack = guiGraphics.pose();
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
+        Matrix3x2fStack matrixStack = GuiGraphicsExtractor.pose();
         Identifier texture = getTexture(gui, 1);
-        die.draw(guiGraphics, texture, gui, 20, 20);
-        die2.draw(guiGraphics, texture, gui, 50, 20);
+        die.draw(GuiGraphicsExtractor, texture, gui, 20, 20);
+        die2.draw(GuiGraphicsExtractor, texture, gui, 50, 20);
         final float smallgridX = x / 0.17f - 686.94116f;
         final float smallgridY = y / 0.17f - 30.117645f;
         boolean foundHover = false;
-        if (selectedPlace != -1)
-        {
-            drawPropertyOnBoardWithPositionRotationAndScale(guiGraphics, texture, gui, places[selectedPlace], selectedPlace, true, false, (int) ((590.6666666666666 - ((getId(selectedPlace) == 0) ? 122 : 76)) / 2.0), 51, 0, 0.75f);
+        if (selectedPlace != -1) {
+            drawPropertyOnBoardWithPositionRotationAndScale(GuiGraphicsExtractor, texture, gui, places[selectedPlace], selectedPlace, true, false, (int) ((590.6666666666666 - ((getId(selectedPlace) == 0) ? 122 : 76)) / 2.0), 51, 0, 0.75f);
         }
-        for (int i = 0; i < places.length; ++i)
-        {
-            if (!foundHover && getModule().inRect((int) smallgridX, (int) smallgridY, getSmallgridPlaceArea(i)))
-            {
-                if (selectedPlace == -1)
-                {
-                    drawPropertyOnBoardWithPositionRotationAndScale(guiGraphics, texture, gui, places[i], i, true, false, (int) ((590.6666666666666 - ((getId(i) == 0) ? 122 : 76)) / 2.0), 51, 0, 0.75f);
+        for (int i = 0; i < places.length; ++i) {
+            if (!foundHover && getModule().inRect((int) smallgridX, (int) smallgridY, getSmallgridPlaceArea(i))) {
+                if (selectedPlace == -1) {
+                    drawPropertyOnBoardWithPositionRotationAndScale(GuiGraphicsExtractor, texture, gui, places[i], i, true, false, (int) ((590.6666666666666 - ((getId(i) == 0) ? 122 : 76)) / 2.0), 51, 0, 0.75f);
                 }
                 foundHover = true;
-                drawPropertyOnBoard(guiGraphics, texture, gui, places[i], i, getSide(i), getId(i), true);
-            }
-            else
-            {
-                drawPropertyOnBoard(guiGraphics, texture, gui, places[i], i, getSide(i), getId(i), false);
+                drawPropertyOnBoard(GuiGraphicsExtractor, texture, gui, places[i], i, getSide(i), getId(i), true);
+            } else {
+                drawPropertyOnBoard(GuiGraphicsExtractor, texture, gui, places[i], i, getSide(i), getId(i), false);
             }
         }
-        for (int i = 0; i < pieces.size(); ++i)
-        {
+        for (int i = 0; i < pieces.size(); ++i) {
             final Piece piece = pieces.get(i);
             final int[] menu = piece.getMenuRect(i);
             Identifier texture2 = getTexture(gui, 1);
-            getModule().drawImage(guiGraphics, texture2, gui, menu, 0, 122);
-            for (int j = 0; j < 3; ++j)
-            {
+            getModule().drawImage(GuiGraphicsExtractor, texture2, gui, menu, 0, 122);
+            for (int j = 0; j < 3; ++j) {
                 int v = 0;
-                switch (j)
-                {
-                    case 0:
-                    {
+                switch (j) {
+                    case 0: {
                         v = ((piece.getController() == Piece.CONTROLLED_BY.PLAYER) ? 0 : ((piece.getController() == Piece.CONTROLLED_BY.COMPUTER) ? 1 : 2));
                         break;
                     }
-                    case 1:
-                    {
+                    case 1: {
                         v = (pieces.get(i).isBankrupt() ? 4 : ((currentPiece == i) ? ((diceCount == 0) ? ((diceTimer > 0) ? 3 : 2) : 1) : 0));
                         break;
                     }
-                    case 2:
-                    {
+                    case 2: {
                         v = ((getSelectedPlace() != null && getSelectedPlace() instanceof Property && ((Property) getSelectedPlace()).getOwner() == pieces.get(i)) ? (((Property) getSelectedPlace()).isMortgaged() ? 2 : 1) : 0);
                         break;
                     }
                 }
-                getModule().drawImage(guiGraphics, texture2, gui, menu[0] + 3, menu[1] + 3 + j * 9, j * 12, 152 + 6 * v, 12, 6);
+                getModule().drawImage(GuiGraphicsExtractor, texture2, gui, menu[0] + 3, menu[1] + 3 + j * 9, j * 12, 152 + 6 * v, 12, 6);
             }
             final int[] player = piece.getPlayerMenuRect(i);
-            getModule().drawImage(guiGraphics, texture2, gui, player, 232, 24 * piece.getV());
-            Note.drawPlayerValue(guiGraphics, this, gui, menu[0] + 50, menu[1] + 2, piece.getNoteCount());
-            for (int k = piece.getAnimationNotes().size() - 1; k >= 0; --k)
-            {
+            getModule().drawImage(GuiGraphicsExtractor, texture2, gui, player, 232, 24 * piece.getV());
+            Note.drawPlayerValue(GuiGraphicsExtractor, this, gui, menu[0] + 50, menu[1] + 2, piece.getNoteCount());
+            for (int k = piece.getAnimationNotes().size() - 1; k >= 0; --k) {
                 final NoteAnimation animation = piece.getAnimationNotes().get(k);
                 int animX = menu[0] + 50 + (6 - animation.getNote().getId()) * 20;
-                if (animX + 16 > 443)
-                {
+                if (animX + 16 > 443) {
                     animX = player[0] + (player[2] - 16) / 2;
                 }
-                if (animation.draw(guiGraphics, this, gui, animX, menu[1] + 2))
-                {
+                if (animation.draw(GuiGraphicsExtractor, this, gui, animX, menu[1] + 2)) {
                     piece.removeNewNoteAnimation(k);
                 }
             }
@@ -661,99 +538,72 @@ public class ArcadeMonopoly extends ArcadeGame
         }
         Identifier texture3 = getTexture(gui, 1);
         int id = 0;
-        for (final Button button : buttons)
-        {
-            if (button.isReallyVisible(this))
-            {
+        for (final Button button : buttons) {
+            if (button.isReallyVisible(this)) {
                 final int[] rect = getButtonRect(id++);
                 int v = 0;
-                if (!button.isReallyEnabled(this))
-                {
+                if (!button.isReallyEnabled(this)) {
                     v = 1;
-                }
-                else if (getModule().inRect(x, y, rect))
-                {
+                } else if (getModule().inRect(x, y, rect)) {
                     v = 2;
                 }
-                getModule().drawImage(guiGraphics, texture3, gui, rect, 152, v * 18);
+                getModule().drawImage(GuiGraphicsExtractor, texture3, gui, rect, 152, v * 18);
             }
         }
-        if (getSelectedPlace() != null)
-        {
-            if (getSelectedPlace() instanceof Street)
-            {
-                final Street street = (Street) getSelectedPlace();
-                getModule().drawImage(guiGraphics, texture3, gui, 32, 185, 76, 22, 16, 16);
-                if (street.getOwner() != null && !street.isMortgaged())
-                {
-                    if (street.getStructureCount() == 0)
-                    {
-                        getModule().drawImage(guiGraphics, texture3, gui, 7, street.ownsAllInGroup(street.getOwner()) ? 241 : 226, 124, 22, 5, 10);
-                    }
-                    else
-                    {
-                        getModule().drawImage(guiGraphics, texture3, gui, 323, 172 + (street.getStructureCount() - 1) * 17, 124, 22, 5, 10);
+        if (getSelectedPlace() != null) {
+            if (getSelectedPlace() instanceof Street street) {
+                getModule().drawImage(GuiGraphicsExtractor, texture3, gui, 32, 185, 76, 22, 16, 16);
+                if (street.getOwner() != null && !street.isMortgaged()) {
+                    if (street.getStructureCount() == 0) {
+                        getModule().drawImage(GuiGraphicsExtractor, texture3, gui, 7, street.ownsAllInGroup(street.getOwner()) ? 241 : 226, 124, 22, 5, 10);
+                    } else {
+                        getModule().drawImage(GuiGraphicsExtractor, texture3, gui, 323, 172 + (street.getStructureCount() - 1) * 17, 124, 22, 5, 10);
                     }
                 }
-                for (int l = 1; l <= 5; ++l)
-                {
-                    drawStreetRent(guiGraphics, gui, street, l);
+                for (int l = 1; l <= 5; ++l) {
+                    drawStreetRent(GuiGraphicsExtractor, gui, street, l);
                 }
-                Note.drawValue(guiGraphics, this, gui, 62, 170, 3, street.getMortgageValue());
-                Note.drawValue(guiGraphics, this, gui, 62, 185, 3, street.getStructureCost());
-                Note.drawValue(guiGraphics, this, gui, 62, 222, 3, street.getRentCost(false));
-                Note.drawValue(guiGraphics, this, gui, 62, 237, 3, street.getRentCost(true));
-            }
-            else if (getSelectedPlace() instanceof Station)
-            {
-                final Station station = (Station) getSelectedPlace();
-                if (station.getOwner() != null && !station.isMortgaged())
-                {
-                    getModule().drawImage(guiGraphics, texture3, gui, 323, 184 + (station.getOwnedInGroup() - 1) * 17, 124, 22, 5, 10);
+                Note.drawValue(GuiGraphicsExtractor, this, gui, 62, 170, 3, street.getMortgageValue());
+                Note.drawValue(GuiGraphicsExtractor, this, gui, 62, 185, 3, street.getStructureCost());
+                Note.drawValue(GuiGraphicsExtractor, this, gui, 62, 222, 3, street.getRentCost(false));
+                Note.drawValue(GuiGraphicsExtractor, this, gui, 62, 237, 3, street.getRentCost(true));
+            } else if (getSelectedPlace() instanceof Station station) {
+                if (station.getOwner() != null && !station.isMortgaged()) {
+                    getModule().drawImage(GuiGraphicsExtractor, texture3, gui, 323, 184 + (station.getOwnedInGroup() - 1) * 17, 124, 22, 5, 10);
                 }
-                Note.drawValue(guiGraphics, this, gui, 62, 170, 3, station.getMortgageValue());
-                for (int l = 1; l <= 4; ++l)
-                {
-                    drawStationRent(guiGraphics, gui, station, l);
+                Note.drawValue(GuiGraphicsExtractor, this, gui, 62, 170, 3, station.getMortgageValue());
+                for (int l = 1; l <= 4; ++l) {
+                    drawStationRent(GuiGraphicsExtractor, gui, station, l);
                 }
-            }
-            else if (getSelectedPlace() instanceof Utility)
-            {
-                final Utility utility = (Utility) getSelectedPlace();
-                if (utility.getOwner() != null && !utility.isMortgaged())
-                {
-                    getModule().drawImage(guiGraphics, texture3, gui, 323, 184 + (utility.getOwnedInGroup() - 1) * 17, 124, 22, 5, 10);
+            } else if (getSelectedPlace() instanceof Utility utility) {
+                if (utility.getOwner() != null && !utility.isMortgaged()) {
+                    getModule().drawImage(GuiGraphicsExtractor, texture3, gui, 323, 184 + (utility.getOwnedInGroup() - 1) * 17, 124, 22, 5, 10);
                 }
-                Note.drawValue(guiGraphics, this, gui, 62, 170, 3, utility.getMortgageValue());
-                for (int l = 1; l <= 3; ++l)
-                {
-                    drawUtilityRent(guiGraphics, gui, utility, l);
+                Note.drawValue(GuiGraphicsExtractor, this, gui, 62, 170, 3, utility.getMortgageValue());
+                for (int l = 1; l <= 3; ++l) {
+                    drawUtilityRent(GuiGraphicsExtractor, gui, utility, l);
                 }
             }
         }
-        if (currentCard != null)
-        {
+        if (currentCard != null) {
             cardScale = Math.min(cardScale + 0.02f, 1.0f);
             cardRotation = Math.max(0, cardRotation - 6);
-            drawCard(guiGraphics, matrixStack, gui, true);
-            drawCard(guiGraphics, matrixStack, gui, false);
-            if (cardScale == 1.0f && useAI())
-            {
+            drawCard(GuiGraphicsExtractor, matrixStack, gui, true);
+            drawCard(GuiGraphicsExtractor, matrixStack, gui, false);
+            if (cardScale == 1.0f && useAI()) {
                 removeCard();
             }
         }
     }
 
-    private void openCard(final Card card)
-    {
+    private void openCard(final Card card) {
         openedCard = true;
         currentCard = card;
         cardScale = 0.0f;
         cardRotation = 540;
     }
 
-    private void drawCard(GuiGraphics guiGraphics, Matrix3x2fStack matrixStack, GuiMinecart gui, final boolean isFront)
-    {
+    private void drawCard(GuiGraphicsExtractor GuiGraphicsExtractor, Matrix3x2fStack matrixStack, GuiMinecart gui, final boolean isFront) {
         matrixStack.pushMatrix();
         final int x = 150;
         final int y = 44;
@@ -766,242 +616,189 @@ public class ArcadeMonopoly extends ArcadeGame
 //        matrixStack.mulPose(cardRotation + (isFront ? 0 : 180), 0.0f, 1.0f, 0.0f);
         matrixStack.translate(-posX, -posY);
         final int[] rect = {0, 0, 142, 80};
-        currentCard.render(this, guiGraphics, getTexture(gui, 0), gui, rect, isFront);
+        currentCard.render(this, GuiGraphicsExtractor, getTexture(gui, 0), gui, rect, isFront);
         matrixStack.popMatrix();
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
         int id = 0;
-        for (final Button button : buttons)
-        {
-            if (button.isReallyVisible(this))
-            {
-                getModule().drawString(guiGraphics, gui, button.getName(), getButtonRect(id++), 4210752);
+        for (final Button button : buttons) {
+            if (button.isReallyVisible(this)) {
+                getModule().drawString(GuiGraphicsExtractor, gui, button.getName(), getButtonRect(id++), 4210752);
             }
         }
-        if (getSelectedPlace() != null)
-        {
-            if (getSelectedPlace() instanceof Street)
-            {
-                getModule().drawString(guiGraphics, gui, "Mortgage", 10, 175, 4210752);
-                getModule().drawString(guiGraphics, gui, "Buy", 10, 190, 4210752);
-                getModule().drawString(guiGraphics, gui, "Rents", 10, 215, 4210752);
-                getModule().drawString(guiGraphics, gui, "Normal", 14, 227, 4210752);
-                getModule().drawString(guiGraphics, gui, "Group", 14, 242, 4210752);
-            }
-            else if (getSelectedPlace() instanceof Station)
-            {
-                getModule().drawString(guiGraphics, gui, "Mortgage", 10, 175, 4210752);
-                getModule().drawString(guiGraphics, gui, "Rents", 330, 170, 4210752);
-            }
-            else if (getSelectedPlace() instanceof Utility)
-            {
-                getModule().drawString(guiGraphics, gui, "Mortgage", 10, 175, 4210752);
-                getModule().drawSplitString(guiGraphics, gui, "The rent depends on the eye count of the dice, if you own one Utility it's " + Utility.getMultiplier(1) + "x the eye count, if you own two it's " + Utility.getMultiplier(2) + "x and if you own them all it's " + Utility.getMultiplier(3) + "x.", 10, 195, 145, 4210752);
-                getModule().drawString(guiGraphics, gui, "Rents", 330, 170, 4210752);
+        if (getSelectedPlace() != null) {
+            if (getSelectedPlace() instanceof Street) {
+                getModule().drawString(GuiGraphicsExtractor, gui, "Mortgage", 10, 175, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "Buy", 10, 190, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "Rents", 10, 215, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "Normal", 14, 227, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "Group", 14, 242, 4210752);
+            } else if (getSelectedPlace() instanceof Station) {
+                getModule().drawString(GuiGraphicsExtractor, gui, "Mortgage", 10, 175, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "Rents", 330, 170, 4210752);
+            } else if (getSelectedPlace() instanceof Utility) {
+                getModule().drawString(GuiGraphicsExtractor, gui, "Mortgage", 10, 175, 4210752);
+                getModule().drawSplitString(GuiGraphicsExtractor, gui, "The rent depends on the eye count of the dice, if you own one Utility it's " + Utility.getMultiplier(1) + "x the eye count, if you own two it's " + Utility.getMultiplier(2) + "x and if you own them all it's " + Utility.getMultiplier(3) + "x.", 10, 195, 145, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "Rents", 330, 170, 4210752);
             }
         }
     }
 
-    private void drawStreetRent(GuiGraphics guiGraphics, GuiMinecart gui, final Street street, final int structures)
-    {
+    private void drawStreetRent(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final Street street, final int structures) {
         Identifier texture = getTexture(gui, 1);
         int graphicalStructures = structures;
         int u = 0;
-        if (graphicalStructures == 5)
-        {
+        if (graphicalStructures == 5) {
             graphicalStructures = 1;
             u = 1;
         }
         final int yPos = 169 + (structures - 1) * 17;
-        for (int i = 0; i < graphicalStructures; ++i)
-        {
-            getModule().drawImage(guiGraphics, texture, gui, 330 + i * 6, yPos, 76 + u * 16, 22, 16, 16);
+        for (int i = 0; i < graphicalStructures; ++i) {
+            getModule().drawImage(GuiGraphicsExtractor, texture, gui, 330 + i * 6, yPos, 76 + u * 16, 22, 16, 16);
         }
-        Note.drawValue(guiGraphics, this, gui, 370, yPos, 3, street.getRentCost(structures));
+        Note.drawValue(GuiGraphicsExtractor, this, gui, 370, yPos, 3, street.getRentCost(structures));
     }
 
-    private void drawStationRent(GuiGraphics guiGraphics, GuiMinecart gui, final Station station, final int ownedStations)
-    {
+    private void drawStationRent(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final Station station, final int ownedStations) {
         Identifier texture = getTexture(gui, 1);
         final int yPos = 181 + (ownedStations - 1) * 17;
-        for (int i = 0; i < ownedStations; ++i)
-        {
-            getModule().drawImage(guiGraphics, texture, gui, 330 + i * 16, yPos, 76 + i * 16, 70, 16, 16);
+        for (int i = 0; i < ownedStations; ++i) {
+            getModule().drawImage(GuiGraphicsExtractor, texture, gui, 330 + i * 16, yPos, 76 + i * 16, 70, 16, 16);
         }
-        Note.drawValue(guiGraphics, this, gui, 410, yPos, 2, station.getRentCost(ownedStations));
+        Note.drawValue(GuiGraphicsExtractor, this, gui, 410, yPos, 2, station.getRentCost(ownedStations));
     }
 
-    private void drawUtilityRent(GuiGraphics guiGraphics, GuiMinecart gui, final Utility utility, final int utils)
-    {
+    private void drawUtilityRent(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final Utility utility, final int utils) {
         Identifier texture = getTexture(gui, 1);
         final int yPos = 181 + (utils - 1) * 17;
-        for (int i = 0; i < utils; ++i)
-        {
-            getModule().drawImage(guiGraphics, texture, gui, 330 + i * 16, yPos, 76 + i * 16, 86, 16, 16);
+        for (int i = 0; i < utils; ++i) {
+            getModule().drawImage(GuiGraphicsExtractor, texture, gui, 330 + i * 16, yPos, 76 + i * 16, 86, 16, 16);
         }
-        Note.drawValue(guiGraphics, this, gui, 400, yPos, 2, utility.getRentCost(utils));
+        Note.drawValue(GuiGraphicsExtractor, this, gui, 400, yPos, 2, utility.getRentCost(utils));
     }
 
-    private int[] getButtonRect(final int i)
-    {
+    private int[] getButtonRect(final int i) {
         return new int[]{10, 50 + i * 22, 80, 18};
     }
 
-    private int getSide(final int i)
-    {
-        if (i < 14)
-        {
+    private int getSide(final int i) {
+        if (i < 14) {
             return 0;
         }
-        if (i < 24)
-        {
+        if (i < 24) {
             return 1;
         }
-        if (i < 38)
-        {
+        if (i < 38) {
             return 2;
         }
         return 3;
     }
 
-    private int getId(final int i)
-    {
-        if (i < 14)
-        {
+    private int getId(final int i) {
+        if (i < 14) {
             return i;
         }
-        if (i < 24)
-        {
+        if (i < 24) {
             return i - 14;
         }
-        if (i < 38)
-        {
+        if (i < 38) {
             return i - 24;
         }
         return i - 38;
     }
 
-    private int[] getSmallgridPlaceArea(final int id)
-    {
+    private int[] getSmallgridPlaceArea(final int id) {
         final int side = getSide(id);
         int i = getId(id);
-        if (i == 0)
-        {
-            switch (side)
-            {
-                case 0:
-                {
+        if (i == 0) {
+            switch (side) {
+                case 0: {
                     return new int[]{1110, 806, 122, 122};
                 }
-                case 1:
-                {
+                case 1: {
                     return new int[]{0, 806, 122, 122};
                 }
-                case 2:
-                {
+                case 2: {
                     return new int[]{0, 0, 122, 122};
                 }
-                default:
-                {
+                default: {
                     return new int[]{1110, 0, 122, 122};
                 }
             }
-        }
-        else
-        {
+        } else {
             --i;
-            switch (side)
-            {
-                case 0:
-                {
+            switch (side) {
+                case 0: {
                     return new int[]{122 + (13 - i) * 76 - 76, 806, 76, 122};
                 }
-                case 1:
-                {
+                case 1: {
                     return new int[]{0, 122 + (9 - i) * 76 - 76, 122, 76};
                 }
-                case 2:
-                {
+                case 2: {
                     return new int[]{122 + i * 76, 0, 76, 122};
                 }
-                default:
-                {
+                default: {
                     return new int[]{1110, 122 + i * 76, 122, 76};
                 }
             }
         }
     }
 
-    private void drawPropertyOnBoard(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final Place place, final int id, final int side, int i, final boolean hover)
-    {
+    private void drawPropertyOnBoard(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, GuiMinecart gui, final Place place, final int id, final int side, int i, final boolean hover) {
         int offX = 0;
         int offY = 0;
         int rotation = 0;
-        if (i == 0)
-        {
-            switch (side)
-            {
-                case 0:
-                {
+        if (i == 0) {
+            switch (side) {
+                case 0: {
                     offX = 1110;
                     offY = 806;
                     rotation = 0;
                     break;
                 }
-                case 1:
-                {
+                case 1: {
                     offX = 122;
                     offY = 806;
                     rotation = 90;
                     break;
                 }
-                case 2:
-                {
+                case 2: {
                     offX = 122;
                     offY = 122;
                     rotation = 180;
                     break;
                 }
-                default:
-                {
+                default: {
                     offX = 1110;
                     offY = 122;
                     rotation = 270;
                     break;
                 }
             }
-        }
-        else
-        {
+        } else {
             --i;
-            switch (side)
-            {
-                case 0:
-                {
+            switch (side) {
+                case 0: {
                     offX = 122 + (13 - i) * 76 - 76;
                     offY = 806;
                     rotation = 0;
                     break;
                 }
-                case 1:
-                {
+                case 1: {
                     offX = 122;
                     offY = 122 + (9 - i) * 76 - 76;
                     rotation = 90;
                     break;
                 }
-                case 2:
-                {
+                case 2: {
                     offX = 122 + i * 76 + 76;
                     offY = 122;
                     rotation = 180;
                     break;
                 }
-                default:
-                {
+                default: {
                     offX = 1110;
                     offY = 122 + i * 76 + 76;
                     rotation = 270;
@@ -1011,29 +808,21 @@ public class ArcadeMonopoly extends ArcadeGame
         }
         offX += 686;
         offY += 30;
-        drawPropertyOnBoardWithPositionRotationAndScale(guiGraphics, texture, gui, place, id, false, hover, offX, offY, rotation, 0.17f);
+        drawPropertyOnBoardWithPositionRotationAndScale(GuiGraphicsExtractor, texture, gui, place, id, false, hover, offX, offY, rotation, 0.17f);
     }
 
-    private void drawPropertyOnBoardWithPositionRotationAndScale(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final Place place, final int id, final boolean zoom, final boolean hover, final int x, final int y, final int r, final float s)
-    {
+    private void drawPropertyOnBoardWithPositionRotationAndScale(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, GuiMinecart gui, final Place place, final int id, final boolean zoom, final boolean hover, final int x, final int y, final int r, final float s) {
         final EnumSet<Place.PLACE_STATE> states = EnumSet.noneOf(Place.PLACE_STATE.class);
-        if (zoom)
-        {
+        if (zoom) {
             states.add(Place.PLACE_STATE.ZOOMED);
-        }
-        else if (hover)
-        {
+        } else if (hover) {
             states.add(Place.PLACE_STATE.HOVER);
         }
-        if (selectedPlace == id)
-        {
+        if (selectedPlace == id) {
             states.add(Place.PLACE_STATE.SELECTED);
         }
-        if (place instanceof Property)
-        {
-            final Property property = (Property) place;
-            if (property.hasOwner() && property.getOwner().showProperties())
-            {
+        if (place instanceof Property property) {
+            if (property.hasOwner() && property.getOwner().showProperties()) {
                 states.add(Place.PLACE_STATE.MARKED);
             }
         }
@@ -1043,109 +832,78 @@ public class ArcadeMonopoly extends ArcadeGame
         //		GlStateManager._scalef(s, s, 1.0f);
         //		GlStateManager._rotatef(r, 0.0f, 0.0f, 1.0f);
         //		GlStateManager._translatef(-posX, -posY, 0.0f);
-        place.draw(guiGraphics, texture, gui, states);
+        place.draw(GuiGraphicsExtractor, texture, gui, states);
         final int[] total = new int[place.getPieceAreaCount()];
-        for (int i = 0; i < pieces.size(); ++i)
-        {
-            if (!pieces.get(i).isBankrupt() && pieces.get(i).getPosition() == id)
-            {
+        for (int i = 0; i < pieces.size(); ++i) {
+            if (!pieces.get(i).isBankrupt() && pieces.get(i).getPosition() == id) {
                 final int[] array = total;
                 final int pieceAreaForPiece = place.getPieceAreaForPiece(pieces.get(i));
                 ++array[pieceAreaForPiece];
             }
         }
         final int[] pos = new int[place.getPieceAreaCount()];
-        for (int j = 0; j < pieces.size(); ++j)
-        {
-            if (!pieces.get(j).isBankrupt() && pieces.get(j).getPosition() == id)
-            {
+        for (int j = 0; j < pieces.size(); ++j) {
+            if (!pieces.get(j).isBankrupt() && pieces.get(j).getPosition() == id) {
                 getTexture(gui, 1);
                 final int area = place.getPieceAreaForPiece(pieces.get(j));
-                place.drawPiece(guiGraphics, texture, gui, pieces.get(j), total[area], pos[area]++, area, states);
+                place.drawPiece(GuiGraphicsExtractor, texture, gui, pieces.get(j), total[area], pos[area]++, area, states);
             }
         }
-        place.drawText(guiGraphics, gui, states);
+        place.drawText(GuiGraphicsExtractor, gui, states);
     }
 
     @Override
-    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int b)
-    {
+    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int b) {
         final float smallgridX = x / 0.17f - 686.94116f;
         final float smallgridY = y / 0.17f - 30.117645f;
         int i = 0;
-        while (i < places.length)
-        {
-            if (getModule().inRect((int) smallgridX, (int) smallgridY, getSmallgridPlaceArea(i)))
-            {
-                if (places[i] instanceof Property)
-                {
-                    if (i == selectedPlace)
-                    {
+        while (i < places.length) {
+            if (getModule().inRect((int) smallgridX, (int) smallgridY, getSmallgridPlaceArea(i))) {
+                if (places[i] instanceof Property) {
+                    if (i == selectedPlace) {
                         selectedPlace = -1;
-                    }
-                    else
-                    {
+                    } else {
                         selectedPlace = i;
                     }
                     return;
                 }
                 break;
-            }
-            else
-            {
+            } else {
                 ++i;
             }
         }
         int id = 0;
-        for (final Button button : buttons)
-        {
-            if (button.isReallyVisible(this) && getModule().inRect(x, y, getButtonRect(id++)))
-            {
-                if (button.isReallyEnabled(this))
-                {
+        for (final Button button : buttons) {
+            if (button.isReallyVisible(this) && getModule().inRect(x, y, getButtonRect(id++))) {
+                if (button.isReallyEnabled(this)) {
                     button.onClick();
                 }
                 return;
             }
         }
-        if (currentCard != null && cardScale == 1.0f)
-        {
+        if (currentCard != null && cardScale == 1.0f) {
             final int[] rect = {150, 44, 142, 80};
-            if (getModule().inRect(x, y, rect))
-            {
+            if (getModule().inRect(x, y, rect)) {
                 removeCard();
             }
         }
         selectedPlace = -1;
     }
 
-    public Identifier getTexture(final GuiMinecart gui, final int number)
-    {
+    public Identifier getTexture(final GuiMinecart gui, final int number) {
         return ResourceHelper.getResource(ArcadeMonopoly.textures[number]);
     }
 
-    public Place[] getPlaces()
-    {
+    public Place[] getPlaces() {
         return places;
     }
 
-    private void removeCard()
-    {
+    private void removeCard() {
         currentCard.doStuff(this, getCurrentPiece());
         currentCard = null;
         endable = true;
-        if (diceCount == 0 && useAI())
-        {
+        if (diceCount == 0 && useAI()) {
             end.onClick();
-        }
-    }
-
-    static
-    {
-        ArcadeMonopoly.textures = new String[5];
-        for (int i = 0; i < ArcadeMonopoly.textures.length; ++i)
-        {
-            ArcadeMonopoly.textures[i] = "/gui/monopoly_" + i + ".png";
         }
     }
 }

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "stevescarts:block/liquid_manager_red",
+    "east": "stevescarts:block/liquid_manager_red",
+    "north": "stevescarts:block/liquid_manager_yellow",
+    "particle": "stevescarts:block/liquid_manager_top",
+    "south": "stevescarts:block/liquid_manager_blue",
+    "up": "stevescarts:block/liquid_manager_top",
+    "west": "stevescarts:block/liquid_manager_green"
+  }
+}

@@ -1,120 +1,94 @@
 package vswe.stevescarts.arcade.monopoly;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.EnumSet;
 
-public class Street extends Property
-{
-    private float[] color;
+public class Street extends Property {
+    private final float[] color;
     private int structures;
-    private int baseRent;
+    private final int baseRent;
 
-    public Street(final ArcadeMonopoly game, final StreetGroup group, final String name, final int cost, final int baseRent)
-    {
+    public Street(final ArcadeMonopoly game, final StreetGroup group, final String name, final int cost, final int baseRent) {
         super(game, group, name, cost);
         color = group.getColor();
         this.baseRent = baseRent;
     }
 
     @Override
-    public void draw(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
-    {
-        super.draw(guiGraphics, texture, gui, states);
-        game.getModule().drawImage(guiGraphics, texture, gui, 0, 0, 76, 0, 76, 22);
-        if (structures > 0 && structures < 5)
-        {
-            for (int i = 0; i < structures; ++i)
-            {
-                game.getModule().drawImage(guiGraphics, texture, gui, 3 + i * 18, 3, 76, 22, 16, 16);
+    public void draw(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
+        super.draw(GuiGraphicsExtractor, texture, gui, states);
+        game.getModule().drawImage(GuiGraphicsExtractor, texture, gui, 0, 0, 76, 0, 76, 22);
+        if (structures > 0 && structures < 5) {
+            for (int i = 0; i < structures; ++i) {
+                game.getModule().drawImage(GuiGraphicsExtractor, texture, gui, 3 + i * 18, 3, 76, 22, 16, 16);
             }
+        } else if (structures == 5) {
+            game.getModule().drawImage(GuiGraphicsExtractor, texture, gui, 3, 3, 92, 22, 16, 16);
         }
-        else if (structures == 5)
-        {
-            game.getModule().drawImage(guiGraphics, texture, gui, 3, 3, 92, 22, 16, 16);
-        }
-        drawValue(guiGraphics, gui);
+        drawValue(GuiGraphicsExtractor, gui);
     }
 
-    public void increaseStructure()
-    {
+    public void increaseStructure() {
         ++structures;
     }
 
     @Override
-    protected int getTextY()
-    {
+    protected int getTextY() {
         return 30;
     }
 
-    public int getRentCost(final int structureCount)
-    {
-        switch (structureCount)
-        {
-            default:
-            {
+    public int getRentCost(final int structureCount) {
+        switch (structureCount) {
+            default: {
                 return baseRent;
             }
-            case 1:
-            {
+            case 1: {
                 return baseRent * 5;
             }
-            case 2:
-            {
+            case 2: {
                 return baseRent * 15;
             }
-            case 3:
-            {
+            case 3: {
                 return baseRent * 40;
             }
-            case 4:
-            {
+            case 4: {
                 return baseRent * 70;
             }
-            case 5:
-            {
+            case 5: {
                 return baseRent * 100;
             }
         }
     }
 
-    public int getRentCost(final boolean ownsAll)
-    {
-        if (ownsAll)
-        {
+    public int getRentCost(final boolean ownsAll) {
+        if (ownsAll) {
             return baseRent * 2;
         }
         return baseRent;
     }
 
     @Override
-    public int getRentCost()
-    {
-        if (structures == 0)
-        {
+    public int getRentCost() {
+        if (structures == 0) {
             return getRentCost(ownsAllInGroup(getOwner()));
         }
         return getRentCost(structures);
     }
 
-    public int getStructureCount()
-    {
+    public int getStructureCount() {
         return structures;
     }
 
-    public int getStructureCost()
-    {
+    public int getStructureCost() {
         return ((StreetGroup) getGroup()).getStructureCost();
     }
 
-    public boolean ownsAllInGroup(final Piece currentPiece)
-    {
-        for (final Property property : getGroup().getProperties())
-        {
-            if (property.getOwner() != currentPiece || property.isMortgaged())
-            {
+    public boolean ownsAllInGroup(final Piece currentPiece) {
+        for (final Property property : getGroup().getProperties()) {
+            if (property.getOwner() != currentPiece || property.isMortgaged()) {
                 return false;
             }
         }
@@ -122,18 +96,15 @@ public class Street extends Property
     }
 
     @Override
-    public boolean canMortgage()
-    {
+    public boolean canMortgage() {
         return super.canMortgage() && structures == 0;
     }
 
-    public int getStructureSellPrice()
-    {
+    public int getStructureSellPrice() {
         return getStructureCost() / 2;
     }
 
-    public void decreaseStructures()
-    {
+    public void decreaseStructures() {
         --structures;
     }
 }

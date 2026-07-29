@@ -1,7 +1,5 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
@@ -13,31 +11,42 @@ import java.util.HashMap;
 import java.util.Locale;
 
 //TODO rewrite the entire upgrade system
-public class AssemblerUpgrade
-{
+public class AssemblerUpgrade {
     private static HashMap<Byte, AssemblerUpgrade> upgrades;
+
+    static {
+        AssemblerUpgrade.upgrades = new HashMap<>();
+    }
+
     private final byte id;
     private final String name;
     private final ArrayList<BaseUpgradeEffect> effects;
     private String icon;
 
-    public static HashMap<Byte, AssemblerUpgrade> getUpgrades()
-    {
+    public AssemblerUpgrade(final int id, final String name) {
+        this(id, name, 0);
+    }
+
+    public AssemblerUpgrade(final int id, final String name, final int sideTexture) {
+        this.id = (byte) id;
+        this.name = name;
+        effects = new ArrayList<>();
+        AssemblerUpgrade.upgrades.put(this.id, this);
+    }
+
+    public static HashMap<Byte, AssemblerUpgrade> getUpgrades() {
         return AssemblerUpgrade.upgrades;
     }
 
-    public static Collection<AssemblerUpgrade> getUpgradesList()
-    {
+    public static Collection<AssemblerUpgrade> getUpgradesList() {
         return AssemblerUpgrade.upgrades.values();
     }
 
-    public static AssemblerUpgrade getUpgrade(final int id)
-    {
+    public static AssemblerUpgrade getUpgrade(final int id) {
         return AssemblerUpgrade.upgrades.get((byte) id);
     }
 
-    public static void init()
-    {
+    public static void init() {
         new AssemblerUpgrade(0, "Batteries").addEffect(new FuelCapacity(5000)).addEffect(new Recharger(40));
         new AssemblerUpgrade(1, "Power Crystal").addEffect(new FuelCapacity(15000)).addEffect(new Recharger(150));
         new AssemblerUpgrade(2, "Module knowledge").addEffect(new TimeFlat(-750)).addEffect(new TimeFlatCart(-5000)).addEffect(new WorkEfficiency(-0.01f));
@@ -60,143 +69,97 @@ public class AssemblerUpgrade
         new AssemblerUpgrade(19, "Solar Panel").addEffect(new Solar());
     }
 
-    public AssemblerUpgrade(final int id, final String name)
-    {
-        this(id, name, 0);
-    }
-
-    public AssemblerUpgrade(final int id, final String name, final int sideTexture)
-    {
-        this.id = (byte) id;
-        this.name = name;
-        effects = new ArrayList<>();
-        AssemblerUpgrade.upgrades.put(this.id, this);
-    }
-
-    public byte getId()
-    {
+    public byte getId() {
         return id;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return "block.stevescarts.upgrade_" + getRawName();
     }
 
-    public AssemblerUpgrade addEffect(final BaseUpgradeEffect effect)
-    {
+    public AssemblerUpgrade addEffect(final BaseUpgradeEffect effect) {
         effects.add(effect);
         return this;
     }
 
-    public ArrayList<BaseUpgradeEffect> getEffects()
-    {
+    public ArrayList<BaseUpgradeEffect> getEffects() {
         return effects;
     }
 
-    public int getInventorySize()
-    {
+    public int getInventorySize() {
         final InventoryUpgradeEffect inv = getInventoryEffect();
-        if (inv != null)
-        {
+        if (inv != null) {
             return inv.getInventorySize();
         }
         return 0;
     }
 
-    public InterfaceUpgradeEffect getInterfaceEffect()
-    {
-        for (final BaseUpgradeEffect effect : effects)
-        {
-            if (effect instanceof InterfaceUpgradeEffect)
-            {
+    public InterfaceUpgradeEffect getInterfaceEffect() {
+        for (final BaseUpgradeEffect effect : effects) {
+            if (effect instanceof InterfaceUpgradeEffect) {
                 return (InterfaceUpgradeEffect) effect;
             }
         }
         return null;
     }
 
-    public InventoryUpgradeEffect getInventoryEffect()
-    {
-        for (final BaseUpgradeEffect effect : effects)
-        {
-            if (effect instanceof InventoryUpgradeEffect)
-            {
+    public InventoryUpgradeEffect getInventoryEffect() {
+        for (final BaseUpgradeEffect effect : effects) {
+            if (effect instanceof InventoryUpgradeEffect) {
                 return (InventoryUpgradeEffect) effect;
             }
         }
         return null;
     }
 
-    public TankUpgradeEffect getTankEffect()
-    {
-        for (final BaseUpgradeEffect effect : effects)
-        {
-            if (effect instanceof TankUpgradeEffect)
-            {
+    public TankUpgradeEffect getTankEffect() {
+        for (final BaseUpgradeEffect effect : effects) {
+            if (effect instanceof TankUpgradeEffect) {
                 return (TankUpgradeEffect) effect;
             }
         }
         return null;
     }
 
-    public void init(final TileEntityUpgrade upgrade)
-    {
-        for (final BaseUpgradeEffect effect : effects)
-        {
+    public void init(final TileEntityUpgrade upgrade) {
+        for (final BaseUpgradeEffect effect : effects) {
             effect.init(upgrade);
         }
     }
 
-    public void load(final TileEntityUpgrade upgrade, ValueInput input)
-    {
-        for (final BaseUpgradeEffect effect : effects)
-        {
+    public void load(final TileEntityUpgrade upgrade, ValueInput input) {
+        for (final BaseUpgradeEffect effect : effects) {
             effect.load(upgrade, input);
         }
     }
 
-    public void save(final TileEntityUpgrade upgrade, ValueOutput output)
-    {
-        for (final BaseUpgradeEffect effect : effects)
-        {
+    public void save(final TileEntityUpgrade upgrade, ValueOutput output) {
+        for (final BaseUpgradeEffect effect : effects) {
             effect.save(upgrade, output);
         }
     }
 
-    public void update(final TileEntityUpgrade upgrade)
-    {
-        for (final BaseUpgradeEffect effect : effects)
-        {
+    public void update(final TileEntityUpgrade upgrade) {
+        for (final BaseUpgradeEffect effect : effects) {
             effect.update(upgrade);
         }
     }
 
-    public void removed(final TileEntityUpgrade upgrade)
-    {
-        for (final BaseUpgradeEffect effect : effects)
-        {
+    public void removed(final TileEntityUpgrade upgrade) {
+        for (final BaseUpgradeEffect effect : effects) {
             effect.removed(upgrade);
         }
     }
 
-    public String getRawName()
-    {
+    public String getRawName() {
         return name.replace(":", "").replace(" ", "_").toLowerCase(Locale.ROOT);
     }
 
-    public String getIcon()
-    {
+    public String getIcon() {
         return icon;
     }
 
-    public void setIcon(String icon)
-    {
+    public void setIcon(String icon) {
         this.icon = icon;
-    }
-
-    static
-    {
-        AssemblerUpgrade.upgrades = new HashMap<>();
     }
 }

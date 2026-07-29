@@ -1,8 +1,6 @@
 package vswe.stevescarts.modules.storages.tanks;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -13,84 +11,65 @@ import vswe.stevescarts.helpers.Localization;
 
 import javax.annotation.Nonnull;
 
-public class ModuleCheatTank extends ModuleTank
-{
+public class ModuleCheatTank extends ModuleTank {
     private static final ChatFormatting[] colors = new ChatFormatting[]{ChatFormatting.YELLOW, ChatFormatting.GREEN, ChatFormatting.RED, ChatFormatting.GOLD};
     private int mode;
 
-    public ModuleCheatTank(ModularMinecart cart)
-    {
+    public ModuleCheatTank(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    protected String getTankInfo()
-    {
+    protected String getTankInfo() {
         String str = super.getTankInfo();
         str = str + "\n\n" + Localization.MODULES.TANKS.CREATIVE_MODE.translate(ModuleCheatTank.colors[mode].toString(), String.valueOf(mode)) + "\n" + Localization.MODULES.TANKS.CHANGE_MODE.translate();
-        if (mode != 0)
-        {
+        if (mode != 0) {
             str = str + "\n" + Localization.MODULES.TANKS.RESET_MODE.translate();
         }
         return str;
     }
 
     @Override
-    protected int getTankSize()
-    {
+    protected int getTankSize() {
         return 2000000000;
     }
 
     @Override
-    public boolean hasVisualTank()
-    {
+    public boolean hasVisualTank() {
         return false;
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final Player player)
-    {
-        if (id == 0 && (data[0] & 0x1) != 0x0)
-        {
-            if (mode != 0 && (data[0] & 0x2) != 0x0)
-            {
+    protected void receivePacket(final int id, final byte[] data, final Player player) {
+        if (id == 0 && (data[0] & 0x1) != 0x0) {
+            if (mode != 0 && (data[0] & 0x2) != 0x0) {
                 mode = 0;
-            }
-            else if (++mode == ModuleCheatTank.colors.length)
-            {
+            } else if (++mode == ModuleCheatTank.colors.length) {
                 mode = 1;
             }
             updateAmount();
             updateData();
-        }
-        else
-        {
+        } else {
             super.receivePacket(id, data, player);
         }
     }
 
     @Override
-    public int numberOfGuiData()
-    {
+    public int numberOfGuiData() {
         return super.numberOfGuiData() + 1;
     }
 
     @Override
-    protected void checkGuiData(final Object[] info)
-    {
+    protected void checkGuiData(final Object[] info) {
         super.checkGuiData(info);
         updateGuiData(info, super.numberOfGuiData(), (short) mode);
     }
 
     @Override
-    public void receiveGuiData(final int id, final short data)
-    {
-        if (id == super.numberOfGuiData())
-        {
+    public void receiveGuiData(final int id, final short data) {
+        if (id == super.numberOfGuiData()) {
             mode = data;
-        }
-        else
-        {
+        } else {
             super.receiveGuiData(id, data);
         }
     }
@@ -107,55 +86,43 @@ public class ModuleCheatTank extends ModuleTank
         mode = input.getByteOr(generateNBTName("mode", id), (byte) 0);
     }
 
-    private void updateAmount()
-    {
-        if (!tank.getFluid().isEmpty())
-        {
-            if (mode == 1)
-            {
+    private void updateAmount() {
+        if (!tank.getFluid().isEmpty()) {
+            if (mode == 1) {
                 tank.getFluid().setAmount(getTankSize());
-            }
-            else if (mode == 2)
-            {
+            } else if (mode == 2) {
                 tank.getFluid().setAmount(0);
-            }
-            else if (mode == 3)
-            {
+            } else if (mode == 3) {
                 tank.getFluid().setAmount(getTankSize() / 2);
             }
         }
     }
 
     @Override
-    public void onFluidUpdated(final int tankid)
-    {
+    public void onFluidUpdated(final int tankid) {
         updateAmount();
         super.onFluidUpdated(tankid);
     }
 
     @Override
-    public boolean isFluidValid(FluidStack stack)
-    {
+    public boolean isFluidValid(FluidStack stack) {
         return tank.isFluidValid(stack);
     }
 
     @Override
-    public int fill(FluidStack resource, IFluidHandler.FluidAction action)
-    {
+    public int fill(FluidStack resource, IFluidHandler.FluidAction action) {
         return tank.fill(resource, action);
     }
 
     @Nonnull
     @Override
-    public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action)
-    {
+    public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action) {
         return tank.drain(maxDrain, action);
     }
 
     @Nonnull
     @Override
-    public FluidStack drain(FluidStack resource, IFluidHandler.FluidAction action)
-    {
+    public FluidStack drain(FluidStack resource, IFluidHandler.FluidAction action) {
         return tank.drain(resource, action);
     }
 }

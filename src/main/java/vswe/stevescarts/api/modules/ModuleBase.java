@@ -1,18 +1,12 @@
 package vswe.stevescarts.api.modules;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -35,8 +29,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.fml.i18n.FMLTranslations;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
-import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
 import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -52,7 +44,6 @@ import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.network.PacketHandler;
 import vswe.stevescarts.network.packets.PacketGuiData;
 import vswe.stevescarts.network.packets.PacketMinecartButton;
-import vswe.stevescarts.polylib.NBTHelper;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -60,25 +51,24 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * The base for all modules. This is what's used by the cart to add features, models and interfaces for the cart. should not be
- * confused with ModuleData which is the data used for adding a module to the cart in the Cart Assembler.
+ * The base for all modules. This is what's used by the cart to add features, models, and interfaces for the cart. should not be
+ * confused with ModuleData, which is the data used for adding a module to the cart in the Cart Assembler.
  *
  * @author Vswe
  */
-public abstract class ModuleBase
-{
+public abstract class ModuleBase {
     private final ModularMinecart cart;
     @Nonnull
     private final NonNullList<ItemStack> cargo;
+    protected int slotGlobalStart;
+    protected ArrayList<SlotStevesCarts> slotList;
     private int offSetX;
     private int offSetY;
     private int guiDataOffset;
     private int packetOffset;
     private ArrayList<ButtonBase> buttons;
-    protected int slotGlobalStart;
     private Identifier moduleId;
     private ArrayList<ModelCartbase> models;
-    protected ArrayList<SlotStevesCarts> slotList;
     private int moduleButtonId;
 
     /**
@@ -86,20 +76,17 @@ public abstract class ModuleBase
      *
      * @param cart The cart this module is created on
      */
-    public ModuleBase(ModularMinecart cart)
-    {
+    public ModuleBase(ModularMinecart cart) {
         moduleButtonId = 0;
         this.cart = cart;
         cargo = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
     }
 
     /**
-     * Initializes the modules, this is done after all modules has been added to the cart, and given proper IDs and everything.
+     * Initializes the modules, this is done after all modules have been added to the cart and given proper IDs and everything.
      */
-    public void init()
-    {
-        if (useButtons())
-        {
+    public void init() {
+        if (useButtons()) {
             buttons = new ArrayList<>();
             loadButtons();
             buttonVisibilityChanged();
@@ -107,10 +94,9 @@ public abstract class ModuleBase
     }
 
     /**
-     * Initializes the modules, this is done after all modules has been added to the cart but before most of the initializing code
+     * Initializes the modules, this is done after all modules have been added to the cart but before most of the initializing code
      */
-    public void preInit()
-    {
+    public void preInit() {
     }
 
     /**
@@ -118,8 +104,7 @@ public abstract class ModuleBase
      *
      * @return The cart this module was created at
      */
-    public ModularMinecart getCart()
-    {
+    public ModularMinecart getCart() {
         return cart;
     }
 
@@ -128,29 +113,17 @@ public abstract class ModuleBase
      *
      * @return If this module is a placeholder module
      */
-    public boolean isPlaceholder()
-    {
+    public boolean isPlaceholder() {
         return getCart().isPlaceholder();
     }
 
     /**
-     * If isPlaceholder returns true you can get the object controlling the simulation of the client only cart.
+     * If isPlaceholder returns true, you can get the object controlling the simulation of the client-only cart.
      *
      * @return The Simulation Info object used to simulate the cart
      */
-    protected SimulationInfo getSimInfo()
-    {
+    protected SimulationInfo getSimInfo() {
         return getCart().getPlaceholderAsssembler().getSimulationInfo();
-    }
-
-    /**
-     * Sets the modular id of this module, this is basically the id of the {@link ModuleData} used to create this module.
-     *
-     * @param val The module id
-     */
-    public void setModuleId(final Identifier val)
-    {
-        moduleId = val;
     }
 
     /**
@@ -158,16 +131,23 @@ public abstract class ModuleBase
      *
      * @return The module id
      */
-    public Identifier getModuleId()
-    {
+    public Identifier getModuleId() {
         return moduleId;
+    }
+
+    /**
+     * Sets the modular id of this module, this is basically the id of the {@link ModuleData} used to create this module.
+     *
+     * @param val The module id
+     */
+    public void setModuleId(final Identifier val) {
+        moduleId = val;
     }
 
     /**
      * Is called when the cart's inventory has been changed
      */
-    public void onInventoryChanged()
-    {
+    public void onInventoryChanged() {
     }
 
     /**
@@ -175,13 +155,20 @@ public abstract class ModuleBase
      *
      * @return The x offset of the interface
      */
-    public int getX()
-    {
-        if (doStealInterface())
-        {
+    public int getX() {
+        if (doStealInterface()) {
             return 0;
         }
         return offSetX;
+    }
+
+    /**
+     * Used to set where the interface of this module starts, this is set by the cart
+     *
+     * @param val The x offset to use
+     */
+    public void setX(final int val) {
+        offSetX = val;
     }
 
     /**
@@ -189,10 +176,8 @@ public abstract class ModuleBase
      *
      * @return The y offset of the interface
      */
-    public int getY()
-    {
-        if (doStealInterface())
-        {
+    public int getY() {
+        if (doStealInterface()) {
             return 0;
         }
         return offSetY;
@@ -201,33 +186,20 @@ public abstract class ModuleBase
     /**
      * Used to set where the interface of this module starts, this is set by the cart
      *
-     * @param val The x offset to use
-     */
-    public void setX(final int val)
-    {
-        offSetX = val;
-    }
-
-    /**
-     * Used to set where the interface of this module starts, this is set by the cart
-     *
      * @param val The y offset to use
      */
-    public void setY(final int val)
-    {
+    public void setY(final int val) {
         offSetY = val;
     }
 
     /**
-     * Returns the amount of stacks that this module can store. This will use hasSlots, getInventoryWidth and
-     * getInventoryHeight to calculate the size, this can however be overridden for more advanced usages.
+     * Returns the number of stacks that this module can store. This will use hasSlots, getInventoryWidth, and
+     * getInventoryHeight to calculate the size, this can, however, be overridden for more advanced usages.
      *
      * @return The size of the inventory of this module
      */
-    public int getInventorySize()
-    {
-        if (!hasSlots())
-        {
+    public int getInventorySize() {
+        if (!hasSlots()) {
             return 0;
         }
         return getInventoryWidth() * getInventoryHeight();
@@ -238,8 +210,7 @@ public abstract class ModuleBase
      *
      * @return The width of the module's interface
      */
-    public int guiWidth()
-    {
+    public int guiWidth() {
         return 15 + getInventoryWidth() * 18;
     }
 
@@ -248,8 +219,7 @@ public abstract class ModuleBase
      *
      * @return The height of the module's interface
      */
-    public int guiHeight()
-    {
+    public int guiHeight() {
         return 27 + getInventoryHeight() * 18;
     }
 
@@ -259,8 +229,7 @@ public abstract class ModuleBase
      *
      * @return The number of slots next to each other
      */
-    protected int getInventoryWidth()
-    {
+    protected int getInventoryWidth() {
         return 3;
     }
 
@@ -270,8 +239,7 @@ public abstract class ModuleBase
      *
      * @return The number of slots on top of each other
      */
-    protected int getInventoryHeight()
-    {
+    protected int getInventoryHeight() {
         return 1;
     }
 
@@ -280,8 +248,7 @@ public abstract class ModuleBase
      *
      * @param extraInformation Extra information of special keys
      */
-    public void keyPress(final GuiMinecart gui, final int id, final int extraInformation)
-    {
+    public void keyPress(final GuiMinecart gui, final int id, final int extraInformation) {
     }
 
     /**
@@ -289,26 +256,22 @@ public abstract class ModuleBase
      *
      * @return The ArrayList of SlotBase with the slots
      */
-    public ArrayList<SlotStevesCarts> getSlots()
-    {
+    public ArrayList<SlotStevesCarts> getSlots() {
         return slotList;
     }
 
     /**
      * Generates the slots used for this module, this is used both for the Container and the Interface. For most modules
-     * just leave this and use getSlot instead (as well as setting getInventoryWidth and getInventoryHeight)
+     *  leave this and use getSlot instead (as well as setting getInventoryWidth and getInventoryHeight)
      *
-     * @param slotCount The number of slots that has already been added to the cart. This is for generating the corred slot id
+     * @param slotCount The number of slots that has already been added to the cart. This is for generating the cored slot id
      * @return The number of slots that the cart have added after this module has generated its slots.
      */
-    public int generateSlots(int slotCount)
-    {
+    public int generateSlots(int slotCount) {
         slotGlobalStart = slotCount;
         slotList = new ArrayList<>();
-        for (int j = 0; j < getInventoryHeight(); ++j)
-        {
-            for (int i = 0; i < getInventoryWidth(); ++i)
-            {
+        for (int j = 0; j < getInventoryHeight(); ++j) {
+            for (int i = 0; i < getInventoryWidth(); ++i) {
                 slotList.add(getSlot(slotCount++, i, j));
             }
         }
@@ -316,7 +279,7 @@ public abstract class ModuleBase
     }
 
     /**
-     * Returns a new slot with the given id, x and y coordinate. This is used to generate the slots easier. Just override this
+     * Returns a new slot with the given id, x and y coordinate. This is used to generate the slots easier. Override this
      * function and return a new slots depending on where it's located. Shouldn't be used if you're overriding generateSlots
      *
      * @param slotId The id of the slot to be created
@@ -324,91 +287,82 @@ public abstract class ModuleBase
      * @param y      The y value of the slot, this is not hte interface coordinate but just which row it's in.
      * @return The created SlotBase
      */
-    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
-    {
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y) {
         return null;
     }
 
     /**
-     * Whether this module has slots or not. By default a module is thought to have slots if it has an interface. This is
-     * however overridden if it's not the case.
+     * Whether this module has slots or not. By default, a module is thought to have slots if it has an interface. This is,
+ however, overridden if it's not the case.
      *
      * @return If it should use slots or not
      */
-    public boolean hasSlots()
-    {
+    public boolean hasSlots() {
         return hasGui();
     }
 
     /**
      * Called every time the cart is being updated.
      */
-    public void update()
-    {
+    public void update() {
     }
 
     /**
-     * Returns if this module has enough fuel to keep the cart going one tick more. This should however be moved to engineModuleBase
+     * Returns if this module has enough fuel to keep the cart going one tick more. This should, however, be moved to engineModuleBase
      *
-     * @param consumption The amount of fuel units the cart wants to consume
+     * @param consumption The number of fuel units the cart wants to consume
      * @return If it has fuel or not
      */
-    public boolean hasFuel(final int consumption)
-    {
+    public boolean hasFuel(final int consumption) {
         return false;
     }
 
     /**
-     * The maximum speed this module allows the cart to move in. The maximum speed of the cart will therefore be set to the lowest
-     * value all of it's modules allow.
+     * The maximum speed of this module allows the cart to move in. The maximum speed of the cart will therefore be set to the lowest
+     * value all of its modules allow.
      *
      * @return The maximum speed of the cart
      */
-    public float getMaxSpeed()
-    {
+    public float getMaxSpeed() {
         return 1.1f;
     }
 
     /**
-     * Returns the Y value this cart should try to be on. By returning Integer.MIN_VALUE this module won't care about where the cart should be.
-     * If no modules do care about this the cart will just continue where it already is.
+     * Returns the Y value this cart should try to be on. By returning Integer,., MIN_VALUE, this module won't care about where the cart should be.
+     * If no modules do care about this, the cart will just continue where it already is.
      *
      * @return The Y value
      */
-    public int getYTarget()
-    {
+    public int getYTarget() {
         return Integer.MIN_VALUE;
     }
 
     /**
      * Called when the cart travels over a rail. Used to allow modules to react to specific rails.
      *
-     * @param pos Blockpos in the world
+     * @param pos Blocks in the world
      */
-    public void moveMinecartOnRail(BlockPos pos, BlockState state)
-    {
+    public void moveMinecartOnRail(BlockPos pos, BlockState state) {
     }
 
     /**
      * Used to get the ItemStack in a specific slot of this module
      *
      * @param slot The slot id, this is the local id for this module.
-     * @return The ItemStack in the slot, could of course be null
+     * @return The ItemStack in the slot could, of course, be null
      */
     @Nonnull
-    public ItemStack getStack(final int slot)
-    {
+    public ItemStack getStack(final int slot) {
         return cargo.get(slot);
     }
 
     /**
-     * Used to set the ItemStack in specific slot of this module.
+     * Used to set the ItemStack in a specific slot of this module.
      *
      * @param slot The slot id, this is the local id for this module.
      * @param item The ItemStack to be set.
      */
-    public void setStack(final int slot, @Nonnull ItemStack item)
-    {
+    public void setStack(final int slot, @Nonnull ItemStack item) {
         cargo.set(slot, item);
     }
 
@@ -419,8 +373,7 @@ public abstract class ModuleBase
      * @param slotEnd   The slot end id, this is the local id for this module.
      * @param item      The ItemStack to be set.
      */
-    public void addStack(final int slotStart, final int slotEnd, @Nonnull ItemStack item)
-    {
+    public void addStack(final int slotStart, final int slotEnd, @Nonnull ItemStack item) {
         getCart().addItemToChest(item, slotGlobalStart + slotStart, slotGlobalStart + slotEnd);
     }
 
@@ -430,35 +383,31 @@ public abstract class ModuleBase
      * @param slot The slot id, this is the local id for this module.
      * @param item The ItemStack to be set.
      */
-    public void addStack(final int slot, @Nonnull ItemStack item)
-    {
+    public void addStack(final int slot, @Nonnull ItemStack item) {
         addStack(slot, slot, item);
     }
 
     /**
-     * Used to prevent the cart to drop things when it breaks. If any module returns false the cart won't drop anything.
+     * Used to prevent the cart from drop things when it breaks. If any module returns false, the cart won't drop anything.
      *
      * @return If this module allows the cart to drop on death
      */
-    public boolean dropOnDeath()
-    {
+    public boolean dropOnDeath() {
         return true;
     }
 
     /**
      * Called when the cart breaks
      */
-    public void onDeath()
-    {
+    public void onDeath() {
     }
 
     /**
-     * Whether the cart should allocate room for this interface. By default this also allocates slots, see hasSlots
+     * Whether the cart should allocate room for this interface. By default, this also allocates slots, see hasSlots
      *
      * @return If the module is using an interface
      */
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return false;
     }
 
@@ -467,22 +416,19 @@ public abstract class ModuleBase
      *
      * @param gui The GUI that will draw the interface
      */
-    public void drawForeground(GuiGraphics guiGraphics, final GuiMinecart gui)
-    {
+    public void drawForeground(GuiGraphicsExtractor guiGraphics, final GuiMinecart gui) {
     }
 
     /**
-     * Draws a one lined string in the center of the given rectangle. It will handle scrolling as well as module offset.
+     * Draws a one-lined string in the center of the given rectangle. It will handle scrolling as well as module offset.
      *
      * @param gui  The gui to draw it on.
      * @param str  The string to be drawn.
      * @param rect The rectangle
      * @param c    The color to be used
      */
-    public void drawString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int[] rect, final int c)
-    {
-        if (rect.length < 4)
-        {
+    public void drawString(GuiGraphicsExtractor guiGraphics, final GuiMinecart gui, final String str, final int[] rect, final int c) {
+        if (rect.length < 4) {
             return;
         }
         drawString(guiGraphics, gui, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2, rect[1] + (rect[3] - Minecraft.getInstance().font.lineHeight + 3) / 2, c);
@@ -497,32 +443,28 @@ public abstract class ModuleBase
      * @param y   The local y coordinate
      * @param c   The color to be used
      */
-    public void drawString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int c)
-    {
+    public void drawString(GuiGraphicsExtractor guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int c) {
         drawString(guiGraphics, gui, str, x, y, -1, false, c);
     }
 
-    public void drawString(GuiGraphics guiGraphics, GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c)
-    {
+    public void drawString(GuiGraphicsExtractor guiGraphics, GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c) {
         Minecraft mc = Minecraft.getInstance();
-        final int left = gui.getGuiLeft();
-        final int top = gui.getGuiTop();
+        final int left = gui.getLeftPos();
+        final int top = gui.getTopPos();
         final int[] rect = {x, y, w, 8};
         boolean stealInterface = doStealInterface();
         int dif = 0;
-        if (!stealInterface)
-        {
+        if (!stealInterface) {
             dif = handleScroll(rect);
         }
-        if (rect[3] > 0)
-        {
+        if (rect[3] > 0) {
             if (!stealInterface) {
                 gui.pushScissor();
             }
             if (center) {
-                guiGraphics.drawString(mc.font, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX() + left, rect[1] + getY() + dif + top, 0xFF000000 | c);
+                guiGraphics.text(mc.font, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX() + left, rect[1] + getY() + dif + top, 0xFF000000 | c);
             } else {
-                guiGraphics.drawString(mc.font, str, rect[0] + getX() + left, rect[1] + getY() + dif + top, 0XFFFFFFFF);
+                guiGraphics.text(mc.font, str, rect[0] + getX() + left, rect[1] + getY() + dif + top, 0XFFFFFFFF);
             }
             if (!stealInterface) {
                 gui.popScissor();
@@ -530,18 +472,15 @@ public abstract class ModuleBase
         }
     }
 
-    public void drawStringWithShadow(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int c)
-    {
-        final int j = gui.getGuiLeft();
-        final int k = gui.getGuiTop();
+    public void drawStringWithShadow(GuiGraphicsExtractor guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int c) {
+        final int j = gui.getLeftPos();
+        final int k = gui.getTopPos();
         final int[] rect = {x, y, 0, 8};
-        if (!doStealInterface())
-        {
+        if (!doStealInterface()) {
             handleScroll(rect);
         }
-        if (rect[3] == 8)
-        {
-            guiGraphics.drawString(Minecraft.getInstance().font, str, rect[0] + getX(), rect[1] + getY(), 0xFF000000 | c);
+        if (rect[3] == 8) {
+            guiGraphics.text(Minecraft.getInstance().font, str, rect[0] + getX(), rect[1] + getY(), 0xFF000000 | c);
         }
     }
 
@@ -555,12 +494,11 @@ public abstract class ModuleBase
      * @param w   The maximum width of the text area
      * @param c   The color to be used
      */
-    public void drawSplitString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int w, final int c)
-    {
+    public void drawSplitString(GuiGraphicsExtractor guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int w, final int c) {
         drawSplitString(guiGraphics, gui, str, x, y, w, false, c);
     }
 
-    public void drawSplitString(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c) {
+    public void drawSplitString(GuiGraphicsExtractor guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c) {
         List<FormattedCharSequence> newlines = gui.getFont().split(Component.literal(str), w);
         for (int i = 0; i < newlines.size(); ++i) {
             String line = newlines.get(i).toString();
@@ -568,13 +506,11 @@ public abstract class ModuleBase
         }
     }
 
-    public void drawItemInInterface(GuiGraphics guiGraphics, final GuiMinecart gui, @Nonnull ItemStack item, final int x, final int y)
-    {
+    public void drawItemInInterface(GuiGraphicsExtractor guiGraphics, final GuiMinecart gui, @Nonnull ItemStack item, final int x, final int y) {
         final int[] rect = {x, y, 16, 16};
         handleScroll(rect);
-        if (rect[3] == 16)
-        {
-            guiGraphics.renderItem(item, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY());
+        if (rect[3] == 16) {
+            guiGraphics.item(item, gui.getLeftPos() + rect[0] + getX(), gui.getTopPos() + rect[1] + getY());
         }
     }
 
@@ -589,67 +525,62 @@ public abstract class ModuleBase
      * @param sizeX   The width of the image
      * @param sizeY   The height of the image
      */
-    public void drawImage(GuiGraphics guiGraphics, Identifier texture, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY)
-    {
-//        drawImage(guiGraphics, texture, gui, targetX, targetY, srcX, srcY, sizeX, sizeY/*, GuiMinecart.RENDER_ROTATION.NORMAL*/);
-        drawImage(guiGraphics, texture, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY/*, rotation*/);
+    public void drawImage(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, final GuiMinecart gui, final int targetX, final int targetY, final int srcX, final int srcY, final int sizeX, final int sizeY) {
+//        drawImage(GuiGraphicsExtractor, texture, gui, targetX, targetY, srcX, srcY, sizeX, sizeY/*, GuiMinecart.RENDER_ROTATION.NORMAL*/);
+        drawImage(GuiGraphicsExtractor, texture, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY/*, rotation*/);
 
     }
 
 //    /**
 //     * Draw an image in the given interface, using the current texture and using the given dimensions.
 //     *
-//     * @param gui      The gui to draw it on
-//     * @param targetX  The local x coordinate to draw it on
-//     * @param targetY  The local y coordinate to draw it on
-//     * @param srcX     The x coordinate in the source file
-//     * @param srcY     The y coordinate in the source file
-//     * @param sizeX    The width of the image
-//     * @param sizeY    The height of the image
+//     * @param gui The gui to draw it on
+//     * @param targetX The local x coordinate to draw it on
+//     * @param targetY The local y coordinate to draw it on
+//     * @param srcX The x coordinate in the source file
+//     * @param srcY The y coordinate in the source file
+//     * @param sizeX The width of the image
+//     * @param sizeY The height of the image
 //     * @param rotation The rotation this will be drawn with
 //     */
-////    public void drawImage(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, int targetX, int targetY, int srcX, int srcY, int sizeX, int sizeY, final GuiMinecart.RENDER_ROTATION rotation)
+////    public void drawImage(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, GuiMinecart gui, int targetX, int targetY, int srcX, int srcY, int sizeX, int sizeY, final GuiMinecart.RENDER_ROTATION rotation)
 //    {
-//        drawImage(guiGraphics, texture, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY/*, rotation*/);
+//        drawImage(GuiGraphicsExtractor, texture, gui, new int[]{targetX, targetY, sizeX, sizeY}, srcX, srcY/*, rotation*/);
 //    }
 
 
 //    /**
 //     * Draw an image in the given interface, using the current texture and using the given dimentiosn.
 //     *
-//     * @param gui  The gui to draw it on
+//     * @param gui The gui to draw it on
 //     * @param rect The rectangle indicating where to draw it {targetX, targetY, sizeX, sizeY}
 //     * @param srcX The x coordinate in the source file
 //     * @param srcY They y coordinate in the source file
 //     */
-////    public void drawImage(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, int[] rect, int srcX, int srcY)
+//// public void drawImage(GuiGraphicsExtractor guiGraphics, Identifier texture, GuiMinecart gui, int[] rect, int srcX, int srcY)
 //    {
-//        drawImage(guiGraphics, texture, gui, rect, srcX, srcY/*, GuiMinecart.RENDER_ROTATION.NORMAL*/);
+//        drawImage(GuiGraphicsExtractor, texture, gui, rect, srcX, srcY/*, GuiMinecart.RENDER_ROTATION.NORMAL*/);
 //    }
 
     /**
      * Draw an image in the given interface, using the current texture and using the given dimentiosn.
      *
-     * @param gui      The gui to draw it on
-     * @param rect     The rectangle indicating where to draw it {targetX, targetY, sizeX, sizeY}
-     * @param srcX     The x coordinate in the source file
-     * @param srcY     They y coordinate in the source file
-//     * @param rotation The rotation this will be drawn with
+     * @param gui  The gui to draw it on
+     * @param rect The rectangle indicating where to draw it {targetX, targetY, sizeX, sizeY}
+     * @param srcX The x coordinate in the source file
+     * @param srcY They y coordinate in the source file
+     *             // * @param rotation The rotation this will be drawn with
      */
-    public void drawImage(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, int[] rect, int srcX, int srcY/*, final GuiMinecart.RENDER_ROTATION rotation*/)
-    {
-        if (rect.length < 4)
-        {
+    public void drawImage(GuiGraphicsExtractor guiGraphics, Identifier texture, GuiMinecart gui, int[] rect, int srcX, int srcY/*, final GuiMinecart.RENDER_ROTATION rotation*/) {
+        if (rect.length < 4) {
             return;
         }
         rect = cloneRect(rect);
-        if (!doStealInterface())
-        {
+        if (!doStealInterface()) {
             srcY -= handleScroll(rect);
         }
-        if (rect[3] > 0)
-        {
-            gui.drawTexturedModalRect(guiGraphics, texture, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), srcX, srcY, rect[2], rect[3]/*, rotation*/);
+        if (rect[3] > 0) {
+            gui.drawTexturedModalRect(guiGraphics, texture, gui.getLeftPos() + rect[0] + getX(), gui.getTopPos() + rect[1] + getY(), srcX, srcY, rect[2], rect[3]/*, rotation*/);
         }
     }
 
@@ -663,33 +594,33 @@ public abstract class ModuleBase
      * @param sizeX   The width of the image
      * @param sizeY   The height of the image
      */
-    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, final int targetX, final int targetY, final int sizeX, final int sizeY) {
+    public void drawImage(GuiGraphicsExtractor guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, final int targetX, final int targetY, final int sizeX, final int sizeY) {
         this.drawImage(guiGraphics, gui, icon, new int[]{targetX, targetY, sizeX, sizeY});
     }
 
-    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect) {
+    public void drawImage(GuiGraphicsExtractor guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect) {
         if (rect.length < 4) return;
         rect = this.cloneRect(rect);
         if (!this.doStealInterface()) {
             this.handleScroll(rect);
         }
         if (rect[3] > 0) {
-            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, icon, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), rect[2], rect[3], 0xFFFFFFFF);
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, icon, gui.getLeftPos() + rect[0] + getX(), gui.getTopPos() + rect[1] + getY(), rect[2], rect[3], 0xFFFFFFFF);
         }
     }
 
-    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, final int targetX, final int targetY, final int sizeX, final int sizeY, int colour) {
+    public void drawImage(GuiGraphicsExtractor guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, final int targetX, final int targetY, final int sizeX, final int sizeY, int colour) {
         this.drawImage(guiGraphics, gui, icon, new int[]{targetX, targetY, sizeX, sizeY}, colour);
     }
 
-    public void drawImage(GuiGraphics guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect, int colour) {
+    public void drawImage(GuiGraphicsExtractor guiGraphics, final GuiMinecart gui, final TextureAtlasSprite icon, int[] rect, int colour) {
         if (rect.length < 4) return;
         rect = this.cloneRect(rect);
         if (!this.doStealInterface()) {
             this.handleScroll(rect);
         }
         if (rect[3] > 0) {
-            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, icon, gui.getGuiLeft() + rect[0] + getX(), gui.getGuiTop() + rect[1] + getY(), rect[2], rect[3], colour);
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, icon, gui.getLeftPos() + rect[0] + getX(), gui.getTopPos() + rect[1] + getY(), rect[2], rect[3], colour);
         }
     }
 
@@ -697,23 +628,20 @@ public abstract class ModuleBase
      * Scrolls a given rectangle accordingly to the scrollbar in the interface
      *
      * @param rect The rectangle to scroll {targetX, targetY, sizeX, sizeY}
-     * @return The start offset caused by the scroll, i.e. if the middle part of the rectangle is the topmost visible part. Used to
-     * change the srcY when drawing images for instance, see drawImage.
+     * @return The start offset caused by the scroll, i.e., if the middle part of the rectangle is the topmost visible part. Used to
+     * change the srcY when drawing images, for instance, see drawImage.
      */
-    public int handleScroll(final int[] rect)
-    {
+    public int handleScroll(final int[] rect) {
         rect[1] -= getCart().getRealScrollY();
         int y = rect[1] + getY();
-        if (y < 4)
-        {
+        if (y < 4) {
             int dif = y - 4;
             rect[3] += dif;
             y = 4;
             rect[1] = y - getY();
             return dif;
         }
-        if (y + rect[3] > ModularMinecart.MODULAR_SPACE_HEIGHT)
-        {
+        if (y + rect[3] > ModularMinecart.MODULAR_SPACE_HEIGHT) {
             rect[3] = Math.max(0, ModularMinecart.MODULAR_SPACE_HEIGHT - y);
             return 0;
         }
@@ -726,8 +654,7 @@ public abstract class ModuleBase
      * @param rect The rectangle to be clones {targetX, targetY, sizeX, sizeY}
      * @return The cloned rectangle {targetX, targetY, sizeX, sizeY}
      */
-    protected int[] cloneRect(final int[] rect)
-    {
+    protected int[] cloneRect(final int[] rect) {
         return new int[]{rect[0], rect[1], rect[2], rect[3]};
     }
 
@@ -736,25 +663,20 @@ public abstract class ModuleBase
      *
      * @return whether buttons are used or not
      */
-    public boolean useButtons()
-    {
+    public boolean useButtons() {
         return false;
     }
 
     /**
      * Called when a client/server button changes visibility state
      */
-    public final void buttonVisibilityChanged()
-    {
+    public final void buttonVisibilityChanged() {
         buttons.sort(ButtonComparator.INSTANCE);
         ButtonBase.LOCATION lastLoc = null;
         int id = 0;
-        for (final ButtonBase button : buttons)
-        {
-            if (button.isVisible())
-            {
-                if (lastLoc != null && button.getLocation() != lastLoc)
-                {
+        for (final ButtonBase button : buttons) {
+            if (button.isVisible()) {
+                if (lastLoc != null && button.getLocation() != lastLoc) {
                     id = 0;
                 }
                 lastLoc = button.getLocation();
@@ -767,19 +689,17 @@ public abstract class ModuleBase
     /**
      * Allows the module to override the direction the cart is going. This mechanic is not finished and hence won't work perfectly.
      *
-     * @param pos The blockpos in the world
+     * @param pos The blocks in the world
      * @return The direction to go, default means that the module won't change it
      */
-    public RAILDIRECTION getSpecialRailDirection(BlockPos pos)
-    {
+    public RAILDIRECTION getSpecialRailDirection(BlockPos pos) {
         return RAILDIRECTION.DEFAULT;
     }
 
     /**
      * Initializing any server/client buttons
      */
-    protected void loadButtons()
-    {
+    protected void loadButtons() {
     }
 
     /**
@@ -787,8 +707,7 @@ public abstract class ModuleBase
      *
      * @param button The button to be added
      */
-    public final void addButton(final ButtonBase button)
-    {
+    public final void addButton(final ButtonBase button) {
         button.setIdInModule(moduleButtonId++);
         buttons.add(button);
     }
@@ -801,20 +720,20 @@ public abstract class ModuleBase
      * @param id   The number of the module
      * @return The string to be used as an NBT name
      */
-    public String generateNBTName(final String name, final int id)
-    {
+    public String generateNBTName(final String name, final int id) {
         return "module" + id + name;
     }
 
     /**
      * Handles the writing of the NBT data when the world is being saved
+     * <p>
+     * // * @param tagCompound The tag compound to write the data to
      *
-//     * @param tagCompound The tag compound to write the data to
-     * @param id          The number of this module
+     * @param id The number of this module
      */
     public final void writeToNBT(ValueOutput output, int id) {
         ValueOutput.TypedOutputList<ItemStackWithSlot> typedoutputlist = output.list(generateNBTName("Items", id), ItemStackWithSlot.CODEC);
-        for(int i = 0; i < getInventorySize(); ++i) {
+        for (int i = 0; i < getInventorySize(); ++i) {
             ItemStack itemstack = getStack(i);
             if (!itemstack.isEmpty()) {
                 typedoutputlist.add(new ItemStackWithSlot(i, itemstack));
@@ -824,36 +743,37 @@ public abstract class ModuleBase
     }
 
     /**
-     * Allows a module to save specific data when world is saved
+     * Allows a module to save specific data when the world is saved
+     * <p>
+     * // * @param tagCompound The NBT tag compound to write to
      *
-//     * @param tagCompound The NBT tag compound to write to
-     * @param id          The number of the module
+     * @param id The number of the module
      */
-    protected void save(ValueOutput output, int id)
-    {
+    protected void save(ValueOutput output, int id) {
     }
 
     /**
      * Handles the reading of the NBT data when the world is being loaded
+     * <p>
+     * // * @param tagCompound The tag compound to read the data from
      *
-//     * @param tagCompound The tag compound to read the data from
-     * @param id          The number of this module
+     * @param id The number of this module
      */
     public final void readFromNBT(ValueInput input, int id) {
-        for(ItemStackWithSlot itemstackwithslot : input.listOrEmpty(generateNBTName("Items", id), ItemStackWithSlot.CODEC)) {
+        for (ItemStackWithSlot itemstackwithslot : input.listOrEmpty(generateNBTName("Items", id), ItemStackWithSlot.CODEC)) {
             setStack(itemstackwithslot.slot(), itemstackwithslot.stack());
         }
         load(input, id);
     }
 
     /**
-     * Allows a module to load specific data when world is loaded
+     * Allows a module to load specific data when the world is loaded
+     * <p>
+     * // * @param tagCompound The NBT tag compound to read from
      *
-//     * @param tagCompound The NBT tag compound to read from
-     * @param id          The number of the module
+     * @param id The number of the module
      */
-    protected void load(ValueInput input, int id)
-    {
+    protected void load(ValueInput input, int id) {
     }
 
     /**
@@ -861,11 +781,9 @@ public abstract class ModuleBase
      *
      * @param gui The gui to draw on
      */
-    public final void drawButtonText(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        for (final ButtonBase button : buttons)
-        {
-            button.drawButtonText(guiGraphics, gui, this);
+    public final void drawButtonText(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        for (final ButtonBase button : buttons) {
+            button.drawButtonText(GuiGraphicsExtractor, gui, this);
         }
     }
 
@@ -876,11 +794,9 @@ public abstract class ModuleBase
      * @param x   The x coordinate of the mouse
      * @param y   The y coordinate of the mouse
      */
-    public final void drawButtons(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
-    {
-        for (final ButtonBase button : buttons)
-        {
-            button.drawButton(guiGraphics, gui, this, x, y);
+    public final void drawButtons(GuiGraphicsExtractor GuiGraphicsExtractor, final GuiMinecart gui, final int x, final int y) {
+        for (final ButtonBase button : buttons) {
+            button.drawButton(GuiGraphicsExtractor, gui, this, x, y);
         }
     }
 
@@ -891,13 +807,10 @@ public abstract class ModuleBase
      * @param x   The x coordinate of the mouse
      * @param y   The y coordinate of the mouse
      */
-    public final void drawButtonOverlays(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
-        for (final ButtonBase button : buttons)
-        {
-            if (button.isVisible())
-            {
-                drawStringOnMouseOver(guiGraphics, gui, button.toString(), x, y, button.getBounds());
+    public final void drawButtonOverlays(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
+        for (final ButtonBase button : buttons) {
+            if (button.isVisible()) {
+                drawStringOnMouseOver(GuiGraphicsExtractor, gui, button.toString(), x, y, button.getBounds());
             }
         }
     }
@@ -908,14 +821,11 @@ public abstract class ModuleBase
      * @param gui         The gui to draw on
      * @param x           The x coordinate of the mouse
      * @param y           The y coordinate of the mouse
-     * @param mousebutton The button which was pressed
+     * @param mousebutton The button that was pressed
      */
-    public final void mouseClickedButton(final GuiMinecart gui, final int x, final int y, final int mousebutton)
-    {
-        for (final ButtonBase button : buttons)
-        {
-            if (inRect(x, y, button.getBounds()))
-            {
+    public final void mouseClickedButton(final GuiMinecart gui, final int x, final int y, final int mousebutton) {
+        for (final ButtonBase button : buttons) {
+            if (inRect(x, y, button.getBounds())) {
                 button.computeOnClick(gui, mousebutton);
             }
         }
@@ -927,8 +837,7 @@ public abstract class ModuleBase
      * @param button    The button that was pressed
      * @param clickinfo The information about the click, which mouse button was clicked, if the shift key was down, etc.
      */
-    public void sendButtonPacket(final ButtonBase button, final byte clickinfo)
-    {
+    public void sendButtonPacket(final ButtonBase button, final byte clickinfo) {
         final byte id = (byte) button.getIdInModule();
         sendPacket(totalNumberOfPackets() - 1, new byte[]{id, clickinfo});
     }
@@ -940,12 +849,10 @@ public abstract class ModuleBase
      * @param x   The x coordinate of the mouse
      * @param y   The y coordinate of the mouse
      */
-    public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, final GuiMinecart gui, final int x, final int y) {
     }
 
-    public void drawBackgroundItems(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackgroundItems(GuiGraphicsExtractor GuiGraphicsExtractor, final GuiMinecart gui, final int x, final int y) {
     }
 
     /**
@@ -956,8 +863,7 @@ public abstract class ModuleBase
      * @param y      The y coordinate of the mouse
      * @param button The button that was pressed on the mouse
      */
-    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
-    {
+    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
     }
 
     /**
@@ -969,8 +875,7 @@ public abstract class ModuleBase
      * @param button The button that was released, or -1 if the cursor is just being moved
      */
     @Deprecated //This is dumb. Use mouseMoved and/or mouseReleased
-    public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button)
-    {
+    public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button) {
     }
 
     /**
@@ -981,19 +886,17 @@ public abstract class ModuleBase
      * @param y      The y coordinate of the mouse
      * @param button The button that was pressed on the mouse
      */
-    public void mouseReleased(final GuiMinecart gui, final int x, final int y, final int button)
-    {
+    public void mouseReleased(final GuiMinecart gui, final int x, final int y, final int button) {
     }
 
     /**
      * Used to handle mouse movement in the module's interface
      *
-     * @param gui    The gui that is being used
-     * @param x      The x coordinate of the mouse
-     * @param y      The y coordinate of the mouse
+     * @param gui The gui that is being used
+     * @param x   The x coordinate of the mouse
+     * @param y   The y coordinate of the mouse
      */
-    public void mouseMoved(final GuiMinecart gui, final int x, final int y)
-    {
+    public void mouseMoved(final GuiMinecart gui, final int x, final int y) {
     }
 
     /**
@@ -1001,10 +904,9 @@ public abstract class ModuleBase
      *
      * @param gui The gui to draw on
      * @param x   The x coordinate of the mouse
-     * @param y   The y coordiante of the mouse
+     * @param y   The y coordinate of the mouse
      */
-    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
     }
 
     /**
@@ -1018,8 +920,7 @@ public abstract class ModuleBase
      * @param sizeY The height of the rectangle
      * @return If the mouse was inside the rectangle
      */
-    protected boolean inRect(final int x, final int y, final int x1, final int y1, final int sizeX, final int sizeY)
-    {
+    protected boolean inRect(final int x, final int y, final int x1, final int y1, final int sizeX, final int sizeY) {
         return inRect(x, y, new int[]{x1, y1, sizeX, sizeY});
     }
 
@@ -1031,15 +932,12 @@ public abstract class ModuleBase
      * @param rect The rectangle to check for {x,y,width, height}
      * @return If the mouse was inside the rectangle
      */
-    public boolean inRect(final int x, final int y, int[] rect)
-    {
-        if (rect.length < 4)
-        {
+    public boolean inRect(final int x, final int y, int[] rect) {
+        if (rect.length < 4) {
             return false;
         }
         rect = cloneRect(rect);
-        if (!doStealInterface())
-        {
+        if (!doStealInterface()) {
             handleScroll(rect);
         }
         return rect[3] > 0 && x >= rect[0] && x <= rect[0] + rect[2] && y >= rect[1] && y <= rect[1] + rect[3];
@@ -1052,20 +950,16 @@ public abstract class ModuleBase
      * @param val    The damage
      * @return True if the cart should take the damage, False to prevent the damage
      */
-    public boolean receiveDamage(DamageSource source, float val)
-    {
+    public boolean receiveDamage(DamageSource source, float val) {
         return true;
     }
 
     /**
-     * Tells the cart to turn around, if this module is allowed to tell the cart to do so.
+     * Tells the cart to turn around if this module is allowed to tell the cart to do so.
      */
-    protected void turnback()
-    {
-        for (final ModuleBase module : getCart().modules())
-        {
-            if (module != this && module.preventTurnback())
-            {
+    protected void turnback() {
+        for (final ModuleBase module : getCart().modules()) {
+            if (module != this && module.preventTurnback()) {
                 return;
             }
         }
@@ -1077,8 +971,7 @@ public abstract class ModuleBase
      *
      * @return True to prevent other modules from turning the cart around
      */
-    protected boolean preventTurnback()
-    {
+    protected boolean preventTurnback() {
         return false;
     }
 
@@ -1087,8 +980,7 @@ public abstract class ModuleBase
      *
      * @return The packet count
      */
-    public final int totalNumberOfPackets()
-    {
+    public final int totalNumberOfPackets() {
         return numberOfPackets() + (useButtons() ? 1 : 0);
     }
 
@@ -1097,8 +989,7 @@ public abstract class ModuleBase
      *
      * @return The packet count
      */
-    protected int numberOfPackets()
-    {
+    protected int numberOfPackets() {
         return 0;
     }
 
@@ -1107,8 +998,7 @@ public abstract class ModuleBase
      *
      * @return The packet offset
      */
-    public int getPacketStart()
-    {
+    public int getPacketStart() {
         return packetOffset;
     }
 
@@ -1117,8 +1007,7 @@ public abstract class ModuleBase
      *
      * @param val The packet offset
      */
-    public void setPacketStart(int val)
-    {
+    public void setPacketStart(int val) {
         packetOffset = val;
     }
 
@@ -1127,8 +1016,7 @@ public abstract class ModuleBase
      *
      * @param id The local id of the packet
      */
-    protected void sendPacket(int id)
-    {
+    protected void sendPacket(int id) {
         sendPacket(id, new byte[0]);
     }
 
@@ -1138,8 +1026,7 @@ public abstract class ModuleBase
      * @param id   The local id of the packet
      * @param data An extra byte sent along
      */
-    public void sendPacket(int id, byte data)
-    {
+    public void sendPacket(int id, byte data) {
         sendPacket(id, new byte[]{data});
     }
 
@@ -1149,8 +1036,7 @@ public abstract class ModuleBase
      * @param id   The local id of the packet
      * @param data A byte array of data sent along
      */
-    public void sendPacket(int id, byte[] data)
-    {
+    public void sendPacket(int id, byte[] data) {
         StevesCartsClient.sendToServer(new PacketMinecartButton(cart.getId(), getPacketStart() + id, data));
     }
 
@@ -1160,8 +1046,7 @@ public abstract class ModuleBase
      * @param id     The local id of the packet
      * @param player The player to send it to
      */
-    protected void sendPacket(int id, Player player)
-    {
+    protected void sendPacket(int id, Player player) {
         sendPacket(id, new byte[0], player);
     }
 
@@ -1172,8 +1057,7 @@ public abstract class ModuleBase
      * @param data   An extra byte sent along
      * @param player The player to send it to
      */
-    protected void sendPacket(int id, byte data, Player player)
-    {
+    protected void sendPacket(int id, byte data, Player player) {
         sendPacket(id, new byte[]{data}, player);
     }
 
@@ -1184,9 +1068,8 @@ public abstract class ModuleBase
      * @param data   A byte array of data sent along
      * @param player The player to send it to
      */
-    protected void sendPacket(int id, byte[] data, Player player)
-    {
-        if (player instanceof ServerPlayer){
+    protected void sendPacket(int id, byte[] data, Player player) {
+        if (player instanceof ServerPlayer) {
             PacketHandler.sendTo(new PacketMinecartButton(cart.getId(), getPacketStart() + id, data), (ServerPlayer) player);
         }
     }
@@ -1195,52 +1078,42 @@ public abstract class ModuleBase
      * Receive a normal packet on the server or the client
      *
      * @param id     The local id of the packet
-     * @param data   The byte array of extra data, could be empty
+     * @param data   The byte array of extra data could be empty
      * @param player The player who sent or received the packet
      */
-    protected void receivePacket(int id, byte[] data, Player player)
-    {
+    protected void receivePacket(int id, byte[] data, Player player) {
     }
 
     /**
      * Handles a packet received on the server or the client and sends it where it should be handled
      *
      * @param id     The local id of the packet
-     * @param data   The byte array of extra data, could be empty
+     * @param data   The byte array of extra data could be empty
      * @param player The player who sent or received the packet
      */
-    public final void delegateReceivedPacket(int id, byte[] data, Player player)
-    {
-        if (id < 0)
-        {
+    public final void delegateReceivedPacket(int id, byte[] data, Player player) {
+        if (id < 0) {
             return;
         }
-        if (id == totalNumberOfPackets() - 1 && useButtons())
-        {
+        if (id == totalNumberOfPackets() - 1 && useButtons()) {
             int buttonId = data[0];
-            if (buttonId < 0)
-            {
+            if (buttonId < 0) {
                 buttonId += 256;
             }
-            for (final ButtonBase button : buttons)
-            {
-                if (button.getIdInModule() == buttonId)
-                {
+            for (final ButtonBase button : buttons) {
+                if (button.getIdInModule() == buttonId) {
                     final byte buttoninformation = data[1];
                     final boolean isCtrlDown = (buttoninformation & 0x40) != 0x0;
                     final boolean isShiftDown = (buttoninformation & 0x80) != 0x0;
                     final int mousebutton = buttoninformation & 0x3F;
-                    if (button.isVisible() && button.isEnabled())
-                    {
+                    if (button.isVisible() && button.isEnabled()) {
                         button.onServerClick(player, mousebutton, isCtrlDown, isShiftDown);
                         break;
                     }
                     break;
                 }
             }
-        }
-        else
-        {
+        } else {
             receivePacket(id, data, player);
         }
     }
@@ -1317,12 +1190,11 @@ public abstract class ModuleBase
 
     /**
      * The amount of Gui data this module want to use. Gui data is used for sending information from the server to the client
-     * when the specific client has the the interface open
+     * when the specific client has the interface open
      *
      * @return The number of Gui data
      */
-    public int numberOfGuiData()
-    {
+    public int numberOfGuiData() {
         return 0;
     }
 
@@ -1331,8 +1203,7 @@ public abstract class ModuleBase
      *
      * @return
      */
-    public int getGuiDataStart()
-    {
+    public int getGuiDataStart() {
         return guiDataOffset;
     }
 
@@ -1346,10 +1217,10 @@ public abstract class ModuleBase
     }
 
     /**
-     * Updates the gui data for a bunch of players. This is the part that actually updates the values. It's however the other
-     * updateGuiData which handles most parts
+     * Updates the gui data for a bunch of players. This is the part that actually updates the values. It's, however, the other
+     * updateGuiData that handles most parts
      *
-     * @param con     The containers that i used
+     * @param con     The containers that I used
      * @param players The players to update
      * @param id      The global gui data id
      * @param data    The data to update to
@@ -1362,10 +1233,10 @@ public abstract class ModuleBase
     }
 
     /**
-     * Updates the gui data sing the supplied info, this is what is being called from a module and it's also the function that
+     * Updates the gui data sing the supplied info, this is what is being called from a module, and it's also the function that
      * actually handles the update.
      *
-     * @param info The information about the update, should be formatted as follows: {Container, Players, isNew}
+     * @param info The information about the update should be formatted as follows: {Container, Players, isNew}
      * @param id   The local gui data id
      * @param data The data to update to
      */
@@ -1459,23 +1330,19 @@ public abstract class ModuleBase
      * @param isMoving A flag telling you if the cart is moving or not
      * @return The consumption
      */
-    public int getConsumption(final boolean isMoving)
-    {
+    public int getConsumption(final boolean isMoving) {
         return 0;
     }
 
-    public void setModels(final ArrayList<ModelCartbase> models)
-    {
-        this.models = models;
-    }
-
-    public ArrayList<ModelCartbase> getModels()
-    {
+    public ArrayList<ModelCartbase> getModels() {
         return models;
     }
 
-    public boolean haveModels()
-    {
+    public void setModels(final ArrayList<ModelCartbase> models) {
+        this.models = models;
+    }
+
+    public boolean haveModels() {
         return models != null;
     }
 
@@ -1491,9 +1358,8 @@ public abstract class ModuleBase
      * @param w   The width of the rectangle
      * @param h   The height of the rectangle
      */
-    public final void drawStringOnMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final String str, final int x, final int y, final int x1, final int y1, final int w, final int h)
-    {
-        drawStringOnMouseOver(guiGraphics, gui, str, x, y, new int[]{x1, y1, w, h});
+    public final void drawStringOnMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final String str, final int x, final int y, final int x1, final int y1, final int w, final int h) {
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, str, x, y, new int[]{x1, y1, w, h});
     }
 
     /**
@@ -1505,21 +1371,19 @@ public abstract class ModuleBase
      * @param y    The y coordinate of the mouse
      * @param rect The rectangle that the mouse has to be in, defin as {x,y,width,height}
      */
-    public final void drawStringOnMouseOver(GuiGraphics guiGraphics, final GuiMinecart gui, final String str, int x, int y, final int[] rect)
-    {
-        if (!inRect(x, y, rect))
-        {
+    public final void drawStringOnMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, final GuiMinecart gui, final String str, int x, int y, final int[] rect) {
+        if (!inRect(x, y, rect)) {
             return;
         }
         x += getX();
         y += getY();
-        gui.drawMouseOver(guiGraphics, str, x, y);
+        gui.drawMouseOver(GuiGraphicsExtractor, str, x, y);
     }
 
 //    /**
 //     * Draws an image overlay on the screen. Observe that this is not when a special interface is open.
 //     *
-//     * @param rect    The rectangle for the image's dimensions {targetX, targetY, width, height}
+//     * @param rect The rectangle for the image's dimensions {targetX, targetY, width, height}
 //     * @param sourceX The x coordinate in the source file
 //     * @param sourceY The y coordinate in the source file
 //     */
@@ -1528,8 +1392,8 @@ public abstract class ModuleBase
 //        drawImage(rect[0], rect[1], sourceX, sourceY, rect[2], rect[3]);
 //    }
 
-    protected void drawImage(GuiGraphics guiGraphics, Identifier texture, int targetX, int targetY, int sourceX, int sourceY, int width, int height) {
-        drawImage(guiGraphics, texture, targetX, targetY, sourceX, sourceY, width, height, 0xFFFFFFFF);
+    protected void drawImage(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, int targetX, int targetY, int sourceX, int sourceY, int width, int height) {
+        drawImage(GuiGraphicsExtractor, texture, targetX, targetY, sourceX, sourceY, width, height, 0xFFFFFFFF);
     }
 
     /**
@@ -1542,23 +1406,19 @@ public abstract class ModuleBase
      * @param width   The width of the image
      * @param height  The height of the image
      */
-    protected void drawImage(GuiGraphics guiGraphics, Identifier texture, int targetX, int targetY, int sourceX, int sourceY, int width, int height, int colour)
-    {
+    protected void drawImage(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, int targetX, int targetY, int sourceX, int sourceY, int width, int height, int colour) {
         //TODO Image Draw
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, targetX, targetY, sourceX, sourceY, width, height, 256, 256, colour);
+        GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, texture, targetX, targetY, sourceX, sourceY, width, height, 256, 256, colour);
     }
 
-    protected Player getClientPlayer()
-    {
-        if (Minecraft.getInstance() != null)
-        {
+    protected Player getClientPlayer() {
+        if (Minecraft.getInstance() != null) {
             return StevesCartsClient.getClientPlayer();
         }
         return null;
     }
 
-    public void renderOverlay(GuiGraphics render, float partialTicks)
-    {
+    public void renderOverlay(GuiGraphicsExtractor render, float partialTicks) {
     }
 
     /**
@@ -1566,8 +1426,7 @@ public abstract class ModuleBase
      *
      * @return True if the module is forcing the engines to stop
      */
-    public boolean stopEngines()
-    {
+    public boolean stopEngines() {
         return false;
     }
 
@@ -1576,8 +1435,7 @@ public abstract class ModuleBase
      *
      * @return False if the cart sohuldn't be rendered
      */
-    public boolean shouldCartRender()
-    {
+    public boolean shouldCartRender() {
         return true;
     }
 
@@ -1586,8 +1444,7 @@ public abstract class ModuleBase
      *
      * @return the push factor, or -1 to use the default value
      */
-    public double getPushFactor()
-    {
+    public double getPushFactor() {
         return -1.0;
     }
 
@@ -1596,8 +1453,7 @@ public abstract class ModuleBase
      *
      * @return The color of the cart {Red 0.0F to 1.0F, Green 0.0F to 1.0F, Blue 0.0F to 1.0F}
      */
-    public float[] getColor()
-    {
+    public float[] getColor() {
         return new float[]{1.0f, 1.0f, 1.0f};
     }
 
@@ -1607,21 +1463,18 @@ public abstract class ModuleBase
      * @param rider The mounted entity
      * @return The offset, or 0 if this module don't wish to change the offset.
      */
-    public float mountedOffset(final Entity rider)
-    {
+    public float mountedOffset(final Entity rider) {
         return 0.0f;
     }
 
     /**
-     * Determines if a block counts as air by the modules, for example a cart will count snow as air, or long grass or the like
+     * Determines if a block counts as air by the modules, for example, a cart will count snow as air, or long grass or the like
      *
-     * @param pos The Blockpos of the block
+     * @param pos The Blocks of the block
      * @return If this block counts as air by the modules
      */
-    protected boolean countsAsAir(BlockPos pos)
-    {
-        if (getCart().level().getBlockState(pos).isAir())
-        {
+    protected boolean countsAsAir(BlockPos pos) {
+        if (getCart().level().getBlockState(pos).isAir()) {
             return true;
         }
         Block b = getCart().level().getBlockState(pos).getBlock();
@@ -1636,91 +1489,77 @@ public abstract class ModuleBase
      * @param z      The Z coordinate of the rail
      * @param active If the rail is active or not
      */
-    public void activatedByRail(final int x, final int y, final int z, final boolean active)
-    {
+    public void activatedByRail(final int x, final int y, final int z, final boolean active) {
     }
 
 
     /**
      * Return the {@link ModuleData} which represents this module
      *
-     * @return The datacc
+     * @return The data
      */
-    public ModuleData getData()
-    {
+    public ModuleData getData() {
         return StevesCartsAPI.MODULE_REGISTRY.get(getModuleId());
     }
 
     /**
      * Allows a module to steal the whole interface, preventing any other module from using the
-     * interface. This is not meant to be permanent, use it when a lot of interface is required,
+     * interface. This is not meant to be permanent, use it when a lot of interfaces are required,
      * then when the user clicks on something to close it then return false again.
      *
-     * @return If module steal the interface
+     * @return If modules steal the interface
      */
-    public boolean doStealInterface()
-    {
+    public boolean doStealInterface() {
         return false;
     }
 
     /**
      * @return true to enable writing and reading of extra data via {@link #writeExtraData()} and {@link #readExtraData(CompoundTag)}
      */
-    public boolean hasExtraData()
-    {
+    public boolean hasExtraData() {
         return false;
     }
 
     /**
-     * @return a tag that will be written to the Cart when picked up. Also saved to Module stack when module is removed from cart.
+     * @return a tag that will be written to the Cart when picked up. Also saved to Module stack when the module is removed from the cart.
      */
-    public CompoundTag writeExtraData()
-    {
+    public CompoundTag writeExtraData() {
         return new CompoundTag();
     }
 
     /**
      * Read extra data that was written in {@link #writeExtraData()}
      */
-    public void readExtraData(CompoundTag nbt)
-    {
+    public void readExtraData(CompoundTag nbt) {
     }
 
-    protected FakePlayer getFakePlayer()
-    {
+    protected FakePlayer getFakePlayer() {
         return FakePlayerFactory.getMinecraft((ServerLevel) getCart().level());
     }
 
-    public boolean disableStandardKeyFunctionality()
-    {
+    public boolean disableStandardKeyFunctionality() {
         return false;
     }
 
-    public void addToLabel(final ArrayList<Component> label)
-    {
+    public void addToLabel(final ArrayList<Component> label) {
     }
 
-    public boolean onInteractFirst(final Player entityplayer)
-    {
+    public boolean onInteractFirst(final Player entityplayer) {
         return false;
     }
 
-    public void postUpdate()
-    {
+    public void postUpdate() {
     }
 
-    public String getModuleName()
-    {
+    public String getModuleName() {
         return FMLTranslations.parseMessage("item.stevescarts." + StevesCartsAPI.MODULE_REGISTRY.get(getModuleId()).getRawName());
     }
 
-    public ItemStack getItemStack()
-    {
+    public ItemStack getItemStack() {
         return new ItemStack(ModItems.MODULES.get(getData()).get());
     }
 
-    public enum RAILDIRECTION
-    {
+    public enum RAILDIRECTION {
         DEFAULT, NORTH, WEST, SOUTH, EAST, LEFT, FORWARD, RIGHT
     }
 }

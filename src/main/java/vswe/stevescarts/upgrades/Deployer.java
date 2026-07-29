@@ -4,11 +4,9 @@ import net.minecraft.network.chat.Component;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.helpers.Localization;
 
-public class Deployer extends BaseUpgradeEffect
-{
+public class Deployer extends BaseUpgradeEffect {
     @Override
-    public Component getName()
-    {
+    public Component getName() {
         return Localization.translate("info.stevescarts.effectDeployer");
     }
 }

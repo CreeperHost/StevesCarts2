@@ -11,20 +11,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StevesCartsAPI
-{
+public class StevesCartsAPI {
     public static final Map<Identifier, ModuleData> MODULE_REGISTRY = new HashMap<>();
     public static final List<ITreeModule> TREE_MODULES = new ArrayList<>();
     public static final List<ICropModule> CROP_MODULES = new ArrayList<>();
 
-    public static ModuleData registerModule(Identifier resourceLocation, ModuleData moduleData)
-    {
-        if(!MODULE_REGISTRY.containsKey(resourceLocation))
-        {
+    public static ModuleData registerModule(Identifier resourceLocation, ModuleData moduleData) {
+        if (!MODULE_REGISTRY.containsKey(resourceLocation)) {
             MODULE_REGISTRY.put(resourceLocation, moduleData);
-        }
-        else
-        {
+        } else {
             StevesCarts.LOGGER.error("Unable to register Module " + resourceLocation + " key already in use");
         }
         return moduleData;

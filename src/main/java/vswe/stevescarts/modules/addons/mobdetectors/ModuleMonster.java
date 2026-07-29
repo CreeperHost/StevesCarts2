@@ -7,22 +7,18 @@ import net.minecraft.world.entity.monster.Enemy;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 
-public class ModuleMonster extends ModuleMobdetector
-{
-    public ModuleMonster(ModularMinecart cart)
-    {
+public class ModuleMonster extends ModuleMobdetector {
+    public ModuleMonster(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return Localization.MODULES.ADDONS.DETECTOR_MONSTERS.translate();
     }
 
     @Override
-    public boolean isValidTarget(final Entity target)
-    {
+    public boolean isValidTarget(final Entity target) {
         return (target instanceof Enemy || (target instanceof Wolf && ((Wolf) target).isAngry())) && !(target instanceof EnderMan);
     }
 }

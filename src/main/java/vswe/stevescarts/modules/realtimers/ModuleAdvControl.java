@@ -1,12 +1,9 @@
 package vswe.stevescarts.modules.realtimers;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Player;
@@ -24,6 +21,7 @@ import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
 public class ModuleAdvControl extends ModuleBase implements ILeverModule {
+    private final EntityData<Integer> speed = new EntityData<>(getCart(), new IntData(0));
     private byte[] engineInformation;
     private int tripPacketTimer;
     private int enginePacketTimer;
@@ -36,13 +34,16 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     private boolean lastBackKey;
     private double odo;
     private double trip;
-    private int[] buttonRect;
-    private final EntityData<Integer> speed = new EntityData<>(getCart(), new IntData(0));
+    private final int[] buttonRect;
 
     public ModuleAdvControl(ModularMinecart cart) {
         super(cart);
         first = true;
         buttonRect = new int[]{15, 20, 24, 12};
+    }
+
+    public static double map(double valueIn, double inMin, double inMax, double outMin, double outMax) {
+        return (valueIn - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
     }
 
     @Override
@@ -66,11 +67,10 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     }
 
     @Override
-    public void renderOverlay(GuiGraphics render, float partialTicks) {
+    public void renderOverlay(GuiGraphicsExtractor render, float partialTicks) {
         Minecraft mc = Minecraft.getInstance();
         Identifier texture = ResourceHelper.getResource("/gui/drive.png");
-        if (engineInformation != null)
-        {
+        if (engineInformation != null) {
             for (int i = 0; i < getCart().engines().size(); ++i) {
                 drawImage(render, texture, 5, i * 15, 0, 0, 66, 15);
                 int upperBarLength = engineInformation[i * 2] & 0x3F;
@@ -104,18 +104,18 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         drawImage(render, texture, 5, enginesEndAt + 52, 0, 47, 32, 20);
         drawImage(render, texture, 5, enginesEndAt + 72, 0, 47, 32, 20);
 
-        render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0xFF909090);
-        render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0xFF909090);
-        render.drawString(mc.font, distToString(odo), 7, enginesEndAt + 52 + 11, 0xFF909090);
-        render.drawString(mc.font, Localization.MODULES.ATTACHMENTS.TRIP.translate(), 7, enginesEndAt + 52 + 22, 0xFF909090);
-        render.drawString(mc.font, distToString(trip), 7, enginesEndAt + 52 + 31, 0xFF909090);
+        render.text(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0xFF909090);
+        render.text(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0xFF909090);
+        render.text(mc.font, distToString(odo), 7, enginesEndAt + 52 + 11, 0xFF909090);
+        render.text(mc.font, Localization.MODULES.ATTACHMENTS.TRIP.translate(), 7, enginesEndAt + 52 + 22, 0xFF909090);
+        render.text(mc.font, distToString(trip), 7, enginesEndAt + 52 + 31, 0xFF909090);
 
         drawItem(render, new ItemStack(Items.CLOCK), 5, enginesEndAt + 32 + 3);
         drawItem(render, new ItemStack(Items.COMPASS), 21, enginesEndAt + 32 + 3);
     }
 
-    public void drawItem(GuiGraphics guiGraphics, ItemStack icon, final int targetX, final int targetY) {
-        guiGraphics.renderItem(getClientPlayer(), icon, targetX, targetY, targetX + targetX * guiWidth());
+    public void drawItem(GuiGraphicsExtractor GuiGraphicsExtractor, ItemStack icon, final int targetX, final int targetY) {
+        GuiGraphicsExtractor.item(getClientPlayer(), icon, targetX, targetY, targetX + targetX * guiWidth());
     }
 
     private String distToString(double dist) {
@@ -288,7 +288,6 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         }
     }
 
-
     private boolean isForwardKeyDown() {
         return (keyinformation & 0x1) != 0x0;
     }
@@ -332,7 +331,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
             int totalfuel = engine.getTotalFuel();
             int fuelInTopBar = 20000;
             int maxBarLength = 62;
-            float percentage = (totalfuel % fuelInTopBar) / (float)fuelInTopBar;
+            float percentage = (totalfuel % fuelInTopBar) / (float) fuelInTopBar;
             int upperBarLength = (int) (maxBarLength * percentage);
             int lowerBarLength = totalfuel / fuelInTopBar;
             if (lowerBarLength > maxBarLength) {
@@ -349,18 +348,18 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         return 4;
     }
 
-    private void setSpeedSetting(final int val) {
-        if (val < 0 || val > 6) {
-            return;
-        }
-        speed.set(val);
-    }
-
     private int getSpeedSetting() {
         if (isPlaceholder()) {
             return 1;
         }
         return speed.get();
+    }
+
+    private void setSpeedSetting(final int val) {
+        if (val < 0 || val > 6) {
+            return;
+        }
+        speed.set(val);
     }
 
     @Override
@@ -382,18 +381,18 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/advlever.png");
         if (inRect(x, y, buttonRect)) {
-            drawImage(guiGraphics, texture, gui, buttonRect, 0, buttonRect[3]);
+            drawImage(GuiGraphicsExtractor, texture, gui, buttonRect, 0, buttonRect[3]);
         } else {
-            drawImage(guiGraphics, texture, gui, buttonRect, 0, 0);
+            drawImage(GuiGraphicsExtractor, texture, gui, buttonRect, 0, 0);
         }
     }
 
     @Override
-    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
-        drawStringOnMouseOver(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.CONTROL_RESET.translate(), x, y, buttonRect);
+    public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.CONTROL_RESET.translate(), x, y, buttonRect);
     }
 
     @Override
@@ -404,8 +403,8 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
-        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.CONTROL_SYSTEM.translate(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.CONTROL_SYSTEM.translate(), 8, 6, 4210752);
     }
 
     @Override
@@ -451,9 +450,5 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
             //			KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode(), false);
             //			KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), false);
         }
-    }
-
-    public static double map(double valueIn, double inMin, double inMax, double outMin, double outMax) {
-        return (valueIn - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
     }
 }
