@@ -5,7 +5,7 @@ permissions:
 
 on:
   push:
-    tags: [ '1.21.11-\d+.\d+.\d+' ]
+    tags: [ '26.1.2-\d+.\d+.\d+' ]
   workflow_dispatch:
     inputs:
       norelease:
@@ -21,11 +21,11 @@ jobs:
       !contains(github.event.head_commit.message, '[ciskip]')
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 21
+      - name: Set up JDK 25
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '25'
       - name: Build with Gradle
         env:
           CREEPERHOST_MAVEN_TOKEN: ${{ secrets.CREEPERHOST_MAVEN_TOKEN}}
