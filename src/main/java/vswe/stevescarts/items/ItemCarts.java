@@ -62,9 +62,7 @@ public class ItemCarts extends MinecartItem
                         try
                         {
                             final EntityMinecartModular cart = new EntityMinecartModular(world, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, info, Component.literal(""));
-                            if (cart.getOwnerUUID() == null) {
-                                cart.setOwnerUUID(player.getUUID());
-                            }
+                            cart.setOwnerUUID(player.getUUID());
                             world.addFreshEntity(cart);
                         } catch (Exception e)
                         {

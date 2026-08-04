@@ -335,7 +335,6 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                             if (!oldcart.isEmpty() && !outputItem.isEmpty() && oldcart.getItem() instanceof ItemCarts && outputItem.getItem() instanceof ItemCarts)
                             {
                                 outputItem.set(DataComponents.CUSTOM_NAME, oldcart.getDisplayName());
-                                copyCartOwner(oldcart, outputItem);
                             }
                             tile.setItem(0, ItemStack.EMPTY);
                         }
@@ -343,17 +342,6 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                 }
             }
         }
-    }
-
-    private static void copyCartOwner(ItemStack source, ItemStack target)
-    {
-        CompoundTag sourceTag = ModItemData.getTagCopy(source);
-        if (!sourceTag.hasUUID(EntityMinecartModular.OWNER_TAG)) {
-            return;
-        }
-
-        ModItemData.modifyTag(target, targetTag ->
-                targetTag.putUUID(EntityMinecartModular.OWNER_TAG, sourceTag.getUUID(EntityMinecartModular.OWNER_TAG)));
     }
 
     public void receivePacket(final int id, final byte[] data, @org.jetbrains.annotations.Nullable ServerPlayer sender)

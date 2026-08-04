@@ -374,10 +374,6 @@ public class ModuleData
         }
         CompoundTag tag = ModItemData.getTagCopy(cart);
         tag.put("modules", modulesTag);
-        UUID ownerUUID = parentcart.getOwnerUUID();
-        if (ownerUUID != null) {
-            tag.putUUID(EntityMinecartModular.OWNER_TAG, ownerUUID);
-        }
         ModItemData.setTag(cart, tag);
         return cart;
     }

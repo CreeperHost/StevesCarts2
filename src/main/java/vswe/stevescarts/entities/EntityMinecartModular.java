@@ -88,7 +88,7 @@ import java.util.stream.Stream;
 
 public class EntityMinecartModular extends AbstractMinecart implements Container, IEntityWithComplexSpawn, IFluidHandler, MenuProvider, DataEntity
 {
-    public static final String OWNER_TAG = "Owner";
+    private static final String OWNER_TAG = "Owner";
 
     @Nullable
     private UUID ownerUUID;
@@ -188,13 +188,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         return moduleCounts;
     }
 
-    @Nullable
-    public UUID getOwnerUUID()
-    {
-        return ownerUUID;
-    }
-
-    public void setOwnerUUID(@Nullable UUID ownerUUID)
+    public void setOwnerUUID(UUID ownerUUID)
     {
         this.ownerUUID = ownerUUID;
     }
@@ -206,9 +200,9 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
                 : new GameProfile(ownerUUID, StevesCarts.FAKE_PLAYER.getName());
     }
 
-    private void loadOwner(@Nullable CompoundTag tag)
+    private void loadOwner(CompoundTag tag)
     {
-        ownerUUID = tag != null && tag.hasUUID(OWNER_TAG)
+        ownerUUID = tag.hasUUID(OWNER_TAG)
                 ? tag.getUUID(OWNER_TAG)
                 : null;
     }
@@ -220,7 +214,6 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         fixedRailDirection = null;
         random = world.random;
         loadModules(info);
-        loadOwner(info);
     }
 
     public EntityMinecartModular(Level world)
