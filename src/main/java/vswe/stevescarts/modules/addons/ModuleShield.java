@@ -1,9 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import net.creeperhost.polylib.data.serializable.BooleanData;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
@@ -17,36 +15,31 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
-public class ModuleShield extends ModuleAddon implements IActivatorModule
-{
+public class ModuleShield extends ModuleAddon implements IActivatorModule {
+    private final EntityData<Boolean> status = new EntityData<>(getCart(), new BooleanData(false));
     private boolean shield;
     private float shieldDistance;
     private float shieldAngle;
     private float lastShieldAngle;
-    private int[] buttonRect;
-    private final EntityData<Boolean> status = new EntityData<>(getCart(), new BooleanData(false));
+    private final int[] buttonRect;
     private boolean setup;
 
-    public ModuleShield(ModularMinecart cart)
-    {
+    public ModuleShield(ModularMinecart cart) {
         super(cart);
         shield = true;
         shieldDistance = 18.0f;
         buttonRect = new int[]{20, 20, 24, 12};
     }
 
-    protected boolean shieldSetting()
-    {
+    protected boolean shieldSetting() {
         return getShieldStatus();
     }
 
-    public float getShieldDistance()
-    {
+    public float getShieldDistance() {
         return shieldDistance;
     }
 
-    public float getShieldAngle()
-    {
+    public float getShieldAngle() {
         return shieldAngle;
     }
 
@@ -54,8 +47,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
         return lastShieldAngle;
     }
 
-    public boolean hasShield()
-    {
+    public boolean hasShield() {
         return shield;
     }
 
@@ -91,113 +83,93 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     }
 
     @Override
-    public boolean receiveDamage(DamageSource source, float val)
-    {
-        if(hasShield()) return false;
+    public boolean receiveDamage(DamageSource source, float val) {
+        if (hasShield()) return false;
 
         return super.receiveDamage(source, val);
     }
 
     @Override
-    public boolean hasSlots()
-    {
+    public boolean hasSlots() {
         return false;
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    public int guiWidth()
-    {
+    public int guiWidth() {
         return 75;
     }
 
     @Override
-    public int guiHeight()
-    {
+    public int guiHeight() {
         return 35;
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, getModuleName(), 8, 6, 4210752);
     }
 
-    public void setShieldStatus(final boolean val)
-    {
-        if (!isPlaceholder())
-        {
-            status.set(val);
-        }
-    }
-
-    private boolean getShieldStatus()
-    {
-        if (isPlaceholder())
-        {
+    private boolean getShieldStatus() {
+        if (isPlaceholder()) {
             return getSimInfo().getShieldActive();
         }
         return status.get();
     }
 
+    public void setShieldStatus(final boolean val) {
+        if (!isPlaceholder()) {
+            status.set(val);
+        }
+    }
+
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/shield.png");
         final int imageID = getShieldStatus() ? 1 : 0;
         int borderID = 0;
-        if (inRect(x, y, buttonRect))
-        {
+        if (inRect(x, y, buttonRect)) {
             borderID = 1;
         }
-        drawImage(guiGraphics, texture, gui, buttonRect, 0, buttonRect[3] * borderID);
+        drawImage(GuiGraphicsExtractor, texture, gui, buttonRect, 0, buttonRect[3] * borderID);
         final int srcY = buttonRect[3] * 2 + imageID * (buttonRect[3] - 2);
-        drawImage(guiGraphics, texture, gui, buttonRect[0] + 1, buttonRect[1] + 1, 0, srcY, buttonRect[2] - 2, buttonRect[3] - 2);
+        drawImage(GuiGraphicsExtractor, texture, gui, buttonRect[0] + 1, buttonRect[1] + 1, 0, srcY, buttonRect[2] - 2, buttonRect[3] - 2);
     }
 
     @Override
-    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
-        drawStringOnMouseOver(guiGraphics, gui, getStateName(), x, y, buttonRect);
+    public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, getStateName(), x, y, buttonRect);
     }
 
-    private String getStateName()
-    {
+    private String getStateName() {
         return Localization.MODULES.ADDONS.SHIELD.translate(getShieldStatus() ? "1" : "0");
     }
 
     @Override
-    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
-    {
-        if (button == 0 && inRect(x, y, buttonRect))
-        {
+    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
+        if (button == 0 && inRect(x, y, buttonRect)) {
             sendPacket(0);
         }
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final Player player)
-    {
-        if (id == 0)
-        {
+    protected void receivePacket(final int id, final byte[] data, final Player player) {
+        if (id == 0) {
             status.set(!getShieldStatus());
         }
     }
 
     @Override
-    public int numberOfPackets()
-    {
+    public int numberOfPackets() {
         return 1;
     }
 
     @Override
-    public int getConsumption(final boolean isMoving)
-    {
+    public int getConsumption(final boolean isMoving) {
         return hasShield() ? 20 : super.getConsumption(isMoving);
     }
 
@@ -214,20 +186,17 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule
     }
 
     @Override
-    public void doActivate(final int id)
-    {
+    public void doActivate(final int id) {
         setShieldStatus(true);
     }
 
     @Override
-    public void doDeActivate(final int id)
-    {
+    public void doDeActivate(final int id) {
         setShieldStatus(false);
     }
 
     @Override
-    public boolean isActive(final int id)
-    {
+    public boolean isActive(final int id) {
         return getShieldStatus();
     }
 }

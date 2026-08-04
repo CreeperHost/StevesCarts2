@@ -2,14 +2,17 @@ package vswe.stevescarts.helpers;
 
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ambient.Bat;
-import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.chicken.Chicken;
 import net.minecraft.world.entity.animal.cow.Cow;
 import net.minecraft.world.entity.animal.cow.MushroomCow;
 import net.minecraft.world.entity.animal.feline.Ocelot;
 import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.entity.animal.wolf.Wolf;
-import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Silverfish;
+import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.skeleton.Skeleton;
 import net.minecraft.world.entity.monster.spider.Spider;
@@ -41,155 +44,10 @@ import vswe.stevescarts.modules.workers.tools.ModuleWoodcutter;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class ModuleState
-{
+public class ModuleState {
     private static HashMap<Byte, ModuleState> states;
-    private Class<? extends ModuleBase> moduleClass;
-    private Localization.GUI.DETECTOR name;
-    private byte id;
-    private STATETYPE type;
 
-    public static HashMap<Byte, ModuleState> getStates()
-    {
-        return ModuleState.states;
-    }
-
-    public static Collection<ModuleState> getStateList()
-    {
-        return ModuleState.states.values();
-    }
-
-    public ModuleState(final int id, final Class<? extends ModuleBase> moduleClass, final Localization.GUI.DETECTOR name, final STATETYPE type)
-    {
-        this.moduleClass = moduleClass;
-        this.name = name;
-        this.id = (byte) id;
-        this.type = type;
-        ModuleState.states.put(this.id, this);
-    }
-
-    public boolean evaluate(ModularMinecart cart)
-    {
-        switch (type)
-        {
-            case SUPPLY:
-            {
-                for (final ModuleBase module : cart.modules())
-                {
-                    if (isModuleOfCorrectType(module) && module instanceof ISuppliesModule)
-                    {
-                        return ((ISuppliesModule) module).haveSupplies();
-                    }
-                }
-                break;
-            }
-            case ACTIVATION:
-            {
-                for (final ModuleBase module : cart.modules())
-                {
-                    if (isModuleOfCorrectType(module) && module instanceof IActivatorModule)
-                    {
-                        return ((IActivatorModule) module).isActive(0);
-                    }
-                }
-                break;
-            }
-            case INVENTORY:
-            {
-                if (this instanceof ModuleStateInv)
-                {
-                    boolean hasModule = false;
-                    for (final ModuleBase module2 : cart.modules())
-                    {
-                        if (isModuleOfCorrectType(module2))
-                        {
-                            final ModuleChest chest = (ModuleChest) module2;
-                            if (((ModuleStateInv) this).full && !chest.isCompletelyFilled())
-                            {
-                                return false;
-                            }
-                            if (!((ModuleStateInv) this).full && !chest.isCompletelyEmpty())
-                            {
-                                return false;
-                            }
-                            hasModule = true;
-                        }
-                    }
-                    return hasModule;
-                }
-                break;
-            }
-            case PASSENGER:
-            {
-                if (!cart.getPassengers().isEmpty())
-                {
-                    Entity passenger = cart.getPassengers().get(0);
-                    return ((ModuleStatePassenger) this).passengerClass.isAssignableFrom(passenger.getClass()) && ((ModuleStatePassenger) this).isPassengerValid(passenger);
-                }
-                break;
-            }
-            case POWER:
-            {
-                for (final ModuleBase module2 : cart.modules())
-                {
-                    if (isModuleOfCorrectType(module2))
-                    {
-                        return ((ModulePowerObserver) module2).isAreaActive(((ModuleStatePower) this).areaId);
-                    }
-                }
-                break;
-            }
-            case TANK:
-            {
-                if (this instanceof ModuleStateTank)
-                {
-                    boolean hasModule2 = false;
-                    for (final ModuleBase module3 : cart.modules())
-                    {
-                        if (isModuleOfCorrectType(module3))
-                        {
-                            final ModuleTank tank = (ModuleTank) module3;
-                            boolean result;
-                            if (((ModuleStateTank) this).full)
-                            {
-                                result = tank.isCompletelyFilled();
-                            }
-                            else
-                            {
-                                result = tank.isCompletelyEmpty();
-                            }
-                            if (result == ((ModuleStateTank) this).individual)
-                            {
-                                return result;
-                            }
-                            hasModule2 = !((ModuleStateTank) this).individual;
-                        }
-                    }
-                    return hasModule2;
-                }
-                break;
-            }
-        }
-        return false;
-    }
-
-    private boolean isModuleOfCorrectType(final ModuleBase module)
-    {
-        return moduleClass.isAssignableFrom(module.getClass());
-    }
-
-    public String getName()
-    {
-        return name.translate();
-    }
-
-    public byte getID()
-    {
-        return id;
-    }
-
-    static
-    {
+    static {
         ModuleState.states = new HashMap<>();
         new ModuleState(0, ModuleRailer.class, Localization.GUI.DETECTOR.RAIL, STATETYPE.SUPPLY);
         new ModuleState(1, ModuleTorch.class, Localization.GUI.DETECTOR.TORCH, STATETYPE.SUPPLY);
@@ -230,27 +88,21 @@ public class ModuleState
         new ModuleStatePassenger(34, Localization.GUI.DETECTOR.OCELOT, Ocelot.class);
         new ModuleStatePassenger(35, Localization.GUI.DETECTOR.VILLAGER, Villager.class);
         new ModuleStatePassenger(36, Localization.GUI.DETECTOR.PLAYER, Player.class);
-        new ModuleStatePassenger(37, Localization.GUI.DETECTOR.ZOMBIE, Zombie.class)
-        {
+        new ModuleStatePassenger(37, Localization.GUI.DETECTOR.ZOMBIE, Zombie.class) {
             @Override
-            public boolean isPassengerValid(final Entity passenger)
-            {
+            public boolean isPassengerValid(final Entity passenger) {
                 return passenger instanceof ZombieVillager;
             }
         };
-        new ModuleStatePassenger(38, Localization.GUI.DETECTOR.CHILD, AgeableMob.class)
-        {
+        new ModuleStatePassenger(38, Localization.GUI.DETECTOR.CHILD, AgeableMob.class) {
             @Override
-            public boolean isPassengerValid(final Entity passenger)
-            {
+            public boolean isPassengerValid(final Entity passenger) {
                 return ((AgeableMob) passenger).getAge() > 0;
             }
         };
-        new ModuleStatePassenger(39, Localization.GUI.DETECTOR.TAMED, TamableAnimal.class)
-        {
+        new ModuleStatePassenger(39, Localization.GUI.DETECTOR.TAMED, TamableAnimal.class) {
             @Override
-            public boolean isPassengerValid(final Entity passenger)
-            {
+            public boolean isPassengerValid(final Entity passenger) {
                 return ((TamableAnimal) passenger).isTame();
             }
         };
@@ -263,59 +115,160 @@ public class ModuleState
         new ModuleStateTank(48, Localization.GUI.DETECTOR.TANK_EMPTY, false, true);
     }
 
-    private static class ModuleStateInv extends ModuleState
-    {
-        private boolean full;
+    private final Class<? extends ModuleBase> moduleClass;
+    private final Localization.GUI.DETECTOR name;
+    private final byte id;
+    private final STATETYPE type;
 
-        public ModuleStateInv(final int id, final Localization.GUI.DETECTOR name, final boolean full)
-        {
+    public ModuleState(final int id, final Class<? extends ModuleBase> moduleClass, final Localization.GUI.DETECTOR name, final STATETYPE type) {
+        this.moduleClass = moduleClass;
+        this.name = name;
+        this.id = (byte) id;
+        this.type = type;
+        ModuleState.states.put(this.id, this);
+    }
+
+    public static HashMap<Byte, ModuleState> getStates() {
+        return ModuleState.states;
+    }
+
+    public static Collection<ModuleState> getStateList() {
+        return ModuleState.states.values();
+    }
+
+    public boolean evaluate(ModularMinecart cart) {
+        switch (type) {
+            case SUPPLY: {
+                for (final ModuleBase module : cart.modules()) {
+                    if (isModuleOfCorrectType(module) && module instanceof ISuppliesModule) {
+                        return ((ISuppliesModule) module).haveSupplies();
+                    }
+                }
+                break;
+            }
+            case ACTIVATION: {
+                for (final ModuleBase module : cart.modules()) {
+                    if (isModuleOfCorrectType(module) && module instanceof IActivatorModule) {
+                        return ((IActivatorModule) module).isActive(0);
+                    }
+                }
+                break;
+            }
+            case INVENTORY: {
+                if (this instanceof ModuleStateInv) {
+                    boolean hasModule = false;
+                    for (final ModuleBase module2 : cart.modules()) {
+                        if (isModuleOfCorrectType(module2)) {
+                            final ModuleChest chest = (ModuleChest) module2;
+                            if (((ModuleStateInv) this).full && !chest.isCompletelyFilled()) {
+                                return false;
+                            }
+                            if (!((ModuleStateInv) this).full && !chest.isCompletelyEmpty()) {
+                                return false;
+                            }
+                            hasModule = true;
+                        }
+                    }
+                    return hasModule;
+                }
+                break;
+            }
+            case PASSENGER: {
+                if (!cart.getPassengers().isEmpty()) {
+                    Entity passenger = cart.getPassengers().get(0);
+                    return ((ModuleStatePassenger) this).passengerClass.isAssignableFrom(passenger.getClass()) && ((ModuleStatePassenger) this).isPassengerValid(passenger);
+                }
+                break;
+            }
+            case POWER: {
+                for (final ModuleBase module2 : cart.modules()) {
+                    if (isModuleOfCorrectType(module2)) {
+                        return ((ModulePowerObserver) module2).isAreaActive(((ModuleStatePower) this).areaId);
+                    }
+                }
+                break;
+            }
+            case TANK: {
+                if (this instanceof ModuleStateTank) {
+                    boolean hasModule2 = false;
+                    for (final ModuleBase module3 : cart.modules()) {
+                        if (isModuleOfCorrectType(module3)) {
+                            final ModuleTank tank = (ModuleTank) module3;
+                            boolean result;
+                            if (((ModuleStateTank) this).full) {
+                                result = tank.isCompletelyFilled();
+                            } else {
+                                result = tank.isCompletelyEmpty();
+                            }
+                            if (result == ((ModuleStateTank) this).individual) {
+                                return result;
+                            }
+                            hasModule2 = !((ModuleStateTank) this).individual;
+                        }
+                    }
+                    return hasModule2;
+                }
+                break;
+            }
+        }
+        return false;
+    }
+
+    private boolean isModuleOfCorrectType(final ModuleBase module) {
+        return moduleClass.isAssignableFrom(module.getClass());
+    }
+
+    public String getName() {
+        return name.translate();
+    }
+
+    public byte getID() {
+        return id;
+    }
+
+    public enum STATETYPE {
+        SUPPLY, ACTIVATION, INVENTORY, PASSENGER, POWER, TANK
+    }
+
+    private static class ModuleStateInv extends ModuleState {
+        private final boolean full;
+
+        public ModuleStateInv(final int id, final Localization.GUI.DETECTOR name, final boolean full) {
             super(id, ModuleChest.class, name, STATETYPE.INVENTORY);
             this.full = full;
         }
     }
 
-    private static class ModuleStateTank extends ModuleState
-    {
-        private boolean full;
-        private boolean individual;
+    private static class ModuleStateTank extends ModuleState {
+        private final boolean full;
+        private final boolean individual;
 
-        public ModuleStateTank(final int id, final Localization.GUI.DETECTOR name, final boolean full, final boolean individual)
-        {
+        public ModuleStateTank(final int id, final Localization.GUI.DETECTOR name, final boolean full, final boolean individual) {
             super(id, ModuleTank.class, name, STATETYPE.TANK);
             this.full = full;
             this.individual = individual;
         }
     }
 
-    private static class ModuleStatePassenger extends ModuleState
-    {
-        private Class passengerClass;
+    private static class ModuleStatePassenger extends ModuleState {
+        private final Class passengerClass;
 
-        public ModuleStatePassenger(final int id, final Localization.GUI.DETECTOR name, final Class passengerClass)
-        {
+        public ModuleStatePassenger(final int id, final Localization.GUI.DETECTOR name, final Class passengerClass) {
             super(id, null, name, STATETYPE.PASSENGER);
             this.passengerClass = passengerClass;
         }
 
-        public boolean isPassengerValid(final Entity passenger)
-        {
+        public boolean isPassengerValid(final Entity passenger) {
             return passengerClass.isAssignableFrom(passenger.getClass());
         }
     }
 
-    private static class ModuleStatePower extends ModuleState
-    {
-        private int areaId;
+    private static class ModuleStatePower extends ModuleState {
+        private final int areaId;
 
-        public ModuleStatePower(final int id, final Localization.GUI.DETECTOR name, final int areaId)
-        {
+        public ModuleStatePower(final int id, final Localization.GUI.DETECTOR name, final int areaId) {
             super(id, ModulePowerObserver.class, name, STATETYPE.POWER);
             this.areaId = areaId;
         }
-    }
-
-    public enum STATETYPE
-    {
-        SUPPLY, ACTIVATION, INVENTORY, PASSENGER, POWER, TANK
     }
 }

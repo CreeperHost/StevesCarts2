@@ -1,15 +1,12 @@
 package vswe.stevescarts.modules.realtimers;
 
-import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.creeperhost.polylib.data.serializable.IntData;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.polylib.EntityData;
 
-public class ModuleRocket extends ModuleBase
-{
+public class ModuleRocket extends ModuleBase {
+    private final EntityData<Integer> unknown = new EntityData<>(getCart(), new IntData(0));
     private boolean flying;
     private int landDirX;
     private int landDirZ;
@@ -19,19 +16,14 @@ public class ModuleRocket extends ModuleBase
     private boolean isLanding;
     private double landY;
     private double groundY;
-    private final EntityData<Integer> unknown = new EntityData<>(getCart(), new IntData(0));
 
-    public ModuleRocket(ModularMinecart cart)
-    {
+    public ModuleRocket(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public void update()
-    {
-        if (isPlaceholder())
-        {
-            return;
+    public void update() {
+        if (isPlaceholder()) {
         }
         //TODO
         //		if (getCart().level.isClientSide) {
@@ -77,17 +69,14 @@ public class ModuleRocket extends ModuleBase
     }
 
     @Override
-    public void activatedByRail(final int x, final int y, final int z, final boolean active)
-    {
-        if (active)
-        {
+    public void activatedByRail(final int x, final int y, final int z, final boolean active) {
+        if (active) {
             takeOff();
             unknown.set(1);
         }
     }
 
-    private void takeOff()
-    {
+    private void takeOff() {
         //TODO
         //		flying = true;
         //		getCart().setCanUseRail(false);
@@ -102,15 +91,13 @@ public class ModuleRocket extends ModuleBase
         //		}
     }
 
-    private void land()
-    {
+    private void land() {
         isLanding = true;
         landY = getCart().y();
 //        getCart().setCanUseRail(true);
     }
 
-    private void done()
-    {
+    private void done() {
         flying = false;
         isLanding = false;
         landDirX = 0;

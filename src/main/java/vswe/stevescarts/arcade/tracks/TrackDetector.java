@@ -1,40 +1,33 @@
 package vswe.stevescarts.arcade.tracks;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
 import java.util.ArrayList;
 
-public class TrackDetector extends Track
-{
+public class TrackDetector extends Track {
     private ArrayList<TrackCoordinate> targets;
 
-    public TrackDetector(final int x, final int y, final TrackOrientation orientation)
-    {
+    public TrackDetector(final int x, final int y, final TrackOrientation orientation) {
         super(x, y, orientation);
         targets = new ArrayList<>();
     }
 
     @Override
-    public Track copy()
-    {
+    public Track copy() {
         final TrackDetector newTrack = new TrackDetector(getX(), getY(), getOrientation());
         newTrack.targets = targets;
         return newTrack;
     }
 
-    public TrackDetector addTarget(final int x, final int y)
-    {
-        if ((int) Math.ceil(targets.size() * 1.125f) == 63)
-        {
+    public TrackDetector addTarget(final int x, final int y) {
+        if ((int) Math.ceil(targets.size() * 1.125f) == 63) {
             return this;
         }
-        for (int i = 0; i < targets.size(); ++i)
-        {
-            if (targets.get(i).getX() == x && targets.get(i).getY() == y)
-            {
+        for (int i = 0; i < targets.size(); ++i) {
+            if (targets.get(i).getX() == x && targets.get(i).getY() == y) {
                 targets.remove(i);
                 return this;
             }
@@ -44,39 +37,11 @@ public class TrackDetector extends Track
     }
 
     @Override
-    public void setExtraInfo(final byte[] data)
-    {
-        int startPosition = 0;
-        short content = 0;
-        for (int i = 0; i < data.length; ++i)
-        {
-            short val = data[i];
-            if (val < 0)
-            {
-                val += 256;
-            }
-            content |= (short) ((val & (int) Math.pow(2.0, Math.min(8, 9 - startPosition)) - 1) << startPosition);
-            if (startPosition == 0)
-            {
-                startPosition = 8;
-            }
-            else
-            {
-                addTarget(content & 0x1F, (content & 0x1E0) >> 5);
-                content = (short) ((val & (int) Math.pow(2.0, startPosition - 1) - 1 << 9 - startPosition) >> 9 - startPosition);
-                startPosition = (startPosition + 8) % 9;
-            }
-        }
-    }
-
-    @Override
-    public byte[] getExtraInfo()
-    {
+    public byte[] getExtraInfo() {
         final byte[] ret = new byte[(int) Math.ceil(targets.size() * 1.125f)];
         int currentByte = 0;
         int startPosition = 0;
-        for (int i = 0; i < targets.size(); ++i)
-        {
+        for (int i = 0; i < targets.size(); ++i) {
             short data = (short) targets.get(i).getX();
             data |= (short) (targets.get(i).getY() << 5);
             final byte[] array = ret;
@@ -85,8 +50,7 @@ public class TrackDetector extends Track
             ++currentByte;
             ret[currentByte] = (byte) ((data & (int) Math.pow(2.0, 1 + startPosition) - 1 << 8 - startPosition) >> 8 - startPosition);
             startPosition = (startPosition + 1) % 8;
-            if (startPosition == 0)
-            {
+            if (startPosition == 0) {
                 ++currentByte;
             }
         }
@@ -94,60 +58,68 @@ public class TrackDetector extends Track
     }
 
     @Override
-    public int getU()
-    {
+    public void setExtraInfo(final byte[] data) {
+        int startPosition = 0;
+        short content = 0;
+        for (int i = 0; i < data.length; ++i) {
+            short val = data[i];
+            if (val < 0) {
+                val += 256;
+            }
+            content |= (short) ((val & (int) Math.pow(2.0, Math.min(8, 9 - startPosition)) - 1) << startPosition);
+            if (startPosition == 0) {
+                startPosition = 8;
+            } else {
+                addTarget(content & 0x1F, (content & 0x1E0) >> 5);
+                content = (short) ((val & (int) Math.pow(2.0, startPosition - 1) - 1 << 9 - startPosition) >> 9 - startPosition);
+                startPosition = (startPosition + 8) % 9;
+            }
+        }
+    }
+
+    @Override
+    public int getU() {
         return 1;
     }
 
     @Override
-    public void travel(final ArcadeTracks game, final Cart cart)
-    {
-        for (final TrackCoordinate target : targets)
-        {
+    public void travel(final ArcadeTracks game, final Cart cart) {
+        for (final TrackCoordinate target : targets) {
             final Track track = game.getTrackMap()[target.getX()][target.getY()];
-            if (track != null)
-            {
+            if (track != null) {
                 track.flip();
             }
         }
     }
 
     @Override
-    public void drawOverlay(GuiGraphics guiGraphics, Identifier texture, ModuleArcade module, final GuiMinecart gui, final int x, final int y, final boolean isRunning)
-    {
-        if (!isRunning && module.inRect(x, y, ArcadeTracks.getTrackArea(getX(), getY())))
-        {
-            for (final TrackCoordinate target : targets)
-            {
-                module.drawImage(guiGraphics, texture, gui, ArcadeTracks.getTrackArea(target.getX(), target.getY()), 0, 128);
+    public void drawOverlay(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, ModuleArcade module, final GuiMinecart gui, final int x, final int y, final boolean isRunning) {
+        if (!isRunning && module.inRect(x, y, ArcadeTracks.getTrackArea(getX(), getY()))) {
+            for (final TrackCoordinate target : targets) {
+                module.drawImage(GuiGraphicsExtractor, texture, gui, ArcadeTracks.getTrackArea(target.getX(), target.getY()), 0, 128);
             }
         }
     }
 
     @Override
-    public void onEditorClick(final ArcadeTracks game)
-    {
+    public void onEditorClick(final ArcadeTracks game) {
         game.setEditorDetectorTrack(this);
     }
 
-    private static class TrackCoordinate
-    {
-        private int x;
-        private int y;
+    private static class TrackCoordinate {
+        private final int x;
+        private final int y;
 
-        public TrackCoordinate(final int x, final int y)
-        {
+        public TrackCoordinate(final int x, final int y) {
             this.x = x;
             this.y = y;
         }
 
-        public int getX()
-        {
+        public int getX() {
             return x;
         }
 
-        public int getY()
-        {
+        public int getY() {
             return y;
         }
     }

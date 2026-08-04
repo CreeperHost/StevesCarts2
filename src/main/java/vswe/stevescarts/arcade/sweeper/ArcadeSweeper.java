@@ -1,7 +1,6 @@
 package vswe.stevescarts.arcade.sweeper;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
@@ -14,43 +13,41 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
-public class ArcadeSweeper extends ArcadeGame
-{
-    private Tile[][] tiles;
-    protected boolean isPlaying;
-    protected boolean hasFinished;
-    private int currentGameType;
-    private int ticks;
-    protected int creepersLeft;
-    protected int emptyLeft;
-    private boolean hasStarted;
-    private int[] highscore;
-    private int highscoreTicks;
+public class ArcadeSweeper extends ArcadeGame {
     private static String textureMenu;
 
-    public ArcadeSweeper(final ModuleArcade module)
-    {
+    static {
+        ArcadeSweeper.textureMenu = "/gui/sweeper.png";
+    }
+
+    protected boolean isPlaying;
+    protected boolean hasFinished;
+    protected int creepersLeft;
+    protected int emptyLeft;
+    private Tile[][] tiles;
+    private int currentGameType;
+    private int ticks;
+    private boolean hasStarted;
+    private final int[] highscore;
+    private int highscoreTicks;
+
+    public ArcadeSweeper(final ModuleArcade module) {
         super(module, Localization.ARCADE.CREEPER);
         highscore = new int[]{999, 999, 999};
         newGame(currentGameType);
     }
 
-    private void newGame(final int size)
-    {
-        switch (size)
-        {
-            case 0:
-            {
+    private void newGame(final int size) {
+        switch (size) {
+            case 0: {
                 newGame(9, 9, 10);
                 break;
             }
-            case 1:
-            {
+            case 1: {
                 newGame(16, 16, 40);
                 break;
             }
-            case 2:
-            {
+            case 2: {
                 newGame(30, 16, 99);
                 break;
             }
@@ -58,18 +55,14 @@ public class ArcadeSweeper extends ArcadeGame
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (hasStarted && isPlaying && !hasFinished && ticks < 19980)
-        {
+        if (hasStarted && isPlaying && !hasFinished && ticks < 19980) {
             ++ticks;
         }
-        if (highscoreTicks > 0)
-        {
+        if (highscoreTicks > 0) {
             ++highscoreTicks;
-            if (highscoreTicks == 78)
-            {
+            if (highscoreTicks == 78) {
                 highscoreTicks = 0;
                 //TODO bring back sounds
 //                ArcadeGame.playSound(SoundHandler.HIGH_SCORE, 1.0f, 1.0f);
@@ -77,8 +70,7 @@ public class ArcadeSweeper extends ArcadeGame
         }
     }
 
-    private void newGame(final int width, final int height, final int totalCreepers)
-    {
+    private void newGame(final int width, final int height, final int totalCreepers) {
         isPlaying = true;
         ticks = 0;
         creepersLeft = totalCreepers;
@@ -87,39 +79,28 @@ public class ArcadeSweeper extends ArcadeGame
         hasFinished = false;
         highscoreTicks = 0;
         tiles = new Tile[width][height];
-        for (int x = 0; x < width; ++x)
-        {
-            for (int y = 0; y < height; ++y)
-            {
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
                 tiles[x][y] = new Tile(this);
             }
         }
-        for (int creepers = 0; creepers < totalCreepers; ++creepers)
-        {
+        for (int creepers = 0; creepers < totalCreepers; ++creepers) {
             final int x2 = getModule().getCart().getRandom().nextInt(width);
             final int y2 = getModule().getCart().getRandom().nextInt(height);
-            if (!tiles[x2][y2].isCreeper())
-            {
+            if (!tiles[x2][y2].isCreeper()) {
                 tiles[x2][y2].setCreeper();
             }
         }
-        for (int x2 = 0; x2 < width; ++x2)
-        {
-            for (int y2 = 0; y2 < height; ++y2)
-            {
-                if (!tiles[x2][y2].isCreeper())
-                {
+        for (int x2 = 0; x2 < width; ++x2) {
+            for (int y2 = 0; y2 < height; ++y2) {
+                if (!tiles[x2][y2].isCreeper()) {
                     int count = 0;
-                    for (int i = -1; i <= 1; ++i)
-                    {
-                        for (int j = -1; j <= 1; ++j)
-                        {
-                            if (i != 0 || j != 0)
-                            {
+                    for (int i = -1; i <= 1; ++i) {
+                        for (int j = -1; j <= 1; ++j) {
+                            if (i != 0 || j != 0) {
                                 final int x3 = x2 + i;
                                 final int y3 = y2 + j;
-                                if (x3 >= 0 && y3 >= 0 && x3 < width && y3 < height && tiles[x3][y3].isCreeper())
-                                {
+                                if (x3 >= 0 && y3 >= 0 && x3 < width && y3 < height && tiles[x3][y3].isCreeper()) {
                                     ++count;
                                 }
                             }
@@ -131,76 +112,56 @@ public class ArcadeSweeper extends ArcadeGame
         }
     }
 
-    private int getMarginLeft()
-    {
+    private int getMarginLeft() {
         return (443 - tiles.length * 10) / 2;
     }
 
-    private int getMarginTop()
-    {
+    private int getMarginTop() {
         return (168 - tiles[0].length * 10) / 2;
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource(ArcadeSweeper.textureMenu);
-        for (int i = 0; i < tiles.length; ++i)
-        {
-            for (int j = 0; j < tiles[0].length; ++j)
-            {
-                tiles[i][j].draw(guiGraphics, texture, this, gui, getMarginLeft() + i * 10, getMarginTop() + j * 10, x, y);
+        for (int i = 0; i < tiles.length; ++i) {
+            for (int j = 0; j < tiles[0].length; ++j) {
+                tiles[i][j].draw(GuiGraphicsExtractor, texture, this, gui, getMarginLeft() + i * 10, getMarginTop() + j * 10, x, y);
             }
         }
     }
 
     @Override
-    public void mouseClicked(final GuiMinecart gui, int x, int y, final int button)
-    {
-        if (!isPlaying)
-        {
+    public void mouseClicked(final GuiMinecart gui, int x, int y, final int button) {
+        if (!isPlaying) {
             return;
         }
         x -= getMarginLeft();
         y -= getMarginTop();
         final int xc = x / 10;
         final int yc = y / 10;
-        if (button == 0)
-        {
+        if (button == 0) {
             openTile(xc, yc, true);
-        }
-        else if (button == 1 && isValidCoordinate(xc, yc))
-        {
+        } else if (button == 1 && isValidCoordinate(xc, yc)) {
             hasStarted = true;
             //TODO bring back sounds
 //            ArcadeGame.playSound(SoundHandler.FLAG_CLICK, 1.0f, 1.0f);
             tiles[xc][yc].mark();
-        }
-        else if (button == 2 && isValidCoordinate(xc, yc) && tiles[xc][yc].getState() == Tile.TILE_STATE.OPENED)
-        {
+        } else if (button == 2 && isValidCoordinate(xc, yc) && tiles[xc][yc].getState() == Tile.TILE_STATE.OPENED) {
             //TODO bring back sounds
 //            ArcadeGame.playSound(SoundHandler.CLICK, 1.0f, 1.0f);
             int nearby = tiles[xc][yc].getNearbyCreepers();
-            if (nearby != 0)
-            {
-                for (int i = -1; i <= 1; ++i)
-                {
-                    for (int j = -1; j <= 1; ++j)
-                    {
-                        if ((i != 0 || j != 0) && isValidCoordinate(xc + i, yc + j) && tiles[xc + i][yc + j].getState() == Tile.TILE_STATE.FLAGGED)
-                        {
+            if (nearby != 0) {
+                for (int i = -1; i <= 1; ++i) {
+                    for (int j = -1; j <= 1; ++j) {
+                        if ((i != 0 || j != 0) && isValidCoordinate(xc + i, yc + j) && tiles[xc + i][yc + j].getState() == Tile.TILE_STATE.FLAGGED) {
                             --nearby;
                         }
                     }
                 }
-                if (nearby == 0)
-                {
-                    for (int i = -1; i <= 1; ++i)
-                    {
-                        for (int j = -1; j <= 1; ++j)
-                        {
-                            if (i != 0 || j != 0)
-                            {
+                if (nearby == 0) {
+                    for (int i = -1; i <= 1; ++i) {
+                        for (int j = -1; j <= 1; ++j) {
+                            if (i != 0 || j != 0) {
                                 openTile(xc + i, yc + j, false);
                             }
                         }
@@ -210,54 +171,40 @@ public class ArcadeSweeper extends ArcadeGame
         }
     }
 
-    private boolean isValidCoordinate(final int x, final int y)
-    {
+    private boolean isValidCoordinate(final int x, final int y) {
         return x >= 0 && y >= 0 && x < tiles.length && y < tiles[0].length;
     }
 
-    private void openTile(final int x, final int y, final boolean first)
-    {
-        if (isValidCoordinate(x, y))
-        {
+    private void openTile(final int x, final int y, final boolean first) {
+        if (isValidCoordinate(x, y)) {
             hasStarted = true;
             final Tile.TILE_OPEN_RESULT result = tiles[x][y].open();
-            if (emptyLeft == 0)
-            {
+            if (emptyLeft == 0) {
                 hasFinished = true;
                 isPlaying = false;
                 //TODO bring back sounds
 //                ArcadeGame.playSound(SoundHandler.GOOD_JOB, 1.0f, 1.0f);
-                if (highscore[currentGameType] > ticks / 20)
-                {
+                if (highscore[currentGameType] > ticks / 20) {
                     highscoreTicks = 1;
                     final int val = ticks / 20;
                     final byte byte1 = (byte) (val & 0xFF);
                     final byte byte2 = (byte) ((val & 0xFF00) >> 8);
                     getModule().sendPacket(3, new byte[]{(byte) currentGameType, byte1, byte2});
                 }
-            }
-            else if (result == Tile.TILE_OPEN_RESULT.BLOB)
-            {
-                if (first)
-                {
+            } else if (result == Tile.TILE_OPEN_RESULT.BLOB) {
+                if (first) {
                     //TODO bring back sounds
 //                    ArcadeGame.playSound(SoundHandler.BLOB_CLICK, 1.0f, 1.0f);
                 }
-                for (int i = -1; i <= 1; ++i)
-                {
-                    for (int j = -1; j <= 1; ++j)
-                    {
+                for (int i = -1; i <= 1; ++i) {
+                    for (int j = -1; j <= 1; ++j) {
                         openTile(x + i, y + j, false);
                     }
                 }
-            }
-            else if (result == Tile.TILE_OPEN_RESULT.DEAD)
-            {
+            } else if (result == Tile.TILE_OPEN_RESULT.DEAD) {
                 isPlaying = false;
                 ArcadeGame.playSound(SoundEvents.GENERIC_EXPLODE.value(), 1.0f, (1.0f + (getModule().getCart().getRandom().nextFloat() - getModule().getCart().getRandom().nextFloat()) * 0.2f) * 0.7f);
-            }
-            else if (result == Tile.TILE_OPEN_RESULT.OK && first)
-            {
+            } else if (result == Tile.TILE_OPEN_RESULT.OK && first) {
                 //TODO bring back sounds
 //                ArcadeGame.playSound(SoundHandler.CLICK, 1.0f, 1.0f);
             }
@@ -265,47 +212,37 @@ public class ArcadeSweeper extends ArcadeGame
     }
 
     @Override
-    public void keyPress(final GuiMinecart gui, final int character, final int extraInformation)
-    {
-        if (character == 19)
-        {
+    public void keyPress(final GuiMinecart gui, final int character, final int extraInformation) {
+        if (character == 19) {
             newGame(currentGameType);
-        }
-        else if (character == 20)
-        {
+        } else if (character == 20) {
             newGame(currentGameType = (currentGameType + 1) % 3);
         }
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
         final String[] mapnames = {Localization.ARCADE.MAP_1.translate(), Localization.ARCADE.MAP_2.translate(), Localization.ARCADE.MAP_3.translate()};
-        getModule().drawString(guiGraphics, gui, Localization.ARCADE.LEFT.translate(String.valueOf(creepersLeft)), 10, 180, 4210752);
-        getModule().drawString(guiGraphics, gui, Localization.ARCADE.TIME.translate(String.valueOf(ticks / 20)), 10, 190, 4210752);
-        getModule().drawString(guiGraphics, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 10, 210, 4210752);
-        getModule().drawString(guiGraphics, gui, "T - " + Localization.ARCADE.INSTRUCTION_CHANGE_MAP.translate(), 10, 230, 4210752);
-        getModule().drawString(guiGraphics, gui, Localization.ARCADE.MAP.translate(mapnames[currentGameType]), 10, 240, 4210752);
-        getModule().drawString(guiGraphics, gui, Localization.ARCADE.HIGH_SCORES.translate(), 330, 180, 4210752);
-        for (int i = 0; i < 3; ++i)
-        {
-            getModule().drawString(guiGraphics, gui, Localization.ARCADE.HIGH_SCORE_ENTRY.translate(mapnames[i], String.valueOf(highscore[i])), 330, 190 + i * 10, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.LEFT.translate(String.valueOf(creepersLeft)), 10, 180, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.TIME.translate(String.valueOf(ticks / 20)), 10, 190, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 10, 210, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "T - " + Localization.ARCADE.INSTRUCTION_CHANGE_MAP.translate(), 10, 230, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.MAP.translate(mapnames[currentGameType]), 10, 240, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.HIGH_SCORES.translate(), 330, 180, 4210752);
+        for (int i = 0; i < 3; ++i) {
+            getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.HIGH_SCORE_ENTRY.translate(mapnames[i], String.valueOf(highscore[i])), 330, 190 + i * 10, 4210752);
         }
     }
 
     @Override
-    public void receivePacket(final int id, final byte[] data, final Player player)
-    {
-        if (id == 3)
-        {
+    public void receivePacket(final int id, final byte[] data, final Player player) {
+        if (id == 3) {
             short data2 = data[1];
             short data3 = data[2];
-            if (data2 < 0)
-            {
+            if (data2 < 0) {
                 data2 += 256;
             }
-            if (data3 < 0)
-            {
+            if (data3 < 0) {
                 data3 += 256;
             }
             highscore[data[0]] = (data2 | data3 << 8);
@@ -313,19 +250,15 @@ public class ArcadeSweeper extends ArcadeGame
     }
 
     @Override
-    public void checkGuiData(final Object[] info)
-    {
-        for (int i = 0; i < 3; ++i)
-        {
+    public void checkGuiData(final Object[] info) {
+        for (int i = 0; i < 3; ++i) {
             getModule().updateGuiData(info, TrackStory.stories.size() + 2 + i, (short) highscore[i]);
         }
     }
 
     @Override
-    public void receiveGuiData(final int id, final short data)
-    {
-        if (id >= TrackStory.stories.size() + 2 && id < TrackStory.stories.size() + 5)
-        {
+    public void receiveGuiData(final int id, final short data) {
+        if (id >= TrackStory.stories.size() + 2 && id < TrackStory.stories.size() + 5) {
             highscore[id - (TrackStory.stories.size() + 2)] = data;
         }
     }
@@ -342,10 +275,5 @@ public class ArcadeSweeper extends ArcadeGame
         for (int i = 0; i < 3; ++i) {
             highscore[i] = input.getShortOr(getModule().generateNBTName("HighscoreSweeper" + i, id), (short) 0);
         }
-    }
-
-    static
-    {
-        ArcadeSweeper.textureMenu = "/gui/sweeper.png";
     }
 }

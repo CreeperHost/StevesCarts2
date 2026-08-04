@@ -1,11 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import net.creeperhost.polylib.data.serializable.IntData;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -14,8 +10,8 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
-import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotCake;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
@@ -24,88 +20,71 @@ import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 
-public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
-{
-    private int cooldown;
+public class ModuleCakeServer extends ModuleBase implements ISuppliesModule {
     private static final int MAX_CAKES = 10;
     private static final int SLICES_PER_CAKE = 6;
     private static final int MAX_TOTAL_SLICES = 66;
-    private int[] rect;
     private final EntityData<Integer> buffer = new EntityData<>(getCart(), new IntData(0));
+    private int cooldown;
+    private final int[] rect;
 
-    public ModuleCakeServer(ModularMinecart cart)
-    {
+    public ModuleCakeServer(ModularMinecart cart) {
         super(cart);
         cooldown = 0;
         rect = new int[]{40, 20, 13, 36};
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (!getCart().level().isClientSide())
-        {
-            if (getCart().hasCreativeSupplies())
-            {
-                if (cooldown >= 20)
-                {
-                    if (getCakeBuffer() < 66)
-                    {
+        if (!getCart().level().isClientSide()) {
+            if (getCart().hasCreativeSupplies()) {
+                if (cooldown >= 20) {
+                    if (getCakeBuffer() < 66) {
                         setCakeBuffer(getCakeBuffer() + 1);
                     }
                     cooldown = 0;
-                }
-                else
-                {
+                } else {
                     ++cooldown;
                 }
             }
             @Nonnull ItemStack item = getStack(0);
-            if (!item.isEmpty() && item.getItem().equals(Items.CAKE) && getCakeBuffer() + 6 <= 66)
-            {
+            if (!item.isEmpty() && item.getItem().equals(Items.CAKE) && getCakeBuffer() + 6 <= 66) {
                 setCakeBuffer(getCakeBuffer() + 6);
                 setStack(0, ItemStack.EMPTY);
             }
         }
     }
 
-    private void setCakeBuffer(final int i)
-    {
-        buffer.set(i);
-    }
-
-    private int getCakeBuffer()
-    {
-        if (isPlaceholder())
-        {
+    private int getCakeBuffer() {
+        if (isPlaceholder()) {
             return 6;
         }
         return buffer.get();
     }
 
+    private void setCakeBuffer(final int i) {
+        buffer.set(i);
+    }
+
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    protected int getInventoryWidth()
-    {
+    protected int getInventoryWidth() {
         return 1;
     }
 
     @Override
-    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
-    {
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y) {
         return new SlotCake(getCart(), slotId, 8 + x * 18, 38 + y * 18);
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.CAKE_SERVER.translate(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.CAKE_SERVER.translate(), 8, 6, 4210752);
     }
 
     @Override
@@ -121,66 +100,53 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
     }
 
     @Override
-    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
-        drawStringOnMouseOver(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.CAKES.translate(String.valueOf(getCakes()), String.valueOf(10)) + "\n" + Localization.MODULES.ATTACHMENTS.SLICES.translate(String.valueOf(getSlices()), String.valueOf(6)), x, y, rect);
+    public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.CAKES.translate(String.valueOf(getCakes()), String.valueOf(10)) + "\n" + Localization.MODULES.ATTACHMENTS.SLICES.translate(String.valueOf(getSlices()), String.valueOf(6)), x, y, rect);
     }
 
-    private int getCakes()
-    {
-        if (getCakeBuffer() == 6)
-        {
+    private int getCakes() {
+        if (getCakeBuffer() == 6) {
             return 10;
         }
         return getCakeBuffer() / 6;
     }
 
-    private int getSlices()
-    {
-        if (getCakeBuffer() == 66)
-        {
+    private int getSlices() {
+        if (getCakeBuffer() == 66) {
             return 6;
         }
         return getCakeBuffer() % 6;
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/cake.png");
-        drawImage(guiGraphics, texture, gui, rect, 0, inRect(x, y, rect) ? rect[3] : 0);
+        drawImage(GuiGraphicsExtractor, texture, gui, rect, 0, inRect(x, y, rect) ? rect[3] : 0);
         final int maxHeight = rect[3] - 2;
         int height = (int) (getCakes() / 10.0f * maxHeight);
-        if (height > 0)
-        {
-            drawImage(guiGraphics, texture, gui, rect[0] + 1, rect[1] + 1 + maxHeight - height, rect[2], maxHeight - height, 7, height);
+        if (height > 0) {
+            drawImage(GuiGraphicsExtractor, texture, gui, rect[0] + 1, rect[1] + 1 + maxHeight - height, rect[2], maxHeight - height, 7, height);
         }
         height = (int) (getSlices() / 6.0f * maxHeight);
-        if (height > 0)
-        {
-            drawImage(guiGraphics, texture, gui, rect[0] + 9, rect[1] + 1 + maxHeight - height, rect[2] + 7, maxHeight - height, 3, height);
+        if (height > 0) {
+            drawImage(GuiGraphicsExtractor, texture, gui, rect[0] + 9, rect[1] + 1 + maxHeight - height, rect[2] + 7, maxHeight - height, 3, height);
         }
     }
 
     @Override
-    public int guiWidth()
-    {
+    public int guiWidth() {
         return 75;
     }
 
     @Override
-    public int guiHeight()
-    {
+    public int guiHeight() {
         return 60;
     }
 
     @Override
-    public boolean onInteractFirst(final Player entityplayer)
-    {
-        if (getCakeBuffer() > 0)
-        {
-            if (!getCart().level().isClientSide() && entityplayer.canEat(false))
-            {
+    public boolean onInteractFirst(final Player entityplayer) {
+        if (getCakeBuffer() > 0) {
+            if (!getCart().level().isClientSide() && entityplayer.canEat(false)) {
                 setCakeBuffer(getCakeBuffer() - 1);
                 entityplayer.getFoodData().eat(2, 0.1F);
             }
@@ -189,19 +155,16 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule
         return false;
     }
 
-    public int getRenderSliceCount()
-    {
+    public int getRenderSliceCount() {
         int count = getSlices();
-        if (count == 0 && getCakes() > 0)
-        {
+        if (count == 0 && getCakes() > 0) {
             count = 6;
         }
         return count;
     }
 
     @Override
-    public boolean haveSupplies()
-    {
+    public boolean haveSupplies() {
         return getCakeBuffer() > 0;
     }
 }

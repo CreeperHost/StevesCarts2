@@ -7,26 +7,23 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.modules.workers.tools.ModuleWoodcutter;
 
-public class ModelWoodCutter extends ModelCartbase
-{
+public class ModelWoodCutter extends ModelCartbase {
     private static ModelPart[] anchors;
-    public ModelWoodCutter(final Identifier resource)
-    {
+
+    public ModelWoodCutter(final Identifier resource) {
         super(null, resource);
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 
         anchors = new ModelPart[5];
 
-        for (int i = -2; i <= 2; ++i)
-        {
+        for (int i = -2; i <= 2; ++i) {
             PartDefinition anchor = modelPartData.addOrReplaceChild("anchor" + i, CubeListBuilder.create(),
                     PartPose.offset(0, 0, 0));
 
@@ -50,19 +47,14 @@ public class ModelWoodCutter extends ModelCartbase
     }
 
     @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll)
-    {
+    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll) {
         super.applyEffects(module, matrixStack, yaw, pitch, roll);
         final float commonAngle = (module == null) ? 0.0f : ((ModuleWoodcutter) module).getCutterAngle();
-        for (int i = 0; i < anchors.length; ++i)
-        {
+        for (int i = 0; i < anchors.length; ++i) {
             float specificAngle;
-            if (i % 2 == 0)
-            {
+            if (i % 2 == 0) {
                 specificAngle = (float) Math.sin(commonAngle);
-            }
-            else
-            {
+            } else {
                 specificAngle = (float) Math.cos(commonAngle);
             }
             anchors[i].x = specificAngle * 1.25f;

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "stevescarts:block/cargo_manager_bot",
+    "east": "stevescarts:block/cargo_manager_red",
+    "north": "stevescarts:block/cargo_manager_yellow",
+    "particle": "stevescarts:block/cargo_manager_top",
+    "south": "stevescarts:block/cargo_manager_blue",
+    "up": "stevescarts:block/cargo_manager_top",
+    "west": "stevescarts:block/cargo_manager_green"
+  }
+}

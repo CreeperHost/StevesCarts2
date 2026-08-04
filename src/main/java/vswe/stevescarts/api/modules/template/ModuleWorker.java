@@ -10,13 +10,11 @@ import net.minecraft.world.phys.Vec3;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.entities.ModularMinecart;
 
-public abstract class ModuleWorker extends ModuleBase
-{
+public abstract class ModuleWorker extends ModuleBase {
     private boolean preWork;
     private boolean shouldDie;
 
-    public ModuleWorker(ModularMinecart cart)
-    {
+    public ModuleWorker(ModularMinecart cart) {
         super(cart);
         preWork = true;
     }
@@ -25,70 +23,56 @@ public abstract class ModuleWorker extends ModuleBase
 
     public abstract boolean work();
 
-    public void startWorking(final int time)
-    {
+    public void startWorking(final int time) {
         getCart().setWorkingTime(time);
         preWork = false;
         getCart().setWorker(this);
     }
 
-    public void stopWorking()
-    {
-        if (getCart().getWorker() == this)
-        {
+    public void stopWorking() {
+        if (getCart().getWorker() == this) {
             preWork = true;
             getCart().setWorker(null);
         }
     }
 
-    public boolean preventAutoShutdown()
-    {
+    public boolean preventAutoShutdown() {
         return false;
     }
 
-    public void kill()
-    {
+    public void kill() {
         shouldDie = true;
     }
 
-    public boolean isDead()
-    {
+    public boolean isDead() {
         return shouldDie;
     }
 
-    public void revive()
-    {
+    public void revive() {
         shouldDie = false;
     }
 
-    protected boolean doPreWork()
-    {
+    protected boolean doPreWork() {
         return preWork;
     }
 
-    public BlockPos getLastblock()
-    {
+    public BlockPos getLastblock() {
         return getNextblock(false);
     }
 
-    public BlockPos getNextblock()
-    {
+    public BlockPos getNextblock() {
         return getNextblock(true);
     }
 
-    private BlockPos getNextblock(boolean flag)
-    {
+    private BlockPos getNextblock(boolean flag) {
         BlockPos pos = getCart().blockPosition();
-        if (BaseRailBlock.isRail(getCart().level(), pos.below()))
-        {
+        if (BaseRailBlock.isRail(getCart().level(), pos.below())) {
             pos = pos.below();
         }
         BlockState blockState = getCart().level().getBlockState(pos);
-        if (BaseRailBlock.isRail(blockState))
-        {
+        if (BaseRailBlock.isRail(blockState)) {
             RailShape direction = ((BaseRailBlock) blockState.getBlock()).getRailDirection(blockState, getCart().level(), pos, getCart());
-            if (direction.isSlope())
-            {
+            if (direction.isSlope()) {
                 pos = pos.above();
             }
 
@@ -105,20 +89,16 @@ public abstract class ModuleWorker extends ModuleBase
     }
 
     @Override
-    public float getMaxSpeed()
-    {
-        if (!doPreWork())
-        {
+    public float getMaxSpeed() {
+        if (!doPreWork()) {
             return 0.0f;
         }
         return super.getMaxSpeed();
     }
 
-    protected boolean isValidForTrack(BlockPos pos, boolean checkBellow)
-    {
+    protected boolean isValidForTrack(BlockPos pos, boolean checkBellow) {
         boolean result = countsAsAir(pos) && (!checkBellow || Block.canSupportRigidBlock(getCart().level(), pos.below()));
-        if (result)
-        {
+        if (result) {
             int coordX = pos.getX() - (getCart().x() - pos.getX());
             int coordZ = pos.getZ() - (getCart().z() - pos.getZ());
             Block block = getCart().level().getBlockState(new BlockPos(coordX, pos.getY(), coordZ)).getBlock();

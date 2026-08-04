@@ -6,10 +6,8 @@ import vswe.stevescarts.entities.ModularMinecart;
 /**
  * Created by modmuss50 on 08/05/2017.
  */
-public class ModuleTreeTap extends ModuleBase
-{
-    public ModuleTreeTap(ModularMinecart cart)
-    {
+public class ModuleTreeTap extends ModuleBase {
+    public ModuleTreeTap(ModularMinecart cart) {
         super(cart);
     }
 }

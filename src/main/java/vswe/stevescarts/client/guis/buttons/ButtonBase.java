@@ -1,165 +1,138 @@
 package vswe.stevescarts.client.guis.buttons;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.helpers.ResourceHelper;
 
-public abstract class ButtonBase
-{
+public abstract class ButtonBase {
+    private static Identifier texture;
+
+    static {
+        ButtonBase.texture = ResourceHelper.getResource("/gui/buttons.png");
+    }
+
     protected final LOCATION loc;
     protected final ModuleBase module;
     private boolean lastVisibility;
     private int currentID;
     private int moduleID;
-    private static Identifier texture;
 
-    public ButtonBase(final ModuleBase module, final LOCATION loc)
-    {
+    public ButtonBase(final ModuleBase module, final LOCATION loc) {
         (this.module = module).addButton(this);
         this.loc = loc;
     }
 
-    public void setCurrentID(final int id)
-    {
+    public void setCurrentID(final int id) {
         currentID = id;
     }
 
-    public void setIdInModule(final int id)
-    {
-        moduleID = id;
-    }
-
-    public int getIdInModule()
-    {
+    public int getIdInModule() {
         return moduleID;
     }
 
+    public void setIdInModule(final int id) {
+        moduleID = id;
+    }
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "";
     }
 
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return false;
     }
 
-    public boolean hasText()
-    {
+    public boolean hasText() {
         return false;
     }
 
-    public boolean isVisible()
-    {
+    public boolean isVisible() {
         return false;
     }
 
-    public final void computeOnClick(final GuiMinecart gui, final int mousebutton)
-    {
+    public final void computeOnClick(final GuiMinecart gui, final int mousebutton) {
     }
 
-    public void onClientClick(final int mousebutton, final boolean ctrlKey, final boolean shiftKey)
-    {
+    public void onClientClick(final int mousebutton, final boolean ctrlKey, final boolean shiftKey) {
     }
 
-    public void onServerClick(final Player player, final int mousebutton, final boolean ctrlKey, final boolean shiftKey)
-    {
+    public void onServerClick(final Player player, final int mousebutton, final boolean ctrlKey, final boolean shiftKey) {
     }
 
-    public boolean handleClickOnServer()
-    {
+    public boolean handleClickOnServer() {
         return true;
     }
 
-    private boolean useTexture()
-    {
+    private boolean useTexture() {
         return texture() != -1;
     }
 
-    public int ColorCode()
-    {
+    public int ColorCode() {
         return 0;
     }
 
-    private boolean hasBorder()
-    {
+    private boolean hasBorder() {
         return borderID() != -1;
     }
 
-    public int borderID()
-    {
+    public int borderID() {
         return -1;
     }
 
-    public int texture()
-    {
+    public int texture() {
         return -1;
     }
 
-    public int textureX()
-    {
+    public int textureX() {
         return texture() % 21 * 12;
     }
 
-    public int textureY()
-    {
+    public int textureY() {
         return 60 + texture() / 21 * 12;
     }
 
-    public void drawButtonText(GuiGraphics guiGraphics, final GuiMinecart gui, final ModuleBase module)
-    {
-        if (isVisible() && hasText())
-        {
-            module.drawString(guiGraphics, gui, toString(), X() + 8, Y() + 7, 16777215);
+    public void drawButtonText(GuiGraphicsExtractor GuiGraphicsExtractor, final GuiMinecart gui, final ModuleBase module) {
+        if (isVisible() && hasText()) {
+            module.drawString(GuiGraphicsExtractor, gui, toString(), X() + 8, Y() + 7, 16777215);
         }
     }
 
-    public void drawButton(GuiGraphics guiGraphics, final GuiMinecart gui, final ModuleBase module, final int x, final int y)
-    {
+    public void drawButton(GuiGraphicsExtractor GuiGraphicsExtractor, final GuiMinecart gui, final ModuleBase module, final int x, final int y) {
         final boolean visibility = isVisible();
-        if (visibility != lastVisibility)
-        {
+        if (visibility != lastVisibility) {
             module.buttonVisibilityChanged();
         }
         lastVisibility = visibility;
-        if (!visibility)
-        {
+        if (!visibility) {
             return;
         }
         int sourceX = 0;
         int sourceY = 20;
-        if (isEnabled())
-        {
+        if (isEnabled()) {
             sourceX = 20 * (ColorCode() + 1);
         }
-        if (module.inRect(x, y, getBounds()))
-        {
+        if (module.inRect(x, y, getBounds())) {
             sourceY += 20;
         }
-        module.drawImage(guiGraphics, ButtonBase.texture, gui, getBounds(), sourceX, sourceY);
-        if (useTexture())
-        {
-            module.drawImage(guiGraphics, ButtonBase.texture, gui, X() + 4, Y() + 4, textureX(), textureY(), 12, 12);
+        module.drawImage(GuiGraphicsExtractor, ButtonBase.texture, gui, getBounds(), sourceX, sourceY);
+        if (useTexture()) {
+            module.drawImage(GuiGraphicsExtractor, ButtonBase.texture, gui, X() + 4, Y() + 4, textureX(), textureY(), 12, 12);
         }
-        if (hasBorder())
-        {
-            module.drawImage(guiGraphics, ButtonBase.texture, gui, getBounds(), borderID() * 20, 0);
+        if (hasBorder()) {
+            module.drawImage(GuiGraphicsExtractor, ButtonBase.texture, gui, getBounds(), borderID() * 20, 0);
         }
     }
 
-    public int[] getBounds()
-    {
+    public int[] getBounds() {
         return new int[]{X(), Y(), 20, 20};
     }
 
-    public int X()
-    {
-        switch (loc)
-        {
+    public int X() {
+        switch (loc) {
             case OVERVIEW -> {
                 return 15 + currentID * 25;
             }
@@ -190,10 +163,8 @@ public abstract class ButtonBase
         }
     }
 
-    public int Y()
-    {
-        switch (loc)
-        {
+    public int Y() {
+        switch (loc) {
             case OVERVIEW -> {
                 return 143;
             }
@@ -224,30 +195,20 @@ public abstract class ButtonBase
         }
     }
 
-    public LOCATION getLocation()
-    {
+    public LOCATION getLocation() {
         return loc;
     }
 
-    public int getLocationID()
-    {
-        for (int i = 0; i < LOCATION.values().length; ++i)
-        {
-            if (LOCATION.values()[i] == loc)
-            {
+    public int getLocationID() {
+        for (int i = 0; i < LOCATION.values().length; ++i) {
+            if (LOCATION.values()[i] == loc) {
                 return i;
             }
         }
         return 0;
     }
 
-    static
-    {
-        ButtonBase.texture = ResourceHelper.getResource("/gui/buttons.png");
-    }
-
-    public enum LOCATION
-    {
+    public enum LOCATION {
         OVERVIEW, PROGRAM, TASK, DEFINED, FLOATING, VARIABLE, BUILD, MODEL
     }
 }

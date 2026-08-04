@@ -8,22 +8,18 @@ import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
 
-public class ModuleCake extends ModuleProjectile
-{
-    public ModuleCake(ModularMinecart cart)
-    {
+public class ModuleCake extends ModuleProjectile {
+    public ModuleCake(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public boolean isValidProjectile(@Nonnull ItemStack item)
-    {
+    public boolean isValidProjectile(@Nonnull ItemStack item) {
         return item.getItem() == Items.CAKE;
     }
 
     @Override
-    public Entity createProjectile(final Entity target, @Nonnull ItemStack item)
-    {
+    public Entity createProjectile(final Entity target, @Nonnull ItemStack item) {
         return new EntityCake(getCart().level());
     }
 }

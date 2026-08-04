@@ -2,13 +2,10 @@ package vswe.stevescarts.modules.workers.tools;
 
 import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.creeperhost.polylib.helpers.LevelHelper;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -27,7 +24,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.neoforged.neoforge.common.Tags;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
@@ -44,8 +40,9 @@ import vswe.stevescarts.polylib.EntityData;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
-{
+public abstract class ModuleDrill extends ModuleTool implements IActivatorModule {
+    private final EntityData<Boolean> isMining = new EntityData<>(getCart(), new BooleanData(false));
+    private final EntityData<Boolean> isEnabled = new EntityData<>(getCart(), new BooleanData(true));
     private ModuleDrillIntelligence intelligence;
     private ModuleLiquidSensors liquidsensors;
     private ModuleOreTracker tracker;
@@ -53,76 +50,58 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     private byte sensorLight;
     private float drillRotation;
     private int miningCoolDown;
-    private int[] buttonRect;
+    private final int[] buttonRect;
     private boolean setup;
-    private final EntityData<Boolean> isMining = new EntityData<>(getCart(), new BooleanData(false));
-    private final EntityData<Boolean> isEnabled = new EntityData<>(getCart(), new BooleanData(true));
 
-    public ModuleDrill(ModularMinecart cart)
-    {
+    public ModuleDrill(ModularMinecart cart) {
         super(cart);
         sensorLight = 1;
         buttonRect = new int[]{15, 30, 24, 12};
     }
 
     @Override
-    public byte getWorkPriority()
-    {
+    public byte getWorkPriority() {
         return 50;
     }
 
     @Override
-    public void init()
-    {
+    public void init() {
         super.init();
-        for (final ModuleBase module : getCart().modules())
-        {
-            if (module instanceof ModuleDrillIntelligence)
-            {
+        for (final ModuleBase module : getCart().modules()) {
+            if (module instanceof ModuleDrillIntelligence) {
                 intelligence = (ModuleDrillIntelligence) module;
             }
-            if (module instanceof ModuleLiquidSensors)
-            {
+            if (module instanceof ModuleLiquidSensors) {
                 liquidsensors = (ModuleLiquidSensors) module;
             }
-            if (module instanceof ModuleOreTracker)
-            {
+            if (module instanceof ModuleOreTracker) {
                 tracker = (ModuleOreTracker) module;
             }
-            if (module instanceof ModuleHeightControl)
-            {
+            if (module instanceof ModuleHeightControl) {
                 hasHeightController = true;
             }
         }
     }
 
     @Override
-    public boolean work()
-    {
+    public boolean work() {
         Level world = getCart().level();
-        if (!isDrillEnabled())
-        {
+        if (!isDrillEnabled()) {
             stopDrill();
             stopWorking();
             return false;
-        }
-        else if (!doPreWork())
-        {
+        } else if (!doPreWork()) {
             stopDrill();
             stopWorking();
         }
-        if (isBroken())
-        {
+        if (isBroken()) {
             return false;
         }
         BlockPos next = getNextblock();
         int[] range = mineRange();
-        for (int holeY = range[1]; holeY >= range[0]; holeY--)
-        {
-            for (int holeX = -blocksOnSide(); holeX <= blocksOnSide(); holeX++)
-            {
-                if (isMiningSpotAllowed(next, holeX, holeY, range))
-                {
+        for (int holeY = range[1]; holeY >= range[0]; holeY--) {
+            for (int holeX = -blocksOnSide(); holeX <= blocksOnSide(); holeX++) {
+                if (isMiningSpotAllowed(next, holeX, holeY, range)) {
                     BlockPos mine = next.offset(((getCart().z() != next.getZ()) ? holeX : 0), holeY, ((getCart().x() != next.getX()) ? holeX : 0));
                     if (mineBlockAndRevive(world, mine, next, holeX, holeY)) {
                         return true;
@@ -132,8 +111,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         }
 
         BlockPos pos = next.offset(0, range[0], 0);
-        if (LevelHelper.isAir(getCart().level(), pos) && !isValidForTrack(pos, true) && mineBlockAndRevive(world, pos.below(), next, 0, range[0] - 1))
-        {
+        if (LevelHelper.isAir(getCart().level(), pos) && !isValidForTrack(pos, true) && mineBlockAndRevive(world, pos.below(), next, 0, range[0] - 1)) {
             return true;
         }
         stopWorking();
@@ -141,30 +119,24 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         return false;
     }
 
-    private boolean isMiningSpotAllowed(BlockPos next, int holeX, int holeY, int[] range)
-    {
+    private boolean isMiningSpotAllowed(BlockPos next, int holeX, int holeY, int[] range) {
         int maxHeight = SCConfig.COMMON.drillSize.get() * 2 + 1 - (hasHeightController ? range[2] == 0 ? -1 : 1 : 0);
-        if (Math.abs(holeX) <= SCConfig.COMMON.drillSize.get() && holeY <= maxHeight)
-        {
+        if (Math.abs(holeX) <= SCConfig.COMMON.drillSize.get() && holeY <= maxHeight) {
             return intelligence == null || intelligence.isActive(holeX + blocksOnSide(), holeY, range[2], next.getX() > getCart().x() || next.getZ() < getCart().z());
         }
         return false;
     }
 
-    private int[] mineRange()
-    {
+    private int[] mineRange() {
         BlockPos next = getNextblock();
         int yTarget = getCart().getYTarget();
-        if (BaseRailBlock.isRail(getCart().level(), next) || BaseRailBlock.isRail(getCart().level(), next.below()))
-        {
+        if (BaseRailBlock.isRail(getCart().level(), next) || BaseRailBlock.isRail(getCart().level(), next.below())) {
             return new int[]{0, blocksOnTop() - 1, 1};
         }
-        if (next.getY() > yTarget)
-        {
+        if (next.getY() > yTarget) {
             return new int[]{-1, blocksOnTop() - 1, 1};
         }
-        if (next.getY() < yTarget)
-        {
+        if (next.getY() < yTarget) {
             return new int[]{1, blocksOnTop() + 1, 0};
         }
         return new int[]{0, blocksOnTop() - 1, 1};
@@ -174,66 +146,49 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
 
     protected abstract int blocksOnSide();
 
-    public int getAreaWidth()
-    {
+    public int getAreaWidth() {
         return blocksOnSide() * 2 + 1;
     }
 
-    public int getAreaHeight()
-    {
+    public int getAreaHeight() {
         return blocksOnTop();
     }
 
-    private boolean mineBlockAndRevive(Level world, BlockPos coord, BlockPos next, final int holeX, final int holeY)
-    {
-        if (mineBlock(world, coord, next, holeX, holeY, false))
-        {
+    private boolean mineBlockAndRevive(Level world, BlockPos coord, BlockPos next, final int holeX, final int holeY) {
+        if (mineBlock(world, coord, next, holeX, holeY, false)) {
             return true;
-        }
-        else if (isDead())
-        {
+        } else if (isDead()) {
             revive();
             return true;
         }
         return false;
     }
 
-    protected boolean mineBlock(Level world, BlockPos coord, BlockPos next, final int holeX, final int holeY, final boolean flag)
-    {
-        if (tracker != null)
-        {
+    protected boolean mineBlock(Level world, BlockPos coord, BlockPos next, final int holeX, final int holeY, final boolean flag) {
+        if (tracker != null) {
             final BlockPos target = tracker.findBlockToMine(this, coord);
-            if (target != null)
-            {
+            if (target != null) {
                 coord = target;
             }
         }
         final Object valid = isValidBlock(world, coord, holeX, holeY, flag);
         BlockEntity storage = null;
-        if (valid instanceof BlockEntity)
-        {
+        if (valid instanceof BlockEntity) {
             storage = (BlockEntity) valid;
-        }
-        else if (valid == null)
-        {
+        } else if (valid == null) {
             return false;
         }
         BlockState blockState = world.getBlockState(coord);
         final Block block = blockState.getBlock();
         float h = blockState.getDestroySpeed(world, coord);
-        if (h < 0.0f)
-        {
+        if (h < 0.0f) {
             h = 0.0f;
         }
-        if (storage != null)
-        {
-            for (int i = 0; i < ((Container) storage).getContainerSize(); ++i)
-            {
+        if (storage != null) {
+            for (int i = 0; i < ((Container) storage).getContainerSize(); ++i) {
                 ItemStack iStack = ((Container) storage).getItem(i);
-                if (!iStack.isEmpty())
-                {
-                    if (!minedItem(world, iStack, next))
-                    {
+                if (!iStack.isEmpty()) {
+                    if (!minedItem(world, iStack, next)) {
                         return false;
                     }
                     ((Container) storage).setItem(i, ItemStack.EMPTY);
@@ -257,24 +212,18 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
 
         List<ItemStack> drops = blockState.getDrops(builder);
 
-        if (!drops.isEmpty())
-        {
+        if (!drops.isEmpty()) {
             boolean shouldRemove = false;
-            for (int j = 0; j < drops.size(); ++j)
-            {
-                if (!minedItem(world, drops.get(j), next))
-                {
+            for (int j = 0; j < drops.size(); ++j) {
+                if (!minedItem(world, drops.get(j), next)) {
                     return false;
                 }
                 shouldRemove = true;
             }
-            if (shouldRemove)
-            {
+            if (shouldRemove) {
                 world.removeBlock(coord, false);
             }
-        }
-        else
-        {
+        } else {
             world.removeBlock(coord, false);
         }
         damageTool(1 + (int) h);
@@ -283,46 +232,36 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         return true;
     }
 
-    protected boolean minedItem(Level world, @Nonnull ItemStack iStack, BlockPos Coords)
-    {
-        if (iStack.isEmpty() || iStack.getCount() <= 0)
-        {
+    protected boolean minedItem(Level world, @Nonnull ItemStack iStack, BlockPos Coords) {
+        if (iStack.isEmpty() || iStack.getCount() <= 0) {
             return true;
         }
-        for (ModuleBase module : getCart().modules())
-        {
-            if (module instanceof ModuleIncinerator)
-            {
+        for (ModuleBase module : getCart().modules()) {
+            if (module instanceof ModuleIncinerator) {
                 ((ModuleIncinerator) module).incinerate(iStack);
-                if (iStack.getCount() <= 0)
-                {
+                if (iStack.getCount() <= 0) {
                     return true;
                 }
             }
         }
         int size = iStack.getCount();
         getCart().addItemToChest(iStack);
-        if (iStack.getCount() == 0)
-        {
+        if (iStack.getCount() == 0) {
             return true;
         }
         boolean hasChest = false;
-        for (ModuleBase module2 : getCart().modules())
-        {
-            if (module2 instanceof ModuleChest)
-            {
+        for (ModuleBase module2 : getCart().modules()) {
+            if (module2 instanceof ModuleChest) {
                 hasChest = true;
                 break;
             }
         }
-        if (!hasChest)
-        {
+        if (!hasChest) {
             final ItemEntity entityitem = new ItemEntity(world, getCart().x(), getCart().y(), getCart().z(), iStack);
             world.addFreshEntity(entityitem);
             return true;
         }
-        if (iStack.getCount() != size)
-        {
+        if (iStack.getCount() != size) {
             final ItemEntity entityitem = new ItemEntity(world, getCart().x(), getCart().y(), getCart().z(), iStack);
             world.addFreshEntity(entityitem);
             return true;
@@ -330,32 +269,26 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         return false;
     }
 
-    private int getTimeToMine(final float hardness)
-    {
+    private int getTimeToMine(final float hardness) {
         final int efficiency = (enchanter != null) ? enchanter.getEfficiencyLevel() : 0;
         return (int) (getTimeMult() * hardness / Math.pow(1.2999999523162842, efficiency)) + ((liquidsensors != null) ? 2 : 0);
     }
 
     protected abstract float getTimeMult();
 
-    public Object isValidBlock(Level world, BlockPos pos, final int holeX, final int holeY, final boolean flag)
-    {
-        if ((!flag && BaseRailBlock.isRail(world, pos)) || BaseRailBlock.isRail(world, pos.above()))
-        {
+    public Object isValidBlock(Level world, BlockPos pos, final int holeX, final int holeY, final boolean flag) {
+        if ((!flag && BaseRailBlock.isRail(world, pos)) || BaseRailBlock.isRail(world, pos.above())) {
             return null;
         }
         BlockState blockState = world.getBlockState(pos);
         final Block block = blockState.getBlock();
-        if (block == null)
-        {
+        if (block == null) {
             return null;
         }
-        if (block == Blocks.AIR)
-        {
+        if (block == Blocks.AIR) {
             return null;
         }
-        if (block == Blocks.BEDROCK)
-        {
+        if (block == Blocks.BEDROCK) {
             return null;
         }
         //TODO
@@ -363,44 +296,36 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
 //        {
 //            return null;
 //        }
-        if (blockState.getDestroySpeed(world, pos) < 0.0f)
-        {
+        if (blockState.getDestroySpeed(world, pos) < 0.0f) {
             return null;
         }
-        if(!world.getFluidState(pos).isEmpty())
-        {
+        if (!world.getFluidState(pos).isEmpty()) {
             return null;
         }
         if ((holeX != 0 || holeY > 0) && (blockState.is(Blocks.TORCH) ||
-                                          blockState.is(Blocks.WALL_TORCH) ||
-                                          blockState.is(Blocks.SOUL_TORCH) ||
-                                          blockState.is(Blocks.SOUL_WALL_TORCH) ||
-                                          blockState.is(Blocks.REDSTONE_WIRE) ||
-                                          blockState.is(Blocks.REDSTONE_TORCH) ||
-                                          blockState.is(Blocks.REDSTONE_WALL_TORCH) ||
-                                          blockState.is(Blocks.REPEATER) ||
-                                          blockState.is(Blocks.COMPARATOR) ||
-                                          blockState.is(ModBlocks.MODULE_TOGGLER.get()))
-        )
-        {
+                blockState.is(Blocks.WALL_TORCH) ||
+                blockState.is(Blocks.SOUL_TORCH) ||
+                blockState.is(Blocks.SOUL_WALL_TORCH) ||
+                blockState.is(Blocks.REDSTONE_WIRE) ||
+                blockState.is(Blocks.REDSTONE_TORCH) ||
+                blockState.is(Blocks.REDSTONE_WALL_TORCH) ||
+                blockState.is(Blocks.REPEATER) ||
+                blockState.is(Blocks.COMPARATOR) ||
+                blockState.is(ModBlocks.MODULE_TOGGLER.get()))
+        ) {
             return null;
         }
-        if (block instanceof BaseEntityBlock)
-        {
+        if (block instanceof BaseEntityBlock) {
             final BlockEntity tileentity = world.getBlockEntity(pos);
-            if (Container.class.isInstance(tileentity))
-            {
-                if (holeX != 0 || holeY > 0)
-                {
+            if (tileentity instanceof Container) {
+                if (holeX != 0 || holeY > 0) {
                     return null;
                 }
                 return tileentity;
             }
         }
-        if (liquidsensors != null)
-        {
-            if (liquidsensors.isDangerous(this, pos.offset(0, 1, 0), true) || liquidsensors.isDangerous(this, pos.offset(1, 0, 0), false) || liquidsensors.isDangerous(this, pos.offset(-1, 0, 0), false) || liquidsensors.isDangerous(this, pos.offset(0, 0, 1), false) || liquidsensors.isDangerous(this, pos.offset(0, 0, -1), false))
-            {
+        if (liquidsensors != null) {
+            if (liquidsensors.isDangerous(this, pos.offset(0, 1, 0), true) || liquidsensors.isDangerous(this, pos.offset(1, 0, 0), false) || liquidsensors.isDangerous(this, pos.offset(-1, 0, 0), false) || liquidsensors.isDangerous(this, pos.offset(0, 0, 1), false) || liquidsensors.isDangerous(this, pos.offset(0, 0, -1), false)) {
                 sensorLight = 3;
                 return null;
             }
@@ -410,35 +335,26 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (getCart().level().isClientSide() && !setup)
-        {
-            if (isPlaceholder() || !isMining.get())
-            {
+        if (getCart().level().isClientSide() && !setup) {
+            if (isPlaceholder() || !isMining.get()) {
                 drillRotation = 0;
                 miningCoolDown = 10;
             }
             setup = true;
         }
-        if ((getCart().hasFuel() && isMining()) || miningCoolDown < 10)
-        {
+        if ((getCart().hasFuel() && isMining()) || miningCoolDown < 10) {
             drillRotation = (float) ((drillRotation + 0.03f * (10 - miningCoolDown)) % (Math.PI * 2));
-            if (isMining())
-            {
+            if (isMining()) {
                 miningCoolDown = 0;
-            }
-            else
-            {
+            } else {
                 ++miningCoolDown;
             }
         }
-        if (!getCart().level().isClientSide() && liquidsensors != null)
-        {
+        if (!getCart().level().isClientSide() && liquidsensors != null) {
             byte data = sensorLight;
-            if (isDrillSpinning())
-            {
+            if (isDrillSpinning()) {
                 data |= 0b100;
             }
             liquidsensors.getInfoFromDrill(data);
@@ -446,103 +362,85 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         }
     }
 
-    protected void startDrill()
-    {
+    protected void startDrill() {
         isMining.set(true);
     }
 
-    protected void stopDrill()
-    {
+    protected void stopDrill() {
         isMining.set(false);
     }
 
-    protected boolean isMining()
-    {
-        if (isPlaceholder())
-        {
+    protected boolean isMining() {
+        if (isPlaceholder()) {
             return getSimInfo().getDrillSpinning();
         }
         return isMining.get();
     }
 
-    protected boolean isDrillSpinning()
-    {
+    protected boolean isDrillSpinning() {
         return isMining() || miningCoolDown < 10;
     }
 
-    public float getDrillRotation()
-    {
+    public float getDrillRotation() {
         return drillRotation;
     }
 
-    private boolean isDrillEnabled()
-    {
+    private boolean isDrillEnabled() {
         return isEnabled.get();
     }
 
-    public void setDrillEnabled(boolean val)
-    {
+    public void setDrillEnabled(boolean val) {
         isEnabled.set(val);
     }
 
     @Override
-    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
-    {
-        if (button == 0 && inRect(x, y, buttonRect))
-        {
+    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
+        if (button == 0 && inRect(x, y, buttonRect)) {
             sendPacket(0);
         }
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final Player player)
-    {
+    protected void receivePacket(final int id, final byte[] data, final Player player) {
         setDrillEnabled(!isDrillEnabled());
     }
 
     @Override
-    public int numberOfPackets()
-    {
+    public int numberOfPackets() {
         return 1;
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        drawString(guiGraphics, gui, Localization.MODULES.TOOLS.DRILL.translate(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.TOOLS.DRILL.translate(), 8, 6, 4210752);
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
-        super.drawBackground(guiGraphics, gui, x, y);
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
+        super.drawBackground(GuiGraphicsExtractor, gui, x, y);
         Identifier texture = ResourceHelper.getResource("/gui/drill.png");
         final int imageID = isDrillEnabled() ? 1 : 0;
         int borderID = 0;
-        if (inRect(x, y, buttonRect))
-        {
+        if (inRect(x, y, buttonRect)) {
             borderID = 1;
         }
-        drawImage(guiGraphics, texture, gui, buttonRect, 0, buttonRect[3] * borderID);
+        drawImage(GuiGraphicsExtractor, texture, gui, buttonRect, 0, buttonRect[3] * borderID);
         final int srcY = buttonRect[3] * 2 + imageID * (buttonRect[3] - 2);
-        drawImage(guiGraphics, texture, gui, buttonRect[0] + 1, buttonRect[1] + 1, 0, srcY, buttonRect[2] - 2, buttonRect[3] - 2);
+        drawImage(GuiGraphicsExtractor, texture, gui, buttonRect[0] + 1, buttonRect[1] + 1, 0, srcY, buttonRect[2] - 2, buttonRect[3] - 2);
     }
 
     @Override
-    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
-        super.drawMouseOver(guiGraphics, gui, x, y);
-        drawStringOnMouseOver(guiGraphics, gui, getStateName(), x, y, buttonRect);
+    public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
+        super.drawMouseOver(GuiGraphicsExtractor, gui, x, y);
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, getStateName(), x, y, buttonRect);
     }
 
-    private String getStateName()
-    {
+    private String getStateName() {
         return Localization.MODULES.TOOLS.TOGGLE.translate(isDrillEnabled() ? "1" : "0");
     }
 
@@ -559,26 +457,22 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     }
 
     @Override
-    public boolean receiveDamage(DamageSource source, float val)
-    {
+    public boolean receiveDamage(DamageSource source, float val) {
         return !source.is(DamageTypes.LAVA) || !source.is(DamageTypes.ON_FIRE);
     }
 
     @Override
-    public void doActivate(final int id)
-    {
+    public void doActivate(final int id) {
         setDrillEnabled(true);
     }
 
     @Override
-    public void doDeActivate(final int id)
-    {
+    public void doDeActivate(final int id) {
         setDrillEnabled(false);
     }
 
     @Override
-    public boolean isActive(final int id)
-    {
+    public boolean isActive(final int id) {
         return isDrillEnabled();
     }
 }

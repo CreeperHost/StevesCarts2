@@ -1,20 +1,14 @@
 package vswe.stevescarts.client.models;
 
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import vswe.stevescarts.api.client.ModelCartbase;
-import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.helpers.ResourceHelper;
-import vswe.stevescarts.modules.workers.ModuleBridge;
 
-public class ModelBridge extends ModelCartbase
-{
+public class ModelBridge extends ModelCartbase {
     private static Identifier normal;
     private static Identifier down;
     private static Identifier up;
@@ -23,13 +17,11 @@ public class ModelBridge extends ModelCartbase
     private static Identifier upWarning;
     private ModelPart drillAnchor;
 
-    public ModelBridge()
-    {
+    public ModelBridge() {
         super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/aiModelNormal.png"));
     }
 
-    public static LayerDefinition getTexturedModelData()
-    {
+    public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         //TODO

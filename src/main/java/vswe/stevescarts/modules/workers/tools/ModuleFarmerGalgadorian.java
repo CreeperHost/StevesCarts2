@@ -5,16 +5,13 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.entities.ModularMinecart;
 
-public class ModuleFarmerGalgadorian extends ModuleFarmer
-{
-    public ModuleFarmerGalgadorian(ModularMinecart cart)
-    {
+public class ModuleFarmerGalgadorian extends ModuleFarmer {
+    public ModuleFarmerGalgadorian(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public int getMaxDurability()
-    {
+    public int getMaxDurability() {
         return 1;
     }
 
@@ -24,26 +21,22 @@ public class ModuleFarmerGalgadorian extends ModuleFarmer
     }
 
     @Override
-    public int getRepairItemUnits(@NotNull ItemStack item)
-    {
+    public int getRepairItemUnits(@NotNull ItemStack item) {
         return 0;
     }
 
     @Override
-    public boolean useDurability()
-    {
+    public boolean useDurability() {
         return false;
     }
 
     @Override
-    public int getRepairSpeed()
-    {
+    public int getRepairSpeed() {
         return 1;
     }
 
     @Override
-    public int getRange()
-    {
+    public int getRange() {
         return 2;
     }
 }

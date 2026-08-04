@@ -5,22 +5,18 @@ import net.minecraft.world.entity.ambient.Bat;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 
-public class ModuleBat extends ModuleMobdetector
-{
-    public ModuleBat(ModularMinecart cart)
-    {
+public class ModuleBat extends ModuleMobdetector {
+    public ModuleBat(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return Localization.MODULES.ADDONS.DETECTOR_BATS.translate();
     }
 
     @Override
-    public boolean isValidTarget(final Entity target)
-    {
+    public boolean isValidTarget(final Entity target) {
         return target instanceof Bat;
     }
 }

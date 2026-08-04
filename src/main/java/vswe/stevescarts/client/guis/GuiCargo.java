@@ -28,6 +28,11 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
     private static Identifier[] texturesLeft;
     private static Identifier[] texturesRight;
 
+    static {
+        GuiCargo.texturesLeft = new Identifier[]{ResourceHelper.getResource("/gui/cargoVersion0Part1.png"), ResourceHelper.getResource("/gui/cargoVersion1Part1.png")};
+        GuiCargo.texturesRight = new Identifier[]{ResourceHelper.getResource("/gui/cargoVersion0Part2.png"), ResourceHelper.getResource("/gui/cargoVersion1Part2.png")};
+    }
+
     public GuiCargo(ContainerCargo containerCargo, Inventory playerInventory, Component iTextComponent) {
         super(containerCargo, playerInventory, createProvider(containerCargo));
     }
@@ -41,11 +46,6 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
                 Constraints.bind(element, gui.getRoot());
             }
         };
-    }
-
-    static {
-        GuiCargo.texturesLeft = new Identifier[]{ResourceHelper.getResource("/gui/cargoVersion0Part1.png"), ResourceHelper.getResource("/gui/cargoVersion1Part1.png")};
-        GuiCargo.texturesRight = new Identifier[]{ResourceHelper.getResource("/gui/cargoVersion0Part2.png"), ResourceHelper.getResource("/gui/cargoVersion1Part2.png")};
     }
 
     private static class CargoElement extends GuiElement<CargoElement> implements BackgroundRender, ForegroundRender {
@@ -89,12 +89,12 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
             int top = (int) yMin();
             int[] coords = getMiddleCoords();
 
-            render.graphics().drawString(font(), getManagerName(), left + coords[0] - 34, top + 4, 0xFFffffff);
-            render.graphics().drawString(font(), Localization.GUI.MANAGER.TITLE.translate(), left + coords[0] + coords[2], top + 4, 0xFFffffff);
+            render.graphics().text(font(), getManagerName(), left + coords[0] - 34, top + 4, 0xFFffffff);
+            render.graphics().text(font(), Localization.GUI.MANAGER.TITLE.translate(), left + coords[0] + coords[2], top + 4, 0xFFffffff);
 
             for (int i = 0; i < 4; ++i) {
                 coords = getTextCoords(i);
-                render.graphics().drawString(font(), getMaxSizeText(i), left + coords[0], top + coords[1], 0xFFffffff);
+                render.graphics().text(font(), getMaxSizeText(i), left + coords[0], top + coords[1], 0xFFffffff);
             }
         }
 
@@ -108,7 +108,8 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
                     drawMouseOver(render, Localization.GUI.MANAGER.CHANGE_TURN_BACK_SETTING.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + ((containerCargo.getColor()[i] == 5) ? Localization.GUI.MANAGER.TURN_BACK_NOT_SELECTED.translate() : (containerCargo.doReturn()[containerCargo.getColor()[i] - 1] ? Localization.GUI.MANAGER.TURN_BACK_DO.translate() : Localization.GUI.MANAGER.TURN_BACK_DO_NOT.translate())), mouseX, mouseY, getReturnCoords(i));
                     drawMouseOver(render, Localization.GUI.MANAGER.CHANGE_TRANSFER_SIZE.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getMaxSizeOverlay(i), mouseX, mouseY, getTextCoords(i));
                     drawMouseOver(render, Localization.GUI.MANAGER.CHANGE_SIDE.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SIDE.translate() + ": " + (new String[]{Localization.GUI.MANAGER.SIDE_RED.translate(), Localization.GUI.MANAGER.SIDE_BLUE.translate(), Localization.GUI.MANAGER.SIDE_YELLOW.translate(), Localization.GUI.MANAGER.SIDE_GREEN.translate(), Localization.GUI.MANAGER.SIDE_DISABLED.translate()})[containerCargo.getColor()[i] - 1], mouseX, mouseY, getColorpickerCoords(i));
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
             drawMouseOver(render, getLayoutString() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getLayoutOption(containerCargo.getLayoutType()), mouseX, mouseY, getMiddleCoords());
             return consumed;
@@ -403,14 +404,14 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
 
         protected String getLayoutOption(final int id) {
             switch (id) {
-                default -> {
-                    return Localization.GUI.CARGO.LAYOUT_SHARED.translate();
-                }
                 case 1 -> {
                     return Localization.GUI.CARGO.LAYOUT_SIDE.translate();
                 }
                 case 2 -> {
                     return Localization.GUI.CARGO.LAYOUT_COLOR.translate();
+                }
+                default -> {
+                    return Localization.GUI.CARGO.LAYOUT_SHARED.translate();
                 }
             }
         }

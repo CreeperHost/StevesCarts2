@@ -1,12 +1,9 @@
 package vswe.stevescarts.modules.workers;
 
 import net.creeperhost.polylib.data.serializable.IntData;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -31,11 +28,11 @@ import vswe.stevescarts.polylib.EntityData;
 import javax.annotation.Nonnull;
 
 public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
+    private final EntityData<Integer> torches = new EntityData<>(getCart(), new IntData(0));
+    boolean markerMoving;
     private int light;
     private int lightLimit;
-    private int[] boxRect;
-    boolean markerMoving;
-    private final EntityData<Integer> torches = new EntityData<>(getCart(), new IntData(0));
+    private final int[] boxRect;
 //    private final EntityData<Integer> lightLevel = new EntityData<>(getCart(), new IntData(0));
 
     public ModuleTorch(ModularMinecart cart) {
@@ -61,8 +58,8 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
-        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
@@ -139,7 +136,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/torch.png");
         int barLength = 3 * light;
         if (light == 15) {
@@ -149,14 +146,14 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
         if (inRect(x, y, boxRect)) {
             srcX += boxRect[2];
         }
-        drawImage(guiGraphics, texture, gui, boxRect, srcX, 0);
-        drawImage(guiGraphics, texture, gui, 13, guiHeight() - 10 + 1, 0, 9, barLength, 7);
-        drawImage(guiGraphics, texture, gui, 12 + 3 * lightLimit, guiHeight() - 10, 0, 16, 1, 9);
+        drawImage(GuiGraphicsExtractor, texture, gui, boxRect, srcX, 0);
+        drawImage(GuiGraphicsExtractor, texture, gui, 13, guiHeight() - 10 + 1, 0, 9, barLength, 7);
+        drawImage(GuiGraphicsExtractor, texture, gui, 12 + 3 * lightLimit, guiHeight() - 10, 0, 16, 1, 9);
     }
 
     @Override
-    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
-        drawStringOnMouseOver(guiGraphics, gui, "Threshold: " + lightLimit + " Current: " + light, x, y, boxRect);
+    public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, "Threshold: " + lightLimit + " Current: " + light, x, y, boxRect);
     }
 
     @Override
@@ -230,12 +227,12 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
         sendPacket(0, (byte) val);
     }
 
-    public void setThreshold(final byte val) {
-        lightLimit = val;
-    }
-
     public int getThreshold() {
         return lightLimit;
+    }
+
+    public void setThreshold(final byte val) {
+        lightLimit = val;
     }
 
     public int getLightLevel() {

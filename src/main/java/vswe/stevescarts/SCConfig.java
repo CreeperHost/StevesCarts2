@@ -9,6 +9,47 @@ import org.apache.logging.log4j.LogManager;
 
 public class SCConfig {
     public static final String CATEGORY_GENERAL = "general";
+    public static final Client CLIENT;
+    public static final Common COMMON;
+    static final ModConfigSpec clientSpec;
+    static final ModConfigSpec commonSpec;
+
+    static {
+        final Pair<Client, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Client::new);
+        clientSpec = specPair.getRight();
+        CLIENT = specPair.getLeft();
+    }
+
+    static {
+        final Pair<Common, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Common::new);
+        commonSpec = specPair.getRight();
+        COMMON = specPair.getLeft();
+    }
+
+    /// /        ConfigTracker.INSTANCE.registerConfig()
+//
+//        configData.load();
+//        spec.acceptConfig(configData);
+//    }
+    @SubscribeEvent
+    public static void onLoad(final ModConfigEvent.Loading configEvent) {
+        LogManager.getLogger().debug(Logging.FORGEMOD, "Loaded Steves config file {}", configEvent.getConfig().getFileName());
+    }
+
+    @SubscribeEvent
+    public static void onFileChange(final ModConfigEvent.Reloading configEvent) {
+        LogManager.getLogger().debug(Logging.FORGEMOD, "Steves Carts config just got changed on the file system!");
+    }
+
+//    public static void loadConfig(ModConfigSpec spec, Path path) {
+//        CommentedFileConfig configData = CommentedFileConfig
+//                .builder(path)
+//                .sync()
+//                .autosave()
+//                .writingMode(WritingMode.REPLACE)
+//                .build();
+//
+//
 
     public static class Client {
         public final ModConfigSpec.ConfigValue<Boolean> useArcadeSounds;
@@ -105,48 +146,5 @@ public class SCConfig {
             allowCartToRunWithRepairItems = builder.comment("Allow carts to run with items in the tool repair slot").define("allowCartToRunWithRepairItems", false);
             assemblerInsertFuel = builder.comment("Allow fuel to be auto inserted into the cart assembler").define("assemblerInsertFuel", false);
         }
-    }
-
-    static final ModConfigSpec clientSpec;
-    public static final Client CLIENT;
-
-    static {
-        final Pair<Client, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Client::new);
-        clientSpec = specPair.getRight();
-        CLIENT = specPair.getLeft();
-    }
-
-    static final ModConfigSpec commonSpec;
-    public static final Common COMMON;
-
-    static {
-        final Pair<Common, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Common::new);
-        commonSpec = specPair.getRight();
-        COMMON = specPair.getLeft();
-    }
-
-//    public static void loadConfig(ModConfigSpec spec, Path path) {
-//        CommentedFileConfig configData = CommentedFileConfig
-//                .builder(path)
-//                .sync()
-//                .autosave()
-//                .writingMode(WritingMode.REPLACE)
-//                .build();
-//
-//
-////        ConfigTracker.INSTANCE.registerConfig()
-//
-//        configData.load();
-//        spec.acceptConfig(configData);
-//    }
-
-    @SubscribeEvent
-    public static void onLoad(final ModConfigEvent.Loading configEvent) {
-        LogManager.getLogger().debug(Logging.FORGEMOD, "Loaded Steves config file {}", configEvent.getConfig().getFileName());
-    }
-
-    @SubscribeEvent
-    public static void onFileChange(final ModConfigEvent.Reloading configEvent) {
-        LogManager.getLogger().debug(Logging.FORGEMOD, "Steves Carts config just got changed on the file system!");
     }
 }

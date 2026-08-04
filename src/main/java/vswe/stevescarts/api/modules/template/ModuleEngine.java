@@ -1,9 +1,7 @@
 package vswe.stevescarts.api.modules.template;
 
 import net.creeperhost.polylib.data.serializable.IntData;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -14,87 +12,70 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
-public abstract class ModuleEngine extends ModuleBase
-{
-    protected int[] priorityButton;
+public abstract class ModuleEngine extends ModuleBase {
     private final EntityData<Integer> option = new EntityData<>(getCart(), new IntData(0));
     private final EntityData<Integer> fuel = new EntityData<>(getCart(), new IntData(0));
+    protected int[] priorityButton;
 
-    public ModuleEngine(ModularMinecart cart)
-    {
+    public ModuleEngine(ModularMinecart cart) {
         super(cart);
         initPriorityButton();
     }
 
-    protected void initPriorityButton()
-    {
+    protected void initPriorityButton() {
         priorityButton = new int[]{78, 7, 16, 16};
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
         loadFuel();
     }
 
     @Override
-    public boolean hasFuel(final int comsumption)
-    {
+    public boolean hasFuel(final int comsumption) {
         return getFuelLevel() >= comsumption && !isDisabled();
     }
 
-    public int getFuelLevel()
-    {
+    public int getFuelLevel() {
         return fuel.get();
     }
 
-    public void setFuelLevel(final int val)
-    {
+    public void setFuelLevel(final int val) {
         fuel.set(val);
     }
 
-    protected boolean isDisabled()
-    {
+    protected boolean isDisabled() {
         return getPriority() >= 3 || getPriority() < 0;
     }
 
-    public int getPriority()
-    {
-        if (isPlaceholder())
-        {
+    public int getPriority() {
+        if (isPlaceholder()) {
             return 0;
         }
         int temp = option.get();
-        if (temp < 0 || temp > 3)
-        {
+        if (temp < 0 || temp > 3) {
             temp = 3;
         }
         return temp;
     }
 
-    public void setPriority(int data)
-    {
-        if (data < 0)
-        {
+    public void setPriority(int data) {
+        if (data < 0) {
             data = 0;
-        }
-        else if (data > 3)
-        {
+        } else if (data > 3) {
             data = 3;
         }
         option.set(data);
     }
 
-    public void consumeFuel(final int comsumption)
-    {
+    public void consumeFuel(final int comsumption) {
         setFuelLevel(getFuelLevel() - comsumption);
     }
 
     protected abstract void loadFuel();
 
-    public void smoke()
-    {
+    public void smoke() {
     }
 
     public abstract int getTotalFuel();
@@ -102,69 +83,56 @@ public abstract class ModuleEngine extends ModuleBase
     public abstract float[] getGuiBarColor();
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    public int guiWidth()
-    {
+    public int guiWidth() {
         return 100;
     }
 
     @Override
-    public int guiHeight()
-    {
+    public int guiHeight() {
         return 50;
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, final GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, final GuiMinecart gui, final int x, final int y) {
         final int sourceX = 16 * getPriority();
         int sourceY = 0;
-        if (inRect(x, y, priorityButton))
-        {
+        if (inRect(x, y, priorityButton)) {
             sourceY = 16;
         }
-        drawImage(guiGraphics, ResourceHelper.getResource("/gui/engine.png"), gui, priorityButton, sourceX, sourceY);
+        drawImage(GuiGraphicsExtractor, ResourceHelper.getResource("/gui/engine.png"), gui, priorityButton, sourceX, sourceY);
     }
 
     @Override
-    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
-        drawStringOnMouseOver(guiGraphics, gui, getPriorityText(), x, y, priorityButton);
+    public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, getPriorityText(), x, y, priorityButton);
     }
 
-    private String getPriorityText()
-    {
-        if (isDisabled())
-        {
+    private String getPriorityText() {
+        if (isDisabled()) {
             return Localization.MODULES.ENGINES.ENGINE_DISABLED.translate();
         }
         return Localization.MODULES.ENGINES.ENGINE_PRIORITY.translate(String.valueOf(getPriority()));
     }
 
     @Override
-    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
-    {
-        if (inRect(x, y, priorityButton) && (button == 0 || button == 1))
-        {
+    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
+        if (inRect(x, y, priorityButton) && (button == 0 || button == 1)) {
             sendPacket(0, (byte) button);
         }
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final Player player)
-    {
-        if (id == 0)
-        {
+    protected void receivePacket(final int id, final byte[] data, final Player player) {
+        if (id == 0) {
             int prio = getPriority();
             prio += ((data[0] == 0) ? 1 : -1);
             prio %= 4;
-            if (prio < 0)
-            {
+            if (prio < 0) {
                 prio += 4;
             }
             setPriority(prio);
@@ -172,8 +140,7 @@ public abstract class ModuleEngine extends ModuleBase
     }
 
     @Override
-    public int numberOfPackets()
-    {
+    public int numberOfPackets() {
         return 1;
     }
 

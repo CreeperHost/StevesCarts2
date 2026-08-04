@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:item/standard_hull_icon"
+    "layer0": "stevescarts:item/module_standard_hull"
   }
 }

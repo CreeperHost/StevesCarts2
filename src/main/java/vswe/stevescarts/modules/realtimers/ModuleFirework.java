@@ -2,10 +2,8 @@ package vswe.stevescarts.modules.realtimers;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
@@ -59,8 +57,8 @@ public class ModuleFirework extends ModuleBase {
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui) {
-        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
@@ -102,7 +100,7 @@ public class ModuleFirework extends ModuleBase {
         for (int i = 0; i < getInventorySize(); ++i) {
             ItemStack stack = getStack(i);
             if (stack.isEmpty()) continue;
-            if (stack.is(Tags.Items.DYES) || stack.is(Items.FIREWORK_STAR)){
+            if (stack.is(Tags.Items.DYES) || stack.is(Items.FIREWORK_STAR)) {
                 canMakeCharge = true;
                 break;
             }
@@ -144,7 +142,8 @@ public class ModuleFirework extends ModuleBase {
                 }
             }
             int chargeCount;
-            for (chargeCount = 1; chargeCount < 7 && getCart().getRandom().nextInt(3 + chargeCount / 3) == 0; ++chargeCount);
+            for (chargeCount = 1; chargeCount < 7 && getCart().getRandom().nextInt(3 + chargeCount / 3) == 0; ++chargeCount)
+                ;
             List<FireworkExplosion> explosions = new ArrayList<>();
             for (int k = 0; k < chargeCount; ++k) {
                 ItemStack charge = getCharge();
@@ -266,7 +265,8 @@ public class ModuleFirework extends ModuleBase {
         }
 
         int colorCount;
-        for (colorCount = getCart().getRandom().nextInt(2) + 1; colorCount <= maxColorCount - 2 && getCart().getRandom().nextInt(2) == 0; colorCount += 2);
+        for (colorCount = getCart().getRandom().nextInt(2) + 1; colorCount <= maxColorCount - 2 && getCart().getRandom().nextInt(2) == 0; colorCount += 2)
+            ;
 
         ArrayList<Integer> availableColours = new ArrayList<>();
         for (int colourId = 0; colourId < 16; ++colourId) {

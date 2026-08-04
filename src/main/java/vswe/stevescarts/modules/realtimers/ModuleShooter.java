@@ -2,16 +2,14 @@ package vswe.stevescarts.modules.realtimers;
 
 import net.creeperhost.polylib.data.serializable.ByteData;
 import net.creeperhost.polylib.data.serializable.IntData;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -19,7 +17,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.minecraft.world.phys.Vec3;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
@@ -37,8 +34,13 @@ import vswe.stevescarts.polylib.EntityData;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-public class ModuleShooter extends ModuleBase implements ISuppliesModule
-{
+public class ModuleShooter extends ModuleBase implements ISuppliesModule {
+    private final ArrayList<Integer> pipes;
+    private final float[] pipeRotations;
+    private final int[] AInterval;
+    private final EntityData<Byte> activePipe = new EntityData<>(getCart(), new ByteData((byte) 0));
+    private final EntityData<Integer> arrowInterval = new EntityData<>(getCart(), new IntData(5));
+    private final EntityData<Integer> arrowCooldownState = new EntityData<>(getCart(), new IntData(0));
     private ArrayList<ModuleProjectile> projectiles;
     private ModuleEnchants enchanter;
     private int pipeSelectionX;
@@ -48,17 +50,9 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     private int[] intervalSelection;
     private int[] intervalDragArea;
     private int dragState;
-    private final ArrayList<Integer> pipes;
-    private final float[] pipeRotations;
-    private final int[] AInterval;
     private int arrowTick;
 
-    private final EntityData<Byte> activePipe = new EntityData<>(getCart(), new ByteData((byte) 0));
-    private final EntityData<Integer> arrowInterval = new EntityData<>(getCart(), new IntData(5));
-    private final EntityData<Integer> arrowCooldownState = new EntityData<>(getCart(), new IntData(0));
-
-    public ModuleShooter(ModularMinecart cart)
-    {
+    public ModuleShooter(ModularMinecart cart) {
         super(cart);
         dragState = -1;
         AInterval = new int[]{1, 3, 5, 7, 10, 13, 17, 21, 27, 35, 44, 55, 70, 95, 130, 175, 220, 275, 340, 420, 520, 650};
@@ -68,18 +62,13 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     }
 
     @Override
-    public void init()
-    {
+    public void init() {
         super.init();
         projectiles = new ArrayList<>();
-        for (final ModuleBase module : getCart().modules())
-        {
-            if (module instanceof ModuleProjectile)
-            {
+        for (final ModuleBase module : getCart().modules()) {
+            if (module instanceof ModuleProjectile) {
                 projectiles.add((ModuleProjectile) module);
-            }
-            else if (module instanceof ModuleEnchants)
-            {
+            } else if (module instanceof ModuleEnchants) {
                 enchanter = (ModuleEnchants) module;
                 enchanter.addType(ModularEnchantments.EnchantmentType.SHOOTER);
             }
@@ -87,61 +76,52 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     }
 
     @Override
-    protected int getInventoryHeight()
-    {
+    protected int getInventoryHeight() {
         return 2;
     }
 
     @Override
-    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
-    {
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y) {
         return new SlotArrow(getCart(), this, slotId, 8 + x * 18, 23 + y * 18);
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.SHOOTER.translate(), 8, 6, 0x404040);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.SHOOTER.translate(), 8, 6, 0x404040);
         final int delay = AInterval[getInterval()];
         final double freq = 20.0 / (delay + 1);
         String s = String.valueOf((int) (freq * 1000.0) / 1000.0);
-        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.FREQUENCY.translate() + ":", intervalDragArea[0] + intervalDragArea[2] + 5, 15, 0x404040);
-        drawString(guiGraphics, gui, s, intervalDragArea[0] + intervalDragArea[2] + 5, 23, 0x404040);
+        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.FREQUENCY.translate() + ":", intervalDragArea[0] + intervalDragArea[2] + 5, 15, 0x404040);
+        drawString(GuiGraphicsExtractor, gui, s, intervalDragArea[0] + intervalDragArea[2] + 5, 23, 0x404040);
         s = delay / 20.0 + Localization.MODULES.ATTACHMENTS.SECONDS.translate(new String[0]);
-        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.DELAY.translate() + ":", intervalDragArea[0] + intervalDragArea[2] + 5, 35, 0x404040);
-        drawString(guiGraphics, gui, s, intervalDragArea[0] + intervalDragArea[2] + 5, 43, 0x404040);
+        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.DELAY.translate() + ":", intervalDragArea[0] + intervalDragArea[2] + 5, 35, 0x404040);
+        drawString(GuiGraphicsExtractor, gui, s, intervalDragArea[0] + intervalDragArea[2] + 5, 43, 0x404040);
     }
 
     @Override
-    public int guiWidth()
-    {
+    public int guiWidth() {
         return super.guiWidth() + guiExtraWidth();
     }
 
-    protected int guiExtraWidth()
-    {
+    protected int guiExtraWidth() {
         return 112;
     }
 
     @Override
-    public int guiHeight()
-    {
+    public int guiHeight() {
         return Math.max(super.guiHeight(), guiRequiredHeight());
     }
 
-    protected int guiRequiredHeight()
-    {
+    protected int guiRequiredHeight() {
         return 67;
     }
 
-    protected void generateInterfaceRegions()
-    {
+    protected void generateInterfaceRegions() {
         pipeSelectionX = guiWidth() - 110;
         pipeSelectionY = (guiHeight() - 12 - 26) / 2 + 12;
         intervalSelectionX = pipeSelectionX + 26 + 8;
@@ -151,55 +131,49 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/shooter.png");
-        drawImage(guiGraphics, texture, gui, pipeSelectionX + 9, pipeSelectionY + 9 - 1, 0, 104, 8, 9);
-        for (int i = 0; i < pipes.size(); ++i)
-        {
+        drawImage(GuiGraphicsExtractor, texture, gui, pipeSelectionX + 9, pipeSelectionY + 9 - 1, 0, 104, 8, 9);
+        for (int i = 0; i < pipes.size(); ++i) {
             final int pipe = pipes.get(i);
             final int pipeX = pipe % 3;
             final int pipeY = pipe / 3;
             final boolean active = isPipeActive(i);
             final boolean selected = inRect(x, y, getRectForPipe(pipe)) || (getCooldownState() == 0 && active);
             int srcX = pipeX * 9;
-            if (!active)
-            {
+            if (!active) {
                 srcX += 26;
             }
             int srcY = pipeY * 9;
-            if (selected)
-            {
+            if (selected) {
                 srcY += 26;
             }
-            drawImage(guiGraphics, texture, gui, getRectForPipe(pipe), srcX, srcY);
+            drawImage(GuiGraphicsExtractor, texture, gui, getRectForPipe(pipe), srcX, srcY);
         }
-        drawImage(guiGraphics, texture, gui, intervalSelection, 42, 52);
+        drawImage(GuiGraphicsExtractor, texture, gui, intervalSelection, 42, 52);
         final int size = (int) (getInterval() / AInterval.length * 4.0f);
         int targetX = intervalSelectionX + 7;
         final int targetY = intervalSelectionY + getInterval() * 2;
         int srcX2 = 0;
         final int srcY2 = 52 + size * 13;
-        drawImage(guiGraphics, texture, gui, targetX, targetY, srcX2, srcY2, 25, 13);
+        drawImage(GuiGraphicsExtractor, texture, gui, targetX, targetY, srcX2, srcY2, 25, 13);
         srcX2 += 25;
         targetX += 7;
-        drawImage(guiGraphics, texture, gui, targetX, targetY + 1, srcX2, srcY2 + 1, 1, 11);
-        drawImage(guiGraphics, texture, gui, targetX + 1, targetY + 2, srcX2 + 1, srcY2 + 2, 1, 9);
-        drawImage(guiGraphics, texture, gui, targetX + 1, targetY + 1, srcX2 + 1, srcY2 + 1, Math.min(getCooldownState(), 15), 2);
-        drawImage(guiGraphics, texture, gui, targetX + 15, targetY + 1, srcX2 + 15, srcY2 + 1, 2, Math.max(Math.min(getCooldownState(), 25) - 15, 0));
+        drawImage(GuiGraphicsExtractor, texture, gui, targetX, targetY + 1, srcX2, srcY2 + 1, 1, 11);
+        drawImage(GuiGraphicsExtractor, texture, gui, targetX + 1, targetY + 2, srcX2 + 1, srcY2 + 2, 1, 9);
+        drawImage(GuiGraphicsExtractor, texture, gui, targetX + 1, targetY + 1, srcX2 + 1, srcY2 + 1, Math.min(getCooldownState(), 15), 2);
+        drawImage(GuiGraphicsExtractor, texture, gui, targetX + 15, targetY + 1, srcX2 + 15, srcY2 + 1, 2, Math.max(Math.min(getCooldownState(), 25) - 15, 0));
         final int len = Math.max(Math.min(getCooldownState(), 41) - 25, 0);
-        drawImage(guiGraphics, texture, gui, targetX + 1 + (16 - len), targetY + 10, srcX2 + 1 + (16 - len), srcY2 + 10, len, 2);
+        drawImage(GuiGraphicsExtractor, texture, gui, targetX + 1 + (16 - len), targetY + 10, srcX2 + 1 + (16 - len), srcY2 + 10, len, 2);
     }
 
-    private int getCurrentCooldownState()
-    {
+    private int getCurrentCooldownState() {
         final double perc = arrowTick / AInterval[getInterval()];
         setCooldownState((int) (41.0 * perc));
         return getCooldownState();
     }
 
-    private int[] getRectForPipe(final int pipe)
-    {
+    private int[] getRectForPipe(final int pipe) {
         return new int[]{pipeSelectionX + pipe % 3 * 9, pipeSelectionY + pipe / 3 * 9, 8, 8};
     }
 
@@ -253,27 +227,19 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     }
 
     @Override
-    public int numberOfPackets()
-    {
+    public int numberOfPackets() {
         return 2;
     }
 
     @Override
-    public void update()
-    {
-        if (!getCart().level().isClientSide())
-        {
-            if (arrowTick > 0)
-            {
+    public void update() {
+        if (!getCart().level().isClientSide()) {
+            if (arrowTick > 0) {
                 --arrowTick;
-            }
-            else
-            {
+            } else {
                 shoot();
             }
-        }
-        else
-        {
+        } else {
             rotatePipes(false);
         }
     }
@@ -282,19 +248,15 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     //0 (Forward Left)		, 1 (Forward)		, 2 (Forward Right)
     //3 (Left),				, 4 (Invalid)		, 5 (Right)
     //6 (Back Left)			, 7 (Back)			, 8 (Back Right)
-    protected void generatePipes(final ArrayList<Integer> list)
-    {
-        for (int i = 0; i < 9; ++i)
-        {
-            if (i != 4)
-            {
+    protected void generatePipes(final ArrayList<Integer> list) {
+        for (int i = 0; i < 9; ++i) {
+            if (i != 4) {
                 list.add(i);
             }
         }
     }
 
-    protected boolean hasProjectileItem()
-    {
+    protected boolean hasProjectileItem() {
         return !getProjectileItem(false).isEmpty();
     }
 
@@ -315,8 +277,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
         return ItemStack.EMPTY;
     }
 
-    protected void shoot()
-    {
+    protected void shoot() {
         setTimeToNext(AInterval[getInterval()]);
         double pushX = getCart().getEffectiveVelocity().x;
         double pushZ = getCart().getEffectiveVelocity().z;
@@ -325,10 +286,8 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
             return;
         }
         boolean hasShot = false;
-        for (int i = 0; i < pipes.size(); ++i)
-        {
-            if (isPipeActive(i))
-            {
+        for (int i = 0; i < pipes.size(); ++i) {
+            if (isPipeActive(i)) {
                 int pipe = pipes.get(i);
                 if (!hasProjectileItem()) {
                     break;
@@ -359,36 +318,27 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
                 damageEnchant();
             }
         }
-        if (hasShot)
-        {
+        if (hasShot) {
             getCart().level().levelEvent(1002, getCart().blockPosition(), 0);
         }
     }
 
-    protected void damageEnchant()
-    {
-        if (enchanter != null)
-        {
+    protected void damageEnchant() {
+        if (enchanter != null) {
             enchanter.damageEnchant(ModularEnchantments.EnchantmentType.SHOOTER, 1);
         }
     }
 
-    protected void setProjectileOnFire(final Entity projectile)
-    {
-        if (enchanter != null && enchanter.useFlame())
-        {
+    protected void setProjectileOnFire(final Entity projectile) {
+        if (enchanter != null && enchanter.useFlame()) {
             projectile.igniteForSeconds(100);
         }
     }
 
-    protected void setProjectileDamage(final Entity projectile)
-    {
-        if (enchanter != null && projectile instanceof Arrow)
-        {
+    protected void setProjectileDamage(final Entity projectile) {
+        if (enchanter != null && projectile instanceof Arrow arrow) {
             final int power = enchanter.getPowerLevel();
-            if (power > 0)
-            {
-                final Arrow arrow = (Arrow) projectile;
+            if (power > 0) {
                 arrow.setBaseDamage(2 + power * 0.5 + 0.5);
             }
         }
@@ -403,15 +353,13 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
 //            {
 //                final Arrow arrow = (Arrow) projectile;
 //                //TODO, This no longer works because knockback is applied on hit by checking the enchants on the item the shooter is holding.
-////                arrow.setKnockback(punch);
+
+    /// /                arrow.setKnockback(punch);
 //            }
 //        }
 //    }
-
-    protected void setHeading(final Entity projectile, final double motionX, final double motionY, final double motionZ, final float motionMult, final float motionNoise)
-    {
-        if (projectile instanceof Projectile)
-        {
+    protected void setHeading(final Entity projectile, final double motionX, final double motionY, final double motionZ, final float motionMult, final float motionNoise) {
+        if (projectile instanceof Projectile) {
             ((Projectile) projectile).shoot(motionX, motionY, motionZ, motionMult, motionNoise);
         }
     }
@@ -446,41 +394,29 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
         return item.getItem() instanceof ArrowItem;
     }
 
-    protected void setTimeToNext(final int val)
-    {
+    protected void setTimeToNext(final int val) {
         arrowTick = val;
     }
 
-    private void rotatePipes(boolean isNew)
-    {
+    private void rotatePipes(boolean isNew) {
         final float minRotation = 0.0f;
         final float maxRotation = (float) Math.PI / 4;
         final float speed = 0.15f;
 
-        for (int i = 0; i < pipes.size(); ++i)
-        {
+        for (int i = 0; i < pipes.size(); ++i) {
             boolean isActive = isPipeActive(i);
-            if (isNew && isActive)
-            {
+            if (isNew && isActive) {
                 pipeRotations[i] = minRotation;
-            }
-            else if (isNew && !isActive)
-            {
+            } else if (isNew && !isActive) {
                 pipeRotations[i] = maxRotation;
-            }
-            else if (isActive && pipeRotations[i] > minRotation)
-            {
+            } else if (isActive && pipeRotations[i] > minRotation) {
                 pipeRotations[i] -= speed;
-                if (this.pipeRotations[i] < minRotation)
-                {
+                if (this.pipeRotations[i] < minRotation) {
                     this.pipeRotations[i] = minRotation;
                 }
-            }
-            else if (!isActive && pipeRotations[i] < maxRotation)
-            {
+            } else if (!isActive && pipeRotations[i] < maxRotation) {
                 pipeRotations[i] += speed;
-                if (pipeRotations[i] > maxRotation)
-                {
+                if (pipeRotations[i] > maxRotation) {
                     pipeRotations[i] = maxRotation;
                 }
             }
@@ -503,31 +439,26 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
         arrowCooldownState.set(cooldown);
     }
 
-    public void setActivePipes(byte val) {
-        activePipe.set(val);
-    }
-
-    public byte getActivePipes()
-    {
-        if (isPlaceholder())
-        {
+    public byte getActivePipes() {
+        if (isPlaceholder()) {
             return getSimInfo().getActivePipes();
         }
         return activePipe.get();
     }
 
-    protected boolean isPipeActive(final int id)
-    {
+    public void setActivePipes(byte val) {
+        activePipe.set(val);
+    }
+
+    protected boolean isPipeActive(final int id) {
         return (getActivePipes() & 1 << id) != 0x0;
     }
 
-    public int getPipeCount()
-    {
+    public int getPipeCount() {
         return pipes.size();
     }
 
-    public float getPipeRotation(final int id)
-    {
+    public float getPipeRotation(final int id) {
         return pipeRotations[id];
     }
 
@@ -554,8 +485,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule
     }
 
     @Override
-    public boolean haveSupplies()
-    {
+    public boolean haveSupplies() {
         return hasProjectileItem();
     }
 }

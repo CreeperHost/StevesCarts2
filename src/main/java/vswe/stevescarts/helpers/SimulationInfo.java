@@ -20,8 +20,7 @@ import vswe.stevescarts.modules.workers.tools.ModuleWoodcutter;
 
 import java.util.ArrayList;
 
-public class SimulationInfo
-{
+public class SimulationInfo {
     private final ArrayList<DropDownMenuItem> items;
     private final DropDownMenuItem itemBOOLChest;
     private final DropDownMenuItem itemBOOLInvis;
@@ -45,108 +44,7 @@ public class SimulationInfo
     private final DropDownMenuItem itemINTBackground;
     public int fuse;
 
-    public boolean getShieldActive()
-    {
-        return itemBOOLShield.getBOOL();
-    }
-
-    public boolean getChestActive()
-    {
-        return itemBOOLChest.getBOOL();
-    }
-
-    public boolean getInvisActive()
-    {
-        return itemBOOLInvis.getBOOL();
-    }
-
-    public boolean getBrakeActive()
-    {
-        return itemBOOLBrake.getBOOL();
-    }
-
-    public boolean getDrillSpinning()
-    {
-        return itemBOOLDrill.getBOOL();
-    }
-
-    public boolean getMaxLight()
-    {
-        return itemBOOLLight.getBOOL();
-    }
-
-    public boolean getNeedBridge()
-    {
-        return itemBOOLBridge.getBOOL();
-    }
-
-    public boolean getIsFarming()
-    {
-        return itemBOOLFarm.getBOOL();
-    }
-
-    public boolean getIsCutting()
-    {
-        return itemBOOLCut.getBOOL();
-    }
-
-    public boolean getIsPipeActive()
-    {
-        return itemBOOLPipe.getBOOL();
-    }
-
-    public boolean getShouldExplode()
-    {
-        return itemBOOLExplode.getBOOL();
-    }
-
-    public int getLiquidLight()
-    {
-        return itemINTLiquid.getINT();
-    }
-
-    public int getFuseLength()
-    {
-        return itemINTFuse.getINT() * 2;
-    }
-
-    public int getWaterLevel()
-    {
-        return itemINTWater.getINT();
-    }
-
-    public int getRailCount()
-    {
-        return itemINTRail.getINT();
-    }
-
-    public byte getTorchInfo()
-    {
-        return itemMULTIBOOLTorch.getMULTIBOOL();
-    }
-
-    public byte getActivePipes()
-    {
-        return (byte) (itemMULTIBOOLPipes1.getMULTIBOOL() << 4 | itemMULTIBOOLPipes2.getMULTIBOOL());
-    }
-
-    public int getBackground()
-    {
-        return itemINTBackground.getINT();
-    }
-
-    public float getExplosionSize()
-    {
-        return itemINTExplosion.getINT() * 2;
-    }
-
-    public ArrayList<DropDownMenuItem> getList()
-    {
-        return items;
-    }
-
-    public SimulationInfo()
-    {
+    public SimulationInfo() {
         items = new ArrayList<>();
         itemBOOLChest = new DropDownMenuItem("Chest", 0, DropDownMenuItem.VALUETYPE.BOOL, ModuleChest.class, ModuleInternalStorage.class);
         itemBOOLInvis = new DropDownMenuItem("Invisible", 1, DropDownMenuItem.VALUETYPE.BOOL, ModuleInvisible.class);
@@ -188,5 +86,85 @@ public class SimulationInfo
         items.add(itemMULTIBOOLPipes1);
         items.add(itemMULTIBOOLPipes2);
         items.add(itemBOOLPipe);
+    }
+
+    public boolean getShieldActive() {
+        return itemBOOLShield.getBOOL();
+    }
+
+    public boolean getChestActive() {
+        return itemBOOLChest.getBOOL();
+    }
+
+    public boolean getInvisActive() {
+        return itemBOOLInvis.getBOOL();
+    }
+
+    public boolean getBrakeActive() {
+        return itemBOOLBrake.getBOOL();
+    }
+
+    public boolean getDrillSpinning() {
+        return itemBOOLDrill.getBOOL();
+    }
+
+    public boolean getMaxLight() {
+        return itemBOOLLight.getBOOL();
+    }
+
+    public boolean getNeedBridge() {
+        return itemBOOLBridge.getBOOL();
+    }
+
+    public boolean getIsFarming() {
+        return itemBOOLFarm.getBOOL();
+    }
+
+    public boolean getIsCutting() {
+        return itemBOOLCut.getBOOL();
+    }
+
+    public boolean getIsPipeActive() {
+        return itemBOOLPipe.getBOOL();
+    }
+
+    public boolean getShouldExplode() {
+        return itemBOOLExplode.getBOOL();
+    }
+
+    public int getLiquidLight() {
+        return itemINTLiquid.getINT();
+    }
+
+    public int getFuseLength() {
+        return itemINTFuse.getINT() * 2;
+    }
+
+    public int getWaterLevel() {
+        return itemINTWater.getINT();
+    }
+
+    public int getRailCount() {
+        return itemINTRail.getINT();
+    }
+
+    public byte getTorchInfo() {
+        return itemMULTIBOOLTorch.getMULTIBOOL();
+    }
+
+    public byte getActivePipes() {
+        return (byte) (itemMULTIBOOLPipes1.getMULTIBOOL() << 4 | itemMULTIBOOLPipes2.getMULTIBOOL());
+    }
+
+    public int getBackground() {
+        return itemINTBackground.getINT();
+    }
+
+    public float getExplosionSize() {
+        return itemINTExplosion.getINT() * 2;
+    }
+
+    public ArrayList<DropDownMenuItem> getList() {
+        return items;
     }
 }

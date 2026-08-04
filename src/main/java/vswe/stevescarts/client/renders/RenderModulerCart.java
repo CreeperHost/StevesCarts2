@@ -2,23 +2,18 @@ package vswe.stevescarts.client.renders;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.event.RenderNameTagEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
+import org.jspecify.annotations.NonNull;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleHull;
@@ -26,7 +21,6 @@ import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.entities.ModularMinecartBehavior;
 import vswe.stevescarts.init.StevesCartsModules;
 import vswe.stevescarts.modules.hull.ModuleReinforced;
-import vswe.stevescarts.modules.hull.ModuleStandard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +31,7 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
     }
 
     @Override
-    public void submit(ModularCartRenderState state, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
+    public void submit(ModularCartRenderState state, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector nodeCollector, @NonNull CameraRenderState cameraRenderState) {
         if (state.isInvisible) {
             return;
         }
@@ -142,12 +136,12 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
     }
 
     @Override
-    public ModularCartRenderState createRenderState() {
+    public @NonNull ModularCartRenderState createRenderState() {
         return new ModularCartRenderState();
     }
 
     @Override
-    public void extractRenderState(ModularMinecart entity, ModularCartRenderState state, float partialTick) {
+    public void extractRenderState(@NonNull ModularMinecart entity, @NonNull ModularCartRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
         ModularMinecartBehavior behavior = (ModularMinecartBehavior) entity.getBehavior();
         if (behavior.cartHasPosRotLerp()) {

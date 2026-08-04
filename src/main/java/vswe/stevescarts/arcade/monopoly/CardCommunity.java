@@ -2,62 +2,49 @@ package vswe.stevescarts.arcade.monopoly;
 
 import java.util.ArrayList;
 
-public abstract class CardCommunity extends Card
-{
+public abstract class CardCommunity extends Card {
     public static ArrayList<CardCommunity> cards;
 
-    public CardCommunity(final String message)
-    {
-        super(message);
-    }
-
-    @Override
-    public int getBackgroundV()
-    {
-        return 1;
-    }
-
-    static
-    {
-        (CardCommunity.cards = new ArrayList<>()).add(new CardCommunity("You just found a ton of buckets in the dungeon.")
-        {
+    static {
+        (CardCommunity.cards = new ArrayList<>()).add(new CardCommunity("You just found a ton of buckets in the dungeon.") {
             @Override
-            public void doStuff(final ArcadeMonopoly game, final Piece piece)
-            {
+            public void doStuff(final ArcadeMonopoly game, final Piece piece) {
                 piece.addMoney(Note.IRON, 9, true);
             }
 
             @Override
-            public int getNoteCount()
-            {
+            public int getNoteCount() {
                 return 9;
             }
 
             @Override
-            public Note getNote()
-            {
+            public Note getNote() {
                 return Note.IRON;
             }
 
             @Override
-            public String getMoneyPrefix()
-            {
+            public String getMoneyPrefix() {
                 return "Collect";
             }
         });
-        CardCommunity.cards.add(new CardCommunity("D2")
-        {
+        CardCommunity.cards.add(new CardCommunity("D2") {
             @Override
-            public void doStuff(final ArcadeMonopoly game, final Piece piece)
-            {
+            public void doStuff(final ArcadeMonopoly game, final Piece piece) {
             }
         });
-        CardCommunity.cards.add(new CardCommunity("D3")
-        {
+        CardCommunity.cards.add(new CardCommunity("D3") {
             @Override
-            public void doStuff(final ArcadeMonopoly game, final Piece piece)
-            {
+            public void doStuff(final ArcadeMonopoly game, final Piece piece) {
             }
         });
+    }
+
+    public CardCommunity(final String message) {
+        super(message);
+    }
+
+    @Override
+    public int getBackgroundV() {
+        return 1;
     }
 }

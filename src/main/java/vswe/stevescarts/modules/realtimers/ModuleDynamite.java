@@ -1,12 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
 import net.creeperhost.polylib.data.serializable.ByteData;
-import net.creeperhost.polylib.data.serializable.IntData;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -15,8 +10,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.modules.ModuleBase;
-import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
+import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotExplosion;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ComponentTypes;
@@ -24,80 +19,63 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
-public class ModuleDynamite extends ModuleBase
-{
-    private boolean markerMoving;
-    private int fuseStartX;
-    private int fuseStartY;
+public class ModuleDynamite extends ModuleBase {
     private final int maxFuseLength = 150;
-
     private final EntityData<Byte> fuse = new EntityData<>(getCart(), new ByteData((byte) 0));
     private final EntityData<Byte> fuseLength = new EntityData<>(getCart(), new ByteData((byte) 70));
     private final EntityData<Byte> explosion = new EntityData<>(getCart(), new ByteData((byte) 8));
+    private boolean markerMoving;
+    private final int fuseStartX;
+    private final int fuseStartY;
 
-    public ModuleDynamite(ModularMinecart cart)
-    {
+    public ModuleDynamite(ModularMinecart cart) {
         super(cart);
         fuseStartX = super.guiWidth() + 5;
         fuseStartY = 27;
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        drawString(guiGraphics, gui, Localization.MODULES.ATTACHMENTS.EXPLOSIVES.translate(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.EXPLOSIVES.translate(), 8, 6, 4210752);
     }
 
     @Override
-    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
-    {
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y) {
         return new SlotExplosion(getCart(), slotId, 8 + x * 18, 23 + y * 18);
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    protected int getInventoryWidth()
-    {
+    protected int getInventoryWidth() {
         return 1;
     }
 
     @Override
-    public void activatedByRail(final int x, final int y, final int z, final boolean active)
-    {
-        if (active && getFuse() == 0)
-        {
+    public void activatedByRail(final int x, final int y, final int z, final boolean active) {
+        if (active && getFuse() == 0) {
             prime();
         }
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (isPlaceholder())
-        {
-            if (getFuse() == 0 && getSimInfo().getShouldExplode())
-            {
+        if (isPlaceholder()) {
+            if (getFuse() == 0 && getSimInfo().getShouldExplode()) {
                 setFuse(1);
-            }
-            else if (getFuse() != 0 && !getSimInfo().getShouldExplode())
-            {
+            } else if (getFuse() != 0 && !getSimInfo().getShouldExplode()) {
                 setFuse(0);
             }
         }
-        if (getFuse() > 0)
-        {
+        if (getFuse() > 0) {
             setFuse(getFuse() + 1);
-            if (getFuse() == getFuseLength())
-            {
+            if (getFuse() == getFuseLength()) {
                 explode();
-                if (!isPlaceholder())
-                {
+                if (!isPlaceholder()) {
                     getCart().remove(Entity.RemovalReason.KILLED);
                 }
             }
@@ -105,76 +83,58 @@ public class ModuleDynamite extends ModuleBase
     }
 
     @Override
-    public int guiWidth()
-    {
+    public int guiWidth() {
         return super.guiWidth() + 136;
     }
 
-    private int[] getMovableMarker()
-    {
+    private int[] getMovableMarker() {
         return new int[]{fuseStartX + (int) (105.0f * (1.0f - getFuseLength() / 150.0f)), fuseStartY, 4, 10};
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/explosions.png");
-        drawImage(guiGraphics, texture, gui, fuseStartX, fuseStartY + 3, 12, 0, 105, 4);
-        drawImage(guiGraphics, texture, gui, fuseStartX + 105, fuseStartY - 4, 0, 10, 16, 16);
-        drawImage(guiGraphics, texture, gui, fuseStartX + (int) (105.0f * (1.0f - (getFuseLength() - getFuse()) / 150.0f)), fuseStartY, isPrimed() ? 8 : 4, 0, 4, 10);
-        drawImage(guiGraphics, texture, gui, getMovableMarker(), 0, 0);
+        drawImage(GuiGraphicsExtractor, texture, gui, fuseStartX, fuseStartY + 3, 12, 0, 105, 4);
+        drawImage(GuiGraphicsExtractor, texture, gui, fuseStartX + 105, fuseStartY - 4, 0, 10, 16, 16);
+        drawImage(GuiGraphicsExtractor, texture, gui, fuseStartX + (int) (105.0f * (1.0f - (getFuseLength() - getFuse()) / 150.0f)), fuseStartY, isPrimed() ? 8 : 4, 0, 4, 10);
+        drawImage(GuiGraphicsExtractor, texture, gui, getMovableMarker(), 0, 0);
     }
 
     @Override
-    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
-    {
-        if (button == 0 && getFuse() == 0 && inRect(x, y, getMovableMarker()))
-        {
+    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
+        if (button == 0 && getFuse() == 0 && inRect(x, y, getMovableMarker())) {
             markerMoving = true;
         }
     }
 
     @Override
-    public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button)
-    {
-        if (getFuse() != 0)
-        {
+    public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button) {
+        if (getFuse() != 0) {
             markerMoving = false;
-        }
-        else if (markerMoving)
-        {
+        } else if (markerMoving) {
             int tempfuse = 150 - (int) ((x - fuseStartX) / 0.7f);
-            if (tempfuse < 2)
-            {
+            if (tempfuse < 2) {
                 tempfuse = 2;
-            }
-            else if (tempfuse > 150)
-            {
+            } else if (tempfuse > 150) {
                 tempfuse = 150;
             }
             sendPacket(0, (byte) tempfuse);
         }
-        if (button != -1)
-        {
+        if (button != -1) {
             markerMoving = false;
         }
     }
 
-    private boolean isPrimed()
-    {
+    private boolean isPrimed() {
         return getFuse() / 5 % 2 == 0 && getFuse() != 0;
     }
 
-    private void explode()
-    {
+    private void explode() {
         if (getCart().level().isClientSide()) return;
 
-        if (isPlaceholder())
-        {
+        if (isPlaceholder()) {
             setFuse(1);
-        }
-        else
-        {
+        } else {
             final float f = explosionSize();
             setStack(0, ItemStack.EMPTY);
             getCart().level().explode(null, getCart().blockPosition().getX(), getCart().blockPosition().getY(), getCart().blockPosition().getZ(), f, Level.ExplosionInteraction.TNT);
@@ -182,120 +142,94 @@ public class ModuleDynamite extends ModuleBase
     }
 
     @Override
-    public void onInventoryChanged()
-    {
+    public void onInventoryChanged() {
         super.onInventoryChanged();
         createExplosives();
     }
 
     @Override
-    public boolean dropOnDeath()
-    {
+    public boolean dropOnDeath() {
         return getFuse() == 0;
     }
 
     @Override
-    public void onDeath()
-    {
-        if (getFuse() > 0 && getFuse() < getFuseLength())
-        {
+    public void onDeath() {
+        if (getFuse() > 0 && getFuse() < getFuseLength()) {
             explode();
         }
     }
 
-    public float explosionSize()
-    {
-        if (isPlaceholder())
-        {
+    public float explosionSize() {
+        if (isPlaceholder()) {
             return getSimInfo().getExplosionSize() / 2.5f;
         }
         return explosion.get() / 2.5f;
     }
 
-    public void createExplosives()
-    {
-        if (isPlaceholder() || getCart().level().isClientSide())
-        {
+    public void createExplosives() {
+        if (isPlaceholder() || getCart().level().isClientSide()) {
             return;
         }
         int f = 8;
-        if (ComponentTypes.DYNAMITE.isStackOfType(getStack(0)))
-        {
+        if (ComponentTypes.DYNAMITE.isStackOfType(getStack(0))) {
             f += getStack(0).getCount() * 2;
         }
         explosion.set((byte) f);
     }
 
-    public int getFuse()
-    {
-        if (isPlaceholder())
-        {
+    public int getFuse() {
+        if (isPlaceholder()) {
             return getSimInfo().fuse;
         }
         int val = fuse.get();
-        if (val < 0)
-        {
+        if (val < 0) {
             return val + 256;
         }
         return val;
     }
 
-    private void setFuse(final int val)
-    {
-        if (isPlaceholder())
-        {
+    private void setFuse(final int val) {
+        if (isPlaceholder()) {
             getSimInfo().fuse = val;
-        }
-        else
-        {
+        } else {
             fuse.set((byte) val);
         }
     }
 
-    public void setFuseLength(int val)
-    {
-        if (val > getMaxFuse())
-        {
+    public int getFuseLength() {
+        if (isPlaceholder()) {
+            return getSimInfo().getFuseLength();
+        }
+        int val = fuseLength.get();
+        if (val < 0) {
+            return val + 256;
+        }
+        return val;
+    }
+
+    public void setFuseLength(int val) {
+        if (val > getMaxFuse()) {
             val = getMaxFuse();
         }
         fuseLength.set((byte) val);
     }
 
-    public int getFuseLength()
-    {
-        if (isPlaceholder())
-        {
-            return getSimInfo().getFuseLength();
-        }
-        int val = fuseLength.get();
-        if (val < 0)
-        {
-            return val + 256;
-        }
-        return val;
-    }
-
-    public void prime()
-    {
+    public void prime() {
         setFuse(1);
     }
 
-    protected int getMaxFuse()
-    {
+    protected int getMaxFuse() {
         return 150;
     }
 
     @Override
-    public int numberOfPackets()
-    {
+    public int numberOfPackets() {
         return 1;
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final Player player)
-    {
-        if (id == 0)
-        {
+    protected void receivePacket(final int id, final byte[] data, final Player player) {
+        if (id == 0) {
             setFuseLength(data[0]);
         }
     }

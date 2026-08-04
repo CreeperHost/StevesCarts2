@@ -8,15 +8,12 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.helpers.ResourceHelper;
 
-public class ModelPigHead extends ModelCartbase
-{
-    public ModelPigHead()
-    {
+public class ModelPigHead extends ModelCartbase {
+    public ModelPigHead() {
         super(getTexturedModelData().bakeRoot(), ResourceHelper.getResourceFromPath("/entity/pig/pig.png"));
     }
 
-    public static LayerDefinition getTexturedModelData()
-    {
+    public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 
@@ -25,7 +22,7 @@ public class ModelPigHead extends ModelCartbase
                 PartPose.offsetAndRotation(-9.0f, -5.0f, 0.0f, 0.0f, 1.5707964f, 0.0f));
 
         head.addOrReplaceChild("box", CubeListBuilder.create().texOffs(16, 16)
-                .addBox(-2.0f, 0.0f, -9.0f, 4, 3, 1),
+                        .addBox(-2.0f, 0.0f, -9.0f, 4, 3, 1),
                 PartPose.ZERO);
 
         return LayerDefinition.create(modelData, 64, 32);

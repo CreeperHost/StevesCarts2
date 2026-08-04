@@ -2,8 +2,7 @@ package vswe.stevescarts.helpers.storages;
 
 import vswe.stevescarts.entities.ModularMinecart;
 
-public class TransferManager
-{
+public class TransferManager {
     private int side;
     private int setting;
     private int lastsetting;
@@ -13,13 +12,11 @@ public class TransferManager
     private boolean toCartEnabled;
     private boolean fromCartEnabled;
 
-    public TransferManager()
-    {
+    public TransferManager() {
         reset();
     }
 
-    public void reset()
-    {
+    public void reset() {
         side = 0;
         setting = -1;
         lastsetting = 0;
@@ -30,83 +27,67 @@ public class TransferManager
         fromCartEnabled = true;
     }
 
-    public int getSetting()
-    {
+    public int getSetting() {
         return setting;
     }
 
-    public void setSetting(final int val)
-    {
+    public void setSetting(final int val) {
         setting = val;
     }
 
-    public int getSide()
-    {
+    public int getSide() {
         return side;
     }
 
-    public void setSide(final int val)
-    {
+    public void setSide(final int val) {
         side = val;
     }
 
-    public int getLastSetting()
-    {
+    public int getLastSetting() {
         return lastsetting;
     }
 
-    public void setLastSetting(final int val)
-    {
+    public void setLastSetting(final int val) {
         lastsetting = val;
     }
 
-    public int getLowestSetting()
-    {
+    public int getLowestSetting() {
         return lowestsetting;
     }
 
-    public void setLowestSetting(final int val)
-    {
+    public void setLowestSetting(final int val) {
         lowestsetting = val;
     }
 
-    public int getWorkload()
-    {
+    public int getWorkload() {
         return workload;
     }
 
-    public void setWorkload(final int val)
-    {
+    public void setWorkload(final int val) {
         workload = val;
     }
 
-    public ModularMinecart getCart()
-    {
+    public ModularMinecart getCart() {
         return cart;
     }
 
-    public void setCart(ModularMinecart val)
-    {
+    public void setCart(ModularMinecart val) {
         cart = val;
     }
 
-    public boolean getFromCartEnabled()
-    {
+    public boolean getFromCartEnabled() {
         return fromCartEnabled;
     }
 
-    public void setFromCartEnabled(final boolean val)
-    {
+    public void setFromCartEnabled(final boolean val) {
         fromCartEnabled = val;
     }
 
-    public boolean getToCartEnabled()
-    {
+    public boolean getToCartEnabled() {
         return toCartEnabled;
     }
 
-    public void setToCartEnabled(final boolean val)
-    {
+    public void setToCartEnabled(final boolean val) {
         toCartEnabled = val;
     }
 }

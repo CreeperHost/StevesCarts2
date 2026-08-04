@@ -1,8 +1,6 @@
 package vswe.stevescarts.modules.addons;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
@@ -15,15 +13,13 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
-public class ModuleColorizer extends ModuleAddon
-{
-    private int markerOffsetX;
-    private int scrollWidth;
-    private int markerMoving;
+public class ModuleColorizer extends ModuleAddon {
     private final EntityData<int[]> colors = new EntityData<>(getCart(), new IntArrayData(new int[]{255, 255, 255}));
+    private final int markerOffsetX;
+    private final int scrollWidth;
+    private int markerMoving;
 
-    public ModuleColorizer(ModularMinecart cart)
-    {
+    public ModuleColorizer(ModularMinecart cart) {
         super(cart);
         markerOffsetX = 10;
         scrollWidth = 64;
@@ -31,96 +27,76 @@ public class ModuleColorizer extends ModuleAddon
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    public boolean hasSlots()
-    {
+    public boolean hasSlots() {
         return false;
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
-    public int guiWidth()
-    {
+    public int guiWidth() {
         return 125;
     }
 
     @Override
-    public int guiHeight()
-    {
+    public int guiHeight() {
         return 75;
     }
 
-    private int[] getMovableMarker(final int i)
-    {
+    private int[] getMovableMarker(final int i) {
         return new int[]{markerOffsetX + (int) (scrollWidth * (getColorVal(i) / 255.0f)) - 2, 17 + i * 20, 4, 13};
     }
 
-    private int[] getArea(final int i)
-    {
+    private int[] getArea(final int i) {
         return new int[]{markerOffsetX, 20 + i * 20, scrollWidth, 7};
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/color.png");
-        for (int i = 0; i < 3; ++i)
-        {
-            drawMarker(guiGraphics, texture, gui, x, y, i);
+        for (int i = 0; i < 3; ++i) {
+            drawMarker(GuiGraphicsExtractor, texture, gui, x, y, i);
         }
-        drawImage(guiGraphics, texture, gui, scrollWidth + 25, 29, 4, 7, 28, 28);
+        drawImage(GuiGraphicsExtractor, texture, gui, scrollWidth + 25, 29, 4, 7, 28, 28);
     }
 
     @Override
-    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         final String[] colorNames = {Localization.MODULES.ADDONS.COLOR_RED.translate(), Localization.MODULES.ADDONS.COLOR_GREEN.translate(), Localization.MODULES.ADDONS.COLOR_BLUE.translate()};
-        for (int i = 0; i < 3; ++i)
-        {
-            drawStringOnMouseOver(guiGraphics, gui, colorNames[i] + ": " + getColorVal(i), x, y, getArea(i));
+        for (int i = 0; i < 3; ++i) {
+            drawStringOnMouseOver(GuiGraphicsExtractor, gui, colorNames[i] + ": " + getColorVal(i), x, y, getArea(i));
         }
     }
 
-    private void drawMarker(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui, final int x, final int y, final int id)
-    {
+    private void drawMarker(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, GuiMinecart gui, final int x, final int y, final int id) {
         final float[] colorArea = new float[3];
         final float[] colorMarker = new float[3];
-        for (int i = 0; i < 3; ++i)
-        {
-            if (i == id)
-            {
+        for (int i = 0; i < 3; ++i) {
+            if (i == id) {
                 colorArea[i] = 0.7f;
                 colorMarker[i] = 1.0f;
-            }
-            else
-            {
+            } else {
                 colorArea[i] = 0.2f;
                 colorMarker[i] = 0.0f;
             }
         }
-        drawImage(guiGraphics, texture, gui, getArea(id), 0, 0);
-        drawImage(guiGraphics, texture, gui, getMovableMarker(id), 0, 7);
+        drawImage(GuiGraphicsExtractor, texture, gui, getArea(id), 0, 0);
+        drawImage(GuiGraphicsExtractor, texture, gui, getMovableMarker(id), 0, 7);
     }
 
     @Override
-    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
-    {
-        if (button == 0)
-        {
-            for (int i = 0; i < 3; ++i)
-            {
-                if (inRect(x, y, getMovableMarker(i)))
-                {
+    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
+        if (button == 0) {
+            for (int i = 0; i < 3; ++i) {
+                if (inRect(x, y, getMovableMarker(i))) {
                     markerMoving = i;
                 }
             }
@@ -128,71 +104,56 @@ public class ModuleColorizer extends ModuleAddon
     }
 
     @Override
-    public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button)
-    {
-        if (markerMoving != -1)
-        {
+    public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button) {
+        if (markerMoving != -1) {
             int tempColor = (int) ((x - markerOffsetX) / (scrollWidth / 255.0f));
-            if (tempColor < 0)
-            {
+            if (tempColor < 0) {
                 tempColor = 0;
-            }
-            else if (tempColor > 255)
-            {
+            } else if (tempColor > 255) {
                 tempColor = 255;
             }
             sendPacket(markerMoving, (byte) tempColor);
         }
-        if (button != -1)
-        {
+        if (button != -1) {
             markerMoving = -1;
         }
     }
 
     @Override
-    public int numberOfPackets()
-    {
+    public int numberOfPackets() {
         return 3;
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final Player player)
-    {
-        if (id >= 0 && id < 3)
-        {
+    protected void receivePacket(final int id, final byte[] data, final Player player) {
+        if (id >= 0 && id < 3) {
             setColorVal(id, data[0]);
         }
     }
 
-    public int getColorVal(final int i)
-    {
-        if (isPlaceholder())
-        {
+    public int getColorVal(final int i) {
+        if (isPlaceholder()) {
             return 255;
         }
         int tempVal = colors.get()[i];
-        if (tempVal < 0)
-        {
+        if (tempVal < 0) {
             tempVal += 256;
         }
         return tempVal;
     }
 
-    public void setColorVal(final int id, final int val)
-    {
+    public void setColorVal(final int id, final int val) {
         int[] colors = this.colors.get();
         colors[id] = val;
         this.colors.set(colors);
     }
 
-    private float getColorComponent(final int i)
-    {
+    private float getColorComponent(final int i) {
         return getColorVal(i) / 255.0f;
     }
 
     @Override
-    public float[] getColor()
-    {
+    public float[] getColor() {
         return new float[]{getColorComponent(0), getColorComponent(1), getColorComponent(2)};
     }
 

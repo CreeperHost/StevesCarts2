@@ -2,21 +2,19 @@ package vswe.stevescarts.arcade.monopoly;
 
 import java.util.ArrayList;
 
-public class Piece
-{
-    private ArcadeMonopoly game;
+public class Piece {
+    private final ArcadeMonopoly game;
     private int pos;
-    private int u;
+    private final int u;
     private int extended;
-    private int[] money;
-    private CONTROLLED_BY control;
-    private ArrayList<NoteAnimation> animationNotes;
-    private ArrayList<NoteAnimation> oldnotes;
+    private final int[] money;
+    private final CONTROLLED_BY control;
+    private final ArrayList<NoteAnimation> animationNotes;
+    private final ArrayList<NoteAnimation> oldnotes;
     private boolean bankrupt;
     private int turnsInJail;
 
-    public Piece(final ArcadeMonopoly game, final int u, final CONTROLLED_BY control)
-    {
+    public Piece(final ArcadeMonopoly game, final int u, final CONTROLLED_BY control) {
         this.game = game;
         pos = 0;
         this.u = u;
@@ -27,110 +25,83 @@ public class Piece
         turnsInJail = -1;
     }
 
-    public void move(final int dif)
-    {
+    public void move(final int dif) {
         pos = (pos + dif) % 48;
     }
 
-    public int getPosition()
-    {
+    public int getPosition() {
         return pos;
     }
 
-    public int getV()
-    {
+    public int getV() {
         return u;
     }
 
-    public int[] getNoteCount()
-    {
+    public int[] getNoteCount() {
         return money;
     }
 
-    public int getNoteCount(final Note note)
-    {
+    public int getNoteCount(final Note note) {
         int money = this.money[note.getId()];
-        for (int i = 0; i < oldnotes.size(); ++i)
-        {
-            if (note == oldnotes.get(i).getNote())
-            {
+        for (int i = 0; i < oldnotes.size(); ++i) {
+            if (note == oldnotes.get(i).getNote()) {
                 --money;
             }
         }
         return money;
     }
 
-    public int getTotalMoney()
-    {
+    public int getTotalMoney() {
         int money = 0;
-        for (int i = 0; i < Note.notes.size(); ++i)
-        {
+        for (int i = 0; i < Note.notes.size(); ++i) {
             money += Note.notes.get(i).getUnits() * this.money[i];
         }
-        for (int i = 0; i < oldnotes.size(); ++i)
-        {
+        for (int i = 0; i < oldnotes.size(); ++i) {
             money -= oldnotes.get(i).getNote().getUnits();
         }
         return money;
     }
 
-    public void addMoney(int money, final boolean useAnimation)
-    {
-        for (int i = Note.notes.size() - 1; i >= 0; --i)
-        {
+    public void addMoney(int money, final boolean useAnimation) {
+        for (int i = Note.notes.size() - 1; i >= 0; --i) {
             final Note note = Note.notes.get(i);
             final int notesToAdd = money / note.getUnits();
-            if (notesToAdd > 0)
-            {
+            if (notesToAdd > 0) {
                 addMoney(note, notesToAdd, true);
                 money -= notesToAdd * note.getUnits();
             }
-            if (money == 0)
-            {
+            if (money == 0) {
                 return;
             }
         }
     }
 
-    public void addMoney(final Note note, final int amount, final boolean useAnimation)
-    {
-        if (useAnimation)
-        {
+    public void addMoney(final Note note, final int amount, final boolean useAnimation) {
+        if (useAnimation) {
             int min = 10;
-            for (final NoteAnimation animation : animationNotes)
-            {
-                if (animation.getAnimation() < min)
-                {
+            for (final NoteAnimation animation : animationNotes) {
+                if (animation.getAnimation() < min) {
                     min = animation.getAnimation();
                 }
             }
-            for (int i = 0; i < amount; ++i)
-            {
+            for (int i = 0; i < amount; ++i) {
                 animationNotes.add(0, new NoteAnimation(note, min - 10, true));
                 min -= 10;
             }
-        }
-        else
-        {
+        } else {
             final int[] money = this.money;
             final int id = note.getId();
             money[id] += amount;
         }
     }
 
-    public void removeNewNoteAnimation(final int i)
-    {
-        if (animationNotes.get(i).isNew())
-        {
+    public void removeNewNoteAnimation(final int i) {
+        if (animationNotes.get(i).isNew()) {
             addMoney(animationNotes.get(i).getNote(), 1, false);
-        }
-        else
-        {
+        } else {
             final Note note = animationNotes.get(i).getNote();
-            for (int j = oldnotes.size() - 1; j >= 0; --j)
-            {
-                if (note == oldnotes.get(j).getNote())
-                {
+            for (int j = oldnotes.size() - 1; j >= 0; --j) {
+                if (note == oldnotes.get(j).getNote()) {
                     oldnotes.remove(j);
                     break;
                 }
@@ -140,37 +111,30 @@ public class Piece
         animationNotes.remove(i);
     }
 
-    public ArrayList<NoteAnimation> getAnimationNotes()
-    {
+    public ArrayList<NoteAnimation> getAnimationNotes() {
         return animationNotes;
     }
 
-    public boolean removeMoney(int money, final boolean useAnimation)
-    {
+    public boolean removeMoney(int money, final boolean useAnimation) {
         final int[] noteCounts = new int[Note.notes.size()];
         final int[] moneyBelowThisLevel = new int[Note.notes.size()];
         int totalmoney = 0;
-        for (int i = 0; i < noteCounts.length; ++i)
-        {
+        for (int i = 0; i < noteCounts.length; ++i) {
             noteCounts[i] = getNoteCount(Note.notes.get(i));
             moneyBelowThisLevel[i] = totalmoney;
             totalmoney += noteCounts[i] * Note.notes.get(i).getUnits();
         }
-        if (totalmoney >= money)
-        {
-            for (int i = Note.notes.size() - 1; i >= 0; --i)
-            {
+        if (totalmoney >= money) {
+            for (int i = Note.notes.size() - 1; i >= 0; --i) {
                 final Note note = Note.notes.get(i);
                 int notesToRemove = money / note.getUnits();
                 notesToRemove = Math.min(notesToRemove, noteCounts[i]);
                 removeMoney(note, notesToRemove, useAnimation);
                 money -= note.getUnits() * notesToRemove;
-                if (money == 0)
-                {
+                if (money == 0) {
                     return true;
                 }
-                if (moneyBelowThisLevel[i] < money)
-                {
+                if (moneyBelowThisLevel[i] < money) {
                     removeMoney(note, 1, useAnimation);
                     money -= note.getUnits();
                     addMoney(-money, useAnimation);
@@ -181,100 +145,74 @@ public class Piece
         return false;
     }
 
-    private void removeMoney(final Note note, final int amount, final boolean useAnimation)
-    {
-        if (useAnimation)
-        {
+    private void removeMoney(final Note note, final int amount, final boolean useAnimation) {
+        if (useAnimation) {
             int min = 10;
-            for (final NoteAnimation animation : animationNotes)
-            {
-                if (animation.getAnimation() < min)
-                {
+            for (final NoteAnimation animation : animationNotes) {
+                if (animation.getAnimation() < min) {
                     min = animation.getAnimation();
                 }
             }
-            for (int i = 0; i < amount; ++i)
-            {
+            for (int i = 0; i < amount; ++i) {
                 final NoteAnimation animation = new NoteAnimation(note, min - 10, false);
                 animationNotes.add(0, animation);
                 oldnotes.add(0, animation);
                 min -= 10;
             }
-        }
-        else
-        {
+        } else {
             final int[] money = this.money;
             final int id = note.getId();
             money[id] -= amount;
         }
     }
 
-    public int[] getMenuRect(final int i)
-    {
+    public int[] getMenuRect(final int i) {
         final int w = 50 + extended;
         return new int[]{443 - w, 10 + i * 30, w, 30};
     }
 
-    public int[] getPlayerMenuRect(final int i)
-    {
+    public int[] getPlayerMenuRect(final int i) {
         final int[] menu = getMenuRect(i);
         return new int[]{menu[0] + 19, menu[1] + 3, 24, 24};
     }
 
-    public void updateExtending(final boolean inRect)
-    {
-        if (inRect && extended < 175)
-        {
+    public void updateExtending(final boolean inRect) {
+        if (inRect && extended < 175) {
             extended = Math.min(175, extended + 20);
-        }
-        else if (!inRect && extended > 0)
-        {
+        } else if (!inRect && extended > 0) {
             extended = Math.max(0, extended - 50);
         }
     }
 
-    public CONTROLLED_BY getController()
-    {
+    public CONTROLLED_BY getController() {
         return control;
     }
 
-    public boolean showProperties()
-    {
+    public boolean showProperties() {
         return this == game.getCurrentPiece();
     }
 
-    public boolean canAffordProperty(final Property property)
-    {
+    public boolean canAffordProperty(final Property property) {
         return getTotalMoney() >= property.getCost();
     }
 
-    public void purchaseProperty(final Property property)
-    {
-        if (removeMoney(property.getCost(), true))
-        {
+    public void purchaseProperty(final Property property) {
+        if (removeMoney(property.getCost(), true)) {
             property.setOwner(this);
-        }
-        else
-        {
+        } else {
             System.out.println("Couldn't remove the resources, this is very weird :S");
         }
     }
 
-    public void bankrupt(final Piece owesMoneyToThis)
-    {
+    public void bankrupt(final Piece owesMoneyToThis) {
         final int money = getTotalMoney();
         removeMoney(money, true);
-        if (owesMoneyToThis != null)
-        {
+        if (owesMoneyToThis != null) {
             owesMoneyToThis.addMoney(money, true);
         }
-        for (final Place place : game.getPlaces())
-        {
-            if (place instanceof Property)
-            {
-                final Property property = (Property) place;
-                if (property.getOwner() == this)
-                {
+        for (final Place place : game.getPlaces()) {
+            if (place instanceof Property property) {
+                if (property.getOwner() == this) {
                     property.setOwner(owesMoneyToThis);
                 }
             }
@@ -282,119 +220,90 @@ public class Piece
         bankrupt = true;
     }
 
-    public boolean canAffordRent(final Property property)
-    {
+    public boolean canAffordRent(final Property property) {
         return getTotalMoney() >= property.getRentCost();
     }
 
-    public void payPropertyRent(final Property property)
-    {
-        if (removeMoney(property.getRentCost(), true))
-        {
+    public void payPropertyRent(final Property property) {
+        if (removeMoney(property.getRentCost(), true)) {
             property.getOwner().addMoney(property.getRentCost(), true);
-        }
-        else
-        {
+        } else {
             System.out.println("Couldn't remove the resources, this is very weird :S");
         }
     }
 
-    public boolean isBankrupt()
-    {
+    public boolean isBankrupt() {
         return bankrupt;
     }
 
-    public boolean canAffordStructure(final Street street)
-    {
+    public boolean canAffordStructure(final Street street) {
         return getTotalMoney() >= street.getStructureCost();
     }
 
-    public void buyStructure(final Street street)
-    {
-        if (removeMoney(street.getStructureCost(), true))
-        {
+    public void buyStructure(final Street street) {
+        if (removeMoney(street.getStructureCost(), true)) {
             street.increaseStructure();
-        }
-        else
-        {
+        } else {
             System.out.println("Couldn't remove the resources, this is very weird :S");
         }
     }
 
-    public boolean isInJail()
-    {
+    public boolean isInJail() {
         return turnsInJail >= 0;
     }
 
-    public void goToJail()
-    {
+    public void goToJail() {
         turnsInJail = 0;
         pos = 14;
     }
 
-    public void releaseFromJail()
-    {
+    public void releaseFromJail() {
         turnsInJail = -1;
     }
 
-    public void increaseTurnsInJail()
-    {
+    public void increaseTurnsInJail() {
         ++turnsInJail;
     }
 
-    public int getTurnsInJail()
-    {
+    public int getTurnsInJail() {
         return turnsInJail;
     }
 
-    public void payFine()
-    {
-        if (removeMoney(50, true))
-        {
+    public void payFine() {
+        if (removeMoney(50, true)) {
             releaseFromJail();
-        }
-        else
-        {
+        } else {
             System.out.println("Couldn't remove the resources, this is very weird :S");
         }
     }
 
-    public boolean canAffordFine()
-    {
+    public boolean canAffordFine() {
         return getTotalMoney() >= 50;
     }
 
-    public void getMoneyFromMortgage(final Property selectedPlace)
-    {
+    public void getMoneyFromMortgage(final Property selectedPlace) {
         addMoney(selectedPlace.getMortgageValue(), true);
         selectedPlace.mortgage();
     }
 
-    public boolean canAffordUnMortgage(final Property selectedPlace)
-    {
+    public boolean canAffordUnMortgage(final Property selectedPlace) {
         return getTotalMoney() >= selectedPlace.getUnMortgagePrice();
     }
 
-    public void payUnMortgage(final Property selectedPlace)
-    {
-        if (removeMoney(selectedPlace.getUnMortgagePrice(), true))
-        {
+    public void payUnMortgage(final Property selectedPlace) {
+        if (removeMoney(selectedPlace.getUnMortgagePrice(), true)) {
             selectedPlace.unMortgage();
-        }
-        else
-        {
+        } else {
             System.out.println("Couldn't remove the resources, this is very weird :S");
         }
     }
 
-    public void sellStructure(final Street selectedPlace)
-    {
+    public void sellStructure(final Street selectedPlace) {
         addMoney(selectedPlace.getStructureSellPrice(), true);
         selectedPlace.decreaseStructures();
     }
 
-    public enum CONTROLLED_BY
-    {
+    public enum CONTROLLED_BY {
         PLAYER, COMPUTER, OTHER
     }
 }

@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "stevescarts:block/new_era_icon"
-  }
-}

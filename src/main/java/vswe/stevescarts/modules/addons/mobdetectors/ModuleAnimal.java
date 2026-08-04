@@ -6,22 +6,18 @@ import net.minecraft.world.entity.animal.Animal;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
 
-public class ModuleAnimal extends ModuleMobdetector
-{
-    public ModuleAnimal(ModularMinecart cart)
-    {
+public class ModuleAnimal extends ModuleMobdetector {
+    public ModuleAnimal(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return Localization.MODULES.ADDONS.DETECTOR_ANIMALS.translate();
     }
 
     @Override
-    public boolean isValidTarget(final Entity target)
-    {
+    public boolean isValidTarget(final Entity target) {
         return target instanceof Animal && (!(target instanceof TamableAnimal) || !((TamableAnimal) target).isTame());
     }
 }

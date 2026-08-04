@@ -6,61 +6,46 @@ import net.minecraft.world.level.block.Blocks;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.entities.ModularMinecart;
 
-public class ModuleMelter extends ModuleAddon
-{
+public class ModuleMelter extends ModuleAddon {
     private int tick;
 
-    public ModuleMelter(ModularMinecart cart)
-    {
+    public ModuleMelter(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (getCart().level().isClientSide())
-        {
+        if (getCart().level().isClientSide()) {
             return;
         }
-        if (getCart().hasFuel())
-        {
-            if (tick >= getInterval())
-            {
+        if (getCart().hasFuel()) {
+            if (tick >= getInterval()) {
                 tick = 0;
                 melt();
-            }
-            else
-            {
+            } else {
                 ++tick;
             }
         }
     }
 
-    protected int getInterval()
-    {
+    protected int getInterval() {
         return 70;
     }
 
-    protected int getBlocksOnSide()
-    {
+    protected int getBlocksOnSide() {
         return 7;
     }
 
-    protected int getBlocksFromLevel()
-    {
+    protected int getBlocksFromLevel() {
         return 1;
     }
 
-    private void melt()
-    {
+    private void melt() {
         BlockPos cartPos = getCart().blockPosition();
-        for (int x = -getBlocksOnSide(); x <= getBlocksOnSide(); ++x)
-        {
-            for (int z = -getBlocksOnSide(); z <= getBlocksOnSide(); ++z)
-            {
-                for (int y = -getBlocksFromLevel(); y <= getBlocksFromLevel(); ++y)
-                {
+        for (int x = -getBlocksOnSide(); x <= getBlocksOnSide(); ++x) {
+            for (int z = -getBlocksOnSide(); z <= getBlocksOnSide(); ++z) {
+                for (int y = -getBlocksFromLevel(); y <= getBlocksFromLevel(); ++y) {
                     BlockPos pos = cartPos.offset(x, y, z);
                     final Block b = getCart().level().getBlockState(pos).getBlock();
                     melt(b, pos);
@@ -69,10 +54,8 @@ public class ModuleMelter extends ModuleAddon
         }
     }
 
-    protected boolean melt(final Block b, BlockPos pos)
-    {
-        if (b == Blocks.SNOW)
-        {
+    protected boolean melt(final Block b, BlockPos pos) {
+        if (b == Blocks.SNOW) {
             getCart().level().removeBlock(pos, false);
             return true;
         }

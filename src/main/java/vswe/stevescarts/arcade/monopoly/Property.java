@@ -1,112 +1,93 @@
 package vswe.stevescarts.arcade.monopoly;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
 import java.util.EnumSet;
 
-public abstract class Property extends Place
-{
-    private String name;
-    private int cost;
+public abstract class Property extends Place {
+    private final String name;
+    private final int cost;
     private Piece owner;
-    private PropertyGroup group;
+    private final PropertyGroup group;
     private boolean mortgaged;
 
-    public Property(final ArcadeMonopoly game, final PropertyGroup group, final String name, final int cost)
-    {
+    public Property(final ArcadeMonopoly game, final PropertyGroup group, final String name, final int cost) {
         super(game);
         (this.group = group).add(this);
         this.name = name;
         this.cost = cost;
     }
 
-    public void drawValue(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        Note.drawValue(guiGraphics, game, gui, 10, 103, 2, cost);
+    public void drawValue(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        Note.drawValue(GuiGraphicsExtractor, game, gui, 10, 103, 2, cost);
     }
 
     @Override
-    public void drawText(GuiGraphics guiGraphics, GuiMinecart gui, final EnumSet<PLACE_STATE> states)
-    {
-        game.getModule().drawSplitString(guiGraphics, gui, name, 3 + gui.getGuiLeft(), getTextY() + gui.getGuiTop(), 70, true, 4210752);
+    public void drawText(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
+        game.getModule().drawSplitString(GuiGraphicsExtractor, gui, name, 3 + gui.getGuiLeft(), getTextY() + gui.getGuiTop(), 70, true, 4210752);
     }
 
     protected abstract int getTextY();
 
-    public int getCost()
-    {
+    public int getCost() {
         return cost;
     }
 
-    public void setOwner(final Piece val)
-    {
-        owner = val;
-    }
-
-    public Piece getOwner()
-    {
+    public Piece getOwner() {
         return owner;
     }
 
-    public boolean hasOwner()
-    {
+    public void setOwner(final Piece val) {
+        owner = val;
+    }
+
+    public boolean hasOwner() {
         return owner != null;
     }
 
     @Override
-    public boolean onPieceStop(final Piece piece)
-    {
+    public boolean onPieceStop(final Piece piece) {
         return owner == null || owner == piece || mortgaged;
     }
 
-    public PropertyGroup getGroup()
-    {
+    public PropertyGroup getGroup() {
         return group;
     }
 
     public abstract int getRentCost();
 
-    public int getMortgageValue()
-    {
+    public int getMortgageValue() {
         return getCost() / 2;
     }
 
-    public int getOwnedInGroup()
-    {
+    public int getOwnedInGroup() {
         int owned = 0;
-        for (final Property property : getGroup().getProperties())
-        {
-            if (property.getOwner() == getOwner() && !property.isMortgaged())
-            {
+        for (final Property property : getGroup().getProperties()) {
+            if (property.getOwner() == getOwner() && !property.isMortgaged()) {
                 ++owned;
             }
         }
         return owned;
     }
 
-    public boolean isMortgaged()
-    {
+    public boolean isMortgaged() {
         return mortgaged;
     }
 
-    public boolean canMortgage()
-    {
+    public boolean canMortgage() {
         return true;
     }
 
-    public void mortgage()
-    {
+    public void mortgage() {
         mortgaged = true;
     }
 
-    public int getUnMortgagePrice()
-    {
+    public int getUnMortgagePrice() {
         return (int) (getMortgageValue() * 1.1f);
     }
 
-    public void unMortgage()
-    {
+    public void unMortgage() {
         mortgaged = false;
     }
 }

@@ -11,19 +11,17 @@ import vswe.stevescarts.items.ItemCarts;
 
 import javax.annotation.Nonnull;
 
-public class SlotAssembler extends Slot
-{
+public class SlotAssembler extends Slot {
     private final ModuleType moduleType;
     private final int xPos;
     private final int yPos;
     private final TileEntityCartAssembler assembler;
-    private int openingAnimation;
     private final int id;
-    private boolean isValid;
     private final boolean useLarge;
+    private int openingAnimation;
+    private boolean isValid;
 
-    public SlotAssembler(final TileEntityCartAssembler assembler, final int i, final int j, final int k, final ModuleType moduleType, final boolean useLarge, final int id)
-    {
+    public SlotAssembler(final TileEntityCartAssembler assembler, final int i, final int j, final int k, final ModuleType moduleType, final boolean useLarge, final int id) {
         super(assembler, i, j, k);
         this.assembler = assembler;
         this.useLarge = useLarge;
@@ -34,129 +32,98 @@ public class SlotAssembler extends Slot
         this.id = id;
     }
 
-    private void invalidationCheck()
-    {
+    private void invalidationCheck() {
         x = -3000;
         y = -3000;
-        if (openingAnimation > 8)
-        {
+        if (openingAnimation > 8) {
             openingAnimation = 8;
         }
     }
 
-    public void update()
-    {
-        if(assembler.getLevel() == null) return;
+    public void update() {
+        if (assembler.getLevel() == null) return;
 
-        if (!assembler.getLevel().isClientSide())
-        {
-            if (!isValid() && hasItem())
-            {
+        if (!assembler.getLevel().isClientSide()) {
+            if (!isValid() && hasItem()) {
                 assembler.puke(getItem());
                 set(ItemStack.EMPTY);
             }
-        }
-        else if (isValid())
-        {
-            if (openingAnimation == 8)
-            {
+        } else if (isValid()) {
+            if (openingAnimation == 8) {
                 x = getX();
                 y = getY();
                 ++openingAnimation;
-            }
-            else if (openingAnimation < 8)
-            {
+            } else if (openingAnimation < 8) {
                 ++openingAnimation;
             }
-        }
-        else if (openingAnimation > 0)
-        {
+        } else if (openingAnimation > 0) {
             --openingAnimation;
-        }
-        else
-        {
+        } else {
             openingAnimation = id * -3;
         }
     }
 
     @Override
-    public void setChanged()
-    {
+    public void setChanged() {
         super.setChanged();
-        if (shouldUpdatePlaceholder())
-        {
+        if (shouldUpdatePlaceholder()) {
             assembler.updatePlaceholder();
-        }
-        else
-        {
+        } else {
             assembler.isErrorListOutdated = true;
         }
     }
 
-    public boolean useLargeInterface()
-    {
+    public boolean useLargeInterface() {
         return useLarge;
     }
 
     @Override
-    public boolean mayPlace(@Nonnull ItemStack itemstack)
-    {
+    public boolean mayPlace(@Nonnull ItemStack itemstack) {
         return isValid && ModuleData.isValidModuleItem(moduleType, itemstack);
     }
 
-    public void invalidate()
-    {
+    public void invalidate() {
         isValid = false;
         invalidationCheck();
     }
 
     @Override
-    public int getMaxStackSize()
-    {
+    public int getMaxStackSize() {
         return 1;
     }
 
-    public void validate()
-    {
+    public void validate() {
         isValid = true;
     }
 
-    public boolean isValid()
-    {
+    public boolean isValid() {
         return isValid;
     }
 
-    public int getAnimationTick()
-    {
+    public int getAnimationTick() {
         return openingAnimation;
     }
 
-    public int getX()
-    {
+    public int getX() {
         return xPos;
     }
 
-    public int getY()
-    {
+    public int getY() {
         return yPos;
     }
 
-    public TileEntityCartAssembler getAssembler()
-    {
+    public TileEntityCartAssembler getAssembler() {
         return assembler;
     }
 
-    public boolean shouldUpdatePlaceholder()
-    {
+    public boolean shouldUpdatePlaceholder() {
         return true;
     }
 
 
     @Override
-    public boolean mayPickup(Player player)
-    {
-        if (getItem().getItem() instanceof ItemCarts)
-        {
+    public boolean mayPickup(Player player) {
+        if (getItem().getItem() instanceof ItemCarts) {
             if (assembler.getIsAssembling()) return false;
         }
         return !getItem().isEmpty() && (!ModItemData.hasTag(getItem()) || !ModItemData.getTagCopy(getItem()).contains(TileEntityCartAssembler.MODIFY_STATUS) || ModItemData.getTagCopy(getItem()).getIntOr(TileEntityCartAssembler.MODIFY_STATUS, 0) > 0);

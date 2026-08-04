@@ -11,45 +11,35 @@ import vswe.stevescarts.entities.ModularMinecart;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class ModuleCleaner extends ModuleBase
-{
-    public ModuleCleaner(ModularMinecart cart)
-    {
+public class ModuleCleaner extends ModuleBase {
+    public ModuleCleaner(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (getCart().level().isClientSide())
-        {
+        if (getCart().level().isClientSide()) {
             return;
         }
-        if (getCart().hasFuel())
-        {
+        if (getCart().hasFuel()) {
             suck();
         }
         clean();
     }
 
-    private double calculatemotion(final double dif)
-    {
-        if (dif > -0.5D && dif < 0.5D)
-        {
+    private double calculatemotion(final double dif) {
+        if (dif > -0.5D && dif < 0.5D) {
             return 0;
         }
 
         return 1 / (dif * 2);
     }
 
-    private void suck()
-    {
+    private void suck() {
         final List<ItemEntity> list = getCart().level().getEntitiesOfClass(ItemEntity.class, getCart().getBoundingBox().inflate(3.0, 1.0, 3.0));
-        for (ItemEntity eItem : list)
-        {
-            if (!eItem.isPickable())
-            {
+        for (ItemEntity eItem : list) {
+            if (!eItem.isPickable()) {
                 double difX = getCart().blockPosition().getX() - eItem.blockPosition().getX();
                 double difY = getCart().blockPosition().getY() - eItem.blockPosition().getY();
                 double difZ = getCart().blockPosition().getZ() - eItem.blockPosition().getZ();
@@ -62,37 +52,28 @@ public class ModuleCleaner extends ModuleBase
         }
     }
 
-    private void clean()
-    {
+    private void clean() {
         final List<ItemEntity> list = getCart().level().getEntitiesOfClass(ItemEntity.class, getCart().getBoundingBox().inflate(3.0, 1.0, 3.0));
-        for (ItemEntity eItem : list)
-        {
-            if (!eItem.isPickable() && !eItem.isRemoved())
-            {
+        for (ItemEntity eItem : list) {
+            if (!eItem.isPickable() && !eItem.isRemoved()) {
                 int stackSize = eItem.getItem().getCount();
                 getCart().addItemToChest(eItem.getItem());
-                if (stackSize != eItem.getItem().getCount())
-                {
+                if (stackSize != eItem.getItem().getCount()) {
                     getCart().level().playSound(null, getCart().blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.2f, ((this.getCart().getRandom().nextFloat() - this.getCart().getRandom().nextFloat()) * 0.7f + 1.0f) * 2.0f);
-                    if (eItem.getItem().getCount() <= 0)
-                    {
+                    if (eItem.getItem().getCount() <= 0) {
                         eItem.remove(Entity.RemovalReason.DISCARDED);
                     }
-                }
-                else if (failPickup(eItem.getItem()))
-                {
+                } else if (failPickup(eItem.getItem())) {
                     eItem.remove(Entity.RemovalReason.DISCARDED);
                 }
             }
         }
     }
 
-    private boolean failPickup(@Nonnull ItemStack item)
-    {
+    private boolean failPickup(@Nonnull ItemStack item) {
         int x = normalize(getCart().xo);
         int z = normalize(getCart().zo);
-        if (x == 0 && z == 0)
-        {
+        if (x == 0 && z == 0) {
             return false;
         }
 
@@ -101,8 +82,7 @@ public class ModuleCleaner extends ModuleBase
         return true;
     }
 
-    private int normalize(double val)
-    {
+    private int normalize(double val) {
         return Double.compare(val, 0.0);
     }
 }

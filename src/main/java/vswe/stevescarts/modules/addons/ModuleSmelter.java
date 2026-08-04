@@ -1,9 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -21,15 +19,13 @@ import vswe.stevescarts.entities.ModularMinecart;
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
-public class ModuleSmelter extends ModuleRecipe
-{
+public class ModuleSmelter extends ModuleRecipe {
     private int energyBuffer;
     private int cooldown;
     private RecipeHolder<SmeltingRecipe> lastRecipe = null;
     private boolean inventoryDirty = true;
 
-    public ModuleSmelter(ModularMinecart cart)
-    {
+    public ModuleSmelter(ModularMinecart cart) {
         super(cart);
         cooldown = 0;
     }
@@ -112,7 +108,7 @@ public class ModuleSmelter extends ModuleRecipe
         if (optional.isPresent()) {
             lastRecipe = optional.get();
             SmeltingRecipe recipe = lastRecipe.value();
-            ItemStack result = recipe.assemble(input, level.registryAccess());
+            ItemStack result = recipe.assemble(input);
             if (result.isItemEnabled(level.enabledFeatures())) {
                 return result;
             }
@@ -121,89 +117,74 @@ public class ModuleSmelter extends ModuleRecipe
     }
 
     @Override
-    public int getConsumption(final boolean isMoving)
-    {
-        if (energyBuffer < 10)
-        {
+    public int getConsumption(final boolean isMoving) {
+        if (energyBuffer < 10) {
             return 15;
         }
         return super.getConsumption(isMoving);
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    protected int getInventoryWidth()
-    {
+    protected int getInventoryWidth() {
         return 1;
     }
 
     @Override
-    protected int getInventoryHeight()
-    {
+    protected int getInventoryHeight() {
         return 2;
     }
 
     @Override
-    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y)
-    {
-        if (y == 0)
-        {
+    protected SlotStevesCarts getSlot(final int slotId, final int x, final int y) {
+        if (y == 0) {
             return new SlotFurnaceInput(getCart(), getCart().level(), slotId, 10 + 18 * x, 15 + 18 * y);
         }
         return new SlotCartCrafterResult(getCart(), slotId, 10 + 18 * x, 15 + 18 * y);
     }
 
     @Override
-    public int numberOfGuiData()
-    {
+    public int numberOfGuiData() {
         return super.numberOfGuiData() + 1;
     }
 
     @Override
-    protected void checkGuiData(final Object[] info)
-    {
+    protected void checkGuiData(final Object[] info) {
         super.checkGuiData(info);
-        updateGuiData(info, super.numberOfGuiData() + 0, (short) energyBuffer);
+        updateGuiData(info, super.numberOfGuiData(), (short) energyBuffer);
     }
 
     @Override
-    public void receiveGuiData(final int id, final short data)
-    {
+    public void receiveGuiData(final int id, final short data) {
         super.receiveGuiData(id, data);
-        if (id == super.numberOfGuiData() + 0)
-        {
+        if (id == super.numberOfGuiData()) {
             energyBuffer = data;
         }
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        super.drawForeground(guiGraphics, gui);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        super.drawForeground(GuiGraphicsExtractor, gui);
         setStack(1, outputDisplay.get());
-        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, getModuleName(), 8, 6, 4210752);
     }
 
     @Override
-    public int guiWidth()
-    {
+    public int guiWidth() {
         return canUseAdvancedFeatures() ? 100 : 45;
     }
 
     @Override
-    protected int[] getArea()
-    {
+    protected int[] getArea() {
         return new int[]{32, 25, 16, 16};
     }
 
     @Override
-    protected boolean canUseAdvancedFeatures()
-    {
+    protected boolean canUseAdvancedFeatures() {
         return false;
     }
 
@@ -220,14 +201,12 @@ public class ModuleSmelter extends ModuleRecipe
     }
 
     @Override
-    protected int getLimitStartX()
-    {
+    protected int getLimitStartX() {
         return 55;
     }
 
     @Override
-    protected int getLimitStartY()
-    {
+    protected int getLimitStartY() {
         return 15;
     }
 }

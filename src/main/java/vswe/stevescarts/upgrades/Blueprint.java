@@ -14,40 +14,32 @@ import vswe.stevescarts.init.ModItemData;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-public class Blueprint extends SimpleInventoryUpgradeEffect
-{
-    public Blueprint()
-    {
+public class Blueprint extends SimpleInventoryUpgradeEffect {
+    public Blueprint() {
         super(1, 1);
     }
 
     @Override
-    public Class<? extends Slot> getSlot(final int i)
-    {
+    public Class<? extends Slot> getSlot(final int i) {
         return SlotCart.class;
     }
 
     @Override
-    public Component getName()
-    {
+    public Component getName() {
         return Localization.translate("info.stevescarts.effectBlueprint");
     }
 
-    public boolean isValidForBluePrint(final TileEntityUpgrade upgrade, final ArrayList<ModuleData> modules, final ModuleData module)
-    {
+    public boolean isValidForBluePrint(final TileEntityUpgrade upgrade, final ArrayList<ModuleData> modules, final ModuleData module) {
         @Nonnull ItemStack blueprint = upgrade.getItem(0);
-        if (blueprint.isEmpty())
-        {
+        if (blueprint.isEmpty()) {
             return false;
         }
         CompoundTag info = ModItemData.getTagCopy(blueprint);
-        if (info.isEmpty())
-        {
+        if (info.isEmpty()) {
             return false;
         }
         final ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
-        if (moduleIDTag == null)
-        {
+        if (moduleIDTag == null) {
             return false;
         }
         final byte[] IDs = moduleIDTag.getAsByteArray();

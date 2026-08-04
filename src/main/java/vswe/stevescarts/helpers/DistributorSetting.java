@@ -5,66 +5,10 @@ import vswe.stevescarts.blocks.tileentities.TileEntityManager;
 
 import java.util.ArrayList;
 
-public class DistributorSetting
-{
+public class DistributorSetting {
     public static ArrayList<DistributorSetting> settings;
-    private final int id;
-    private final int imageId;
-    private final boolean top;
-    private final Localization.GUI.DISTRIBUTOR name;
 
-    public DistributorSetting(final int id, final boolean top, final Localization.GUI.DISTRIBUTOR name)
-    {
-        this.id = id;
-        this.top = top;
-        this.name = name;
-        imageId = id / 2;
-    }
-
-    public boolean isValid(final TileEntityManager manager, final int chunkId, final boolean top)
-    {
-        return top == this.top;
-    }
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public int getImageId()
-    {
-        return imageId;
-    }
-
-    public String getName(final TileEntityManager[] manager)
-    {
-        if (manager != null && manager.length > 1)
-        {
-            return name.translate() + " (" + (getIsTop() ? Localization.GUI.DISTRIBUTOR.MANAGER_TOP.translate() : Localization.GUI.DISTRIBUTOR.MANAGER_BOT.translate()) + ")";
-        }
-        return name.translate();
-    }
-
-    public boolean getIsTop()
-    {
-        return top;
-    }
-
-    public boolean isEnabled(final TileEntityDistributor distributor)
-    {
-        if (distributor.getInventories().length == 0)
-        {
-            return false;
-        }
-        if (top)
-        {
-            return distributor.hasTop;
-        }
-        return distributor.hasBot;
-    }
-
-    static
-    {
+    static {
         (DistributorSetting.settings = new ArrayList<>()).add(new DistributorSetting(0, true, Localization.GUI.DISTRIBUTOR.SETTING_ALL));
         DistributorSetting.settings.add(new DistributorSetting(1, false, Localization.GUI.DISTRIBUTOR.SETTING_ALL));
         DistributorSetting.settings.add(new DistributorSettingColor(2, true, Localization.GUI.DISTRIBUTOR.SETTING_RED, 1));
@@ -89,63 +33,96 @@ public class DistributorSetting
         DistributorSetting.settings.add(new DistributorSettingDirection(21, false, Localization.GUI.DISTRIBUTOR.SETTING_FROM_CART, false));
     }
 
-    private static class DistributorSettingColor extends DistributorSetting
-    {
-        private int color;
+    private final int id;
+    private final int imageId;
+    private final boolean top;
+    private final Localization.GUI.DISTRIBUTOR name;
 
-        public DistributorSettingColor(final int id, final boolean top, final Localization.GUI.DISTRIBUTOR name, final int color)
-        {
+    public DistributorSetting(final int id, final boolean top, final Localization.GUI.DISTRIBUTOR name) {
+        this.id = id;
+        this.top = top;
+        this.name = name;
+        imageId = id / 2;
+    }
+
+    public boolean isValid(final TileEntityManager manager, final int chunkId, final boolean top) {
+        return top == this.top;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public String getName(final TileEntityManager[] manager) {
+        if (manager != null && manager.length > 1) {
+            return name.translate() + " (" + (getIsTop() ? Localization.GUI.DISTRIBUTOR.MANAGER_TOP.translate() : Localization.GUI.DISTRIBUTOR.MANAGER_BOT.translate()) + ")";
+        }
+        return name.translate();
+    }
+
+    public boolean getIsTop() {
+        return top;
+    }
+
+    public boolean isEnabled(final TileEntityDistributor distributor) {
+        if (distributor.getInventories().length == 0) {
+            return false;
+        }
+        if (top) {
+            return distributor.hasTop;
+        }
+        return distributor.hasBot;
+    }
+
+    private static class DistributorSettingColor extends DistributorSetting {
+        private final int color;
+
+        public DistributorSettingColor(final int id, final boolean top, final Localization.GUI.DISTRIBUTOR name, final int color) {
             super(id, top, name);
             this.color = color;
         }
 
         @Override
-        public boolean isValid(final TileEntityManager manager, final int chunkId, final boolean top)
-        {
-            if (manager.layoutType == 0)
-            {
+        public boolean isValid(final TileEntityManager manager, final int chunkId, final boolean top) {
+            if (manager.layoutType == 0) {
                 return super.isValid(manager, chunkId, top);
             }
             return super.isValid(manager, chunkId, top) && manager.color[chunkId] == color;
         }
     }
 
-    private static class DistributorSettingChunk extends DistributorSetting
-    {
-        private int chunk;
+    private static class DistributorSettingChunk extends DistributorSetting {
+        private final int chunk;
 
-        public DistributorSettingChunk(final int id, final boolean top, final Localization.GUI.DISTRIBUTOR name, final int chunk)
-        {
+        public DistributorSettingChunk(final int id, final boolean top, final Localization.GUI.DISTRIBUTOR name, final int chunk) {
             super(id, top, name);
             this.chunk = chunk;
         }
 
         @Override
-        public boolean isValid(final TileEntityManager manager, final int chunkId, final boolean top)
-        {
-            if (manager.layoutType == 0)
-            {
+        public boolean isValid(final TileEntityManager manager, final int chunkId, final boolean top) {
+            if (manager.layoutType == 0) {
                 return super.isValid(manager, chunkId, top);
             }
             return super.isValid(manager, chunkId, top) && chunk == chunkId;
         }
     }
 
-    private static class DistributorSettingDirection extends DistributorSetting
-    {
-        private boolean toCart;
+    private static class DistributorSettingDirection extends DistributorSetting {
+        private final boolean toCart;
 
-        public DistributorSettingDirection(final int id, final boolean top, final Localization.GUI.DISTRIBUTOR name, final boolean toCart)
-        {
+        public DistributorSettingDirection(final int id, final boolean top, final Localization.GUI.DISTRIBUTOR name, final boolean toCart) {
             super(id, top, name);
             this.toCart = toCart;
         }
 
         @Override
-        public boolean isValid(final TileEntityManager manager, final int chunkId, final boolean top)
-        {
-            if (manager.layoutType == 0)
-            {
+        public boolean isValid(final TileEntityManager manager, final int chunkId, final boolean top) {
+            if (manager.layoutType == 0) {
                 return super.isValid(manager, chunkId, top);
             }
             return super.isValid(manager, chunkId, top) && manager.toCart[chunkId] == toCart;

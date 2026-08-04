@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "stevescarts:item/burning_easter_egg_icon"
+    "layer0": "stevescarts:item/component_burning_easter_egg"
   }
 }

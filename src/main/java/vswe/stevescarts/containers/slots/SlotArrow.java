@@ -7,19 +7,16 @@ import vswe.stevescarts.modules.realtimers.ModuleShooter;
 
 import javax.annotation.Nonnull;
 
-public class SlotArrow extends SlotStevesCarts
-{
+public class SlotArrow extends SlotStevesCarts {
     private final ModuleShooter shooter;
 
-    public SlotArrow(final Container iinventory, final ModuleShooter shooter, final int i, final int j, final int k)
-    {
+    public SlotArrow(final Container iinventory, final ModuleShooter shooter, final int i, final int j, final int k) {
         super(iinventory, i, j, k);
         this.shooter = shooter;
     }
 
     @Override
-    public boolean mayPlace(@Nonnull ItemStack itemstack)
-    {
+    public boolean mayPlace(@Nonnull ItemStack itemstack) {
         return shooter.isValidProjectileItem(itemstack);
     }
 }

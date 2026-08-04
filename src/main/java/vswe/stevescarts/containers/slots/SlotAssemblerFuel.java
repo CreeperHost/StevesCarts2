@@ -7,37 +7,30 @@ import vswe.stevescarts.polylib.FuelHelper;
 
 import javax.annotation.Nonnull;
 
-public class SlotAssemblerFuel extends SlotAssembler
-{
-    public SlotAssemblerFuel(final TileEntityCartAssembler assembler, final int i, final int j, final int k)
-    {
+public class SlotAssemblerFuel extends SlotAssembler {
+    public SlotAssemblerFuel(final TileEntityCartAssembler assembler, final int i, final int j, final int k) {
         super(assembler, i, j, k, ModuleType.NONE, true, 0);
     }
 
     @Override
-    public boolean mayPlace(@Nonnull ItemStack itemstack)
-    {
+    public boolean mayPlace(@Nonnull ItemStack itemstack) {
         return FuelHelper.isItemFuel(itemstack, getAssembler().getLevel());
     }
 
-    public int getFuelLevel(@Nonnull ItemStack itemstack)
-    {
-        if (mayPlace(itemstack))
-        {
+    public int getFuelLevel(@Nonnull ItemStack itemstack) {
+        if (mayPlace(itemstack)) {
             return (int) (FuelHelper.getItemBurnTime(itemstack, getAssembler().getLevel()) * 0.25);
         }
         return 0;
     }
 
     @Override
-    public int getMaxStackSize()
-    {
+    public int getMaxStackSize() {
         return 64;
     }
 
     @Override
-    public boolean shouldUpdatePlaceholder()
-    {
+    public boolean shouldUpdatePlaceholder() {
         return false;
     }
 }

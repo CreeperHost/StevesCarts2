@@ -1,52 +1,42 @@
 package vswe.stevescarts.arcade.invaders;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import vswe.stevescarts.client.guis.GuiMinecart;
 
-public class Building extends Unit
-{
-    public Building(final ArcadeInvaders game, final int x, final int y)
-    {
+public class Building extends Unit {
+    public Building(final ArcadeInvaders game, final int x, final int y) {
         super(game, x, y);
         health = 10;
     }
 
     @Override
-    public void draw(GuiGraphics guiGraphics, Identifier texture, GuiMinecart gui)
-    {
-        game.getModule().drawImage(guiGraphics, texture, gui, x, y, 32 + (10 - health) * 16, 16, 16, 16);
+    public void draw(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, GuiMinecart gui) {
+        game.getModule().drawImage(GuiGraphicsExtractor, texture, gui, x, y, 32 + (10 - health) * 16, 16, 16, 16);
     }
 
     @Override
-    protected int getHitboxWidth()
-    {
+    protected int getHitboxWidth() {
         return 16;
     }
 
     @Override
-    protected int getHitboxHeight()
-    {
+    protected int getHitboxHeight() {
         return 16;
     }
 
     @Override
-    protected boolean isObstacle()
-    {
+    protected boolean isObstacle() {
         return true;
     }
 
     @Override
-    public UPDATE_RESULT update()
-    {
-        if (super.update() == UPDATE_RESULT.DEAD)
-        {
+    public UPDATE_RESULT update() {
+        if (super.update() == UPDATE_RESULT.DEAD) {
             return UPDATE_RESULT.DEAD;
         }
-        for (final Unit invader : game.invaders)
-        {
-            if (!invader.dead && collidesWith(invader))
-            {
+        for (final Unit invader : game.invaders) {
+            if (!invader.dead && collidesWith(invader)) {
                 dead = true;
                 health = 0;
                 return UPDATE_RESULT.DEAD;

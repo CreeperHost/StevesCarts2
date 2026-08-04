@@ -7,21 +7,16 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.helpers.ComponentTypes;
 import vswe.stevescarts.helpers.Localization;
 
-import java.util.Locale;
-
-public class ItemCartComponent extends Item
-{
+public class ItemCartComponent extends Item {
     public ComponentTypes componentType;
 
-    public ItemCartComponent(ComponentTypes componentType, Item.Properties properties)
-    {
+    public ItemCartComponent(ComponentTypes componentType, Item.Properties properties) {
         super(properties);
         this.componentType = componentType;
     }
 
     @Override
-    public @NotNull Component getName(@NotNull ItemStack itemStack)
-    {
+    public @NotNull Component getName(@NotNull ItemStack itemStack) {
         return Localization.translate("item.stevescarts." + componentType.getName());
     }
 }

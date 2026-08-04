@@ -7,22 +7,18 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.entities.ModularMinecart;
 
-public class ModuleWoodcutterDiamond extends ModuleWoodcutter
-{
-    public ModuleWoodcutterDiamond(ModularMinecart cart)
-    {
+public class ModuleWoodcutterDiamond extends ModuleWoodcutter {
+    public ModuleWoodcutterDiamond(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public int getPercentageDropChance()
-    {
+    public int getPercentageDropChance() {
         return 80;
     }
 
     @Override
-    public int getMaxDurability()
-    {
+    public int getMaxDurability() {
         return SCConfig.COMMON.woodcutterDurabilityDiamond.get();
     }
 
@@ -41,8 +37,7 @@ public class ModuleWoodcutterDiamond extends ModuleWoodcutter
     }
 
     @Override
-    public int getRepairSpeed()
-    {
+    public int getRepairSpeed() {
         return 150;
     }
 }

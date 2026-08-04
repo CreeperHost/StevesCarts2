@@ -13,35 +13,29 @@ import vswe.stevescarts.init.ModContainers;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ContainerActivator extends ContainerBase
-{
+public class ContainerActivator extends ContainerBase {
     private final TileEntityActivator activator;
     public ArrayList<Integer> lastOptions;
 
-    public ContainerActivator(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer)
-    {
+    public ContainerActivator(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer) {
         this(id, playerInventory, (TileEntityActivator) Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(packetBuffer.readBlockPos())), new SimpleContainerData(17));
     }
 
-    public ContainerActivator(int id, Inventory playerInventory, TileEntityActivator tileEntityActivator, SimpleContainerData data)
-    {
+    public ContainerActivator(int id, Inventory playerInventory, TileEntityActivator tileEntityActivator, SimpleContainerData data) {
         super(ModContainers.CONTAINER_ACTIVATOR.get(), id);
         this.activator = tileEntityActivator;
         lastOptions = new ArrayList<>();
-        for (final ActivatorOption option : activator.getOptions())
-        {
+        for (final ActivatorOption option : activator.getOptions()) {
             lastOptions.add(option.getOption());
         }
     }
 
-    public TileEntityActivator getActivator()
-    {
+    public TileEntityActivator getActivator() {
         return activator;
     }
 
     @Override
-    public boolean stillValid(@NotNull Player player)
-    {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 }

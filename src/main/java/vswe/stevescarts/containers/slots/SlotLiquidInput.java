@@ -13,21 +13,18 @@ import vswe.stevescarts.helpers.storages.SCTank;
 
 import java.util.Optional;
 
-public class SlotLiquidInput extends SlotStevesCarts
-{
-    private SCTank tank;
-    private int maxsize;
+public class SlotLiquidInput extends SlotStevesCarts {
+    private final SCTank tank;
+    private final int maxsize;
 
-    public SlotLiquidInput(final Container iinventory, final SCTank tank, final int maxsize, final int i, final int j, final int k)
-    {
+    public SlotLiquidInput(final Container iinventory, final SCTank tank, final int maxsize, final int i, final int j, final int k) {
         super(iinventory, i, j, k);
         this.tank = tank;
         this.maxsize = maxsize;
     }
 
     @Override
-    public boolean mayPlace(@NotNull ItemStack itemStack)
-    {
+    public boolean mayPlace(@NotNull ItemStack itemStack) {
         Optional<IFluidHandlerItem> opt = FluidUtil.getFluidHandler(itemStack);
         if (!opt.isPresent()) return false;
         IFluidHandlerItem fluidHandler = opt.orElseThrow(RuntimeException::new);
@@ -40,8 +37,7 @@ public class SlotLiquidInput extends SlotStevesCarts
     }
 
     @Override
-    public int getMaxStackSize()
-    {
+    public int getMaxStackSize() {
         if (maxsize != -1) {
             return maxsize;
         }

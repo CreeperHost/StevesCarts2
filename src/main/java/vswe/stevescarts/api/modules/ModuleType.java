@@ -1,13 +1,8 @@
 package vswe.stevescarts.api.modules;
 
-import vswe.stevescarts.api.modules.template.ModuleEngine;
-import vswe.stevescarts.api.modules.template.ModuleHull;
-import vswe.stevescarts.api.modules.template.ModuleStorage;
-import vswe.stevescarts.api.modules.template.ModuleAddon;
-import vswe.stevescarts.api.modules.template.ModuleTool;
+import vswe.stevescarts.api.modules.template.*;
 
-public enum ModuleType
-{
+public enum ModuleType {
     HULL(ModuleHull.class),
     ENGINE(ModuleEngine.class),
     TOOL(ModuleTool.class),
@@ -18,13 +13,11 @@ public enum ModuleType
 
     private final Class<?> clazz;
 
-    ModuleType(Class<?> clazz)
-    {
+    ModuleType(Class<?> clazz) {
         this.clazz = clazz;
     }
 
-    public Class<?> getClazz()
-    {
+    public Class<?> getClazz() {
         return clazz;
     }
 }

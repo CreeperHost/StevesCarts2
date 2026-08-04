@@ -47,7 +47,6 @@ public class BlockUpgrade extends BlockContainerBase implements TooltipBlock {
     public static final BooleanProperty CONNECTED = BooleanProperty.create("connected");
 
     private static final VoxelShape[] BBS = new VoxelShape[6];
-    private final AssemblerUpgrade assemblerUpgrade;
 
     static {
         float thickness = 2.0F;
@@ -58,6 +57,8 @@ public class BlockUpgrade extends BlockContainerBase implements TooltipBlock {
         BBS[Direction.NORTH.ordinal()] = Block.box(0, 0, 16 - thickness, 16, 16, 16);
         BBS[Direction.SOUTH.ordinal()] = Block.box(0, 0, 0, 16, 16, thickness);
     }
+
+    private final AssemblerUpgrade assemblerUpgrade;
 
     public BlockUpgrade(Properties properties) {
         this(properties, null);
@@ -92,7 +93,7 @@ public class BlockUpgrade extends BlockContainerBase implements TooltipBlock {
     }
 
 
-    @SuppressWarnings ("deprication")
+    @SuppressWarnings("deprication")
     @Override
     public boolean canSurvive(@NotNull BlockState blockState, LevelReader iWorldReader, BlockPos blockPos) {
         BlockPos offset = blockPos.relative(getFacing(blockState));

@@ -15,59 +15,47 @@ import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.init.ModEntities;
 
-public class EntityCake extends ThrownEgg
-{
-    public EntityCake(final Level world)
-    {
+public class EntityCake extends ThrownEgg {
+    public EntityCake(final Level world) {
         super(ModEntities.CAKE.get(), world);
     }
 
-    public EntityCake(final Level world, final LivingEntity thrower, ItemStack stack)
-    {
+    public EntityCake(final Level world, final LivingEntity thrower, ItemStack stack) {
         super(world, thrower, stack);
     }
 
-    public EntityCake(final Level world, final double x, final double y, final double z, ItemStack stack)
-    {
+    public EntityCake(final Level world, final double x, final double y, final double z, ItemStack stack) {
         super(world, x, y, z, stack);
     }
 
-    public EntityCake(EntityType<EntityCake> entityCakeEntityType, Level world)
-    {
+    public EntityCake(EntityType<EntityCake> entityCakeEntityType, Level world) {
         super(entityCakeEntityType, world);
     }
 
     @Override
-    protected void onHitEntity(EntityHitResult data)
-    {
-        if (data.getEntity() != null)
-        {
-            if (data.getEntity() instanceof Player player)
-            {
+    protected void onHitEntity(EntityHitResult data) {
+        if (data.getEntity() != null) {
+            if (data.getEntity() instanceof Player player) {
                 player.getFoodData().eat(14, 0.7f);
             }
         }
-        if (level() instanceof ServerLevel serverLevel)
-        {
+        if (level() instanceof ServerLevel serverLevel) {
             kill(serverLevel);
         }
     }
 
     @Override
-    protected void onHitBlock(@NotNull BlockHitResult blockHitResult)
-    {
+    protected void onHitBlock(@NotNull BlockHitResult blockHitResult) {
         BlockPos pos = blockPosition();
 
         if (level().getBlockState(pos).isAir() && Blocks.CAKE.defaultBlockState().canSurvive(level(), pos))//level.isSideSolid(pos.down(), EnumFacing.UP))
         {
             level().setBlock(pos, Blocks.CAKE.defaultBlockState(), 3);
         }
-        for (int j = 0; j < 8; ++j)
-        {
+        for (int j = 0; j < 8; ++j) {
             level().addParticle(ParticleTypes.ITEM_SNOWBALL, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
         }
-        if (level() instanceof ServerLevel serverLevel)
-        {
+        if (level() instanceof ServerLevel serverLevel) {
             kill(serverLevel);
         }
     }

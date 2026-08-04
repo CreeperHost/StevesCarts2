@@ -8,19 +8,16 @@ import vswe.stevescarts.modules.workers.tools.ModuleWoodcutter;
 
 import javax.annotation.Nonnull;
 
-public class SlotSapling extends SlotStevesCarts
-{
-    private ModuleWoodcutter module;
+public class SlotSapling extends SlotStevesCarts {
+    private final ModuleWoodcutter module;
 
-    public SlotSapling(final Container iinventory, final ModuleWoodcutter module, final int i, final int j, final int k)
-    {
+    public SlotSapling(final Container iinventory, final ModuleWoodcutter module, final int i, final int j, final int k) {
         super(iinventory, i, j, k);
         this.module = module;
     }
 
     @Override
-    public boolean mayPlace(@Nonnull ItemStack itemstack)
-    {
+    public boolean mayPlace(@Nonnull ItemStack itemstack) {
         return itemstack.is(ItemTags.SAPLINGS);
     }
 }

@@ -1,10 +1,8 @@
 package vswe.stevescarts.modules.realtimers;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,21 +13,18 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ResourceHelper;
 
-public abstract class ModuleCommand extends ModuleBase implements CommandSource
-{
+public abstract class ModuleCommand extends ModuleBase implements CommandSource {
     private String command;
-    private int[] textbox;
+    private final int[] textbox;
 
-    public ModuleCommand(ModularMinecart cart)
-    {
+    public ModuleCommand(ModularMinecart cart) {
         super(cart);
         command = "say HI";
         textbox = new int[]{10, 10, 145, 90};
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
         //TODO
         //		final List lines = Minecraft.getInstance().font.width(command, textbox[2] - 4);
         //		for (int i = 0; i < lines.size(); ++i) {
@@ -39,46 +34,36 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    public boolean hasSlots()
-    {
+    public boolean hasSlots() {
         return false;
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/command.png");
-        drawImage(guiGraphics, texture, gui, textbox, 0, 0);
+        drawImage(GuiGraphicsExtractor, texture, gui, textbox, 0, 0);
     }
 
-    public void keyPress(final char character, final int extraInformation)
-    {
-        if (extraInformation == 14)
-        {
-            if (command.length() > 0)
-            {
+    public void keyPress(final char character, final int extraInformation) {
+        if (extraInformation == 14) {
+            if (command.length() > 0) {
                 command = command.substring(0, command.length() - 1);
             }
-        }
-        else
-        {
+        } else {
             command += Character.toString(character);
         }
     }
 
-    public String getCommandSenderName()
-    {
+    public String getCommandSenderName() {
         return "@";
     }
 
-    public void sendChatToPlayer(final String var1)
-    {
+    public void sendChatToPlayer(final String var1) {
     }
 
 
@@ -87,29 +72,23 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource
     //		return var1 <= 2;
     //	}
 
-    public String translateString(final String var1, final Object... var2)
-    {
+    public String translateString(final String var1, final Object... var2) {
         return var1;
     }
 
-    public BlockPos getPlayerCoordinates()
-    {
+    public BlockPos getPlayerCoordinates() {
         return getCart().blockPosition();
     }
 
-    private void executeCommand()
-    {
-        if (!getCart().level().isClientSide())
-        {
+    private void executeCommand() {
+        if (!getCart().level().isClientSide()) {
             //TODO
         }
     }
 
     @Override
-    public void moveMinecartOnRail(BlockPos pos, BlockState state)
-    {
-        if (state.getBlock() == Blocks.DETECTOR_RAIL)
-        {
+    public void moveMinecartOnRail(BlockPos pos, BlockState state) {
+        if (state.getBlock() == Blocks.DETECTOR_RAIL) {
             executeCommand();
         }
     }

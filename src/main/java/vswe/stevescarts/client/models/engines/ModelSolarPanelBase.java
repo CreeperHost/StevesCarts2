@@ -7,26 +7,22 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.engines.ModuleSolarTop;
 
-public class ModelSolarPanelBase extends ModelCartbase
-{
+public class ModelSolarPanelBase extends ModelCartbase {
     private final ModelPart moving;
     private final ModelPart top;
 
-    public ModelSolarPanelBase()
-    {
+    public ModelSolarPanelBase() {
         super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/panelModelBase.png"));
         this.moving = this.getRoot().getChild("moving");
         this.top = this.getRoot().getChild("top");
     }
 
-    public static LayerDefinition getTexturedModelData()
-    {
+    public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         modelPartData.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0f, -5.0f, -1.0f, 2, 10, 2), PartPose.offset(0.0f, -4.5f, 0.0f));
@@ -36,8 +32,7 @@ public class ModelSolarPanelBase extends ModelCartbase
     }
 
     @Override
-    public void applyEffects(final ModuleBase module, PoseStack matrixStack, final float yaw, final float pitch, final float roll)
-    {
+    public void applyEffects(final ModuleBase module, PoseStack matrixStack, final float yaw, final float pitch, final float roll) {
         super.applyEffects(module, matrixStack, yaw, pitch, roll);
         moving.y = ((module == null) ? -4.0f : ((ModuleSolarTop) module).getMovingLevel());
     }

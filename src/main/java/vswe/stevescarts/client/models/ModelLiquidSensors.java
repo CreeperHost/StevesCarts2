@@ -7,7 +7,6 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -16,11 +15,11 @@ import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.addons.ModuleLiquidSensors;
 
 public class ModelLiquidSensors extends ModelCartbase {
-    private static Identifier texture = ResourceHelper.getResource("/models/sensorModel.png");
+    private static final Identifier texture = ResourceHelper.getResource("/models/sensorModel.png");
 
     private int activeColour = 0;
-    private ModelPart[] sensorLeft;
-    private ModelPart[] sensorRight;
+    private final ModelPart[] sensorLeft;
+    private final ModelPart[] sensorRight;
 
     public ModelLiquidSensors() {
         super(null, texture);

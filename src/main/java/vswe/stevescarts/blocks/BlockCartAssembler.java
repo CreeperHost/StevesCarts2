@@ -3,7 +3,6 @@ package vswe.stevescarts.blocks;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -22,22 +21,17 @@ import vswe.stevescarts.polylib.Pair;
 
 import java.util.ArrayList;
 
-public class BlockCartAssembler extends BlockContainerBase
-{
+public class BlockCartAssembler extends BlockContainerBase {
     public static final MapCodec<BlockCartAssembler> CODEC = simpleCodec(BlockCartAssembler::new);
 
-    public BlockCartAssembler(Block.Properties properties)
-    {
+    public BlockCartAssembler(Block.Properties properties) {
         super(properties);
     }
 
     @Override
-    public @NotNull InteractionResult useWithoutItem(@NotNull BlockState blockState, Level world, @NotNull BlockPos blockPos, @NotNull Player playerEntity, BlockHitResult result)
-    {
-        if (!world.isClientSide())
-        {
-            if (!playerEntity.isCrouching())
-            {
+    public @NotNull InteractionResult useWithoutItem(@NotNull BlockState blockState, Level world, @NotNull BlockPos blockPos, @NotNull Player playerEntity, BlockHitResult result) {
+        if (!world.isClientSide()) {
+            if (!playerEntity.isCrouching()) {
                 playerEntity.openMenu((MenuProvider) world.getBlockEntity(blockPos), blockPos);
                 return InteractionResult.SUCCESS;
             }
@@ -46,37 +40,28 @@ public class BlockCartAssembler extends BlockContainerBase
     }
 
 
-    public void updateMultiBlock(final Level world, final BlockPos pos)
-    {
+    public void updateMultiBlock(final Level world, final BlockPos pos) {
         BlockEntity master = world.getBlockEntity(pos);
-        if (master instanceof TileEntityCartAssembler)
-        {
+        if (master instanceof TileEntityCartAssembler) {
             ((TileEntityCartAssembler) master).clearUpgrades();
         }
         checkForUpgrades(world, pos);
-        if (master instanceof TileEntityCartAssembler)
-        {
+        if (master instanceof TileEntityCartAssembler) {
             ((TileEntityCartAssembler) master).onUpgradeUpdate();
         }
     }
 
-    private void checkForUpgrades(final Level world, final BlockPos pos)
-    {
-        for (Direction facing : Direction.values())
-        {
+    private void checkForUpgrades(final Level world, final BlockPos pos) {
+        for (Direction facing : Direction.values()) {
             checkForUpgrade(world, pos.relative(facing));
         }
     }
 
-    private TileEntityCartAssembler checkForUpgrade(final Level world, final BlockPos pos)
-    {
+    private TileEntityCartAssembler checkForUpgrade(final Level world, final BlockPos pos) {
         final BlockEntity tile = world.getBlockEntity(pos);
-        if (tile != null && tile instanceof TileEntityUpgrade)
-        {
-            final TileEntityUpgrade upgrade = (TileEntityUpgrade) tile;
+        if (tile != null && tile instanceof TileEntityUpgrade upgrade) {
             final ArrayList<Pair<TileEntityCartAssembler, Direction>> masters = getMasters(world, pos);
-            if (masters.size() == 1)
-            {
+            if (masters.size() == 1) {
                 Pair<TileEntityCartAssembler, Direction> pair = masters.get(0);
                 TileEntityCartAssembler master = pair.first();
                 master.addUpgrade(upgrade);
@@ -84,8 +69,7 @@ public class BlockCartAssembler extends BlockContainerBase
                 return master;
             }
             world.blockEntityChanged(pos);
-            for (final Pair<TileEntityCartAssembler, Direction> master2 : masters)
-            {
+            for (final Pair<TileEntityCartAssembler, Direction> master2 : masters) {
                 master2.first().removeUpgrade(upgrade);
             }
             upgrade.setMaster(null, null);
@@ -93,30 +77,23 @@ public class BlockCartAssembler extends BlockContainerBase
         return null;
     }
 
-    private ArrayList<Pair<TileEntityCartAssembler, Direction>> getMasters(final Level world, final BlockPos pos)
-    {
+    private ArrayList<Pair<TileEntityCartAssembler, Direction>> getMasters(final Level world, final BlockPos pos) {
         final ArrayList<Pair<TileEntityCartAssembler, Direction>> masters = new ArrayList<>();
-        for (Direction facing : Direction.values())
-        {
+        for (Direction facing : Direction.values()) {
             final TileEntityCartAssembler temp = getMaster(world, pos.relative(facing));
-            if (temp != null)
-            {
+            if (temp != null) {
                 masters.add(Pair.of(temp, facing));
             }
         }
         return masters;
     }
 
-    private TileEntityCartAssembler getValidMaster(final Level world, final BlockPos pos)
-    {
+    private TileEntityCartAssembler getValidMaster(final Level world, final BlockPos pos) {
         TileEntityCartAssembler master = null;
-        for (Direction facing : Direction.values())
-        {
+        for (Direction facing : Direction.values()) {
             final TileEntityCartAssembler temp = getMaster(world, pos.relative(facing));
-            if (temp != null)
-            {
-                if (master != null)
-                {
+            if (temp != null) {
+                if (master != null) {
                     return null;
                 }
                 master = temp;
@@ -125,33 +102,26 @@ public class BlockCartAssembler extends BlockContainerBase
         return master;
     }
 
-    private TileEntityCartAssembler getMaster(final Level world, final BlockPos pos)
-    {
+    private TileEntityCartAssembler getMaster(final Level world, final BlockPos pos) {
         final BlockEntity tile = world.getBlockEntity(pos);
-        if (tile != null && tile instanceof final TileEntityCartAssembler master)
-        {
-            if (!master.isDead)
-            {
+        if (tile != null && tile instanceof final TileEntityCartAssembler master) {
+            if (!master.isDead) {
                 return master;
             }
         }
         return null;
     }
 
-    public void addUpgrade(final Level world, final BlockPos pos)
-    {
+    public void addUpgrade(final Level world, final BlockPos pos) {
         final TileEntityCartAssembler master = getValidMaster(world, pos);
-        if (master != null)
-        {
+        if (master != null) {
             updateMultiBlock(world, master.getBlockPos());
         }
     }
 
-    public void removeUpgrade(final Level world, final BlockPos pos)
-    {
+    public void removeUpgrade(final Level world, final BlockPos pos) {
         final TileEntityCartAssembler master = getValidMaster(world, pos);
-        if (master != null)
-        {
+        if (master != null) {
             updateMultiBlock(world, master.getBlockPos());
         }
     }
@@ -165,8 +135,7 @@ public class BlockCartAssembler extends BlockContainerBase
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState)
-    {
+    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
         return new TileEntityCartAssembler(blockPos, blockState);
     }
 

@@ -5,57 +5,44 @@ import net.neoforged.fml.i18n.FMLTranslations;
 
 import java.util.Arrays;
 
-public final class Localization
-{
+public final class Localization {
     //TODO, this entire system needs to be switched to Components so this translation can be done client side.
     // But that will require a significant rewrite of a lot of localisation.
 
     //No point in fixing this, its time to replace
-    private static String doTranslate(final String name, final String... vars)
-    {
+    private static String doTranslate(final String name, final String... vars) {
         String result = FMLTranslations.getPattern(name, () -> name);
-        for (int i = 0; i < vars.length; ++i)
-        {
+        for (int i = 0; i < vars.length; ++i) {
             final String pluralCheck = "[%" + (i + 1) + ":";
             final int index = result.indexOf(pluralCheck);
-            if (index != -1)
-            {
+            if (index != -1) {
                 final int endIndex = result.indexOf("]", index);
-                if (endIndex != -1)
-                {
+                if (endIndex != -1) {
                     final String optionsStr = result.substring(index + pluralCheck.length(), endIndex);
                     final String[] options = optionsStr.split("\\|");
                     final int optionId = (!vars[i].equals("1") && !vars[i].equals("-1")) ? 1 : 0;
-                    if (optionId >= 0 && optionId < options.length)
-                    {
+                    if (optionId >= 0 && optionId < options.length) {
                         final String option = options[optionId];
                         result = result.substring(0, index) + option + result.substring(endIndex + 1);
                         --i;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 final String listCheck = "[%" + (i + 1) + "->";
                 final int index2 = result.indexOf(listCheck);
-                if (index2 != -1)
-                {
+                if (index2 != -1) {
                     final int endIndex2 = result.indexOf("]", index2);
-                    if (endIndex2 != -1)
-                    {
+                    if (endIndex2 != -1) {
                         final String optionsStr2 = result.substring(index2 + listCheck.length(), endIndex2);
                         final String[] options2 = optionsStr2.split("\\|");
                         final int optionId2 = Integer.parseInt(vars[i]);
-                        if (optionId2 >= 0 && optionId2 < options2.length)
-                        {
+                        if (optionId2 >= 0 && optionId2 < options2.length) {
                             final String option2 = options2[optionId2];
                             result = result.substring(0, index2) + option2 + result.substring(endIndex2 + 1);
                             --i;
                         }
                     }
-                }
-                else
-                {
+                } else {
                     result = result.replace("[%" + (i + 1) + "]", vars[i]);
                 }
             }
@@ -68,10 +55,164 @@ public final class Localization
         return Component.literal(doTranslate(name, Arrays.stream(vars).map(String::valueOf).toArray(String[]::new)));
     }
 
-    public static class GUI
-    {
-        public enum ASSEMBLER
-        {
+    public enum MODULE_INFO {
+        ENGINE_GROUP("moduleGroupEngine"),
+        DRILL_GROUP("moduleGroupDrill"),
+        FARMER_GROUP("moduleGroupFarmer"),
+        CUTTER_GROUP("moduleGroupCutter"),
+        TANK_GROUP("moduleGroupTank"),
+        ENTITY_GROUP("moduleGroupEntity"),
+        SHOOTER_GROUP("moduleGroupShooter"),
+        TOOL_GROUP("moduleGroupTool"),
+        TOOL_OR_SHOOTER_GROUP("moduleGroupToolShooter"),
+        HULL_CATEGORY("moduleCategoryHull"),
+        ENGINE_CATEGORY("moduleCategoryEngine"),
+        TOOL_CATEGORY("moduleCategoryTool"),
+        STORAGE_CATEGORY("moduleCategoryStorage"),
+        ADDON_CATEGORY("moduleCategoryAddon"),
+        ATTACHMENT_CATEGORY("moduleCategoryAttachment"),
+        PIG_MESSAGE("pigExtraMessage"),
+        OCEAN_MESSAGE("oceanExtraMessage"),
+        OPEN_TANK("openExtraMessage"),
+        ALPHA_MESSAGE("alphaExtraMessage"),
+        STORAGE_EMPTY("storageEmpty"),
+        STORAGE_FULL("storageFull"),
+        GIFT_STORAGE_FULL("giftStorageFull"),
+        EGG_STORAGE_FULL("eggStorageFull"),
+        MODULAR_COST("modularCost"),
+        SIDE_NONE("cartSideNone"),
+        SIDE_TOP("cartSideTop"),
+        SIDE_CENTER("cartSideCenter"),
+        SIDE_BOTTOM("cartSideBottom"),
+        SIDE_BACK("cartSideBack"),
+        SIDE_LEFT("cartSideLeft"),
+        SIDE_RIGHT("cartSideRight"),
+        SIDE_FRONT("cartSideFront"),
+        OCCUPIED_SIDES("occupiedSides"),
+        AND("sidesAnd"),
+        SHIFT_FOR_MORE("shiftForMore"),
+        NO_SIDES("noSides"),
+        CONFLICT_HOWEVER("moduleConflictHowever"),
+        CONFLICT_ALSO("moduleConflictAlso"),
+        REQUIREMENT("moduleRequirement"),
+        MODULE_COUNT_1("moduleCount1"),
+        MODULE_COUNT_2("moduleCount2"),
+        MODULE_COUNT_3("moduleCount3"),
+        DUPLICATES("allowDuplicates"),
+        TYPE("moduleType"),
+        CAPACITY_ERROR("capacityOverloadError"),
+        COMBINATION_ERROR("impossibleCombinationError"),
+        COMPLEXITY_ERROR("complexityOverloadError"),
+        PARENT_ERROR("missingParentError"),
+        NEMESIS_ERROR("presentNemesisError"),
+        DUPLICATE_ERROR("presentDuplicateError"),
+        CLASH_ERROR("sideClashError"),
+        TOOL_UNBREAKABLE("toolUnbreakable"),
+        TOOL_DURABILITY("toolDurability"),
+        MODULAR_CAPACITY("modularCapacity"),
+        COMPLEXITY_CAP("complexityCap"),
+        MAX_ENGINES("maxEngineCount"),
+        MAX_ADDONS("maxAddonCount");
+
+        private final String name;
+
+        MODULE_INFO(final String name) {
+            this.name = name;
+        }
+
+        public String translate(final String... vars) {
+            return doTranslate("info.stevescarts." + name, vars);
+        }
+    }
+
+    public enum UPGRADES {
+        FLAT("effectTimeFlat"),
+        CART_FLAT("effectTimeFlatCart"),
+        FLAT_REMOVED("effectTimeFlatRemove"),
+        EFFICIENCY("effectEfficiency");
+
+        private final String name;
+
+        UPGRADES(final String name) {
+            this.name = name;
+        }
+
+        public String translate(final String... vars) {
+            return doTranslate("info.stevescarts." + name, vars);
+        }
+    }
+
+    public enum ARCADE {
+        GHAST("ghastInvaders"),
+        EXTRA_LIVES("ghastLives"),
+        HIGH_SCORE("highScore"),
+        SCORE("score"),
+        INSTRUCTION_SHOOT("instructionShoot"),
+        INSTRUCTION_LEFT("instructionLeft"),
+        INSTRUCTION_RIGHT("instructionRight"),
+        INSTRUCTION_RESTART("instructionRestart"),
+        CREEPER("creeperSweeper"),
+        MAP_1("creeperMapName1"),
+        MAP_2("creeperMapName2"),
+        MAP_3("creeperMapName3"),
+        LEFT("creepersLeft"),
+        TIME("creeperTime"),
+        INSTRUCTION_CHANGE_MAP("instructionChangeMap"),
+        MAP("creeperCurrentMap"),
+        HIGH_SCORES("creeperHighScores"),
+        HIGH_SCORE_ENTRY("creeperHighScore"),
+        STACKER("mobStacker"),
+        REMOVED_LINES("stackerRemovedLines"),
+        REMOVED_LINES_COMBO("stackerRemovedLinesCombo"),
+        INSTRUCTION_ROTATE("instructionRotate"),
+        INSTRUCTION_DROP("instructionDrop"),
+        OPERATOR("trackOperator"),
+        SAVE_ERROR("operatorSaveError"),
+        SAVE("operatorSave"),
+        USER_MAPS("operatorUserCreatedMaps"),
+        STORIES("operatorStories"),
+        HELP("operatorHelp"),
+        INSTRUCTION_SHAPE("instructionTrackShape"),
+        INSTRUCTION_ROTATE_TRACK("instructionRotateTrack"),
+        INSTRUCTION_FLIP_TRACK("instructionFlipTrack"),
+        INSTRUCTION_DEFAULT_DIRECTION("instructionDefaultDirection"),
+        INSTRUCTION_TRACK_TYPE("instructionTrackType"),
+        INSTRUCTION_DELETE_TRACK("instructionDeleteTrack"),
+        INSTRUCTION_COPY_TRACK("instructionCopyTrack"),
+        INSTRUCTION_STEVE("instructionMoveSteve"),
+        INSTRUCTION_MAP("instructionMoveMap"),
+        INSTRUCTION_PLACE_TRACK("instructionPlaceTrack"),
+        INSTRUCTION_DESELECT_TRACK("instructionDeselectTrack"),
+        LEFT_MOUSE("leftMouseButton"),
+        RIGHT_MOUSE("rightMouseButton"),
+        BUTTON_START("buttonStart"),
+        BUTTON_MENU("buttonMenu"),
+        BUTTON_STOP("buttonStop"),
+        BUTTON_NEXT("buttonNextLevel"),
+        BUTTON_START_LEVEL("buttonStartLevel"),
+        BUTTON_SELECT_STORY("buttonSelectStory"),
+        BUTTON_SELECT_OTHER_STORY("buttonSelectStoryOther"),
+        BUTTON_CREATE_LEVEL("buttonCreateLevel"),
+        BUTTON_EDIT_LEVEL("buttonEditLevel"),
+        BUTTON_REFRESH("buttonRefreshList"),
+        BUTTON_SAVE("buttonSave"),
+        BUTTON_SAVE_AS("buttonSaveAs"),
+        BUTTON_CANCEL("buttonCancel"),
+        MADNESS("forgecraftMadness");
+
+        private final String name;
+
+        ARCADE(final String name) {
+            this.name = name;
+        }
+
+        public String translate(final String... vars) {
+            return doTranslate("arcade.stevescarts." + name, vars);
+        }
+    }
+
+    public static class GUI {
+        public enum ASSEMBLER {
             TITLE("cartAssembler"),
             ASSEMBLE_INSTRUCTION("basicAssembleInstruction"),
             INVALID_HULL("invalidHullError"),
@@ -93,19 +234,16 @@ public final class Localization
 
             private final String name;
 
-            ASSEMBLER(final String name)
-            {
+            ASSEMBLER(final String name) {
                 this.name = name;
             }
 
-            public String translate(final String... vars)
-            {
+            public String translate(final String... vars) {
                 return doTranslate("gui.stevescarts." + name, vars);
             }
         }
 
-        public enum MANAGER
-        {
+        public enum MANAGER {
             TITLE("manager"),
             CURRENT_SETTING("currentSetting"),
             CHANGE_TRANSFER_DIRECTION("changeTransferDirection"),
@@ -126,19 +264,16 @@ public final class Localization
 
             private final String name;
 
-            MANAGER(final String name)
-            {
+            MANAGER(final String name) {
                 this.name = name;
             }
 
-            public String translate(final String... vars)
-            {
+            public String translate(final String... vars) {
                 return doTranslate("gui.stevescarts." + name, vars);
             }
         }
 
-        public enum CARGO
-        {
+        public enum CARGO {
             TITLE("cargoManager"),
             CHANGE_SLOT_LAYOUT("changeSlotLayout"),
             LAYOUT_SHARED("layoutShared"),
@@ -169,19 +304,16 @@ public final class Localization
 
             private final String name;
 
-            CARGO(final String name)
-            {
+            CARGO(final String name) {
                 this.name = name;
             }
 
-            public String translate(final String... vars)
-            {
+            public String translate(final String... vars) {
                 return doTranslate("gui.stevescarts." + name, vars);
             }
         }
 
-        public enum LIQUID
-        {
+        public enum LIQUID {
             TITLE("liquidManager"),
             CHANGE_LAYOUT("changeTankLayout"),
             LAYOUT_ALL("layoutSharedTanks"),
@@ -194,19 +326,16 @@ public final class Localization
 
             private final String name;
 
-            LIQUID(final String name)
-            {
+            LIQUID(final String name) {
                 this.name = name;
             }
 
-            public String translate(final String... vars)
-            {
+            public String translate(final String... vars) {
                 return doTranslate("gui.stevescarts." + name, vars);
             }
         }
 
-        public enum TOGGLER
-        {
+        public enum TOGGLER {
             TITLE("moduleToggler"),
             OPTION_DRILL("optionDrill"),
             OPTION_SHIELD("optionShield"),
@@ -224,19 +353,16 @@ public final class Localization
 
             private final String name;
 
-            TOGGLER(final String name)
-            {
+            TOGGLER(final String name) {
                 this.name = name;
             }
 
-            public String translate(final String... vars)
-            {
+            public String translate(final String... vars) {
                 return doTranslate("gui.stevescarts." + name, vars);
             }
         }
 
-        public enum DISTRIBUTOR
-        {
+        public enum DISTRIBUTOR {
             TITLE("externalDistributor"),
             NOT_CONNECTED("distributorNotConnected"),
             SIDE("sideName"),
@@ -265,19 +391,16 @@ public final class Localization
 
             private final String name;
 
-            DISTRIBUTOR(final String name)
-            {
+            DISTRIBUTOR(final String name) {
                 this.name = name;
             }
 
-            public String translate(final String... vars)
-            {
+            public String translate(final String... vars) {
                 return doTranslate("gui.stevescarts." + name, vars);
             }
         }
 
-        public enum DETECTOR
-        {
+        public enum DETECTOR {
             OUTPUT("operatorOutput"),
             AND("operatorAnd"),
             OR("operatorOr"),
@@ -348,115 +471,18 @@ public final class Localization
 
             private final String name;
 
-            DETECTOR(final String name)
-            {
+            DETECTOR(final String name) {
                 this.name = name;
             }
 
-            public String translate(final String... vars)
-            {
+            public String translate(final String... vars) {
                 return doTranslate("gui.stevescarts." + name, vars);
             }
         }
     }
 
-    public enum MODULE_INFO
-    {
-        ENGINE_GROUP("moduleGroupEngine"),
-        DRILL_GROUP("moduleGroupDrill"),
-        FARMER_GROUP("moduleGroupFarmer"),
-        CUTTER_GROUP("moduleGroupCutter"),
-        TANK_GROUP("moduleGroupTank"),
-        ENTITY_GROUP("moduleGroupEntity"),
-        SHOOTER_GROUP("moduleGroupShooter"),
-        TOOL_GROUP("moduleGroupTool"),
-        TOOL_OR_SHOOTER_GROUP("moduleGroupToolShooter"),
-        HULL_CATEGORY("moduleCategoryHull"),
-        ENGINE_CATEGORY("moduleCategoryEngine"),
-        TOOL_CATEGORY("moduleCategoryTool"),
-        STORAGE_CATEGORY("moduleCategoryStorage"),
-        ADDON_CATEGORY("moduleCategoryAddon"),
-        ATTACHMENT_CATEGORY("moduleCategoryAttachment"),
-        PIG_MESSAGE("pigExtraMessage"),
-        OCEAN_MESSAGE("oceanExtraMessage"),
-        OPEN_TANK("openExtraMessage"),
-        ALPHA_MESSAGE("alphaExtraMessage"),
-        STORAGE_EMPTY("storageEmpty"),
-        STORAGE_FULL("storageFull"),
-        GIFT_STORAGE_FULL("giftStorageFull"),
-        EGG_STORAGE_FULL("eggStorageFull"),
-        MODULAR_COST("modularCost"),
-        SIDE_NONE("cartSideNone"),
-        SIDE_TOP("cartSideTop"),
-        SIDE_CENTER("cartSideCenter"),
-        SIDE_BOTTOM("cartSideBottom"),
-        SIDE_BACK("cartSideBack"),
-        SIDE_LEFT("cartSideLeft"),
-        SIDE_RIGHT("cartSideRight"),
-        SIDE_FRONT("cartSideFront"),
-        OCCUPIED_SIDES("occupiedSides"),
-        AND("sidesAnd"),
-        SHIFT_FOR_MORE("shiftForMore"),
-        NO_SIDES("noSides"),
-        CONFLICT_HOWEVER("moduleConflictHowever"),
-        CONFLICT_ALSO("moduleConflictAlso"),
-        REQUIREMENT("moduleRequirement"),
-        MODULE_COUNT_1("moduleCount1"),
-        MODULE_COUNT_2("moduleCount2"),
-        MODULE_COUNT_3("moduleCount3"),
-        DUPLICATES("allowDuplicates"),
-        TYPE("moduleType"),
-        CAPACITY_ERROR("capacityOverloadError"),
-        COMBINATION_ERROR("impossibleCombinationError"),
-        COMPLEXITY_ERROR("complexityOverloadError"),
-        PARENT_ERROR("missingParentError"),
-        NEMESIS_ERROR("presentNemesisError"),
-        DUPLICATE_ERROR("presentDuplicateError"),
-        CLASH_ERROR("sideClashError"),
-        TOOL_UNBREAKABLE("toolUnbreakable"),
-        TOOL_DURABILITY("toolDurability"),
-        MODULAR_CAPACITY("modularCapacity"),
-        COMPLEXITY_CAP("complexityCap"),
-        MAX_ENGINES("maxEngineCount"),
-        MAX_ADDONS("maxAddonCount");
-
-        private final String name;
-
-        MODULE_INFO(final String name)
-        {
-            this.name = name;
-        }
-
-        public String translate(final String... vars)
-        {
-            return doTranslate("info.stevescarts." + name, vars);
-        }
-    }
-
-    public enum UPGRADES
-    {
-        FLAT("effectTimeFlat"),
-        CART_FLAT("effectTimeFlatCart"),
-        FLAT_REMOVED("effectTimeFlatRemove"),
-        EFFICIENCY("effectEfficiency");
-
-        private final String name;
-
-        UPGRADES(final String name)
-        {
-            this.name = name;
-        }
-
-        public String translate(final String... vars)
-        {
-            return doTranslate("info.stevescarts." + name, vars);
-        }
-    }
-
-    public static class MODULES
-    {
-        public enum ADDONS
-        {
+    public static class MODULES {
+        public enum ADDONS {
             BUTTON_RANDOMIZE("buttonRandomize"),
             DETECTOR_ANIMALS("detectorAnimals"),
             DETECTOR_BATS("detectorBats"),
@@ -513,19 +539,16 @@ public final class Localization
 
             private final String name;
 
-            ADDONS(final String name)
-            {
+            ADDONS(final String name) {
                 this.name = name;
             }
 
-            public String translate(final String... vars)
-            {
+            public String translate(final String... vars) {
                 return doTranslate("modules.addons.stevescarts." + name, vars);
             }
         }
 
-        public enum ENGINES
-        {
+        public enum ENGINES {
             OVER_9000("creativePowerLevel"),
             COAL("coalEngineTitle"),
             NO_FUEL("outOfFuel"),
@@ -542,19 +565,16 @@ public final class Localization
 
             private final String name;
 
-            ENGINES(final String name)
-            {
+            ENGINES(final String name) {
                 this.name = name;
             }
 
-            public String translate(final String... vars)
-            {
+            public String translate(final String... vars) {
                 return doTranslate("modules.engines.stevescarts." + name, vars);
             }
         }
 
-        public enum TANKS
-        {
+        public enum TANKS {
             CREATIVE_MODE("creativeTankMode"),
             CHANGE_MODE("creativeTankChangeMode"),
             RESET_MODE("creativeTankResetMode"),
@@ -566,19 +586,16 @@ public final class Localization
 
             private final String name;
 
-            TANKS(final String name)
-            {
+            TANKS(final String name) {
                 this.name = name;
             }
 
-            public String translate(final String... vars)
-            {
+            public String translate(final String... vars) {
                 return doTranslate("modules.tanks.stevescarts." + name, vars);
             }
         }
 
-        public enum TOOLS
-        {
+        public enum TOOLS {
             DURABILITY("toolDurability"),
             BROKEN("toolBroken"),
             REPAIRING("toolRepairing"),
@@ -595,19 +612,16 @@ public final class Localization
 
             private final String name;
 
-            TOOLS(final String name)
-            {
+            TOOLS(final String name) {
                 this.name = name;
             }
 
-            public String translate(final String... vars)
-            {
+            public String translate(final String... vars) {
                 return doTranslate("modules.tools.stevescarts." + name, vars);
             }
         }
 
-        public enum ATTACHMENTS
-        {
+        public enum ATTACHMENTS {
             FERTILIZERS("fertilizers"),
             RAILER("railerTitle"),
             CONTROL_SYSTEM("controlSystemTitle"),
@@ -647,94 +661,18 @@ public final class Localization
 
             private final String name;
 
-            ATTACHMENTS(final String name)
-            {
+            ATTACHMENTS(final String name) {
                 this.name = name;
             }
 
-            public String translate(final String... vars)
-            {
+            public String translate(final String... vars) {
                 return doTranslate("modules.attachments.stevescarts." + name, vars);
             }
         }
     }
 
-    public enum ARCADE
-    {
-        GHAST("ghastInvaders"),
-        EXTRA_LIVES("ghastLives"),
-        HIGH_SCORE("highScore"),
-        SCORE("score"),
-        INSTRUCTION_SHOOT("instructionShoot"),
-        INSTRUCTION_LEFT("instructionLeft"),
-        INSTRUCTION_RIGHT("instructionRight"),
-        INSTRUCTION_RESTART("instructionRestart"),
-        CREEPER("creeperSweeper"),
-        MAP_1("creeperMapName1"),
-        MAP_2("creeperMapName2"),
-        MAP_3("creeperMapName3"),
-        LEFT("creepersLeft"),
-        TIME("creeperTime"),
-        INSTRUCTION_CHANGE_MAP("instructionChangeMap"),
-        MAP("creeperCurrentMap"),
-        HIGH_SCORES("creeperHighScores"),
-        HIGH_SCORE_ENTRY("creeperHighScore"),
-        STACKER("mobStacker"),
-        REMOVED_LINES("stackerRemovedLines"),
-        REMOVED_LINES_COMBO("stackerRemovedLinesCombo"),
-        INSTRUCTION_ROTATE("instructionRotate"),
-        INSTRUCTION_DROP("instructionDrop"),
-        OPERATOR("trackOperator"),
-        SAVE_ERROR("operatorSaveError"),
-        SAVE("operatorSave"),
-        USER_MAPS("operatorUserCreatedMaps"),
-        STORIES("operatorStories"),
-        HELP("operatorHelp"),
-        INSTRUCTION_SHAPE("instructionTrackShape"),
-        INSTRUCTION_ROTATE_TRACK("instructionRotateTrack"),
-        INSTRUCTION_FLIP_TRACK("instructionFlipTrack"),
-        INSTRUCTION_DEFAULT_DIRECTION("instructionDefaultDirection"),
-        INSTRUCTION_TRACK_TYPE("instructionTrackType"),
-        INSTRUCTION_DELETE_TRACK("instructionDeleteTrack"),
-        INSTRUCTION_COPY_TRACK("instructionCopyTrack"),
-        INSTRUCTION_STEVE("instructionMoveSteve"),
-        INSTRUCTION_MAP("instructionMoveMap"),
-        INSTRUCTION_PLACE_TRACK("instructionPlaceTrack"),
-        INSTRUCTION_DESELECT_TRACK("instructionDeselectTrack"),
-        LEFT_MOUSE("leftMouseButton"),
-        RIGHT_MOUSE("rightMouseButton"),
-        BUTTON_START("buttonStart"),
-        BUTTON_MENU("buttonMenu"),
-        BUTTON_STOP("buttonStop"),
-        BUTTON_NEXT("buttonNextLevel"),
-        BUTTON_START_LEVEL("buttonStartLevel"),
-        BUTTON_SELECT_STORY("buttonSelectStory"),
-        BUTTON_SELECT_OTHER_STORY("buttonSelectStoryOther"),
-        BUTTON_CREATE_LEVEL("buttonCreateLevel"),
-        BUTTON_EDIT_LEVEL("buttonEditLevel"),
-        BUTTON_REFRESH("buttonRefreshList"),
-        BUTTON_SAVE("buttonSave"),
-        BUTTON_SAVE_AS("buttonSaveAs"),
-        BUTTON_CANCEL("buttonCancel"),
-        MADNESS("forgecraftMadness");
-
-        private final String name;
-
-        ARCADE(final String name)
-        {
-            this.name = name;
-        }
-
-        public String translate(final String... vars)
-        {
-            return doTranslate("arcade.stevescarts." + name, vars);
-        }
-    }
-
-    public static class STORIES
-    {
-        public enum THE_BEGINNING
-        {
+    public static class STORIES {
+        public enum THE_BEGINNING {
             MAP_EDITOR("mapEditor"),
             TITLE("title"),
             MISSION("mission"),
@@ -763,13 +701,11 @@ public final class Localization
 
             private final String name;
 
-            THE_BEGINNING(final String name)
-            {
+            THE_BEGINNING(final String name) {
                 this.name = name;
             }
 
-            public String translate(final String... vars)
-            {
+            public String translate(final String... vars) {
                 return doTranslate("stories.beginning.stevescarts." + name, vars);
             }
         }

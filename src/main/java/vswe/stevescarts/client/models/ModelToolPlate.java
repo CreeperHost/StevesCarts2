@@ -8,15 +8,12 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.helpers.ResourceHelper;
 
-public class ModelToolPlate extends ModelCartbase
-{
-    public ModelToolPlate()
-    {
+public class ModelToolPlate extends ModelCartbase {
+    public ModelToolPlate() {
         super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/toolPlateModel.png"));
     }
 
-    public static LayerDefinition getTexturedModelData()
-    {
+    public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 

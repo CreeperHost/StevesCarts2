@@ -3,27 +3,20 @@ package vswe.stevescarts.api.upgrades;
 import net.minecraft.nbt.CompoundTag;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 
-public abstract class RechargerBaseUpgrade extends BaseUpgradeEffect
-{
+public abstract class RechargerBaseUpgrade extends BaseUpgradeEffect {
     @Override
-    public void update(final TileEntityUpgrade tileEntityUpgrade)
-    {
-        if(tileEntityUpgrade.getLevel() == null) return;
+    public void update(final TileEntityUpgrade tileEntityUpgrade) {
+        if (tileEntityUpgrade.getLevel() == null) return;
 
-        if (!tileEntityUpgrade.getLevel().isClientSide() && canGenerate(tileEntityUpgrade))
-        {
+        if (!tileEntityUpgrade.getLevel().isClientSide() && canGenerate(tileEntityUpgrade)) {
             final CompoundTag comp = tileEntityUpgrade.getCompound();
-            if (comp == null)
-            {
+            if (comp == null) {
                 return;
             }
-            if (comp.getShortOr("GenerateCooldown", (short) 0) >= 1200 / getAmount(tileEntityUpgrade))
-            {
+            if (comp.getShortOr("GenerateCooldown", (short) 0) >= 1200 / getAmount(tileEntityUpgrade)) {
                 comp.putShort("GenerateCooldown", (short) 0);
                 tileEntityUpgrade.getMaster().increaseFuel(1);
-            }
-            else
-            {
+            } else {
                 comp.putShort("GenerateCooldown", (short) (comp.getShortOr("GenerateCooldown", (short) 0) + 1));
             }
         }
@@ -34,8 +27,7 @@ public abstract class RechargerBaseUpgrade extends BaseUpgradeEffect
     protected abstract int getAmount(final TileEntityUpgrade tileEntityUpgrade);
 
     @Override
-    public void init(final TileEntityUpgrade tileEntityUpgrade)
-    {
+    public void init(final TileEntityUpgrade tileEntityUpgrade) {
         tileEntityUpgrade.getCompound().putShort("GenerateCooldown", (short) 0);
     }
 }

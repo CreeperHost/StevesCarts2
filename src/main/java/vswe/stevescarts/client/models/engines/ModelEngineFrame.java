@@ -7,15 +7,12 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import vswe.stevescarts.helpers.ResourceHelper;
 
-public class ModelEngineFrame extends ModelEngineBase
-{
-    public ModelEngineFrame()
-    {
+public class ModelEngineFrame extends ModelEngineBase {
+    public ModelEngineFrame() {
         super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/engineModelFrame.png"));
     }
 
-    public static LayerDefinition getTexturedModelData()
-    {
+    public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         modelPartData.addOrReplaceChild("left", CubeListBuilder.create().texOffs(0, 0).addBox(-0.5f, -2.5f, -0.5f, 1, 5, 1), PartPose.offset(-4.0f, 0.0f, 0.0f));

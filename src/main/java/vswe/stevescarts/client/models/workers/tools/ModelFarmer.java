@@ -7,7 +7,6 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -17,11 +16,15 @@ import vswe.stevescarts.modules.workers.tools.ModuleFarmer;
 public class ModelFarmer extends ModelCartbase {
     private ModelPart mainAnchor;
     private ModelPart anchor;
-    private ModelPart[] outers = new ModelPart[6];
+    private final ModelPart[] outers = new ModelPart[6];
 
     public ModelFarmer(final Identifier resource) {
         super(null, resource);
         buildModels();
+    }
+
+    private static float nailRot(final int i) {
+        return (i + 0.5f) * 6.2831855f / 6.0f;
     }
 
     public void buildModels() {
@@ -126,10 +129,6 @@ public class ModelFarmer extends ModelCartbase {
         for (int i = 0; i < 6; ++i) {
             outers[i].xRot = farmAngle + nailRot(i);
         }
-    }
-
-    private static float nailRot(final int i) {
-        return (i + 0.5f) * 6.2831855f / 6.0f;
     }
 
     @Override

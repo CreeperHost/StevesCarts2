@@ -1,18 +1,12 @@
 package vswe.stevescarts;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.serialization.*;
-import com.mojang.serialization.codecs.SimpleMapCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent;
-import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 import vswe.stevescarts.client.models.*;
 import vswe.stevescarts.client.models.engines.*;
 import vswe.stevescarts.client.models.pig.ModelPigHead;
@@ -37,25 +31,20 @@ import vswe.stevescarts.init.ModEntities;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.init.ModScreens;
 
-import java.util.stream.Stream;
-
 import static vswe.stevescarts.init.StevesCartsModules.*;
 
-public class StevesCartsClient
-{
+public class StevesCartsClient {
     public static void init(IEventBus bus) {
         ModScreens.init(bus);
         bus.addListener(StevesCartsClient::registerItemExtensions);
     }
 
-    public static void clientInit(final FMLClientSetupEvent event)
-    {
+    public static void clientInit(final FMLClientSetupEvent event) {
         initModels();
         EntityRenderers.register(ModEntities.MODULAR_CART.get(), RenderModulerCart::new);
     }
 
-    public static void initModels()
-    {
+    public static void initModels() {
         WOODEN_HULL.addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelWooden.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelWoodenTop.png")));
         STANDARD_HULL.addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelStandard.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelStandardTop.png")));
         REINFORCED_HULL.addModel("Hull", new ModelHull(ResourceHelper.getResource("/models/hullModelLarge.png"))).addModel("Top", new ModelHullTop(ResourceHelper.getResource("/models/hullModelLargeTop.png")));

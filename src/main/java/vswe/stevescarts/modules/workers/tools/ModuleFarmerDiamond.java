@@ -7,16 +7,13 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.entities.ModularMinecart;
 
-public class ModuleFarmerDiamond extends ModuleFarmer
-{
-    public ModuleFarmerDiamond(ModularMinecart cart)
-    {
+public class ModuleFarmerDiamond extends ModuleFarmer {
+    public ModuleFarmerDiamond(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public int getMaxDurability()
-    {
+    public int getMaxDurability() {
         return SCConfig.COMMON.farmerDurabilityDiamond.get();
     }
 
@@ -35,20 +32,17 @@ public class ModuleFarmerDiamond extends ModuleFarmer
     }
 
     @Override
-    public boolean useDurability()
-    {
+    public boolean useDurability() {
         return true;
     }
 
     @Override
-    public int getRepairSpeed()
-    {
+    public int getRepairSpeed() {
         return 500;
     }
 
     @Override
-    public int getRange()
-    {
+    public int getRange() {
         return 1;
     }
 }

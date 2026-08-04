@@ -4,14 +4,12 @@ import vswe.stevescarts.api.modules.ModuleBase;
 
 import java.util.ArrayList;
 
-public class GuiAllocationHelper
-{
+public class GuiAllocationHelper {
     public int width;
     public int maxHeight;
     public ArrayList<ModuleBase> modules;
 
-    public GuiAllocationHelper()
-    {
+    public GuiAllocationHelper() {
         modules = new ArrayList<>();
     }
 }

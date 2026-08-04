@@ -9,28 +9,22 @@ import vswe.stevescarts.init.ModItems;
 
 import javax.annotation.Nonnull;
 
-public class SlotOutput extends SlotAssembler
-{
-    public SlotOutput(final TileEntityCartAssembler assembler, final int i, final int j, final int k)
-    {
+public class SlotOutput extends SlotAssembler {
+    public SlotOutput(final TileEntityCartAssembler assembler, final int i, final int j, final int k) {
         super(assembler, i, j, k, ModuleType.NONE, true, 0);
     }
 
     @Override
-    public void validate()
-    {
+    public void validate() {
     }
 
     @Override
-    public void invalidate()
-    {
+    public void invalidate() {
     }
 
     @Override
-    public boolean mayPlace(@Nonnull ItemStack itemstack)
-    {
-        if (!getAssembler().getIsAssembling() && itemstack.getItem() == ModItems.CARTS.get())
-        {
+    public boolean mayPlace(@Nonnull ItemStack itemstack) {
+        if (!getAssembler().getIsAssembling() && itemstack.getItem() == ModItems.CARTS.get()) {
             final CompoundTag info = ModItemData.getTagCopy(itemstack);
             return info.contains("maxTime");
         }
@@ -38,8 +32,7 @@ public class SlotOutput extends SlotAssembler
     }
 
     @Override
-    public boolean shouldUpdatePlaceholder()
-    {
+    public boolean shouldUpdatePlaceholder() {
         return false;
     }
 }

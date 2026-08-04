@@ -1,14 +1,10 @@
 package vswe.stevescarts.init;
 
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import vswe.stevescarts.client.guis.*;
 
-import java.util.MissingFormatArgumentException;
-
-public class ModScreens
-{
+public class ModScreens {
     public static void init(IEventBus modEventBus) {
         modEventBus.addListener(ModScreens::registerScreens);
     }

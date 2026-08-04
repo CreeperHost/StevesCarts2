@@ -8,15 +8,12 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.helpers.ResourceHelper;
 
-public class ModelNote extends ModelCartbase
-{
-    public ModelNote()
-    {
+public class ModelNote extends ModelCartbase {
+    public ModelNote() {
         super(getTexturedModelData().bakeRoot(), ResourceHelper.getResource("/models/noteModel.png"));
     }
 
-    public static LayerDefinition getTexturedModelData()
-    {
+    public static LayerDefinition getTexturedModelData() {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         createSide(modelPartData, false);
@@ -25,8 +22,7 @@ public class ModelNote extends ModelCartbase
         return LayerDefinition.create(modelData, 64, 32);
     }
 
-    private static void createSide(PartDefinition partDefinition, final boolean opposite)
-    {
+    private static void createSide(PartDefinition partDefinition, final boolean opposite) {
         PartDefinition anchor = partDefinition.addOrReplaceChild("anchor", CubeListBuilder.create().texOffs(0, 0), PartPose.ZERO);
         anchor.addOrReplaceChild("base_" + opposite, CubeListBuilder.create().texOffs(0, 0).mirror(opposite)
                         .addBox(8.0f, 6.0f, 6.0f, 16, 12, 12),

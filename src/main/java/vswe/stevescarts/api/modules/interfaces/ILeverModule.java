@@ -1,6 +1,5 @@
 package vswe.stevescarts.api.modules.interfaces;
 
-public interface ILeverModule
-{
+public interface ILeverModule {
     float getLeverState();
 }

@@ -1,12 +1,13 @@
 package vswe.stevescarts.init;
 
-import dev.architectury.registry.registries.DeferredRegister;
-import dev.architectury.registry.registries.RegistrySupplier;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
+import net.neoforged.bus.api.IEventBus;
 import vswe.stevescarts.Constants;
 
 import java.util.function.Consumer;
@@ -16,14 +17,12 @@ import java.util.function.Consumer;
  */
 public class ModItemData {
 
-    public static void init() {
-        DATA.register();
+    public static final DeferredRegister<DataComponentType<?>> DATA = DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, Constants.MOD_ID);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<CustomData>> ITEM_TAG = DATA.register("item_tag", () -> DataComponentType.<CustomData>builder().persistent(CustomData.CODEC).networkSynchronized(CustomData.STREAM_CODEC).build());
+
+    public static void init(IEventBus modBus) {
+        DATA.register(modBus);
     }
-
-    public static final DeferredRegister<DataComponentType<?>> DATA = DeferredRegister.create(Constants.MOD_ID, Registries.DATA_COMPONENT_TYPE);
-
-    public static final RegistrySupplier<DataComponentType<CustomData>> ITEM_TAG = DATA.register("item_tag", () -> DataComponentType.<CustomData>builder().persistent(CustomData.CODEC).networkSynchronized(CustomData.STREAM_CODEC).build());
-
 
     public static boolean hasTag(ItemStack stack) {
         return stack.has(ITEM_TAG);

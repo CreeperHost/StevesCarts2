@@ -18,48 +18,38 @@ import vswe.stevescarts.modules.workers.tools.ModuleDrill;
 
 import java.util.ArrayList;
 
-public class ModuleLiquidDrainer extends ModuleWorker
-{
-    public ModuleLiquidDrainer(ModularMinecart cart)
-    {
+public class ModuleLiquidDrainer extends ModuleWorker {
+    public ModuleLiquidDrainer(ModularMinecart cart) {
         super(cart);
     }
 
     @Override
-    public byte getWorkPriority()
-    {
+    public byte getWorkPriority() {
         return 0;
     }
 
     @Override
-    public boolean work()
-    {
+    public boolean work() {
         return false;
     }
 
-    public void handleLiquid(final ModuleDrill drill, BlockPos pos)
-    {
+    public void handleLiquid(final ModuleDrill drill, BlockPos pos) {
         ArrayList<BlockPos> checked = new ArrayList<>();
         int result = drainAt(getCart().level(), drill, checked, pos, 0);
-        if (result > 0 && doPreWork())
-        {
+        if (result > 0 && doPreWork()) {
             drill.kill();
             startWorking((int) (2.5f * result));
-        }
-        else
-        {
+        } else {
             stopWorking();
         }
     }
 
     @Override
-    public boolean preventAutoShutdown()
-    {
+    public boolean preventAutoShutdown() {
         return true;
     }
 
-    private int drainAt(Level level, final ModuleDrill drill, final ArrayList<BlockPos> checked, final BlockPos pos, int buckets)
-    {
+    private int drainAt(Level level, final ModuleDrill drill, final ArrayList<BlockPos> checked, final BlockPos pos, int buckets) {
         int drained = 0;
         BlockState state = level.getBlockState(pos);
         if (!isLiquid(state)) {

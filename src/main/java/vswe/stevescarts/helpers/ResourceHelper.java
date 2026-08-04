@@ -6,15 +6,12 @@ import vswe.stevescarts.Constants;
 import java.util.Locale;
 
 @Deprecated
-public class ResourceHelper
-{
-    public static Identifier getResource(final String path)
-    {
+public class ResourceHelper {
+    public static Identifier getResource(final String path) {
         return Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures" + path.toLowerCase(Locale.ROOT));
     }
 
-    public static Identifier getResourceFromPath(final String path)
-    {
+    public static Identifier getResourceFromPath(final String path) {
         return Identifier.withDefaultNamespace("textures" + path.toLowerCase(Locale.ROOT));
     }
 }

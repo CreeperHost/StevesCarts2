@@ -1,9 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
@@ -23,26 +21,24 @@ import vswe.stevescarts.polylib.EntityData;
 
 import java.util.Arrays;
 
-public class ModuleDrillIntelligence extends ModuleAddon
-{
+public class ModuleDrillIntelligence extends ModuleAddon {
     private ModuleDrill drill;
     private boolean hasHeightController;
+    private final EntityData<BoolArray> disabledArray = new EntityData<>(getCart(), new BoolArrayData(new BoolArray(getDrillWidth() * getDrillHeight())));
     private int guiW;
     private int guiH;
     private boolean clickedState;
     private boolean clicked;
     private int lastId;
-    private final EntityData<BoolArray> disabledArray = new EntityData<>(getCart(), new BoolArrayData(new BoolArray(getDrillWidth() * getDrillHeight())));
 
-    public ModuleDrillIntelligence(ModularMinecart cart)
-    {
+    public ModuleDrillIntelligence(ModularMinecart cart) {
         super(cart);
         guiW = -1;
         guiH = -1;
     }
 
     public BoolArray getDisabledArray() {
-        if (isPlaceholder()) return new BoolArray(16*16);
+        if (isPlaceholder()) return new BoolArray(16 * 16);
         if (disabledArray.get().getBytes().length != Math.ceil((getDrillWidth() * getDrillHeight()) / 8D)) {
             disabledArray.set(new BoolArray(getDrillWidth() * getDrillHeight()));
         }
@@ -55,19 +51,13 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    public void preInit()
-    {
+    public void preInit() {
         super.preInit();
-        for (final ModuleBase module : getCart().modules())
-        {
-            if (module instanceof ModuleDrill)
-            {
+        for (final ModuleBase module : getCart().modules()) {
+            if (module instanceof ModuleDrill) {
                 drill = (ModuleDrill) module;
-            }
-            else
-            {
-                if (!(module instanceof ModuleHeightControl))
-                {
+            } else {
+                if (!(module instanceof ModuleHeightControl)) {
                     continue;
                 }
                 hasHeightController = true;
@@ -76,126 +66,103 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    public boolean hasSlots()
-    {
+    public boolean hasSlots() {
         return false;
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        drawString(guiGraphics, gui, getModuleName(), 8, 6, 0x404040);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, getModuleName(), 8, 6, 0x404040);
     }
 
-    private int getDrillWidth()
-    {
-        if (drill == null)
-        {
+    private int getDrillWidth() {
+        if (drill == null) {
             return 0;
         }
         return drill.getAreaWidth();
     }
 
-    private int getDrillHeight()
-    {
-        if (drill == null)
-        {
+    private int getDrillHeight() {
+        if (drill == null) {
             return 0;
         }
         return drill.getAreaHeight() + (hasHeightController ? 2 : 0);
     }
 
     @Override
-    public int guiWidth()
-    {
-        if (guiW == -1)
-        {
+    public int guiWidth() {
+        if (guiW == -1) {
             guiW = Math.max(15 + getDrillWidth() * 10 + 5, 93);
         }
         return guiW;
     }
 
     @Override
-    public int guiHeight()
-    {
-        if (guiH == -1)
-        {
+    public int guiHeight() {
+        if (guiH == -1) {
             guiH = 20 + getDrillHeight() * 10 + 5;
         }
         return guiH;
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/intelligence.png");
         final int w = getDrillWidth();
         final int h = getDrillHeight();
-        for (int i = 0; i < w; ++i)
-        {
-            for (int j = 0; j < h; ++j)
-            {
+        for (int i = 0; i < w; ++i) {
+            for (int j = 0; j < h; ++j) {
                 final int[] rect = getSettingRect(i, j);
                 int maxY = ((getDrillHeight() / 2 - 1) - SCConfig.COMMON.drillSize.get()) * 2;
 
                 int srcX = (!hasHeightController || (j != maxY && j != h - 1)) ? 0 : 8;
                 int srcY = 0;
-                drawImage(guiGraphics, texture, gui, rect, srcX, srcY);
-                if (isRestricted(j * w + i))
-                {
+                drawImage(GuiGraphicsExtractor, texture, gui, rect, srcX, srcY);
+                if (isRestricted(j * w + i)) {
                     srcX = 16;
                     srcY = 8;
-                    drawImage(guiGraphics, texture, gui, rect, srcX, srcY);
-                }
-                else if (isActive(j * w + i))
-                {
+                    drawImage(GuiGraphicsExtractor, texture, gui, rect, srcX, srcY);
+                } else if (isActive(j * w + i)) {
                     srcX = (isLocked(j * w + i) ? 8 : 0);
                     srcY = 8;
-                    drawImage(guiGraphics, texture, gui, rect, srcX, srcY);
+                    drawImage(GuiGraphicsExtractor, texture, gui, rect, srcX, srcY);
                 }
                 srcX = (inRect(x, y, rect) ? 8 : 0);
                 srcY = 16;
-                drawImage(guiGraphics, texture, gui, rect, srcX, srcY);
+                drawImage(GuiGraphicsExtractor, texture, gui, rect, srcX, srcY);
             }
         }
     }
 
 
-    public boolean isActive(int x, int y, final int offset, final boolean direction)
-    {
+    public boolean isActive(int x, int y, final int offset, final boolean direction) {
         y = getDrillHeight() - 1 - y;
-        if (hasHeightController)
-        {
+        if (hasHeightController) {
             y -= offset;
         }
-        if (!direction)
-        {
+        if (!direction) {
             x = getDrillWidth() - 1 - x;
         }
         return isActive(y * getDrillWidth() + x);
     }
 
-    private boolean isActive(int id)
-    {
+    private boolean isActive(int id) {
         BoolArray array = getDisabledArray();
         return !isRestricted(id) && (isLocked(id) || !array.get(id));
     }
 
-    private boolean isLocked(int id)
-    {
+    private boolean isLocked(int id) {
         final int x = id % getDrillWidth();
         final int y = id / getDrillWidth();
         return (y == getDrillHeight() - 1 || (hasHeightController && y == getDrillHeight() - 2)) && x == (getDrillWidth() - 1) / 2;
     }
 
-    private boolean isRestricted(int id)
-    {
+    private boolean isRestricted(int id) {
         int size = SCConfig.COMMON.drillSize.get();
         int centerX = (getDrillWidth() - 1) / 2;
         int x = id % getDrillWidth();
@@ -208,56 +175,46 @@ public class ModuleDrillIntelligence extends ModuleAddon
         return validX || validY;
     }
 
-    private void swapActiveness(final int id)
-    {
-        if (!isRestricted(id) && !isLocked(id))
-        {
+    private void swapActiveness(final int id) {
+        if (!isRestricted(id) && !isLocked(id)) {
             BoolArray array = getDisabledArray();
             array.set(id, !array.get(id));
             setDisabledArray(array);
         }
     }
 
-    private int[] getSettingRect(final int x, final int y)
-    {
+    private int[] getSettingRect(final int x, final int y) {
         return new int[]{15 + x * 10, 20 + y * 10, 8, 8};
     }
 
     @Override
-    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         final int w = getDrillWidth();
         final int h = getDrillHeight();
-        for (int i = 0; i < w; ++i)
-        {
-            for (int j = 0; j < h; ++j)
-            {
+        for (int i = 0; i < w; ++i) {
+            for (int j = 0; j < h; ++j) {
                 final int[] rect = getSettingRect(i, j);
                 final String str = isRestricted(j * w + i) ? Localization.MODULES.ADDONS.RESTRICTED_INTELLIGENCE.translate() : isLocked(j * w + i) ? Localization.MODULES.ADDONS.LOCKED.translate() : (Localization.MODULES.ADDONS.CHANGE_INTELLIGENCE.translate() + "\n" + Localization.MODULES.ADDONS.CURRENT_INTELLIGENCE.translate(isActive(j * w + i) ? "0" : "1"));
-                drawStringOnMouseOver(guiGraphics, gui, str, x, y, rect);
+                drawStringOnMouseOver(GuiGraphicsExtractor, gui, str, x, y, rect);
             }
         }
     }
 
     @Override
-    public int numberOfGuiData()
-    {
+    public int numberOfGuiData() {
         final int maxDrillWidth = 9;
         final int maxDrillHeight = 9;
         return (int) Math.ceil(maxDrillWidth * (maxDrillHeight + 2) / 16.0f);
     }
 
     @Override
-    public int numberOfPackets()
-    {
+    public int numberOfPackets() {
         return 1;
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final Player player)
-    {
-        if (id == 0)
-        {
+    protected void receivePacket(final int id, final byte[] data, final Player player) {
+        if (id == 0) {
             swapActiveness(data[0]);
         }
     }
@@ -282,23 +239,16 @@ public class ModuleDrillIntelligence extends ModuleAddon
     }
 
     @Override
-    public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button)
-    {
-        if (button == -1 && clicked)
-        {
+    public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button) {
+        if (button == -1 && clicked) {
             final int w = getDrillWidth();
             final int h = getDrillHeight();
-            for (int i = 0; i < w; ++i)
-            {
-                for (int j = 0; j < h; ++j)
-                {
-                    if (lastId != j * w + i)
-                    {
-                        if (isActive(j * w + i) == clickedState)
-                        {
+            for (int i = 0; i < w; ++i) {
+                for (int j = 0; j < h; ++j) {
+                    if (lastId != j * w + i) {
+                        if (isActive(j * w + i) == clickedState) {
                             final int[] rect = getSettingRect(i, j);
-                            if (inRect(x, y, rect))
-                            {
+                            if (inRect(x, y, rect)) {
                                 lastId = j * w + i;
                                 sendPacket(0, (byte) (j * w + i));
                                 return;
@@ -308,26 +258,20 @@ public class ModuleDrillIntelligence extends ModuleAddon
                 }
             }
         }
-        if (button == 0)
-        {
+        if (button == 0) {
             clicked = false;
         }
     }
 
     @Override
-    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
-    {
-        if (button == 0)
-        {
+    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
+        if (button == 0) {
             final int w = getDrillWidth();
             final int h = getDrillHeight();
-            for (int i = 0; i < w; ++i)
-            {
-                for (int j = 0; j < h; ++j)
-                {
+            for (int i = 0; i < w; ++i) {
+                for (int j = 0; j < h; ++j) {
                     final int[] rect = getSettingRect(i, j);
-                    if (inRect(x, y, rect))
-                    {
+                    if (inRect(x, y, rect)) {
                         clicked = true;
                         clickedState = isActive(j * w + i);
                         lastId = j * w + i;

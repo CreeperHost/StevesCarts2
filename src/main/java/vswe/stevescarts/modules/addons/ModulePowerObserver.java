@@ -1,9 +1,6 @@
 package vswe.stevescarts.modules.addons;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
@@ -19,14 +16,12 @@ import vswe.stevescarts.helpers.ShortArrayData;
 import vswe.stevescarts.init.ModSerializers.ShortArray;
 import vswe.stevescarts.polylib.EntityData;
 
-public class ModulePowerObserver extends ModuleAddon
-{
-    private int currentEngine;
+public class ModulePowerObserver extends ModuleAddon {
     private final EntityData<ShortArray> areaData = new EntityData<>(getCart(), new ShortArrayData(new ShortArray(4)));
     private final EntityData<ShortArray> powerLevel = new EntityData<>(getCart(), new ShortArrayData(new ShortArray(4)));
+    private int currentEngine;
 
-    public ModulePowerObserver(ModularMinecart cart)
-    {
+    public ModulePowerObserver(ModularMinecart cart) {
         super(cart);
         currentEngine = -1;
     }
@@ -35,12 +30,12 @@ public class ModulePowerObserver extends ModuleAddon
         return areaData.get().getArray();
     }
 
-    public short[] getPowerLevel() {
-        return powerLevel.get().getArray();
-    }
-
     public void setAreaData(short[] shorts) {
         areaData.set(new ShortArray(shorts));
+    }
+
+    public short[] getPowerLevel() {
+        return powerLevel.get().getArray();
     }
 
     public void setPowerLevel(short[] shorts) {
@@ -48,211 +43,178 @@ public class ModulePowerObserver extends ModuleAddon
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    public boolean hasSlots()
-    {
+    public boolean hasSlots() {
         return false;
     }
 
     @Override
-    public int guiWidth()
-    {
+    public int guiWidth() {
         return 190;
     }
 
     @Override
-    public int guiHeight()
-    {
+    public int guiHeight() {
         return 150;
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        drawString(guiGraphics, gui, getModuleName(), 8, 6, 4210752);
-        for (int i = 0; i < 4; ++i)
-        {
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, getModuleName(), 8, 6, 4210752);
+        for (int i = 0; i < 4; ++i) {
             final int[] rect = getPowerRect(i);
-            drawString(guiGraphics, gui, getPowerLevel()[i] + Localization.MODULES.ADDONS.K.translate(new String[0]), rect, 4210752);
+            drawString(GuiGraphicsExtractor, gui, getPowerLevel()[i] + Localization.MODULES.ADDONS.K.translate(new String[0]), rect, 4210752);
         }
     }
 
-    private boolean removeOnPickup()
-    {
+    private boolean removeOnPickup() {
         return true;
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y) {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         for (int i = 0; i < getCart().engines().size(); ++i) {
             if (!removeOnPickup() || currentEngine != i) {
-                drawEngine(guiGraphics, gui, i, getEngineRect(i));
+                drawEngine(GuiGraphicsExtractor, gui, i, getEngineRect(i));
             }
         }
         Identifier texture = ResourceHelper.getResource("/gui/observer.png");
         for (int i = 0; i < 4; ++i) {
             int[] rect = getAreaRect(i);
-            drawImage(guiGraphics, texture, gui, rect, 18, 22 * i);
+            drawImage(GuiGraphicsExtractor, texture, gui, rect, 18, 22 * i);
             if (inRect(x, y, rect)) {
-                drawImage(guiGraphics, texture, gui, rect, 18, 22 * (i + 4));
+                drawImage(GuiGraphicsExtractor, texture, gui, rect, 18, 22 * (i + 4));
             }
             int count = 0;
             for (int j = 0; j < getCart().engines().size(); ++j) {
                 if ((getAreaData()[i] & 1 << j) != 0x0) {
-                    drawEngine(guiGraphics, gui, j, getEngineRectInArea(i, count));
+                    drawEngine(GuiGraphicsExtractor, gui, j, getEngineRectInArea(i, count));
                     ++count;
                 }
             }
             rect = getPowerRect(i);
             if (isAreaActive(i)) {
-                drawImage(guiGraphics, texture, gui, rect, 122, 0);
+                drawImage(GuiGraphicsExtractor, texture, gui, rect, 122, 0);
             } else {
-                drawImage(guiGraphics, texture, gui, rect, 122 + rect[2], 0);
+                drawImage(GuiGraphicsExtractor, texture, gui, rect, 122 + rect[2], 0);
             }
             if (inRect(x, y, rect)) {
-                drawImage(guiGraphics, texture, gui, rect, 122 + rect[2] * 2, 0);
+                drawImage(GuiGraphicsExtractor, texture, gui, rect, 122 + rect[2] * 2, 0);
             }
         }
         if (currentEngine != -1) {
-            drawEngine(guiGraphics, gui, currentEngine, getEngineRectMouse(x, y + getCart().getRealScrollY()));
+            drawEngine(GuiGraphicsExtractor, gui, currentEngine, getEngineRectMouse(x, y + getCart().getRealScrollY()));
         }
     }
 
-    private void drawEngine(GuiGraphics guiGraphics, GuiMinecart gui, int id, int[] rect)
-    {
+    private void drawEngine(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, int id, int[] rect) {
         ModuleEngine engine = getCart().engines().get(id);
         int initialHeight = rect[3];
         rect = cloneRect(rect);
         int offset = 0;
-        if (!doStealInterface())
-        {
+        if (!doStealInterface()) {
             offset = handleScroll(rect);
         }
         if (rect[3] <= 0) return;
         if (initialHeight != rect[3]) {
             gui.pushScissor();
         }
-        gui.drawModuleIcon(guiGraphics, engine.getItemStack(), gui.getGuiLeft() + getX() + rect[0], gui.getGuiTop() + getY() + rect[1] + offset, 0, 0, 0, 0);
+        gui.drawModuleIcon(GuiGraphicsExtractor, engine.getItemStack(), gui.getGuiLeft() + getX() + rect[0], gui.getGuiTop() + getY() + rect[1] + offset, 0, 0, 0, 0);
         if (initialHeight != rect[3]) {
             gui.popScissor();
         }
     }
 
-    private int[] getAreaRect(final int id)
-    {
+    private int[] getAreaRect(final int id) {
         return new int[]{10, 40 + 25 * id, 104, 22};
     }
 
-    private int[] getEngineRect(final int id)
-    {
+    private int[] getEngineRect(final int id) {
         return new int[]{11 + id * 20, 21, 16, 16};
     }
 
-    private int[] getEngineRectMouse(final int x, final int y)
-    {
+    private int[] getEngineRectMouse(final int x, final int y) {
         return new int[]{x - 8, y - 8, 16, 16};
     }
 
-    private int[] getEngineRectInArea(final int areaid, final int number)
-    {
+    private int[] getEngineRectInArea(final int areaid, final int number) {
         final int[] area = getAreaRect(areaid);
         return new int[]{area[0] + 4 + number * 20, area[1] + 3, 16, 16};
     }
 
-    private int[] getPowerRect(final int areaid)
-    {
+    private int[] getPowerRect(final int areaid) {
         final int[] area = getAreaRect(areaid);
         return new int[]{area[0] + area[2] + 10, area[1] + 2, 35, 18};
     }
 
     @Override
-    public void drawMouseOver(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
-        for (int i = 0; i < getCart().engines().size(); ++i)
-        {
-            if (!removeOnPickup() || currentEngine != i)
-            {
+    public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
+        for (int i = 0; i < getCart().engines().size(); ++i) {
+            if (!removeOnPickup() || currentEngine != i) {
                 final ModuleEngine engine = getCart().engines().get(i);
-                drawStringOnMouseOver(guiGraphics, gui, engine.getData().getName() + "\n" + Localization.MODULES.ADDONS.OBSERVER_INSTRUCTION.translate(), x, y, getEngineRect(i));
+                drawStringOnMouseOver(GuiGraphicsExtractor, gui, engine.getData().getName() + "\n" + Localization.MODULES.ADDONS.OBSERVER_INSTRUCTION.translate(), x, y, getEngineRect(i));
             }
         }
-        for (int i = 0; i < 4; ++i)
-        {
+        for (int i = 0; i < 4; ++i) {
             int count = 0;
-            for (int j = 0; j < getCart().engines().size(); ++j)
-            {
-                if ((getAreaData()[i] & 1 << j) != 0x0)
-                {
+            for (int j = 0; j < getCart().engines().size(); ++j) {
+                if ((getAreaData()[i] & 1 << j) != 0x0) {
                     final ModuleEngine engine2 = getCart().engines().get(j);
-                    drawStringOnMouseOver(guiGraphics, gui, engine2.getData().getName() + "\n" + Localization.MODULES.ADDONS.OBSERVER_REMOVE.translate(), x, y, getEngineRectInArea(i, count));
+                    drawStringOnMouseOver(GuiGraphicsExtractor, gui, engine2.getData().getName() + "\n" + Localization.MODULES.ADDONS.OBSERVER_REMOVE.translate(), x, y, getEngineRectInArea(i, count));
                     ++count;
                 }
             }
-            if (currentEngine != -1)
-            {
-                drawStringOnMouseOver(guiGraphics, gui, Localization.MODULES.ADDONS.OBSERVER_DROP.translate(), x, y, getAreaRect(i));
+            if (currentEngine != -1) {
+                drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ADDONS.OBSERVER_DROP.translate(), x, y, getAreaRect(i));
             }
-            drawStringOnMouseOver(guiGraphics, gui, Localization.MODULES.ADDONS.OBSERVER_CHANGE.translate() + "\n" + Localization.MODULES.ADDONS.OBSERVER_CHANGE_10.translate(), x, y, getPowerRect(i));
+            drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ADDONS.OBSERVER_CHANGE.translate() + "\n" + Localization.MODULES.ADDONS.OBSERVER_CHANGE_10.translate(), x, y, getPowerRect(i));
         }
     }
 
     @Override
-    public int numberOfGuiData()
-    {
+    public int numberOfGuiData() {
         return 8;
     }
 
     @Override
-    public int numberOfPackets()
-    {
+    public int numberOfPackets() {
         return 3;
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final Player player)
-    {
-        if (id == 0)
-        {
+    protected void receivePacket(final int id, final byte[] data, final Player player) {
+        if (id == 0) {
             final int area = data[0];
             final int engine = data[1];
             final short[] areaData = this.getAreaData();
             final int n = area;
             areaData[n] |= (short) (1 << engine);
             setAreaData(areaData);
-        }
-        else if (id == 1)
-        {
+        } else if (id == 1) {
             final int area = data[0];
             final int engine = data[1];
             final short[] areaData2 = getAreaData();
             final int n2 = area;
             areaData2[n2] &= (short) ~(1 << engine);
             setAreaData(areaData2);
-        }
-        else if (id == 2)
-        {
+        } else if (id == 2) {
             final int area = data[0];
             final int button = data[1] & 0x1;
             final boolean shift = (data[1] & 0x2) != 0x0;
             int change = (button == 0) ? 1 : -1;
-            if (shift)
-            {
+            if (shift) {
                 change *= 10;
             }
             short[] powerLevel = getPowerLevel();
             short value = powerLevel[area];
             value += (short) change;
-            if (value < 0)
-            {
+            if (value < 0) {
                 value = 0;
-            }
-            else if (value > 999)
-            {
+            } else if (value > 999) {
                 value = 999;
             }
             powerLevel[area] = value;
@@ -277,41 +239,29 @@ public class ModulePowerObserver extends ModuleAddon
     }
 
     @Override
-    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
-    {
-        for (int i = 0; i < 4; ++i)
-        {
+    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
+        for (int i = 0; i < 4; ++i) {
             final int[] rect = getPowerRect(i);
-            if (inRect(x, y, rect))
-            {
+            if (inRect(x, y, rect)) {
                 sendPacket(2, new byte[]{(byte) i, (byte) (button | (StevesCartsClient.hasShiftDown() ? 2 : 0))});
                 break;
             }
         }
-        if (button == 0)
-        {
-            for (int i = 0; i < getCart().engines().size(); ++i)
-            {
+        if (button == 0) {
+            for (int i = 0; i < getCart().engines().size(); ++i) {
                 final int[] rect = getEngineRect(i);
-                if (inRect(x, y, rect))
-                {
+                if (inRect(x, y, rect)) {
                     currentEngine = i;
                     break;
                 }
             }
-        }
-        else if (button == 1)
-        {
-            for (int i = 0; i < 4; ++i)
-            {
+        } else if (button == 1) {
+            for (int i = 0; i < 4; ++i) {
                 int count = 0;
-                for (int j = 0; j < getCart().engines().size(); ++j)
-                {
-                    if ((getAreaData()[i] & 1 << j) != 0x0)
-                    {
+                for (int j = 0; j < getCart().engines().size(); ++j) {
+                    if ((getAreaData()[i] & 1 << j) != 0x0) {
                         final int[] rect2 = getEngineRectInArea(i, count);
-                        if (inRect(x, y, rect2))
-                        {
+                        if (inRect(x, y, rect2)) {
                             sendPacket(1, new byte[]{(byte) i, (byte) j});
                             break;
                         }
@@ -322,14 +272,11 @@ public class ModulePowerObserver extends ModuleAddon
         }
     }
 
-    public boolean isAreaActive(final int area)
-    {
+    public boolean isAreaActive(final int area) {
         int power = 0;
-        for (int i = 0; i < getCart().engines().size(); ++i)
-        {
+        for (int i = 0; i < getCart().engines().size(); ++i) {
             final ModuleEngine engine = getCart().engines().get(i);
-            if ((getAreaData()[area] & 1 << i) != 0x0)
-            {
+            if ((getAreaData()[area] & 1 << i) != 0x0) {
                 power += engine.getTotalFuel();
             }
         }

@@ -2,7 +2,6 @@ package vswe.stevescarts.blocks;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -15,20 +14,16 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 
-public class BlockActivator extends BlockContainerBase
-{
+public class BlockActivator extends BlockContainerBase {
     public static final MapCodec<BlockActivator> CODEC = simpleCodec(BlockActivator::new);
 
-    public BlockActivator(Block.Properties properties)
-    {
+    public BlockActivator(Block.Properties properties) {
         super(properties);
     }
 
     @Override
-    public @NotNull InteractionResult useWithoutItem(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player playerEntity, BlockHitResult result)
-    {
-        if (!level.isClientSide())
-        {
+    public @NotNull InteractionResult useWithoutItem(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player playerEntity, BlockHitResult result) {
+        if (!level.isClientSide()) {
             playerEntity.openMenu((MenuProvider) level.getBlockEntity(blockPos), blockPos);
             return InteractionResult.SUCCESS;
         }
@@ -37,8 +32,7 @@ public class BlockActivator extends BlockContainerBase
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState)
-    {
+    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
         return new TileEntityActivator(blockPos, blockState);
     }
 

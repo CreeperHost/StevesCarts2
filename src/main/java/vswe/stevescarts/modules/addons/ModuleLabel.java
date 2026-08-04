@@ -2,9 +2,7 @@ package vswe.stevescarts.modules.addons;
 
 import net.creeperhost.polylib.data.serializable.ByteData;
 import net.creeperhost.polylib.data.serializable.IntData;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -25,53 +23,42 @@ import vswe.stevescarts.polylib.EntityData;
 
 import java.util.ArrayList;
 
-public class ModuleLabel extends ModuleAddon
-{
-    private ArrayList<LabelInformation> labels;
-    private int delay;
-    private ArrayList<SlotStevesCarts> storageSlots;
-    private ModuleTool tool;
+public class ModuleLabel extends ModuleAddon {
     private final EntityData<Integer> seconds = new EntityData<>(getCart(), new IntData(0));
     private final EntityData<Byte> used = new EntityData<>(getCart(), new ByteData((byte) 0));
     private final EntityData<Integer> data = new EntityData<>(getCart(), new IntData(0));
+    private final ArrayList<LabelInformation> labels;
+    private int delay;
+    private ArrayList<SlotStevesCarts> storageSlots;
+    private ModuleTool tool;
     private final EntityData<Byte> active = new EntityData<>(getCart(), new ByteData((byte) (hasToolWithDurability() ? -1 : 0)));
 
-    public ModuleLabel(ModularMinecart cart)
-    {
+    public ModuleLabel(ModularMinecart cart) {
         super(cart);
         delay = 0;
-        (labels = new ArrayList<>()).add(new LabelInformation(Localization.MODULES.ADDONS.NAME)
-        {
+        (labels = new ArrayList<>()).add(new LabelInformation(Localization.MODULES.ADDONS.NAME) {
             @Override
-            public Component getLabel()
-            {
+            public Component getLabel() {
                 return getCart().getName();
             }
         });
-        labels.add(new LabelInformation(Localization.MODULES.ADDONS.DISTANCE)
-        {
+        labels.add(new LabelInformation(Localization.MODULES.ADDONS.DISTANCE) {
             @Override
-            public Component getLabel()
-            {
+            public Component getLabel() {
                 return Component.literal(Localization.MODULES.ADDONS.DISTANCE_LONG.translate(String.valueOf((int) getCart().distanceTo(getClientPlayer()))));
             }
         });
-        labels.add(new LabelInformation(Localization.MODULES.ADDONS.POSITION)
-        {
+        labels.add(new LabelInformation(Localization.MODULES.ADDONS.POSITION) {
             @Override
-            public Component getLabel()
-            {
+            public Component getLabel() {
                 return Component.literal(Localization.MODULES.ADDONS.POSITION_LONG.translate(String.valueOf(getCart().x()), String.valueOf(getCart().y()), String.valueOf(getCart().z())));
             }
         });
-        labels.add(new LabelInformation(Localization.MODULES.ADDONS.FUEL)
-        {
+        labels.add(new LabelInformation(Localization.MODULES.ADDONS.FUEL) {
             @Override
-            public Component getLabel()
-            {
+            public Component getLabel() {
                 int seconds = ModuleLabel.this.seconds.get();
-                if (seconds == -1)
-                {
+                if (seconds == -1) {
                     return Component.literal(Localization.MODULES.ADDONS.FUEL_NO_CONSUMPTION.translate());
                 }
                 int minutes = seconds / 60;
@@ -81,14 +68,11 @@ public class ModuleLabel extends ModuleAddon
                 return Component.literal(String.format(Localization.MODULES.ADDONS.FUEL_LONG.translate() + ": %02d:%02d:%02d", hours, minutes, seconds));
             }
         });
-        labels.add(new LabelInformation(Localization.MODULES.ADDONS.STORAGE)
-        {
+        labels.add(new LabelInformation(Localization.MODULES.ADDONS.STORAGE) {
             @Override
-            public Component getLabel()
-            {
+            public Component getLabel() {
                 int used = ModuleLabel.this.used.get();
-                if (used < 0)
-                {
+                if (used < 0) {
                     used += 256;
                 }
                 return Component.literal((storageSlots == null) ? "" : (Localization.MODULES.ADDONS.STORAGE.translate() + ": " + used + "/" + storageSlots.size() + ((storageSlots.size() == 0) ? "" : ("[" + (int) (100.0f * used / storageSlots.size()) + "%]"))));
@@ -97,39 +81,28 @@ public class ModuleLabel extends ModuleAddon
     }
 
     @Override
-    public void preInit()
-    {
-        if (getCart().modules() != null)
-        {
-            for (final ModuleBase moduleBase : getCart().modules())
-            {
-                if (moduleBase instanceof ModuleTool)
-                {
+    public void preInit() {
+        if (getCart().modules() != null) {
+            for (final ModuleBase moduleBase : getCart().modules()) {
+                if (moduleBase instanceof ModuleTool) {
                     tool = (ModuleTool) moduleBase;
-                    labels.add(new LabelInformation(Localization.MODULES.ADDONS.DURABILITY)
-                    {
+                    labels.add(new LabelInformation(Localization.MODULES.ADDONS.DURABILITY) {
                         @Override
-                        public Component getLabel()
-                        {
-                            if (!tool.useDurability())
-                            {
+                        public Component getLabel() {
+                            if (!tool.useDurability()) {
                                 return Component.literal(Localization.MODULES.ADDONS.UNBREAKABLE.translate());
                             }
                             final int data = ModuleLabel.this.data.get();
-                            if (data == 0)
-                            {
+                            if (data == 0) {
                                 return Component.literal(Localization.MODULES.ADDONS.BROKEN.translate());
                             }
-                            if (data > 0)
-                            {
+                            if (data > 0) {
                                 return Component.literal(Localization.MODULES.ADDONS.DURABILITY.translate() + ": " + data + " / " + tool.getMaxDurability() + " [" + 100 * data / tool.getMaxDurability() + "%]");
                             }
-                            if (data == -1)
-                            {
+                            if (data == -1) {
                                 return Component.empty();
                             }
-                            if (data == -2)
-                            {
+                            if (data == -2) {
                                 return Component.literal(Localization.MODULES.ADDONS.NOT_BROKEN.translate());
                             }
                             return Component.literal(Localization.MODULES.ADDONS.REPAIR.translate() + " [" + -(data + 3) + "%]");
@@ -142,17 +115,12 @@ public class ModuleLabel extends ModuleAddon
     }
 
     @Override
-    public void init()
-    {
+    public void init() {
         storageSlots = new ArrayList<>();
-        for (final ModuleBase module : getCart().modules())
-        {
-            if (module.getSlots() != null)
-            {
-                for (final SlotStevesCarts slot : module.getSlots())
-                {
-                    if (slot instanceof SlotChest)
-                    {
+        for (final ModuleBase module : getCart().modules()) {
+            if (module.getSlots() != null) {
+                for (final SlotStevesCarts slot : module.getSlots()) {
+                    if (slot instanceof SlotChest) {
                         storageSlots.add(slot);
                     }
                 }
@@ -160,140 +128,102 @@ public class ModuleLabel extends ModuleAddon
         }
     }
 
-    private boolean hasTool()
-    {
+    private boolean hasTool() {
         return tool != null;
     }
 
-    private boolean hasToolWithDurability()
-    {
+    private boolean hasToolWithDurability() {
         return hasTool() && tool.useDurability();
     }
 
     @Override
-    public void addToLabel(final ArrayList<Component> label)
-    {
-        for (int i = 0; i < labels.size(); ++i)
-        {
-            if (isActive(i))
-            {
+    public void addToLabel(final ArrayList<Component> label) {
+        for (int i = 0; i < labels.size(); ++i) {
+            if (isActive(i)) {
                 label.add(labels.get(i).getLabel());
             }
         }
     }
 
-    private int[] getBoxArea(final int i)
-    {
+    private int[] getBoxArea(final int i) {
         return new int[]{10, 17 + i * 12, 8, 8};
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         Identifier texture = ResourceHelper.getResource("/gui/label.png");
-        for (int i = 0; i < labels.size(); ++i)
-        {
+        for (int i = 0; i < labels.size(); ++i) {
             final int[] rect = getBoxArea(i);
-            drawImage(guiGraphics, texture, gui, rect, isActive(i) ? 8 : 0, 0);
-            drawImage(guiGraphics, texture, gui, rect, inRect(x, y, rect) ? 8 : 0, 8);
+            drawImage(GuiGraphicsExtractor, texture, gui, rect, isActive(i) ? 8 : 0, 0);
+            drawImage(GuiGraphicsExtractor, texture, gui, rect, inRect(x, y, rect) ? 8 : 0, 8);
         }
     }
 
-    private boolean isActive(final int i)
-    {
+    private boolean isActive(final int i) {
         return !isPlaceholder() && (active.get() & 1 << i) != 0x0;
     }
 
-    private void toggleActive(final int i)
-    {
+    private void toggleActive(final int i) {
         active.set((byte) (active.get() ^ 1 << i));
     }
 
     @Override
-    public void update()
-    {
-        if (!isPlaceholder() && !getCart().level().isClientSide())
-        {
-            if (delay <= 0)
-            {
-                if (isActive(3))
-                {
+    public void update() {
+        if (!isPlaceholder() && !getCart().level().isClientSide()) {
+            if (delay <= 0) {
+                if (isActive(3)) {
                     int data = 0;
-                    for (final ModuleEngine engine : getCart().engines())
-                    {
-                        if (engine.getPriority() != 3)
-                        {
+                    for (final ModuleEngine engine : getCart().engines()) {
+                        if (engine.getPriority() != 3) {
                             data += engine.getTotalFuel();
                         }
                     }
-                    if (data != 0)
-                    {
+                    if (data != 0) {
                         final int consumption = getCart().getConsumption();
-                        if (consumption == 0)
-                        {
+                        if (consumption == 0) {
                             data = -1;
-                        }
-                        else
-                        {
+                        } else {
                             data /= consumption * 20;
                         }
                     }
                     seconds.set(data);
                 }
-                if (isActive(4))
-                {
+                if (isActive(4)) {
                     int data = 0;
-                    for (final SlotStevesCarts slot : storageSlots)
-                    {
-                        if (slot.hasItem())
-                        {
+                    for (final SlotStevesCarts slot : storageSlots) {
+                        if (slot.hasItem()) {
                             ++data;
                         }
                     }
                     used.set((byte) data);
                 }
-                if (hasToolWithDurability())
-                {
-                    if (isActive(5))
-                    {
-                        if (tool.isRepairing())
-                        {
-                            if (tool.isActuallyRepairing())
-                            {
+                if (hasToolWithDurability()) {
+                    if (isActive(5)) {
+                        if (tool.isRepairing()) {
+                            if (tool.isActuallyRepairing()) {
                                 data.set(-3 - tool.getRepairPercentage());
-                            }
-                            else
-                            {
+                            } else {
                                 data.set(-2);
                             }
-                        }
-                        else
-                        {
+                        } else {
                             data.set(tool.getCurrentDurability());
                         }
-                    }
-                    else if (data.get() != -1)
-                    {
+                    } else if (data.get() != -1) {
                         data.set(-1);
                     }
                 }
                 delay = 20;
-            }
-            else if (delay > 0)
-            {
+            } else if (delay > 0) {
                 --delay;
             }
         }
     }
 
     @Override
-    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button)
-    {
-        for (int i = 0; i < labels.size(); ++i)
-        {
+    public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
+        for (int i = 0; i < labels.size(); ++i) {
             final int[] rect = getBoxArea(i);
-            if (inRect(x, y, rect))
-            {
+            if (inRect(x, y, rect)) {
                 sendPacket(0, (byte) i);
                 break;
             }
@@ -301,52 +231,43 @@ public class ModuleLabel extends ModuleAddon
     }
 
     @Override
-    protected int numberOfPackets()
-    {
+    protected int numberOfPackets() {
         return 1;
     }
 
     @Override
-    protected void receivePacket(final int id, final byte[] data, final Player player)
-    {
-        if (id == 0)
-        {
+    protected void receivePacket(final int id, final byte[] data, final Player player) {
+        if (id == 0) {
             toggleActive(data[0]);
         }
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        drawString(guiGraphics, gui, Localization.MODULES.ADDONS.LABELS.translate(), 8, 6, 4210752);
-        for (int i = 0; i < labels.size(); ++i)
-        {
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ADDONS.LABELS.translate(), 8, 6, 4210752);
+        for (int i = 0; i < labels.size(); ++i) {
             final int[] rect = getBoxArea(i);
-            drawString(guiGraphics, gui, labels.get(i).getName(), rect[0] + 12, rect[1] + 1, 4210752);
+            drawString(GuiGraphicsExtractor, gui, labels.get(i).getName(), rect[0] + 12, rect[1] + 1, 4210752);
         }
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    public boolean hasSlots()
-    {
+    public boolean hasSlots() {
         return false;
     }
 
     @Override
-    public int guiWidth()
-    {
+    public int guiWidth() {
         return 92;
     }
 
     @Override
-    public int guiHeight()
-    {
+    public int guiHeight() {
         return 77;
     }
 

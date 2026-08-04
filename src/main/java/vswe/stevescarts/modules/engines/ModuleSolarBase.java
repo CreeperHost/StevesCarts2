@@ -1,13 +1,8 @@
 package vswe.stevescarts.modules.engines;
 
 import net.creeperhost.polylib.data.serializable.BooleanData;
-import net.creeperhost.polylib.data.serializable.ByteData;
 import net.creeperhost.polylib.data.serializable.IntData;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -22,140 +17,112 @@ import vswe.stevescarts.polylib.EntityData;
 
 import java.util.List;
 
-public abstract class ModuleSolarBase extends ModuleEngine
-{
-    private boolean maxLight;
-    private int panelCoolDown;
-    protected boolean down;
-    private boolean setup;
+public abstract class ModuleSolarBase extends ModuleEngine {
     private final EntityData<Integer> light = new EntityData<>(getCart(), new IntData(0));
     private final EntityData<Boolean> upState = new EntityData<>(getCart(), new BooleanData(false));
+    protected boolean down;
+    private boolean maxLight;
+    private int panelCoolDown;
+    private boolean setup;
 
-    public ModuleSolarBase(ModularMinecart cart)
-    {
+    public ModuleSolarBase(ModularMinecart cart) {
         super(cart);
         down = true;
     }
 
     @Override
-    public boolean hasSlots()
-    {
+    public boolean hasSlots() {
         return false;
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
         updateSolarModel();
     }
 
     @Override
-    protected void loadFuel()
-    {
+    protected void loadFuel() {
         updateLight();
         updateDataForModel();
         chargeSolar();
     }
 
     @Override
-    public int getTotalFuel()
-    {
+    public int getTotalFuel() {
         return getFuelLevel();
     }
 
     @Override
-    public float[] getGuiBarColor()
-    {
+    public float[] getGuiBarColor() {
         return new float[]{1.0f, 1.0f, 0.0f};
     }
 
-    private void updateLight()
-    {
-        if (!getCart().level().isBrightOutside() || getCart().level().isRaining())
-        {
+    private void updateLight() {
+        if (!getCart().level().isBrightOutside() || getCart().level().isRaining()) {
             light.set(0);
-        }
-        else
-        {
-            if (getCart().level().canSeeSky(getCart().blockPosition()))
-            {
+        } else {
+            if (getCart().level().canSeeSky(getCart().blockPosition())) {
                 light.set(15);
             }
         }
     }
 
-    private void updateDataForModel()
-    {
-        if (isPlaceholder())
-        {
+    private void updateDataForModel() {
+        if (isPlaceholder()) {
             light.set((getSimInfo().getMaxLight() ? 15 : 14));
         }
         maxLight = (light.get() == 15);
-        if (!upState.get() && light.get() == 15)
-        {
+        if (!upState.get() && light.get() == 15) {
             light.set(14);
         }
     }
 
-    private void chargeSolar()
-    {
-        if (light.get() == 15 && getCart().level().random.nextInt(8) < 4)
-        {
+    private void chargeSolar() {
+        if (light.get() == 15 && getCart().level().getRandom().nextInt(8) < 4) {
             setFuelLevel(getFuelLevel() + getGenSpeed());
-            if (getFuelLevel() > getMaxCapacity())
-            {
+            if (getFuelLevel() > getMaxCapacity()) {
                 setFuelLevel(getMaxCapacity());
             }
         }
     }
 
-    public int getLight()
-    {
+    public int getLight() {
         return light.get();
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        drawString(guiGraphics, gui, Localization.MODULES.ENGINES.SOLAR.translate(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ENGINES.SOLAR.translate(), 8, 6, 4210752);
         String strfuel = Localization.MODULES.ENGINES.NO_POWER.translate();
-        if (getFuelLevel() > 0)
-        {
+        if (getFuelLevel() > 0) {
             strfuel = "Power: " + getFuelLevel();//Localization.MODULES.ENGINES.POWER.translate(String.valueOf(getFuelLevel()));
         }
-        drawString(guiGraphics, gui, strfuel, 8, 42, 4210752);
+        drawString(GuiGraphicsExtractor, gui, strfuel, 8, 42, 4210752);
     }
 
     @Override
-    public void drawBackground(GuiGraphics guiGraphics, GuiMinecart gui, final int x, final int y)
-    {
-        super.drawBackground(guiGraphics, gui, x, y);
+    public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
+        super.drawBackground(GuiGraphicsExtractor, gui, x, y);
         Identifier texture = ResourceHelper.getResource("/gui/solar.png");
         int lightWidth = light.get() * 3;
-        if (light.get() == 15)
-        {
+        if (light.get() == 15) {
             lightWidth += 2;
         }
-        drawImage(guiGraphics, texture, gui, 9, 20, 0, 0, 54, 18);
-        drawImage(guiGraphics, texture, gui, 15, 21, 0, 18, lightWidth, 16);
+        drawImage(GuiGraphicsExtractor, texture, gui, 9, 20, 0, 0, 54, 18);
+        drawImage(GuiGraphicsExtractor, texture, gui, 15, 21, 0, 18, lightWidth, 16);
     }
 
-    protected boolean isGoingDown()
-    {
+    protected boolean isGoingDown() {
         return down;
     }
 
-    public void updateSolarModel()
-    {
-        if (getCart().level().isClientSide())
-        {
+    public void updateSolarModel() {
+        if (getCart().level().isClientSide()) {
             updateDataForModel();
-            if (!setup)
-            {
+            if (!setup) {
                 boolean tmpUp = upState.get();
-                if (tmpUp)
-                {
+                if (tmpUp) {
                     setAnimDone();
                     upState.set(true);
                     down = false;
@@ -164,16 +131,11 @@ public abstract class ModuleSolarBase extends ModuleEngine
             }
         }
         panelCoolDown += (maxLight ? 1 : -1);
-        if (down && panelCoolDown < 0)
-        {
+        if (down && panelCoolDown < 0) {
             panelCoolDown = 0;
-        }
-        else if (!down && panelCoolDown > 0)
-        {
+        } else if (!down && panelCoolDown > 0) {
             panelCoolDown = 0;
-        }
-        else if (Math.abs(panelCoolDown) > 20)
-        {
+        } else if (Math.abs(panelCoolDown) > 20) {
             panelCoolDown = 0;
             down = !down;
         }
@@ -181,8 +143,7 @@ public abstract class ModuleSolarBase extends ModuleEngine
     }
 
     @Override
-    public int numberOfGuiData()
-    {
+    public int numberOfGuiData() {
         return 2;
     }
 
@@ -193,19 +154,14 @@ public abstract class ModuleSolarBase extends ModuleEngine
     }
 
     @Override
-    public void receiveGuiData(final int id, final short data)
-    {
-        if (id == 0)
-        {
+    public void receiveGuiData(final int id, final short data) {
+        if (id == 0) {
             int dataint = data;
-            if (dataint < 0)
-            {
+            if (dataint < 0) {
                 dataint += 65536;
             }
             setFuelLevel((getFuelLevel() & 0xFFFF0000) | dataint);
-        }
-        else if (id == 1)
-        {
+        } else if (id == 1) {
             setFuelLevel((getFuelLevel() & 0xFFFF) | data << 16);
         }
     }

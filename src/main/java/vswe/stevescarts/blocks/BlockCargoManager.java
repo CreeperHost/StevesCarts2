@@ -2,7 +2,6 @@ package vswe.stevescarts.blocks;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -15,20 +14,16 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 
-public class BlockCargoManager extends BlockContainerBase
-{
+public class BlockCargoManager extends BlockContainerBase {
     public static final MapCodec<BlockCargoManager> CODEC = simpleCodec(BlockCargoManager::new);
 
-    public BlockCargoManager(Block.Properties properties)
-    {
+    public BlockCargoManager(Block.Properties properties) {
         super(properties);
     }
 
     @Override
-    public @NotNull InteractionResult useWithoutItem(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player playerEntity, BlockHitResult result)
-    {
-        if (!level.isClientSide())
-        {
+    public @NotNull InteractionResult useWithoutItem(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player playerEntity, BlockHitResult result) {
+        if (!level.isClientSide()) {
             playerEntity.openMenu((MenuProvider) level.getBlockEntity(blockPos), blockPos);
             return InteractionResult.SUCCESS;
         }
@@ -49,8 +44,7 @@ public class BlockCargoManager extends BlockContainerBase
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState)
-    {
+    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
         return new TileEntityCargo(blockPos, blockState);
     }
 

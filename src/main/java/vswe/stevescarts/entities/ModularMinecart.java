@@ -1,9 +1,10 @@
 package vswe.stevescarts.entities;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -29,11 +30,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.RailShape;
-import net.minecraft.world.level.storage.TagValueOutput;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
@@ -42,7 +42,6 @@ import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
-import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.events.CartEvents;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -55,11 +54,9 @@ import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModEntities;
-import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.polylib.DataEntity;
 import vswe.stevescarts.polylib.EntityData;
-import vswe.stevescarts.polylib.NBTHelper;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -72,19 +69,28 @@ import java.util.Optional;
 public class ModularMinecart extends AbstractMinecart implements IEntityWithComplexSpawn, MenuProvider, DataEntity, IModularCart {
     public static final int MODULAR_SPACE_WIDTH = 443;
     public static final int MODULAR_SPACE_HEIGHT = 168;
-
+    public static final int[][][] railDirectionCoordinates = new int[][][]{
+            {{0, 0, -1}, {0, 0, 1}},
+            {{-1, 0, 0}, {1, 0, 0}},
+            {{-1, -1, 0}, {1, 0, 0}},
+            {{-1, 0, 0}, {1, -1, 0}},
+            {{0, 0, -1}, {0, -1, 1}},
+            {{0, -1, -1}, {0, 0, 1}},
+            {{0, 0, 1}, {1, 0, 0}},
+            {{0, 0, 1}, {-1, 0, 0}},
+            {{0, 0, -1}, {-1, 0, 0}},
+            {{0, 0, -1}, {1, 0, 0}}};
     private static final EntityDataAccessor<Boolean> IS_BURNING = SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> IS_DISANABLED = SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.BOOLEAN);
-
+    protected final List<ChunkPos> forcedChunks = new ArrayList<>();
     private final ArrayList<ModuleCountPair> moduleCounts = new ArrayList<>();
     private final ArrayList<ModuleBase> modules = new ArrayList<>();
     private final ArrayList<ModuleWorker> workModules = new ArrayList<>();
     private final ArrayList<ModuleEngine> engineModules = new ArrayList<>();
     private final ArrayList<ModuleTank> tankModules = new ArrayList<>();
     private final List<EntityData<?>> entityDataList = new ArrayList<>();
-
-    protected final List<ChunkPos> forcedChunks = new ArrayList<>();
-
+    public boolean canScrollModules;
+    public int modularSpaceHeight;
     protected TileEntityCartAssembler placeholderAsssembler;
     protected List<Identifier> moduleLoadingData;
     protected ModuleWorker workingComponent;
@@ -96,26 +102,19 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     protected int workingTime;
     protected int motorRotation;
     protected int keepAlive;
-
-    private float rotationOffset;
-    private float playerRotationOffset;
-
     /**
      * When the cart needs to stop to perform a cart function, the current velocity is stored in this field,
      * So that it can be restored after the operation is complete.
      */
     protected Vec3 preStopVelocity = null;
-
     //These two fields are used to control what happens on entering a junction track.
     protected RailShape fixedRailDirection;
     protected BlockPos fixedRailPos;
-
     protected Component name; //TODO, Is this actually used?
-
     //Client/Gui fields
     protected int scrollY;
-    public boolean canScrollModules;
-    public int modularSpaceHeight;
+    private float rotationOffset;
+    private float playerRotationOffset;
 
     public ModularMinecart(Level level, double x, double y, double z) {
         super(ModEntities.MODULAR_CART.get(), level, x, y, z);
@@ -132,12 +131,26 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         loadPlaceHolderModules(data);
     }
 
+    // Old Module Load
+
     public ModularMinecart(Level world, double x, double y, double z, CompoundTag data) {
         this(world, x, y, z);
         _oldLoadModules(data);
     }
 
-    // Old Module Load
+    public ModularMinecart(EntityType<?> entityType, Level level) {
+        super(entityType, level);
+        behavior = new ModularMinecartBehavior(this);
+    }
+
+    // ===============
+
+    public static Optional<BlockPos> readBlockPos(CompoundTag tag, String key) {
+        int[] aint = tag.getIntArray(key).orElseGet(() -> new int[0]);
+        return aint.length == 3 ? Optional.of(new BlockPos(aint[0], aint[1], aint[2])) : Optional.empty();
+    }
+
+    //=== Cart Stuff ===//
 
     private void _oldLoadModules(CompoundTag info) {
         List<CompoundTag> modules = new ArrayList<>();
@@ -168,15 +181,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         }
         initModules();
     }
-
-    // ===============
-
-    public ModularMinecart(EntityType<?> entityType, Level level) {
-        super(entityType, level);
-        behavior = new ModularMinecartBehavior(this);
-    }
-
-    //=== Cart Stuff ===//
 
     @Override
     public void tick() {
@@ -303,6 +307,8 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         return entityData.get(IS_BURNING);
     }
 
+    //=== Cart Motion Handling ===//
+
     public void setEngineBurning(final boolean on) {
         entityData.set(IS_BURNING, on);
     }
@@ -312,11 +318,10 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         return Localization.translate("entity.minecraft.minecart");
     }
 
-    //=== Cart Motion Handling ===//
-
     /**
      * Returns the carts velocity vector, or what the pre-stop velocity vector if that cart is stopped.
-     * */
+     *
+     */
     public Vec3 getEffectiveVelocity() {
         float rotation = behavior.getYRot();
         float pushRad = (rotation + 90) * 0.017453292F;
@@ -393,6 +398,8 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         return super.getMaxSpeed(level);
     }
 
+    //=== Modules ===//
+
     @Override
     protected double makeStepAlongTrack(BlockPos pos, RailShape shape, double distance) {
         return super.makeStepAlongTrack(pos, shape, distance);
@@ -402,8 +409,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     protected void moveAlongTrack(ServerLevel level) {
         super.moveAlongTrack(level);
     }
-
-    //=== Modules ===//
 
     @Override
     public ModularMinecart getCart() {
@@ -447,6 +452,13 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     }
 
     @Override
+    public ModuleWorker getWorker() {
+        return workingComponent;
+    }
+
+    //=== Interact ===//
+
+    @Override
     public void setWorker(ModuleWorker worker) {
         if (workingComponent != null && worker != null) {
             workingComponent.stopWorking();
@@ -456,20 +468,17 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         }
     }
 
-    @Override
-    public ModuleWorker getWorker() {
-        return workingComponent;
-    }
+    //=== Data ===//
 
     @Override
     public void setWorkingTime(int val) {
         workingTime = val;
     }
 
-    //=== Interact ===//
+
 
     @Override
-    public @NotNull InteractionResult interactAt(@NotNull Player player, @NotNull Vec3 vec, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResult interact(@NotNull Player player, @NotNull InteractionHand hand, @NotNull Vec3 vec) {
         if (isPlaceholder()) {
             return InteractionResult.FAIL;
         }
@@ -489,8 +498,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         }
         return InteractionResult.SUCCESS;
     }
-
-    //=== Data ===//
 
     @Override
     public void remove(@NotNull Entity.RemovalReason removalReason) {
@@ -635,24 +642,18 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         }
     }
 
-    public static Optional<BlockPos> readBlockPos(CompoundTag tag, String key) {
-        int[] aint = tag.getIntArray(key).orElseGet(() -> new int[0]);
-        return aint.length == 3 ? Optional.of(new BlockPos(aint[0], aint[1], aint[2])) : Optional.empty();
-    }
-
-
     @Override
     public List<EntityData<?>> getEntityDataList() {
         return entityDataList;
     }
 
+
+    //=== Random / Util stuff ===
+
     @Override
     public void registerEntityData(EntityData<?> data) {
         entityDataList.add(data);
     }
-
-
-    //=== Random / Util stuff ===
 
     @Nullable
     @Override
@@ -674,17 +675,5 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         }
 
     }
-
-    public static final int[][][] railDirectionCoordinates = new int[][][]{
-            {{0, 0, -1}, {0, 0, 1}},
-            {{-1, 0, 0}, {1, 0, 0}},
-            {{-1, -1, 0}, {1, 0, 0}},
-            {{-1, 0, 0}, {1, -1, 0}},
-            {{0, 0, -1}, {0, -1, 1}},
-            {{0, -1, -1}, {0, 0, 1}},
-            {{0, 0, 1}, {1, 0, 0}},
-            {{0, 0, 1}, {-1, 0, 0}},
-            {{0, 0, -1}, {-1, 0, 0}},
-            {{0, 0, -1}, {1, 0, 0}}};
 
 }

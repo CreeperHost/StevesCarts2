@@ -1,9 +1,0 @@
-{
-  "parent": "block/cube_bottom_top",
-  "textures": {
-    "particle":"stevescarts:block/module_toggler_top",
-    "top":"stevescarts:block/module_toggler_top",
-    "down":"stevescarts:block/module_toggler_bot",
-    "side":"stevescarts:block/module_toggler_side"
-  }
-}

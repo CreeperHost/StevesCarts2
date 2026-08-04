@@ -1,23 +1,20 @@
 package vswe.stevescarts.datagen;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import vswe.stevescarts.Constants;
 
-public class GeneratorLanguage extends LanguageProvider
-{
-    public GeneratorLanguage(DataGenerator gen)
-    {
-        super(gen.getPackOutput(), Constants.MOD_ID, "en_us");
+public class GeneratorLanguage extends LanguageProvider {
+    public GeneratorLanguage(PackOutput output) {
+        super(output, Constants.MOD_ID, "en_us");
     }
 
     @Override
-    protected void addTranslations()
-    {
+    protected void addTranslations() {
         add("stevescarts.creativetab.modules", "Steve's Carts 2 Modules");
         add("stevescarts.creativetab.items", "Steve's Carts 2 Components");
         add("stevescarts.creativetab.blocks", "Steve's Carts 2 Blocks");
-        add("entity.stevescarts.modular_cart","Modular Cart");
+        add("entity.stevescarts.modular_cart", "Modular Cart");
         add("gui.stevescarts.cartAssembler", "Cart Assembler");
         add("gui.stevescarts.basicAssembleInstruction", "To start making a cart, please add a Cart Hull of your choice to the Hull Slot.");
         add("gui.stevescarts.invalidHullError", "The Cart Hull added to the Hull Slot is not a valid Hull. This should not be possible so you've probably done something strange.");

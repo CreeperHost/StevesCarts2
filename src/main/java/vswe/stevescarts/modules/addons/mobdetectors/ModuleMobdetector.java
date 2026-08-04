@@ -4,10 +4,8 @@ import net.minecraft.world.entity.Entity;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.entities.ModularMinecart;
 
-public abstract class ModuleMobdetector extends ModuleAddon
-{
-    public ModuleMobdetector(ModularMinecart cart)
-    {
+public abstract class ModuleMobdetector extends ModuleAddon {
+    public ModuleMobdetector(ModularMinecart cart) {
         super(cart);
     }
 

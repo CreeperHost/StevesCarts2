@@ -19,6 +19,10 @@ public class PacketMinecartTurn implements CustomPacketPayload {
         this.cartID = cartID;
     }
 
+    public static PacketMinecartTurn read(FriendlyByteBuf buffer) {
+        return new PacketMinecartTurn(buffer.readInt());
+    }
+
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
@@ -26,10 +30,6 @@ public class PacketMinecartTurn implements CustomPacketPayload {
 
     public void write(FriendlyByteBuf buf) {
         buf.writeInt(cartID);
-    }
-
-    public static PacketMinecartTurn read(FriendlyByteBuf buffer) {
-        return new PacketMinecartTurn(buffer.readInt());
     }
 
     public static class Handler implements IPayloadHandler<PacketMinecartTurn> {

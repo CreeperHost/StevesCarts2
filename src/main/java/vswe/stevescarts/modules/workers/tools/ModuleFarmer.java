@@ -1,13 +1,11 @@
 package vswe.stevescarts.modules.workers.tools;
 
 import net.creeperhost.polylib.data.serializable.BooleanData;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.TriState;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -36,30 +34,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
-{
+public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule {
+    private final EntityData<Boolean> isFarming = new EntityData<>(getCart(), new BooleanData(false));
     private ArrayList<ICropModule> plantModules;
     private int farming;
     private float farmAngle;
     private float rigAngle;
-    private final EntityData<Boolean> isFarming = new EntityData<>(getCart(), new BooleanData(false));
 
-    public ModuleFarmer(ModularMinecart cart)
-    {
+    public ModuleFarmer(ModularMinecart cart) {
         super(cart);
         rigAngle = -3.926991f;
     }
 
     protected abstract int getRange();
 
-    public int getExternalRange()
-    {
+    public int getExternalRange() {
         return getRange();
     }
 
     @Override
-    public void init()
-    {
+    public void init() {
         super.init();
         plantModules = new ArrayList<>();
         for (final ModuleBase module : getCart().modules()) {
@@ -71,34 +65,28 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     }
 
     @Override
-    public byte getWorkPriority()
-    {
+    public byte getWorkPriority() {
         return 80;
     }
 
     @Override
-    public boolean hasGui()
-    {
+    public boolean hasGui() {
         return true;
     }
 
     @Override
-    public void drawForeground(GuiGraphics guiGraphics, GuiMinecart gui)
-    {
-        drawString(guiGraphics, gui, Localization.MODULES.TOOLS.FARMER.translate(), 8, 6, 4210752);
+    public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
+        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.TOOLS.FARMER.translate(), 8, 6, 4210752);
     }
 
     @Override
-    protected int getInventoryWidth()
-    {
+    protected int getInventoryWidth() {
         return super.getInventoryWidth() + 3;
     }
 
     @Override
-    protected SlotStevesCarts getSlot(final int slotId, int x, final int y)
-    {
-        if (x == 0)
-        {
+    protected SlotStevesCarts getSlot(final int slotId, int x, final int y) {
+        if (x == 0) {
             return super.getSlot(slotId, x, y);
         }
         --x;
@@ -106,25 +94,19 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     }
 
     @Override
-    public boolean work()
-    {
+    public boolean work() {
         Level world = getCart().level();
         BlockPos next = getNextblock();
-        for (int i = -getRange(); i <= getRange(); ++i)
-        {
-            for (int j = -getRange(); j <= getRange(); ++j)
-            {
+        for (int i = -getRange(); i <= getRange(); ++i) {
+            for (int j = -getRange(); j <= getRange(); ++j) {
                 BlockPos coord = next.offset(i, -1, j);
-                if (farm(world, coord))
-                {
+                if (farm(world, coord)) {
                     return true;
                 }
-                if (till(world, coord))
-                {
+                if (till(world, coord)) {
                     return true;
                 }
-                if (plant(world, coord))
-                {
+                if (plant(world, coord)) {
                     return true;
                 }
             }
@@ -132,12 +114,9 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
         return false;
     }
 
-    protected boolean till(Level world, BlockPos pos)
-    {
-        if (world.getBlockState(pos).is(BlockTags.DIRT) && world.getBlockState(pos.above()).isAir())
-        {
-            if (doPreWork())
-            {
+    protected boolean till(Level world, BlockPos pos) {
+        if (world.getBlockState(pos).is(BlockTags.DIRT) && world.getBlockState(pos.above()).isAir()) {
+            if (doPreWork()) {
                 startWorking(10);
                 return true;
             }
@@ -147,17 +126,13 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
         return false;
     }
 
-    protected boolean plant(Level world, BlockPos pos)
-    {
+    protected boolean plant(Level world, BlockPos pos) {
         int hasSeeds = -1;
         BlockState soilState = world.getBlockState(pos);
         Block soilblock = soilState.getBlock();
-        if (soilblock != null)
-        {
-            for (int i = 0; i < getInventorySize(); ++i)
-            {
-                if (!getStack(i).isEmpty() && isSeedValidHandler(getStack(i)))
-                {
+        if (soilblock != null) {
+            for (int i = 0; i < getInventorySize(); ++i) {
+                if (!getStack(i).isEmpty() && isSeedValidHandler(getStack(i))) {
                     BlockState cropblock = getCropFromSeedHandler(getStack(i), world, pos);
                     if (cropblock != null && world.getBlockState(pos.above()).isAir()) {
                         if (cropblock.canSurvive(world, pos.above())) {
@@ -167,10 +142,8 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
                     }
                 }
             }
-            if (hasSeeds != -1)
-            {
-                if (doPreWork())
-                {
+            if (hasSeeds != -1) {
+                if (doPreWork()) {
                     startWorking(25);
                     return true;
                 }
@@ -179,8 +152,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
                 world.setBlock(pos.above(), cropblock2, 3);
                 ItemStack stack = getStack(hasSeeds);
                 stack.shrink(1);
-                if (getStack(hasSeeds).getCount() <= 0)
-                {
+                if (getStack(hasSeeds).getCount() <= 0) {
                     setStack(hasSeeds, ItemStack.EMPTY);
                 }
             }
@@ -188,18 +160,14 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
         return false;
     }
 
-    protected boolean farm(Level world, BlockPos pos)
-    {
+    protected boolean farm(Level world, BlockPos pos) {
         ModularMinecart cart = getCart();
-        if (!isBroken())
-        {
+        if (!isBroken()) {
             pos = pos.above();
             BlockState blockState = world.getBlockState(pos);
             Block block = blockState.getBlock();
-            if (isReadyToHarvestHandler(world, pos))
-            {
-                if (doPreWork())
-                {
+            if (isReadyToHarvestHandler(world, pos)) {
+                if (doPreWork()) {
                     final int efficiency = (enchanter != null) ? enchanter.getEfficiencyLevel() : 0;
                     final int workingtime = (int) (getBaseFarmingTime() / Math.pow(1.2999999523162842, efficiency));
                     setFarming(workingtime * 4);
@@ -222,11 +190,9 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
                 }
 
                 stuff = blockState.getDrops(builder);
-                for (@Nonnull ItemStack iStack : stuff)
-                {
+                for (@Nonnull ItemStack iStack : stuff) {
                     cart.addItemToChest(iStack);
-                    if (iStack.getCount() != 0)
-                    {
+                    if (iStack.getCount() != 0) {
                         final ItemEntity entityitem = new ItemEntity(world, cart.x(), cart.y(), cart.z(), iStack);
                         world.addFreshEntity(entityitem);
                     }
@@ -238,18 +204,15 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
         return false;
     }
 
-    protected int getBaseFarmingTime()
-    {
+    protected int getBaseFarmingTime() {
         return 25;
     }
 
-    public boolean isSeedValidHandler(@Nonnull ItemStack seed)
-    {
+    public boolean isSeedValidHandler(@Nonnull ItemStack seed) {
         return seed.is(Tags.Items.SEEDS) || seed.is(ItemTags.VILLAGER_PLANTABLE_SEEDS) || plantModules.stream().anyMatch(e -> e.isSeedValid(seed));
     }
 
-    protected BlockState getCropFromSeedHandler(@Nonnull ItemStack seed, Level level, BlockPos pos)
-    {
+    protected BlockState getCropFromSeedHandler(@Nonnull ItemStack seed, Level level, BlockPos pos) {
         Block cropBlock = Block.byItem(seed.getItem());
         BlockState state = cropBlock.defaultBlockState();
         if (cropBlock instanceof CropBlock) {
@@ -263,8 +226,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
         return state;
     }
 
-    protected boolean isReadyToHarvestHandler(Level world, BlockPos pos)
-    {
+    protected boolean isReadyToHarvestHandler(Level world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
         if (state.getBlock() instanceof CropBlock cropsBlock) {
             return cropsBlock.isMaxAge(world.getBlockState(pos));
@@ -272,64 +234,47 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
         return plantModules.stream().anyMatch(e -> e.isReadyToHarvest(world, pos));
     }
 
-    public float getFarmAngle()
-    {
+    public float getFarmAngle() {
         return farmAngle;
     }
 
-    public float getRigAngle()
-    {
+    public float getRigAngle() {
         return rigAngle;
     }
 
-    private void setFarming(int val)
-    {
-        farming = val;
-        isFarming.set(val > 0);
-    }
-
-    protected boolean isFarming()
-    {
-        if (isPlaceholder())
-        {
+    protected boolean isFarming() {
+        if (isPlaceholder()) {
             return getSimInfo().getIsFarming();
         }
         return getCart().isEngineBurning() && isFarming.get();
     }
 
+    private void setFarming(int val) {
+        farming = val;
+        isFarming.set(val > 0);
+    }
+
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (!getCart().level().isClientSide())
-        {
+        if (!getCart().level().isClientSide()) {
             setFarming(farming - 1);
-        }
-        else
-        {
+        } else {
             final float up = -3.926991f;
             final float down = -3.1415927f;
             final boolean flag = isFarming();
-            if (flag)
-            {
-                if (rigAngle < down)
-                {
+            if (flag) {
+                if (rigAngle < down) {
                     rigAngle += 0.1f;
-                    if (rigAngle > down)
-                    {
+                    if (rigAngle > down) {
                         rigAngle = down;
                     }
-                }
-                else
-                {
+                } else {
                     farmAngle = (float) ((farmAngle + 0.15f) % 6.283185307179586);
                 }
-            }
-            else if (rigAngle > up)
-            {
+            } else if (rigAngle > up) {
                 rigAngle -= 0.075f;
-                if (rigAngle < up)
-                {
+                if (rigAngle < up) {
                     rigAngle = up;
                 }
             }
@@ -337,13 +282,10 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     }
 
     @Override
-    public boolean haveSupplies()
-    {
-        for (int i = 0; i < getInventorySize(); ++i)
-        {
+    public boolean haveSupplies() {
+        for (int i = 0; i < getInventorySize(); ++i) {
             @Nonnull ItemStack item = getStack(i);
-            if (!item.isEmpty() && isSeedValidHandler(item))
-            {
+            if (!item.isEmpty() && isSeedValidHandler(item)) {
                 return true;
             }
         }

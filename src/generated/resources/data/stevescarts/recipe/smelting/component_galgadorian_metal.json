@@ -6,7 +6,6 @@
   "group": "stevescarts",
   "ingredient": "stevescarts:component_lump_of_galgador",
   "result": {
-    "count": 1,
     "id": "stevescarts:component_galgadorian_metal"
   }
 }

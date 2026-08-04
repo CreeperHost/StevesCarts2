@@ -8,8 +8,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.containers.*;
 
-public class ModContainers
-{
+public class ModContainers {
     public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(BuiltInRegistries.MENU, Constants.MOD_ID);
 
     public static final DeferredHolder<MenuType<?>, MenuType<ContainerCartAssembler>> CONTAINER_CART_ASSEMBLER = CONTAINERS.register("cart_assembler", () -> IMenuTypeExtension.create(ContainerCartAssembler::new));

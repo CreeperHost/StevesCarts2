@@ -29,7 +29,7 @@ public class ModularMinecartBehavior extends NewMinecartBehavior {
 
     @Override
     public void moveAlongTrack(ServerLevel serverLevel) {
-        for(TrackIteration newminecartbehavior$trackiteration = new TrackIteration(); newminecartbehavior$trackiteration.shouldIterate() && this.minecart.isAlive(); newminecartbehavior$trackiteration.firstIteration = false) {
+        for (TrackIteration newminecartbehavior$trackiteration = new TrackIteration(); newminecartbehavior$trackiteration.shouldIterate() && this.minecart.isAlive(); newminecartbehavior$trackiteration.firstIteration = false) {
             Vec3 vec3 = this.getDeltaMovement();
             BlockPos blockpos = this.minecart.getCurrentBlockPosOrRailBelow();
             BlockState blockstate = this.level().getBlockState(blockpos);
@@ -44,10 +44,9 @@ public class ModularMinecartBehavior extends NewMinecartBehavior {
                 this.minecart.resetFallDistance();
                 this.minecart.setOldPosAndRot();
                 Block block = blockstate.getBlock();
-                if (block instanceof PoweredRailBlock) {
-                    PoweredRailBlock poweredRail = (PoweredRailBlock)block;
+                if (block instanceof PoweredRailBlock poweredRail) {
                     if (poweredRail.isActivatorRail()) {
-                        this.minecart.activateMinecart(serverLevel, blockpos.getX(), blockpos.getY(), blockpos.getZ(), (Boolean)blockstate.getValue(PoweredRailBlock.POWERED));
+                        this.minecart.activateMinecart(serverLevel, blockpos.getX(), blockpos.getY(), blockpos.getZ(), blockstate.getValue(PoweredRailBlock.POWERED));
                     }
                 }
 
@@ -57,7 +56,7 @@ public class ModularMinecartBehavior extends NewMinecartBehavior {
 
                 minecart.handleMoveAlongTrack(blockpos, blockstate);
 
-                RailShape railshape = ((BaseRailBlock)blockstate.getBlock()).getRailDirection(blockstate, this.level(), blockpos, this.minecart);
+                RailShape railshape = ((BaseRailBlock) blockstate.getBlock()).getRailDirection(blockstate, this.level(), blockpos, this.minecart);
                 vec31 = this.calculateTrackSpeed(serverLevel, vec3.horizontal(), newminecartbehavior$trackiteration, blockpos, blockstate, railshape);
                 if (newminecartbehavior$trackiteration.firstIteration) {
                     newminecartbehavior$trackiteration.movementLeft = vec31.horizontalDistance();
@@ -81,14 +80,14 @@ public class ModularMinecartBehavior extends NewMinecartBehavior {
                         this.setXRot(this.minecart.onGround() ? 0.0F : Mth.rotLerp(0.2F, this.getXRot(), 0.0F));
                     }
                 } else {
-                    float f = 180.0F - (float)(Math.atan2(vec31.z, vec31.x) * 180.0 / Math.PI);
-                    float f1 = this.minecart.onGround() && !this.minecart.isOnRails() ? 0.0F : 90.0F - (float)(Math.atan2(vec31.horizontalDistance(), vec31.y) * 180.0 / Math.PI);
+                    float f = 180.0F - (float) (Math.atan2(vec31.z, vec31.x) * 180.0 / Math.PI);
+                    float f1 = this.minecart.onGround() && !this.minecart.isOnRails() ? 0.0F : 90.0F - (float) (Math.atan2(vec31.horizontalDistance(), vec31.y) * 180.0 / Math.PI);
                     f += this.minecart.isFlipped() ? 180.0F : 0.0F;
                     f1 *= this.minecart.isFlipped() ? -1.0F : 1.0F;
                     this.setRotation(f, f1);
                 }
 
-                this.lerpSteps.add(new MinecartStep(vec32, this.getDeltaMovement(), this.getYRot(), this.getXRot(), (float)Math.min(d0, this.getMaxSpeed(serverLevel))));
+                this.lerpSteps.add(new MinecartStep(vec32, this.getDeltaMovement(), this.getYRot(), this.getXRot(), (float) Math.min(d0, this.getMaxSpeed(serverLevel))));
             } else if (vec3.horizontalDistanceSqr() > 0.0) {
                 this.lerpSteps.add(new MinecartStep(vec32, this.getDeltaMovement(), this.getYRot(), this.getXRot(), 1.0F));
             }
@@ -100,7 +99,8 @@ public class ModularMinecartBehavior extends NewMinecartBehavior {
         }
     }
 
-    @Override //TODO, THis may need tweaking, The previous default "getMaxCartSpeedOnRail" value was 1.2, So things may need to be tweaked.
+    @Override
+    //TODO, THis may need tweaking, The previous default "getMaxCartSpeedOnRail" value was 1.2, So things may need to be tweaked.
     public double getMaxSpeed(ServerLevel level) {
         double maxSpeed = this.minecart.isInWater() ? 0.2 : 0.4;
         return Math.min(maxSpeed, minecart.modules().stream().mapToDouble(ModuleBase::getMaxSpeed).min().orElse(maxSpeed));

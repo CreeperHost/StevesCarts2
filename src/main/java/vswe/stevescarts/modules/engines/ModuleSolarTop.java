@@ -2,17 +2,15 @@ package vswe.stevescarts.modules.engines;
 
 import vswe.stevescarts.entities.ModularMinecart;
 
-public abstract class ModuleSolarTop extends ModuleSolarBase
-{
-    private float minVal;
-    private float maxVal;
-    private float minAngle;
-    private float maxAngle;
+public abstract class ModuleSolarTop extends ModuleSolarBase {
+    private final float minVal;
+    private final float maxVal;
+    private final float minAngle;
+    private final float maxAngle;
     private float innerRotation;
     private float movingLevel;
 
-    public ModuleSolarTop(ModularMinecart cart)
-    {
+    public ModuleSolarTop(ModularMinecart cart) {
         super(cart);
         minVal = -4.0f;
         maxVal = -13.0f;
@@ -22,61 +20,45 @@ public abstract class ModuleSolarTop extends ModuleSolarBase
         movingLevel = minVal;
     }
 
-    public float getInnerRotation()
-    {
+    public float getInnerRotation() {
         return innerRotation;
     }
 
-    public float getMovingLevel()
-    {
+    public float getMovingLevel() {
         return movingLevel;
     }
 
     @Override
-    protected void setAnimDone()
-    {
+    protected void setAnimDone() {
         innerRotation = maxAngle;
         movingLevel = minVal;
         down = false;
     }
 
     @Override
-    public boolean updatePanels()
-    {
-        if (movingLevel > minVal)
-        {
+    public boolean updatePanels() {
+        if (movingLevel > minVal) {
             movingLevel = minVal;
         }
-        if (innerRotation < minAngle)
-        {
+        if (innerRotation < minAngle) {
             innerRotation = minAngle;
-        }
-        else if (innerRotation > maxAngle)
-        {
+        } else if (innerRotation > maxAngle) {
             innerRotation = maxAngle;
         }
         final float targetAngle = isGoingDown() ? minAngle : maxAngle;
-        if (movingLevel > maxVal && innerRotation != targetAngle)
-        {
+        if (movingLevel > maxVal && innerRotation != targetAngle) {
             movingLevel -= 0.2f;
-            if (movingLevel <= maxVal)
-            {
+            if (movingLevel <= maxVal) {
                 movingLevel = maxVal;
             }
-        }
-        else if (innerRotation != targetAngle)
-        {
+        } else if (innerRotation != targetAngle) {
             innerRotation += (isGoingDown() ? -0.05f : 0.05f);
-            if ((!isGoingDown() && innerRotation >= targetAngle) || (isGoingDown() && innerRotation <= targetAngle))
-            {
+            if ((!isGoingDown() && innerRotation >= targetAngle) || (isGoingDown() && innerRotation <= targetAngle)) {
                 innerRotation = targetAngle;
             }
-        }
-        else if (movingLevel < minVal)
-        {
+        } else if (movingLevel < minVal) {
             movingLevel += 0.2f;
-            if (movingLevel >= minVal)
-            {
+            if (movingLevel >= minVal) {
                 movingLevel = minVal;
             }
         }

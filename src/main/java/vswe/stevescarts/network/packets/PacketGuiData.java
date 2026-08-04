@@ -9,16 +9,11 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.client.network.ClientPacketHandlers;
 
-public class PacketGuiData implements CustomPacketPayload {
+public record PacketGuiData(int containerId, int dataId, int data) implements CustomPacketPayload {
     public static final Type<PacketGuiData> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "gui_data"));
-    private final int containerId;
-    private final int dataId;
-    private final int data;
 
-    public PacketGuiData(int containerId, int dataId, int data) {
-        this.containerId = containerId;
-        this.dataId = dataId;
-        this.data = data;
+    public static PacketGuiData read(FriendlyByteBuf buffer) {
+        return new PacketGuiData(buffer.readInt(), buffer.readVarInt(), buffer.readVarInt());
     }
 
     @Override
@@ -31,14 +26,6 @@ public class PacketGuiData implements CustomPacketPayload {
         buf.writeVarInt(dataId);
         buf.writeVarInt(data);
     }
-
-    public static PacketGuiData read(FriendlyByteBuf buffer) {
-        return new PacketGuiData(buffer.readInt(), buffer.readVarInt(), buffer.readVarInt());
-    }
-
-    public int getContainerId() { return containerId; }
-    public int getDataId() { return dataId; }
-    public int getData() { return data; }
 
     public static class Handler implements IPayloadHandler<PacketGuiData> {
         @Override
