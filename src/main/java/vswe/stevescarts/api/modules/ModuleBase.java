@@ -37,7 +37,6 @@ import net.neoforged.fml.i18n.FMLTranslations;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import org.jetbrains.annotations.NotNull;
-import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.data.ModuleData;
@@ -1719,7 +1718,7 @@ public abstract class ModuleBase
 
     protected FakePlayer getFakePlayer()
     {
-        return FakePlayerFactory.get((ServerLevel) getCart().level(), StevesCarts.FAKE_PLAYER);
+        return FakePlayerFactory.get((ServerLevel) getCart().level(), getCart().getFakePlayerProfile());
     }
 
     public boolean disableStandardKeyFunctionality()

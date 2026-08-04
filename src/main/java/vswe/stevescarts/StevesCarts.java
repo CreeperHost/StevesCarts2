@@ -72,7 +72,9 @@ public class StevesCarts
     {
         if(event.getTab() == StevesCartsCreativeTabs.BLOCKS.get())
         {
-            ModBlocks.BLOCKS.getEntries().forEach(blockRegistryObject -> event.accept(blockRegistryObject.get()));
+            ModBlocks.BLOCKS.getEntries().stream()
+                    .filter(blockRegistryObject -> blockRegistryObject != ModBlocks.CART_DEPLOYER)
+                    .forEach(blockRegistryObject -> event.accept(blockRegistryObject.get()));
         }
         if(event.getTab() == StevesCartsCreativeTabs.ITEMS.get())
         {

@@ -280,6 +280,7 @@
   "info.stevescarts.effectBlueprint": "Ativa o uso de carrinhos de Projeto.",
   "info.stevescarts.effectCombustionFuel": "Fontes de combustível padrão ativadas.",
   "info.stevescarts.effectDeployer": "Permite a implantação de carrinhos concluídos.",
+  "info.stevescarts.effectDeployerUnavailable": "Indisponível: a implantação automática de carrinhos não foi implementada.",
   "info.stevescarts.effectDisassemble": "Permite desmontar e modificar carrinhos.",
   "info.stevescarts.effectEfficiency": "Eficiência de montagem [%1]%.",
   "info.stevescarts.effectFuelCapacity": "Capacidade de combustível [%1].",

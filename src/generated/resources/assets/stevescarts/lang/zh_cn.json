@@ -280,6 +280,7 @@
   "info.stevescarts.effectBlueprint": "启用蓝图矿车。",
   "info.stevescarts.effectCombustionFuel": "启用标准燃料源。",
   "info.stevescarts.effectDeployer": "启用已完成的矿车的调度。",
+  "info.stevescarts.effectDeployerUnavailable": "不可用：自动部署矿车功能尚未实现。",
   "info.stevescarts.effectDisassemble": "允许你拆卸和调整矿车。",
   "info.stevescarts.effectEfficiency": "装配效率 [%1]%.",
   "info.stevescarts.effectFuelCapacity": "燃料容量 [%1]。",

@@ -1,5 +1,6 @@
 package vswe.stevescarts.entities;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -51,6 +52,7 @@ import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -82,10 +84,15 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 public class EntityMinecartModular extends AbstractMinecart implements Container, IEntityWithComplexSpawn, IFluidHandler, MenuProvider, DataEntity
 {
+    private static final String OWNER_TAG = "Owner";
+
+    @Nullable
+    private UUID ownerUUID;
     public BlockPos disabledPos;
     protected boolean wasDisabled;
     public double pushX;
@@ -180,6 +187,25 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
     public ArrayList<ModuleCountPair> getModuleCounts()
     {
         return moduleCounts;
+    }
+
+    public void setOwnerUUID(UUID ownerUUID)
+    {
+        this.ownerUUID = ownerUUID;
+    }
+
+    public GameProfile getFakePlayerProfile()
+    {
+        return !SCConfig.COMMON.useCartOwnerForFakePlayer.get() || ownerUUID == null
+                ? StevesCarts.FAKE_PLAYER
+                : new GameProfile(ownerUUID, StevesCarts.FAKE_PLAYER.getName());
+    }
+
+    private void loadOwner(CompoundTag tag)
+    {
+        ownerUUID = tag.hasUUID(OWNER_TAG)
+                ? tag.getUUID(OWNER_TAG)
+                : null;
     }
 
     public EntityMinecartModular(final Level world, final double x, final double y, final double z, final CompoundTag info, final Component name)
@@ -1145,6 +1171,9 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         tagCompound.putDouble("temppushX", temppushX);
         tagCompound.putDouble("temppushZ", temppushZ);
         tagCompound.putShort("workingTime", (short) workingTime);
+        if (ownerUUID != null) {
+            tagCompound.putUUID(OWNER_TAG, ownerUUID);
+        }
         writeModulesToNbt(tagCompound);
         if (modules != null)
         {
@@ -1186,6 +1215,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
         temppushX = tagCompound.getDouble("temppushX");
         temppushZ = tagCompound.getDouble("temppushZ");
         workingTime = tagCompound.getShort("workingTime");
+        loadOwner(tagCompound);
         loadModules(tagCompound);
         if (modules != null)
         {
