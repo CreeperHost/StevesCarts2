@@ -280,6 +280,7 @@
   "info.stevescarts.effectBlueprint": "Enable the use of Blueprint carts.",
   "info.stevescarts.effectCombustionFuel": "Enabled standard fuel sources.",
   "info.stevescarts.effectDeployer": "Enables deployment of finished carts.",
+  "info.stevescarts.effectDeployerUnavailable": "Unavailable: automatic cart deployment is not implemented.",
   "info.stevescarts.effectDisassemble": "Allows you to disassemble and modify carts.",
   "info.stevescarts.effectEfficiency": "Assembling efficiency [%1]%.",
   "info.stevescarts.effectFuelCapacity": "Fuel capacity [%1].",

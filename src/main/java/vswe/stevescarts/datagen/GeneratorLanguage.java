@@ -507,6 +507,7 @@ public class GeneratorLanguage extends LanguageProvider
         add("info.stevescarts.effectBlueprint", "Enable the use of Blueprint carts.");
         add("info.stevescarts.effectCombustionFuel", "Enabled standard fuel sources.");
         add("info.stevescarts.effectDeployer", "Enables deployment of finished carts.");
+        add("info.stevescarts.effectDeployerUnavailable", "Unavailable: automatic cart deployment is not implemented.");
         add("info.stevescarts.effectDisassemble", "Allows you to disassemble and modify carts.");
         add("info.stevescarts.effectFuelCapacity", "Fuel capacity [%1].");
         add("info.stevescarts.effectFuelCost", "Fuel cost [%1]%.");
