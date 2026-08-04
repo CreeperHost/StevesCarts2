@@ -52,6 +52,7 @@ import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -195,7 +196,7 @@ public class EntityMinecartModular extends AbstractMinecart implements Container
 
     public GameProfile getFakePlayerProfile()
     {
-        return ownerUUID == null
+        return !SCConfig.COMMON.useCartOwnerForFakePlayer.get() || ownerUUID == null
                 ? StevesCarts.FAKE_PLAYER
                 : new GameProfile(ownerUUID, StevesCarts.FAKE_PLAYER.getName());
     }

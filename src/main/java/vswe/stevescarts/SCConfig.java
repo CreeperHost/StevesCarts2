@@ -31,6 +31,7 @@ public class SCConfig {
         public final ModConfigSpec.ConfigValue<Integer> standard_solar_production;
 
         public final ModConfigSpec.ConfigValue<Boolean> allowCartToRunWithRepairItems;
+        public final ModConfigSpec.ConfigValue<Boolean> useCartOwnerForFakePlayer;
 
         public final ModConfigSpec.ConfigValue<String> woodcutterRepairDiamond;
         public final ModConfigSpec.ConfigValue<Integer> woodcutterRepairAmountDiamond;
@@ -103,6 +104,9 @@ public class SCConfig {
 
 
             allowCartToRunWithRepairItems = builder.comment("Allow carts to run with items in the tool repair slot").define("allowCartToRunWithRepairItems", false);
+            useCartOwnerForFakePlayer = builder
+                    .comment("Use the placing player's UUID for cart fake players. Disable to use the legacy shared [StevesCarts] fake player.")
+                    .define("useCartOwnerForFakePlayer", true);
             assemblerInsertFuel = builder.comment("Allow fuel to be auto inserted into the cart assembler").define("assemblerInsertFuel", false);
         }
     }
