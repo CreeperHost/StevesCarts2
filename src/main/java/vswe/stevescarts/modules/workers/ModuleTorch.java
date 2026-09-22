@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.workers;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
@@ -200,7 +201,7 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if (button == 0 && inRect(x, y, boxRect)) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && inRect(x, y, boxRect)) {
             generatePacket(x, y);
             markerMoving = true;
         }

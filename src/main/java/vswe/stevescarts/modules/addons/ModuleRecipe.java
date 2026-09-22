@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.addons;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.ByteData;
 import net.creeperhost.polylib.data.serializable.StackData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -159,15 +160,19 @@ public abstract class ModuleRecipe extends ModuleAddon {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
+        if (button != InputConstants.MOUSE_BUTTON_LEFT && button != InputConstants.MOUSE_BUTTON_RIGHT) {
+            return;
+        }
+        byte encodedButton = (byte) (button == InputConstants.MOUSE_BUTTON_LEFT ? 0 : 1);
         if (canUseAdvancedFeatures()) {
             if (inRect(x, y, getArea())) {
-                sendPacket(0, (byte) button);
+                sendPacket(0, encodedButton);
             }
             int i = 0;
             while (i < 3) {
                 if ((mode.get() == 1 || i == 1) && inRect(x, y, getControlRect(i))) {
                     if (i == 1) {
-                        sendPacket(1, (byte) button);
+                        sendPacket(1, encodedButton);
                         break;
                     }
                     byte encodedData = (byte) ((i != 0) ? 1 : 0);

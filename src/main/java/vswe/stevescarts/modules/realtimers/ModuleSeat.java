@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.realtimers;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
@@ -83,7 +84,7 @@ public class ModuleSeat extends ModuleBase {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if (button == 0 && inRect(x, y, buttonRect)) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && inRect(x, y, buttonRect)) {
             sendPacket(0);
         }
     }

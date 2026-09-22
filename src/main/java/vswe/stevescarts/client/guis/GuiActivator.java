@@ -1,5 +1,6 @@
 package vswe.stevescarts.client.guis;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -97,12 +98,16 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator> {
         super.mouseClicked(event, isDoubleClick);
         double mouseX = event.x() - getLeftPos();
         double mouseY = event.y() - getTopPos();
+        int button = event.button();
+        if (button != InputConstants.MOUSE_BUTTON_LEFT && button != InputConstants.MOUSE_BUTTON_RIGHT) {
+            return false;
+        }
         for (int i = 0; i < activator.getOptions().size(); ++i) {
             final int[] box = getBoxRect(i);
             if (inRect((int) mouseX, (int) mouseY, box)) {
-                byte data = (byte) ((event.button() != 0) ? 1 : 0);
+                byte data = (byte) ((button == InputConstants.MOUSE_BUTTON_RIGHT) ? 1 : 0);
                 data |= (byte) (i << 1);
-                activator.getOptions().get(i).changeOption(event.button() == 0);
+                activator.getOptions().get(i).changeOption(button == InputConstants.MOUSE_BUTTON_LEFT);
                 StevesCartsClient.sendToServer(new PacketActivator(activator.getBlockPos(), 0, new byte[]{data}));
             }
         }

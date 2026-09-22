@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.realtimers;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.ByteData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -102,7 +103,7 @@ public class ModuleDynamite extends ModuleBase {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if (button == 0 && getFuse() == 0 && inRect(x, y, getMovableMarker())) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && getFuse() == 0 && inRect(x, y, getMovableMarker())) {
             markerMoving = true;
         }
     }

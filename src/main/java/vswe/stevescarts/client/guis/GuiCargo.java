@@ -1,5 +1,6 @@
 package vswe.stevescarts.client.guis;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.client.modulargui.ModularGui;
 import net.creeperhost.polylib.client.modulargui.ModularGuiContainer;
 import net.creeperhost.polylib.client.modulargui.elements.GuiElement;
@@ -118,14 +119,18 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
 
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            if (button != InputConstants.MOUSE_BUTTON_LEFT && button != InputConstants.MOUSE_BUTTON_RIGHT) {
+                return false;
+            }
+            int encodedButton = button == InputConstants.MOUSE_BUTTON_RIGHT ? 1 : 0;
             int x = (int) (mouseX - xMin());
             int y = (int) (mouseY - yMin());
             if (inRect(x, y, getMiddleCoords())) {
-                manager.sendPacket(5, (byte) ((button == 0) ? 1 : -1));
+                manager.sendPacket(5, (byte) ((button == InputConstants.MOUSE_BUTTON_LEFT) ? 1 : -1));
             } else {
                 for (int i = 0; i < 4; ++i) {
                     byte data = (byte) i;
-                    data |= (byte) (button << 2);
+                    data |= (byte) (encodedButton << 2);
                     if (inRect(x, y, getArrowCoords(i))) {
                         manager.sendPacket(0, (byte) i);
                         break;

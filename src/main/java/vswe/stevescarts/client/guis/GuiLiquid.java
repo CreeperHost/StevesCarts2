@@ -1,5 +1,6 @@
 package vswe.stevescarts.client.guis;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -358,14 +359,19 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
         super.mouseClicked(event, isDoubleClick);
         int x = (int) event.x();
         int y = (int) event.y();
+        int button = event.button();
+        if (button != InputConstants.MOUSE_BUTTON_LEFT && button != InputConstants.MOUSE_BUTTON_RIGHT) {
+            return false;
+        }
+        int encodedButton = button == InputConstants.MOUSE_BUTTON_RIGHT ? 1 : 0;
         x -= leftPos;
         y -= topPos;
         if (inRect(x, y, getMiddleCoords())) {
-            getLiquid().sendPacket(5, (byte) ((event.button() == 0) ? 1 : -1));
+            getLiquid().sendPacket(5, (byte) ((button == InputConstants.MOUSE_BUTTON_LEFT) ? 1 : -1));
         } else {
             for (int i = 0; i < 4; ++i) {
                 byte data = (byte) i;
-                data |= (byte) (event.button() << 2);
+                data |= (byte) (encodedButton << 2);
                 if (inRect(x, y, getArrowCoords(i))) {
                     getLiquid().sendPacket(0, (byte) i);
                     break;

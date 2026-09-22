@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.storages.tanks;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -278,8 +279,9 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if (inRect(x, y, tankBounds)) {
-            byte data = (byte) button;
+        if (inRect(x, y, tankBounds)
+                && (button == InputConstants.MOUSE_BUTTON_LEFT || button == InputConstants.MOUSE_BUTTON_RIGHT)) {
+            byte data = (byte) (button == InputConstants.MOUSE_BUTTON_LEFT ? 0 : 1);
             if (StevesCartsClient.hasShiftDown()) {
                 data |= 0x2;
             }

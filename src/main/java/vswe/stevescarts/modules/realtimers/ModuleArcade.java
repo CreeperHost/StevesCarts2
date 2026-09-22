@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.realtimers;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -152,13 +153,13 @@ public class ModuleArcade extends ModuleBase {
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
         if (isGameActive()) {
-            if (button == 0 && inRect(x, y, getExitArea())) {
+            if (button == InputConstants.MOUSE_BUTTON_LEFT && inRect(x, y, getExitArea())) {
                 currentGame.unload(gui);
                 currentGame = null;
             } else {
                 currentGame.mouseClicked(gui, x, y, button);
             }
-        } else if (button == 0) {
+        } else if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             for (int i = 0; i < games.size(); ++i) {
                 if (inRect(x, y, getButtonBoundsArea(i))) {
                     (currentGame = games.get(i)).load(gui);

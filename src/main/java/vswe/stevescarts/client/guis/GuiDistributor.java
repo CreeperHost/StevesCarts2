@@ -1,5 +1,6 @@
 package vswe.stevescarts.client.guis;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.client.modulargui.lib.container.DataSync;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -140,7 +141,8 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
         double x = event.x() - getLeftPos();
         double y = event.y() - getTopPos();
-        if (event.button() == 0) {
+        int button = event.button();
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             for (final DistributorSetting setting : DistributorSetting.settings) {
                 if (setting.isEnabled(distributor)) {
                     final int[] box = getSettingBoxRect(setting.getImageId(), setting.getIsTop());
@@ -168,7 +170,7 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
                     }
                 }
             }
-        } else if (event.button() == 1) {
+        } else if (button == InputConstants.MOUSE_BUTTON_RIGHT) {
             int id = 0;
             final ArrayList<DataSync<DistributorSide>> sides = containerDistributor.sideSyncs;
             for (final DataSync<DistributorSide> sync : sides) {

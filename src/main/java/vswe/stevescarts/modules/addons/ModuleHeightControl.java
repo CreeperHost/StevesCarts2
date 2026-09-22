@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.addons;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -120,7 +121,7 @@ public class ModuleHeightControl extends ModuleAddon {
 
     @Override
     public void mouseClicked(GuiMinecart gui, int x, int y, int button) {
-        if (button == 0) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             byte packetData = 0;
             if (inRect(x, y, arrowMiddle)) {
                 packetData |= 0x1;

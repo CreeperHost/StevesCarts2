@@ -1,5 +1,6 @@
 package vswe.stevescarts.arcade.sweeper;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
@@ -139,14 +140,14 @@ public class ArcadeSweeper extends ArcadeGame {
         y -= getMarginTop();
         final int xc = x / 10;
         final int yc = y / 10;
-        if (button == 0) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             openTile(xc, yc, true);
-        } else if (button == 1 && isValidCoordinate(xc, yc)) {
+        } else if (button == InputConstants.MOUSE_BUTTON_RIGHT && isValidCoordinate(xc, yc)) {
             hasStarted = true;
             //TODO bring back sounds
 //            ArcadeGame.playSound(SoundHandler.FLAG_CLICK, 1.0f, 1.0f);
             tiles[xc][yc].mark();
-        } else if (button == 2 && isValidCoordinate(xc, yc) && tiles[xc][yc].getState() == Tile.TILE_STATE.OPENED) {
+        } else if (button == InputConstants.MOUSE_BUTTON_MIDDLE && isValidCoordinate(xc, yc) && tiles[xc][yc].getState() == Tile.TILE_STATE.OPENED) {
             //TODO bring back sounds
 //            ArcadeGame.playSound(SoundHandler.CLICK, 1.0f, 1.0f);
             int nearby = tiles[xc][yc].getNearbyCreepers();

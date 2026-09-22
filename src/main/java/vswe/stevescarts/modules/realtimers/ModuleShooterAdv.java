@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.realtimers;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.ByteData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
@@ -93,7 +94,7 @@ public class ModuleShooterAdv extends ModuleShooter {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if (button == 0) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             for (int i = 0; i < detectors.size(); ++i) {
                 if (inRect(x, y, getSelectionBox(i))) {
                     sendPacket(0, (byte) i);

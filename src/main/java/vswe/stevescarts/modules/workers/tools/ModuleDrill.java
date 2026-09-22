@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.workers.tools;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.creeperhost.polylib.helpers.LevelHelper;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -395,7 +396,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if (button == 0 && inRect(x, y, buttonRect)) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && inRect(x, y, buttonRect)) {
             sendPacket(0);
         }
     }

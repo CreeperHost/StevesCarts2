@@ -1,5 +1,6 @@
 package vswe.stevescarts.arcade.tracks;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -883,7 +884,7 @@ public class ArcadeTracks extends ArcadeGame {
             return;
         }
         if (editorTrack != null) {
-            if ((clicked && button == 0) || (!clicked && button == -1 && isEditorTrackDraging)) {
+            if ((clicked && button == InputConstants.MOUSE_BUTTON_LEFT) || (!clicked && button == -1 && isEditorTrackDraging)) {
                 final int x2 = x - 5;
                 final int y2 = y - 5;
                 final int gridX = x2 / 16;
@@ -896,7 +897,7 @@ public class ArcadeTracks extends ArcadeGame {
                     }
                     isEditorTrackDraging = true;
                 }
-            } else if (button == 1 || (!clicked && isEditorTrackDraging)) {
+            } else if (button == InputConstants.MOUSE_BUTTON_RIGHT || (!clicked && isEditorTrackDraging)) {
                 if (clicked) {
                     editorTrack = null;
                 }

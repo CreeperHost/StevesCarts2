@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.addons.plants;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -68,8 +69,9 @@ public class ModulePlantSize extends ModuleAddon {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if ((button == 0 || button == 1) && inRect(x, y, boxrect)) {
-            sendPacket(0, (byte) button);
+        if ((button == InputConstants.MOUSE_BUTTON_LEFT || button == InputConstants.MOUSE_BUTTON_RIGHT)
+                && inRect(x, y, boxrect)) {
+            sendPacket(0, (byte) (button == InputConstants.MOUSE_BUTTON_LEFT ? 0 : 1));
         }
     }
 

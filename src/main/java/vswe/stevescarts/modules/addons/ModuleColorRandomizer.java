@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.addons;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -75,7 +76,7 @@ public class ModuleColorRandomizer extends ModuleAddon {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if (button == 0 && inRect(x, y, this.button)) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && inRect(x, y, this.button)) {
             sendPacket(0);
         }
     }

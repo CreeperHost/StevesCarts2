@@ -232,7 +232,6 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
-
         ModuleBase thief = cart.getInterfaceThief();
         if (thief != null) {
             handleModuleMouseClicked(thief, (int) event.x(), (int) event.y(), event.button());

@@ -1,5 +1,6 @@
 package vswe.stevescarts.api.modules.template;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.entity.player.Player;
@@ -121,8 +122,9 @@ public abstract class ModuleEngine extends ModuleBase {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if (inRect(x, y, priorityButton) && (button == 0 || button == 1)) {
-            sendPacket(0, (byte) button);
+        if (inRect(x, y, priorityButton)
+                && (button == InputConstants.MOUSE_BUTTON_LEFT || button == InputConstants.MOUSE_BUTTON_RIGHT)) {
+            sendPacket(0, (byte) (button == InputConstants.MOUSE_BUTTON_LEFT ? 0 : 1));
         }
     }
 

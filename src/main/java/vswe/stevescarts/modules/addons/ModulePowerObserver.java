@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.addons;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -225,7 +226,7 @@ public class ModulePowerObserver extends ModuleAddon {
     @Override
     public void mouseReleased(GuiMinecart gui, int x, int y, int button) {
         if (button != -1) {
-            if (button == 0) {
+            if (button == InputConstants.MOUSE_BUTTON_LEFT) {
                 for (int i = 0; i < 4; ++i) {
                     final int[] rect = getAreaRect(i);
                     if (inRect(x, y, rect)) {
@@ -240,14 +241,18 @@ public class ModulePowerObserver extends ModuleAddon {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
+        if (button != InputConstants.MOUSE_BUTTON_LEFT && button != InputConstants.MOUSE_BUTTON_RIGHT) {
+            return;
+        }
+        int encodedButton = button == InputConstants.MOUSE_BUTTON_LEFT ? 0 : 1;
         for (int i = 0; i < 4; ++i) {
             final int[] rect = getPowerRect(i);
             if (inRect(x, y, rect)) {
-                sendPacket(2, new byte[]{(byte) i, (byte) (button | (StevesCartsClient.hasShiftDown() ? 2 : 0))});
+                sendPacket(2, new byte[]{(byte) i, (byte) (encodedButton | (StevesCartsClient.hasShiftDown() ? 2 : 0))});
                 break;
             }
         }
-        if (button == 0) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             for (int i = 0; i < getCart().engines().size(); ++i) {
                 final int[] rect = getEngineRect(i);
                 if (inRect(x, y, rect)) {
@@ -255,7 +260,7 @@ public class ModulePowerObserver extends ModuleAddon {
                     break;
                 }
             }
-        } else if (button == 1) {
+        } else if (button == InputConstants.MOUSE_BUTTON_RIGHT) {
             for (int i = 0; i < 4; ++i) {
                 int count = 0;
                 for (int j = 0; j < getCart().engines().size(); ++j) {

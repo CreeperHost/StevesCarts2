@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.realtimers;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.particles.ParticleTypes;
@@ -435,7 +436,7 @@ public class ModuleNote extends ModuleBase {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int buttonId) {
-        if (buttonId == 0) {
+        if (buttonId == InputConstants.MOUSE_BUTTON_LEFT) {
             for (final Button button : buttons) {
                 button.clicked(x, y);
             }
@@ -444,10 +445,10 @@ public class ModuleNote extends ModuleBase {
             } else if (!isScrollingY && inRect(x, y, scrollYrect)) {
                 isScrollingY = true;
             }
-        } else if (buttonId == 1 && !isScrollingXTune && inRect(x, y, scrollXrect)) {
+        } else if (buttonId == InputConstants.MOUSE_BUTTON_RIGHT && !isScrollingXTune && inRect(x, y, scrollXrect)) {
             isScrollingXTune = true;
         }
-        if (buttonId == 0 || buttonId == 1) {
+        if (buttonId == InputConstants.MOUSE_BUTTON_LEFT || buttonId == InputConstants.MOUSE_BUTTON_RIGHT) {
             for (int i = getScrollY(); i < Math.min(tracks.size(), getScrollY() + tracksInView); ++i) {
                 final Track track = tracks.get(i);
                 for (int j = getScrollX(); j < Math.min(track.notes.size(), getScrollX() + notesInView); ++j) {
@@ -455,7 +456,7 @@ public class ModuleNote extends ModuleBase {
                     if (inRect(x, y, note.getBounds(i - getScrollY(), j - getScrollX()))) {
                         int instrumentInfo = currentInstrument;
                         if (instrumentInfo == -1) {
-                            if (buttonId == 0) {
+                            if (buttonId == InputConstants.MOUSE_BUTTON_LEFT) {
                                 instrumentInfo = 6;
                             } else {
                                 instrumentInfo = 7;

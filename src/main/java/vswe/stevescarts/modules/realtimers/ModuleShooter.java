@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.realtimers;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.ByteData;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -179,7 +180,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if (button == 0) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             if (inRect(x, y, intervalDragArea)) {
                 dragState = y - (intervalSelectionY + getInterval() * 2);
                 StevesCarts.LOGGER.info("dragState: {}", dragState);

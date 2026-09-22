@@ -1,5 +1,6 @@
 package vswe.stevescarts.client.guis;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
@@ -458,17 +459,21 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
             }
         }
         if (isScrolling) {
-            if (event.button() != -1) {
-                isScrolling = false;
-                assembler.setSpinning(true);
-            } else {
-                assembler.setYaw(assembler.getYaw() + x - scrollingX);
-                assembler.setRoll(assembler.getRoll() + y - scrollingY);
-                scrollingX = x;
-                scrollingY = y;
-            }
+            assembler.setYaw(assembler.getYaw() + x - scrollingX);
+            assembler.setRoll(assembler.getRoll() + y - scrollingY);
+            scrollingX = x;
+            scrollingY = y;
         }
         return true;
+    }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent event) {
+        if (isScrolling) {
+            isScrolling = false;
+            assembler.setSpinning(true);
+        }
+        return super.mouseReleased(event);
     }
 
     @Override
@@ -476,11 +481,12 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         super.mouseClicked(event, isDoubleClick);
         int x = (int) (event.x() - getLeftPos());
         int y = (int) (event.y() - getTopPos());
+        int button = event.button();
         if (inRect(x, y, assembleRect)) {
             StevesCartsClient.sendToServer(new PacketCreateCart(this.assembler.getBlockPos(), 0, new byte[0]));
             return true;
         } else if (inRect(x, y, blackBackground)) {
-            if (event.button() == 0) {
+            if (button == InputConstants.MOUSE_BUTTON_LEFT) {
                 if (!isScrolling) {
                     scrollingX = x;
                     scrollingY = y;
@@ -488,7 +494,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                     spin = !spin;
                     return true;
                 }
-            } else if (event.button() == 1) {
+            } else if (button == InputConstants.MOUSE_BUTTON_RIGHT) {
                 dropdownX = x;
                 dropdownY = y;
                 if (dropdownY + assembler.getDropDown().size() * 20 > 164) {
@@ -509,7 +515,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
                 }
             }
         }
-        if (event.button() == 0 && dropdownX != -1 && dropdownY != -1) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && dropdownX != -1 && dropdownY != -1) {
             boolean anyLargeItem = false;
             final ArrayList<DropDownMenuItem> items = assembler.getDropDown();
             for (int j = 0; j < items.size(); ++j) {

@@ -1,5 +1,6 @@
 package vswe.stevescarts.arcade.tetris;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
@@ -179,7 +180,7 @@ public class ArcadeTetris extends ArcadeGame {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if (button == 0 && !isPlaying && gameOverTicks >= 150 && getModule().inRect(x, y, new int[]{189, 9, 100, 150})) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && !isPlaying && gameOverTicks >= 150 && getModule().inRect(x, y, new int[]{189, 9, 100, 150})) {
             newgame();
         }
     }

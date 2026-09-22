@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.addons;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -94,7 +95,7 @@ public class ModuleColorizer extends ModuleAddon {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if (button == 0) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             for (int i = 0; i < 3; ++i) {
                 if (inRect(x, y, getMovableMarker(i))) {
                     markerMoving = i;

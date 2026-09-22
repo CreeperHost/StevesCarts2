@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.addons;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.serialization.Codec;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -258,14 +259,14 @@ public class ModuleDrillIntelligence extends ModuleAddon {
                 }
             }
         }
-        if (button == 0) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             clicked = false;
         }
     }
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if (button == 0) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             final int w = getDrillWidth();
             final int h = getDrillHeight();
             for (int i = 0; i < w; ++i) {

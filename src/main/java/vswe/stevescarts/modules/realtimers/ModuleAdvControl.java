@@ -1,5 +1,6 @@
 package vswe.stevescarts.modules.realtimers;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -397,7 +398,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
 
     @Override
     public void mouseClicked(final GuiMinecart gui, final int x, final int y, final int button) {
-        if (button == 0 && inRect(x, y, buttonRect)) {
+        if (button == InputConstants.MOUSE_BUTTON_LEFT && inRect(x, y, buttonRect)) {
             sendPacket(3);
         }
     }
