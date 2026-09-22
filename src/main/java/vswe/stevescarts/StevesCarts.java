@@ -33,6 +33,7 @@ public class StevesCarts {
         AssemblerUpgrade.init();
         ModItems.ITEMS.register(modBus);
         ModBlocks.BLOCKS.register(modBus);
+        ModSounds.SOUND_EVENTS.register(modBus);
         StevesCartsCreativeTabs.CREATIVE_TAB.register(modBus);
         ModEntities.ENTITIES.register(modBus);
         ModBlocks.TILES_ENTITIES.register(modBus);

@@ -1,5 +1,6 @@
 package vswe.stevescarts.arcade.invaders;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
@@ -10,6 +11,7 @@ import vswe.stevescarts.arcade.tracks.TrackStory;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.init.ModSounds;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
 import java.util.ArrayList;
@@ -135,12 +137,12 @@ public class ArcadeInvaders extends ArcadeGame {
                     }
                 }
                 //30
-                if (isKeyDown(65)) {
+                if (InputConstants.isKeyDown(InputConstants.KEY_A)) {
                     player.move(-1);
-                } else if (isKeyDown(68)) {
+                } else if (InputConstants.isKeyDown(InputConstants.KEY_D)) {
                     player.move(1);
                 }
-                if (fireDelay == 0 && isKeyDown(87)) {
+                if (fireDelay == 0 && InputConstants.isKeyDown(InputConstants.KEY_W)) {
                     projectiles.add(new Projectile(this, player.x + 8 - 2, player.y - 15, true));
                     ArcadeGame.playSound(SoundEvents.ARROW_SHOOT, 0.8f, 1.0f / (getModule().getCart().getRandom().nextFloat() * 0.4f + 1.2f) + 0.5f);
                     fireDelay = 10;
@@ -173,17 +175,9 @@ public class ArcadeInvaders extends ArcadeGame {
         } else if (newHighscore && gameoverCounter < 5) {
             ++gameoverCounter;
             if (gameoverCounter == 5) {
-                //TODO reimplement sound
-//                ArcadeGame.playSound(SoundHandler.HIGH_SCORE, 1.0f, 1.0f);
+                ArcadeGame.playSound(ModSounds.HIGH_SCORE.get(), 1.0f, 1.0f);
             }
         }
-    }
-
-    public boolean isKeyDown(int id) {
-
-        //TODO
-//        		return InputMappings.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), id);
-        return false;
     }
 
     @Override
@@ -225,7 +219,7 @@ public class ArcadeInvaders extends ArcadeGame {
 
     @Override
     public void keyPress(final GuiMinecart gui, final int character, final int extraInformation) {
-        if (character == 19) {
+        if (character == InputConstants.KEY_R) {
             start();
         }
     }

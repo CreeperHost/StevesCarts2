@@ -1,6 +1,8 @@
 package vswe.stevescarts.arcade;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +24,7 @@ public abstract class ArcadeGame {
 
     public static void playSound(SoundEvent sound, float volume, float pitch) {
         if (SCConfig.CLIENT.useArcadeSounds.get() && sound != null) {
-            //			SoundHandler.playSound(sound, SoundCategory.BLOCKS, volume, pitch);
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(sound, pitch, volume));
         }
     }
 

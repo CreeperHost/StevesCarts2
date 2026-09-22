@@ -17,7 +17,9 @@ public class TetrisBlock {
 
     public void render(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, ArcadeTetris game, final GuiMinecart gui, final int x, final int y) {
         if (y >= 0) {
-//            game.getModule().drawImage(GuiGraphicsExtractor, texture, gui, 189 + x * 10, 9 + y * 10, u, v, 10, 10, r);
+            game.getModule().drawImage(GuiGraphicsExtractor, texture, gui,
+                    ArcadeTetris.BOARD_START_X + x * 10, ArcadeTetris.BOARD_START_Y + y * 10,
+                    u, v, 10, 10, r);
         }
     }
 

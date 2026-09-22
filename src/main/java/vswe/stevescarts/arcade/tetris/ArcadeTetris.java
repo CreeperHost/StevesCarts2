@@ -3,7 +3,6 @@ package vswe.stevescarts.arcade.tetris;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -12,17 +11,15 @@ import vswe.stevescarts.arcade.tracks.TrackStory;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.init.ModSounds;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
 public class ArcadeTetris extends ArcadeGame {
     public static final int BOARD_START_X = 189;
     public static final int BOARD_START_Y = 9;
-    private static SoundEvent[] removalSounds;
     private static String texture;
 
     static {
-        //TODO bring back sounds
-        //        ArcadeTetris.removalSounds = new SoundEvent[]{SoundHandler.LINES_1, SoundHandler.LINES_2, SoundHandler.LINES_3, SoundHandler.LINES_4};
         ArcadeTetris.texture = "/gui/tetris.png";
     }
 
@@ -101,7 +98,12 @@ public class ArcadeTetris extends ArcadeGame {
                             final int n = removedCount - 1;
                             ++removedByAmount[n];
                             score += removedCount * removedCount * 100;
-                            ArcadeGame.playSound(ArcadeTetris.removalSounds[removedCount - 1], 1.0f, 1.0f);
+                            ArcadeGame.playSound(switch (removedCount) {
+                                case 1 -> ModSounds.LINES_1.get();
+                                case 2 -> ModSounds.LINES_2.get();
+                                case 3 -> ModSounds.LINES_3.get();
+                                default -> ModSounds.LINES_4.get();
+                            }, 1.0f, 1.0f);
                         }
                         quickMove = false;
                         ++piecesSinceDelayChange;
@@ -117,8 +119,7 @@ public class ArcadeTetris extends ArcadeGame {
                         quickMove = false;
                         gameOverTicks = 0;
                         newHighScore();
-                        //TODO bring back sounds
-//                        ArcadeGame.playSound(SoundHandler.GAME_OVER, 1.0f, 1.0f);
+                        ArcadeGame.playSound(ModSounds.GAME_OVER.get(), 1.0f, 1.0f);
                     }
                 } else {
                     generatePiece();
@@ -130,8 +131,7 @@ public class ArcadeTetris extends ArcadeGame {
         } else if (gameOverTicks < 170) {
             gameOverTicks = Math.min(170, gameOverTicks + 5);
         } else if (newHighScore) {
-            //TODO bring back sounds
-//            ArcadeGame.playSound(SoundHandler.HIGH_SCORE, 1.0f, 1.0f);
+            ArcadeGame.playSound(ModSounds.HIGH_SCORE.get(), 1.0f, 1.0f);
             newHighScore = false;
         }
     }
@@ -163,17 +163,17 @@ public class ArcadeTetris extends ArcadeGame {
     @Override
     public void keyPress(final GuiMinecart gui, final int character, final int extraInformation) {
         if (piece != null) {
-            if (character == 19) {
+            if (character == InputConstants.KEY_W) {
                 piece.rotate(board);
-            } else if (character == 30) {
+            } else if (character == InputConstants.KEY_A) {
                 piece.move(this, board, -1, 0, false);
-            } else if (character == 32) {
+            } else if (character == InputConstants.KEY_D) {
                 piece.move(this, board, 1, 0, false);
-            } else if (character == 31) {
+            } else if (character == InputConstants.KEY_S) {
                 quickMove = true;
             }
         }
-        if (character == 19) {
+        if (character == InputConstants.KEY_R) {
             newgame();
         }
     }

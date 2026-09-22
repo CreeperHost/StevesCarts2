@@ -12,6 +12,7 @@ import vswe.stevescarts.arcade.tracks.TrackStory;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.init.ModSounds;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
 public class ArcadeSweeper extends ArcadeGame {
@@ -65,8 +66,7 @@ public class ArcadeSweeper extends ArcadeGame {
             ++highscoreTicks;
             if (highscoreTicks == 78) {
                 highscoreTicks = 0;
-                //TODO bring back sounds
-//                ArcadeGame.playSound(SoundHandler.HIGH_SCORE, 1.0f, 1.0f);
+                ArcadeGame.playSound(ModSounds.HIGH_SCORE.get(), 1.0f, 1.0f);
             }
         }
     }
@@ -144,12 +144,10 @@ public class ArcadeSweeper extends ArcadeGame {
             openTile(xc, yc, true);
         } else if (button == InputConstants.MOUSE_BUTTON_RIGHT && isValidCoordinate(xc, yc)) {
             hasStarted = true;
-            //TODO bring back sounds
-//            ArcadeGame.playSound(SoundHandler.FLAG_CLICK, 1.0f, 1.0f);
+            ArcadeGame.playSound(ModSounds.FLAG_CLICK.get(), 1.0f, 1.0f);
             tiles[xc][yc].mark();
         } else if (button == InputConstants.MOUSE_BUTTON_MIDDLE && isValidCoordinate(xc, yc) && tiles[xc][yc].getState() == Tile.TILE_STATE.OPENED) {
-            //TODO bring back sounds
-//            ArcadeGame.playSound(SoundHandler.CLICK, 1.0f, 1.0f);
+            ArcadeGame.playSound(ModSounds.CLICK.get(), 1.0f, 1.0f);
             int nearby = tiles[xc][yc].getNearbyCreepers();
             if (nearby != 0) {
                 for (int i = -1; i <= 1; ++i) {
@@ -183,8 +181,7 @@ public class ArcadeSweeper extends ArcadeGame {
             if (emptyLeft == 0) {
                 hasFinished = true;
                 isPlaying = false;
-                //TODO bring back sounds
-//                ArcadeGame.playSound(SoundHandler.GOOD_JOB, 1.0f, 1.0f);
+                ArcadeGame.playSound(ModSounds.GOOD_JOB.get(), 1.0f, 1.0f);
                 if (highscore[currentGameType] > ticks / 20) {
                     highscoreTicks = 1;
                     final int val = ticks / 20;
@@ -194,8 +191,7 @@ public class ArcadeSweeper extends ArcadeGame {
                 }
             } else if (result == Tile.TILE_OPEN_RESULT.BLOB) {
                 if (first) {
-                    //TODO bring back sounds
-//                    ArcadeGame.playSound(SoundHandler.BLOB_CLICK, 1.0f, 1.0f);
+                    ArcadeGame.playSound(ModSounds.BLOB_CLICK.get(), 1.0f, 1.0f);
                 }
                 for (int i = -1; i <= 1; ++i) {
                     for (int j = -1; j <= 1; ++j) {
@@ -206,17 +202,16 @@ public class ArcadeSweeper extends ArcadeGame {
                 isPlaying = false;
                 ArcadeGame.playSound(SoundEvents.GENERIC_EXPLODE.value(), 1.0f, (1.0f + (getModule().getCart().getRandom().nextFloat() - getModule().getCart().getRandom().nextFloat()) * 0.2f) * 0.7f);
             } else if (result == Tile.TILE_OPEN_RESULT.OK && first) {
-                //TODO bring back sounds
-//                ArcadeGame.playSound(SoundHandler.CLICK, 1.0f, 1.0f);
+                ArcadeGame.playSound(ModSounds.CLICK.get(), 1.0f, 1.0f);
             }
         }
     }
 
     @Override
     public void keyPress(final GuiMinecart gui, final int character, final int extraInformation) {
-        if (character == 19) {
+        if (character == InputConstants.KEY_R) {
             newGame(currentGameType);
-        } else if (character == 20) {
+        } else if (character == InputConstants.KEY_T) {
             newGame(currentGameType = (currentGameType + 1) % 3);
         }
     }

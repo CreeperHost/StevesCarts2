@@ -7,6 +7,7 @@ import net.minecraft.sounds.SoundEvents;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
+import vswe.stevescarts.init.ModSounds;
 
 public class TetrisPiece {
     private final TetrisPiecePart[] parts;
@@ -145,8 +146,7 @@ public class TetrisPiece {
                             ArcadeGame.playSound(sound, volume, (game.getModule().getCart().getRandom().nextFloat() - game.getModule().getCart().getRandom().nextFloat()) * 0.2f + 1.0f);
                         }
                     } else {
-                        //TODO bring back sounds
-//                        ArcadeGame.playSound(SoundHandler.BOOP, 1.0f, 1.0f);
+                        ArcadeGame.playSound(ModSounds.BOOP.get(), 1.0f, 1.0f);
                     }
                 }
                 return isGameOver ? MOVE_RESULT.GAME_OVER : MOVE_RESULT.FAIL;

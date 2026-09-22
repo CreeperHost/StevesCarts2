@@ -10,6 +10,7 @@ import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.init.ModSounds;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
 import java.util.ArrayList;
@@ -76,8 +77,7 @@ public class ArcadeTracks extends ArcadeGame {
             @Override
             public void onItemPickUp() {
                 completeLevel();
-                //TODO bring back sounds
-//                ArcadeGame.playSound(SoundHandler.WIN, 1.0f, 1.0f);
+                ArcadeGame.playSound(ModSounds.WIN.get(), 1.0f, 1.0f);
             }
 
             @Override
@@ -309,7 +309,7 @@ public class ArcadeTracks extends ArcadeGame {
                 }
             }
             for (final Track track : tracks) {
-//                getModule().drawImage(GuiGraphicsExtractor, texture, gui, getTrackArea(track.getX(), track.getY()), 16 * track.getU(), 16 * track.getV(), track.getRotation());
+                getModule().drawImage(GuiGraphicsExtractor, texture, gui, getTrackArea(track.getX(), track.getY()), 16 * track.getU(), 16 * track.getV(), track.getRotation());
             }
             if (isUsingEditor()) {
                 if (editorDetectorTrack != null && !isRunning) {
@@ -332,10 +332,10 @@ public class ArcadeTracks extends ArcadeGame {
                 cart.render(GuiGraphicsExtractor, texture, this, gui, tick);
             }
             if (isUsingEditor() && !isRunning) {
-//                getModule().drawImage(GuiGraphicsExtractor, texture, gui, 5 + playerStartX * 16, 5 + playerStartY * 16, 162, 212, 8, 8, playerStartDirection.getRenderRotation());
+                getModule().drawImage(GuiGraphicsExtractor, texture, gui, 5 + playerStartX * 16, 5 + playerStartY * 16, 162, 212, 8, 8, playerStartDirection.getRenderRotation());
             }
             if (!isMenuOpen && editorTrack != null) {
-//                getModule().drawImage(GuiGraphicsExtractor, texture, gui, x - 8, y - 8, 16 * editorTrack.getU(), 16 * editorTrack.getV(), 16, 16, editorTrack.getRotation());
+                getModule().drawImage(GuiGraphicsExtractor, texture, gui, x - 8, y - 8, 16 * editorTrack.getU(), 16 * editorTrack.getV(), 16, 16, editorTrack.getRotation());
             }
             if (isSaveMenuOpen) {
                 final int[] rect2 = getSaveMenuArea();
@@ -756,14 +756,16 @@ public class ArcadeTracks extends ArcadeGame {
         }
     }
 
-    //TODO, Keys are now ints
     @Override
     public void keyPress(final GuiMinecart gui, final int character, final int extraInformation) {
         if (isSaveMenuOpen) {
-            if (saveName.length() < 15 && validSaveNameCharacters.indexOf(Character.toLowerCase(character)) != -1) {
-                saveName += character;
-            } else if (extraInformation == 14 && saveName.length() > 0) {
+            if (character == InputConstants.KEY_BACKSPACE && saveName.length() > 0) {
                 saveName = saveName.substring(0, saveName.length() - 1);
+            } else if (saveName.length() < 15) {
+                char typed = getSaveNameCharacter(character);
+                if (validSaveNameCharacters.indexOf(typed) != -1) {
+                    saveName += typed;
+                }
             }
         } else {
             if (!isUsingEditor() || isRunning) {
@@ -775,15 +777,15 @@ public class ArcadeTracks extends ArcadeGame {
             } else {
                 track = hoveringTrack;
             }
-            switch (Character.toLowerCase(character)) {
-                case 'a': {
+            switch (character) {
+                case InputConstants.KEY_A: {
                     if (track != null && track.getOrientation().getOpposite() != null) {
                         track.setOrientation(track.getOrientation().getOpposite());
                         break;
                     }
                     break;
                 }
-                case 'r': {
+                case InputConstants.KEY_R: {
                     if (track != null) {
                         for (final TrackOrientation orientation : TrackOrientation.ALL) {
                             if (orientation.getV() == track.getV() && ((orientation.getV() == 1 && orientation.getRotation() != track.getRotation()) || orientation.getRotation() == track.getRotation().getNextRotation())) {
@@ -795,7 +797,7 @@ public class ArcadeTracks extends ArcadeGame {
                     }
                     break;
                 }
-                case 'f': {
+                case InputConstants.KEY_F: {
                     if (track != null) {
                         for (final TrackOrientation orientation : TrackOrientation.ALL) {
                             if (orientation.getV() == track.getV() && (orientation.getV() == 2 || orientation.getV() == 3) && orientation.getRotation() == track.getRotation().getFlippedRotation()) {
@@ -807,34 +809,34 @@ public class ArcadeTracks extends ArcadeGame {
                     }
                     break;
                 }
-                case 't': {
+                case InputConstants.KEY_T: {
                     if (editorTrack != null) {
                         editorTrack.nextType();
                         break;
                     }
                     break;
                 }
-                case '1': {
+                case InputConstants.KEY_1: {
                     setEditorTrack(new TrackEditor(TrackOrientation.CORNER_DOWN_RIGHT));
                     break;
                 }
-                case '2': {
+                case InputConstants.KEY_2: {
                     setEditorTrack(new TrackEditor(TrackOrientation.STRAIGHT_VERTICAL));
                     break;
                 }
-                case '3': {
+                case InputConstants.KEY_3: {
                     setEditorTrack(new TrackEditor(TrackOrientation.JUNCTION_3WAY_STRAIGHT_FORWARD_VERTICAL_CORNER_DOWN_RIGHT));
                     break;
                 }
-                case '4': {
+                case InputConstants.KEY_4: {
                     setEditorTrack(new TrackEditor(TrackOrientation.JUNCTION_3WAY_CORNER_RIGHT_ENTRANCE_DOWN));
                     break;
                 }
-                case '5': {
+                case InputConstants.KEY_5: {
                     setEditorTrack(new TrackEditor(TrackOrientation.JUNCTION_4WAY));
                     break;
                 }
-                case 'd': {
+                case InputConstants.KEY_D: {
                     if (hoveringTrack != null) {
                         tracks.remove(hoveringTrack);
                         if (hoveringTrack.getX() >= 0 && hoveringTrack.getX() < trackMap.length && hoveringTrack.getY() >= 0 && hoveringTrack.getY() < trackMap[0].length) {
@@ -845,7 +847,7 @@ public class ArcadeTracks extends ArcadeGame {
                     }
                     break;
                 }
-                case 'c': {
+                case InputConstants.KEY_C: {
                     if (editorTrack == null && hoveringTrack != null) {
                         setEditorTrack(new TrackEditor(hoveringTrack.getOrientation()));
                         editorTrack.setType(hoveringTrack.getU());
@@ -853,7 +855,7 @@ public class ArcadeTracks extends ArcadeGame {
                     }
                     break;
                 }
-                case 's': {
+                case InputConstants.KEY_S: {
                     if (hoveringTrack != null) {
                         if (playerStartX == hoveringTrack.getX() && playerStartY == hoveringTrack.getY()) {
                             playerStartDirection = playerStartDirection.getLeft();
@@ -866,7 +868,7 @@ public class ArcadeTracks extends ArcadeGame {
                     }
                     break;
                 }
-                case 'x': {
+                case InputConstants.KEY_X: {
                     if (hoveringTrack != null) {
                         itemX = hoveringTrack.getX();
                         itemY = hoveringTrack.getY();
@@ -876,6 +878,19 @@ public class ArcadeTracks extends ArcadeGame {
                 }
             }
         }
+    }
+
+    private char getSaveNameCharacter(int key) {
+        if (key >= InputConstants.KEY_A && key <= InputConstants.KEY_Z) {
+            return (char) ('a' + key - InputConstants.KEY_A);
+        }
+        if (key >= InputConstants.KEY_1 && key <= InputConstants.KEY_9) {
+            return (char) ('1' + key - InputConstants.KEY_1);
+        }
+        if (key == InputConstants.KEY_0) {
+            return '0';
+        }
+        return key == InputConstants.KEY_SPACE ? ' ' : '\0';
     }
 
     private void handleEditorTrack(final int x, final int y, final int button, final boolean clicked) {

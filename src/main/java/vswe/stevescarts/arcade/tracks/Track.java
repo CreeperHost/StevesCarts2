@@ -2,7 +2,9 @@ package vswe.stevescarts.arcade.tracks;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
+import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
+import vswe.stevescarts.init.ModSounds;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
 import java.util.ArrayList;
@@ -132,8 +134,7 @@ public class Track {
 
     public void flip() {
         if (orientation.getOpposite() != null) {
-            //TODO bring back sounds
-//            ArcadeGame.playSound(SoundHandler.GEAR_SWITCH, 1.0f, 1.0f);
+            ArcadeGame.playSound(ModSounds.GEAR_SWITCH.get(), 1.0f, 1.0f);
             setOrientation(orientation.getOpposite());
         }
     }
