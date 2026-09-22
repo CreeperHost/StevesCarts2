@@ -6,6 +6,7 @@ import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -47,6 +48,9 @@ public abstract class ModelCartbase extends Model {
     }
 
     public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll) {
+    }
+
+    public void submitExtraGeometry(ModuleBase module, PoseStack poseStack, SubmitNodeCollector nodeCollector, int light) {
     }
 
     public RenderType getRenderType(ModuleBase moduleBase) {

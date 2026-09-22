@@ -1,5 +1,6 @@
 package vswe.stevescarts.client.models.storages.tanks;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
@@ -7,9 +8,12 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.client.renders.FluidTankRenderer;
 import vswe.stevescarts.helpers.ResourceHelper;
+import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 
 public class ModelAdvancedTank extends ModelCartbase {
     public ModelAdvancedTank() {
@@ -30,5 +34,11 @@ public class ModelAdvancedTank extends ModelCartbase {
     @Override
     public RenderType getRenderType(ModuleBase moduleBase) {
         return RenderTypes.entityCutout(getTexture());
+    }
+
+    @Override
+    public void submitExtraGeometry(ModuleBase module, PoseStack poseStack, SubmitNodeCollector nodeCollector, int light) {
+        FluidTankRenderer.submit((ModuleTank) module, poseStack, nodeCollector, light,
+                -0.425F, -0.675F, -0.30F, 0.425F, 0.1125F, 0.30F);
     }
 }

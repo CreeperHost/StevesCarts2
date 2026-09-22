@@ -63,6 +63,7 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
                 if (model.getRenderType(module) == null) continue;
                 model.applyEffects(module, poseStack, state.yRot, state.xRot, 0);
                 nodeCollector.submitModel(model, null, poseStack, model.getRenderType(module), state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+                model.submitExtraGeometry(module, poseStack, nodeCollector, state.lightCoords);
             }
         }
 
@@ -72,6 +73,7 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
             for (ModelCartbase model : StevesCartsModules.REINFORCED_HULL.getModels(true).values()) {
                 model.applyEffects(hull, poseStack, 0, 0, 0);
                 nodeCollector.submitModel(model, null, poseStack, model.getRenderType(hull), state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+                model.submitExtraGeometry(hull, poseStack, nodeCollector, state.lightCoords);
             }
         }
 

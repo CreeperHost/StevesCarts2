@@ -232,7 +232,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
         if (tank.getFluid().isEmpty()) {
             return 0.0f;
         }
-        return tank.getFluidAmount() / getTankSize();
+        return (float) tank.getFluidAmount() / getTankSize();
     }
 
     public boolean isCompletelyFilled() {

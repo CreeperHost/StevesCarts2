@@ -59,6 +59,7 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
                         for (ModelCartbase model : module.getModels()) {
                             model.applyEffects(module, matrixStack, 0, 0, 0);
                             nodeCollector.submitModel(model, null, matrixStack, model.getRenderType(module), 240, OverlayTexture.NO_OVERLAY, 0);
+                            model.submitExtraGeometry(module, matrixStack, nodeCollector, light);
                         }
                     }
                 }
@@ -69,6 +70,7 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
             for (ModelCartbase model : StevesCartsModules.REINFORCED_HULL.getModels(true).values()) {
                 model.applyEffects(hull, matrixStack, 0, 0, 0);
                 nodeCollector.submitModel(model, null, matrixStack, model.getRenderType(hull), 240, OverlayTexture.NO_OVERLAY, 0);
+                model.submitExtraGeometry(hull, matrixStack, nodeCollector, light);
             }
         }
         matrixStack.popPose();

@@ -8,9 +8,10 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.client.renders.FluidTankRenderer;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 
@@ -42,36 +43,11 @@ public class ModelSideTanks extends ModelCartbase {
     }
 
     @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll) {
-        super.applyEffects(module, matrixStack, yaw, pitch, roll);
-        ModuleTank moduleTank = (ModuleTank) module;
-        FluidStack fluidStack = moduleTank.getFluid();
-        int light = 15;
-        if (fluidStack != null && !fluidStack.isEmpty()) {
-            //TODO fluid rendering
-
-//            matrixStack.pushPose();
-//            VertexConsumer buffer = rtb.getBuffer(FluidTankRenderType.RESIZABLE);
-//            //Left
-//            matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
-//            matrixStack.translate(-0.45, -0.15F, -0.85);
-//
-//            dev.architectury.fluid.FluidStack fluidStackA = dev.architectury.fluid.FluidStack.create(fluidStack.getFluid(), fluidStack.getAmount());
-//
-//
-//            matrixStack.scale(0.7F, (FluidRenderHelper.getScale(moduleTank.getFluidAmount(), moduleTank.getCapacity(), fluidStack.isEmpty()) / 3), 0.3F);
-//            RenderUtils.renderObject(FluidRenderHelper.getFluidModel(fluidStackA, FluidRenderHelper.STAGES + 1), matrixStack, buffer, RenderUtils.getColorARGB(fluidStackA, 0.2F),
-//                    RenderUtils.calculateGlowLight(light, fluidStackA));
-//            matrixStack.popPose();
-//
-//            //Right
-//            matrixStack.pushPose();
-//            matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
-//            matrixStack.translate(-0.45, -0.15, 0.55);
-//            matrixStack.scale(0.7F, FluidRenderHelper.getScale(moduleTank.getFluidAmount(), moduleTank.getCapacity(), fluidStack.isEmpty()) / 3, 0.3F);
-//            RenderUtils.renderObject(FluidRenderHelper.getFluidModel(fluidStackA, FluidRenderHelper.STAGES + 1), matrixStack, buffer, RenderUtils.getColorARGB(fluidStackA, 0.2F),
-//                    RenderUtils.calculateGlowLight(light, fluidStackA));
-//            matrixStack.popPose();
-        }
+    public void submitExtraGeometry(ModuleBase module, PoseStack poseStack, SubmitNodeCollector nodeCollector, int light) {
+        ModuleTank tank = (ModuleTank) module;
+        FluidTankRenderer.submit(tank, poseStack, nodeCollector, light,
+                -0.42F, -0.17F, -0.80F, 0.17F, 0.11F, -0.575F);
+        FluidTankRenderer.submit(tank, poseStack, nodeCollector, light,
+                -0.42F, -0.17F, 0.575F, 0.17F, 0.11F, 0.80F);
     }
 }

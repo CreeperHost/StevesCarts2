@@ -8,9 +8,10 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.client.renders.FluidTankRenderer;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 
@@ -36,25 +37,8 @@ public class ModelFrontTank extends ModelCartbase {
     }
 
     @Override
-    public void applyEffects(ModuleBase module, PoseStack matrixStack, float yaw, float pitch, float roll) {
-        super.applyEffects(module, matrixStack, yaw, pitch, roll);
-        ModuleTank moduleTank = (ModuleTank) module;
-        FluidStack fluidStack = moduleTank.getFluid();
-        int light = 15;
-        //TODO fluid rendering
-//        if(fluidStack != null && !fluidStack.isEmpty())
-//        {
-//            matrixStack.pushPose();
-//            VertexConsumer buffer = rtb.getBuffer(FluidTankRenderType.RESIZABLE);
-//            matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
-//            matrixStack.translate(-1.1, -0.25D, -0.4);
-//            matrixStack.scale(0.5F, FluidRenderHelper.getScale(moduleTank.getFluidAmount(), moduleTank.getCapacity(), fluidStack.isEmpty()) / 2, 0.8F);
-//            dev.architectury.fluid.FluidStack fluidStackA = dev.architectury.fluid.FluidStack.create(fluidStack.getFluid(), fluidStack.getAmount());
-//
-//            RenderUtils.renderObject(FluidRenderHelper.getFluidModel(fluidStackA, FluidRenderHelper.STAGES + 1), matrixStack, buffer, RenderUtils.getColorARGB(fluidStackA, 0.2F),
-//                    RenderUtils.calculateGlowLight(light, fluidStackA));
-//
-//            matrixStack.popPose();
-//        }
+    public void submitExtraGeometry(ModuleBase module, PoseStack poseStack, SubmitNodeCollector nodeCollector, int light) {
+        FluidTankRenderer.submit((ModuleTank) module, poseStack, nodeCollector, light,
+                -1.05F, -0.175F, -0.3625F, -0.70F, 0.175F, 0.3625F);
     }
 }

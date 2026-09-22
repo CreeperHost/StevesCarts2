@@ -137,12 +137,9 @@ dependencies {
     // And its provides the option to then use net.minecraft as the group, and one of; client, server or joined as the module name, plus the game version as version.
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation "net.creeperhost.polylib:polylib-neoforge:${polylib_version}"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
 //    implementation fg.deobf("curse.maven:railcraft-reborn-901491:4708018")
-
-//    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
-//    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
-//    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
 //    runtimeOnly "curse.maven:roughly-enough-items-310111:6833149"
 //    runtimeOnly "curse.maven:cloth-config-348521:6669837"
 }

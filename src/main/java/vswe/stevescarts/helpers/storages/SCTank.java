@@ -190,7 +190,8 @@ public class SCTank extends FluidStacksResourceHandler implements IFluidTank {
         TextureAtlasSprite icon = material.sprite();
         if (icon == null) return;
 
-        int fluidColor = model.fluidTintSource().color(fluidState);
+        var tintSource = model.fluidTintSource();
+        int fluidColor = tintSource == null ? 0xFFFFFFFF : tintSource.color(fluidState);
         for (int y = 0; y < 3; y++) {
             int pixels = fluidLevel - (2 - y) * 16;
 
