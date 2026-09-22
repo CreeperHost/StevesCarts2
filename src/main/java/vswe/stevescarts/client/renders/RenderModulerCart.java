@@ -62,7 +62,7 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
             for (ModelCartbase model : module.getModels()) {
                 if (model.getRenderType(module) == null) continue;
                 model.applyEffects(module, poseStack, state.yRot, state.xRot, 0);
-                nodeCollector.submitModel(model, null, poseStack, model.getRenderType(module), 240, OverlayTexture.NO_OVERLAY, 0);
+                nodeCollector.submitModel(model, null, poseStack, model.getRenderType(module), state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             }
         }
 
@@ -71,13 +71,13 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
             ModuleHull hull = new ModuleReinforced(null);
             for (ModelCartbase model : StevesCartsModules.REINFORCED_HULL.getModels(true).values()) {
                 model.applyEffects(hull, poseStack, 0, 0, 0);
-                nodeCollector.submitModel(model, null, poseStack, model.getRenderType(hull), 240, OverlayTexture.NO_OVERLAY, 0);
+                nodeCollector.submitModel(model, null, poseStack, model.getRenderType(hull), state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             }
         }
 
         poseStack.popPose();
 
-        renderTag(state.label, poseStack, nodeCollector, 240, cameraRenderState, state.distanceToCameraSq);
+        renderTag(state.label, poseStack, nodeCollector, state.lightCoords, cameraRenderState, state.distanceToCameraSq);
     }
 
     //    @Override
