@@ -4,9 +4,13 @@
 # folders
 !/src
 !/gradle/
+!/.github/
+!/.github/workflows/
+!/.github/workflows/*.yml
 
 # files
 !/.gitignore
+!/.modpacksch.json
 !/README.md
 !/build.gradle
 !/gradle.properties

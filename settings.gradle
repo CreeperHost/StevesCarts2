@@ -1,6 +1,10 @@
 pluginManagement {
     repositories {
         mavenLocal()
+        maven {
+            name = 'CreeperHost'
+            url = uri('https://maven.creeperhost.net')
+        }
         gradlePluginPortal()
         maven { url = 'https://maven.neoforged.net/releases' }
         maven { url "https://maven.architectury.dev/" }

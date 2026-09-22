@@ -1,9 +1,11 @@
+import net.creeperhost.modpacksch.EnvironmentSupport
+
 plugins {
     id 'java-library'
     id 'maven-publish'
     id 'net.neoforged.moddev' version '2.0.147'
+    id 'net.creeperhost.modpacksch' version '0.1.1'
     id 'idea'
-    id "me.shedaniel.unified-publishing" version "0.1.+"
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -19,6 +21,12 @@ def ENV = System.getenv()
 
 version = minecraft_version + "-" + mod_version + "-neoforge"
 group = mod_group_id
+
+def releaseTag = providers.environmentVariable('GITHUB_REF_NAME')
+        .orElse("${minecraft_version}-${mod_version}")
+def releaseNotes = providers.environmentVariable('STEVESCARTS_CHANGELOG')
+        .orElse('See the GitHub release notes for changes in this version.')
+def marketplaceDisplayName = "${minecraft_version}-${mod_version} [NeoForge]"
 
 repositories {
     mavenLocal()
@@ -188,37 +196,64 @@ publishing {
     }
 }
 
-unifiedPublishing {
-    project {
-        displayName = "$rootProject.mod_version"
-        releaseType = "$rootProject.artifact_type"
-        changelog = ""
-        gameVersions = ["$rootProject.minecraft_version"]
-        gameLoaders = ["neoforge"]
-        mainPublication tasks.jar
-        relations {
-            depends {
-                curseforge = "polylib"
-                modrinth = "polylib"
-            }
-        }
+publishMods {
+    file = tasks.jar.archiveFile
+    version = releaseTag
+    changelog = releaseNotes
+    type = STABLE
+    displayName = "${mod_name} ${mod_version} for NeoForge ${minecraft_version}"
+    modLoaders.add('neoforge')
+    dryRun = providers.environmentVariable('STEVESCARTS_PUBLISH_DRY_RUN')
+            .map { it.equalsIgnoreCase('true') }
+            .orElse(false)
 
-        var CURSE_API_KEY = project.findProperty("CURSE_API_KEY") ?: System.getenv("CURSE_API_KEY")
-        if (CURSE_API_KEY != null) {
-            curseforge {
-                token = CURSE_API_KEY
-                id = rootProject.curseforge_id
-            }
-        }
+    github {
+        repository = 'CreeperHost/StevesCarts2'
+        accessToken = providers.environmentVariable('GITHUB_TOKEN')
+        commitish = minecraft_version
+        tagName = releaseTag
+        allowEmptyFiles = true
+    }
 
-        var MODRINTH_TOKEN = project.findProperty("MODRINTH_TOKEN") ?: System.getenv("MODRINTH_TOKEN")
-        if (MODRINTH_TOKEN != null) {
-            modrinth {
-                token = MODRINTH_TOKEN
-                id = rootProject.modrinth_id
-                version = "$project.mod_version"
-            }
+    if (providers.environmentVariable('CURSEFORGE_PROJECT_ID').isPresent()) {
+        curseforge {
+            projectId = providers.environmentVariable('CURSEFORGE_PROJECT_ID')
+            accessToken = providers.environmentVariable('CURSEFORGE_TOKEN')
+            displayName = marketplaceDisplayName
+            minecraftVersions.add(minecraft_version)
+            client = true
+            server = true
+            requires('polylib')
         }
+    }
+
+    if (providers.environmentVariable('MODRINTH_PROJECT_ID').isPresent()) {
+        modrinth {
+            projectId = providers.environmentVariable('MODRINTH_PROJECT_ID')
+            accessToken = providers.environmentVariable('MODRINTH_TOKEN')
+            displayName = marketplaceDisplayName
+            minecraftVersions.add(minecraft_version)
+            environment = CLIENT_AND_SERVER
+            requires('6lvkzFFj')
+        }
+    }
+}
+
+modpacksCh {
+    defaults {
+        gameVersions.add(minecraft_version)
+        environment {
+            client = EnvironmentSupport.REQUIRED
+            server = EnvironmentSupport.REQUIRED
+        }
+        dependencies {
+            requiredCurseForge('576589')
+            requiredModrinth('6lvkzFFj')
+        }
+    }
+    publication(':publishGithub') {
+        displayName = "${mod_name} NeoForge ${minecraft_version}"
+        loaders.add('neoforge')
     }
 }
 

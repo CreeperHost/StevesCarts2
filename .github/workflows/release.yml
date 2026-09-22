@@ -1,0 +1,65 @@
+name: Publish release
+
+on:
+  push:
+    tags:
+      - '26.3-*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: stevescarts-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      CURSEFORGE_TOKEN: ${{ secrets.CURSE_API_KEY }}
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+      CURSEFORGE_PROJECT_ID: '551524'
+      MODRINTH_PROJECT_ID: 'n1RjKB2S'
+
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v6
+
+      - name: Validate release inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected="$(sed -n 's/^minecraft_version=//p' gradle.properties)-$(sed -n 's/^mod_version=//p' gradle.properties)"
+          test "${GITHUB_REF_NAME}" = "${expected}"
+          test -n "${CURSEFORGE_PROJECT_ID}"
+          test -n "${MODRINTH_PROJECT_ID}"
+          test -n "${CURSEFORGE_TOKEN}"
+          test -n "${MODRINTH_TOKEN}"
+
+      - name: Add marketplace identities to release metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          jq --arg curseforge "${CURSEFORGE_PROJECT_ID}" \
+             --arg modrinth "${MODRINTH_PROJECT_ID}" \
+             '.projects.curseforge = $curseforge |
+              .projects.modrinth = $modrinth |
+              .preferredDownload = "curseforge"' \
+             .modpacksch.json > .modpacksch.release.json
+          mv .modpacksch.release.json .modpacksch.json
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Build, test and publish
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build publishMods --no-daemon

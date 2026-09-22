@@ -1,0 +1,42 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - '26.3'
+  pull_request:
+    branches:
+      - '26.3'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stevescarts-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Build and test
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build --no-daemon
+
+      - name: Check the working tree
+        run: git diff --exit-code

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://modpacks.ch/schemas/project-link-v1.json",
+  "version": 1,
+  "projects": {
+    "github": "CreeperHost/StevesCarts2",
+    "curseforge": "551524",
+    "modrinth": "n1RjKB2S"
+  },
+  "preferredDownload": "curseforge",
+  "destinations": [
+    {
+      "platform": "github",
+      "releases": true,
+      "manifestAsset": "modpacksch-release.json"
+    }
+  ],
+  "visibility": "listed"
+}
