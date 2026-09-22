@@ -46,6 +46,14 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade> {
         return coords != null && x >= coords[0] && x < coords[0] + coords[2] && y >= coords[1] && y < coords[1] + coords[3];
     }
 
+    public int getLeftPos() {
+        return leftPos;
+    }
+
+    public int getTopPos() {
+        return topPos;
+    }
+
     @Override
     public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTicks) {
         final int j = getLeftPos();

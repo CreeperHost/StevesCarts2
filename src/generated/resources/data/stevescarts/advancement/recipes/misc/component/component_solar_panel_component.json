@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/component_solar_panel_component"
+        "recipes": "stevescarts:component/component_solar_panel_component"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

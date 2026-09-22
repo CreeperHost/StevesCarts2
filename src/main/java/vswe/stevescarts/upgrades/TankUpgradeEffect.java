@@ -54,8 +54,8 @@ public abstract class TankUpgradeEffect extends InventoryUpgradeEffect {
         if (TankUpgradeEffect.texture == null) {
             TankUpgradeEffect.texture = ResourceHelper.getResource("/gui/tank.png");
         }
-        upgrade.tank.drawFluid(GuiGraphicsExtractor, gui.getGuiLeft(), gui.getGuiTop(), tankInterfaceX, tankInterfaceY);
-        GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, TankUpgradeEffect.texture, gui.getGuiLeft() + tankInterfaceX, gui.getGuiTop() + tankInterfaceY, 0, 0, 36, 51, 256, 256);
+        upgrade.tank.drawFluid(GuiGraphicsExtractor, gui.getLeftPos(), gui.getTopPos(), tankInterfaceX, tankInterfaceY);
+        GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, TankUpgradeEffect.texture, gui.getLeftPos() + tankInterfaceX, gui.getTopPos() + tankInterfaceY, 0, 0, 36, 51, 256, 256);
     }
 
     @Override

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/component_galgadorian_wheels"
+        "recipes": "stevescarts:component/component_galgadorian_wheels"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

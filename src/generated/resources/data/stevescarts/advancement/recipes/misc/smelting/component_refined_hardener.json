@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:smelting/component_refined_hardener"
+        "recipes": "stevescarts:smelting/component_refined_hardener"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

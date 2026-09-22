@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:upgrade/upgrade_generic_engine"
+        "recipes": "stevescarts:upgrade/upgrade_generic_engine"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

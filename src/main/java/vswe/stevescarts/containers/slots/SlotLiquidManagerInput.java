@@ -2,11 +2,11 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 import vswe.stevescarts.helpers.storages.SCTank;
+import vswe.stevescarts.helpers.storages.FluidContainerHelper;
 
 public class SlotLiquidManagerInput extends SlotStevesCarts {
     private final TileEntityLiquid manager;
@@ -20,8 +20,7 @@ public class SlotLiquidManagerInput extends SlotStevesCarts {
 
     @Override
     public boolean mayPlace(ItemStack itemstack) {
-        IFluidHandler handler = FluidUtil.getFluidHandler(itemstack).orElse(null);
-        if (handler == null) {
+        if (!FluidContainerHelper.hasHandler(itemstack)) {
             return false;
         }
         if (tankid < 0 || tankid >= 4) {
@@ -29,7 +28,7 @@ public class SlotLiquidManagerInput extends SlotStevesCarts {
         }
         SCTank tank = manager.getTanks()[tankid];
 
-        FluidStack fluidStack = handler.drain(1000, IFluidHandler.FluidAction.SIMULATE);
+        FluidStack fluidStack = FluidUtil.getFirstStackContained(itemstack);
         return (fluidStack.isEmpty() && !tank.getFluid().isEmpty()) || (!fluidStack.isEmpty() && (tank.getFluid().isEmpty() || tank.getFluid().is(fluidStack.getFluid())));
     }
 }

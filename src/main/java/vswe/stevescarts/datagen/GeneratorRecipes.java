@@ -1,10 +1,10 @@
 package vswe.stevescarts.datagen;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
@@ -15,7 +15,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
-import org.jspecify.annotations.NonNull;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.helpers.ComponentTypes;
@@ -23,12 +22,10 @@ import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.init.StevesCartsModules;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 
 public class GeneratorRecipes extends RecipeProvider {
-    public GeneratorRecipes(HolderLookup.Provider provider, RecipeOutput output) {
-        super(provider, output);
+    public GeneratorRecipes(BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+        super(recipes, advancements);
     }
 
     @Override
@@ -2292,19 +2289,4 @@ public class GeneratorRecipes extends RecipeProvider {
                 .save(output, recipeFolder(itemFromName("stevescarts:module_crop_nether_wart"), "module"));
     }
 
-    public static class Runner extends RecipeProvider.Runner {
-        public Runner(PackOutput p_365442_, CompletableFuture<HolderLookup.Provider> p_362168_) {
-            super(p_365442_, p_362168_);
-        }
-
-        @Override
-        protected @NonNull RecipeProvider createRecipeProvider(HolderLookup.@NonNull Provider provider, @NonNull RecipeOutput output) {
-            return new GeneratorRecipes(provider, output);
-        }
-
-        @Override
-        public @NonNull String getName() {
-            return "Steves Carts Recipes";
-        }
-    }
 }

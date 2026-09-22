@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_cage"
+        "recipes": "stevescarts:module/module_cage"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

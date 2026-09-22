@@ -127,6 +127,10 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
 
     public ModularMinecart(Level world, TileEntityCartAssembler assembler, ArrayList<Identifier> data) {
         this(world);
+        // Placeholder carts are rendered in the assembler without ever being added to
+        // the level. Since 26.3, entities do not receive an ID until they are added, but
+        // entity render-state extraction requires one.
+        setId(Integer.MIN_VALUE);
         setPlaceholder(assembler);
         loadPlaceHolderModules(data);
     }
@@ -367,7 +371,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         canBeDisabled = (!forceUnDisable && canBeDisabled);
         if (canBeDisabled && !isDisabled()) {
             preStopVelocity = getDeltaMovement().add(0); //<- Would be nice if there was a .copy function on Vec3...
-            disabledPos = new BlockPos(pos);
+            disabledPos = pos.immutable();
             setIsDisabled(true);
         }
         if (fixedRailPos != null && !fixedRailPos.equals(pos)) {

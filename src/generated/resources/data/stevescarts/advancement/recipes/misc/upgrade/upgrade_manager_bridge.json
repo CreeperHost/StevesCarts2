@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:upgrade/upgrade_manager_bridge"
+        "recipes": "stevescarts:upgrade/upgrade_manager_bridge"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

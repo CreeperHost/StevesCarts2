@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/component_graphical_interface"
+        "recipes": "stevescarts:component/component_graphical_interface"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

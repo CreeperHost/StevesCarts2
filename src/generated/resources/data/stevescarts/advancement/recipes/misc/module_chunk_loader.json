@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module_chunk_loader"
+        "recipes": "stevescarts:module_chunk_loader"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

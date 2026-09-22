@@ -26,7 +26,6 @@ import net.minecraft.world.level.block.VineBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.fml.i18n.FMLTranslations;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import vswe.stevescarts.StevesCartsClient;
@@ -39,6 +38,7 @@ import vswe.stevescarts.client.guis.buttons.ButtonBase;
 import vswe.stevescarts.containers.ContainerMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ButtonComparator;
+import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.SimulationInfo;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.network.PacketHandler;
@@ -459,7 +459,7 @@ public abstract class ModuleBase {
         }
         if (rect[3] > 0) {
             if (!stealInterface) {
-                gui.pushScissor();
+                gui.pushScissor(guiGraphics);
             }
             if (center) {
                 guiGraphics.text(mc.font, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX() + left, rect[1] + getY() + dif + top, 0xFF000000 | c);
@@ -467,7 +467,7 @@ public abstract class ModuleBase {
                 guiGraphics.text(mc.font, str, rect[0] + getX() + left, rect[1] + getY() + dif + top, 0XFFFFFFFF);
             }
             if (!stealInterface) {
-                gui.popScissor();
+                gui.popScissor(guiGraphics);
             }
         }
     }
@@ -1552,7 +1552,7 @@ public abstract class ModuleBase {
     }
 
     public String getModuleName() {
-        return FMLTranslations.parseMessage("item.stevescarts." + StevesCartsAPI.MODULE_REGISTRY.get(getModuleId()).getRawName());
+        return Localization.translate("item.stevescarts." + StevesCartsAPI.MODULE_REGISTRY.get(getModuleId()).getRawName()).getString();
     }
 
     public ItemStack getItemStack() {

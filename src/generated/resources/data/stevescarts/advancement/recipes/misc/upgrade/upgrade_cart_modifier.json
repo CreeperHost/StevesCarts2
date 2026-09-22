@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:upgrade/upgrade_cart_modifier"
+        "recipes": "stevescarts:upgrade/upgrade_cart_modifier"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

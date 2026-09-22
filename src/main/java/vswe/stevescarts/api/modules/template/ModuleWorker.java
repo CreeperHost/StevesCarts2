@@ -64,6 +64,16 @@ public abstract class ModuleWorker extends ModuleBase {
         return getNextblock(true);
     }
 
+    /**
+     * Returns the rail block the cart is currently travelling over. Area workers use
+     * this as their centre so their work footprint stays aligned with both sides of
+     * the track, independent of the minecart's rendered facing direction.
+     */
+    protected BlockPos getCurrentRailBlock() {
+        BlockPos railPos = getCart().getCurrentBlockPosOrRailBelow();
+        return BaseRailBlock.isRail(getCart().level(), railPos) ? railPos : getNextblock();
+    }
+
     private BlockPos getNextblock(boolean flag) {
         BlockPos pos = getCart().blockPosition();
         if (BaseRailBlock.isRail(getCart().level(), pos.below())) {

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:upgrade/upgrade_experienced_assembler"
+        "recipes": "stevescarts:upgrade/upgrade_experienced_assembler"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

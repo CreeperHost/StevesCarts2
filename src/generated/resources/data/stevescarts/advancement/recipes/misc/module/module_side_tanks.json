@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_side_tanks"
+        "recipes": "stevescarts:module/module_side_tanks"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

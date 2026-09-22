@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:block/blockjunction"
+        "recipes": "stevescarts:block/blockjunction"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

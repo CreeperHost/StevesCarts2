@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -108,7 +109,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule {
     @Override
     public boolean work() {
         Level world = getCart().level();
-        BlockPos next = getNextblock();
+        BlockPos next = getCurrentRailBlock();
         for (int i = -range; i <= range; ++i) {
             for (int j = -range; j <= range; ++j) {
                 if (random.nextInt(25) == 0 && fertilize(world, next.offset(i, 0, j))) {
@@ -124,9 +125,9 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule {
         Block blockTop = stateOfTopBlock.getBlock();
         if (getFertAmount() > 0) {
             if (blockTop instanceof CropBlock growable) {
-                if (growable.isValidBonemealTarget(world, pos, stateOfTopBlock)) {
-                    if (growable.isBonemealSuccess(world, getCart().getRandom(), pos, stateOfTopBlock)) {
-                        growable.performBonemeal((ServerLevel) world, getCart().getRandom(), pos, stateOfTopBlock);
+                if (growable.isValidBonemealTarget(world, pos, stateOfTopBlock, BonemealSource.MOB)) {
+                    if (growable.isBonemealSuccess(world, getCart().getRandom(), pos, stateOfTopBlock, BonemealSource.MOB)) {
+                        growable.performBonemeal((ServerLevel) world, getCart().getRandom(), pos, stateOfTopBlock, BonemealSource.MOB);
                         setFertAmount(getFertAmount() - 2);
                         return true;
                     }

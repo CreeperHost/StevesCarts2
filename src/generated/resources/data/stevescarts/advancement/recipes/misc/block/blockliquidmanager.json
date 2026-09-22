@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:block/blockliquidmanager"
+        "recipes": "stevescarts:block/blockliquidmanager"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

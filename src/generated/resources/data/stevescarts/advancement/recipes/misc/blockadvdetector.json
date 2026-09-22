@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:blockadvdetector"
+        "recipes": "stevescarts:blockadvdetector"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:block/blockcargomanager"
+        "recipes": "stevescarts:block/blockcargomanager"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

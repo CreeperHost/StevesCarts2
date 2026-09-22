@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_torch_placer"
+        "recipes": "stevescarts:module/module_torch_placer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

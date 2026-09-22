@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_basic_solar_engine"
+        "recipes": "stevescarts:module/module_basic_solar_engine"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

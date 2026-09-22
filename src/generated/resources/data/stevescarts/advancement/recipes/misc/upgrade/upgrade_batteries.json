@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:upgrade/upgrade_batteries"
+        "recipes": "stevescarts:upgrade/upgrade_batteries"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

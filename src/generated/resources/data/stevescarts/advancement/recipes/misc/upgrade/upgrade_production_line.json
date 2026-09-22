@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:upgrade/upgrade_production_line"
+        "recipes": "stevescarts:upgrade/upgrade_production_line"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

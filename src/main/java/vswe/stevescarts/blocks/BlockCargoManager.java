@@ -1,6 +1,5 @@
 package vswe.stevescarts.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -15,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 
 public class BlockCargoManager extends BlockContainerBase {
-    public static final MapCodec<BlockCargoManager> CODEC = simpleCodec(BlockCargoManager::new);
 
     public BlockCargoManager(Block.Properties properties) {
         super(properties);
@@ -48,8 +46,4 @@ public class BlockCargoManager extends BlockContainerBase {
         return new TileEntityCargo(blockPos, blockState);
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_hardened_wood_cutter"
+        "recipes": "stevescarts:module/module_hardened_wood_cutter"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

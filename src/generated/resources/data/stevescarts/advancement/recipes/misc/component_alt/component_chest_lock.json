@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component_alt/component_chest_lock"
+        "recipes": "stevescarts:component_alt/component_chest_lock"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

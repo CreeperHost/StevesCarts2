@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:upgrade/upgrade_industrial_espionage"
+        "recipes": "stevescarts:upgrade/upgrade_industrial_espionage"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

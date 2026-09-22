@@ -96,7 +96,7 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     @Override
     public boolean work() {
         Level world = getCart().level();
-        BlockPos next = getNextblock();
+        BlockPos next = getCurrentRailBlock();
         for (int i = -getRange(); i <= getRange(); ++i) {
             for (int j = -getRange(); j <= getRange(); ++j) {
                 BlockPos coord = next.offset(i, -1, j);
@@ -115,12 +115,23 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     }
 
     protected boolean till(Level world, BlockPos pos) {
-        if (world.getBlockState(pos).is(BlockTags.DIRT) && world.getBlockState(pos.above()).isAir()) {
+        BlockPos cropPos = pos.above();
+        BlockState aboveState = world.getBlockState(cropPos);
+        boolean canClearAbove = aboveState.isAir()
+                || (aboveState.canBeReplaced() && aboveState.getFluidState().isEmpty());
+        BlockState soilState = world.getBlockState(pos);
+        boolean isTillableSoil = soilState.is(BlockTags.DIRT) || soilState.is(Blocks.GRASS_BLOCK);
+        if (isTillableSoil && canClearAbove) {
             if (doPreWork()) {
-                startWorking(10);
+                final int workingTime = 10;
+                setFarming(workingTime * 4);
+                startWorking(workingTime);
                 return true;
             }
             stopWorking();
+            if (!aboveState.isAir()) {
+                world.destroyBlock(cropPos, false);
+            }
             world.setBlock(pos, Blocks.FARMLAND.defaultBlockState(), 3);
         }
         return false;

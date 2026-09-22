@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:upgrade/upgrade_power_crystal"
+        "recipes": "stevescarts:upgrade/upgrade_power_crystal"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

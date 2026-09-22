@@ -3,7 +3,7 @@ package vswe.stevescarts.upgrades;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import vswe.stevescarts.helpers.storages.IFluidHandler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.helpers.Localization;
 

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_entity_detector_bat"
+        "recipes": "stevescarts:module/module_entity_detector_bat"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

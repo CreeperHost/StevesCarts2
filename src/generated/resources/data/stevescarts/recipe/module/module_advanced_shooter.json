@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "stevescarts",
   "key": {
     "D": "stevescarts:component_entity_scanner",

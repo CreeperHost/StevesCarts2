@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/component_fuse"
+        "recipes": "stevescarts:component/component_fuse"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

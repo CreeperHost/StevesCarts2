@@ -2,9 +2,9 @@ package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.fluids.FluidUtil;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.helpers.storages.TransferHandler;
+import vswe.stevescarts.helpers.storages.FluidContainerHelper;
 
 import javax.annotation.Nonnull;
 
@@ -20,6 +20,6 @@ public class SlotLiquidOutput extends SlotStevesCarts implements ISpecialItemTra
 
     @Override
     public boolean isItemValidForTransfer(@Nonnull ItemStack item, final TransferHandler.TRANSFER_TYPE type) {
-        return type == TransferHandler.TRANSFER_TYPE.OTHER && FluidUtil.getFluidHandler(item).isPresent();
+        return type == TransferHandler.TRANSFER_TYPE.OTHER && FluidContainerHelper.hasHandler(item);
     }
 }

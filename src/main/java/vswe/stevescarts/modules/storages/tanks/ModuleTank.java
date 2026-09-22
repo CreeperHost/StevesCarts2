@@ -13,8 +13,8 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.IFluidTank;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import vswe.stevescarts.helpers.storages.IFluidHandler;
+import vswe.stevescarts.helpers.storages.IFluidTank;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.modules.template.ModuleStorage;
@@ -145,7 +145,7 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
 
     @Override
     public void drawBackground(GuiGraphicsExtractor GuiGraphicsExtractor, final GuiMinecart gui, final int x, final int y) {
-        tank.drawFluid(GuiGraphicsExtractor, gui.getLeftPos(), gui.getGuiTop(), tankBounds[0], tankBounds[1]);
+        tank.drawFluid(GuiGraphicsExtractor, gui.getLeftPos(), gui.getTopPos(), tankBounds[0], tankBounds[1]);
         drawImage(GuiGraphicsExtractor, ResourceHelper.getResource("/gui/tank.png"), gui, tankBounds, 0, 0);
     }
 

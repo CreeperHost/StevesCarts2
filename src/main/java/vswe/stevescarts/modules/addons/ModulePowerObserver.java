@@ -121,11 +121,11 @@ public class ModulePowerObserver extends ModuleAddon {
         }
         if (rect[3] <= 0) return;
         if (initialHeight != rect[3]) {
-            gui.pushScissor();
+            gui.pushScissor(GuiGraphicsExtractor);
         }
         gui.drawModuleIcon(GuiGraphicsExtractor, engine.getItemStack(), gui.getGuiLeft() + getX() + rect[0], gui.getGuiTop() + getY() + rect[1] + offset, 0, 0, 0, 0);
         if (initialHeight != rect[3]) {
-            gui.popScissor();
+            gui.popScissor(GuiGraphicsExtractor);
         }
     }
 

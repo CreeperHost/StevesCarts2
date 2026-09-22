@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.NonNull;
 import vswe.stevescarts.Constants;
+import vswe.stevescarts.client.renders.ItemStackRenderer;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItems;
 
@@ -32,13 +33,13 @@ public class GeneratorModels extends ModelProvider {
 
     @Override
     protected void registerModels(@NonNull BlockModelGenerators blockModels, @NonNull ItemModelGenerators itemModels) {
-        blockModels.createTrivialBlock(ModBlocks.CART_ASSEMBLER.get(), TexturedModel.CUBE_TOP_BOTTOM.updateTexture((mapping) -> {
+        blockModels.createTrivialBlock(ModBlocks.CART_ASSEMBLER.get(), TexturedModel.CUBE_BOTTOM_TOP.updateTexture((mapping) -> {
             mapping.put(TextureSlot.TOP, getMaterial("cart_assembler_top"));
             mapping.put(TextureSlot.SIDE, getMaterial("cart_assembler_side_1"));
             mapping.put(TextureSlot.BOTTOM, getMaterial("cart_assembler_bot"));
         }));
 
-        blockModels.createTrivialBlock(ModBlocks.MODULE_TOGGLER.get(), TexturedModel.CUBE_TOP_BOTTOM.updateTexture((mapping) -> {
+        blockModels.createTrivialBlock(ModBlocks.MODULE_TOGGLER.get(), TexturedModel.CUBE_BOTTOM_TOP.updateTexture((mapping) -> {
             mapping.put(TextureSlot.TOP, getMaterial("module_toggler_top"));
             mapping.put(TextureSlot.SIDE, getMaterial("module_toggler_side"));
             mapping.put(TextureSlot.BOTTOM, getMaterial("module_toggler_bot"));
@@ -127,6 +128,12 @@ public class GeneratorModels extends ModelProvider {
                 return;
             }
 
+            if (item == ModItems.CARTS.get()) {
+                Identifier baseModel = ModelLocationUtils.getModelLocation(item);
+                itemModels.itemModelOutput.accept(item, ItemModelUtils.specialModel(baseModel, new ItemStackRenderer.Unbaked()));
+                return;
+            }
+
             itemModels.generateFlatItem(item, ModelTemplates.FLAT_ITEM);
         });
     }
@@ -151,15 +158,23 @@ public class GeneratorModels extends ModelProvider {
             ).build();
 
     private void createUpgrade(Supplier<Block> block, String name, BlockModelGenerators blockModels) {
-        blockModels.createTrivialBlock(
-                block.get(),
-                TexturedModel.CUBE.updateTexture(
-                        (mapping) -> {
-                            mapping.put(TextureSlot.SIDE, getMaterial("upgrade_side_0_icon"));
-                            mapping.put(TextureSlot.FRONT, getMaterial("%s_icon".formatted(name)));
-                            mapping.put(TextureSlot.PARTICLE, getMaterial("upgrade_side_0_icon"));
-                        }
-                ).updateTemplate((_ -> UPGRADE))
+        Block upgrade = block.get();
+        Identifier model = TexturedModel.CUBE.updateTexture(
+                (mapping) -> {
+                    mapping.put(TextureSlot.SIDE, getMaterial("upgrade_side_0_icon"));
+                    mapping.put(TextureSlot.FRONT, getMaterial("%s_icon".formatted(name)));
+                    mapping.put(TextureSlot.PARTICLE, getMaterial("upgrade_side_0_icon"));
+                }
+        ).updateTemplate((_ -> UPGRADE)).create(upgrade, blockModels.modelOutput);
+
+        MultiVariant variant = BlockModelGenerators.plainVariant(model);
+        blockModels.blockStateOutput.accept(
+                MultiVariantGenerator.dispatch(upgrade, variant)
+                        .with(PropertyDispatch.modify(BlockStateProperties.HORIZONTAL_FACING)
+                                .select(Direction.WEST, BlockModelGenerators.NOP)
+                                .select(Direction.NORTH, BlockModelGenerators.Y_ROT_90)
+                                .select(Direction.EAST, BlockModelGenerators.Y_ROT_180)
+                                .select(Direction.SOUTH, BlockModelGenerators.Y_ROT_270))
         );
     }
 

@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.143'
+    id 'net.neoforged.moddev' version '2.0.147'
     id 'idea'
     id "me.shedaniel.unified-publishing" version "0.1.+"
 }
@@ -149,6 +149,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             mod_id                 : mod_id,
             mod_name               : mod_name,
             mod_license            : mod_license,
+            mod_description        : mod_description,
             mod_version            : mod_version,
     ]
     inputs.properties replaceProperties

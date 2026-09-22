@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "stevescarts",
   "key": {
     "#": "stevescarts:component_iron_blade",

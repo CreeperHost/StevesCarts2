@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import vswe.stevescarts.helpers.storages.IFluidHandler;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -39,7 +39,7 @@ public class ModuleHydrater extends ModuleWorker {
     @Override
     public boolean work() {
         Level world = getCart().level();
-        BlockPos next = getNextblock();
+        BlockPos next = getCurrentRailBlock();
         for (int i = -range; i <= range; ++i) {
             for (int j = -range; j <= range; ++j) {
                 if (hydrate(world, next.offset(i, -1, j))) {

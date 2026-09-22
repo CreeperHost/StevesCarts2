@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:block/blockdistributor"
+        "recipes": "stevescarts:block/blockdistributor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

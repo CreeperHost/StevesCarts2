@@ -1,6 +1,5 @@
 package vswe.stevescarts.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -41,7 +40,6 @@ import java.util.function.Consumer;
 
 public class BlockUpgrade extends BlockContainerBase implements TooltipBlock {
     //TODO, Figure out this codec stuff....
-    public static final MapCodec<BlockUpgrade> CODEC = simpleCodec(BlockUpgrade::new);
 
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty CONNECTED = BooleanProperty.create("connected");
@@ -135,8 +133,4 @@ public class BlockUpgrade extends BlockContainerBase implements TooltipBlock {
         }
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 }

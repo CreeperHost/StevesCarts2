@@ -1,6 +1,9 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "stevescarts:item/modularcart"
+    "type": "minecraft:special",
+    "base": "stevescarts:item/modularcart",
+    "model": {
+      "type": "stevescarts:modularcart"
+    }
   }
 }

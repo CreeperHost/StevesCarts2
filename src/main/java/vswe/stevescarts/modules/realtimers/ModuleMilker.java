@@ -8,8 +8,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
+import vswe.stevescarts.helpers.storages.IFluidHandler;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -44,8 +44,8 @@ public class ModuleMilker extends ModuleBase {
 
     private void depositeMilk() {
         if (milkbuffer > 0) {
-            final FluidStack ret = FluidUtil.getFluidContained(new ItemStack(Items.MILK_BUCKET)).get();
-            if (ret != null) {
+            final FluidStack ret = FluidUtil.getFirstStackContained(new ItemStack(Items.MILK_BUCKET));
+            if (!ret.isEmpty()) {
                 ret.setAmount(milkbuffer);
                 milkbuffer -= getCart().fill(ret, IFluidHandler.FluidAction.EXECUTE);
             }

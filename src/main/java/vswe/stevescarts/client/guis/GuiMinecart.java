@@ -1,6 +1,5 @@
 package vswe.stevescarts.client.guis;
 
-import com.mojang.blaze3d.opengl.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -49,6 +48,14 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
 
     protected void setup(final ModularMinecart cart) {
         this.cart = cart;
+    }
+
+    public int getGuiLeft() {
+        return getLeftPos();
+    }
+
+    public int getGuiTop() {
+        return getTopPos();
     }
 
     @Override
@@ -156,7 +163,6 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
         mouseY -= getTopPos();
         ArrayList<ModuleCountPair> moduleCounts = cart.moduleCounts();
         guiGraphics.text(Minecraft.getInstance().font, cart.getName(), getLeftPos() + 5, getTopPos() + 172, 0xFFffffff);
-        GlStateManager._enableBlend();
         for (int i = 0; i < moduleCounts.size(); ++i) {
             ModuleCountPair count = moduleCounts.get(i);
             if (count.getCount() != 1) {
@@ -166,7 +172,6 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
                         getModuleDisplayY(i) + 8, 0xFFFFFF | alpha << 24);
             }
         }
-        GlStateManager._disableBlend();
     }
 
     private void renderModuleListMouseOver(GuiGraphicsExtractor guiGraphics, int x, int y) {
@@ -422,12 +427,14 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
         return true;
     }
 
-    public void pushScissor() {
-        GuiHelper.pushGuiScissor(minecraft, getLeftPos() + 5, getTopPos() + 4, 438, 164, width, height);
+    public void pushScissor(GuiGraphicsExtractor guiGraphics) {
+        int left = getLeftPos() + 5;
+        int top = getTopPos() + 4;
+        guiGraphics.enableScissor(left, top, left + 438, top + 164);
     }
 
-    public void popScissor() {
-        GuiHelper.popScissor();
+    public void popScissor(GuiGraphicsExtractor guiGraphics) {
+        guiGraphics.disableScissor();
     }
 
     public void drawTexturedModalRect(GuiGraphicsExtractor guiGraphics, Identifier texture, int x, int y, int u, int v, int w, int h) //}, RENDER_ROTATION rotation)

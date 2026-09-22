@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_brake_handle"
+        "recipes": "stevescarts:module/module_brake_handle"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

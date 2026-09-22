@@ -19,15 +19,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.IFluidTank;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.containers.ContainerLiquid;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.storages.ITankHolder;
 import vswe.stevescarts.helpers.storages.SCTank;
+import vswe.stevescarts.helpers.storages.IFluidHandler;
+import vswe.stevescarts.helpers.storages.IFluidTank;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.helpers.storages.TransferManager;
 import vswe.stevescarts.init.ModBlocks;
@@ -257,7 +257,7 @@ public class TileEntityLiquid extends TileEntityManager implements ITankHolder, 
 
     private boolean isFluidValid(final int sideId, final FluidStack fluid) {
         @Nonnull ItemStack filter = getItem(sideId * 3 + 2);
-        final FluidStack filterFluid = FluidUtil.getFluidContained(filter).orElse(FluidStack.EMPTY);
+        final FluidStack filterFluid = FluidUtil.getFirstStackContained(filter);
         return filterFluid.isEmpty() || FluidStack.isSameFluidSameComponents(filterFluid, fluid);
     }
 

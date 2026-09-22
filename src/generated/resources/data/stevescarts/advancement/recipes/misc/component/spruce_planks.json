@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/spruce_planks"
+        "recipes": "stevescarts:component/spruce_planks"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:upgrade/upgrade_module_knowledge"
+        "recipes": "stevescarts:upgrade/upgrade_module_knowledge"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

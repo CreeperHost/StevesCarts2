@@ -1,6 +1,5 @@
 package vswe.stevescarts.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
@@ -33,17 +32,11 @@ import vswe.stevescarts.upgrades.Transposer;
 import javax.annotation.Nonnull;
 
 public class BlockRailAdvDetector extends BaseRailBlock {
-    public static final MapCodec<BlockRailAdvDetector> CODEC = simpleCodec(BlockRailAdvDetector::new);
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
 
     public BlockRailAdvDetector(Properties builder) {
         super(true, builder);
         this.registerDefaultState(this.stateDefinition.any().setValue(SHAPE, RailShape.NORTH_SOUTH).setValue(WATERLOGGED, Boolean.FALSE));
-    }
-
-    @Override
-    protected MapCodec<? extends BaseRailBlock> codec() {
-        return CODEC;
     }
 
     @Override
@@ -160,7 +153,6 @@ public class BlockRailAdvDetector extends BaseRailBlock {
         return cart.getDisabledPos() != null && cart.getDisabledPos().equals(pos) && cart.isDisabled();
     }
 
-    @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter level, BlockPos pos, @Nullable Direction direction) {
         for (Direction facing : Direction.values()) {
             if (facing.getAxis() == Direction.Axis.Y) continue;

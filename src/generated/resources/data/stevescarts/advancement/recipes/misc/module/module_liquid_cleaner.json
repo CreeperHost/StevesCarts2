@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_liquid_cleaner"
+        "recipes": "stevescarts:module/module_liquid_cleaner"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

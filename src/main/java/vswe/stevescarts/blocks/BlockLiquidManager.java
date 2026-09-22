@@ -1,6 +1,5 @@
 package vswe.stevescarts.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -15,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 
 public class BlockLiquidManager extends BlockContainerBase {
-    public static final MapCodec<BlockLiquidManager> CODEC = simpleCodec(BlockLiquidManager::new);
 
     public BlockLiquidManager(Block.Properties properties) {
         super(properties);
@@ -36,8 +34,4 @@ public class BlockLiquidManager extends BlockContainerBase {
         return new TileEntityLiquid(blockPos, blockState);
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 }

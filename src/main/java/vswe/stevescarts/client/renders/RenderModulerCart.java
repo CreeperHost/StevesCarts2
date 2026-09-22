@@ -46,13 +46,13 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
         poseStack.translate(xOffset, yOffset, zOffset);
 
         //New render transforms
-        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(-state.xRot));
+        poseStack.rotateDegrees(Axis.YP, state.yRot);
+        poseStack.rotateDegrees(Axis.ZP, -state.xRot);
         poseStack.translate(0.0F, 0.375F, 0.0F);
 
         float f3 = state.hurtTime;
         if (f3 > 0.0F) {
-            poseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f3) * f3 * state.damageTime / 10.0F * (float) state.hurtDir));
+            poseStack.rotateDegrees(Axis.XP, Mth.sin(f3) * f3 * state.damageTime / 10.0F * (float) state.hurtDir);
         }
 
         poseStack.scale(-1.0F, -1.0F, 1.0F);
@@ -62,7 +62,7 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
             for (ModelCartbase model : module.getModels()) {
                 if (model.getRenderType(module) == null) continue;
                 model.applyEffects(module, poseStack, state.yRot, state.xRot, 0);
-                nodeCollector.submitModel(model, null, poseStack, model.getRenderType(module), 240, OverlayTexture.NO_OVERLAY, 0, null);
+                nodeCollector.submitModel(model, null, poseStack, model.getRenderType(module), 240, OverlayTexture.NO_OVERLAY, 0);
             }
         }
 
@@ -71,7 +71,7 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
             ModuleHull hull = new ModuleReinforced(null);
             for (ModelCartbase model : StevesCartsModules.REINFORCED_HULL.getModels(true).values()) {
                 model.applyEffects(hull, poseStack, 0, 0, 0);
-                nodeCollector.submitModel(model, null, poseStack, model.getRenderType(hull), 240, OverlayTexture.NO_OVERLAY, 0, null);
+                nodeCollector.submitModel(model, null, poseStack, model.getRenderType(hull), 240, OverlayTexture.NO_OVERLAY, 0);
             }
         }
 
@@ -129,7 +129,7 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
         double lineHeight = 0.3;
         double rowOffset = label.size() * lineHeight;
         for (Component component : label) {
-            nodeCollector.submitNameTag(poseStack, new Vec3(0, rowOffset, 0), 0, component, throughWalls, light, distanceToCameraSq, cameraRenderState);
+            nodeCollector.submitNameTag(poseStack, new Vec3(0, rowOffset, 0), 0, component, throughWalls, light, cameraRenderState);
             rowOffset -= lineHeight;
         }
         poseStack.popPose();

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_advanced_sctank"
+        "recipes": "stevescarts:module/module_advanced_sctank"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -34,6 +34,9 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
             return;
         }
         matrixStack.pushPose();
+        // Item transforms are authored around the center of the 0..1 block-model
+        // coordinate space, while cart entity models are authored around the origin.
+        matrixStack.translate(0.5F, 0.5F, 0.5F);
         matrixStack.scale(-1.0f, -1.0f, 1.0f);
 
         /*if (transformType == ItemDisplayContext.GUI) {
@@ -42,8 +45,8 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
         } else {
             matrixStack.translate(-0.5, -0.5, 0.5);
         }*/
-        matrixStack.mulPose(Axis.ZP.rotationDegrees(180));
-        matrixStack.mulPose(Axis.XP.rotationDegrees(180));
+        matrixStack.rotateDegrees(Axis.ZP, 180);
+        matrixStack.rotateDegrees(Axis.XP, 180);
 
         CompoundTag info = ModItemData.getTagCopy(stack);
         if (info.contains("modules")) {
@@ -55,7 +58,7 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
                     if (module.getModels() != null) {
                         for (ModelCartbase model : module.getModels()) {
                             model.applyEffects(module, matrixStack, 0, 0, 0);
-                            nodeCollector.submitModel(model, null, matrixStack, model.getRenderType(module), 240, OverlayTexture.NO_OVERLAY, 0, null);
+                            nodeCollector.submitModel(model, null, matrixStack, model.getRenderType(module), 240, OverlayTexture.NO_OVERLAY, 0);
                         }
                     }
                 }
@@ -65,7 +68,7 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
             ModuleHull hull = new ModuleReinforced(null);
             for (ModelCartbase model : StevesCartsModules.REINFORCED_HULL.getModels(true).values()) {
                 model.applyEffects(hull, matrixStack, 0, 0, 0);
-                nodeCollector.submitModel(model, null, matrixStack, model.getRenderType(hull), 240, OverlayTexture.NO_OVERLAY, 0, null);
+                nodeCollector.submitModel(model, null, matrixStack, model.getRenderType(hull), 240, OverlayTexture.NO_OVERLAY, 0);
             }
         }
         matrixStack.popPose();

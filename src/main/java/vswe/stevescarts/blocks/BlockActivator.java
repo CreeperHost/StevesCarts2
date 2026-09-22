@@ -1,6 +1,5 @@
 package vswe.stevescarts.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -15,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 
 public class BlockActivator extends BlockContainerBase {
-    public static final MapCodec<BlockActivator> CODEC = simpleCodec(BlockActivator::new);
 
     public BlockActivator(Block.Properties properties) {
         super(properties);
@@ -36,8 +34,4 @@ public class BlockActivator extends BlockContainerBase {
         return new TileEntityActivator(blockPos, blockState);
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 }

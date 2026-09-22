@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/oak_planks"
+        "recipes": "stevescarts:component/oak_planks"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

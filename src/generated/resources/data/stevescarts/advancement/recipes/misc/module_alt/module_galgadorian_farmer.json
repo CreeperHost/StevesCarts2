@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module_alt/module_galgadorian_farmer"
+        "recipes": "stevescarts:module_alt/module_galgadorian_farmer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

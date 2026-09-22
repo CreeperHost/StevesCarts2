@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:upgrade/upgrade_thermal_engine"
+        "recipes": "stevescarts:upgrade/upgrade_thermal_engine"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -2,15 +2,11 @@ package vswe.stevescarts.modules.workers;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.wrappers.BucketPickupHandlerWrapper;
+import vswe.stevescarts.helpers.storages.IFluidHandler;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.BlockPosHelpers;
@@ -96,13 +92,6 @@ public class ModuleLiquidDrainer extends ModuleWorker {
     }
 
     private FluidStack getFluidStack(BlockState state, BlockPos pos, boolean doDrain) {
-        Block block = state.getBlock();
-
-        if (block instanceof LiquidBlock fluidBlock) {
-            BucketPickupHandlerWrapper wrapper = new BucketPickupHandlerWrapper(null, fluidBlock, getCart().level(), pos);
-            return wrapper.drain(FluidType.BUCKET_VOLUME, doDrain ? IFluidHandler.FluidAction.EXECUTE : IFluidHandler.FluidAction.SIMULATE);
-        }
-
         FluidState fluid = state.getFluidState();
         if (fluid.isEmpty() || !fluid.isSource()) {
             return null;

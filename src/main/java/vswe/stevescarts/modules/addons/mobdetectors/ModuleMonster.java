@@ -2,7 +2,7 @@ package vswe.stevescarts.modules.addons.mobdetectors;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.wolf.Wolf;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.monster.Enemy;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.Localization;
@@ -19,6 +19,6 @@ public class ModuleMonster extends ModuleMobdetector {
 
     @Override
     public boolean isValidTarget(final Entity target) {
-        return (target instanceof Enemy || (target instanceof Wolf && ((Wolf) target).isAngry())) && !(target instanceof EnderMan);
+        return (target instanceof Enemy || (target instanceof Wolf && ((Wolf) target).isAngry())) && !(target instanceof Enderman);
     }
 }

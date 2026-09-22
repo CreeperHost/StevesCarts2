@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/component_glass_o_magic"
+        "recipes": "stevescarts:component/component_glass_o_magic"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

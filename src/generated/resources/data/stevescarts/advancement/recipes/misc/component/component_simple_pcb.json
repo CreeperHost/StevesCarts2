@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/component_simple_pcb"
+        "recipes": "stevescarts:component/component_simple_pcb"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

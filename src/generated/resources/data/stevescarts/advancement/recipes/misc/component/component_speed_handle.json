@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/component_speed_handle"
+        "recipes": "stevescarts:component/component_speed_handle"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

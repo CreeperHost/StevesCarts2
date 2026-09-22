@@ -1,5 +1,8 @@
 package vswe.stevescarts.datagen;
 
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -11,9 +14,10 @@ public class StevesCartsDataGenerators {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent.Client event) {
         event.createProvider(GeneratorModels::new);
-        event.createProvider(GeneratorLootTables::new);
         event.createProvider(GeneratorBlockTags::new);
         event.createProvider(GeneratorLanguage::new);
-        event.createProvider(GeneratorRecipes.Runner::new);
+        event.createReloadableRegistryObjects(new RegistrySetBuilder()
+                .add(Registries.LOOT_TABLE, new GeneratorLootTables())
+                .add(RecipeProvider.asBootstrap(GeneratorRecipes::new)));
     }
 }

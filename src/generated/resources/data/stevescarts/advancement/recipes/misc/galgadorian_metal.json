@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:galgadorian_metal"
+        "recipes": "stevescarts:galgadorian_metal"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

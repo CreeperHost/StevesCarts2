@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_pumpkin_chariot"
+        "recipes": "stevescarts:module/module_pumpkin_chariot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

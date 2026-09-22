@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/component_basket"
+        "recipes": "stevescarts:component/component_basket"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

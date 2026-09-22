@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/stick"
+        "recipes": "stevescarts:component/stick"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

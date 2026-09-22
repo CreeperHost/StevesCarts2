@@ -42,6 +42,7 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
             @Override
             public void buildGui(ModularGui gui, ContainerScreenAccess<ContainerCargo> access) {
                 gui.initStandardGui(305, 222);
+                gui.setVanillaSlotRendering(true);
                 CargoElement element = new CargoElement(gui.getRoot(), containerCargo);
                 Constraints.bind(element, gui.getRoot());
             }

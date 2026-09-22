@@ -26,7 +26,7 @@ public abstract class InterfaceUpgradeEffect extends BaseUpgradeEffect {
     }
 
     protected void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiUpgrade gui, final String str, final int x, final int y, final int[] rect) {
-        if (gui.inRect(x - gui.getGuiLeft(), y - gui.getGuiTop(), rect)) {
+        if (gui.inRect(x - gui.getLeftPos(), y - gui.getTopPos(), rect)) {
             GuiGraphicsExtractor.setTooltipForNextFrame(Minecraft.getInstance().font, Component.literal(str), x, y);
         }
     }

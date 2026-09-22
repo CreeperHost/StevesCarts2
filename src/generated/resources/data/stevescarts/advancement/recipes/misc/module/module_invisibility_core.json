@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_invisibility_core"
+        "recipes": "stevescarts:module/module_invisibility_core"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

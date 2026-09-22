@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/component_iron_wheels"
+        "recipes": "stevescarts:component/component_iron_wheels"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

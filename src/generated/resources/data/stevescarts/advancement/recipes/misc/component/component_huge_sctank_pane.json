@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/component_huge_sctank_pane"
+        "recipes": "stevescarts:component/component_huge_sctank_pane"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

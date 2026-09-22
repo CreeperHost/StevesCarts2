@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_drill_intelligence"
+        "recipes": "stevescarts:module/module_drill_intelligence"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:upgrade/upgrade_new_era"
+        "recipes": "stevescarts:upgrade/upgrade_new_era"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

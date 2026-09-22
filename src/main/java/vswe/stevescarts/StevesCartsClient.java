@@ -1,6 +1,5 @@
 package vswe.stevescarts;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -119,11 +118,11 @@ public class StevesCartsClient {
 
     @Deprecated
     public static boolean hasShiftDown() {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 340) || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 344);
+        return Minecraft.getInstance().hasShiftDown();
     }
 
     @Deprecated
     public static boolean hasControlDown() {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 341) || InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), 345);
+        return Minecraft.getInstance().hasControlDown();
     }
 }

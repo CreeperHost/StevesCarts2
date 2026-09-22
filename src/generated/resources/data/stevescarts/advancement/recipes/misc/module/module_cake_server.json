@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_cake_server"
+        "recipes": "stevescarts:module/module_cake_server"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

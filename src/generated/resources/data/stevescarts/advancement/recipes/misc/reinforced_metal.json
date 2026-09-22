@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:reinforced_metal"
+        "recipes": "stevescarts:reinforced_metal"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

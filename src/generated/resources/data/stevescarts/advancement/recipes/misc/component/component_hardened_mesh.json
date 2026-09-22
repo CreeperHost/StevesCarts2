@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/component_hardened_mesh"
+        "recipes": "stevescarts:component/component_hardened_mesh"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_incinerator"
+        "recipes": "stevescarts:module/module_incinerator"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

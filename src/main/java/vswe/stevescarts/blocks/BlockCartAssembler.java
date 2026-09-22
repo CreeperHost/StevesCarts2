@@ -1,6 +1,5 @@
 package vswe.stevescarts.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
@@ -22,7 +21,6 @@ import vswe.stevescarts.polylib.Pair;
 import java.util.ArrayList;
 
 public class BlockCartAssembler extends BlockContainerBase {
-    public static final MapCodec<BlockCartAssembler> CODEC = simpleCodec(BlockCartAssembler::new);
 
     public BlockCartAssembler(Block.Properties properties) {
         super(properties);
@@ -139,8 +137,4 @@ public class BlockCartAssembler extends BlockContainerBase {
         return new TileEntityCartAssembler(blockPos, blockState);
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 }

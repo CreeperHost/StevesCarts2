@@ -1,6 +1,7 @@
 package vswe.stevescarts.helpers;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.locale.Language;
 import net.neoforged.fml.i18n.FMLTranslations;
 
 import java.util.Arrays;
@@ -11,7 +12,10 @@ public final class Localization {
 
     //No point in fixing this, its time to replace
     private static String doTranslate(final String name, final String... vars) {
-        String result = FMLTranslations.getPattern(name, () -> name);
+        String result = Language.getInstance().getOrDefault(
+                name,
+                FMLTranslations.getPattern(name, () -> name)
+        );
         for (int i = 0; i < vars.length; ++i) {
             final String pluralCheck = "[%" + (i + 1) + ":";
             final int index = result.indexOf(pluralCheck);

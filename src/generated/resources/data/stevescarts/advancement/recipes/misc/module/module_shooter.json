@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_shooter"
+        "recipes": "stevescarts:module/module_shooter"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

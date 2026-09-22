@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:component/component_entity_analyzer"
+        "recipes": "stevescarts:component/component_entity_analyzer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

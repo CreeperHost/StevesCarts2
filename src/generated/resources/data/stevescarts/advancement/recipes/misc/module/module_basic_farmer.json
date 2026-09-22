@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_basic_farmer"
+        "recipes": "stevescarts:module/module_basic_farmer"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

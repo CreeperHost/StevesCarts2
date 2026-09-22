@@ -18,8 +18,8 @@ public class GeneratorBlockTags extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.@NonNull Provider provider) {
-        ModBlocks.BLOCKS.getEntries().forEach(block -> tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block.get()));
-        tag(BlockTags.RAILS).add(ModBlocks.ADVANCED_DETECTOR.get()).add(ModBlocks.JUNCTION.get());
-        tag(BlockTags.BEACON_BASE_BLOCKS).add(ModBlocks.GALGADORIAN_METAL.get()).add(ModBlocks.REINFORCED_METAL.get()).add(ModBlocks.ENHANCED_GALGADORIAN_METAL.get());
+        ModBlocks.BLOCKS.getEntries().forEach(block -> tag(BlockTags.MINEABLE_WITH_PICKAXE).add(block.getKey()));
+        tag(BlockTags.RAILS).add(ModBlocks.ADVANCED_DETECTOR.getKey()).add(ModBlocks.JUNCTION.getKey());
+        tag(BlockTags.BEACON_BASE_BLOCKS).add(ModBlocks.GALGADORIAN_METAL.getKey()).add(ModBlocks.REINFORCED_METAL.getKey()).add(ModBlocks.ENHANCED_GALGADORIAN_METAL.getKey());
     }
 }

@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import vswe.stevescarts.helpers.storages.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.StevesCartsAPI;
@@ -356,7 +356,7 @@ public interface IModularCart extends Container, IFluidHandler {
             if (getCart().fixedRailDirection == null) {
                 return null;
             }
-            getCart().fixedRailPos = new BlockPos(pos);
+            getCart().fixedRailPos = pos.immutable();
         }
         return getCart().fixedRailDirection;
     }

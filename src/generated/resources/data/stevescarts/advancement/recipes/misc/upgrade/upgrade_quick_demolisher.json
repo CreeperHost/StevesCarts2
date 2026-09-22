@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:upgrade/upgrade_quick_demolisher"
+        "recipes": "stevescarts:upgrade/upgrade_quick_demolisher"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

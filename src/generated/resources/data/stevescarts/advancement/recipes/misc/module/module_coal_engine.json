@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "stevescarts:module/module_coal_engine"
+        "recipes": "stevescarts:module/module_coal_engine"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
