@@ -85,6 +85,8 @@
   "block.stevescarts.upgrade_solar_panel": "Upgrade: Solar Panel",
   "block.stevescarts.upgrade_thermal_engine": "Upgrade: Thermal Engine",
   "entity.stevescarts.modular_cart": "Modular Cart",
+  "container.activator": "Module Toggler",
+  "container.liquidmanager": "Liquid Manager",
   "gui.stevescarts.assembleCart": "Assemble cart",
   "gui.stevescarts.assembleProgress": "Progress",
   "gui.stevescarts.basicAssembleInstruction": "To start making a cart, please add a Cart Hull of your choice to the Hull Slot.",

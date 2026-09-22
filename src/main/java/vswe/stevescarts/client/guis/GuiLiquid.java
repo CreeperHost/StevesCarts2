@@ -99,6 +99,13 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
         drawMouseOver(graphics, getLayoutString() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getLayoutOption(containerLiquid.getLayoutType()), mouseX, mouseY, getMiddleCoords());
     }
 
+    @Override
+    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        // The manager draws its own split title above. Keep only the vanilla
+        // inventory label so the menu title is not rendered underneath it.
+        graphics.text(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, -12566464, false);
+    }
+
     public void drawMouseOver(GuiGraphicsExtractor graphics, final String str, final int x, final int y, final int[] rect) {
         if (inRect(x - leftPos, y - topPos, rect)) {
             List<Component> toolTip = Arrays.stream(str.split("\n")).map(Component::literal).collect(Collectors.toList());

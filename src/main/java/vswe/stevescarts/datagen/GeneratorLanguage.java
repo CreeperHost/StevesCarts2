@@ -412,6 +412,9 @@ public class GeneratorLanguage extends LanguageProvider {
         add("block.stevescarts.upgrade_solar_panel", "Upgrade: Solar Panel");
         add("block.stevescarts.upgrade_thermal_engine", "Upgrade: Thermal Engine");
 
+        add("container.activator", "Module Toggler");
+        add("container.liquidmanager", "Liquid Manager");
+
         add("item.stevescarts.blockcargomanager", "Cargo Manager");
         add("item.stevescarts.blockjunction", "Junction Rail");
         add("item.stevescarts.blockadvdetector", "Advanced Detector Rail");
