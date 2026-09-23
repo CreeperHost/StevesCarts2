@@ -56,16 +56,16 @@ public class ContainerLiquid extends ContainerBase {
         return data.get(0);
     }
 
-    public int[] getColor() {
-        return new int[]{data.get(1), data.get(2), data.get(3), data.get(4)};
+    public int getColor(int channel) {
+        return data.get(1 + channel);
     }
 
-    public boolean[] toCart() {
-        return new boolean[]{data.get(5) == 1, data.get(6) == 1, data.get(7) == 1, data.get(8) == 1};
+    public boolean isToCart(int channel) {
+        return data.get(5 + channel) == 1;
     }
 
-    public boolean[] doReturn() {
-        return new boolean[]{data.get(9) == 1, data.get(10) == 1, data.get(11) == 1, data.get(12) == 1};
+    public boolean isReturning(int color) {
+        return color >= 1 && color <= 4 && data.get(8 + color) == 1;
     }
 
     private int[] getAmounts() {

@@ -22,6 +22,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
+    private static final int CHANNEL_COUNT = 4;
+    private static final int DISABLED_COLOR = 5;
     private static Identifier texture;
     private static Identifier textureExtra;
 
@@ -40,18 +42,22 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
     @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         graphics.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.texture, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
-        if (getLiquid().getTanks() != null) {
-            for (int i = 0; i < 4; ++i) {
+        var tanks = getLiquid().getTanks();
+        if (tanks != null) {
+            for (int i = 0; i < Math.min(CHANNEL_COUNT, tanks.length); ++i) {
+                if (tanks[i] == null) {
+                    continue;
+                }
                 final int[] coords = getTankCoords(i);
-                getLiquid().getTanks()[i].drawFluid(graphics, leftPos, topPos, leftPos + coords[0], topPos + coords[1]);
+                tanks[i].drawFluid(graphics, leftPos, topPos, leftPos + coords[0], topPos + coords[1]);
             }
         }
         final int left = leftPos;
         final int top = topPos;
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < CHANNEL_COUNT; ++i) {
             drawArrow(graphics, i, left, top);
-            final int color = containerLiquid.getColor()[i] - 1;
-            if (color != 4) {
+            final int color = containerLiquid.getColor(i);
+            if (isActiveColor(color)) {
                 drawColors(graphics, i, color, left, top);
             }
         }
@@ -66,20 +72,30 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
 
         graphics.text(Minecraft.getInstance().font, getManagerName(), leftPos + coords[0] - 34, topPos + 4, 0xFFffffff);
         graphics.text(Minecraft.getInstance().font, Component.translatable("gui.stevescarts.manager").getString(), leftPos + coords[0] + coords[2], topPos + 4, 0xFFffffff);
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < CHANNEL_COUNT; ++i) {
             coords = getTextCoords(i);
             final String str = getMaxSizeText(i);
             graphics.text(Minecraft.getInstance().font, str, leftPos + coords[0], topPos + coords[1], 0xFFffffff);
         }
-        for (int i = 0; i < 4; ++i) {
-            try {
-                drawExtraOverlay(graphics, i, mouseX, mouseY);
-                drawMouseOver(graphics, Component.translatable("gui.stevescarts.changeTransferDirection").getString() + ": " + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + (containerLiquid.toCart()[i] ? Component.translatable("gui.stevescarts.directionToCart").getString() : Component.translatable("gui.stevescarts.directionFromCart").getString()), mouseX, mouseY, getArrowCoords(i));
-                drawMouseOver(graphics, Component.translatable("gui.stevescarts.changeTurnBack").getString() + "\n" + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + ((containerLiquid.getColor()[i] == 5) ? Component.translatable("gui.stevescarts.turnBackDisabled").getString() : (containerLiquid.doReturn()[containerLiquid.getColor()[i] - 1] ? Component.translatable("gui.stevescarts.turnBack").getString() : Component.translatable("gui.stevescarts.continueForward").getString())), mouseX, mouseY, getReturnCoords(i));
-                drawMouseOver(graphics, Component.translatable("gui.stevescarts.changeTransferSize").getString() + ": " + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + getMaxSizeOverlay(i), mouseX, mouseY, getTextCoords(i));
-                drawMouseOver(graphics, Component.translatable("gui.stevescarts.changeSide").getString() + " " + Component.translatable("gui.stevescarts.currentSide").getString() + ": " + (new String[]{Component.translatable("gui.stevescarts.sideRed").getString(), Component.translatable("gui.stevescarts.sideBlue").getString(), Component.translatable("gui.stevescarts.sideYellow").getString(), Component.translatable("gui.stevescarts.sideGreen").getString(), Component.translatable("gui.stevescarts.sideDisabled").getString()})[containerLiquid.getColor()[i] - 1], mouseX, mouseY, getColorpickerCoords(i));
-            } catch (Exception ignored) {
-            } //TODO, This is not a solution.
+        for (int i = 0; i < CHANNEL_COUNT; ++i) {
+            drawExtraOverlay(graphics, i, mouseX, mouseY);
+            drawMouseOver(graphics, Component.translatable("gui.stevescarts.changeTransferDirection").getString() + ": " + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + (containerLiquid.isToCart(i) ? Component.translatable("gui.stevescarts.directionToCart").getString() : Component.translatable("gui.stevescarts.directionFromCart").getString()), mouseX, mouseY, getArrowCoords(i));
+            drawMouseOver(graphics, Component.translatable("gui.stevescarts.changeTransferSize").getString() + ": " + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + getMaxSizeOverlay(i), mouseX, mouseY, getTextCoords(i));
+
+            final int color = containerLiquid.getColor(i);
+            if (!isValidColor(color)) {
+                continue;
+            }
+
+            final String returnSetting = color == DISABLED_COLOR
+                    ? Component.translatable("gui.stevescarts.turnBackDisabled").getString()
+                    : containerLiquid.isReturning(color)
+                    ? Component.translatable("gui.stevescarts.turnBack").getString()
+                    : Component.translatable("gui.stevescarts.continueForward").getString();
+            drawMouseOver(graphics, Component.translatable("gui.stevescarts.changeTurnBack").getString() + "\n" + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + returnSetting, mouseX, mouseY, getReturnCoords(i));
+
+            final String[] colorNames = new String[]{Component.translatable("gui.stevescarts.sideRed").getString(), Component.translatable("gui.stevescarts.sideBlue").getString(), Component.translatable("gui.stevescarts.sideYellow").getString(), Component.translatable("gui.stevescarts.sideGreen").getString(), Component.translatable("gui.stevescarts.sideDisabled").getString()};
+            drawMouseOver(graphics, Component.translatable("gui.stevescarts.changeSide").getString() + ": " + Component.translatable("gui.stevescarts.currentSide").getString() + ": " + colorNames[color - 1], mouseX, mouseY, getColorpickerCoords(i));
         }
         drawMouseOver(graphics, getLayoutString() + "\n" + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + getLayoutOption(containerLiquid.getLayoutType()), mouseX, mouseY, getMiddleCoords());
     }
@@ -152,7 +168,8 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
         int sourceX = getArrowSourceX();
         int sourceY = 28;
         sourceY += 56 * id;
-        if (!containerLiquid.toCart()[id]) {
+        final boolean toCart = containerLiquid.isToCart(id);
+        if (!toCart) {
             sourceX += 28;
         }
         final int targetX = getArrowCoords(id)[0];
@@ -160,12 +177,12 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
         int sizeX = 28;
         int sizeY = 28;
         GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + targetX, top + targetY, sourceX, sourceY, sizeX, sizeY, 256, 256);
-        if (id == getLiquid().getLastSetting() && containerLiquid.getColor()[id] != 5) {
+        if (id == getLiquid().getLastSetting() && isActiveColor(containerLiquid.getColor(id))) {
             sourceY -= 28;
             int scaledProgress = getLiquid().moveProgressScaled(42);
             int offsetX = 0;
             int offsetY = 0;
-            if (containerLiquid.toCart()[id]) {
+            if (toCart) {
                 sizeX = 14;
                 if (id % 2 == 0) {
                     offsetX = 14;
@@ -195,7 +212,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
             sizeY = (sizeX = 28);
             if (scaledProgress > 19) {
                 scaledProgress -= 19;
-                if (containerLiquid.toCart()[id]) {
+                if (toCart) {
                     sizeX = scaledProgress;
                     if (sizeX > 23) {
                         sizeX = 23;
@@ -259,18 +276,27 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
     }
 
     protected void drawColors(GuiGraphicsExtractor GuiGraphicsExtractor, int id, final int color, final int left, final int top) {
-        try {
-            int[] coords = getReturnCoords(id);
-            GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + coords[0], top + coords[1], getColorSourceX() + (containerLiquid.doReturn()[containerLiquid.getColor()[id] - 1] ? 8 : 0), 80 + 8 * color, 8, 8, 256, 256);
-            coords = getBoxCoords(id);
-            GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + coords[0] - 2, top + coords[1] - 2, getColorSourceX(), 20 * color, 20, 20, 256, 256);
-            if (containerLiquid.getLayoutType() == 2) {
-                final int[] coords2 = getTankCoords(id);
-                GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + coords2[0], top + coords2[1], 36, 51 * color, 36, 51, 256, 256);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!isActiveColor(color)) {
+            return;
         }
+
+        final int colorIndex = color - 1;
+        int[] coords = getReturnCoords(id);
+        GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + coords[0], top + coords[1], getColorSourceX() + (containerLiquid.isReturning(color) ? 8 : 0), 80 + 8 * colorIndex, 8, 8, 256, 256);
+        coords = getBoxCoords(id);
+        GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + coords[0] - 2, top + coords[1] - 2, getColorSourceX(), 20 * colorIndex, 20, 20, 256, 256);
+        if (containerLiquid.getLayoutType() == 2) {
+            final int[] coords2 = getTankCoords(id);
+            GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + coords2[0], top + coords2[1], 36, 51 * colorIndex, 36, 51, 256, 256);
+        }
+    }
+
+    private boolean isActiveColor(int color) {
+        return color >= 1 && color < DISABLED_COLOR;
+    }
+
+    private boolean isValidColor(int color) {
+        return color >= 1 && color <= DISABLED_COLOR;
     }
 
     protected int offsetObjectY(final int layout, final int x, final int y) {
@@ -278,7 +304,10 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
     }
 
     protected void drawExtraOverlay(GuiGraphicsExtractor GuiGraphicsExtractor, int id, final int x, final int y) {
-        drawMouseOver(GuiGraphicsExtractor, getLiquid().getTanks()[id].getMouseOver(), x, y, getTankCoords(id));
+        var tanks = getLiquid().getTanks();
+        if (tanks != null && id >= 0 && id < tanks.length && tanks[id] != null) {
+            drawMouseOver(GuiGraphicsExtractor, tanks[id].getMouseOver(), x, y, getTankCoords(id));
+        }
     }
 
     protected Block getBlock() {
@@ -338,7 +367,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
         if (inRect(x, y, getMiddleCoords())) {
             getLiquid().sendPacket(5, (byte) ((button == InputConstants.MOUSE_BUTTON_LEFT) ? 1 : -1));
         } else {
-            for (int i = 0; i < 4; ++i) {
+            for (int i = 0; i < CHANNEL_COUNT; ++i) {
                 byte data = (byte) i;
                 data |= (byte) (encodedButton << 2);
                 if (inRect(x, y, getArrowCoords(i))) {
