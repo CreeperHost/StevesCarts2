@@ -24,7 +24,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
-import org.joml.Matrix3x2fStack;
 import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
@@ -553,10 +552,9 @@ public abstract class ModuleBase {
      * @param gui  The gui to draw it on
      * @param rect The rectangle indicating where to draw it {targetX, targetY, sizeX, sizeY}
      * @param srcX The x coordinate in the source file
-     * @param srcY They y coordinate in the source file
-     *             // * @param rotation The rotation this will be drawn with
+     * @param srcY The y coordinate in the source file
      */
-    public void drawImage(GuiGraphicsExtractor guiGraphics, Identifier texture, GuiMinecart gui, int[] rect, int srcX, int srcY/*, final GuiMinecart.RENDER_ROTATION rotation*/) {
+    public void drawImage(GuiGraphicsExtractor guiGraphics, Identifier texture, GuiMinecart gui, int[] rect, int srcX, int srcY) {
         if (rect.length < 4) {
             return;
         }
@@ -565,7 +563,7 @@ public abstract class ModuleBase {
             srcY -= handleScroll(rect);
         }
         if (rect[3] > 0) {
-            gui.drawTexturedModalRect(guiGraphics, texture, gui.getLeftPos() + rect[0] + getX(), gui.getTopPos() + rect[1] + getY(), srcX, srcY, rect[2], rect[3]/*, rotation*/);
+            gui.drawTexturedModalRect(guiGraphics, texture, gui.getLeftPos() + rect[0] + getX(), gui.getTopPos() + rect[1] + getY(), srcX, srcY, rect[2], rect[3]);
         }
     }
 
@@ -584,10 +582,6 @@ public abstract class ModuleBase {
 
     public void drawImage(GuiGraphicsExtractor guiGraphics, Identifier texture, GuiMinecart gui,
                           int[] rect, int srcX, int srcY, GuiMinecart.RENDER_ROTATION rotation) {
-        if (rotation == GuiMinecart.RENDER_ROTATION.NORMAL) {
-            drawImage(guiGraphics, texture, gui, rect, srcX, srcY);
-            return;
-        }
         if (rect.length < 4) {
             return;
         }
@@ -599,34 +593,9 @@ public abstract class ModuleBase {
         if (rect[3] <= 0) {
             return;
         }
-
-        float angle = switch (rotation) {
-            case ROTATE_90, ROTATE_90_FLIP -> (float) (Math.PI / 2.0);
-            case ROTATE_180, FLIP_VERTICAL -> (float) Math.PI;
-            case ROTATE_270, ROTATE_270_FLIP -> (float) (Math.PI * 1.5);
-            default -> 0.0f;
-        };
-        boolean flip = rotation == GuiMinecart.RENDER_ROTATION.FLIP_HORIZONTAL
-                || rotation == GuiMinecart.RENDER_ROTATION.ROTATE_90_FLIP
-                || rotation == GuiMinecart.RENDER_ROTATION.FLIP_VERTICAL
-                || rotation == GuiMinecart.RENDER_ROTATION.ROTATE_270_FLIP;
-
         int targetX = gui.getLeftPos() + rect[0] + getX();
         int targetY = gui.getTopPos() + rect[1] + getY();
-        float centerX = targetX + rect[2] / 2.0f;
-        float centerY = targetY + rect[3] / 2.0f;
-        Matrix3x2fStack pose = guiGraphics.pose();
-        pose.pushMatrix();
-        pose.translate(centerX, centerY);
-        if (angle != 0.0f) {
-            pose.rotate(angle);
-        }
-        if (flip) {
-            pose.scale(-1.0f, 1.0f);
-        }
-        pose.translate(-centerX, -centerY);
-        gui.drawTexturedModalRect(guiGraphics, texture, targetX, targetY, srcX, srcY, rect[2], rect[3]);
-        pose.popMatrix();
+        gui.drawTexturedModalRect(guiGraphics, texture, targetX, targetY, srcX, srcY, rect[2], rect[3], rotation);
     }
 
     /**

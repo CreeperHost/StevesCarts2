@@ -11,6 +11,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Matrix3x2fStack;
 import org.jspecify.annotations.NonNull;
 import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.modules.ModuleBase;
@@ -436,90 +437,41 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
         guiGraphics.disableScissor();
     }
 
-    public void drawTexturedModalRect(GuiGraphicsExtractor guiGraphics, Identifier texture, int x, int y, int u, int v, int w, int h) //}, RENDER_ROTATION rotation)
-    {
-//        final float fw = 0.00390625f;
-//        final float fy = 0.00390625f;
+    public void drawTexturedModalRect(GuiGraphicsExtractor guiGraphics, Identifier texture, int x, int y, int u, int v, int w, int h) {
+        drawTexturedModalRect(guiGraphics, texture, x, y, u, v, w, h, RENDER_ROTATION.NORMAL);
+    }
 
-//        final double a = (u) * fw;
-//        final double b = (u + w) * fw;
-//        final double c = (v + h) * fy;
-//        final double d = (v) * fy;
+    public void drawTexturedModalRect(GuiGraphicsExtractor guiGraphics, Identifier texture, int x, int y, int u, int v, int w, int h, RENDER_ROTATION rotation) {
+        if (rotation == RENDER_ROTATION.NORMAL) {
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, x, y, (float) u, (float) v, w, h, 256, 256);
+            return;
+        }
 
-//        final double[] ptA = {a, c};
-//        final double[] ptB = {b, c};
-//        final double[] ptC = {b, d};
-//        final double[] ptD = {a, d};
-
-//        double[] pt1, pt2, pt3, pt4;
-//
-//        switch (rotation)
-//        {
-//            default -> {
-//                pt1 = ptA;
-//                pt2 = ptB;
-//                pt3 = ptC;
-//                pt4 = ptD;
-//            }
-//            case ROTATE_90 -> {
-//                pt1 = ptB;
-//                pt2 = ptC;
-//                pt3 = ptD;
-//                pt4 = ptA;
-//            }
-//            case ROTATE_180 -> {
-//                pt1 = ptC;
-//                pt2 = ptD;
-//                pt3 = ptA;
-//                pt4 = ptB;
-//            }
-//            case ROTATE_270 -> {
-//                pt1 = ptD;
-//                pt2 = ptA;
-//                pt3 = ptB;
-//                pt4 = ptC;
-//            }
-//            case FLIP_HORIZONTAL -> {
-//                pt1 = ptB;
-//                pt2 = ptA;
-//                pt3 = ptD;
-//                pt4 = ptC;
-//            }
-//            case ROTATE_90_FLIP -> {
-//                pt1 = ptA;
-//                pt2 = ptD;
-//                pt3 = ptC;
-//                pt4 = ptB;
-//            }
-//            case FLIP_VERTICAL -> {
-//                pt1 = ptD;
-//                pt2 = ptC;
-//                pt3 = ptB;
-//                pt4 = ptA;
-//            }
-//            case ROTATE_270_FLIP -> {
-//                pt1 = ptC;
-//                pt2 = ptB;
-//                pt3 = ptA;
-//                pt4 = ptD;
-//            }
-//        }
-
-//        public void blit(RenderPipeline pipeline, Identifier atlas, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
-
-
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, x, y, (float) u, (float) v, w, h, 256, 256);
-
-
-        //TODO Rotation render
-//        GuiGraphicsExtractor.drawSpecial(buffer -> {
-//            VertexConsumer consumer = buffer.getBuffer(RenderType.guiTextured(texture));
-//            Matrix4f mat = GuiGraphicsExtractor.pose().last().pose();
-//            consumer.addVertex(mat, (x), y + h, 0).setUv((float) pt1[0], (float) pt1[1]).setColor(0xFFFFFFFF);
-//            consumer.addVertex(mat, (x + w), y + h, 0).setUv((float) pt2[0], (float) pt2[1]).setColor(0xFFFFFFFF);
-//            consumer.addVertex(mat, (x + w), y, 0).setUv((float) pt3[0], (float) pt3[1]).setColor(0xFFFFFFFF);
-//            consumer.addVertex(mat, (x), y, 0).setUv((float) pt4[0], (float) pt4[1]).setColor(0xFFFFFFFF);
-//        });
+        float angle = switch (rotation) {
+            case ROTATE_90, ROTATE_90_FLIP -> (float) (Math.PI / 2.0);
+            case ROTATE_180, FLIP_VERTICAL -> (float) Math.PI;
+            case ROTATE_270, ROTATE_270_FLIP -> (float) (Math.PI * 1.5);
+            default -> 0.0F;
+        };
+        boolean flipped = switch (rotation) {
+            case FLIP_HORIZONTAL, ROTATE_90_FLIP, FLIP_VERTICAL, ROTATE_270_FLIP -> true;
+            default -> false;
+        };
+        float centerX = x + w / 2.0F;
+        float centerY = y + h / 2.0F;
+        Matrix3x2fStack pose = guiGraphics.pose();
+        pose.pushMatrix();
+        try {
+            pose.translate(centerX, centerY);
+            pose.rotate(angle);
+            if (flipped) {
+                pose.scale(-1.0F, 1.0F);
+            }
+            pose.translate(-centerX, -centerY);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, x, y, (float) u, (float) v, w, h, 256, 256);
+        } finally {
+            pose.popMatrix();
+        }
     }
 
     public enum RENDER_ROTATION {
