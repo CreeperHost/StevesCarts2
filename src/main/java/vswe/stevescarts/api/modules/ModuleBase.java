@@ -554,6 +554,19 @@ public abstract class ModuleBase {
         }
     }
 
+    public void drawImage(GuiGraphicsExtractor guiGraphics, Identifier texture, GuiMinecart gui, int[] rect, int srcX, int srcY, int colour) {
+        if (rect.length < 4) {
+            return;
+        }
+        rect = cloneRect(rect);
+        if (!doStealInterface()) {
+            srcY -= handleScroll(rect);
+        }
+        if (rect[3] > 0) {
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, gui.getLeftPos() + rect[0] + getX(), gui.getTopPos() + rect[1] + getY(), srcX, srcY, rect[2], rect[3], 256, 256, colour);
+        }
+    }
+
     public void drawImage(GuiGraphicsExtractor guiGraphics, Identifier texture, GuiMinecart gui,
                           int[] rect, int srcX, int srcY, GuiMinecart.RENDER_ROTATION rotation) {
         if (rotation == GuiMinecart.RENDER_ROTATION.NORMAL) {

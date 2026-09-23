@@ -697,13 +697,8 @@ public class ModuleNote extends ModuleBase {
         }
 
         public void draw(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, GuiMinecart gui, final int x, final int y) {
-            if (!inRect(x, y, getRect())) {
-                //TODO
-                //                GlStateManager._color4f((color >> 16) / 255.0f, (color >> 8 & 0xFF) / 255.0f, (color & 0xFF) / 255.0f, 1.0f);
-            }
-            drawImage(GuiGraphicsExtractor, texture, gui, getRect(), 32, 0);
-            //TODO
-            //            GlStateManager._color4f(1.0f, 1.0f, 1.0f, 1.0f);
+            int buttonColor = inRect(x, y, getRect()) ? 0xFFFFFFFF : 0xFF000000 | color;
+            drawImage(GuiGraphicsExtractor, texture, gui, getRect(), 32, 0, buttonColor);
             int srcX = 0;
             final int srcY = 16;
             if (down) {
@@ -743,7 +738,8 @@ public class ModuleNote extends ModuleBase {
             }
             final int[] rect = getBounds(trackID, noteID);
 
-            drawImage(GuiGraphicsExtractor, texture, gui, rect, srcX, 0);
+            int noteColor = instrumentId != 0 && playProgress == noteID + getScrollX() && isPlaying() ? 0xFF4C4C4C : 0xFFFFFFFF;
+            drawImage(GuiGraphicsExtractor, texture, gui, rect, srcX, 0, noteColor);
             if (inRect(x, y, rect)) {
                 drawImage(GuiGraphicsExtractor, texture, gui, rect, 32, 0);
             }
