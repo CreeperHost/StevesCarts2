@@ -21,6 +21,7 @@ import vswe.stevescarts.init.ModItems;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -154,29 +155,31 @@ public class ModuleData {
     }
 
     public static boolean isValidModuleCombo(final ModuleDataHull hull, final ArrayList<ModuleData> modules) {
-        //TODO rewrite all of this
+        if (hull == null || modules == null) {
+            return false;
+        }
 
-//        final int[] max = {1, hull.getEngineMax(), 1, 4, hull.getAddonMax(), 6};
-//        final int[] current = new int[max.length];
-//        for (final ModuleData module : modules)
-//        {
-//            int id = 5;
-//            for (int i = 0; i < 5; ++i)
-//            {
-//                if (isValidModuleItem(i, module))
-//                {
-//                    id = i;
-//                    break;
-//                }
-//            }
-//            final int[] array = current;
-//            final int n = id;
-//            ++array[n];
-//            if (current[id] > max[id])
-//            {
-//                return false;
-//            }
-//        }
+        EnumMap<ModuleType, Integer> counts = new EnumMap<>(ModuleType.class);
+        for (ModuleData module : modules) {
+            if (module == null) {
+                return false;
+            }
+
+            ModuleType type = module.getModuleType();
+            int maximum = switch (type) {
+                case HULL -> 1;
+                case ENGINE -> hull.getEngineMax();
+                case TOOL -> 1;
+                case ATTACHMENT -> 6;
+                case STORAGE -> 4;
+                case ADDON -> hull.getAddonMax();
+                case NONE -> 0;
+            };
+            int count = counts.merge(type, 1, Integer::sum);
+            if (count > maximum) {
+                return false;
+            }
+        }
         return true;
     }
 
