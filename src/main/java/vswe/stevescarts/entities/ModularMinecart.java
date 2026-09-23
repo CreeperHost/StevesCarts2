@@ -67,6 +67,8 @@ import java.util.Optional;
  * Created by brandon3055 on 07/12/2024
  */
 public class ModularMinecart extends AbstractMinecart implements IEntityWithComplexSpawn, MenuProvider, DataEntity, IModularCart {
+    private static final double STOP_CENTER_EPSILON = 1.0 / 64.0;
+    private static final double STOP_CENTER_SPEED = 0.125;
     public static final int MODULAR_SPACE_WIDTH = 443;
     public static final int MODULAR_SPACE_HEIGHT = 168;
     public static final int[][][] railDirectionCoordinates = new int[][][]{
@@ -194,9 +196,13 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
                 if (!fullStop) {
                     double xOffset = (disabledPos.getX() + 0.5) - position().x;
                     double zOffset = (disabledPos.getZ() + 0.5) - position().z;
-                    move(MoverType.SELF, new Vec3(xOffset * 0.25, 0, zOffset * 0.25));
-                    if (xOffset < 0.05 && zOffset < 0.05) {
+                    Vec3 offset = new Vec3(xOffset, 0, zOffset);
+                    double distance = offset.horizontalDistance();
+                    if (distance <= STOP_CENTER_EPSILON) {
+                        move(MoverType.SELF, offset);
                         fullStop = true;
+                    } else {
+                        move(MoverType.SELF, offset.scale(Math.min(STOP_CENTER_SPEED, distance) / distance));
                     }
                 }
             } else {
@@ -337,11 +343,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     @Override
     protected Vec3 applyNaturalSlowdown(Vec3 initialVelocity) {
         if (isDisabled()) {
-            //TODO, want to figure out some smarter stopping logic that ensures cart stops in middle of track.
-            if (initialVelocity.length() > 0.1) { //Allows pushing, kinda, (needs work)
-                initialVelocity = initialVelocity.multiply(0, 0, 0);
-            }
-            return super.applyNaturalSlowdown(initialVelocity.multiply(0.8, 0.8, 0.8));
+            return Vec3.ZERO;
         }
         //If engine is burning and we are not stopped, then apply engine power.
         if (isEngineBurning() && preStopVelocity == null) {
@@ -370,8 +372,9 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         }
         canBeDisabled = (!forceUnDisable && canBeDisabled);
         if (canBeDisabled && !isDisabled()) {
-            preStopVelocity = getDeltaMovement().add(0); //<- Would be nice if there was a .copy function on Vec3...
+            preStopVelocity = getDeltaMovement();
             disabledPos = pos.immutable();
+            fullStop = false;
             setIsDisabled(true);
         }
         if (fixedRailPos != null && !fixedRailPos.equals(pos)) {
@@ -388,7 +391,10 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     public void releaseCart() {
         wasDisabled = true;
         setIsDisabled(false);
-        behavior.setDeltaMovement(preStopVelocity);
+        fullStop = false;
+        if (preStopVelocity != null) {
+            behavior.setDeltaMovement(preStopVelocity);
+        }
         preStopVelocity = null;
     }
 

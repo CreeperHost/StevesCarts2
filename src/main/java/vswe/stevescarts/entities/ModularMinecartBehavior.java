@@ -100,9 +100,8 @@ public class ModularMinecartBehavior extends NewMinecartBehavior {
     }
 
     @Override
-    //TODO, THis may need tweaking, The previous default "getMaxCartSpeedOnRail" value was 1.2, So things may need to be tweaked.
     public double getMaxSpeed(ServerLevel level) {
-        double maxSpeed = this.minecart.isInWater() ? 0.2 : 0.4;
+        double maxSpeed = super.getMaxSpeed(level);
         return Math.min(maxSpeed, minecart.modules().stream().mapToDouble(ModuleBase::getMaxSpeed).min().orElse(maxSpeed));
     }
 }
