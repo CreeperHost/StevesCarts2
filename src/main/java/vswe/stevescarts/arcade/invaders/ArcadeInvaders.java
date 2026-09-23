@@ -1,5 +1,7 @@
 package vswe.stevescarts.arcade.invaders;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -9,7 +11,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.arcade.tracks.TrackStory;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModSounds;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
@@ -42,7 +43,7 @@ public class ArcadeInvaders extends ArcadeGame {
     private int gameoverCounter;
 
     public ArcadeInvaders(final ModuleArcade module) {
-        super(module, Localization.ARCADE.GHAST);
+        super(module, "arcade.stevescarts.ghastInvaders");
         invaders = new ArrayList<>();
         buildings = new ArrayList<>();
         lives = new ArrayList<>();
@@ -208,13 +209,13 @@ public class ArcadeInvaders extends ArcadeGame {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.EXTRA_LIVES.translate() + ":", 10, 180, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.HIGH_SCORE.translate(String.valueOf(highscore)), 10, 210, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.SCORE.translate(String.valueOf(score)), 10, 220, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, "W - " + Localization.ARCADE.INSTRUCTION_SHOOT.translate(), 330, 180, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, "A - " + Localization.ARCADE.INSTRUCTION_LEFT.translate(), 330, 190, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, "D - " + Localization.ARCADE.INSTRUCTION_RIGHT.translate(), 330, 200, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 330, 220, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.ghastLives").getString() + ":", 10, 180, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.highScore", String.valueOf(highscore)).getString(), 10, 210, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.score", String.valueOf(score)).getString(), 10, 220, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "W - " + Component.translatable("arcade.stevescarts.instructionShoot").getString(), 330, 180, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "A - " + Component.translatable("arcade.stevescarts.instructionLeft").getString(), 330, 190, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "D - " + Component.translatable("arcade.stevescarts.instructionRight").getString(), 330, 200, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "R - " + Component.translatable("arcade.stevescarts.instructionRestart").getString(), 330, 220, 4210752);
     }
 
     @Override

@@ -50,7 +50,6 @@ import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.containers.ContainerMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModEntities;
@@ -325,7 +324,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Localization.translate("entity.minecraft.minecart");
+        return Component.translatable("entity.minecraft.minecart");
     }
 
     /**
@@ -597,7 +596,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     @Override
     protected void readAdditionalSaveData(ValueInput input) {
         super.readAdditionalSaveData(input);
-        name = Localization.translate(input.getStringOr("cartName", ""));
+        name = Component.translatable(input.getStringOr("cartName", ""));
         setEngineBurning(input.getBooleanOr("engine_burning", false));
         setIsDisabled(input.getBooleanOr("disabled", false));
         if (input.getBooleanOr("stopped", false)) {

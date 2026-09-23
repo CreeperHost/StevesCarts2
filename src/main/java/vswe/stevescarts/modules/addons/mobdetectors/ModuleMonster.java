@@ -1,11 +1,12 @@
 package vswe.stevescarts.modules.addons.mobdetectors;
 
+import net.minecraft.network.chat.Component;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.monster.Enemy;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 
 public class ModuleMonster extends ModuleMobdetector {
     public ModuleMonster(ModularMinecart cart) {
@@ -14,7 +15,7 @@ public class ModuleMonster extends ModuleMobdetector {
 
     @Override
     public String getName() {
-        return Localization.MODULES.ADDONS.DETECTOR_MONSTERS.translate();
+        return Component.translatable("modules.addons.stevescarts.detectorMonsters").getString();
     }
 
     @Override

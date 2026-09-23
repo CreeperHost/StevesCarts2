@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.engines;
 
+import net.minecraft.network.chat.Component;
+
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
@@ -8,7 +10,6 @@ import vswe.stevescarts.helpers.storages.IFluidHandler;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 
 public abstract class ModuleThermalBase extends ModuleEngine {
     private static final int RELOAD_LIQUID_SIZE = 1;
@@ -93,18 +94,18 @@ public abstract class ModuleThermalBase extends ModuleEngine {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ENGINES.THERMAL.translate(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.engines.stevescarts.thermalEngineTitle").getString(), 8, 6, 4210752);
         int consumption = getCart().getConsumption();
         if (consumption == 0) {
             consumption = 1;
         }
         String str;
         if (getFuelLevel() >= consumption && (!requiresCoolant() || getCoolantLevel() >= consumption)) {
-            str = Localization.MODULES.ENGINES.POWERED.translate();
+            str = Component.translatable("modules.engines.stevescarts.thermalPowered").getString();
         } else if (getFuelLevel() >= consumption) {
-            str = Localization.MODULES.ENGINES.NO_WATER.translate();
+            str = Component.translatable("modules.engines.stevescarts.outOfWater").getString();
         } else {
-            str = Localization.MODULES.ENGINES.NO_LAVA.translate();
+            str = Component.translatable("modules.engines.stevescarts.outOfLava").getString();
         }
         drawString(GuiGraphicsExtractor, gui, str, 8, 22, 4210752);
     }

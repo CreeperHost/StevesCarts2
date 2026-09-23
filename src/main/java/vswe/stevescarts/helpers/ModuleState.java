@@ -1,5 +1,6 @@
 package vswe.stevescarts.helpers;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.Animal;
@@ -49,78 +50,78 @@ public class ModuleState {
 
     static {
         ModuleState.states = new HashMap<>();
-        new ModuleState(0, ModuleRailer.class, Localization.GUI.DETECTOR.RAIL, STATETYPE.SUPPLY);
-        new ModuleState(1, ModuleTorch.class, Localization.GUI.DETECTOR.TORCH, STATETYPE.SUPPLY);
-        new ModuleState(2, ModuleWoodcutter.class, Localization.GUI.DETECTOR.SAPLING, STATETYPE.SUPPLY);
-        new ModuleState(3, ModuleFarmer.class, Localization.GUI.DETECTOR.SEED, STATETYPE.SUPPLY);
-        new ModuleState(5, ModuleBridge.class, Localization.GUI.DETECTOR.BRIDGE, STATETYPE.SUPPLY);
-        new ModuleState(40, ModuleShooter.class, Localization.GUI.DETECTOR.PROJECTILE, STATETYPE.SUPPLY);
-        new ModuleState(41, ModuleFertilizer.class, Localization.GUI.DETECTOR.FERTILIZING, STATETYPE.SUPPLY);
-        new ModuleState(49, ModuleCakeServer.class, Localization.GUI.DETECTOR.CAKE, STATETYPE.SUPPLY);
-        new ModuleState(6, ModuleShield.class, Localization.GUI.DETECTOR.SHIELD, STATETYPE.ACTIVATION);
-        new ModuleState(7, ModuleChunkLoader.class, Localization.GUI.DETECTOR.CHUNK, STATETYPE.ACTIVATION);
-        new ModuleState(8, ModuleInvisible.class, Localization.GUI.DETECTOR.INVISIBILITY, STATETYPE.ACTIVATION);
-        new ModuleState(9, ModuleDrill.class, Localization.GUI.DETECTOR.DRILL, STATETYPE.ACTIVATION);
-        new ModuleState(12, ModuleCage.class, Localization.GUI.DETECTOR.CAGE, STATETYPE.ACTIVATION);
-        new ModuleStateInv(10, Localization.GUI.DETECTOR.STORAGE_FULL, true);
-        new ModuleStateInv(11, Localization.GUI.DETECTOR.STORAGE_EMPTY, false);
-        new ModuleStatePassenger(13, Localization.GUI.DETECTOR.PASSENGER, LivingEntity.class);
-        new ModuleStatePassenger(14, Localization.GUI.DETECTOR.ANIMAL, Animal.class);
-        new ModuleStatePassenger(15, Localization.GUI.DETECTOR.TAMEABLE, TamableAnimal.class);
-        new ModuleStatePassenger(16, Localization.GUI.DETECTOR.BREEDABLE, AgeableMob.class);
-        new ModuleStatePassenger(17, Localization.GUI.DETECTOR.HOSTILE, Mob.class);
-        new ModuleStatePassenger(18, Localization.GUI.DETECTOR.CREEPER, Creeper.class);
-        new ModuleStatePassenger(19, Localization.GUI.DETECTOR.SKELETON, Skeleton.class);
-        new ModuleStatePassenger(20, Localization.GUI.DETECTOR.SPIDER, Spider.class);
-        new ModuleStatePassenger(21, Localization.GUI.DETECTOR.ZOMBIE, Zombie.class);
-        new ModuleStatePassenger(22, Localization.GUI.DETECTOR.PIG_MAN, Piglin.class);
-        new ModuleStatePassenger(23, Localization.GUI.DETECTOR.SILVERFISH, Silverfish.class);
-        new ModuleStatePassenger(24, Localization.GUI.DETECTOR.BLAZE, Blaze.class);
-        new ModuleStatePassenger(25, Localization.GUI.DETECTOR.BAT, Bat.class);
-        new ModuleStatePassenger(26, Localization.GUI.DETECTOR.WITCH, Witch.class);
-        new ModuleStatePassenger(27, Localization.GUI.DETECTOR.PIG, Piglin.class);
-        new ModuleStatePassenger(28, Localization.GUI.DETECTOR.SHEEP, Sheep.class);
-        new ModuleStatePassenger(29, Localization.GUI.DETECTOR.COW, Cow.class);
-        new ModuleStatePassenger(30, Localization.GUI.DETECTOR.MOOSHROOM, MushroomCow.class);
-        new ModuleStatePassenger(31, Localization.GUI.DETECTOR.CHICKEN, Chicken.class);
-        new ModuleStatePassenger(32, Localization.GUI.DETECTOR.WOLF, Wolf.class);
+        new ModuleState(0, ModuleRailer.class, "gui.stevescarts.stateRails", STATETYPE.SUPPLY);
+        new ModuleState(1, ModuleTorch.class, "gui.stevescarts.stateTorches", STATETYPE.SUPPLY);
+        new ModuleState(2, ModuleWoodcutter.class, "gui.stevescarts.stateSaplings", STATETYPE.SUPPLY);
+        new ModuleState(3, ModuleFarmer.class, "gui.stevescarts.sateSeeds", STATETYPE.SUPPLY);
+        new ModuleState(5, ModuleBridge.class, "gui.stevescarts.stateBridge", STATETYPE.SUPPLY);
+        new ModuleState(40, ModuleShooter.class, "gui.stevescarts.stateProjectiles", STATETYPE.SUPPLY);
+        new ModuleState(41, ModuleFertilizer.class, "gui.stevescarts.stateFertilizing", STATETYPE.SUPPLY);
+        new ModuleState(49, ModuleCakeServer.class, "gui.stevescarts.stateCake", STATETYPE.SUPPLY);
+        new ModuleState(6, ModuleShield.class, "gui.stevescarts.stateShield", STATETYPE.ACTIVATION);
+        new ModuleState(7, ModuleChunkLoader.class, "gui.stevescarts.stateChunk", STATETYPE.ACTIVATION);
+        new ModuleState(8, ModuleInvisible.class, "gui.stevescarts.stateInvisibility", STATETYPE.ACTIVATION);
+        new ModuleState(9, ModuleDrill.class, "gui.stevescarts.stateDrill", STATETYPE.ACTIVATION);
+        new ModuleState(12, ModuleCage.class, "gui.stevescarts.stateCage", STATETYPE.ACTIVATION);
+        new ModuleStateInv(10, "gui.stevescarts.stateStorageFull", true);
+        new ModuleStateInv(11, "gui.stevescarts.stateStorageEmpty", false);
+        new ModuleStatePassenger(13, "gui.stevescarts.statePassenger", LivingEntity.class);
+        new ModuleStatePassenger(14, "gui.stevescarts.stateAnimal", Animal.class);
+        new ModuleStatePassenger(15, "gui.stevescarts.stateTameable", TamableAnimal.class);
+        new ModuleStatePassenger(16, "gui.stevescarts.stateBreedable", AgeableMob.class);
+        new ModuleStatePassenger(17, "gui.stevescarts.stateHostile", Mob.class);
+        new ModuleStatePassenger(18, "gui.stevescarts.stateCreeper", Creeper.class);
+        new ModuleStatePassenger(19, "gui.stevescarts.stateSkeleton", Skeleton.class);
+        new ModuleStatePassenger(20, "gui.stevescarts.stateSpider", Spider.class);
+        new ModuleStatePassenger(21, "gui.stevescarts.stateZombie", Zombie.class);
+        new ModuleStatePassenger(22, "gui.stevescarts.stateZombiePigMan", Piglin.class);
+        new ModuleStatePassenger(23, "gui.stevescarts.stateSilverFish", Silverfish.class);
+        new ModuleStatePassenger(24, "gui.stevescarts.stateBlaze", Blaze.class);
+        new ModuleStatePassenger(25, "gui.stevescarts.stateBat", Bat.class);
+        new ModuleStatePassenger(26, "gui.stevescarts.stateWitch", Witch.class);
+        new ModuleStatePassenger(27, "gui.stevescarts.statePig", Piglin.class);
+        new ModuleStatePassenger(28, "gui.stevescarts.stateSheep", Sheep.class);
+        new ModuleStatePassenger(29, "gui.stevescarts.stateCow", Cow.class);
+        new ModuleStatePassenger(30, "gui.stevescarts.stateMooshroom", MushroomCow.class);
+        new ModuleStatePassenger(31, "gui.stevescarts.stateChicken", Chicken.class);
+        new ModuleStatePassenger(32, "gui.stevescarts.stateWolf", Wolf.class);
         //TODO Restore snow golem passenger detection.
-        new ModuleStatePassenger(34, Localization.GUI.DETECTOR.OCELOT, Ocelot.class);
-        new ModuleStatePassenger(35, Localization.GUI.DETECTOR.VILLAGER, Villager.class);
-        new ModuleStatePassenger(36, Localization.GUI.DETECTOR.PLAYER, Player.class);
-        new ModuleStatePassenger(37, Localization.GUI.DETECTOR.ZOMBIE, Zombie.class) {
+        new ModuleStatePassenger(34, "gui.stevescarts.stateOcelot", Ocelot.class);
+        new ModuleStatePassenger(35, "gui.stevescarts.stateVillager", Villager.class);
+        new ModuleStatePassenger(36, "gui.stevescarts.statePlayer", Player.class);
+        new ModuleStatePassenger(37, "gui.stevescarts.stateZombie", Zombie.class) {
             @Override
             public boolean isPassengerValid(final Entity passenger) {
                 return passenger instanceof ZombieVillager;
             }
         };
-        new ModuleStatePassenger(38, Localization.GUI.DETECTOR.CHILD, AgeableMob.class) {
+        new ModuleStatePassenger(38, "gui.stevescarts.stateChild", AgeableMob.class) {
             @Override
             public boolean isPassengerValid(final Entity passenger) {
                 return ((AgeableMob) passenger).getAge() > 0;
             }
         };
-        new ModuleStatePassenger(39, Localization.GUI.DETECTOR.TAMED, TamableAnimal.class) {
+        new ModuleStatePassenger(39, "gui.stevescarts.stateTamed", TamableAnimal.class) {
             @Override
             public boolean isPassengerValid(final Entity passenger) {
                 return ((TamableAnimal) passenger).isTame();
             }
         };
-        new ModuleStatePower(42, Localization.GUI.DETECTOR.POWER_RED, 0);
-        new ModuleStatePower(43, Localization.GUI.DETECTOR.POWER_BLUE, 1);
-        new ModuleStatePower(44, Localization.GUI.DETECTOR.POWER_GREEN, 2);
-        new ModuleStatePower(45, Localization.GUI.DETECTOR.POWER_YELLOW, 3);
-        new ModuleStateTank(46, Localization.GUI.DETECTOR.TANKS_FULL, true, false);
-        new ModuleStateTank(47, Localization.GUI.DETECTOR.TANKS_EMPTY, false, false);
-        new ModuleStateTank(48, Localization.GUI.DETECTOR.TANK_EMPTY, false, true);
+        new ModuleStatePower(42, "gui.stevescarts.statePowerRed", 0);
+        new ModuleStatePower(43, "gui.stevescarts.statePowerBlue", 1);
+        new ModuleStatePower(44, "gui.stevescarts.statePowerGreen", 2);
+        new ModuleStatePower(45, "gui.stevescarts.statePowerYellow", 3);
+        new ModuleStateTank(46, "gui.stevescarts.stateTanksFull", true, false);
+        new ModuleStateTank(47, "gui.stevescarts.stateTanksEmpty", false, false);
+        new ModuleStateTank(48, "gui.stevescarts.stateTankEmpty", false, true);
     }
 
     private final Class<? extends ModuleBase> moduleClass;
-    private final Localization.GUI.DETECTOR name;
+    private final String name;
     private final byte id;
     private final STATETYPE type;
 
-    public ModuleState(final int id, final Class<? extends ModuleBase> moduleClass, final Localization.GUI.DETECTOR name, final STATETYPE type) {
+    public ModuleState(final int id, final Class<? extends ModuleBase> moduleClass, final String name, final STATETYPE type) {
         this.moduleClass = moduleClass;
         this.name = name;
         this.id = (byte) id;
@@ -219,7 +220,7 @@ public class ModuleState {
     }
 
     public String getName() {
-        return name.translate();
+        return Component.translatable(name).getString();
     }
 
     public byte getID() {
@@ -233,7 +234,7 @@ public class ModuleState {
     private static class ModuleStateInv extends ModuleState {
         private final boolean full;
 
-        public ModuleStateInv(final int id, final Localization.GUI.DETECTOR name, final boolean full) {
+        public ModuleStateInv(final int id, final String name, final boolean full) {
             super(id, ModuleChest.class, name, STATETYPE.INVENTORY);
             this.full = full;
         }
@@ -243,7 +244,7 @@ public class ModuleState {
         private final boolean full;
         private final boolean individual;
 
-        public ModuleStateTank(final int id, final Localization.GUI.DETECTOR name, final boolean full, final boolean individual) {
+        public ModuleStateTank(final int id, final String name, final boolean full, final boolean individual) {
             super(id, ModuleTank.class, name, STATETYPE.TANK);
             this.full = full;
             this.individual = individual;
@@ -253,7 +254,7 @@ public class ModuleState {
     private static class ModuleStatePassenger extends ModuleState {
         private final Class passengerClass;
 
-        public ModuleStatePassenger(final int id, final Localization.GUI.DETECTOR name, final Class passengerClass) {
+        public ModuleStatePassenger(final int id, final String name, final Class passengerClass) {
             super(id, null, name, STATETYPE.PASSENGER);
             this.passengerClass = passengerClass;
         }
@@ -266,7 +267,7 @@ public class ModuleState {
     private static class ModuleStatePower extends ModuleState {
         private final int areaId;
 
-        public ModuleStatePower(final int id, final Localization.GUI.DETECTOR name, final int areaId) {
+        public ModuleStatePower(final int id, final String name, final int areaId) {
             super(id, ModulePowerObserver.class, name, STATETYPE.POWER);
             this.areaId = areaId;
         }

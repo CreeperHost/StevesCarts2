@@ -1,10 +1,11 @@
 package vswe.stevescarts.modules.engines;
 
+import net.minecraft.network.chat.Component;
+
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 
 public class ModuleCheatEngine extends ModuleEngine {
 
@@ -32,7 +33,7 @@ public class ModuleCheatEngine extends ModuleEngine {
         if (split.length > 1) {
             drawString(GuiGraphicsExtractor, gui, split[1], 8, 16, 4210752);
         }
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ENGINES.OVER_9000.translate(String.valueOf(getFuelLevel())), 8, 42, 4210752);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.engines.stevescarts.creativePowerLevel", String.valueOf(getFuelLevel())).getString(), 8, 42, 4210752);
     }
 
     @Override

@@ -24,7 +24,6 @@ import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.containers.ContainerDistributor;
 import vswe.stevescarts.helpers.DistributorSetting;
 import vswe.stevescarts.helpers.DistributorSide;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.storages.SCTank;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.network.packets.PacketDistributorTile;
@@ -47,12 +46,12 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
     public TileEntityDistributor(BlockPos blockPos, BlockState blockState) {
         super(ModBlocks.EXTERNAL_DISTRIBUTOR_TILE.get(), blockPos, blockState);
         dirty = true;
-        (sides = new ArrayList<>()).add(new DistributorSide(0, Localization.GUI.DISTRIBUTOR.SIDE_ORANGE, Direction.UP));
-        sides.add(new DistributorSide(1, Localization.GUI.DISTRIBUTOR.SIDE_PURPLE, Direction.DOWN));
-        sides.add(new DistributorSide(2, Localization.GUI.DISTRIBUTOR.SIDE_YELLOW, Direction.NORTH));
-        sides.add(new DistributorSide(3, Localization.GUI.DISTRIBUTOR.SIDE_GREEN, Direction.WEST));
-        sides.add(new DistributorSide(4, Localization.GUI.DISTRIBUTOR.SIDE_BLUE, Direction.SOUTH));
-        sides.add(new DistributorSide(5, Localization.GUI.DISTRIBUTOR.SIDE_RED, Direction.EAST));
+        (sides = new ArrayList<>()).add(new DistributorSide(0, "gui.stevescarts.distributorSideOrange", Direction.UP));
+        sides.add(new DistributorSide(1, "gui.stevescarts.distributorSidePurple", Direction.DOWN));
+        sides.add(new DistributorSide(2, "gui.stevescarts.distributorSideYellow", Direction.NORTH));
+        sides.add(new DistributorSide(3, "gui.stevescarts.distributorSideGreen", Direction.WEST));
+        sides.add(new DistributorSide(4, "gui.stevescarts.distributorSideBlue", Direction.SOUTH));
+        sides.add(new DistributorSide(5, "gui.stevescarts.distributorSideRed", Direction.EAST));
         fluidHandlerMap = new HashMap<>();
         for (Direction facing : Direction.values()) {
             fluidHandlerMap.put(facing, new DistributorFluidHandler(facing));

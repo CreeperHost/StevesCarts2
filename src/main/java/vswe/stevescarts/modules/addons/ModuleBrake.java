@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -11,7 +13,6 @@ import vswe.stevescarts.api.modules.interfaces.ILeverModule;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -48,7 +49,7 @@ public class ModuleBrake extends ModuleAddon implements ILeverModule {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ADDONS.CONTROL_LEVER.translate(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.addons.stevescarts.controlLeverTitle").getString(), 8, 6, 4210752);
     }
 
     @Override
@@ -86,8 +87,8 @@ public class ModuleBrake extends ModuleAddon implements ILeverModule {
 
     @Override
     public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
-        drawStringOnMouseOver(GuiGraphicsExtractor, gui, isForceStopping() ? Localization.MODULES.ADDONS.LEVER_START.translate() : Localization.MODULES.ADDONS.LEVER_STOP.translate(), x, y, startstopRect);
-        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ADDONS.LEVER_TURN.translate(), x, y, turnbackRect);
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, isForceStopping() ? Component.translatable("modules.addons.stevescarts.leverStartCart").getString() : Component.translatable("modules.addons.stevescarts.leverStopCart").getString(), x, y, startstopRect);
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Component.translatable("modules.addons.stevescarts.leverTurnAroundCart").getString(), x, y, turnbackRect);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -14,7 +16,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -28,7 +29,7 @@ public class ModuleNote extends ModuleBase {
     private final static int tracksInView = 5;
     private final static int[] instrumentColors = new int[]{4210752, 16711680, 65280, 255, 16776960, 65535};
     private final static String[] pitchNames = new String[]{"F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#"};
-    private final static Localization.MODULES.ATTACHMENTS[] instrumentNames = new Localization.MODULES.ATTACHMENTS[]{Localization.MODULES.ATTACHMENTS.PIANO, Localization.MODULES.ATTACHMENTS.BASS_DRUM, Localization.MODULES.ATTACHMENTS.SNARE_DRUM, Localization.MODULES.ATTACHMENTS.STICKS, Localization.MODULES.ATTACHMENTS.BASS_GUITAR};
+    private final static String[] instrumentNames = new String[]{"modules.attachments.stevescarts.notePiano", "modules.attachments.stevescarts.noteBassDrum", "modules.attachments.stevescarts.noteSnareDrum", "modules.attachments.stevescarts.noteSticks", "modules.attachments.stevescarts.noteBassGuitar"};
     private final static int notemapX = 70;
     private final static int notemapY = 40;
     private final static int trackHeight = 20;
@@ -72,10 +73,10 @@ public class ModuleNote extends ModuleBase {
         if (getCart().level().isClientSide()) {
             buttons = new ArrayList<>();
             createTrack = new Button(notemapX - 60, notemapY - 20);
-            createTrack.text = Localization.MODULES.ATTACHMENTS.CREATE_TRACK.translate();
+            createTrack.text = Component.translatable("modules.attachments.stevescarts.noteCreateTrack").getString();
             createTrack.imageID = 0;
             removeTrack = new Button(notemapX - 40, notemapY - 20);
-            removeTrack.text = Localization.MODULES.ATTACHMENTS.REMOVE_TRACK.translate();
+            removeTrack.text = Component.translatable("modules.attachments.stevescarts.noteRemoveTrack").getString();
             removeTrack.imageID = 1;
             speedButton = new Button(notemapX - 20, notemapY - 20);
             updateSpeedButton();
@@ -84,9 +85,9 @@ public class ModuleNote extends ModuleBase {
                 final Button tempButton = new Button(notemapX - 20 + (i + 1) * 20, notemapY - 20);
                 instrumentbuttons.add(tempButton);
                 if (i > 0) {
-                    tempButton.text = Localization.MODULES.ATTACHMENTS.ACTIVATE_INSTRUMENT.translate(instrumentNames[i - 1].translate());
+                    tempButton.text = Component.translatable("modules.attachments.stevescarts.noteActivateInstrument", Component.translatable(instrumentNames[i - 1])).getString();
                 } else {
-                    tempButton.text = Localization.MODULES.ATTACHMENTS.DEACTIVATE_INSTRUMENT.translate();
+                    tempButton.text = Component.translatable("modules.attachments.stevescarts.noteDeactivateInstrument").getString();
                 }
                 tempButton.color = instrumentColors[i];
             }
@@ -96,7 +97,7 @@ public class ModuleNote extends ModuleBase {
     private void updateSpeedButton() {
         if (getCart().level().isClientSide()) {
             speedButton.imageID = 14 - speedSetting;
-            speedButton.text = Localization.MODULES.ATTACHMENTS.NOTE_DELAY.translate(String.valueOf(getTickDelay()));
+            speedButton.text = Component.translatable("modules.attachments.stevescarts.noteDelay", String.valueOf(getTickDelay())).getString();
         }
     }
 
@@ -799,7 +800,7 @@ public class ModuleNote extends ModuleBase {
             if (instrumentId == 0) {
                 return "Unknown instrument";
             }
-            return instrumentNames[instrumentId - 1].translate() + " " + pitchNames[pitch];
+            return Component.translatable(instrumentNames[instrumentId - 1]).getString() + " " + pitchNames[pitch];
         }
     }
 
@@ -817,10 +818,10 @@ public class ModuleNote extends ModuleBase {
             if (getCart().level().isClientSide()) {
                 final int ID = tracks.size() + 1;
                 addButton = new TrackButton(notemapX - 60, ID - 1);
-                addButton.text = Localization.MODULES.ATTACHMENTS.ADD_NOTE.translate(String.valueOf(ID));
+                addButton.text = Component.translatable("modules.attachments.stevescarts.noteAdd", String.valueOf(ID)).getString();
                 addButton.imageID = 2;
                 removeButton = new TrackButton(notemapX - 40, ID - 1);
-                removeButton.text = Localization.MODULES.ATTACHMENTS.REMOVE_NOTE.translate(String.valueOf(ID));
+                removeButton.text = Component.translatable("modules.attachments.stevescarts.noteRemove", String.valueOf(ID)).getString();
                 removeButton.imageID = 3;
                 volumeButton = new TrackButton(notemapX - 20, ID - 1);
                 volumeButton.text = getVolumeText();
@@ -830,7 +831,7 @@ public class ModuleNote extends ModuleBase {
         }
 
         private String getVolumeText() {
-            return Localization.MODULES.ATTACHMENTS.VOLUME.translate(String.valueOf(volume));
+            return Component.translatable("modules.attachments.stevescarts.noteVolume." + volume).getString();
         }
 
         public void unload() {

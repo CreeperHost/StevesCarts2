@@ -8,7 +8,6 @@ import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.data.ModuleDataGroup;
 import vswe.stevescarts.api.modules.data.ModuleDataHull;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.modules.addons.*;
 import vswe.stevescarts.modules.addons.mobdetectors.*;
 import vswe.stevescarts.modules.addons.plants.ModuleNetherwart;
@@ -145,7 +144,7 @@ public class StevesCartsModules {
                 new ModuleDataHull(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "pumpkin_chariot"), "Pumpkin Chariot", ModulePumpkin.class, ModuleType.HULL).setCapacity(40).setEngineMax(1).setAddonMax(0).setComplexityMax(15));
 
         MACHANICAL_PIG = StevesCartsAPI.registerModule(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "mechanical_pig"),
-                new ModuleDataHull(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "mechanical_pig"), "Mechanical Pig", ModulePig.class, ModuleType.HULL).setCapacity(150).setEngineMax(2).setAddonMax(4).setComplexityMax(50).addSide(ModuleData.SIDE.FRONT).addMessage(Localization.MODULE_INFO.PIG_MESSAGE));
+                new ModuleDataHull(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "mechanical_pig"), "Mechanical Pig", ModulePig.class, ModuleType.HULL).setCapacity(150).setEngineMax(2).setAddonMax(4).setComplexityMax(50).addSide(ModuleData.SIDE.FRONT).addMessage("info.stevescarts.pigExtraMessage"));
 
         CREATIVE_HULL = StevesCartsAPI.registerModule(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "creative_hull"),
                 new ModuleDataHull(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "creative_hull"), "Creative Hull", ModuleCheatHull.class, ModuleType.HULL).setCapacity(10000).setEngineMax(5).setAddonMax(12).setComplexityMax(150));
@@ -175,7 +174,7 @@ public class StevesCartsModules {
         DefaultModuleGroups.TANK_GROUP.add(FRONT_TANK);
 
         OPEN_TANK = StevesCartsAPI.registerModule(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "open_sctank"),
-                new ModuleData(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "open_sctank"), "Open SCTank", ModuleOpenTank.class, ModuleType.STORAGE, 31).addSide(ModuleData.SIDE.TOP).addMessage(Localization.MODULE_INFO.OPEN_TANK));
+                new ModuleData(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "open_sctank"), "Open SCTank", ModuleOpenTank.class, ModuleType.STORAGE, 31).addSide(ModuleData.SIDE.TOP).addMessage("info.stevescarts.openExtraMessage"));
         DefaultModuleGroups.TANK_GROUP.add(OPEN_TANK);
 
 
@@ -412,19 +411,19 @@ public class StevesCartsModules {
                 new ModuleData(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "experience_bank"), "Experience Bank", ModuleExperience.class, ModuleType.ADDON, 36));
 
         CAKE_SERVER = StevesCartsAPI.registerModule(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "cake_server"),
-                new ModuleData(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "cake_server"), "Cake Server", ModuleCakeServer.class, ModuleType.ADDON, 10).addSide(ModuleData.SIDE.TOP).addMessage(Localization.MODULE_INFO.ALPHA_MESSAGE));
+                new ModuleData(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "cake_server"), "Cake Server", ModuleCakeServer.class, ModuleType.ADDON, 10).addSide(ModuleData.SIDE.TOP).addMessage("info.stevescarts.alphaExtraMessage"));
 
         CHUNK_LOADER = StevesCartsAPI.registerModule(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "chunk_loader"),
                 new ModuleData(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "chunk_loader"), "Chunk Loader", ModuleChunkLoader.class, ModuleType.ADDON, 10));
     }
 
     public static void setupDefaultGroups() {
-        DefaultModuleGroups.ENGINE_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.ENGINE_GROUP);
-        DefaultModuleGroups.DRILL_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.DRILL_GROUP);
-        DefaultModuleGroups.FARMER_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.FARMER_GROUP);
-        DefaultModuleGroups.WOODCUTTER_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.CUTTER_GROUP);
-        DefaultModuleGroups.TANK_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.TANK_GROUP);
-        DefaultModuleGroups.TOOL_GROUP = ModuleDataGroup.getCombinedGroup(Localization.MODULE_INFO.TOOL_GROUP, DefaultModuleGroups.DRILL_GROUP, DefaultModuleGroups.WOODCUTTER_GROUP);
-        DefaultModuleGroups.ENTITY_DETECTOR_GROUP = new ModuleDataGroup(Localization.MODULE_INFO.ENTITY_GROUP);
+        DefaultModuleGroups.ENGINE_GROUP = new ModuleDataGroup("info.stevescarts.moduleGroupEngine");
+        DefaultModuleGroups.DRILL_GROUP = new ModuleDataGroup("info.stevescarts.moduleGroupDrill");
+        DefaultModuleGroups.FARMER_GROUP = new ModuleDataGroup("info.stevescarts.moduleGroupFarmer");
+        DefaultModuleGroups.WOODCUTTER_GROUP = new ModuleDataGroup("info.stevescarts.moduleGroupCutter");
+        DefaultModuleGroups.TANK_GROUP = new ModuleDataGroup("info.stevescarts.moduleGroupTank");
+        DefaultModuleGroups.TOOL_GROUP = ModuleDataGroup.getCombinedGroup("info.stevescarts.moduleGroupTool", DefaultModuleGroups.DRILL_GROUP, DefaultModuleGroups.WOODCUTTER_GROUP);
+        DefaultModuleGroups.ENTITY_DETECTOR_GROUP = new ModuleDataGroup("info.stevescarts.moduleGroupEntity");
     }
 }

@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -26,7 +28,6 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 
 import java.util.Comparator;
@@ -91,8 +92,8 @@ public class ModuleCage extends ModuleBase implements IActivatorModule {
 
     @Override
     public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
-        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.CAGE_AUTO.translate(disablePickup ? "0" : "1"), x, y, autoRect);
-        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.CAGE.translate(isCageEmpty() ? "0" : "1"), x, y, manualRect);
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.cageAutoPickUp." + (disablePickup ? "activate" : "deactivate")).getString(), x, y, autoRect);
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.cagePickUp." + (isCageEmpty() ? "grab" : "release")).getString(), x, y, manualRect);
     }
 
     private boolean isCageEmpty() {

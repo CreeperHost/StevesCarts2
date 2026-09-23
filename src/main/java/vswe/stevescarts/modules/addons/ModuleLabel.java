@@ -17,7 +17,6 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.LabelInformation;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -36,46 +35,46 @@ public class ModuleLabel extends ModuleAddon {
     public ModuleLabel(ModularMinecart cart) {
         super(cart);
         delay = 0;
-        (labels = new ArrayList<>()).add(new LabelInformation(Localization.MODULES.ADDONS.NAME) {
+        (labels = new ArrayList<>()).add(new LabelInformation("modules.addons.stevescarts.informationProviderLabelName") {
             @Override
             public Component getLabel() {
                 return getCart().getName();
             }
         });
-        labels.add(new LabelInformation(Localization.MODULES.ADDONS.DISTANCE) {
+        labels.add(new LabelInformation("modules.addons.stevescarts.informationProviderLabelDistance") {
             @Override
             public Component getLabel() {
-                return Component.literal(Localization.MODULES.ADDONS.DISTANCE_LONG.translate(String.valueOf((int) getCart().distanceTo(getClientPlayer()))));
+                return Component.literal(Component.translatable("modules.addons.stevescarts.informationProviderMessageDistance", String.valueOf((int) getCart().distanceTo(getClientPlayer()))).getString());
             }
         });
-        labels.add(new LabelInformation(Localization.MODULES.ADDONS.POSITION) {
+        labels.add(new LabelInformation("modules.addons.stevescarts.informationProviderLabelPosition") {
             @Override
             public Component getLabel() {
-                return Component.literal(Localization.MODULES.ADDONS.POSITION_LONG.translate(String.valueOf(getCart().x()), String.valueOf(getCart().y()), String.valueOf(getCart().z())));
+                return Component.literal(Component.translatable("modules.addons.stevescarts.informationProviderMessagePosition", String.valueOf(getCart().x()), String.valueOf(getCart().y()), String.valueOf(getCart().z())).getString());
             }
         });
-        labels.add(new LabelInformation(Localization.MODULES.ADDONS.FUEL) {
+        labels.add(new LabelInformation("modules.addons.stevescarts.informationProviderLabelFuel") {
             @Override
             public Component getLabel() {
                 int seconds = ModuleLabel.this.seconds.get();
                 if (seconds == -1) {
-                    return Component.literal(Localization.MODULES.ADDONS.FUEL_NO_CONSUMPTION.translate());
+                    return Component.literal(Component.translatable("modules.addons.stevescarts.informationProviderMessageNoConsumption").getString());
                 }
                 int minutes = seconds / 60;
                 seconds -= minutes * 60;
                 final int hours = minutes / 60;
                 minutes -= hours * 60;
-                return Component.literal(String.format(Localization.MODULES.ADDONS.FUEL_LONG.translate() + ": %02d:%02d:%02d", hours, minutes, seconds));
+                return Component.literal(String.format(Component.translatable("modules.addons.stevescarts.informationProviderMessageFuel").getString() + ": %02d:%02d:%02d", hours, minutes, seconds));
             }
         });
-        labels.add(new LabelInformation(Localization.MODULES.ADDONS.STORAGE) {
+        labels.add(new LabelInformation("modules.addons.stevescarts.informationProviderLabelStorage") {
             @Override
             public Component getLabel() {
                 int used = ModuleLabel.this.used.get();
                 if (used < 0) {
                     used += 256;
                 }
-                return Component.literal((storageSlots == null) ? "" : (Localization.MODULES.ADDONS.STORAGE.translate() + ": " + used + "/" + storageSlots.size() + ((storageSlots.size() == 0) ? "" : ("[" + (int) (100.0f * used / storageSlots.size()) + "%]"))));
+                return Component.literal((storageSlots == null) ? "" : (Component.translatable("modules.addons.stevescarts.informationProviderLabelStorage").getString() + ": " + used + "/" + storageSlots.size() + ((storageSlots.size() == 0) ? "" : ("[" + (int) (100.0f * used / storageSlots.size()) + "%]"))));
             }
         });
     }
@@ -86,26 +85,26 @@ public class ModuleLabel extends ModuleAddon {
             for (final ModuleBase moduleBase : getCart().modules()) {
                 if (moduleBase instanceof ModuleTool) {
                     tool = (ModuleTool) moduleBase;
-                    labels.add(new LabelInformation(Localization.MODULES.ADDONS.DURABILITY) {
+                    labels.add(new LabelInformation("modules.addons.stevescarts.informationProviderLabelDurability") {
                         @Override
                         public Component getLabel() {
                             if (!tool.useDurability()) {
-                                return Component.literal(Localization.MODULES.ADDONS.UNBREAKABLE.translate());
+                                return Component.literal(Component.translatable("modules.addons.stevescarts.informationProviderMessageUnbreakable").getString());
                             }
                             final int data = ModuleLabel.this.data.get();
                             if (data == 0) {
-                                return Component.literal(Localization.MODULES.ADDONS.BROKEN.translate());
+                                return Component.literal(Component.translatable("modules.addons.stevescarts.informationProviderMessageToolBroken").getString());
                             }
                             if (data > 0) {
-                                return Component.literal(Localization.MODULES.ADDONS.DURABILITY.translate() + ": " + data + " / " + tool.getMaxDurability() + " [" + 100 * data / tool.getMaxDurability() + "%]");
+                                return Component.literal(Component.translatable("modules.addons.stevescarts.informationProviderLabelDurability").getString() + ": " + data + " / " + tool.getMaxDurability() + " [" + 100 * data / tool.getMaxDurability() + "%]");
                             }
                             if (data == -1) {
                                 return Component.empty();
                             }
                             if (data == -2) {
-                                return Component.literal(Localization.MODULES.ADDONS.NOT_BROKEN.translate());
+                                return Component.literal(Component.translatable("modules.addons.stevescarts.informationProviderMessageToolNotBroken").getString());
                             }
-                            return Component.literal(Localization.MODULES.ADDONS.REPAIR.translate() + " [" + -(data + 3) + "%]");
+                            return Component.literal(Component.translatable("modules.addons.stevescarts.informationProviderMessageRepair").getString() + " [" + -(data + 3) + "%]");
                         }
                     });
                     break;
@@ -244,7 +243,7 @@ public class ModuleLabel extends ModuleAddon {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ADDONS.LABELS.translate(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.addons.stevescarts.informationProviderLabels").getString(), 8, 6, 4210752);
         for (int i = 0; i < labels.size(); ++i) {
             final int[] rect = getBoxArea(i);
             drawString(GuiGraphicsExtractor, gui, labels.get(i).getName(), rect[0] + 12, rect[1] + 1, 4210752);

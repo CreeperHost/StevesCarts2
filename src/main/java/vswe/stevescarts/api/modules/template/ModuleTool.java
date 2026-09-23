@@ -1,5 +1,7 @@
 package vswe.stevescarts.api.modules.template;
 
+import net.minecraft.network.chat.Component;
+
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.Registry;
@@ -20,7 +22,6 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotRepair;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.addons.ModuleEnchants;
@@ -114,9 +115,9 @@ public abstract class ModuleTool extends ModuleWorker {
     public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         String str;
         if (useDurability()) {
-            str = Localization.MODULES.TOOLS.DURABILITY.translate() + ": " + getCurrentDurability() + "/" + getMaxDurability();
+            str = Component.translatable("modules.tools.stevescarts.toolDurability").getString() + ": " + getCurrentDurability() + "/" + getMaxDurability();
             if (isBroken()) {
-                str = str + " [" + Localization.MODULES.TOOLS.BROKEN.translate() + "]";
+                str = str + " [" + Component.translatable("modules.tools.stevescarts.toolBroken").getString() + "]";
             } else {
                 str = str + " [" + 100 * getCurrentDurability() / getMaxDurability() + "%]";
             }
@@ -125,18 +126,18 @@ public abstract class ModuleTool extends ModuleWorker {
                 if (isActuallyRepairing()) {
                     str = str + " [" + getRepairPercentage() + "%]";
                 } else if (!SCConfig.COMMON.allowCartToRunWithRepairItems.get()) {
-                    str += Localization.MODULES.TOOLS.DECENT.translate();
+                    str += Component.translatable("modules.tools.stevescarts.toolDecent").getString();
                 }
             } else {
                 Item item = BuiltInRegistries.ITEM.getValue(getRepairItem());
                 if (item != Items.AIR) {
-                    str += Localization.MODULES.TOOLS.INSTRUCTION.translate(item.getName(new ItemStack(item)).getString());
+                    str += Component.translatable("modules.tools.stevescarts.toolRepairInstruction", item.getName(new ItemStack(item)).getString()).getString();
                 }
             }
         } else {
-            str = Localization.MODULES.TOOLS.UNBREAKABLE.translate();
+            str = Component.translatable("modules.tools.stevescarts.toolUnbreakable").getString();
             if (isRepairing() && !isActuallyRepairing()) {
-                str = str + " " + Localization.MODULES.TOOLS.UNBREAKABLE_REPAIR.translate();
+                str = str + " " + Component.translatable("modules.tools.stevescarts.toolUnbreakableRepairError").getString();
             }
         }
         drawStringOnMouseOver(GuiGraphicsExtractor, gui, str, x, y, durabilityRect);

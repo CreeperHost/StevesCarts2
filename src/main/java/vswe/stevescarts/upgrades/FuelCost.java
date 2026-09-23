@@ -2,7 +2,6 @@ package vswe.stevescarts.upgrades;
 
 import net.minecraft.network.chat.Component;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
-import vswe.stevescarts.helpers.Localization;
 
 public class FuelCost extends BaseUpgradeEffect {
     private final float cost;
@@ -13,7 +12,7 @@ public class FuelCost extends BaseUpgradeEffect {
 
     @Override
     public Component getName() {
-        return Localization.translate("info.stevescarts.effectFuelCost", (getPercentage() >= 0 ? "+" : "") + getPercentage());
+        return Component.translatable("info.stevescarts.effectFuelCost", (getPercentage() >= 0 ? "+" : "") + getPercentage());
     }
 
     private int getPercentage() {

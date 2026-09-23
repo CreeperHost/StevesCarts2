@@ -20,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.containers.ContainerActivator;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ActivatorOption;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.modules.addons.ModuleChunkLoader;
 import vswe.stevescarts.modules.addons.ModuleInvisible;
@@ -41,13 +40,13 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider 
     }
 
     private void loadOptions() {
-        (options = new ArrayList<>()).add(new ActivatorOption(Localization.GUI.TOGGLER.OPTION_DRILL, ModuleDrill.class));
-        options.add(new ActivatorOption(Localization.GUI.TOGGLER.OPTION_SHIELD, ModuleShield.class));
-        options.add(new ActivatorOption(Localization.GUI.TOGGLER.OPTION_INVISIBILITY, ModuleInvisible.class));
-        options.add(new ActivatorOption(Localization.GUI.TOGGLER.OPTION_CHUNK, ModuleChunkLoader.class));
-        options.add(new ActivatorOption(Localization.GUI.TOGGLER.OPTION_CAGE_AUTO, ModuleCage.class, 0));
-        options.add(new ActivatorOption(Localization.GUI.TOGGLER.OPTION_CAGE, ModuleCage.class, 1));
-        options.add(new ActivatorOption(Localization.GUI.TOGGLER.OPTION_REMOVER, ModuleRemover.class));
+        (options = new ArrayList<>()).add(new ActivatorOption("gui.stevescarts.optionDrill", ModuleDrill.class));
+        options.add(new ActivatorOption("gui.stevescarts.optionShield", ModuleShield.class));
+        options.add(new ActivatorOption("gui.stevescarts.optionInvisibility", ModuleInvisible.class));
+        options.add(new ActivatorOption("gui.stevescarts.optionChunk", ModuleChunkLoader.class));
+        options.add(new ActivatorOption("gui.stevescarts.optionCageAuto", ModuleCage.class, 0));
+        options.add(new ActivatorOption("gui.stevescarts.optionCage", ModuleCage.class, 1));
+        options.add(new ActivatorOption("gui.stevescarts.optionRemover", ModuleRemover.class));
     }
 
     public ArrayList<ActivatorOption> getOptions() {

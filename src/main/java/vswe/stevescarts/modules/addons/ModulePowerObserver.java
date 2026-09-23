@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -11,7 +13,6 @@ import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.helpers.ShortArrayData;
 import vswe.stevescarts.init.ModSerializers.ShortArray;
@@ -68,7 +69,7 @@ public class ModulePowerObserver extends ModuleAddon {
         drawString(GuiGraphicsExtractor, gui, getModuleName(), 8, 6, 4210752);
         for (int i = 0; i < 4; ++i) {
             final int[] rect = getPowerRect(i);
-            drawString(GuiGraphicsExtractor, gui, getPowerLevel()[i] + Localization.MODULES.ADDONS.K.translate(new String[0]), rect, 4210752);
+            drawString(GuiGraphicsExtractor, gui, getPowerLevel()[i] + Component.translatable("modules.addons.stevescarts.powerThousandSuffix").getString(), rect, 4210752);
         }
     }
 
@@ -157,7 +158,7 @@ public class ModulePowerObserver extends ModuleAddon {
         for (int i = 0; i < getCart().engines().size(); ++i) {
             if (!removeOnPickup() || currentEngine != i) {
                 final ModuleEngine engine = getCart().engines().get(i);
-                drawStringOnMouseOver(GuiGraphicsExtractor, gui, engine.getData().getName() + "\n" + Localization.MODULES.ADDONS.OBSERVER_INSTRUCTION.translate(), x, y, getEngineRect(i));
+                drawStringOnMouseOver(GuiGraphicsExtractor, gui, engine.getData().getName() + "\n" + Component.translatable("modules.addons.stevescarts.powerObserverInstruction").getString(), x, y, getEngineRect(i));
             }
         }
         for (int i = 0; i < 4; ++i) {
@@ -165,14 +166,14 @@ public class ModulePowerObserver extends ModuleAddon {
             for (int j = 0; j < getCart().engines().size(); ++j) {
                 if ((getAreaData()[i] & 1 << j) != 0x0) {
                     final ModuleEngine engine2 = getCart().engines().get(j);
-                    drawStringOnMouseOver(GuiGraphicsExtractor, gui, engine2.getData().getName() + "\n" + Localization.MODULES.ADDONS.OBSERVER_REMOVE.translate(), x, y, getEngineRectInArea(i, count));
+                    drawStringOnMouseOver(GuiGraphicsExtractor, gui, engine2.getData().getName() + "\n" + Component.translatable("modules.addons.stevescarts.powerObserverRemoveInstruction").getString(), x, y, getEngineRectInArea(i, count));
                     ++count;
                 }
             }
             if (currentEngine != -1) {
-                drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ADDONS.OBSERVER_DROP.translate(), x, y, getAreaRect(i));
+                drawStringOnMouseOver(GuiGraphicsExtractor, gui, Component.translatable("modules.addons.stevescarts.powerObserverDropInstruction").getString(), x, y, getAreaRect(i));
             }
-            drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ADDONS.OBSERVER_CHANGE.translate() + "\n" + Localization.MODULES.ADDONS.OBSERVER_CHANGE_10.translate(), x, y, getPowerRect(i));
+            drawStringOnMouseOver(GuiGraphicsExtractor, gui, Component.translatable("modules.addons.stevescarts.powerObserverChangeInstruction").getString() + "\n" + Component.translatable("modules.addons.stevescarts.powerObserverChangeInstruction10").getString(), x, y, getPowerRect(i));
         }
     }
 

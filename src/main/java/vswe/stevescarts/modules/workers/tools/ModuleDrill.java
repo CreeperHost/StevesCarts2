@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.workers.tools;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.creeperhost.polylib.helpers.LevelHelper;
@@ -32,7 +34,6 @@ import vswe.stevescarts.api.modules.template.ModuleChest;
 import vswe.stevescarts.api.modules.template.ModuleTool;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.modules.addons.*;
@@ -425,7 +426,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.TOOLS.DRILL.translate(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.tools.stevescarts.drillTitle").getString(), 8, 6, 4210752);
     }
 
     @Override
@@ -449,7 +450,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
     }
 
     private String getStateName() {
-        return Localization.MODULES.TOOLS.TOGGLE.translate(isDrillEnabled() ? "1" : "0");
+        return Component.translatable("modules.tools.stevescarts.drillToggle." + (isDrillEnabled() ? "disable" : "enable")).getString();
     }
 
     @Override

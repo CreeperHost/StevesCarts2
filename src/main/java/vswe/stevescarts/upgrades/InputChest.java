@@ -14,7 +14,6 @@ import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerCartAssembler;
 import vswe.stevescarts.containers.slots.SlotAssemblerFuel;
 import vswe.stevescarts.containers.slots.SlotModule;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 
 import javax.annotation.Nonnull;
@@ -27,7 +26,7 @@ public class InputChest extends SimpleInventoryUpgradeEffect {
 
     @Override
     public Component getName() {
-        return Localization.translate("info.stevescarts.effectInputChest", getInventorySize());
+        return Component.translatable("info.stevescarts.effectInputChest", getInventorySize());
     }
 
     @Override

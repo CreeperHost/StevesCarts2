@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.ByteData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -16,7 +18,6 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotExplosion;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ComponentTypes;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -37,7 +38,7 @@ public class ModuleDynamite extends ModuleBase {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.EXPLOSIVES.translate(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.explosivesTitle").getString(), 8, 6, 4210752);
     }
 
     @Override

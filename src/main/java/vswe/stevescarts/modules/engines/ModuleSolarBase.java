@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.engines;
 
+import net.minecraft.network.chat.Component;
+
 import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -11,7 +13,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -93,10 +94,10 @@ public abstract class ModuleSolarBase extends ModuleEngine {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ENGINES.SOLAR.translate(), 8, 6, 4210752);
-        String strfuel = Localization.MODULES.ENGINES.NO_POWER.translate();
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.engines.stevescarts.solarEngineTitle").getString(), 8, 6, 4210752);
+        String strfuel = Component.translatable("modules.engines.stevescarts.outOfPower").getString();
         if (getFuelLevel() > 0) {
-            strfuel = "Power: " + getFuelLevel();//Localization.MODULES.ENGINES.POWER.translate(String.valueOf(getFuelLevel()));
+            strfuel = "Power: " + getFuelLevel();//Component.translatable("modules.engines.stevescarts.powerLevel", String.valueOf(getFuelLevel())).getString();
         }
         drawString(GuiGraphicsExtractor, gui, strfuel, 8, 42, 4210752);
     }

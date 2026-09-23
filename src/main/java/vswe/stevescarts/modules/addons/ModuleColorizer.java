@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -10,7 +12,6 @@ import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.IntArrayData;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -71,7 +72,7 @@ public class ModuleColorizer extends ModuleAddon {
 
     @Override
     public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
-        final String[] colorNames = {Localization.MODULES.ADDONS.COLOR_RED.translate(), Localization.MODULES.ADDONS.COLOR_GREEN.translate(), Localization.MODULES.ADDONS.COLOR_BLUE.translate()};
+        final String[] colorNames = {Component.translatable("modules.addons.stevescarts.colorizerRgbRed").getString(), Component.translatable("modules.addons.stevescarts.colorizerRgbGreen").getString(), Component.translatable("modules.addons.stevescarts.colorizerRgbBlue").getString()};
         for (int i = 0; i < 3; ++i) {
             drawStringOnMouseOver(GuiGraphicsExtractor, gui, colorNames[i] + ": " + getColorVal(i), x, y, getArea(i));
         }

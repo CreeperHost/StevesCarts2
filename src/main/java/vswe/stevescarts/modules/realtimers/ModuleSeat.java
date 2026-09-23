@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -8,7 +10,6 @@ import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 
 public class ModuleSeat extends ModuleBase {
@@ -79,7 +80,7 @@ public class ModuleSeat extends ModuleBase {
     }
 
     private String getStateName() {
-        return Localization.MODULES.ATTACHMENTS.SEAT_MESSAGE.translate(String.valueOf(getState()));
+        return Component.translatable("modules.attachments.stevescarts.seatStateMessage." + getState()).getString();
     }
 
     @Override

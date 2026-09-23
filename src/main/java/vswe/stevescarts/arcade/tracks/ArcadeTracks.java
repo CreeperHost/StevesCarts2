@@ -1,5 +1,7 @@
 package vswe.stevescarts.arcade.tracks;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -8,7 +10,6 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModSounds;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
@@ -64,7 +65,7 @@ public class ArcadeTracks extends ArcadeGame {
     private final String validSaveNameCharacters;
 
     public ArcadeTracks(final ModuleArcade module) {
-        super(module, Localization.ARCADE.OPERATOR);
+        super(module, "arcade.stevescarts.trackOperator");
         isMenuOpen = true;
         isRunning = false;
         currentStory = -1;
@@ -237,9 +238,9 @@ public class ArcadeTracks extends ArcadeGame {
         if (isSaveMenuOpen) {
             final int[] menu = getSaveMenuArea();
             if (failedToSave) {
-                getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.SAVE_ERROR.translate(), menu[0] + 3, menu[1] + 3, 16711680);
+                getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.operatorSaveError").getString(), menu[0] + 3, menu[1] + 3, 16711680);
             } else {
-                getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.SAVE.translate(), menu[0] + 3, menu[1] + 3, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.operatorSave").getString(), menu[0] + 3, menu[1] + 3, 4210752);
             }
             getModule().drawString(GuiGraphicsExtractor, gui, saveName + ((saveName.length() < 15 && getModule().getCart().level().getGameTime() % 20L < 10L) ? "|" : ""), menu[0] + 5, menu[1] + 16, 16777215);
         } else if (isMenuOpen) {
@@ -250,16 +251,16 @@ public class ArcadeTracks extends ArcadeGame {
                 final int[] menu = getMenuArea();
                 String str;
                 if (currentMenuTab == 1) {
-                    str = Localization.ARCADE.USER_MAPS.translate();
+                    str = Component.translatable("arcade.stevescarts.operatorUserCreatedMaps").getString();
                 } else if (storySelected) {
                     str = TrackStory.stories.get(storyList.getSelectedIndex()).getName();
                 } else {
-                    str = Localization.ARCADE.STORIES.translate();
+                    str = Component.translatable("arcade.stevescarts.operatorStories").getString();
                 }
                 getModule().drawString(GuiGraphicsExtractor, gui, str, menu[0] + 5, menu[1] + 32, 4210752);
             } else {
                 final int[] menu = getMenuArea();
-                getModule().drawSplitString(GuiGraphicsExtractor, gui, Localization.ARCADE.HELP.translate(), menu[0] + 10, menu[1] + 20, menu[2] - 20, 4210752);
+                getModule().drawSplitString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.operatorHelp").getString(), menu[0] + 10, menu[1] + 20, menu[2] - 20, 4210752);
             }
         } else {
             for (final LevelMessage message : currentMap.getMessages()) {
@@ -268,17 +269,17 @@ public class ArcadeTracks extends ArcadeGame {
                 }
             }
             if (isUsingEditor()) {
-                getModule().drawString(GuiGraphicsExtractor, gui, "1-5 - " + Localization.ARCADE.INSTRUCTION_SHAPE.translate(), 10, 180, 4210752);
-                getModule().drawString(GuiGraphicsExtractor, gui, "R - " + Localization.ARCADE.INSTRUCTION_ROTATE_TRACK.translate(), 10, 190, 4210752);
-                getModule().drawString(GuiGraphicsExtractor, gui, "F - " + Localization.ARCADE.INSTRUCTION_FLIP_TRACK.translate(), 10, 200, 4210752);
-                getModule().drawString(GuiGraphicsExtractor, gui, "A - " + Localization.ARCADE.INSTRUCTION_DEFAULT_DIRECTION.translate(), 10, 210, 4210752);
-                getModule().drawString(GuiGraphicsExtractor, gui, "T - " + Localization.ARCADE.INSTRUCTION_TRACK_TYPE.translate(), 10, 220, 4210752);
-                getModule().drawString(GuiGraphicsExtractor, gui, "D - " + Localization.ARCADE.INSTRUCTION_DELETE_TRACK.translate(), 10, 230, 4210752);
-                getModule().drawString(GuiGraphicsExtractor, gui, "C - " + Localization.ARCADE.INSTRUCTION_COPY_TRACK.translate(), 10, 240, 4210752);
-                getModule().drawString(GuiGraphicsExtractor, gui, "S - " + Localization.ARCADE.INSTRUCTION_STEVE.translate(), 330, 180, 4210752);
-                getModule().drawString(GuiGraphicsExtractor, gui, "X - " + Localization.ARCADE.INSTRUCTION_MAP.translate(), 330, 190, 4210752);
-                getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.LEFT_MOUSE.translate() + " - " + Localization.ARCADE.INSTRUCTION_PLACE_TRACK.translate(), 330, 200, 4210752);
-                getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.RIGHT_MOUSE.translate() + " - " + Localization.ARCADE.INSTRUCTION_DESELECT_TRACK.translate(), 330, 210, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "1-5 - " + Component.translatable("arcade.stevescarts.instructionTrackShape").getString(), 10, 180, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "R - " + Component.translatable("arcade.stevescarts.instructionRotateTrack").getString(), 10, 190, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "F - " + Component.translatable("arcade.stevescarts.instructionFlipTrack").getString(), 10, 200, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "A - " + Component.translatable("arcade.stevescarts.instructionDefaultDirection").getString(), 10, 210, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "T - " + Component.translatable("arcade.stevescarts.instructionTrackType").getString(), 10, 220, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "D - " + Component.translatable("arcade.stevescarts.instructionDeleteTrack").getString(), 10, 230, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "C - " + Component.translatable("arcade.stevescarts.instructionCopyTrack").getString(), 10, 240, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "S - " + Component.translatable("arcade.stevescarts.instructionMoveSteve").getString(), 330, 180, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, "X - " + Component.translatable("arcade.stevescarts.instructionMoveMap").getString(), 330, 190, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.leftMouseButton").getString() + " - " + Component.translatable("arcade.stevescarts.instructionPlaceTrack").getString(), 330, 200, 4210752);
+                getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.rightMouseButton").getString() + " - " + Component.translatable("arcade.stevescarts.instructionDeselectTrack").getString(), 330, 210, 4210752);
             }
         }
     }
@@ -631,46 +632,46 @@ public class ArcadeTracks extends ArcadeGame {
     private String getButtonText(final int id) {
         switch (id) {
             case 0: {
-                return Localization.ARCADE.BUTTON_START.translate();
+                return Component.translatable("arcade.stevescarts.buttonStart").getString();
             }
             case 1: {
-                return Localization.ARCADE.BUTTON_MENU.translate();
+                return Component.translatable("arcade.stevescarts.buttonMenu").getString();
             }
             case 2: {
-                return Localization.ARCADE.BUTTON_STOP.translate();
+                return Component.translatable("arcade.stevescarts.buttonStop").getString();
             }
             case 3: {
-                return Localization.ARCADE.BUTTON_NEXT.translate();
+                return Component.translatable("arcade.stevescarts.buttonNextLevel").getString();
             }
             case 4: {
-                return storySelected ? Localization.ARCADE.BUTTON_START_LEVEL.translate() : Localization.ARCADE.BUTTON_SELECT_STORY.translate();
+                return storySelected ? Component.translatable("arcade.stevescarts.buttonStartLevel").getString() : Component.translatable("arcade.stevescarts.buttonSelectStory").getString();
             }
             case 5: {
-                return Localization.ARCADE.BUTTON_SELECT_OTHER_STORY.translate();
+                return Component.translatable("arcade.stevescarts.buttonSelectStoryOther").getString();
             }
             case 6: {
-                return Localization.ARCADE.BUTTON_START_LEVEL.translate();
+                return Component.translatable("arcade.stevescarts.buttonStartLevel").getString();
             }
             case 7: {
-                return Localization.ARCADE.BUTTON_CREATE_LEVEL.translate();
+                return Component.translatable("arcade.stevescarts.buttonCreateLevel").getString();
             }
             case 8: {
-                return Localization.ARCADE.BUTTON_EDIT_LEVEL.translate();
+                return Component.translatable("arcade.stevescarts.buttonEditLevel").getString();
             }
             case 9: {
-                return Localization.ARCADE.BUTTON_REFRESH.translate();
+                return Component.translatable("arcade.stevescarts.buttonRefreshList").getString();
             }
             case 10: {
-                return Localization.ARCADE.BUTTON_SAVE.translate();
+                return Component.translatable("arcade.stevescarts.buttonSave").getString();
             }
             case 11: {
-                return Localization.ARCADE.BUTTON_SAVE_AS.translate();
+                return Component.translatable("arcade.stevescarts.buttonSaveAs").getString();
             }
             case 12: {
-                return Localization.ARCADE.BUTTON_CANCEL.translate();
+                return Component.translatable("arcade.stevescarts.buttonCancel").getString();
             }
             case 13: {
-                return Localization.ARCADE.BUTTON_SAVE.translate();
+                return Component.translatable("arcade.stevescarts.buttonSave").getString();
             }
             default: {
                 return "Hello, I'm a button";

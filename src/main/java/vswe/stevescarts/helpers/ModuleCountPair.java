@@ -1,5 +1,7 @@
 package vswe.stevescarts.helpers;
 
+import net.minecraft.network.chat.Component;
+
 import net.minecraft.nbt.CompoundTag;
 import vswe.stevescarts.api.modules.data.ModuleData;
 
@@ -41,7 +43,7 @@ public class ModuleCountPair {
 
     @Override
     public String toString() {
-        String ret = data.getCartInfoText(Localization.translate(name).getString(), extraData);
+        String ret = data.getCartInfoText(Component.translatable(name).getString(), extraData);
         if (count != 1) {
             ret = ret + " x" + count;
         }

@@ -1,5 +1,7 @@
 package vswe.stevescarts.helpers;
 
+import net.minecraft.network.chat.Component;
+
 import net.minecraft.core.Direction;
 import vswe.stevescarts.blocks.tileentities.TileEntityDistributor;
 
@@ -7,11 +9,11 @@ import java.util.Objects;
 
 public class DistributorSide {
     private final int id;
-    private final Localization.GUI.DISTRIBUTOR name;
+    private final String name;
     private final Direction side;
     private int data;
 
-    public DistributorSide(final int id, final Localization.GUI.DISTRIBUTOR name, final Direction side) {
+    public DistributorSide(final int id, final String name, final Direction side) {
         this.name = name;
         this.id = id;
         this.side = side;
@@ -23,7 +25,7 @@ public class DistributorSide {
     }
 
     public String getName() {
-        return name.translate();
+        return Component.translatable(name).getString();
     }
 
     public Direction getSide() {
@@ -97,7 +99,7 @@ public class DistributorSide {
     }
 
     public String getInfo() {
-        return Localization.GUI.DISTRIBUTOR.SIDE_TOOL_TIP.translate(getName());
+        return Component.translatable("gui.stevescarts.sideToolTip", getName()).getString();
     }
 
     @Override

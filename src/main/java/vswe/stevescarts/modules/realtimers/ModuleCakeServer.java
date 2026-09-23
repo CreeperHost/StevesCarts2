@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.minecraft.network.chat.Component;
+
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -14,7 +16,6 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotCake;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -84,7 +85,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.CAKE_SERVER.translate(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.cakeServerTitle").getString(), 8, 6, 4210752);
     }
 
     @Override
@@ -101,7 +102,7 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule {
 
     @Override
     public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
-        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.CAKES.translate(String.valueOf(getCakes()), String.valueOf(10)) + "\n" + Localization.MODULES.ATTACHMENTS.SLICES.translate(String.valueOf(getSlices()), String.valueOf(6)), x, y, rect);
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.cakesLabel", String.valueOf(getCakes()), String.valueOf(10)).getString() + "\n" + Component.translatable("modules.attachments.stevescarts.slicesLabel", String.valueOf(getSlices()), String.valueOf(6)).getString(), x, y, rect);
     }
 
     private int getCakes() {

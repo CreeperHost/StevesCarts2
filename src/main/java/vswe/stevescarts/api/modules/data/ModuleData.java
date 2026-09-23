@@ -15,7 +15,6 @@ import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
 
@@ -40,7 +39,7 @@ public class ModuleData {
     private ModuleData parent;
     private boolean isLocked;
     private boolean defaultLock;
-    private ArrayList<Localization.MODULE_INFO> message;
+    private ArrayList<String> message;
     private HashMap<String, ModelCartbase> models;
     private HashMap<String, ModelCartbase> modelsPlaceholder;
     private ArrayList<String> removedModels;
@@ -184,23 +183,23 @@ public class ModuleData {
 
     public static String checkForErrors(final ModuleDataHull hull, final ArrayList<ModuleData> modules) {
         if (getTotalCost(modules) > hull.getCapacity()) {
-            return Localization.MODULE_INFO.CAPACITY_ERROR.translate();
+            return Component.translatable("info.stevescarts.capacityOverloadError").getString();
         }
         if (!isValidModuleCombo(hull, modules)) {
-            return Localization.MODULE_INFO.COMBINATION_ERROR.translate();
+            return Component.translatable("info.stevescarts.impossibleCombinationError").getString();
         }
         for (int i = 0; i < modules.size(); ++i) {
             final ModuleData mod1 = modules.get(i);
             if (mod1.getCost() > hull.getComplexityMax()) {
-                return Localization.MODULE_INFO.COMPLEXITY_ERROR.translate(mod1.getName());
+                return Component.translatable("info.stevescarts.complexityOverloadError", mod1.getName()).getString();
             }
             if (mod1.getParent() != null && !modules.contains(mod1.getParent())) {
-                return Localization.MODULE_INFO.PARENT_ERROR.translate(mod1.getName(), mod1.getParent().getName());
+                return Component.translatable("info.stevescarts.missingParentError", mod1.getName(), mod1.getParent().getName()).getString();
             }
             if (mod1.getNemesis() != null) {
                 for (final ModuleData nemesis : mod1.getNemesis()) {
                     if (modules.contains(nemesis)) {
-                        return Localization.MODULE_INFO.NEMESIS_ERROR.translate(mod1.getName(), nemesis.getName());
+                        return Component.translatable("info.stevescarts.presentNemesisError", mod1.getName(), nemesis.getName()).getString();
                     }
                 }
             }
@@ -215,7 +214,7 @@ public class ModuleData {
                         }
                     }
                     if (count < group.getCount()) {
-                        return Localization.MODULE_INFO.PARENT_ERROR.translate(mod1.getName(), group.getCountName() + " " + group.getName());
+                        return Component.translatable("info.stevescarts.missingParentError", mod1.getName(), group.getCountName() + " " + group.getName()).getString();
                     }
                 }
             }
@@ -223,7 +222,7 @@ public class ModuleData {
                 final ModuleData mod4 = modules.get(j);
                 if (mod1 == mod4) {
                     if (!mod1.getAllowDuplicate()) {
-                        return Localization.MODULE_INFO.DUPLICATE_ERROR.translate(mod1.getName());
+                        return Component.translatable("info.stevescarts.presentDuplicateError", mod1.getName()).getString();
                     }
                 } else if (mod1.getRenderingSides() != null && mod4.getRenderingSides() != null) {
                     SIDE clash = SIDE.NONE;
@@ -239,7 +238,7 @@ public class ModuleData {
                         }
                     }
                     if (clash != SIDE.NONE) {
-                        return Localization.MODULE_INFO.CLASH_ERROR.translate(mod1.getName(), mod4.getName(), clash.toString());
+                        return Component.translatable("info.stevescarts.sideClashError", mod1.getName(), mod4.getName(), clash.toString()).getString();
                     }
                 }
             }
@@ -341,7 +340,7 @@ public class ModuleData {
         return this;
     }
 
-    public ModuleData addMessage(final Localization.MODULE_INFO s) {
+    public ModuleData addMessage(final String s) {
         if (message == null) {
             message = new ArrayList<>();
         }
@@ -477,8 +476,8 @@ public class ModuleData {
     public void addExtraMessage(Consumer<Component> consumer) {
         if (message != null) {
             consumer.accept(Component.literal(""));
-            for (final Localization.MODULE_INFO m : message) {
-                final String str = m.translate();
+            for (final String m : message) {
+                final String str = Component.translatable(m).getString();
                 if (str.length() <= MAX_MESSAGE_ROW_LENGTH) {
                     addExtraMessage(consumer, str);
                 } else {
@@ -504,7 +503,7 @@ public class ModuleData {
     }
 
     public final void addInformation(Consumer<Component> consumer, final CompoundTag compound) {
-        consumer.accept(Component.literal(ChatFormatting.GRAY + Localization.MODULE_INFO.MODULAR_COST.translate() + ": " + modularCost));
+        consumer.accept(Component.literal(ChatFormatting.GRAY + Component.translatable("info.stevescarts.modularCost").getString() + ": " + modularCost));
         if (compound != null && compound.contains("Data")) {
             final String extradatainfo = getModuleInfoText(compound.getByteOr("Data", (byte) 0));
             if (extradatainfo != null) {
@@ -513,7 +512,7 @@ public class ModuleData {
         }
         if (StevesCartsClient.hasShiftDown()) {
             if (getRenderingSides() == null || getRenderingSides().size() == 0) {
-                consumer.accept(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.NO_SIDES.translate()));
+                consumer.accept(Component.literal(ChatFormatting.DARK_AQUA + Component.translatable("info.stevescarts.noSides").getString()));
             } else {
                 StringBuilder sides = new StringBuilder();
                 for (int i = 0; i < getRenderingSides().size(); ++i) {
@@ -521,36 +520,36 @@ public class ModuleData {
                     if (i == 0) {
                         sides.append(side.toString());
                     } else if (i == getRenderingSides().size() - 1) {
-                        sides.append(" ").append(Localization.MODULE_INFO.AND.translate()).append(" ").append(side.toString());
+                        sides.append(" ").append(Component.translatable("info.stevescarts.sidesAnd").getString()).append(" ").append(side.toString());
                     } else {
                         sides.append(", ").append(side.toString());
                     }
                 }
-                consumer.accept(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.OCCUPIED_SIDES.translate(sides.toString(), String.valueOf(getRenderingSides().size()))));
+                consumer.accept(Component.literal(ChatFormatting.DARK_AQUA + Component.translatable("info.stevescarts.occupiedSides." + (getRenderingSides().size() == 1 ? "singular" : "plural"), sides.toString()).getString()));
             }
             if (getNemesis() != null && getNemesis().size() != 0) {
                 if (getRenderingSides() == null || getRenderingSides().size() == 0) {
-                    consumer.accept(Component.literal(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_HOWEVER.translate() + ":"));
+                    consumer.accept(Component.literal(ChatFormatting.RED + Component.translatable("info.stevescarts.moduleConflictHowever").getString() + ":"));
                 } else {
-                    consumer.accept(Component.literal(ChatFormatting.RED + Localization.MODULE_INFO.CONFLICT_ALSO.translate() + ":"));
+                    consumer.accept(Component.literal(ChatFormatting.RED + Component.translatable("info.stevescarts.moduleConflictAlso").getString() + ":"));
                 }
                 for (final ModuleData module : getNemesis()) {
                     consumer.accept(Component.literal(ChatFormatting.RED + module.getName()));
                 }
             }
             if (parent != null) {
-                consumer.accept(Component.literal(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + parent.getName()));
+                consumer.accept(Component.literal(ChatFormatting.YELLOW + Component.translatable("info.stevescarts.moduleRequirement").getString() + " " + parent.getName()));
             }
             if (getRequirement() != null && getRequirement().size() != 0) {
                 for (final ModuleDataGroup group : getRequirement()) {
-                    consumer.accept(Component.literal(ChatFormatting.YELLOW + Localization.MODULE_INFO.REQUIREMENT.translate() + " " + group.getCountName() + " " + group.getName()));
+                    consumer.accept(Component.literal(ChatFormatting.YELLOW + Component.translatable("info.stevescarts.moduleRequirement").getString() + " " + group.getCountName() + " " + group.getName()));
                 }
             }
             if (getAllowDuplicate()) {
-                consumer.accept(Component.literal(ChatFormatting.GREEN + Localization.MODULE_INFO.DUPLICATES.translate()));
+                consumer.accept(Component.literal(ChatFormatting.GREEN + Component.translatable("info.stevescarts.allowDuplicates").getString()));
             }
         } else {
-            consumer.accept(Component.literal(ChatFormatting.DARK_AQUA + Localization.MODULE_INFO.SHIFT_FOR_MORE.translate("SHIFT")));
+            consumer.accept(Component.literal(ChatFormatting.DARK_AQUA + Component.translatable("info.stevescarts.shiftForMore", "SHIFT").getString()));
         }
         consumer.accept(Component.literal(ChatFormatting.BLUE + "Module Type: " + ChatFormatting.WHITE + moduleType.name()));
         addExtraMessage(consumer);
@@ -561,17 +560,17 @@ public class ModuleData {
     }
 
     public enum SIDE {
-        NONE(Localization.MODULE_INFO.SIDE_NONE), TOP(Localization.MODULE_INFO.SIDE_TOP), CENTER(Localization.MODULE_INFO.SIDE_CENTER), BOTTOM(Localization.MODULE_INFO.SIDE_BOTTOM), BACK(Localization.MODULE_INFO.SIDE_BACK), LEFT(Localization.MODULE_INFO.SIDE_LEFT), RIGHT(Localization.MODULE_INFO.SIDE_RIGHT), FRONT(Localization.MODULE_INFO.SIDE_FRONT);
+        NONE("info.stevescarts.cartSideNone"), TOP("info.stevescarts.cartSideTop"), CENTER("info.stevescarts.cartSideCenter"), BOTTOM("info.stevescarts.cartSideBottom"), BACK("info.stevescarts.cartSideBack"), LEFT("info.stevescarts.cartSideLeft"), RIGHT("info.stevescarts.cartSideRight"), FRONT("info.stevescarts.cartSideFront");
 
-        private final Localization.MODULE_INFO name;
+        private final String name;
 
-        SIDE(final Localization.MODULE_INFO name) {
+        SIDE(final String name) {
             this.name = name;
         }
 
         @Override
         public String toString() {
-            return name.translate();
+            return Component.translatable(name).getString();
         }
     }
 }

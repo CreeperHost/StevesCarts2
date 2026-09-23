@@ -5,7 +5,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.helpers.ComponentTypes;
-import vswe.stevescarts.helpers.Localization;
 
 public class ItemCartComponent extends Item {
     public ComponentTypes componentType;
@@ -17,6 +16,6 @@ public class ItemCartComponent extends Item {
 
     @Override
     public @NotNull Component getName(@NotNull ItemStack itemStack) {
-        return Localization.translate("item.stevescarts." + componentType.getName());
+        return Component.translatable("item.stevescarts." + componentType.getName());
     }
 }

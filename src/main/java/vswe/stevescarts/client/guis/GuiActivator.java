@@ -14,7 +14,6 @@ import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
 import vswe.stevescarts.containers.ContainerActivator;
 import vswe.stevescarts.helpers.ActivatorOption;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.network.packets.PacketActivator;
 
@@ -64,7 +63,7 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator> {
         extractTooltip(graphics, mouseX, mouseY);
         mouseX -= getLeftPos();
         mouseY -= getTopPos();
-        graphics.text(Minecraft.getInstance().font, Localization.GUI.TOGGLER.TITLE.translate(), getLeftPos() + 8, getTopPos() + 6, 0xFF404040, false);
+        graphics.text(Minecraft.getInstance().font, Component.translatable("gui.stevescarts.moduleToggler").getString(), getLeftPos() + 8, getTopPos() + 6, 0xFF404040, false);
         for (int i = 0; i < activator.getOptions().size(); ++i) {
             final ActivatorOption option = activator.getOptions().get(i);
             final int[] box = getBoxRect(i);

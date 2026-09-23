@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.workers.tools;
 
+import net.minecraft.network.chat.Component;
+
 import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
@@ -29,7 +31,6 @@ import vswe.stevescarts.containers.slots.SlotRepair;
 import vswe.stevescarts.containers.slots.SlotSapling;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.BlockPosHelpers;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.modules.addons.plants.ModulePlantSize;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -61,7 +62,7 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.TOOLS.CUTTER.translate(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.tools.stevescarts.cutterTitle").getString(), 8, 6, 4210752);
     }
 
     @Override

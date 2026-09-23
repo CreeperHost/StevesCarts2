@@ -16,7 +16,6 @@ import vswe.stevescarts.blocks.tileentities.TileEntityManager;
 import vswe.stevescarts.containers.ContainerDistributor;
 import vswe.stevescarts.helpers.DistributorSetting;
 import vswe.stevescarts.helpers.DistributorSide;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 
 import java.util.ArrayList;
@@ -60,13 +59,13 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
                 }
                 graphics.blit(RenderPipelines.GUI_TEXTURED, GuiDistributor.texture, j + box[0], k + box[1], srcX, imageHeight, box[2], box[3], 256, 256);
                 graphics.blit(RenderPipelines.GUI_TEXTURED, GuiDistributor.texture, j + box[0] + 2, k + box[1] + 2, box[2] * 2 + (box[2] - 4) * side.getId(), imageHeight, box[2] - 4, box[3] - 4, 256, 256);
-                drawMouseMover(Localization.GUI.DISTRIBUTOR.SIDE.translate(side.getName()) + ((activeId != -1) ? (": [" + Localization.GUI.DISTRIBUTOR.DROP_INSTRUCTION.translate() + "]") : ""), x, y, box);
+                drawMouseMover(Component.translatable("gui.stevescarts.sideName", side.getName()).getString() + ((activeId != -1) ? (": [" + Component.translatable("gui.stevescarts.dropInstruction").getString() + "]") : ""), x, y, box);
                 int settingCount = 0;
                 for (final DistributorSetting setting : DistributorSetting.settings) {
                     if (setting.isEnabled(distributor) && side.isSet(setting.getId())) {
                         final int[] settingbox = getActiveSettingBoxRect(id, settingCount++);
                         drawSetting(graphics, setting, settingbox, inRect(x, y, settingbox));
-                        drawMouseMover(setting.getName(invs) + ": [" + Localization.GUI.DISTRIBUTOR.REMOVE_INSTRUCTION.translate() + "]", x, y, settingbox);
+                        drawMouseMover(setting.getName(invs) + ": [" + Component.translatable("gui.stevescarts.removeInstruction").getString() + "]", x, y, settingbox);
                     }
                 }
                 ++id;
@@ -89,10 +88,10 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
     public void extractContents(@NonNull GuiGraphicsExtractor graphics, int x, int y, float partialTicks) {
         this.extractBackground(graphics, x, y, partialTicks);
         super.extractContents(graphics, x, y, partialTicks);
-        graphics.text(Minecraft.getInstance().font, Localization.GUI.DISTRIBUTOR.TITLE.translate(), leftPos + 8, topPos + 6, 0xFFffffff);
+        graphics.text(Minecraft.getInstance().font, Component.translatable("gui.stevescarts.externalDistributor").getString(), leftPos + 8, topPos + 6, 0xFFffffff);
         final TileEntityManager[] invs = distributor.getInventories();
         if (invs.length == 0) {
-            graphics.text(Minecraft.getInstance().font, Localization.GUI.DISTRIBUTOR.NOT_CONNECTED.translate(), leftPos + 30, topPos + 40, 0xFFff4040);
+            graphics.text(Minecraft.getInstance().font, Component.translatable("gui.stevescarts.distributorNotConnected").getString(), leftPos + 30, topPos + 40, 0xFFff4040);
         }
         if (mouseOverText != null && !mouseOverText.equals("")) {
             graphics.setTooltipForNextFrame(Minecraft.getInstance().font, Component.literal(mouseOverText), x, y);

@@ -13,7 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import vswe.stevescarts.blocks.tileentities.TileEntityLiquid;
 import vswe.stevescarts.containers.ContainerLiquid;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModBlocks;
 
@@ -66,7 +65,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
         int[] coords = getMiddleCoords();
 
         graphics.text(Minecraft.getInstance().font, getManagerName(), leftPos + coords[0] - 34, topPos + 4, 0xFFffffff);
-        graphics.text(Minecraft.getInstance().font, Localization.GUI.MANAGER.TITLE.translate(), leftPos + coords[0] + coords[2], topPos + 4, 0xFFffffff);
+        graphics.text(Minecraft.getInstance().font, Component.translatable("gui.stevescarts.manager").getString(), leftPos + coords[0] + coords[2], topPos + 4, 0xFFffffff);
         for (int i = 0; i < 4; ++i) {
             coords = getTextCoords(i);
             final String str = getMaxSizeText(i);
@@ -75,14 +74,14 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
         for (int i = 0; i < 4; ++i) {
             try {
                 drawExtraOverlay(graphics, i, mouseX, mouseY);
-                drawMouseOver(graphics, Localization.GUI.MANAGER.CHANGE_TRANSFER_DIRECTION.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + (containerLiquid.toCart()[i] ? Localization.GUI.MANAGER.DIRECTION_TO_CART.translate() : Localization.GUI.MANAGER.DIRECTION_FROM_CART.translate()), mouseX, mouseY, getArrowCoords(i));
-                drawMouseOver(graphics, Localization.GUI.MANAGER.CHANGE_TURN_BACK_SETTING.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + ((containerLiquid.getColor()[i] == 5) ? Localization.GUI.MANAGER.TURN_BACK_NOT_SELECTED.translate() : (containerLiquid.doReturn()[containerLiquid.getColor()[i] - 1] ? Localization.GUI.MANAGER.TURN_BACK_DO.translate() : Localization.GUI.MANAGER.TURN_BACK_DO_NOT.translate())), mouseX, mouseY, getReturnCoords(i));
-                drawMouseOver(graphics, Localization.GUI.MANAGER.CHANGE_TRANSFER_SIZE.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getMaxSizeOverlay(i), mouseX, mouseY, getTextCoords(i));
-                drawMouseOver(graphics, Localization.GUI.MANAGER.CHANGE_SIDE.translate() + " " + Localization.GUI.MANAGER.CURRENT_SIDE.translate() + ": " + (new String[]{Localization.GUI.MANAGER.SIDE_RED.translate(), Localization.GUI.MANAGER.SIDE_BLUE.translate(), Localization.GUI.MANAGER.SIDE_YELLOW.translate(), Localization.GUI.MANAGER.SIDE_GREEN.translate(), Localization.GUI.MANAGER.SIDE_DISABLED.translate()})[containerLiquid.getColor()[i] - 1], mouseX, mouseY, getColorpickerCoords(i));
+                drawMouseOver(graphics, Component.translatable("gui.stevescarts.changeTransferDirection").getString() + ": " + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + (containerLiquid.toCart()[i] ? Component.translatable("gui.stevescarts.directionToCart").getString() : Component.translatable("gui.stevescarts.directionFromCart").getString()), mouseX, mouseY, getArrowCoords(i));
+                drawMouseOver(graphics, Component.translatable("gui.stevescarts.changeTurnBack").getString() + "\n" + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + ((containerLiquid.getColor()[i] == 5) ? Component.translatable("gui.stevescarts.turnBackDisabled").getString() : (containerLiquid.doReturn()[containerLiquid.getColor()[i] - 1] ? Component.translatable("gui.stevescarts.turnBack").getString() : Component.translatable("gui.stevescarts.continueForward").getString())), mouseX, mouseY, getReturnCoords(i));
+                drawMouseOver(graphics, Component.translatable("gui.stevescarts.changeTransferSize").getString() + ": " + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + getMaxSizeOverlay(i), mouseX, mouseY, getTextCoords(i));
+                drawMouseOver(graphics, Component.translatable("gui.stevescarts.changeSide").getString() + " " + Component.translatable("gui.stevescarts.currentSide").getString() + ": " + (new String[]{Component.translatable("gui.stevescarts.sideRed").getString(), Component.translatable("gui.stevescarts.sideBlue").getString(), Component.translatable("gui.stevescarts.sideYellow").getString(), Component.translatable("gui.stevescarts.sideGreen").getString(), Component.translatable("gui.stevescarts.sideDisabled").getString()})[containerLiquid.getColor()[i] - 1], mouseX, mouseY, getColorpickerCoords(i));
             } catch (Exception ignored) {
             } //TODO, This is not a solution.
         }
-        drawMouseOver(graphics, getLayoutString() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getLayoutOption(containerLiquid.getLayoutType()), mouseX, mouseY, getMiddleCoords());
+        drawMouseOver(graphics, getLayoutString() + "\n" + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + getLayoutOption(containerLiquid.getLayoutType()), mouseX, mouseY, getMiddleCoords());
     }
 
     @Override
@@ -107,7 +106,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
     }
 
     protected String getManagerName() {
-        return Localization.GUI.LIQUID.TITLE.translate();
+        return Component.translatable("gui.stevescarts.liquidManager").getString();
     }
 
     protected int[] getTextCoords(final int id) {
@@ -225,17 +224,17 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
     protected String getMaxSizeOverlay(final int id) {
         float buckets = containerLiquid.getMaxAmountBuckets(id);
         if (containerLiquid.getMaxAmount(id) == 0) {
-            return Localization.GUI.LIQUID.TRANSFER_ALL.translate();
+            return Component.translatable("gui.stevescarts.transferAllLiquid").getString();
         }
-        return Localization.GUI.LIQUID.TRANSFER_BUCKETS.translate(String.valueOf(buckets)) + Localization.GUI.LIQUID.TRANSFER_BUCKET_SHORT.translate();
+        return Component.translatable("gui.stevescarts.transferBuckets", String.valueOf(buckets)).getString() + Component.translatable("gui.stevescarts.transferBucketShort").getString();
     }
 
     protected String getMaxSizeText(final int id) {
         float buckets = containerLiquid.getMaxAmountBuckets(id);
         if (containerLiquid.getMaxAmount(id) == 0) {
-            return Localization.GUI.LIQUID.TRANSFER_ALL_SHORT.translate();
+            return Component.translatable("gui.stevescarts.transferAllLiquidShort").getString();
         }
-        return buckets + Localization.GUI.LIQUID.TRANSFER_BUCKET_SHORT.translate();
+        return buckets + Component.translatable("gui.stevescarts.transferBucketShort").getString();
     }
 
     protected int getArrowSourceX() {
@@ -299,19 +298,19 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
     }
 
     protected String getLayoutString() {
-        return Localization.GUI.LIQUID.CHANGE_LAYOUT.translate();
+        return Component.translatable("gui.stevescarts.changeTankLayout").getString();
     }
 
     protected String getLayoutOption(final int id) {
         switch (id) {
             case 1 -> {
-                return Localization.GUI.LIQUID.LAYOUT_SIDE.translate();
+                return Component.translatable("gui.stevescarts.layoutSidedTanks").getString();
             }
             case 2 -> {
-                return Localization.GUI.LIQUID.LAYOUT_COLOR.translate();
+                return Component.translatable("gui.stevescarts.layoutColorTanks").getString();
             }
             default -> {
-                return Localization.GUI.LIQUID.LAYOUT_ALL.translate();
+                return Component.translatable("gui.stevescarts.layoutSharedTanks").getString();
             }
         }
     }

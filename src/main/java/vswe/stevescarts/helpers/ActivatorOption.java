@@ -1,21 +1,23 @@
 package vswe.stevescarts.helpers;
 
+import net.minecraft.network.chat.Component;
+
 import net.minecraft.ChatFormatting;
 import vswe.stevescarts.api.modules.ModuleBase;
 
 public class ActivatorOption {
     private final Class<? extends ModuleBase> module;
     private final int id;
-    private final Localization.GUI.TOGGLER name;
+    private final String name;
     private int option;
 
-    public ActivatorOption(final Localization.GUI.TOGGLER name, final Class<? extends ModuleBase> module, final int id) {
+    public ActivatorOption(final String name, final Class<? extends ModuleBase> module, final int id) {
         this.name = name;
         this.module = module;
         this.id = id;
     }
 
-    public ActivatorOption(final Localization.GUI.TOGGLER name, final Class<? extends ModuleBase> module) {
+    public ActivatorOption(final String name, final Class<? extends ModuleBase> module) {
         this(name, module, 0);
     }
 
@@ -24,7 +26,7 @@ public class ActivatorOption {
     }
 
     public String getName() {
-        return name.translate();
+        return Component.translatable(name).getString();
     }
 
     public int getOption() {
@@ -67,8 +69,8 @@ public class ActivatorOption {
 
     public String getInfo() {
         if (isDisabled()) {
-            return Localization.GUI.TOGGLER.SETTING_DISABLED.translate();
+            return Component.translatable("gui.stevescarts.settingDisabled").getString();
         }
-        return ChatFormatting.GOLD + Localization.GUI.TOGGLER.SETTING_ORANGE.translate() + ": " + (shouldActivate(true) ? (ChatFormatting.DARK_GREEN + Localization.GUI.TOGGLER.STATE_ACTIVATE.translate()) : (shouldDeactivate(true) ? (ChatFormatting.DARK_RED + Localization.GUI.TOGGLER.STATE_DEACTIVATE.translate()) : (ChatFormatting.YELLOW + Localization.GUI.TOGGLER.STATE_TOGGLE.translate()))) + "\n" + ChatFormatting.DARK_BLUE + Localization.GUI.TOGGLER.SETTING_BLUE.translate() + ": " + (shouldActivate(false) ? (ChatFormatting.DARK_GREEN + Localization.GUI.TOGGLER.STATE_ACTIVATE.translate()) : (shouldDeactivate(false) ? (ChatFormatting.DARK_RED + Localization.GUI.TOGGLER.STATE_DEACTIVATE.translate()) : (ChatFormatting.YELLOW + Localization.GUI.TOGGLER.STATE_TOGGLE.translate())));
+        return ChatFormatting.GOLD + Component.translatable("gui.stevescarts.settingOrange").getString() + ": " + (shouldActivate(true) ? (ChatFormatting.DARK_GREEN + Component.translatable("gui.stevescarts.stateActivate").getString()) : (shouldDeactivate(true) ? (ChatFormatting.DARK_RED + Component.translatable("gui.stevescarts.stateDeactivate").getString()) : (ChatFormatting.YELLOW + Component.translatable("gui.stevescarts.stateToggle").getString()))) + "\n" + ChatFormatting.DARK_BLUE + Component.translatable("gui.stevescarts.settingBlue").getString() + ": " + (shouldActivate(false) ? (ChatFormatting.DARK_GREEN + Component.translatable("gui.stevescarts.stateActivate").getString()) : (shouldDeactivate(false) ? (ChatFormatting.DARK_RED + Component.translatable("gui.stevescarts.stateDeactivate").getString()) : (ChatFormatting.YELLOW + Component.translatable("gui.stevescarts.stateToggle").getString())));
     }
 }

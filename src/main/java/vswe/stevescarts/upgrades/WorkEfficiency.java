@@ -2,7 +2,6 @@ package vswe.stevescarts.upgrades;
 
 import net.minecraft.network.chat.Component;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
-import vswe.stevescarts.helpers.Localization;
 
 public class WorkEfficiency extends BaseUpgradeEffect {
     private final float efficiency;
@@ -13,7 +12,7 @@ public class WorkEfficiency extends BaseUpgradeEffect {
 
     @Override
     public Component getName() {
-        return Component.literal(Localization.UPGRADES.EFFICIENCY.translate(((getPercentage() >= 0) ? "+" : "") + getPercentage()));
+        return Component.literal(Component.translatable("info.stevescarts.effectEfficiency", ((getPercentage() >= 0) ? "+" : "") + getPercentage()).getString());
     }
 
     private int getPercentage() {

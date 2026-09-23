@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.minecraft.network.chat.Component;
+
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -12,7 +14,6 @@ import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -65,10 +66,10 @@ public class ModuleExperience extends ModuleBase {
 
     @Override
     public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
-        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.EXPERIENCE_LEVEL.translate(String.valueOf(getExperienceAmount()), String.valueOf(1500)) + "\n" +
-                Localization.MODULES.ATTACHMENTS.EXPERIENCE_EXTRACT.translate() + "\n" +
-                Localization.MODULES.ATTACHMENTS.EXPERIENCE_EXTRACT_ALL.translate() + "\n" +
-                Localization.MODULES.ATTACHMENTS.EXPERIENCE_PLAYER_LEVEL.translate(String.valueOf(getClientPlayer().experienceLevel)), x, y, getContainerRect());
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.experienceLevel", String.valueOf(getExperienceAmount()), String.valueOf(1500)).getString() + "\n" +
+                Component.translatable("modules.attachments.stevescarts.experienceExtract").getString() + "\n" +
+                Component.translatable("modules.attachments.stevescarts.experienceExtractAll").getString() + "\n" +
+                Component.translatable("modules.attachments.stevescarts.experiencePlayerLevel", String.valueOf(getClientPlayer().experienceLevel)).getString(), x, y, getContainerRect());
     }
 
     @Override
@@ -78,7 +79,7 @@ public class ModuleExperience extends ModuleBase {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.EXPERIENCE.translate(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.experienceTitle").getString(), 8, 6, 4210752);
     }
 
     private int[] getContainerRect() {

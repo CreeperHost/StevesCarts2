@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.Minecraft;
@@ -19,7 +21,6 @@ import vswe.stevescarts.api.modules.interfaces.ILeverModule;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -105,10 +106,10 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         drawImage(render, texture, 5, enginesEndAt + 52, 0, 47, 32, 20);
         drawImage(render, texture, 5, enginesEndAt + 72, 0, 47, 32, 20);
 
-        render.text(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0xFF909090);
-        render.text(mc.font, Localization.MODULES.ATTACHMENTS.ODO.translate(), 7, enginesEndAt + 52 + 2, 0xFF909090);
+        render.text(mc.font, Component.translatable("modules.attachments.stevescarts.controlSystemOdoMeter").getString(), 7, enginesEndAt + 52 + 2, 0xFF909090);
+        render.text(mc.font, Component.translatable("modules.attachments.stevescarts.controlSystemOdoMeter").getString(), 7, enginesEndAt + 52 + 2, 0xFF909090);
         render.text(mc.font, distToString(odo), 7, enginesEndAt + 52 + 11, 0xFF909090);
-        render.text(mc.font, Localization.MODULES.ATTACHMENTS.TRIP.translate(), 7, enginesEndAt + 52 + 22, 0xFF909090);
+        render.text(mc.font, Component.translatable("modules.attachments.stevescarts.controlSystemTripMeter").getString(), 7, enginesEndAt + 52 + 22, 0xFF909090);
         render.text(mc.font, distToString(trip), 7, enginesEndAt + 52 + 31, 0xFF909090);
 
         drawItem(render, new ItemStack(Items.CLOCK), 5, enginesEndAt + 32 + 3);
@@ -145,7 +146,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
                 s += ".0";
             }
         }
-        s += Localization.MODULES.ATTACHMENTS.DISTANCES.translate(String.valueOf(i));
+        s += Component.translatable("modules.attachments.stevescarts.controlSystemDistanceUnits." + i).getString();
         return s;
     }
 
@@ -418,7 +419,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
 
     @Override
     public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
-        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.CONTROL_RESET.translate(), x, y, buttonRect);
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.controlSystemReset").getString(), x, y, buttonRect);
     }
 
     @Override
@@ -430,7 +431,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.CONTROL_SYSTEM.translate(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.controlSystemTitle").getString(), 8, 6, 4210752);
     }
 
     @Override

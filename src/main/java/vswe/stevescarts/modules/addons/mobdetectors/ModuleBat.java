@@ -1,9 +1,10 @@
 package vswe.stevescarts.modules.addons.mobdetectors;
 
+import net.minecraft.network.chat.Component;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ambient.Bat;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 
 public class ModuleBat extends ModuleMobdetector {
     public ModuleBat(ModularMinecart cart) {
@@ -12,7 +13,7 @@ public class ModuleBat extends ModuleMobdetector {
 
     @Override
     public String getName() {
-        return Localization.MODULES.ADDONS.DETECTOR_BATS.translate();
+        return Component.translatable("modules.addons.stevescarts.detectorBats").getString();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.minecraft.network.chat.Component;
+
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -200,7 +202,7 @@ public class ModuleEnchants extends ModuleAddon {
             if (data.getEnchant() != null) {
                 str = data.getInfoText();
             } else {
-                str = Localization.MODULES.ADDONS.ENCHANT_INSTRUCTION.translate();
+                str = Component.translatable("modules.addons.stevescarts.enchanterInstruction").getString();
             }
             drawStringOnMouseOver(GuiGraphicsExtractor, gui, str, x, y, getBoxRect(i));
         }

@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.serialization.Codec;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -14,7 +16,6 @@ import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.BoolArrayData;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModSerializers.BoolArray;
 import vswe.stevescarts.modules.workers.tools.ModuleDrill;
@@ -195,7 +196,7 @@ public class ModuleDrillIntelligence extends ModuleAddon {
         for (int i = 0; i < w; ++i) {
             for (int j = 0; j < h; ++j) {
                 final int[] rect = getSettingRect(i, j);
-                final String str = isRestricted(j * w + i) ? Localization.MODULES.ADDONS.RESTRICTED_INTELLIGENCE.translate() : isLocked(j * w + i) ? Localization.MODULES.ADDONS.LOCKED.translate() : (Localization.MODULES.ADDONS.CHANGE_INTELLIGENCE.translate() + "\n" + Localization.MODULES.ADDONS.CURRENT_INTELLIGENCE.translate(isActive(j * w + i) ? "0" : "1"));
+                final String str = isRestricted(j * w + i) ? Component.translatable("modules.addons.stevescarts.intelligenceRestricted").getString() : isLocked(j * w + i) ? Component.translatable("modules.addons.stevescarts.intelligenceLockedBlock").getString() : (Component.translatable("modules.addons.stevescarts.intelligenceChange").getString() + "\n" + Component.translatable("modules.addons.stevescarts.intelligenceCurrent." + (isActive(j * w + i) ? "enabled" : "disabled")).getString());
                 drawStringOnMouseOver(GuiGraphicsExtractor, gui, str, x, y, rect);
             }
         }

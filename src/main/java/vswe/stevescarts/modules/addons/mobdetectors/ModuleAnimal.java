@@ -1,10 +1,11 @@
 package vswe.stevescarts.modules.addons.mobdetectors;
 
+import net.minecraft.network.chat.Component;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Animal;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 
 public class ModuleAnimal extends ModuleMobdetector {
     public ModuleAnimal(ModularMinecart cart) {
@@ -13,7 +14,7 @@ public class ModuleAnimal extends ModuleMobdetector {
 
     @Override
     public String getName() {
-        return Localization.MODULES.ADDONS.DETECTOR_ANIMALS.translate();
+        return Component.translatable("modules.addons.stevescarts.detectorAnimals").getString();
     }
 
     @Override

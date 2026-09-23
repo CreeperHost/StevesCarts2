@@ -9,7 +9,6 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.data.ModuleData;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.init.ModItemData;
 
 import javax.annotation.Nonnull;
@@ -25,7 +24,7 @@ public class ItemCartModule extends Item implements IModuleItem {
 
     @Override
     public @NotNull Component getName(@NotNull ItemStack stack) {
-        return Localization.translate("item.stevescarts." + moduleData.getRawName());
+        return Component.translatable("item.stevescarts." + moduleData.getRawName());
     }
 
     @Override

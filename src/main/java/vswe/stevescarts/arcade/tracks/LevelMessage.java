@@ -1,17 +1,17 @@
 package vswe.stevescarts.arcade.tracks;
 
-import vswe.stevescarts.helpers.Localization;
+import net.minecraft.network.chat.Component;
 
 public class LevelMessage {
     private final int x;
     private final int y;
     private final int w;
-    private final Localization.STORIES.THE_BEGINNING message;
+    private final String message;
     private int isRunning;
     private int isStill;
     private int isDone;
 
-    public LevelMessage(final int x, final int y, final int w, final Localization.STORIES.THE_BEGINNING message) {
+    public LevelMessage(final int x, final int y, final int w, final String message) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -31,7 +31,7 @@ public class LevelMessage {
     }
 
     public String getMessage() {
-        return message.translate();
+        return Component.translatable(message).getString();
     }
 
     public LevelMessage setMustBeRunning() {

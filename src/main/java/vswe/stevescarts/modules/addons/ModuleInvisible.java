@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -11,7 +13,6 @@ import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -83,7 +84,7 @@ public class ModuleInvisible extends ModuleAddon implements IActivatorModule {
     }
 
     private String getStateName() {
-        return Localization.MODULES.ADDONS.INVISIBILITY.translate(isVisible() ? "0" : "1");
+        return Component.translatable("modules.addons.stevescarts.invisibilityToggle." + (isVisible() ? "activate" : "deactivate")).getString();
     }
 
     @Override

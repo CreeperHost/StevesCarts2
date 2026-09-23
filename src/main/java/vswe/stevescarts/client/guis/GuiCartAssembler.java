@@ -27,7 +27,6 @@ import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.containers.ContainerCartAssembler;
 import vswe.stevescarts.containers.slots.SlotAssembler;
 import vswe.stevescarts.helpers.DropDownMenuItem;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.helpers.TitleBox;
 import vswe.stevescarts.network.packets.PacketCreateCart;
@@ -91,7 +90,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
     private void updateErrorList() {
         final ArrayList<TextWithColor> lines = new ArrayList<>();
         if (this.assembler.getItem(0).isEmpty()) {
-            this.addText(lines, Localization.GUI.ASSEMBLER.ASSEMBLE_INSTRUCTION.translate());
+            this.addText(lines, Component.translatable("gui.stevescarts.basicAssembleInstruction").getString());
             this.hasErrors = true;
         } else {
             ItemStack stack = this.assembler.getItem(0);
@@ -102,18 +101,18 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
             }
             ModuleData hulldata = cartModule.getModuleData();
             if (hulldata == null || !(hulldata instanceof ModuleDataHull hull)) {
-                this.addText(lines, Localization.GUI.ASSEMBLER.INVALID_HULL.translate(), 10357518);
+                this.addText(lines, Component.translatable("gui.stevescarts.invalidHullError").getString(), 10357518);
                 this.hasErrors = true;
             } else {
-                this.addText(lines, Localization.GUI.ASSEMBLER.HULL_CAPACITY.translate() + ": " + hull.getCapacity());
-                this.addText(lines, Localization.GUI.ASSEMBLER.COMPLEXITY_CAP.translate() + ": " + hull.getComplexityMax());
-                this.addText(lines, Localization.GUI.ASSEMBLER.TOTAL_COST.translate() + ": " + this.assembler.getTotalCost());
-                this.addText(lines, Localization.GUI.ASSEMBLER.TOTAl_TIME.translate() + ": " + this.formatTime((int) (this.assembler.generateAssemblingTime() / this.assembler.getEfficiency())));
+                this.addText(lines, Component.translatable("gui.stevescarts.hullCapacity").getString() + ": " + hull.getCapacity());
+                this.addText(lines, Component.translatable("gui.stevescarts.complexityCap").getString() + ": " + hull.getComplexityMax());
+                this.addText(lines, Component.translatable("gui.stevescarts.totalCost").getString() + ": " + this.assembler.getTotalCost());
+                this.addText(lines, Component.translatable("gui.stevescarts.totalTime").getString() + ": " + this.formatTime((int) (this.assembler.generateAssemblingTime() / this.assembler.getEfficiency())));
                 this.addNewLine(lines);
                 final ArrayList<String> errors = this.assembler.getErrors();
                 this.hasErrors = (errors.size() > 0);
                 if (errors.size() == 0) {
-                    this.addText(lines, Localization.GUI.ASSEMBLER.NO_ERROR.translate(), 22566);
+                    this.addText(lines, Component.translatable("gui.stevescarts.readyMessage").getString(), 22566);
                 } else {
                     for (final String error : errors) {
                         this.addText(lines, error, 10357518);
@@ -220,7 +219,7 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
 
     @Override
     public void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        graphics.text(Minecraft.getInstance().font, Localization.GUI.ASSEMBLER.TITLE.translate(), 18, 6, 0xFFffffff);
+        graphics.text(Minecraft.getInstance().font, Component.translatable("gui.stevescarts.cartAssembler").getString(), 18, 6, 0xFFffffff);
     }
 
     @Override
@@ -254,20 +253,20 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         String assemblingInfo;
         if (containerCartAssembler.getIsAssembling()) {
             assemblingProgress = (float) containerCartAssembler.getAssemblingTime() / (float) containerCartAssembler.getMaxAssemblingTime();
-            assemblingInfo = Localization.GUI.ASSEMBLER.ASSEMBLE_PROGRESS.translate() + ": " + formatProgress(assemblingProgress);
-            assemblingInfo = assemblingInfo + ": " + Localization.GUI.ASSEMBLER.TIME_LEFT.translate() + ": " + formatTime((int) ((containerCartAssembler.getMaxAssemblingTime() - containerCartAssembler.getAssemblingTime()) / assembler.getEfficiency()));
+            assemblingInfo = Component.translatable("gui.stevescarts.assembleProgress").getString() + ": " + formatProgress(assemblingProgress);
+            assemblingInfo = assemblingInfo + ": " + Component.translatable("gui.stevescarts.timeLeft").getString() + ": " + formatTime((int) ((containerCartAssembler.getMaxAssemblingTime() - containerCartAssembler.getAssemblingTime()) / assembler.getEfficiency()));
         } else {
-            assemblingInfo = Localization.GUI.ASSEMBLER.IDLE_MESSAGE.translate();
+            assemblingInfo = Component.translatable("gui.stevescarts.idleAssemblerMessage").getString();
         }
         if (!hasErrors) {
             if (assembler.getIsDisassembling()) {
-                drawProgressBarInfo(graphics, assembleRect, mouseX, mouseY, Localization.GUI.ASSEMBLER.MODIFY_CART.translate());
+                drawProgressBarInfo(graphics, assembleRect, mouseX, mouseY, Component.translatable("gui.stevescarts.modifyCart").getString());
             } else {
-                drawProgressBarInfo(graphics, assembleRect, mouseX, mouseY, Localization.GUI.ASSEMBLER.ASSEMBLE_CART.translate());
+                drawProgressBarInfo(graphics, assembleRect, mouseX, mouseY, Component.translatable("gui.stevescarts.assembleCart").getString());
             }
         }
         drawProgressBarInfo(graphics, assemblingProgRect, mouseX, mouseY, assemblingInfo);
-        drawProgressBarInfo(graphics, fuelProgRect, mouseX, mouseY, Localization.GUI.ASSEMBLER.FUEL_LEVEL.translate() + ": " + containerCartAssembler.getFuel() + "/" + assembler.getMaxFuelLevel());
+        drawProgressBarInfo(graphics, fuelProgRect, mouseX, mouseY, Component.translatable("gui.stevescarts.fuelLevel").getString() + ": " + containerCartAssembler.getFuel() + "/" + assembler.getMaxFuelLevel());
     }
 
     private String formatProgress(final float progress) {

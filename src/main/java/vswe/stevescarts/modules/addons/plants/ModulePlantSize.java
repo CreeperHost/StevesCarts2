@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons.plants;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -9,7 +11,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 
 public class ModulePlantSize extends ModuleAddon {
@@ -48,7 +49,7 @@ public class ModulePlantSize extends ModuleAddon {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ADDONS.PLANTER_RANGE.translate(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.addons.stevescarts.planterRangeExtenderTitle").getString(), 8, 6, 4210752);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class ModulePlantSize extends ModuleAddon {
 
     @Override
     public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
-        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ADDONS.SAPLING_AMOUNT.translate() + ": " + size + "x" + size, x, y, boxrect);
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Component.translatable("modules.addons.stevescarts.saplingPlantAmount").getString() + ": " + size + "x" + size, x, y, boxrect);
     }
 
     @Override

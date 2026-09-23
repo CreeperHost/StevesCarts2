@@ -1,5 +1,7 @@
 package vswe.stevescarts.helpers.storages;
 
+import net.minecraft.network.chat.Component;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.block.FluidModel;
@@ -21,7 +23,6 @@ import net.neoforged.neoforge.transfer.fluid.FluidStacksResourceHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
-import vswe.stevescarts.helpers.Localization;
 
 import java.text.NumberFormat;
 
@@ -163,7 +164,7 @@ public class SCTank extends FluidStacksResourceHandler implements IFluidTank {
 
     public String getMouseOver() {
         FluidStack fluid = getFluid();
-        String name = Localization.MODULES.TANKS.EMPTY.translate();
+        String name = Component.translatable("modules.tanks.stevescarts.tankEmpty").getString();
         int amount = 0;
         if (!fluid.isEmpty()) {
             name = fluid.getHoverName().getString();

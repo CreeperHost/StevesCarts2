@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.ByteData;
 import net.creeperhost.polylib.data.serializable.IntData;
@@ -25,7 +27,6 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotArrow;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.addons.ModuleEnchants;
@@ -93,14 +94,14 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.SHOOTER.translate(), 8, 6, 0x404040);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.shooterTitle").getString(), 8, 6, 0x404040);
         final int delay = AInterval[getInterval()];
         final double freq = 20.0 / (delay + 1);
         String s = String.valueOf((int) (freq * 1000.0) / 1000.0);
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.FREQUENCY.translate() + ":", intervalDragArea[0] + intervalDragArea[2] + 5, 15, 0x404040);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.shooterFrequency").getString() + ":", intervalDragArea[0] + intervalDragArea[2] + 5, 15, 0x404040);
         drawString(GuiGraphicsExtractor, gui, s, intervalDragArea[0] + intervalDragArea[2] + 5, 23, 0x404040);
-        s = delay / 20.0 + Localization.MODULES.ATTACHMENTS.SECONDS.translate(new String[0]);
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.DELAY.translate() + ":", intervalDragArea[0] + intervalDragArea[2] + 5, 35, 0x404040);
+        s = delay / 20.0 + Component.translatable("modules.attachments.stevescarts.shooterSeconds").getString();
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.shooterDelay").getString() + ":", intervalDragArea[0] + intervalDragArea[2] + 5, 35, 0x404040);
         drawString(GuiGraphicsExtractor, gui, s, intervalDragArea[0] + intervalDragArea[2] + 5, 43, 0x404040);
     }
 

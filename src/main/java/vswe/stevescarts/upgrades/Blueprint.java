@@ -8,7 +8,6 @@ import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.slots.SlotCart;
-import vswe.stevescarts.helpers.Localization;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class Blueprint extends SimpleInventoryUpgradeEffect {
 
     @Override
     public Component getName() {
-        return Localization.translate("info.stevescarts.effectBlueprint");
+        return Component.translatable("info.stevescarts.effectBlueprint");
     }
 
     public boolean isValidForBluePrint(final TileEntityUpgrade upgrade, final ArrayList<ModuleData> modules, final ModuleData module) {

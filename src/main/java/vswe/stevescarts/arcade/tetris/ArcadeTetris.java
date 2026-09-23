@@ -1,5 +1,7 @@
 package vswe.stevescarts.arcade.tetris;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -9,7 +11,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.arcade.tracks.TrackStory;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModSounds;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
@@ -38,7 +39,7 @@ public class ArcadeTetris extends ArcadeGame {
     private boolean newHighScore;
 
     public ArcadeTetris(final ModuleArcade module) {
-        super(module, Localization.ARCADE.STACKER);
+        super(module, "arcade.stevescarts.mobStacker");
         ticks = 0;
         isPlaying = true;
         quickMove = false;
@@ -187,17 +188,17 @@ public class ArcadeTetris extends ArcadeGame {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.HIGH_SCORE.translate(String.valueOf(highscore)), 10, 20, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.SCORE.translate(String.valueOf(score)), 10, 40, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.REMOVED_LINES.translate(String.valueOf(removed)), 10, 60, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.highScore", String.valueOf(highscore)).getString(), 10, 20, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.score", String.valueOf(score)).getString(), 10, 40, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.stackerRemovedLines", String.valueOf(removed)).getString(), 10, 60, 4210752);
         for (int i = 0; i < 4; ++i) {
-            getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.REMOVED_LINES_COMBO.translate(String.valueOf(i), String.valueOf(removedByAmount[i])), 10, 80 + i * 10, 4210752);
+            getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.stackerRemovedLinesCombo." + i, removedByAmount[i]).getString(), 10, 80 + i * 10, 4210752);
         }
-        getModule().drawString(GuiGraphicsExtractor, gui, "W - " + Localization.ARCADE.INSTRUCTION_ROTATE.translate(), 340, 20, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, "A - " + Localization.ARCADE.INSTRUCTION_LEFT.translate(), 340, 30, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, "S - " + Localization.ARCADE.INSTRUCTION_DROP.translate(), 340, 40, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, "D - " + Localization.ARCADE.INSTRUCTION_RIGHT.translate(), 340, 50, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 340, 70, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "W - " + Component.translatable("arcade.stevescarts.instructionRotate").getString(), 340, 20, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "A - " + Component.translatable("arcade.stevescarts.instructionLeft").getString(), 340, 30, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "S - " + Component.translatable("arcade.stevescarts.instructionDrop").getString(), 340, 40, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "D - " + Component.translatable("arcade.stevescarts.instructionRight").getString(), 340, 50, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "R - " + Component.translatable("arcade.stevescarts.instructionRestart").getString(), 340, 70, 4210752);
     }
 
     private void newHighScore() {

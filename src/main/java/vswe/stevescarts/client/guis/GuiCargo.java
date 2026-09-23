@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.Block;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 import vswe.stevescarts.containers.ContainerCargo;
 import vswe.stevescarts.helpers.CargoItemSelection;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModBlocks;
 
@@ -92,7 +91,7 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
             int[] coords = getMiddleCoords();
 
             render.graphics().text(font(), getManagerName(), left + coords[0] - 34, top + 4, 0xFFffffff);
-            render.graphics().text(font(), Localization.GUI.MANAGER.TITLE.translate(), left + coords[0] + coords[2], top + 4, 0xFFffffff);
+            render.graphics().text(font(), Component.translatable("gui.stevescarts.manager").getString(), left + coords[0] + coords[2], top + 4, 0xFFffffff);
 
             for (int i = 0; i < 4; ++i) {
                 coords = getTextCoords(i);
@@ -106,14 +105,14 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
             for (int i = 0; i < 4; ++i) {
                 try {
                     drawExtraOverlay(render, i, mouseX, mouseY);
-                    drawMouseOver(render, Localization.GUI.MANAGER.CHANGE_TRANSFER_DIRECTION.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + (containerCargo.toCart()[i] ? Localization.GUI.MANAGER.DIRECTION_TO_CART.translate() : Localization.GUI.MANAGER.DIRECTION_FROM_CART.translate()), mouseX, mouseY, getArrowCoords(i));
-                    drawMouseOver(render, Localization.GUI.MANAGER.CHANGE_TURN_BACK_SETTING.translate() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + ((containerCargo.getColor()[i] == 5) ? Localization.GUI.MANAGER.TURN_BACK_NOT_SELECTED.translate() : (containerCargo.doReturn()[containerCargo.getColor()[i] - 1] ? Localization.GUI.MANAGER.TURN_BACK_DO.translate() : Localization.GUI.MANAGER.TURN_BACK_DO_NOT.translate())), mouseX, mouseY, getReturnCoords(i));
-                    drawMouseOver(render, Localization.GUI.MANAGER.CHANGE_TRANSFER_SIZE.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getMaxSizeOverlay(i), mouseX, mouseY, getTextCoords(i));
-                    drawMouseOver(render, Localization.GUI.MANAGER.CHANGE_SIDE.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SIDE.translate() + ": " + (new String[]{Localization.GUI.MANAGER.SIDE_RED.translate(), Localization.GUI.MANAGER.SIDE_BLUE.translate(), Localization.GUI.MANAGER.SIDE_YELLOW.translate(), Localization.GUI.MANAGER.SIDE_GREEN.translate(), Localization.GUI.MANAGER.SIDE_DISABLED.translate()})[containerCargo.getColor()[i] - 1], mouseX, mouseY, getColorpickerCoords(i));
+                    drawMouseOver(render, Component.translatable("gui.stevescarts.changeTransferDirection").getString() + "\n" + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + (containerCargo.toCart()[i] ? Component.translatable("gui.stevescarts.directionToCart").getString() : Component.translatable("gui.stevescarts.directionFromCart").getString()), mouseX, mouseY, getArrowCoords(i));
+                    drawMouseOver(render, Component.translatable("gui.stevescarts.changeTurnBack").getString() + "\n" + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + ((containerCargo.getColor()[i] == 5) ? Component.translatable("gui.stevescarts.turnBackDisabled").getString() : (containerCargo.doReturn()[containerCargo.getColor()[i] - 1] ? Component.translatable("gui.stevescarts.turnBack").getString() : Component.translatable("gui.stevescarts.continueForward").getString())), mouseX, mouseY, getReturnCoords(i));
+                    drawMouseOver(render, Component.translatable("gui.stevescarts.changeTransferSize").getString() + ": " + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + getMaxSizeOverlay(i), mouseX, mouseY, getTextCoords(i));
+                    drawMouseOver(render, Component.translatable("gui.stevescarts.changeSide").getString() + ": " + Component.translatable("gui.stevescarts.currentSide").getString() + ": " + (new String[]{Component.translatable("gui.stevescarts.sideRed").getString(), Component.translatable("gui.stevescarts.sideBlue").getString(), Component.translatable("gui.stevescarts.sideYellow").getString(), Component.translatable("gui.stevescarts.sideGreen").getString(), Component.translatable("gui.stevescarts.sideDisabled").getString()})[containerCargo.getColor()[i] - 1], mouseX, mouseY, getColorpickerCoords(i));
                 } catch (Exception ignored) {
                 }
             }
-            drawMouseOver(render, getLayoutString() + "\n" + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + getLayoutOption(containerCargo.getLayoutType()), mouseX, mouseY, getMiddleCoords());
+            drawMouseOver(render, getLayoutString() + "\n" + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + getLayoutOption(containerCargo.getLayoutType()), mouseX, mouseY, getMiddleCoords());
             return consumed;
         }
 
@@ -300,26 +299,26 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
             final int amount = containerCargo.getAmount(id);
             final int type = containerCargo.getAmountType(id);
             if (type == 0) {
-                return Localization.GUI.CARGO.TRANSFER_ALL.translate();
+                return Component.translatable("gui.stevescarts.transferAll").getString();
             }
             if (type == 1) {
-                return Localization.GUI.CARGO.TRANSFER_ITEMS.translate(String.valueOf(amount), String.valueOf(amount));
+                return Component.translatable("gui.stevescarts.transferItems." + (Math.abs(amount) == 1 ? "singular" : "plural"), amount).getString();
             }
-            return Localization.GUI.CARGO.TRANSFER_STACKS.translate(String.valueOf(amount), String.valueOf(amount));
+            return Component.translatable("gui.stevescarts.transferStacks." + (Math.abs(amount) == 1 ? "singular" : "plural"), amount).getString();
         }
 
         protected String getMaxSizeText(final int id) {
             final int type = containerCargo.getAmountType(id);
             String s;
             if (type == 0) {
-                s = Localization.GUI.CARGO.TRANSFER_ALL_SHORT.translate();
+                s = Component.translatable("gui.stevescarts.transferAllShort").getString();
             } else {
                 final int amount = containerCargo.getAmount(id);
                 s = String.valueOf(amount);
                 if (type == 1) {
-                    s = s + " " + Localization.GUI.CARGO.TRANSFER_ITEMS_SHORT.translate();
+                    s = s + " " + Component.translatable("gui.stevescarts.transferItemsShort").getString();
                 } else {
-                    s = s + " " + Localization.GUI.CARGO.TRANSFER_STACKS_SHORT.translate();
+                    s = s + " " + Component.translatable("gui.stevescarts.transferStacksShort").getString();
                 }
             }
             return s;
@@ -378,14 +377,14 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
                 if (n < TileEntityCargo.itemSelections.size()) {
                     final CargoItemSelection item = TileEntityCargo.itemSelections.get(containerCargo.getTarget()[id]);
                     if (item.getName() != null) {
-                        drawMouseOver(render, Localization.GUI.CARGO.CHANGE_STORAGE_AREA.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + item.getName(), mouseX, mouseY, getBoxCoords(id));
+                        drawMouseOver(render, Component.translatable("gui.stevescarts.changeTransferCartArea").getString() + ": " + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + item.getName(), mouseX, mouseY, getBoxCoords(id));
                     } else {
-                        drawMouseOver(render, Localization.GUI.CARGO.CHANGE_STORAGE_AREA.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + Localization.GUI.CARGO.UNKNOWN_AREA.translate(), mouseX, mouseY, getBoxCoords(id));
+                        drawMouseOver(render, Component.translatable("gui.stevescarts.changeTransferCartArea").getString() + ": " + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + Component.translatable("gui.stevescarts.unknownAreaMessage").getString(), mouseX, mouseY, getBoxCoords(id));
                     }
                     return;
                 }
             }
-            drawMouseOver(render, Localization.GUI.CARGO.CHANGE_STORAGE_AREA.translate() + ": " + Localization.GUI.MANAGER.CURRENT_SETTING.translate() + ": " + Localization.GUI.CARGO.UNKNOWN_AREA.translate(), mouseX, mouseY, getBoxCoords(id));
+            drawMouseOver(render, Component.translatable("gui.stevescarts.changeTransferCartArea").getString() + ": " + Component.translatable("gui.stevescarts.currentSetting").getString() + ": " + Component.translatable("gui.stevescarts.unknownAreaMessage").getString(), mouseX, mouseY, getBoxCoords(id));
         }
 
         protected Block getBlock() {
@@ -393,7 +392,7 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
         }
 
         protected String getManagerName() {
-            return Localization.GUI.CARGO.TITLE.translate();
+            return Component.translatable("gui.stevescarts.cargoManager").getString();
         }
 
         private int[] getInvCoords(final int id) {
@@ -405,19 +404,19 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
         }
 
         protected String getLayoutString() {
-            return Localization.GUI.CARGO.CHANGE_SLOT_LAYOUT.translate();
+            return Component.translatable("gui.stevescarts.changeSlotLayout").getString();
         }
 
         protected String getLayoutOption(final int id) {
             switch (id) {
                 case 1 -> {
-                    return Localization.GUI.CARGO.LAYOUT_SIDE.translate();
+                    return Component.translatable("gui.stevescarts.layoutSide").getString();
                 }
                 case 2 -> {
-                    return Localization.GUI.CARGO.LAYOUT_COLOR.translate();
+                    return Component.translatable("gui.stevescarts.layoutColor").getString();
                 }
                 default -> {
-                    return Localization.GUI.CARGO.LAYOUT_SHARED.translate();
+                    return Component.translatable("gui.stevescarts.layoutShared").getString();
                 }
             }
         }

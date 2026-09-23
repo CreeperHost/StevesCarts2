@@ -3,14 +3,14 @@ package vswe.stevescarts.helpers;
 import net.minecraft.network.chat.Component;
 
 public abstract class LabelInformation {
-    private final Localization.MODULES.ADDONS name;
+    private final String name;
 
-    public LabelInformation(final Localization.MODULES.ADDONS name) {
+    public LabelInformation(final String name) {
         this.name = name;
     }
 
     public String getName() {
-        return name.translate();
+        return Component.translatable(name).getString();
     }
 
     public abstract Component getLabel();

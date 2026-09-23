@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -10,7 +12,6 @@ import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.IntArrayData;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -69,7 +70,7 @@ public class ModuleColorRandomizer extends ModuleAddon {
     @Override
     public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         if (inRect(x, y, button)) {
-            final String randomizeString = Localization.MODULES.ADDONS.BUTTON_RANDOMIZE.translate();
+            final String randomizeString = Component.translatable("modules.addons.stevescarts.buttonRandomize").getString();
             drawStringOnMouseOver(GuiGraphicsExtractor, gui, randomizeString, x, y, button);
         }
     }

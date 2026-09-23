@@ -1,5 +1,7 @@
 package vswe.stevescarts.api.modules.template;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -9,7 +11,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -115,9 +116,9 @@ public abstract class ModuleEngine extends ModuleBase {
 
     private String getPriorityText() {
         if (isDisabled()) {
-            return Localization.MODULES.ENGINES.ENGINE_DISABLED.translate();
+            return Component.translatable("modules.engines.stevescarts.engineDisabledMessage").getString();
         }
-        return Localization.MODULES.ENGINES.ENGINE_PRIORITY.translate(String.valueOf(getPriority()));
+        return Component.translatable("modules.engines.stevescarts.enginePriorityMessage." + getPriority()).getString();
     }
 
     @Override

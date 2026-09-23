@@ -1,21 +1,22 @@
 package vswe.stevescarts.api.modules.data;
 
-import vswe.stevescarts.helpers.Localization;
+import net.minecraft.network.chat.Component;
+
 
 import java.util.ArrayList;
 
 public class ModuleDataGroup {
     private final ArrayList<ModuleData> modules;
-    private Localization.MODULE_INFO name;
+    private String name;
     private int count;
 
-    public ModuleDataGroup(final Localization.MODULE_INFO name) {
+    public ModuleDataGroup(final String name) {
         this.name = name;
         count = 1;
         modules = new ArrayList<>();
     }
 
-    public static ModuleDataGroup getCombinedGroup(final Localization.MODULE_INFO name, final ModuleDataGroup group1, final ModuleDataGroup group2) {
+    public static ModuleDataGroup getCombinedGroup(final String name, final ModuleDataGroup group1, final ModuleDataGroup group2) {
         final ModuleDataGroup newgroup = group1.copy();
         newgroup.add(group2);
         newgroup.name = name;
@@ -23,7 +24,7 @@ public class ModuleDataGroup {
     }
 
     public String getName() {
-        return name.translate(String.valueOf(getCount()));
+        return Component.translatable(name + (getCount() == 1 ? ".singular" : ".plural")).getString();
     }
 
     public ArrayList<ModuleData> getModules() {
@@ -63,13 +64,13 @@ public class ModuleDataGroup {
     public String getCountName() {
         switch (count) {
             case 1 -> {
-                return Localization.MODULE_INFO.MODULE_COUNT_1.translate();
+                return Component.translatable("info.stevescarts.moduleCount1").getString();
             }
             case 2 -> {
-                return Localization.MODULE_INFO.MODULE_COUNT_2.translate();
+                return Component.translatable("info.stevescarts.moduleCount2").getString();
             }
             case 3 -> {
-                return Localization.MODULE_INFO.MODULE_COUNT_3.translate();
+                return Component.translatable("info.stevescarts.moduleCount3").getString();
             }
             default -> {
                 return "???";

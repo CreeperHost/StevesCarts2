@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -12,7 +14,6 @@ import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.template.ModuleAddon;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -147,7 +148,7 @@ public class ModuleShield extends ModuleAddon implements IActivatorModule {
     }
 
     private String getStateName() {
-        return Localization.MODULES.ADDONS.SHIELD.translate(getShieldStatus() ? "1" : "0");
+        return Component.translatable("modules.addons.stevescarts.shieldToggle." + (getShieldStatus() ? "deactivate" : "activate")).getString();
     }
 
     @Override

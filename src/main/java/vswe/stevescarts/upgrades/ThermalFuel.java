@@ -5,7 +5,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import vswe.stevescarts.helpers.storages.IFluidHandler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
-import vswe.stevescarts.helpers.Localization;
 
 public class ThermalFuel extends TankUpgradeEffect {
     public static final int LAVA_EFFICIENCY = 3;
@@ -17,7 +16,7 @@ public class ThermalFuel extends TankUpgradeEffect {
 
     @Override
     public Component getName() {
-        return Localization.translate("info.stevescarts.effectThermal");
+        return Component.translatable("info.stevescarts.effectThermal");
     }
 
     @Override

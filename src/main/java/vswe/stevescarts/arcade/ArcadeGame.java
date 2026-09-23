@@ -3,6 +3,7 @@ package vswe.stevescarts.arcade;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
@@ -10,14 +11,13 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
 public abstract class ArcadeGame {
     private final ModuleArcade module;
-    private final Localization.ARCADE name;
+    private final String name;
 
-    public ArcadeGame(final ModuleArcade module, final Localization.ARCADE name) {
+    public ArcadeGame(final ModuleArcade module, final String name) {
         this.name = name;
         this.module = module;
     }
@@ -29,7 +29,7 @@ public abstract class ArcadeGame {
     }
 
     public String getName() {
-        return name.translate();
+        return Component.translatable(name).getString();
     }
 
     public ModuleArcade getModule() {

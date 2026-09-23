@@ -1,5 +1,7 @@
 package vswe.stevescarts.arcade.sweeper;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
@@ -10,7 +12,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.arcade.tracks.TrackStory;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.init.ModSounds;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
@@ -34,7 +35,7 @@ public class ArcadeSweeper extends ArcadeGame {
     private int highscoreTicks;
 
     public ArcadeSweeper(final ModuleArcade module) {
-        super(module, Localization.ARCADE.CREEPER);
+        super(module, "arcade.stevescarts.creeperSweeper");
         highscore = new int[]{999, 999, 999};
         newGame(currentGameType);
     }
@@ -218,15 +219,15 @@ public class ArcadeSweeper extends ArcadeGame {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        final String[] mapnames = {Localization.ARCADE.MAP_1.translate(), Localization.ARCADE.MAP_2.translate(), Localization.ARCADE.MAP_3.translate()};
-        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.LEFT.translate(String.valueOf(creepersLeft)), 10, 180, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.TIME.translate(String.valueOf(ticks / 20)), 10, 190, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, "R - " + Localization.ARCADE.INSTRUCTION_RESTART.translate(), 10, 210, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, "T - " + Localization.ARCADE.INSTRUCTION_CHANGE_MAP.translate(), 10, 230, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.MAP.translate(mapnames[currentGameType]), 10, 240, 4210752);
-        getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.HIGH_SCORES.translate(), 330, 180, 4210752);
+        final String[] mapnames = {Component.translatable("arcade.stevescarts.creeperMapName1").getString(), Component.translatable("arcade.stevescarts.creeperMapName2").getString(), Component.translatable("arcade.stevescarts.creeperMapName3").getString()};
+        getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.creepersLeft", String.valueOf(creepersLeft)).getString(), 10, 180, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.creeperTime", String.valueOf(ticks / 20)).getString(), 10, 190, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "R - " + Component.translatable("arcade.stevescarts.instructionRestart").getString(), 10, 210, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, "T - " + Component.translatable("arcade.stevescarts.instructionChangeMap").getString(), 10, 230, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.creeperCurrentMap", mapnames[currentGameType]).getString(), 10, 240, 4210752);
+        getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.creeperHighScores").getString(), 330, 180, 4210752);
         for (int i = 0; i < 3; ++i) {
-            getModule().drawString(GuiGraphicsExtractor, gui, Localization.ARCADE.HIGH_SCORE_ENTRY.translate(mapnames[i], String.valueOf(highscore[i])), 330, 190 + i * 10, 4210752);
+            getModule().drawString(GuiGraphicsExtractor, gui, Component.translatable("arcade.stevescarts.creeperHighScore", mapnames[i], String.valueOf(highscore[i])).getString(), 330, 190 + i * 10, 4210752);
         }
     }
 

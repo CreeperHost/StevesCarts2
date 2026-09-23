@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.addons;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.ByteData;
 import net.creeperhost.polylib.data.serializable.StackData;
@@ -18,7 +20,6 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.blocks.tileentities.TileEntityCargo;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -115,34 +116,34 @@ public abstract class ModuleRecipe extends ModuleAddon {
     @Override
     public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         if (canUseAdvancedFeatures()) {
-            String str = Localization.MODULES.ADDONS.RECIPE_OUTPUT.translate() + "\n" + Localization.MODULES.ADDONS.CURRENT.translate() + ": ";
+            String str = Component.translatable("modules.addons.stevescarts.recipeOutput").getString() + "\n" + Component.translatable("modules.addons.stevescarts.recipeCurrentSelection").getString() + ": ";
             if (isTargetInvalid()) {
-                str += Localization.MODULES.ADDONS.INVALID_OUTPUT.translate();
+                str += Component.translatable("modules.addons.stevescarts.recipeInvalidOutput").getString();
             } else {
                 str += TileEntityCargo.itemSelections.get(target.get()).getName();
             }
             drawStringOnMouseOver(GuiGraphicsExtractor, gui, str, x, y, getArea());
             for (int i = 0; i < 3; ++i) {
                 if (i == 1) {
-                    str = Localization.MODULES.ADDONS.RECIPE_MODE.translate() + "\n" + Localization.MODULES.ADDONS.CURRENT.translate() + ": ";
+                    str = Component.translatable("modules.addons.stevescarts.recipeChangeMode").getString() + "\n" + Component.translatable("modules.addons.stevescarts.recipeCurrentSelection").getString() + ": ";
                     switch (mode.get()) {
                         case 0: {
-                            str += Localization.MODULES.ADDONS.RECIPE_NO_LIMIT.translate();
+                            str += Component.translatable("modules.addons.stevescarts.recipeNoLimit").getString();
                             break;
                         }
                         case 1: {
-                            str += Localization.MODULES.ADDONS.RECIPE_LIMIT.translate();
+                            str += Component.translatable("modules.addons.stevescarts.recipeLimit").getString();
                             break;
                         }
                         default: {
-                            str += Localization.MODULES.ADDONS.RECIPE_DISABLED.translate();
+                            str += Component.translatable("modules.addons.stevescarts.recipeDisabled").getString();
                             break;
                         }
                     }
                 } else if (mode.get() != 1) {
                     str = null;
                 } else {
-                    str = Localization.MODULES.ADDONS.RECIPE_CHANGE_AMOUNT.translate((i == 0) ? "0" : "1") + "\n" + Localization.MODULES.ADDONS.RECIPE_CHANGE_AMOUNT_10.translate() + "\n" + Localization.MODULES.ADDONS.RECIPE_CHANGE_AMOUNT_64.translate();
+                    str = Component.translatable("modules.addons.stevescarts.recipeChangeLimit." + (i == 0 ? "increase" : "decrease")).getString() + "\n" + Component.translatable("modules.addons.stevescarts.recipeChangeLimit10").getString() + "\n" + Component.translatable("modules.addons.stevescarts.recipeChangeLimit64").getString();
                 }
                 if (str != null) {
                     drawStringOnMouseOver(GuiGraphicsExtractor, gui, str, x, y, getControlRect(i));

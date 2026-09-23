@@ -26,7 +26,6 @@ import vswe.stevescarts.containers.ContainerCargo;
 import vswe.stevescarts.containers.slots.*;
 import vswe.stevescarts.helpers.CargoItemSelection;
 import vswe.stevescarts.helpers.ComponentTypes;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.helpers.storages.TransferManager;
 import vswe.stevescarts.init.ModBlocks;
@@ -83,20 +82,20 @@ public class TileEntityCargo extends TileEntityManager implements MenuProvider {
     }
 
     public static void loadSelectionSettings() {
-        (TileEntityCargo.itemSelections = new ArrayList<>()).add(new CargoItemSelection(Localization.GUI.CARGO.AREA_ALL, Slot.class, new ItemStackTemplate(ModItems.CARTS.get(), 1)));
-        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_ENGINE, SlotFuel.class, new ItemStackTemplate(ModItems.MODULES.get(StevesCartsModules.COAL_ENGINE).get())));
-        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_RAILER, SlotBuilder.class, new ItemStackTemplate(Items.RAIL)));
-        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_STORAGE, SlotChest.class, new ItemStackTemplate(Blocks.CHEST.asItem(), 1)));
-        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_TORCHES, SlotTorch.class, new ItemStackTemplate(Blocks.TORCH.asItem(), 1)));
-        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_EXPLOSIVES, ISlotExplosions.class, new ItemStackTemplate(ModItems.COMPONENTS.get(ComponentTypes.DYNAMITE).get())));
-        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_ARROWS, SlotArrow.class, new ItemStackTemplate(Items.ARROW, 1)));
-        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_BRIDGE, SlotBridge.class, new ItemStackTemplate(Blocks.BRICKS.asItem(), 1)));
-        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_SEEDS, SlotSeed.class, new ItemStackTemplate(Items.WHEAT_SEEDS, 1)));
-        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_SEEDS, SlotSeed.class, new ItemStackTemplate(Items.BONE_MEAL)));
-        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_SAPLINGS, SlotSapling.class, new ItemStackTemplate(Blocks.OAK_SAPLING.asItem(), 1)));
-        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_FIREWORK, SlotFirework.class, new ItemStackTemplate(Items.FIREWORK_ROCKET, 1)));
-        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_BUCKETS, SlotMilker.class, new ItemStackTemplate(Items.BUCKET, 1)));
-        TileEntityCargo.itemSelections.add(new CargoItemSelection(Localization.GUI.CARGO.AREA_CAKES, SlotCake.class, new ItemStackTemplate(Items.CAKE, 1)));
+        (TileEntityCargo.itemSelections = new ArrayList<>()).add(new CargoItemSelection("gui.stevescarts.cartAreaAll", Slot.class, new ItemStackTemplate(ModItems.CARTS.get(), 1)));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection("gui.stevescarts.cartAreaEngine", SlotFuel.class, new ItemStackTemplate(ModItems.MODULES.get(StevesCartsModules.COAL_ENGINE).get())));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection("gui.stevescarts.cartAreaRailer", SlotBuilder.class, new ItemStackTemplate(Items.RAIL)));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection("gui.stevescarts.cartAreaStorage", SlotChest.class, new ItemStackTemplate(Blocks.CHEST.asItem(), 1)));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection("gui.stevescarts.cartAreaTorches", SlotTorch.class, new ItemStackTemplate(Blocks.TORCH.asItem(), 1)));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection("gui.stevescarts.cartAreaExplosives", ISlotExplosions.class, new ItemStackTemplate(ModItems.COMPONENTS.get(ComponentTypes.DYNAMITE).get())));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection("gui.stevescarts.cartAreaArrows", SlotArrow.class, new ItemStackTemplate(Items.ARROW, 1)));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection("gui.stevescarts.cartAreaBridge", SlotBridge.class, new ItemStackTemplate(Blocks.BRICKS.asItem(), 1)));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection("gui.stevescarts.cartAreaSeeds", SlotSeed.class, new ItemStackTemplate(Items.WHEAT_SEEDS, 1)));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection("gui.stevescarts.cartAreaSeeds", SlotSeed.class, new ItemStackTemplate(Items.BONE_MEAL)));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection("gui.stevescarts.cartAreaSaplings", SlotSapling.class, new ItemStackTemplate(Blocks.OAK_SAPLING.asItem(), 1)));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection("gui.stevescarts.cartAreaFirework", SlotFirework.class, new ItemStackTemplate(Items.FIREWORK_ROCKET, 1)));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection("gui.stevescarts.cartAreaBuckets", SlotMilker.class, new ItemStackTemplate(Items.BUCKET, 1)));
+        TileEntityCargo.itemSelections.add(new CargoItemSelection("gui.stevescarts.cartAreaCakes", SlotCake.class, new ItemStackTemplate(Items.CAKE, 1)));
     }
 
     @Override

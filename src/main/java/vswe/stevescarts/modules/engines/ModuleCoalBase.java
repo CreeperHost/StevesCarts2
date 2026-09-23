@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.engines;
 
+import net.minecraft.network.chat.Component;
+
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.item.ItemStack;
@@ -11,7 +13,6 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotFuel;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.polylib.FuelHelper;
 
 import javax.annotation.Nonnull;
@@ -88,8 +89,8 @@ public abstract class ModuleCoalBase extends ModuleEngine {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ENGINES.COAL.translate(), 8, 6, 4210752);
-        String strfuel = Localization.MODULES.ENGINES.NO_FUEL.translate();
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.engines.stevescarts.coalEngineTitle").getString(), 8, 6, 4210752);
+        String strfuel = Component.translatable("modules.engines.stevescarts.outOfFuel").getString();
         if (getFuelLevel() > 0) {
             strfuel = "Fuel: " + getFuelLevel();
         }

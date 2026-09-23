@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.workers;
 
+import net.minecraft.network.chat.Component;
+
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
@@ -22,7 +24,6 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotFertilizer;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.workers.tools.ModuleFarmer;
 import vswe.stevescarts.polylib.EntityData;
@@ -82,7 +83,7 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule {
 
     @Override
     public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
-        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.FERTILIZERS.translate() + ": " + getFertAmount() + " / " + getMaxFert(), x, y, tankPosX, tankPosY, 18, 27);
+        drawStringOnMouseOver(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.fertilizers").getString() + ": " + getFertAmount() + " / " + getMaxFert(), x, y, tankPosX, tankPosY, 18, 27);
     }
 
     @Override

@@ -5,7 +5,6 @@ import net.minecraft.resources.Identifier;
 import org.joml.Matrix3x2fStack;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.client.guis.GuiMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.realtimers.ModuleArcade;
 
@@ -59,7 +58,7 @@ public class ArcadeMonopoly extends ArcadeGame {
     private int cardRotation;
 
     public ArcadeMonopoly(final ModuleArcade module) {
-        super(module, Localization.ARCADE.MADNESS);
+        super(module, "arcade.stevescarts.forgecraftMadness");
         selectedPlace = -1;
         (pieces = new ArrayList<>()).add(new Piece(this, 0, Piece.CONTROLLED_BY.PLAYER));
         pieces.add(new Piece(this, 1, Piece.CONTROLLED_BY.COMPUTER));

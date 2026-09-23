@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.storages.tanks;
 
+import net.minecraft.network.chat.Component;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
@@ -7,7 +9,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
 import vswe.stevescarts.helpers.storages.IFluidHandler;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 
 import javax.annotation.Nonnull;
 
@@ -22,9 +23,9 @@ public class ModuleCheatTank extends ModuleTank {
     @Override
     protected String getTankInfo() {
         String str = super.getTankInfo();
-        str = str + "\n\n" + Localization.MODULES.TANKS.CREATIVE_MODE.translate(ModuleCheatTank.colors[mode].toString(), String.valueOf(mode)) + "\n" + Localization.MODULES.TANKS.CHANGE_MODE.translate();
+        str = str + "\n\n" + Component.translatable("modules.tanks.stevescarts.creativeTankMode", ModuleCheatTank.colors[mode].toString(), Component.translatable("modules.tanks.stevescarts.creativeTankMode." + mode)).getString() + "\n" + Component.translatable("modules.tanks.stevescarts.creativeTankChangeMode").getString();
         if (mode != 0) {
-            str = str + "\n" + Localization.MODULES.TANKS.RESET_MODE.translate();
+            str = str + "\n" + Component.translatable("modules.tanks.stevescarts.creativeTankResetMode").getString();
         }
         return str;
     }

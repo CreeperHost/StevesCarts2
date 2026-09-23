@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.realtimers;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.ByteData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -18,7 +20,6 @@ import net.minecraft.world.phys.Vec3;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.addons.mobdetectors.ModuleMobdetector;
 import vswe.stevescarts.polylib.EntityData;
@@ -75,7 +76,7 @@ public class ModuleShooterAdv extends ModuleShooter {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.SHOOTER.translate(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.shooterTitle").getString(), 8, 6, 4210752);
         for (int i = 0; i < detectors.size(); ++i) {
             final int[] box = getSelectionBox(i);
             drawString(GuiGraphicsExtractor, gui, detectors.get(i).getName(), box[0] + 12, box[1], 4210752);

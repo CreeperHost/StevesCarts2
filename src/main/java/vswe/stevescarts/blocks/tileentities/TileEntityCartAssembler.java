@@ -37,7 +37,6 @@ import vswe.stevescarts.containers.slots.SlotHull;
 import vswe.stevescarts.containers.slots.SlotOutput;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.DropDownMenuItem;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.SimulationInfo;
 import vswe.stevescarts.helpers.TitleBox;
 import vswe.stevescarts.helpers.storages.TransferHandler;
@@ -460,17 +459,17 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     public ArrayList<String> getErrors() {
         final ArrayList<String> errors = new ArrayList<>();
         if (hullSlot.getItem().isEmpty()) {
-            errors.add(Localization.GUI.ASSEMBLER.HULL_ERROR.translate());
+            errors.add(Component.translatable("gui.stevescarts.noHullError").getString());
         } else {
             IModuleItem itemCartModule = (IModuleItem) getItem(0).getItem();
             final ModuleData hulldata = itemCartModule.getModuleData();
             if (!(hulldata instanceof ModuleDataHull)) {
-                errors.add(Localization.GUI.ASSEMBLER.INVALID_HULL_SHORT.translate());
+                errors.add(Component.translatable("gui.stevescarts.invalidHullErrorShort").getString());
             } else {
                 if (isAssembling) {
-                    errors.add(Localization.GUI.ASSEMBLER.BUSY.translate());
+                    errors.add(Component.translatable("gui.stevescarts.busyAssemblerError").getString());
                 } else if (outputSlot != null && !outputSlot.getItem().isEmpty()) {
-                    errors.add(Localization.GUI.ASSEMBLER.DEPARTURE_BAY.translate());
+                    errors.add(Component.translatable("gui.stevescarts.departureBayError").getString());
                 }
                 final ArrayList<ModuleData> modules = new ArrayList<>();
                 for (int i = 0; i < getContainerSize() - nonModularSlots(); ++i) {

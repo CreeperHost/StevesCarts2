@@ -34,7 +34,6 @@ import vswe.stevescarts.client.guis.buttons.ButtonBase;
 import vswe.stevescarts.containers.ContainerMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ButtonComparator;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.SimulationInfo;
 import vswe.stevescarts.init.ModItems;
 import vswe.stevescarts.network.PacketHandler;
@@ -1481,7 +1480,7 @@ public abstract class ModuleBase {
     }
 
     public String getModuleName() {
-        return Localization.translate("item.stevescarts." + StevesCartsAPI.MODULE_REGISTRY.get(getModuleId()).getRawName()).getString();
+        return Component.translatable("item.stevescarts." + StevesCartsAPI.MODULE_REGISTRY.get(getModuleId()).getRawName()).getString();
     }
 
     public ItemStack getItemStack() {

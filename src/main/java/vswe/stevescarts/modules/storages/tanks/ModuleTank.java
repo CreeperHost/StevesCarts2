@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.storages.tanks;
 
+import net.minecraft.network.chat.Component;
+
 import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -24,7 +26,6 @@ import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotLiquidInput;
 import vswe.stevescarts.containers.slots.SlotLiquidOutput;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.helpers.storages.ITankHolder;
 import vswe.stevescarts.helpers.storages.SCTank;
@@ -158,9 +159,9 @@ public class ModuleTank extends ModuleStorage implements IFluidTank, ITankHolder
     protected String getTankInfo() {
         String str = tank.getMouseOver();
         if (!locked.get().isEmpty()) {
-            str = str + "\n\n" + Localization.MODULES.TANKS.LOCKED.translate() + " " + locked.get().getHoverName().getString() + "\n" + Localization.MODULES.TANKS.UNLOCK.translate();
+            str = str + "\n\n" + Component.translatable("modules.tanks.stevescarts.tankLocked").getString() + " " + locked.get().getHoverName().getString() + "\n" + Component.translatable("modules.tanks.stevescarts.tankUnlock").getString();
         } else if (!tank.getFluid().isEmpty()) {
-            str = str + "\n\n" + Localization.MODULES.TANKS.LOCK.translate();
+            str = str + "\n\n" + Component.translatable("modules.tanks.stevescarts.tankLock").getString();
         }
         return str;
     }

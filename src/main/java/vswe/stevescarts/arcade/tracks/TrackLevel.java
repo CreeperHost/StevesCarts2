@@ -1,7 +1,7 @@
 package vswe.stevescarts.arcade.tracks;
 
 import net.minecraft.client.Minecraft;
-import vswe.stevescarts.helpers.Localization;
+import net.minecraft.network.chat.Component;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -13,7 +13,7 @@ public class TrackLevel {
     private static String MAP_FOLDER_PATH;
 
     static {
-        editor = new TrackLevel(Localization.STORIES.THE_BEGINNING.MAP_EDITOR, 0, 0, TrackOrientation.DIRECTION.RIGHT, 26, 9);
+        editor = new TrackLevel("stories.beginning.stevescarts.mapEditor", 0, 0, TrackOrientation.DIRECTION.RIGHT, 26, 9);
         TrackLevel.MAP_FOLDER_PATH = "sc2/arcade/trackoperator/";
     }
 
@@ -26,8 +26,8 @@ public class TrackLevel {
     private final ArrayList<Track> tracks;
     private final ArrayList<LevelMessage> messages;
 
-    public TrackLevel(Localization.STORIES.THE_BEGINNING name, final int playerX, final int playerY, final TrackOrientation.DIRECTION playerDir, final int itemX, final int itemY) {
-        if (name != null) this.name = name.translate();
+    public TrackLevel(String name, final int playerX, final int playerY, final TrackOrientation.DIRECTION playerDir, final int itemX, final int itemY) {
+        if (name != null) this.name = Component.translatable(name).getString();
         this.playerX = playerX;
         this.playerY = playerY;
         this.playerDir = playerDir;
@@ -202,8 +202,8 @@ public class TrackLevel {
         return name;
     }
 
-    public void setName(Localization.STORIES.THE_BEGINNING name) {
-        this.name = name.translate();
+    public void setTranslationKey(String name) {
+        this.name = Component.translatable(name).getString();
     }
 
     public void setName(String name) {

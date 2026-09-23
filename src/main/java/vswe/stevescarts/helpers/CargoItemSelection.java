@@ -1,5 +1,6 @@
 package vswe.stevescarts.helpers;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 
@@ -9,9 +10,9 @@ public class CargoItemSelection {
     private final Class validSlot;
     @Nonnull
     private final ItemStackTemplate icon;
-    private final Localization.GUI.CARGO name;
+    private final String name;
 
-    public CargoItemSelection(final Localization.GUI.CARGO name, final Class validSlot, @Nonnull ItemStackTemplate icon) {
+    public CargoItemSelection(final String name, final Class validSlot, @Nonnull ItemStackTemplate icon) {
         this.name = name;
         this.validSlot = validSlot;
         this.icon = icon;
@@ -30,6 +31,6 @@ public class CargoItemSelection {
         if (name == null) {
             return null;
         }
-        return name.translate();
+        return Component.translatable(name).getString();
     }
 }

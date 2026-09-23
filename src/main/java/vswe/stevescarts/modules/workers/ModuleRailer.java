@@ -1,5 +1,7 @@
 package vswe.stevescarts.modules.workers;
 
+import net.minecraft.network.chat.Component;
+
 import net.creeperhost.polylib.data.serializable.ByteData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
@@ -17,7 +19,6 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBuilder;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.polylib.EntityData;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        drawString(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.RAILER.translate(), 8, 6, 4210752);
+        drawString(GuiGraphicsExtractor, gui, Component.translatable("modules.attachments.stevescarts.railerTitle").getString(), 8, 6, 4210752);
     }
 
     @Override
