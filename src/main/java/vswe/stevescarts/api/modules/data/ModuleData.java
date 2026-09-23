@@ -23,7 +23,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.function.Consumer;
 
@@ -254,45 +253,6 @@ public class ModuleData {
             currentCost += module.getCost();
         }
         return currentCost;
-    }
-
-    //TODO dead code
-    private static long calculateCombinations() {
-        long combinations = 0L;
-        final ArrayList<ModuleData> potential = new ArrayList<>();
-        for (final ModuleData module : StevesCartsAPI.MODULE_REGISTRY.values()) {
-            if (!(module instanceof ModuleDataHull)) {
-                potential.add(module);
-            }
-        }
-        for (final ModuleData module : StevesCartsAPI.MODULE_REGISTRY.values()) {
-            if (module instanceof ModuleDataHull) {
-                final ArrayList<ModuleData> modules = new ArrayList<>();
-                combinations += populateHull((ModuleDataHull) module, modules, (ArrayList<ModuleData>) potential.clone(), 0);
-                System.out.println("Hull added: " + combinations);
-            }
-        }
-        return combinations;
-    }
-
-    private static long populateHull(final ModuleDataHull hull, final ArrayList<ModuleData> attached, final ArrayList<ModuleData> potential, final int depth) {
-        if (checkForErrors(hull, attached) != null) {
-            return 0L;
-        }
-        long combinations = 1L;
-        final Iterator<ModuleData> itt = potential.iterator();
-        while (itt.hasNext()) {
-            final ModuleData module = itt.next();
-            final ArrayList<ModuleData> attachedCopy = (ArrayList<ModuleData>) attached.clone();
-            attachedCopy.add(module);
-            final ArrayList<ModuleData> potentialCopy = (ArrayList<ModuleData>) potential.clone();
-            itt.remove();
-            combinations += populateHull(hull, attachedCopy, potentialCopy, depth + 1);
-            if (depth < 3) {
-                System.out.println("Modular state[" + depth + "]: " + combinations);
-            }
-        }
-        return combinations;
     }
 
     public Class<? extends ModuleBase> getModuleClass() {

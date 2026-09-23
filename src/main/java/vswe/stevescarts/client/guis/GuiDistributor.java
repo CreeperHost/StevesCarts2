@@ -165,8 +165,6 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
                     if (side.isEnabled(distributor)) {
                         final int[] box = getSideBoxRect(id++);
                         if (inRect((int) x, (int) y, box)) {
-                            //This is client-side and will need removing
-//                            distributor.getSides().get(side.getId()).set(activeId);
                             distributor.sendPacket(0, new byte[]{(byte) activeId, (byte) side.getId()});
                             //Remove from cursor
                             activeId = -1;
@@ -188,8 +186,6 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
                             if (!inRect((int) x, (int) y, settingbox)) {
                                 continue;
                             }
-                            //This is client-side and will need removing
-//                            distributor.getSides().get(side.getId()).reset(setting.getId());
                             distributor.sendPacket(1, new byte[]{(byte) setting.getId(), (byte) side.getId()});
                             //Remove from cursor
                             activeId = -1;

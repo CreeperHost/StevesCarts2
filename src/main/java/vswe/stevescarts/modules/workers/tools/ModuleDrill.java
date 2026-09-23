@@ -304,11 +304,6 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         if (block == Blocks.BEDROCK) {
             return null;
         }
-        //TODO
-//        if (block instanceof IFluidBlock)
-//        {
-//            return null;
-//        }
         if (blockState.getDestroySpeed(world, pos) < 0.0f) {
             return null;
         }

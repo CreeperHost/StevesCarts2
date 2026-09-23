@@ -32,12 +32,6 @@ public class ItemCarts extends MinecartItem {
         super(ModEntities.MODULAR_CART.get(), props);
     }
 
-//    @Override
-//    public Component getName()
-//    {
-//        return Component.literal("Modular Cart");
-//    }
-
     @Override
     public InteractionResult useOn(UseOnContext itemUseContext) {
         Player player = itemUseContext.getPlayer();

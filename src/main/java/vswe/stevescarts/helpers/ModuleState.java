@@ -84,7 +84,7 @@ public class ModuleState {
         new ModuleStatePassenger(30, Localization.GUI.DETECTOR.MOOSHROOM, MushroomCow.class);
         new ModuleStatePassenger(31, Localization.GUI.DETECTOR.CHICKEN, Chicken.class);
         new ModuleStatePassenger(32, Localization.GUI.DETECTOR.WOLF, Wolf.class);
-        //		new ModuleStatePassenger(33, Localization.GUI.DETECTOR.SNOW_GOLEM, EntitySnowman.class);
+        //TODO Restore snow golem passenger detection.
         new ModuleStatePassenger(34, Localization.GUI.DETECTOR.OCELOT, Ocelot.class);
         new ModuleStatePassenger(35, Localization.GUI.DETECTOR.VILLAGER, Villager.class);
         new ModuleStatePassenger(36, Localization.GUI.DETECTOR.PLAYER, Player.class);

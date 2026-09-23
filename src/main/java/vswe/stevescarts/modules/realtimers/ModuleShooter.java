@@ -313,7 +313,6 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
                 setHeading(projectile, x, 0.10000000149011612D, y, 1.6f, 12.0f);
                 setProjectileDamage(projectile);
                 setProjectileOnFire(projectile);
-//                setProjectileKnockback(projectile);
                 getCart().level().addFreshEntity(projectile);
                 hasShot = true;
                 damageEnchant();
@@ -345,20 +344,6 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
         }
     }
 
-//    protected void setProjectileKnockback(final Entity projectile)
-//    {
-//        if (enchanter != null && projectile instanceof Arrow)
-//        {
-//            final int punch = enchanter.getPunchLevel();
-//            if (punch > 0)
-//            {
-//                final Arrow arrow = (Arrow) projectile;
-//                //TODO, This no longer works because knockback is applied on hit by checking the enchants on the item the shooter is holding.
-
-    /// /                arrow.setKnockback(punch);
-//            }
-//        }
-//    }
     protected void setHeading(final Entity projectile, final double motionX, final double motionY, final double motionZ, final float motionMult, final float motionNoise) {
         if (projectile instanceof Projectile) {
             ((Projectile) projectile).shoot(motionX, motionY, motionZ, motionMult, motionNoise);
@@ -380,7 +365,6 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
         }
 
         Arrow arrow = new Arrow(getCart().level(), 0, 0, 0, stack, bow);
-//        arrow.setEffectsFromItem(stack); //TODO Do we even need this?
         arrow.setOwner(getCart()); //Ensures arrows dont hit cart immediately after they are fired.
         return arrow;
     }

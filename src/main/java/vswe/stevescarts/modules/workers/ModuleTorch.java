@@ -34,8 +34,6 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
     private int light;
     private int lightLimit;
     private final int[] boxRect;
-//    private final EntityData<Integer> lightLevel = new EntityData<>(getCart(), new IntData(0));
-
     public ModuleTorch(ModularMinecart cart) {
         super(cart);
         lightLimit = 8;
@@ -189,14 +187,12 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
 
     @Override
     protected void receivePacket(final int id, final byte[] data, final Player player) {
-        //		if (id == 0) {
         lightLimit = data[0];
         if (lightLimit < 0) {
             lightLimit = 0;
         } else if (lightLimit > 15) {
             lightLimit = 15;
         }
-        //		}
     }
 
     @Override

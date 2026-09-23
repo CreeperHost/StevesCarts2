@@ -2,14 +2,11 @@ package vswe.stevescarts.modules.realtimers;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.containers.slots.SlotCakeDynamite;
 import vswe.stevescarts.entities.ModularMinecart;
-
-import javax.annotation.Nonnull;
 
 public class ModuleCakeServerDynamite extends ModuleCakeServer {
     private int dynamiteCount;
@@ -47,18 +44,7 @@ public class ModuleCakeServerDynamite extends ModuleCakeServer {
     public void update() {
         super.update();
         if (!getCart().level().isClientSide()) {
-            //TODO
-            @Nonnull ItemStack item = getStack(0);
-            //			if (!item.isEmpty() && item.getItem().equals(ModItems.COMPONENTS.get()) && dynamiteCount < getMaxDynamiteCount()) {
-            //				final int count = Math.min(getMaxDynamiteCount() - dynamiteCount, item.getCount());
-            //				dynamiteCount += count;
-            //				@Nonnull
-            //				ItemStack itemStack = item;
-            //				itemStack.shrink(count);
-            //				if (item.getCount() == 0) {
-            //					setStack(0, ItemStack.EMPTY);
-            //				}
-            //			}
+            //TODO Restore dynamite loading.
         }
     }
 

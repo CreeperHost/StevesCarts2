@@ -26,11 +26,6 @@ public class SCConfig {
         COMMON = specPair.getLeft();
     }
 
-    /// /        ConfigTracker.INSTANCE.registerConfig()
-//
-//        configData.load();
-//        spec.acceptConfig(configData);
-//    }
     @SubscribeEvent
     public static void onLoad(final ModConfigEvent.Loading configEvent) {
         LogManager.getLogger().debug(Logging.FORGEMOD, "Loaded Steves config file {}", configEvent.getConfig().getFileName());
@@ -40,16 +35,6 @@ public class SCConfig {
     public static void onFileChange(final ModConfigEvent.Reloading configEvent) {
         LogManager.getLogger().debug(Logging.FORGEMOD, "Steves Carts config just got changed on the file system!");
     }
-
-//    public static void loadConfig(ModConfigSpec spec, Path path) {
-//        CommentedFileConfig configData = CommentedFileConfig
-//                .builder(path)
-//                .sync()
-//                .autosave()
-//                .writingMode(WritingMode.REPLACE)
-//                .build();
-//
-//
 
     public static class Client {
         public final ModConfigSpec.ConfigValue<Boolean> useArcadeSounds;

@@ -85,8 +85,6 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         EntityRenderDispatcher entityrenderdispatcher = Minecraft.getInstance().getEntityRenderDispatcher();
         EntityRenderer<? super Entity, ?> entityrenderer = entityrenderdispatcher.getRenderer(entity);
         EntityRenderState entityrenderstate = entityrenderer.createRenderState(entity, 1.0F);
-        //TODO
-//        entityrenderstate.hitboxesRenderState = null;
         graphics.entity(entityrenderstate, scale, translation, rotation, overrideCameraAngle, x1, y1, x2, y2);
     }
 
@@ -153,7 +151,6 @@ public class GuiCartAssembler extends AbstractContainerScreen<ContainerCartAssem
         graphics.blit(RenderPipelines.GUI_TEXTURED, GuiCartAssembler.textureLeft, left, top, 0, 0, 256, imageHeight, 256, 256);
         graphics.blit(RenderPipelines.GUI_TEXTURED, GuiCartAssembler.textureRight, left + 256, top, 0, 0, imageWidth - 256, imageHeight, 256, 256);
         graphics.blit(RenderPipelines.GUI_TEXTURED, GuiCartAssembler.textureRight, left + 256, top, 0, 0, imageWidth - 256, imageHeight, 256, 256);
-//        ResourceHelper.bindResource(GuiCartAssembler.textureExtra);
         final ArrayList<SlotAssembler> slots = assembler.getSlots();
         for (final SlotAssembler slot : slots) {
             int targetX = slot.getX() - 1;

@@ -82,47 +82,6 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
         renderTag(state.label, poseStack, nodeCollector, state.lightCoords, cameraRenderState, state.distanceToCameraSq);
     }
 
-    //    @Override
-//    public void render(ModularCartRenderState state, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
-//        if (state.isInvisible) {
-//            return;
-//        }
-//
-//        super.render(state, poseStack, bufferSource, light);
-//
-//        poseStack.pushPose();
-//        long offsetSeed = state.offsetSeed;
-//        float xOffset = (((float) (offsetSeed >> 16 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
-//        float yOffset = (((float) (offsetSeed >> 20 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
-//        float zOffset = (((float) (offsetSeed >> 24 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
-//        poseStack.translate(xOffset, yOffset, zOffset);
-//
-//        //New render transforms
-//        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot));
-//        poseStack.mulPose(Axis.ZP.rotationDegrees(-state.xRot));
-//        poseStack.translate(0.0F, 0.375F, 0.0F);
-//
-//        float f3 = state.hurtTime;
-//        if (f3 > 0.0F) {
-//            poseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(f3) * f3 * state.damageTime / 10.0F * (float) state.hurtDir));
-//        }
-//
-//        poseStack.scale(-1.0F, -1.0F, 1.0F);
-//
-//        for (ModuleBase module : state.modules) {
-//            if (!module.haveModels()) continue;
-//            for (ModelCartbase model : module.getModels()) {
-//                if (model.getRenderType(module) == null) continue;
-//                model.applyEffects(module, poseStack, bufferSource, state.yRot, state.xRot, 0);
-//                model.renderToBuffer(poseStack, bufferSource.getBuffer(model.getRenderType(module)), light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
-//            }
-//        }
-//
-//        poseStack.popPose();
-//
-//        renderTag(state.label, poseStack, bufferSource, light);
-//    }
-
     protected void renderTag(List<Component> label, PoseStack poseStack, SubmitNodeCollector nodeCollector, int light, CameraRenderState cameraRenderState, double distanceToCameraSq) {
         boolean throughWalls = true;
         poseStack.pushPose();

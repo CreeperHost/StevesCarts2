@@ -279,15 +279,6 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
             }
         }
 
-//        int applerand = 200;
-//        if (fortune > 0)
-//        {
-//            applerand -= 10 << fortune;
-//            if (applerand < 40)
-//            {
-//                applerand = 40;
-//            }
-//        }
 
         List<ItemStack> nerfedstuff = getTierDrop(stuff);
         for (@Nonnull ItemStack iStack : nerfedstuff) {

@@ -47,21 +47,6 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
                 getLiquid().getTanks()[i].drawFluid(graphics, leftPos, topPos, leftPos + coords[0], topPos + coords[1]);
             }
         }
-        int version;
-        if (containerLiquid.getLayoutType() == 0) {
-            version = 0;
-        } else {
-            version = 1;
-        }
-        for (int j = 0; j < 2; ++j) {
-//            graphics.blit(GuiLiquid.texture, leftPos + ((j == 0) ? 27 : 171), topPos + 63, 0, 102 + version * 12, 32, 12);
-        }
-        for (int j = 0; j < 4; ++j) {
-            final int[] coords2 = getTankCoords(j);
-            final int type = j % 2;
-//            graphics.blit(GuiLiquid.texture, leftPos + coords2[0], topPos + coords2[1], 0, 51 * type, 36, 51);
-        }
-
         final int left = leftPos;
         final int top = topPos;
         for (int i = 0; i < 4; ++i) {
@@ -102,8 +87,7 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        // The manager draws its own split title above. Keep only the vanilla
-        // inventory label so the menu title is not rendered underneath it.
+        //NO-OP
         graphics.text(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, -12566464, false);
     }
 
@@ -236,20 +220,6 @@ public class GuiLiquid extends AbstractContainerScreen<ContainerLiquid> {
                 GuiGraphicsExtractor.blit(RenderPipelines.GUI_TEXTURED, GuiLiquid.textureExtra, left + targetX + offsetX, top + targetY + offsetY, sourceX + offsetX, sourceY + offsetY, sizeX, sizeY, 256, 256);
             }
         }
-    }
-
-    protected void drawItems(final int id, final int left, final int top) {
-        //		ItemStack cartIcon;
-        //		if (containerLiquid.getTarget()[id] < 0 || containerCargo.getTarget()[id] >= TileEntityCargo.itemSelections.size()
-        //				|| TileEntityCargo.itemSelections.get(containerCargo.getTarget()[id]).getIcon().isEmpty())
-        //		{
-        //			cartIcon = new ItemStack(Items.MINECART, 1);
-        //		} else {
-        //			cartIcon = TileEntityCargo.itemSelections.get(containerCargo.getTarget()[id]).getIcon();
-        //		}
-        //
-        //		final int[] coords = getBoxCoords(id);
-        //		renderitem.renderGuiItem(cartIcon, left + coords[0], top + coords[1]);
     }
 
     protected String getMaxSizeOverlay(final int id) {

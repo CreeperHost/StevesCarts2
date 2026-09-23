@@ -1132,76 +1132,6 @@ public abstract class ModuleBase {
         }
     }
 
-//    /**
-//     * The number of datamangers this module wants to use
-//     *
-//     * @return The amount of datamangers
-//     */
-//    public int numberOfDataWatchers()
-//    {
-//        return 0;
-//    }
-//
-//    /**
-//     * Used to initiate the datamangers
-//     */
-//    public void initDw()
-//    {
-//    }
-//
-//    /**
-//     * Register a dataparameter to the datamanger
-//     *
-//     * @param key   The local datamanger key
-//     * @param value The value to add
-//     */
-//    protected final <T> void registerDw(EntityDataAccessor<T> key, T value)
-//    {
-//        for (SynchedEntityData.DataItem<?> entry : getCart().getDataManager().itemsById)
-//        {
-//            if (entry.getAccessor() == key)
-//            {
-//                return;
-//            }
-//        }
-//        //TODO
-//        if(!getCart().getDataManager().hasItem(key)){
-//            getCart().getDataManager().define(key, value);
-//        }
-//    }
-//
-//    /**
-//     * Updates a datamanger
-//     *
-//     * @param key   The local datamanger key
-//     * @param value The value to update it to
-//     */
-//    protected final <T> void updateDw(EntityDataAccessor<T> key, T value)
-//    {
-//        getCart().getDataManager().set(key, value);
-//    }
-//
-//    protected final <T> void updateDw(EntityDataAccessor<T> key, T value, boolean force)
-//    {
-//        getCart().getDataManager().set(key, value, force);
-//    }
-//
-//    /**
-//     * Get a datamanger
-//     *
-//     * @param key The local datamanger key
-//     * @return The value of the datamanger
-//     */
-//    protected <T> T getDw(EntityDataAccessor<T> key)
-//    {
-//        return getCart().getDataManager().get(key);
-//    }
-//
-//    protected <T> EntityDataAccessor<T> createDw(EntityDataSerializer<T> serializer)
-//    {
-//        return serializer.createAccessor(cart.getNextDataWatcher());
-//    }
-
     /**
      * The amount of Gui data this module want to use. Gui data is used for sending information from the server to the client
      * when the specific client has the interface open
@@ -1393,18 +1323,6 @@ public abstract class ModuleBase {
         y += getY();
         gui.drawMouseOver(GuiGraphicsExtractor, str, x, y);
     }
-
-//    /**
-//     * Draws an image overlay on the screen. Observe that this is not when a special interface is open.
-//     *
-//     * @param rect The rectangle for the image's dimensions {targetX, targetY, width, height}
-//     * @param sourceX The x coordinate in the source file
-//     * @param sourceY The y coordinate in the source file
-//     */
-//    protected void drawImage(final int[] rect, final int sourceX, final int sourceY)
-//    {
-//        drawImage(rect[0], rect[1], sourceX, sourceY, rect[2], rect[3]);
-//    }
 
     protected void drawImage(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, int targetX, int targetY, int sourceX, int sourceY, int width, int height) {
         drawImage(GuiGraphicsExtractor, texture, targetX, targetY, sourceX, sourceY, width, height, 0xFFFFFFFF);

@@ -37,6 +37,5 @@ public class PacketHandler {
     @Deprecated
     public static void sendTo(CustomPacketPayload message, ServerPlayer player) {
         PacketDistributor.sendToPlayer(player, message);
-//        PacketDistributor.PLAYER.with(player).send(message);
     }
 }

@@ -120,7 +120,6 @@ public class BlockRailAdvDetector extends BaseRailBlock {
                                                 if (effect2 instanceof Disassemble disassembler) {
                                                     if (tile.getItem(0).isEmpty()) {
                                                         tile.setItem(0, ModuleData.createModularCart(cart));
-//                                                        upgrade.getMaster().managerInteract(cart, false);
                                                         for (int p = 0; p < cart.getContainerSize(); ++p) {
                                                             @Nonnull ItemStack item = cart.removeItem(p, 64);
                                                             if (!item.isEmpty()) {

@@ -39,18 +39,11 @@ public class ItemStackRenderer implements SpecialModelRenderer<ItemStackRenderer
         matrixStack.translate(0.5F, 0.5F, 0.5F);
         matrixStack.scale(-1.0f, -1.0f, 1.0f);
 
-        /*if (transformType == ItemDisplayContext.GUI) {
-            matrixStack.translate(-1, 0, 0);
-//                matrixStack.scale(lowestMult, lowestMult, lowestMult);
-        } else {
-            matrixStack.translate(-0.5, -0.5, 0.5);
-        }*/
         matrixStack.rotateDegrees(Axis.ZP, 180);
         matrixStack.rotateDegrees(Axis.XP, 180);
 
         CompoundTag info = ModItemData.getTagCopy(stack);
         if (info.contains("modules")) {
-            float lowestMult = 1.0f;
             ModularMinecart cart = new ModularMinecart(Minecraft.getInstance().level, 0, 0, 0, info);
 
             if (cart.modules() != null) {

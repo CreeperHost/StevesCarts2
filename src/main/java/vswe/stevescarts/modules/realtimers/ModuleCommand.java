@@ -25,12 +25,7 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource 
 
     @Override
     public void drawForeground(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui) {
-        //TODO
-        //		final List lines = Minecraft.getInstance().font.width(command, textbox[2] - 4);
-        //		for (int i = 0; i < lines.size(); ++i) {
-        //			final String line = lines.get(i).toString();
-        //			drawString(matrixStack, gui, line, textbox[0] + 2, textbox[1] + 2 + i * 8, 16777215);
-        //		}
+        //TODO Restore command text rendering.
     }
 
     @Override
@@ -66,11 +61,6 @@ public abstract class ModuleCommand extends ModuleBase implements CommandSource 
     public void sendChatToPlayer(final String var1) {
     }
 
-
-    //	@Override
-    //	public boolean canUseCommand(final int var1, final String var2) {
-    //		return var1 <= 2;
-    //	}
 
     public String translateString(final String var1, final Object... var2) {
         return var1;

@@ -40,22 +40,4 @@ public class ShortArrayData extends AbstractDataStore<ModSerializers.ShortArray>
         value = new ModSerializers.ShortArray(input.read("value", Codec.SHORT.listOf()).orElse(Collections.emptyList()).toArray(new Short[0]));
     }
 
-//    @Override
-//    public Tag toTag(HolderLookup.Provider provider) {
-//        ListTag list = new ListTag();
-//        for (short s : value.getArray()) {
-//            list.add(ShortTag.valueOf(s));
-//        }
-//        return list;
-//    }
-//
-//    @Override
-//    public void fromTag(HolderLookup.Provider provider, Tag tag) {
-//        ListTag list = (ListTag) tag;
-//        short[] shorts = new short[list.size()];
-//        for (int i = 0; i < list.size(); i++) {
-//            shorts[i] = list.getShortOr(i, (short) 0);
-//        }
-//        value = new ModSerializers.ShortArray(shorts);
-//    }
 }

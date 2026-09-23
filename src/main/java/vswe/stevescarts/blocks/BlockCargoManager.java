@@ -5,7 +5,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,18 +26,6 @@ public class BlockCargoManager extends BlockContainerBase {
         }
         return InteractionResult.SUCCESS;
     }
-
-    //TODO The logic that now exists by default in BlockEntity should cover this but need to test that.
-//    @Override
-//    public void onRemove(@NotNull BlockState blockState1, @NotNull Level world, @NotNull BlockPos blockPos, @NotNull BlockState blockState, boolean p_196243_5_)
-//    {
-//        final TileEntityCargo tile = (TileEntityCargo) world.getBlockEntity(blockPos);
-//        if (tile != null)
-//        {
-//            BlockContainerBase.dropResources(blockState, world, blockPos);
-//        }
-//        super.onRemove(blockState1, world, blockPos, blockState, p_196243_5_);
-//    }
 
     @org.jetbrains.annotations.Nullable
     @Override

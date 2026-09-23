@@ -563,23 +563,11 @@ public interface IModularCart extends Container, IFluidHandler {
             ModuleBase module = moduleConstructor.newInstance(this);
             module.setModuleId(moduleData.getID());
             modules().add(module);
-//            if (data != null && data.contains("data")) { Currently not used so can just comment out for now.
-//                module.readExtraData(data.getCompoundOrEmpty("data"));
-//            }
         } catch (Exception e) {
             StevesCarts.LOGGER.error("Failed to load module with ID " + moduleData.getID() + "! More info below.");
             e.printStackTrace();
         }
     }
-
-//    default void writeModulesToNbt(ValueOutput output) {
-//        ValueOutput list = output.child("modules");
-//        list.putInt("count", modules.size());
-//        for (int i = 0; i < modules.size(); i++) {
-//            list.putString(String.valueOf(i), modules.get(i).getModuleId().toString());
-//        }
-//    }
-
 
     default void updateSimulationModules(List<Identifier> data) {
         if (!isPlaceholder()) {

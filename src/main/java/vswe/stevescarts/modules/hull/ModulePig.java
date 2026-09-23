@@ -13,17 +13,13 @@ import javax.annotation.Nonnull;
 public class ModulePig extends ModuleHull {
     private int oinkTimer;
 
-    /**
-     * Only used for getting the texture of the armor.
-     */
-    //	private LayerBipedArmor fakeArmorLayer = new LayerBipedArmor(null);
     public ModulePig(ModularMinecart cart) {
         super(cart);
         oinkTimer = getRandomTimer();
     }
 
     private void oink() {
-        //		this.getCart().level.playSound((Entity) this.getCart(), SoundEvents.PIG_AMBIENT, 1.0f, (this.getCart().random.nextFloat() - this.getCart().random.nextFloat()) * 0.2f + 1.0f);
+        //TODO Restore pig cart sounds.
     }
 
     private int getRandomTimer() {
@@ -66,7 +62,6 @@ public class ModulePig extends ModuleHull {
             return null;
         }
         return Identifier.parse("");
-        //		return fakeArmorLayer.getArmorResource((Entity) null, item, EntityEquipmentSlot.HEAD, isOverlay ? "overlay" : null);
     }
 
     public boolean hasHelmetColor(final boolean isOverlay) {
@@ -74,11 +69,6 @@ public class ModulePig extends ModuleHull {
     }
 
     public int getHelmetColor(final boolean isOverlay) {
-//        if (hasHelment())
-//        {
-//            ItemStack item = getHelmet();
-//            return Minecraft.getInstance().cologetItemColors().getColor(item, isOverlay ? 1 : 0);
-//        }
         return -1;
     }
 

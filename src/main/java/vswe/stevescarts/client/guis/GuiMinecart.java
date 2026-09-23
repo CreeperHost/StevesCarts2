@@ -89,8 +89,6 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
         final int top = getTopPos();
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiMinecart.textureLeft, left, top, 0, 0, 256, 256, 256, 256);
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiMinecart.textureRight, left + 256, top, 0, 0, imageWidth - 256, imageHeight, 256, 256);
-//        guiGraphics.flush(); //Need to flush because... Lets just say this entire gui is in desperate need of a complete overhaul...
-
         if (cart != null) {
             final ModuleBase thief = cart.getInterfaceThief();
             if (thief != null) {
@@ -109,8 +107,6 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
                 //Draw Scroll Bar
                 guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiMinecart.textureRight, left + scrollBox[0], top + scrollBox[1], 222, 24, scrollBox[2], scrollBox[3], 256, 256);
                 guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiMinecart.textureRight, left + scrollBox[0] + 2, top + scrollBox[1] + 2 + cart.getScrollY(), 240, 26 + (cart.canScrollModules ? 0 : 25), 14, 25, 256, 256);
-//                guiGraphics.flush(); //Need to flush because... Lets just say this entire gui is in desperate need of a complete overhaul...
-
                 for (final ModuleBase module : cart.modules()) {
                     drawModuleSlots(guiGraphics, GuiMinecart.textureRight, module);
                 }
@@ -133,18 +129,9 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
     }
 
     private void renderModuleList(GuiGraphicsExtractor guiGraphics, int x, int y) {
-//        ArrayList<ModuleCountPair> moduleCounts = cart.getModuleCounts();
         for (int i = 0; i < cart.modules().size(); i++) {
-//            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             drawModuleIcon(guiGraphics, cart.modules().get(i).getItemStack(), getLeftPos() + getModuleDisplayX(i), getTopPos() + getModuleDisplayY(i), 1.0f, 1.0f, 0.0f, 0.0f);
         }
-
-//        for (int i = 0; i < moduleCounts.size(); ++i)
-//        {
-//            ModuleCountPair count = moduleCounts.get(i);
-//            drawModuleIcon(guiGraphics, count.getData(), getLeftPos() + getModuleDisplayX(i), getTopPos() + getModuleDisplayY(i), 1.0f, 1.0f, 0.0f, 0.0f);
-//        }
-//        GlStateManager._disableBlend();
     }
 
     private void renderReturnButton(GuiGraphicsExtractor guiGraphics, int x, int y) {
@@ -156,7 +143,6 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
 
     public void drawModuleIcon(GuiGraphicsExtractor guiGraphics, ItemStack icon, final int targetX, final int targetY, final float sizeX, final float sizeY, final float offsetX, final float offsetY) {
         guiGraphics.item(icon, targetX, targetY);
-//        RenderSystem.disableDepthTest();
     }
 
     private void renderModuleListText(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {

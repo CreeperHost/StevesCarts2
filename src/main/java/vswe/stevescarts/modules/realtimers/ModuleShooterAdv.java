@@ -160,7 +160,6 @@ public class ModuleShooterAdv extends ModuleShooter {
 
         setProjectileDamage(projectile);
         setProjectileOnFire(projectile);
-//        setProjectileKnockback(projectile);
 
         getCart().level().addFreshEntity(projectile);
 

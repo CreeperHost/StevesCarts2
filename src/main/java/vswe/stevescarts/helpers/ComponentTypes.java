@@ -103,7 +103,6 @@ public enum ComponentTypes {
 
     public String getRawName() {
         return name;
-//        return name.replace(":", "").replace("'", "").replace(" ", "_").replace("-", "_").toLowerCase();
     }
 
     @Nonnull

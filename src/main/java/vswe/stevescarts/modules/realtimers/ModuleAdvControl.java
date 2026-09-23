@@ -81,10 +81,8 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
                 ModuleEngine engine = getCart().engines().get(i);
                 float[] rgb = engine.getGuiBarColor();
                 int args = ARGB.colorFromFloat(1F, rgb[0], rgb[1], rgb[2]);
-//                RenderSystem.setShaderColor(rgb[0], rgb[1], rgb[2], 1.0f);
                 drawImage(render, texture, 7, i * 15 + 2, 66, 0, upperBarLength, 5, args);
                 drawImage(render, texture, 7, i * 15 + 2 + 6, 66, 6, lowerBarLength, 5, args);
-//                RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
                 drawImage(render, texture, 5, i * 15, 66 + engine.getPriority() * 7, 11, 7, 15);
             }
         }

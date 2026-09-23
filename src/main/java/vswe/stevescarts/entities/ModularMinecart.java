@@ -675,12 +675,8 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     protected void positionRider(Entity passenger, Entity.MoveFunction moveFunction) {
         super.positionRider(passenger, moveFunction);
         if (this.level().isClientSide() && passenger instanceof Player player) {
-            if (player.shouldRotateWithMinecart() /* && useExperimentalMovement(this.level())*/) {
-                //TODO, Figure out if we want this, and get seat rendering working properly.
-//            if (true /*player.shouldRotateWithMinecart() && useExperimentalMovement(this.level())*/) {
-//                float f = (float) Mth.rotLerp(0.5, (double)this.playerRotationOffset, (double)this.rotationOffset);
-//                player.setYRot(player.getYRot() - (f - this.playerRotationOffset));
-//                this.playerRotationOffset = f;
+            if (player.shouldRotateWithMinecart()) {
+                //TODO Restore rider rotation when cart seats support it.
             }
         }
 

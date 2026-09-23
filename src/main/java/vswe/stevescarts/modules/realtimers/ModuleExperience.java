@@ -63,19 +63,6 @@ public class ModuleExperience extends ModuleBase {
         }
     }
 
-//    @Override
-//    public int numberOfDataWatchers()
-//    {
-//        return 1;
-//    }
-//
-//    @Override
-//    public void initDw()
-//    {
-//        EXPERIENCE = createDw(EntityDataSerializers.INT);
-//        registerDw(EXPERIENCE, 0);
-//    }
-
     @Override
     public void drawMouseOver(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final int x, final int y) {
         drawStringOnMouseOver(GuiGraphicsExtractor, gui, Localization.MODULES.ATTACHMENTS.EXPERIENCE_LEVEL.translate(String.valueOf(getExperienceAmount()), String.valueOf(1500)) + "\n" +
