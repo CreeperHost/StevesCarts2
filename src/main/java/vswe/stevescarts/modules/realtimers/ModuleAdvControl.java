@@ -6,7 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ARGB;
+import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -167,10 +169,6 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     protected void receivePacket(final int id, final byte[] data, final Player player) {
         if (id == 0) {
             engineInformation = data;
-        } else if (id == 1) {
-            if (getCart().getCartRider() != null && getCart().getCartRider() instanceof Player && getCart().getCartRider() == player) {
-                keyinformation = data[0];
-            }
         } else if (id == 2) {
             int intOdo = 0;
             int intTrip = 0;
@@ -217,6 +215,8 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
 
         if (getCart().level().isClientSide()) {
             encodeKeys();
+        } else {
+            readRiderInput();
         }
         if (!lastBackKey && isBackKeyDown()) {
             turnback();
@@ -275,18 +275,45 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
     private void encodeKeys() {
         if (getCart().getCartRider() != null && getCart().getCartRider() instanceof Player && getCart().getCartRider() == getClientPlayer()) {
             final Minecraft minecraft = Minecraft.getInstance();
-            final byte oldVal = keyinformation;
+            keyinformation = encodeInput(
+                    minecraft.options.keyUp.isDown(),
+                    minecraft.options.keyLeft.isDown(),
+                    minecraft.options.keyRight.isDown(),
+                    minecraft.options.keyDown.isDown(),
+                    minecraft.options.keyJump.isDown(),
+                    minecraft.options.keySprint.isDown()
+            );
+        } else {
             keyinformation = 0;
-            keyinformation |= (byte) ((minecraft.options.keyUp.isDown() ? 1 : 0) << 0);
-            keyinformation |= (byte) ((minecraft.options.keyLeft.isDown() ? 1 : 0) << 1);
-            keyinformation |= (byte) ((minecraft.options.keyRight.isDown() ? 1 : 0) << 2);
-            keyinformation |= (byte) ((minecraft.options.keyDown.isDown() ? 1 : 0) << 3);
-            keyinformation |= (byte) ((minecraft.options.keyJump.isDown() ? 1 : 0) << 4);
-            keyinformation |= (byte) ((minecraft.options.keySprint.isDown() ? 1 : 0) << 5);
-            if (oldVal != keyinformation) {
-                sendPacket(1, new byte[]{keyinformation});
-            }
         }
+    }
+
+    private void readRiderInput() {
+        if (!(getCart().getCartRider() instanceof ServerPlayer player)) {
+            keyinformation = 0;
+            return;
+        }
+
+        Input input = player.getLastClientInput();
+        keyinformation = encodeInput(
+                input.forward(),
+                input.left(),
+                input.right(),
+                input.backward(),
+                input.jump(),
+                input.sprint()
+        );
+    }
+
+    private static byte encodeInput(boolean forward, boolean left, boolean right, boolean back, boolean jump, boolean sprint) {
+        int encoded = 0;
+        encoded |= (forward ? 1 : 0) << 0;
+        encoded |= (left ? 1 : 0) << 1;
+        encoded |= (right ? 1 : 0) << 2;
+        encoded |= (back ? 1 : 0) << 3;
+        encoded |= (jump ? 1 : 0) << 4;
+        encoded |= (sprint ? 1 : 0) << 5;
+        return (byte) encoded;
     }
 
     private boolean isForwardKeyDown() {
@@ -444,12 +471,4 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         return getSpeedSetting() / 6.0f;
     }
 
-    @Override
-    public void postUpdate() {
-        if (this.getCart().level().isClientSide() && this.getCart().getCartRider() != null && this.getCart().getCartRider() instanceof Player && this.getCart().getCartRider() == this.getClientPlayer()) {
-            //TODO
-            //			KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindSprint.getKeyCode(), false);
-            //			KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindJump.getKeyCode(), false);
-        }
-    }
 }
