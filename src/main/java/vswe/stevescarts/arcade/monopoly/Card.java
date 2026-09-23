@@ -15,7 +15,7 @@ public abstract class Card {
     public void render(final ArcadeMonopoly game, GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, final GuiMinecart gui, final int[] rect, final boolean isFront) {
         if (isFront) {
             game.getModule().drawImage(GuiGraphicsExtractor, game.getTexture(gui, 1), gui, rect, 67, 177);
-            game.getModule().drawSplitString(GuiGraphicsExtractor, gui, message, rect[0] + gui.getGuiLeft() + 5, rect[1] + gui.getGuiTop() + 5, rect[2] - 10, true, 4210752);
+            game.getModule().drawSplitString(GuiGraphicsExtractor, gui, message, rect[0] + 5, rect[1] + 5, rect[2] - 10, true, 4210752);
             if (getNote() != null) {
                 int x = 10;
                 if (!getMoneyPrefix().equals("")) {

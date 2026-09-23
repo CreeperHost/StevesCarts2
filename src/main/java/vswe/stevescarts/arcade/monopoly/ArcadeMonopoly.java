@@ -77,7 +77,7 @@ public class ArcadeMonopoly extends ArcadeGame {
         final StreetGroup streetGroup9 = new StreetGroup(200, new int[]{40, 78, 161});
         final PropertyGroup stationGroup = new PropertyGroup();
         final PropertyGroup utilGroup = new PropertyGroup();
-        places = new Place[]{new Go(this), new Street(this, streetGroup1, "Soaryn Chest", 30, 2), new Community(this), new Street(this, streetGroup1, "Eddie's Cobble Stairs", 30, 2), new Place(this), new Utility(this, utilGroup, 0, "Test"), new Street(this, streetGroup2, "Ecu's Eco Escape", 60, 4), new Station(this, stationGroup, 0, "Wooden Station"), new Street(this, streetGroup2, "Test", 60, 4), new Villager(this), new Street(this, streetGroup3, "Direwolf's 9x9", 100, 6), new Chance(this), new Street(this, streetGroup3, "Greg's Forest", 100, 6), new Street(this, streetGroup3, "Alice's Tunnel", 110, 8), new Jail(this), new Street(this, streetGroup4, "Flora's Alveary", 140, 10), new Utility(this, utilGroup, 1, "Test"), new Street(this, streetGroup4, "Sengir's Greenhouse", 140, 10), new Street(this, streetGroup4, "Test", 160, 12), new Station(this, stationGroup, 1, "Standard Station"), new Street(this, streetGroup5, "Muse's Moon Base", 200, 14), new Community(this), new Street(this, streetGroup5, "Algorithm's Crafting CPU", 200, 14), new Street(this, streetGroup5, "Pink Lemmingaide Stand", 240, 16), new CornerPlace(this, 2), new Street(this, streetGroup6, "Covert's Railyard", 250, 18), new Chance(this), new Street(this, streetGroup6, "Test", 250, 18), new Street(this, streetGroup6, "Test", 270, 20), new Community(this), new Street(this, streetGroup6, "Test", 270, 20), new Station(this, stationGroup, 2, "Reinforced Station"), new Street(this, streetGroup7, "Player's Industrial Warehouse", 320, 22), new Villager(this), new Street(this, streetGroup7, "Dan's Computer Repair", 320, 22), new Street(this, streetGroup7, "iChun's Hat Shop", 350, 24), new Utility(this, utilGroup, 2, "Test"), new Street(this, streetGroup7, "Lex's Forge", 350, 24), new GoToJail(this), new Street(this, streetGroup8, "Morvelaira's Pretty Wall", 400, 26), new Street(this, streetGroup8, "Rorax's Tower of Doom", 400, 26), new Community(this), new Street(this, streetGroup8, "Jaded's Crash Lab", 440, 30), new Station(this, stationGroup, 3, "Galgadorian Station"), new Chance(this), new Street(this, streetGroup9, "Test", 500, 40), new Place(this), new Street(this, streetGroup9, "Vswe's Redstone Tower", 600, 50)};
+        places = new Place[]{new Go(this), new Street(this, streetGroup1, "Soaryn Chest", 30, 2), new Community(this), new Street(this, streetGroup1, "Eddie's Cobble Stairs", 30, 2), new Place(this), new Utility(this, utilGroup, 0, "Water Works"), new Street(this, streetGroup2, "Ecu's Eco Escape", 60, 4), new Station(this, stationGroup, 0, "Wooden Station"), new Street(this, streetGroup2, "Pahimar's Alchemy Lab", 60, 4), new Villager(this), new Street(this, streetGroup3, "Direwolf's 9x9", 100, 6), new Chance(this), new Street(this, streetGroup3, "Greg's Forest", 100, 6), new Street(this, streetGroup3, "Alice's Tunnel", 110, 8), new Jail(this), new Street(this, streetGroup4, "Flora's Alveary", 140, 10), new Utility(this, utilGroup, 1, "Lava Works"), new Street(this, streetGroup4, "Sengir's Greenhouse", 140, 10), new Street(this, streetGroup4, "King Lemming's Dynamo", 160, 12), new Station(this, stationGroup, 1, "Standard Station"), new Street(this, streetGroup5, "Muse's Moon Base", 200, 14), new Community(this), new Street(this, streetGroup5, "Algorithm's Crafting CPU", 200, 14), new Street(this, streetGroup5, "Pink Lemmingaide Stand", 240, 16), new CornerPlace(this, 2), new Street(this, streetGroup6, "Covert's Railyard", 250, 18), new Chance(this), new Street(this, streetGroup6, "CPW's Coding Cave", 250, 18), new Street(this, streetGroup6, "Azanor's Arcane Tower", 270, 20), new Community(this), new Street(this, streetGroup6, "mDiyo's Smeltery", 270, 20), new Station(this, stationGroup, 2, "Reinforced Station"), new Street(this, streetGroup7, "Player's Industrial Warehouse", 320, 22), new Villager(this), new Street(this, streetGroup7, "Dan's Computer Repair", 320, 22), new Street(this, streetGroup7, "iChun's Hat Shop", 350, 24), new Utility(this, utilGroup, 2, "Redstone Works"), new Street(this, streetGroup7, "Neo's Forge", 350, 24), new GoToJail(this), new Street(this, streetGroup8, "Morvelaira's Pretty Wall", 400, 26), new Street(this, streetGroup8, "Rorax's Tower of Doom", 400, 26), new Community(this), new Street(this, streetGroup8, "Jaded's Crash Lab", 440, 30), new Station(this, stationGroup, 3, "Galgadorian Station"), new Chance(this), new Street(this, streetGroup9, "ChickenBones' Ender Storage", 500, 40), new Place(this), new Street(this, streetGroup9, "Vswe's Redstone Tower", 600, 50)};
         ((Property) places[1]).setOwner(pieces.get(0));
         ((Property) places[3]).setOwner(pieces.get(0));
         die = new Die(this, 0);
@@ -588,8 +588,7 @@ public class ArcadeMonopoly extends ArcadeGame {
         if (currentCard != null) {
             cardScale = Math.min(cardScale + 0.02f, 1.0f);
             cardRotation = Math.max(0, cardRotation - 6);
-            drawCard(GuiGraphicsExtractor, matrixStack, gui, true);
-            drawCard(GuiGraphicsExtractor, matrixStack, gui, false);
+            drawCard(GuiGraphicsExtractor, matrixStack, gui);
             if (cardScale == 1.0f && useAI()) {
                 removeCard();
             }
@@ -603,20 +602,23 @@ public class ArcadeMonopoly extends ArcadeGame {
         cardRotation = 540;
     }
 
-    private void drawCard(GuiGraphicsExtractor GuiGraphicsExtractor, Matrix3x2fStack matrixStack, GuiMinecart gui, final boolean isFront) {
-        matrixStack.pushMatrix();
+    private void drawCard(GuiGraphicsExtractor GuiGraphicsExtractor, Matrix3x2fStack matrixStack, GuiMinecart gui) {
         final int x = 150;
         final int y = 44;
         final float s = cardScale;
+        final float rotationScale = (float) Math.cos(Math.toRadians(cardRotation));
+        final float horizontalScale = s * Math.abs(rotationScale);
+        if (horizontalScale < 0.001f) {
+            return;
+        }
         final float posX = gui.getGuiLeft() + 71;
         final float posY = gui.getGuiTop() + 40;
-//        matrixStack.translate(0.0f, 0.0f, 100.0f);
+        matrixStack.pushMatrix();
         matrixStack.translate(posX + x, posY + y);
-        matrixStack.scale(s, s);
-//        matrixStack.mulPose(cardRotation + (isFront ? 0 : 180), 0.0f, 1.0f, 0.0f);
+        matrixStack.scale(horizontalScale, s);
         matrixStack.translate(-posX, -posY);
         final int[] rect = {0, 0, 142, 80};
-        currentCard.render(this, GuiGraphicsExtractor, getTexture(gui, 0), gui, rect, isFront);
+        currentCard.render(this, GuiGraphicsExtractor, getTexture(gui, 0), gui, rect, rotationScale >= 0.0f);
         matrixStack.popMatrix();
     }
 
@@ -828,10 +830,12 @@ public class ArcadeMonopoly extends ArcadeGame {
         }
         final float posX = gui.getGuiLeft();
         final float posY = gui.getGuiTop();
-        //		GlStateManager._translatef(posX + x * s, posY + y * s, 0.0f);
-        //		GlStateManager._scalef(s, s, 1.0f);
-        //		GlStateManager._rotatef(r, 0.0f, 0.0f, 1.0f);
-        //		GlStateManager._translatef(-posX, -posY, 0.0f);
+        final Matrix3x2fStack matrixStack = GuiGraphicsExtractor.pose();
+        matrixStack.pushMatrix();
+        matrixStack.translate(posX + x * s, posY + y * s);
+        matrixStack.scale(s, s);
+        matrixStack.rotate((float) Math.toRadians(r));
+        matrixStack.translate(-posX, -posY);
         place.draw(GuiGraphicsExtractor, texture, gui, states);
         final int[] total = new int[place.getPieceAreaCount()];
         for (int i = 0; i < pieces.size(); ++i) {
@@ -850,6 +854,7 @@ public class ArcadeMonopoly extends ArcadeGame {
             }
         }
         place.drawText(GuiGraphicsExtractor, gui, states);
+        matrixStack.popMatrix();
     }
 
     @Override

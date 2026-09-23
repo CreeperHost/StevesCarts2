@@ -653,6 +653,7 @@ public class GeneratorLanguage extends LanguageProvider {
         add("arcade.stevescarts.instructionRight", "Move right");
         add("arcade.stevescarts.instructionRestart", "Restart");
         add("arcade.stevescarts.creeperSweeper", "Creeper Sweeper");
+        add("arcade.stevescarts.forgecraftMadness", "ForgeCraft Madness");
         add("arcade.stevescarts.creeperMapName1", "Tiny");
         add("arcade.stevescarts.creeperMapName2", "Medium");
         add("arcade.stevescarts.creeperMapName3", "Large");

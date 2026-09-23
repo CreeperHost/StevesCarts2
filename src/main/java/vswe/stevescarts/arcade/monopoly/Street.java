@@ -20,7 +20,7 @@ public class Street extends Property {
     @Override
     public void draw(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
         super.draw(GuiGraphicsExtractor, texture, gui, states);
-        game.getModule().drawImage(GuiGraphicsExtractor, texture, gui, 0, 0, 76, 0, 76, 22);
+        game.getModule().drawImage(GuiGraphicsExtractor, texture, gui, new int[]{0, 0, 76, 22}, 76, 0, getStreetColor());
         if (structures > 0 && structures < 5) {
             for (int i = 0; i < structures; ++i) {
                 game.getModule().drawImage(GuiGraphicsExtractor, texture, gui, 3 + i * 18, 3, 76, 22, 16, 16);
@@ -29,6 +29,13 @@ public class Street extends Property {
             game.getModule().drawImage(GuiGraphicsExtractor, texture, gui, 3, 3, 92, 22, 16, 16);
         }
         drawValue(GuiGraphicsExtractor, gui);
+    }
+
+    private int getStreetColor() {
+        return 0xFF000000
+                | Math.round(color[0] * 255.0f) << 16
+                | Math.round(color[1] * 255.0f) << 8
+                | Math.round(color[2] * 255.0f);
     }
 
     public void increaseStructure() {

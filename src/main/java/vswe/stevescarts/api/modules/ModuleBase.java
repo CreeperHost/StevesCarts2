@@ -459,9 +459,9 @@ public abstract class ModuleBase {
                 gui.pushScissor(guiGraphics);
             }
             if (center) {
-                guiGraphics.text(mc.font, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX() + left, rect[1] + getY() + dif + top, 0xFF000000 | c);
+                guiGraphics.text(mc.font, str, rect[0] + (rect[2] - Minecraft.getInstance().font.width(str)) / 2 + getX() + left, rect[1] + getY() + dif + top, 0xFF000000 | c, false);
             } else {
-                guiGraphics.text(mc.font, str, rect[0] + getX() + left, rect[1] + getY() + dif + top, 0XFFFFFFFF);
+                guiGraphics.text(mc.font, str, rect[0] + getX() + left, rect[1] + getY() + dif + top, 0XFFFFFFFF, false);
             }
             if (!stealInterface) {
                 gui.popScissor(guiGraphics);
@@ -477,7 +477,7 @@ public abstract class ModuleBase {
             handleScroll(rect);
         }
         if (rect[3] == 8) {
-            guiGraphics.text(Minecraft.getInstance().font, str, rect[0] + getX(), rect[1] + getY(), 0xFF000000 | c);
+            guiGraphics.text(Minecraft.getInstance().font, str, rect[0] + getX(), rect[1] + getY(), 0xFF000000 | c, true);
         }
     }
 
@@ -496,10 +496,25 @@ public abstract class ModuleBase {
     }
 
     public void drawSplitString(GuiGraphicsExtractor guiGraphics, final GuiMinecart gui, final String str, final int x, final int y, final int w, final boolean center, final int c) {
-        List<FormattedCharSequence> newlines = gui.getFont().split(Component.literal(str), w);
-        for (int i = 0; i < newlines.size(); ++i) {
-            String line = newlines.get(i).toString();
-            drawString(guiGraphics, gui, line, x, y + i * 8, w, center, c);
+        Minecraft mc = Minecraft.getInstance();
+        List<FormattedCharSequence> lines = gui.getFont().split(Component.literal(str), w);
+        for (int i = 0; i < lines.size(); ++i) {
+            FormattedCharSequence line = lines.get(i);
+            int lineX = center ? x + (w - mc.font.width(line)) / 2 : x;
+            int[] rect = {lineX, y + i * 8, w, 8};
+            int dif = 0;
+            if (!doStealInterface()) {
+                dif = handleScroll(rect);
+            }
+            if (rect[3] > 0) {
+                if (!doStealInterface()) {
+                    gui.pushScissor(guiGraphics);
+                }
+                guiGraphics.text(mc.font, line, rect[0] + getX() + gui.getLeftPos(), rect[1] + getY() + dif + gui.getTopPos(), 0xFF000000 | c, false);
+                if (!doStealInterface()) {
+                    gui.popScissor(guiGraphics);
+                }
+            }
         }
     }
 

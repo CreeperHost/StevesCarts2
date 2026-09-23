@@ -25,7 +25,7 @@ public abstract class Property extends Place {
 
     @Override
     public void drawText(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
-        game.getModule().drawSplitString(GuiGraphicsExtractor, gui, name, 3 + gui.getGuiLeft(), getTextY() + gui.getGuiTop(), 70, true, 4210752);
+        game.getModule().drawSplitString(GuiGraphicsExtractor, gui, name, 3, getTextY(), 70, true, 4210752);
     }
 
     protected abstract int getTextY();

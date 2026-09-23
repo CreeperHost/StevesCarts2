@@ -16,7 +16,6 @@ public class CornerPlace extends Place {
 
     @Override
     public void draw(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier tex, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
-        applyColorFilter(gui, states);
-        game.getModule().drawImage(GuiGraphicsExtractor, game.getTexture(gui, 2), gui, 0, 0, 122 * (texture % 2), 122 * (texture / 2), 122, 122);
+        game.getModule().drawImage(GuiGraphicsExtractor, game.getTexture(gui, 2), gui, new int[]{0, 0, 122, 122}, 122 * (texture % 2), 122 * (texture / 2), getColorFilter(states));
     }
 }

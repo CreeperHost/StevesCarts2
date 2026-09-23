@@ -79,19 +79,10 @@ public abstract class ArcadeGame {
         return false;
     }
 
-    public boolean allowKeyRepeat() {
-        return false;
-    }
-
     public void load(final GuiMinecart gui) {
-        //TODO
-//        		gui.enableKeyRepeat(allowKeyRepeat());
     }
 
     public void unload(final GuiMinecart gui) {
-        if (allowKeyRepeat()) {
-            //			gui.enableKeyRepeat(false);
-        }
     }
 
     public void drawImageInArea(GuiGraphicsExtractor GuiGraphicsExtractor, Identifier texture, GuiMinecart gui, final int x, final int y, final int u, final int v, final int w, final int h) {

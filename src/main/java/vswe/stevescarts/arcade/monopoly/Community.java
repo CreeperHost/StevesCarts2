@@ -17,7 +17,7 @@ public class Community extends CardPlace {
 
     @Override
     public void drawText(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
-        game.getModule().drawSplitString(GuiGraphicsExtractor, gui, "Dungeon Chest", 3 + gui.getGuiLeft(), 10 + gui.getGuiTop(), 70, true, 4210752);
+        game.getModule().drawSplitString(GuiGraphicsExtractor, gui, "Dungeon Chest", 3, 10, 70, true, 4210752);
     }
 
     @Override

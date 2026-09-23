@@ -30,27 +30,26 @@ public class Place {
             u = getTextureId() % 3;
             v = getTextureId() % 6 / 3;
         }
-        applyColorFilter(gui, states);
-        game.getModule().drawImage(GuiGraphicsExtractor, game.getTexture(gui, t), gui, 0, 0, 76 * u, 122 * v, 76, 122);
+        game.getModule().drawImage(GuiGraphicsExtractor, game.getTexture(gui, t), gui, new int[]{0, 0, 76, 122}, 76 * u, 122 * v, getColorFilter(states));
     }
 
-    public void applyColorFilter(final GuiMinecart gui, final EnumSet<PLACE_STATE> states) {
-        //TODO
+    protected int getColorFilter(final EnumSet<PLACE_STATE> states) {
         if (states.contains(PLACE_STATE.SELECTED)) {
             if (states.contains(PLACE_STATE.HOVER)) {
-                //				GlStateManager._color4f(1.0f, 0.8f, 0.5f, 1.0f);
+                return 0xFFFFCC80;
             } else {
-                //				GlStateManager._color4f(1.0f, 1.0f, 0.75f, 1.0f);
+                return 0xFFFFFFBF;
             }
         } else if (states.contains(PLACE_STATE.MARKED)) {
             if (states.contains(PLACE_STATE.HOVER)) {
-                //				GlStateManager._color4f(1.0f, 0.75f, 1.0f, 1.0f);
+                return 0xFFFFBFFF;
             } else {
-                //				GlStateManager._color4f(1.0f, 0.85f, 0.85f, 1.0f);
+                return 0xFFFFD9D9;
             }
         } else if (states.contains(PLACE_STATE.HOVER)) {
-            //			GlStateManager._color4f(0.9f, 0.9f, 1.0f, 1.0f);
+            return 0xFFE6E6FF;
         }
+        return 0xFFFFFFFF;
     }
 
     public void drawText(GuiGraphicsExtractor GuiGraphicsExtractor, GuiMinecart gui, final EnumSet<PLACE_STATE> states) {

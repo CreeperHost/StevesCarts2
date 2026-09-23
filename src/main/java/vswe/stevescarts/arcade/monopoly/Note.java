@@ -73,13 +73,13 @@ public class Note {
 
     public void draw(GuiGraphicsExtractor GuiGraphicsExtractor, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount, final int color) {
         draw(GuiGraphicsExtractor, game, gui, x + 10, y);
-        game.getModule().drawString(GuiGraphicsExtractor, gui, amount + "x ", new int[]{x + gui.getGuiLeft(), y + gui.getGuiTop(), 10, 16}, color);
+        game.getModule().drawString(GuiGraphicsExtractor, gui, amount + "x ", new int[]{x, y, 10, 16}, color);
     }
 
     public void drawPlayer(GuiGraphicsExtractor GuiGraphicsExtractor, ArcadeMonopoly game, final GuiMinecart gui, final int x, final int y, final int amount) {
         game.drawImageInArea(GuiGraphicsExtractor, game.getTexture(gui, 1), gui, x, y, 76 + u * 16, 38 + v * 16, 16, 16);
         if (x + 16 < 443) {
-            game.getModule().drawString(GuiGraphicsExtractor, gui, String.valueOf(amount), x + gui.getGuiLeft(), y + 17 + gui.getGuiTop(), 16, true, 0xFF404040);
+            game.getModule().drawString(GuiGraphicsExtractor, gui, String.valueOf(amount), x, y + 17, 16, true, 0xFF404040);
         }
     }
 

@@ -9,6 +9,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.arcade.ArcadeGame;
 import vswe.stevescarts.arcade.invaders.ArcadeInvaders;
+import vswe.stevescarts.arcade.monopoly.ArcadeMonopoly;
 import vswe.stevescarts.arcade.sweeper.ArcadeSweeper;
 import vswe.stevescarts.arcade.tetris.ArcadeTetris;
 import vswe.stevescarts.arcade.tracks.ArcadeTracks;
@@ -20,6 +21,7 @@ import vswe.stevescarts.helpers.ResourceHelper;
 import java.util.ArrayList;
 
 public class ModuleArcade extends ModuleBase {
+    private static final int LIST_TEXTURE_HEIGHT = 88;
     private final ArrayList<ArcadeGame> games;
     private ArcadeGame currentGame;
     private int afkTimer;
@@ -30,7 +32,7 @@ public class ModuleArcade extends ModuleBase {
         games.add(new ArcadeTetris(this));
         games.add(new ArcadeInvaders(this));
         games.add(new ArcadeSweeper(this));
-        //		games.add(new ArcadeMonopoly(this));
+        games.add(new ArcadeMonopoly(this));
     }
 
     private boolean isGameActive() {
@@ -59,7 +61,7 @@ public class ModuleArcade extends ModuleBase {
 
     @Override
     public int guiHeight() {
-        return 115;
+        return 31 + games.size() * 21;
     }
 
     @Override
@@ -97,7 +99,9 @@ public class ModuleArcade extends ModuleBase {
             currentGame.drawBackground(GuiGraphicsExtractor, gui, x, y);
         } else {
             final int[] rect = getListArea();
-            drawImage(GuiGraphicsExtractor, texture, gui, rect, 0, 0);
+            drawImage(GuiGraphicsExtractor, texture, gui, rect[0], rect[1], 0, 0, rect[2], LIST_TEXTURE_HEIGHT - 2);
+            drawImage(GuiGraphicsExtractor, texture, gui, rect[0], rect[1] + LIST_TEXTURE_HEIGHT - 2, 0, LIST_TEXTURE_HEIGHT - 23, rect[2], 21);
+            drawImage(GuiGraphicsExtractor, texture, gui, rect[0], rect[1] + rect[3] - 2, 0, LIST_TEXTURE_HEIGHT - 2, rect[2], 2);
             for (int i = 0; i < games.size(); ++i) {
                 final int[] button = getButtonGraphicArea(i);
                 final int srcX2 = 0;
@@ -105,7 +109,7 @@ public class ModuleArcade extends ModuleBase {
                 if (button[3] > 0) {
                     drawImage(GuiGraphicsExtractor, texture, gui, button, srcX2, srcY2);
                     final int[] icon = getButtonIconArea(i);
-                    drawImage(GuiGraphicsExtractor, texture, gui, icon, i * 16, rect[3]);
+                    drawImage(GuiGraphicsExtractor, texture, gui, icon, i * 16, LIST_TEXTURE_HEIGHT);
                 }
             }
         }
@@ -124,7 +128,7 @@ public class ModuleArcade extends ModuleBase {
     }
 
     private int[] getListArea() {
-        return new int[]{15, 20, 170, 88};
+        return new int[]{15, 20, 170, 4 + games.size() * 21};
     }
 
     private int[] getButtonBoundsArea(final int i) {
