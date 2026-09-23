@@ -2,12 +2,16 @@ package vswe.stevescarts.api.modules.template;
 
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import vswe.stevescarts.SCConfig;
@@ -199,6 +203,16 @@ public abstract class ModuleTool extends ModuleWorker {
         if (enchanter != null) {
             enchanter.damageEnchant(ModularEnchantments.EnchantmentType.TOOL, val);
         }
+    }
+
+    protected ItemStack createFortuneTool(Item item) {
+        ItemStack tool = new ItemStack(item);
+        int fortune = enchanter != null ? enchanter.getFortuneLevel() : 0;
+        if (fortune > 0) {
+            Registry<Enchantment> enchantments = getCart().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+            tool.enchant(enchantments.getOrThrow(Enchantments.FORTUNE), fortune);
+        }
+        return tool;
     }
 
     @Override

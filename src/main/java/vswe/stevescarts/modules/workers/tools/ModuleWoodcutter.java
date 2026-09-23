@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SaplingBlock;
@@ -261,11 +262,8 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         }
         List<ItemStack> stuff;
 
-        //TODO, Figure out how to get this working
-        final int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
-
         LootParams.Builder builder = new LootParams.Builder((ServerLevel) world)
-                .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
+                .withParameter(LootContextParams.TOOL, createFortuneTool(Items.DIAMOND_AXE))
                 .withParameter(LootContextParams.ORIGIN, getCart().position());
 
         BlockEntity blockEntity = world.getBlockEntity(here);

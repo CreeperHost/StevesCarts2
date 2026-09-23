@@ -5,8 +5,6 @@ import net.creeperhost.polylib.data.serializable.BooleanData;
 import net.creeperhost.polylib.helpers.LevelHelper;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
@@ -16,8 +14,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.BaseRailBlock;
@@ -219,15 +215,8 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
                 }
             }
         }
-        int fortune = (enchanter != null) ? enchanter.getFortuneLevel() : 0;
-        ItemStack tool = new ItemStack(Items.DIAMOND_PICKAXE);
-        if (fortune > 0) {
-            Registry<Enchantment> enchantments = getCart().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-            tool.enchant(enchantments.getOrThrow(Enchantments.FORTUNE), fortune);
-        }
-
         LootParams.Builder builder = new LootParams.Builder((ServerLevel) world)
-                .withParameter(LootContextParams.TOOL, tool)
+                .withParameter(LootContextParams.TOOL, createFortuneTool(Items.DIAMOND_PICKAXE))
                 .withParameter(LootContextParams.ORIGIN, getCart().position());
 
         if (storage != null) {
