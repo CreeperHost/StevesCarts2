@@ -1,11 +1,10 @@
 package vswe.stevescarts.client.models.pig;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.helpers.ResourceHelper;
 
@@ -18,43 +17,25 @@ public class ModelPigTail extends ModelCartbase {
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
 
-        //TODO
-        //        final ModelRenderer tailanchor = new ModelRenderer(this);
-        //        AddRenderer(tailanchor);
-        //        tailanchor.setPos(10.0f, -4.0f, 0.0f);
-        //        tailanchor.yRot = 1.5707964f;
-        //        final ModelRenderer tail1 = new ModelRenderer(this, 0, 0);
-        //        fixSize(tail1);
-        //        tailanchor.addChild(tail1);
-        //        tail1.addBox(-1.5f, -0.5f, -0.0f, 3, 1, 1, 0.0f);
-        //        tail1.setPos(0.0f, 0.0f, 0.0f);
-        //        final ModelRenderer tail2 = new ModelRenderer(this, 0, 0);
-        //        fixSize(tail2);
-        //        tailanchor.addChild(tail2);
-        //        tail2.addBox(-0.5f, -1.5f, -0.0f, 1, 3, 1, 0.0f);
-        //        tail2.setPos(2.0f, -2.0f, 0.0f);
-        //        final ModelRenderer tail3 = new ModelRenderer(this, 0, 0);
-        //        fixSize(tail3);
-        //        tailanchor.addChild(tail3);
-        //        tail3.addBox(-1.0f, -0.5f, -0.0f, 2, 1, 1, 0.0f);
-        //        tail3.setPos(0.5f, -4.0f, 0.0f);
-        //        final ModelRenderer tail4 = new ModelRenderer(this, 0, 0);
-        //        fixSize(tail4);
-        //        tailanchor.addChild(tail4);
-        //        tail4.addBox(-0.5f, -0.5f, -0.0f, 1, 1, 1, 0.0f);
-        //        tail4.setPos(-1.0f, -3.0f, 0.0f);
-        //        final ModelRenderer tail5 = new ModelRenderer(this, 0, 0);
-        //        fixSize(tail5);
-        //        tailanchor.addChild(tail5);
-        //        tail5.addBox(-0.5f, -0.5f, -0.0f, 1, 1, 1, 0.0f);
-        //        tail5.setPos(0.0f, -2.0f, 0.0f);
+        PartDefinition anchor = modelPartData.addOrReplaceChild("tail_anchor", CubeListBuilder.create(),
+                PartPose.offsetAndRotation(10.0F, -4.0F, 0.0F, 0.0F, 1.5707964F, 0.0F));
 
+        anchor.addOrReplaceChild("tail_base", CubeListBuilder.create().texOffs(0, 0)
+                        .addBox(-1.5F, -0.5F, 0.0F, 3.0F, 1.0F, 1.0F),
+                PartPose.ZERO);
+        anchor.addOrReplaceChild("tail_right", CubeListBuilder.create().texOffs(0, 0)
+                        .addBox(-0.5F, -1.5F, 0.0F, 1.0F, 3.0F, 1.0F),
+                PartPose.offset(2.0F, -2.0F, 0.0F));
+        anchor.addOrReplaceChild("tail_top", CubeListBuilder.create().texOffs(0, 0)
+                        .addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 1.0F),
+                PartPose.offset(0.5F, -4.0F, 0.0F));
+        anchor.addOrReplaceChild("tail_left", CubeListBuilder.create().texOffs(0, 0)
+                        .addBox(-0.5F, -0.5F, 0.0F, 1.0F, 1.0F, 1.0F),
+                PartPose.offset(-1.0F, -3.0F, 0.0F));
+        anchor.addOrReplaceChild("tail_center", CubeListBuilder.create().texOffs(0, 0)
+                        .addBox(-0.5F, -0.5F, 0.0F, 1.0F, 1.0F, 1.0F),
+                PartPose.offset(0.0F, -2.0F, 0.0F));
 
         return LayerDefinition.create(modelData, 32, 32);
-    }
-
-    @Override
-    public void renderToBuffer(@NotNull PoseStack p_225598_1_, @NotNull VertexConsumer p_225598_2_, int p_225598_3_, int p_225598_4_, int colour) {
-        super.renderToBuffer(p_225598_1_, p_225598_2_, p_225598_3_, p_225598_4_, colour);
     }
 }

@@ -10,7 +10,7 @@ import vswe.stevescarts.helpers.ResourceHelper;
 
 public class ModelPigHead extends ModelCartbase {
     public ModelPigHead() {
-        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResourceFromPath("/entity/pig/pig.png"));
+        super(getTexturedModelData().bakeRoot(), ResourceHelper.getResourceFromPath("/entity/pig/pig_temperate.png"));
     }
 
     public static LayerDefinition getTexturedModelData() {
@@ -25,6 +25,6 @@ public class ModelPigHead extends ModelCartbase {
                         .addBox(-2.0f, 0.0f, -9.0f, 4, 3, 1),
                 PartPose.ZERO);
 
-        return LayerDefinition.create(modelData, 64, 32);
+        return LayerDefinition.create(modelData, 64, 64);
     }
 }
