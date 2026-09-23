@@ -19,10 +19,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FlowerBlock;
-import net.minecraft.world.level.block.SnowLayerBlock;
-import net.minecraft.world.level.block.VineBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -1495,11 +1491,8 @@ public abstract class ModuleBase {
      * @return If this block counts as air by the modules
      */
     protected boolean countsAsAir(BlockPos pos) {
-        if (getCart().level().getBlockState(pos).isAir()) {
-            return true;
-        }
-        Block b = getCart().level().getBlockState(pos).getBlock();
-        return b instanceof SnowLayerBlock || b instanceof FlowerBlock || b instanceof VineBlock;
+        BlockState state = getCart().level().getBlockState(pos);
+        return state.isAir() || state.canBeReplaced() && state.getFluidState().isEmpty();
     }
 
     /**
