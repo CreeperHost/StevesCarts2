@@ -1,6 +1,7 @@
 package vswe.stevescarts.containers.slots;
 
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.helpers.storages.TransferHandler;
@@ -12,43 +13,40 @@ public abstract class SlotFake extends SlotStevesCarts implements ISpecialItemTr
         super(iinventory, i, j, k);
     }
 
-    //TODO
-    //	@Override
-    //	public int getSlotStackLimit() {
-    //		return 0;
-    //	}
-    //
-    //	@Override
-    //	public int getItemStackLimit(ItemStack stack) {
-    //		ItemStack copy = stack.copy();
-    //		copy.setCount(1);
-    //		this.inventory.setInventorySlotContents(getSlotIndex(), copy);
-    //		return 0;
-    //	}
-    //
-    //	@Override
-    //	public void putStack(ItemStack stack) {
-    //		if (!stack.isEmpty())
-    //			super.putStack(stack);
-    //		else
-    //			this.onSlotChanged();
-    //	}
-    //
-    //	@Override
-    //	public boolean canTakeStack(EntityPlayer playerIn) {
-    //		if (playerIn.inventory.getItemStack().isEmpty())
-    //			return true;
-    //		return false;
-    //	}
-    //
-    //	@Override
-    //	public ItemStack onTake(final EntityPlayer par1EntityPlayer, @Nonnull ItemStack par2ItemStack) {
-    //		super.onTake(par1EntityPlayer, par2ItemStack);
-    //		if (!par2ItemStack.isEmpty() && par1EntityPlayer != null && par1EntityPlayer.inventory != null) {
-    //			par1EntityPlayer.inventory.setItemStack(ItemStack.EMPTY);
-    //		}
-    //		return ItemStack.EMPTY;
-    //	}
+    /**
+     * Ghost slots describe a recipe or filter. They never own a real stack, so keep
+     * only one representative item and prevent the vanilla menu code from taking it.
+     * ContainerBase handles clicks on these slots without changing the carried stack.
+     */
+    @Override
+    public void set(ItemStack stack) {
+        super.set(stack.isEmpty() ? ItemStack.EMPTY : stack.copyWithCount(1));
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
+
+    @Override
+    public int getMaxStackSize(ItemStack stack) {
+        return 1;
+    }
+
+    @Override
+    public boolean mayPickup(Player player) {
+        return false;
+    }
+
+    @Override
+    public ItemStack remove(int amount) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public boolean isFake() {
+        return true;
+    }
 
     @Override
     public boolean isItemValidForTransfer(@Nonnull ItemStack item, final TransferHandler.TRANSFER_TYPE type) {

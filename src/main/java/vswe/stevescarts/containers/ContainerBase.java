@@ -2,10 +2,12 @@ package vswe.stevescarts.containers;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.containers.slots.SlotFake;
 
 import javax.annotation.Nullable;
 
@@ -17,6 +19,59 @@ public abstract class ContainerBase extends AbstractContainerMenu {
     public static boolean canStacksMerge(ItemStack stack1, ItemStack stack2) {
         if (stack1.isEmpty() || stack2.isEmpty()) return false;
         return ItemStack.isSameItemSameComponents(stack1, stack2);
+    }
+
+    @Override
+    public void clicked(int slotIndex, int button, ContainerInput input, Player player) {
+        if (slotIndex >= 0 && slotIndex < slots.size() && slots.get(slotIndex) instanceof SlotFake ghostSlot) {
+            handleGhostSlotClick(ghostSlot, button, input, player);
+            return;
+        }
+
+        super.clicked(slotIndex, button, input, player);
+    }
+
+    private void handleGhostSlotClick(SlotFake slot, int button, ContainerInput input, Player player) {
+        switch (input) {
+            case PICKUP -> {
+                if (button != 0 && button != 1) {
+                    return;
+                }
+
+                ItemStack carried = getCarried();
+                if (carried.isEmpty()) {
+                    slot.set(ItemStack.EMPTY);
+                } else if (slot.mayPlace(carried)) {
+                    slot.set(carried);
+                }
+            }
+            case SWAP -> {
+                if (button < 0 || button >= player.getInventory().getContainerSize()) {
+                    return;
+                }
+
+                ItemStack hotbarStack = player.getInventory().getItem(button);
+                if (hotbarStack.isEmpty()) {
+                    slot.set(ItemStack.EMPTY);
+                } else if (slot.mayPlace(hotbarStack)) {
+                    slot.set(hotbarStack);
+                }
+            }
+            case QUICK_MOVE, THROW -> slot.set(ItemStack.EMPTY);
+            case CLONE, QUICK_CRAFT, PICKUP_ALL -> {
+                // A ghost item must never be cloned, dragged, collected, or thrown as a real item.
+            }
+        }
+    }
+
+    @Override
+    public boolean canDragTo(Slot slot) {
+        return !(slot instanceof SlotFake);
+    }
+
+    @Override
+    public boolean canTakeItemForPickAll(ItemStack carried, Slot target) {
+        return !(target instanceof SlotFake);
     }
 
     @Override
@@ -99,6 +154,10 @@ public abstract class ContainerBase extends AbstractContainerMenu {
         for (int machineIndex = 0; machineIndex < numSlots - 9 * 4; machineIndex++) {
             Slot slot = slots.get(machineIndex);
             if (!slot.mayPlace(stackToShift)) continue;
+            if (slot instanceof SlotFake) {
+                slot.set(stackToShift);
+                return true;
+            }
             if (shiftItemStack(stackToShift, machineIndex, machineIndex + 1)) return true;
         }
         return false;
