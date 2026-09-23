@@ -1,15 +1,14 @@
 package vswe.stevescarts.upgrades;
 
-import net.minecraft.nbt.ByteArrayTag;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.slots.SlotCart;
 import vswe.stevescarts.helpers.Localization;
-import vswe.stevescarts.init.ModItemData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -34,30 +33,34 @@ public class Blueprint extends SimpleInventoryUpgradeEffect {
         if (blueprint.isEmpty()) {
             return false;
         }
-        CompoundTag info = ModItemData.getTagCopy(blueprint);
-        if (info.isEmpty()) {
+
+        final NonNullList<ItemStack> blueprintModules = ModuleData.getModularItems(blueprint);
+        if (blueprintModules.isEmpty()) {
             return false;
         }
-        final ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
-        if (moduleIDTag == null) {
-            return false;
+
+        // Treat both the blueprint and assembler contents as multisets. This is
+        // important for modules which allow duplicates: one installed copy must
+        // only satisfy one copy requested by the blueprint.
+        final ArrayList<ModuleData> unmatchedAssemblerModules = new ArrayList<>(modules);
+        for (final ItemStack blueprintStack : blueprintModules) {
+            if (!(blueprintStack.getItem() instanceof IModuleItem moduleItem)) {
+                continue;
+            }
+
+            final ModuleData blueprintModule = moduleItem.getModuleData();
+            if (blueprintModule == null) {
+                continue;
+            }
+
+            final int installedIndex = unmatchedAssemblerModules.indexOf(blueprintModule);
+            if (installedIndex >= 0) {
+                unmatchedAssemblerModules.remove(installedIndex);
+            } else if (blueprintModule == module) {
+                return true;
+            }
         }
-        final byte[] IDs = moduleIDTag.getAsByteArray();
-        final ArrayList<ModuleData> missing = new ArrayList<>();
-        //TODO
-//        for (final byte id : IDs)
-//        {
-//            final ModuleData blueprintModule = ModuleData.getList().get(id);
-//            final int index = modules.indexOf(blueprintModule);
-//            if (index != -1)
-//            {
-//                modules.remove(index);
-//            }
-//            else
-//            {
-//                missing.add(blueprintModule);
-//            }
-//        }
-        return missing.contains(module);
+
+        return false;
     }
 }
