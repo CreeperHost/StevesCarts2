@@ -17,11 +17,8 @@ public class ModCapabilities {
 
     private static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModBlocks.EXTERNAL_DISTRIBUTOR_TILE.get(), WorldlyContainerWrapper::new);
+        event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlocks.EXTERNAL_DISTRIBUTOR_TILE.get(), (entity, side) -> entity.getFluidHandler(side));
 
-        //TODO Overhaul fluid handling.
-//        event.registerBlockEntity(Capabilities.Fluid.BLOCK, ModBlocks.EXTERNAL_DISTRIBUTOR_TILE.get(), (entity, side) -> entity.fluidHandlerMap.get(side));
-
-        event.registerBlockEntity(Capabilities.Item.BLOCK, ModBlocks.CARGO_MANAGER_TILE.get(), (entity, side) -> entity.createHandler());
         if (SCConfig.COMMON.assemblerInsertFuel.get())
             event.registerBlockEntity(Capabilities.Item.BLOCK, ModBlocks.CART_ASSEMBLER_TILE.get(), WorldlyContainerWrapper::new);
     }

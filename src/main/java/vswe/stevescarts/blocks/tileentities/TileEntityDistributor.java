@@ -14,9 +14,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.TransferPreconditions;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.StevesCartsClient;
 import vswe.stevescarts.containers.ContainerDistributor;
@@ -24,12 +26,9 @@ import vswe.stevescarts.helpers.DistributorSetting;
 import vswe.stevescarts.helpers.DistributorSide;
 import vswe.stevescarts.helpers.Localization;
 import vswe.stevescarts.helpers.storages.SCTank;
-import vswe.stevescarts.helpers.storages.IFluidHandler;
-import vswe.stevescarts.helpers.storages.IFluidTank;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.network.packets.PacketDistributorTile;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TileEntityDistributor extends TileEntityBase implements WorldlyContainer, MenuProvider {
-    public final Map<Direction, IFluidHandler> fluidHandlerMap;
+    private final Map<Direction, ResourceHandler<FluidResource>> fluidHandlerMap;
     private final ArrayList<DistributorSide> sides;
     public ResourceHandler<ItemResource>[] invHandlers = new ResourceHandler[6];
     public boolean hasTop;
@@ -56,55 +55,13 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
         sides.add(new DistributorSide(5, Localization.GUI.DISTRIBUTOR.SIDE_RED, Direction.EAST));
         fluidHandlerMap = new HashMap<>();
         for (Direction facing : Direction.values()) {
-            fluidHandlerMap.put(facing, new IFluidHandler() {
-                @Override
-                public int getTanks() {
-                    final IFluidTank[] tanks = TileEntityDistributor.this.getTanks(facing);
-                    return tanks.length;
-                }
-
-                @Nonnull
-                @Override
-                public FluidStack getFluidInTank(int tank) {
-                    final IFluidTank[] tanks = TileEntityDistributor.this.getTanks(facing);
-                    return tanks[tank].getFluid();
-                }
-
-                @Override
-                public int getTankCapacity(int tank) {
-                    final IFluidTank[] tanks = TileEntityDistributor.this.getTanks(facing);
-                    return tanks[tank].getCapacity();
-                }
-
-                @Override
-                public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
-                    final IFluidTank[] tanks = TileEntityDistributor.this.getTanks(facing);
-                    return tanks[tank].isFluidValid(stack);
-                }
-
-                @Override
-                public int fill(FluidStack resource, FluidAction action) {
-                    final IFluidTank[] tanks = TileEntityDistributor.this.getTanks(facing);
-                    int amount = 0;
-                    for (final IFluidTank tank : tanks) {
-                        amount += tank.fill(resource, action);
-                    }
-                    return amount;
-                }
-
-                @Nonnull
-                @Override
-                public FluidStack drain(FluidStack resource, FluidAction action) {
-                    return TileEntityDistributor.this.drain(facing, resource, resource.getAmount(), action);
-                }
-
-                @Nonnull
-                @Override
-                public FluidStack drain(int maxDrain, FluidAction action) {
-                    return TileEntityDistributor.this.drain(facing, FluidStack.EMPTY, maxDrain, action);
-                }
-            });
+            fluidHandlerMap.put(facing, new DistributorFluidHandler(facing));
         }
+    }
+
+    @Nullable
+    public ResourceHandler<FluidResource> getFluidHandler(@Nullable Direction direction) {
+        return direction == null ? null : fluidHandlerMap.get(direction);
     }
 
     public ArrayList<DistributorSide> getSides() {
@@ -292,44 +249,6 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
         return false;
     }
 
-    //Drain target or if target is empty drain whatever is available.
-    private FluidStack drain(final Direction from, @Nonnull FluidStack target, int maxDrain, final IFluidHandler.FluidAction doDrain) {
-        FluidStack totalDrained = FluidStack.EMPTY;
-
-        final IFluidTank[] tanks = getTanks(from);
-        for (IFluidTank tank : tanks) {
-            FluidStack contents = tank.getFluid();
-            if (contents.isEmpty() || (!target.isEmpty() && !FluidStack.isSameFluidSameComponents(contents, target))) {
-                continue;
-            }
-
-            FluidStack drained = tank.drain(maxDrain, doDrain);
-            if (drained.isEmpty()) {
-                continue;
-            }
-
-            maxDrain -= drained.getAmount();
-            if (totalDrained.isEmpty()) {
-                totalDrained = drained;
-            } else {
-                totalDrained.grow(drained.getAmount());
-            }
-
-            //Now that we have started to extract "some fluid" we can not accept any other fluid we may find.
-            if (target.isEmpty()) {
-                target = drained;
-            }
-
-            if (maxDrain <= 0) return totalDrained;
-        }
-
-        return totalDrained;
-    }
-
-    private boolean hasAnyTank(Direction facing) {
-        return facing != null && getInventories().length > 0 && getTanks(facing).length > 0;
-    }
-
     public SCTank[] getTanks(final Direction direction) {
         final TileEntityManager[] invs = getInventories();
         if (invs.length > 0) {
@@ -349,6 +268,62 @@ public class TileEntityDistributor extends TileEntityBase implements WorldlyCont
             }
         }
         return new SCTank[0];
+    }
+
+    private final class DistributorFluidHandler implements ResourceHandler<FluidResource> {
+        private final Direction direction;
+
+        private DistributorFluidHandler(Direction direction) {
+            this.direction = direction;
+        }
+
+        private SCTank getTank(int index) {
+            SCTank[] tanks = getTanks(direction);
+            return index >= 0 && index < tanks.length ? tanks[index] : null;
+        }
+
+        @Override
+        public int size() {
+            return getTanks(direction).length;
+        }
+
+        @Override
+        public FluidResource getResource(int index) {
+            SCTank tank = getTank(index);
+            return tank == null ? FluidResource.EMPTY : tank.getResource(0);
+        }
+
+        @Override
+        public long getAmountAsLong(int index) {
+            SCTank tank = getTank(index);
+            return tank == null ? 0 : tank.getAmountAsLong(0);
+        }
+
+        @Override
+        public long getCapacityAsLong(int index, FluidResource resource) {
+            SCTank tank = getTank(index);
+            return tank == null ? 0 : tank.getCapacityAsLong(0, resource);
+        }
+
+        @Override
+        public boolean isValid(int index, FluidResource resource) {
+            SCTank tank = getTank(index);
+            return tank != null && tank.isValid(0, resource);
+        }
+
+        @Override
+        public int insert(int index, FluidResource resource, int amount, TransactionContext transaction) {
+            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+            SCTank tank = getTank(index);
+            return tank == null ? 0 : tank.insert(0, resource, amount, transaction);
+        }
+
+        @Override
+        public int extract(int index, FluidResource resource, int amount, TransactionContext transaction) {
+            TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+            SCTank tank = getTank(index);
+            return tank == null ? 0 : tank.extract(0, resource, amount, transaction);
+        }
     }
 
     private void populateTanks(final ArrayList<SCTank> tanks, final DistributorSide side, final TileEntityManager manager, final boolean top) {
