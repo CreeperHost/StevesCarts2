@@ -100,6 +100,11 @@ public class GuiDistributor extends AbstractContainerScreen<ContainerDistributor
         mouseOverText = null;
     }
 
+    @Override
+    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        //NO-OP
+    }
+
     private void drawMouseMover(final String str, final int x, final int y, final int[] rect) {
         if (inRect(x, y, rect)) {
             mouseOverText = str;
