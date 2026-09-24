@@ -14,6 +14,7 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotMilker;
+import vswe.stevescarts.entities.IModularCart;
 import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
@@ -50,23 +51,26 @@ public class ModuleMilker extends ModuleBase {
                 milkbuffer -= getCart().fill(ret, IFluidHandler.FluidAction.EXECUTE);
             }
             if (milkbuffer == 1000) {
-                for (int i = 0; i < getInventorySize(); ++i) {
-                    @Nonnull ItemStack bucket = getStack(i);
-                    if (!bucket.isEmpty() && bucket.getItem() == Items.BUCKET) {
-                        @Nonnull ItemStack milk = new ItemStack(Items.MILK_BUCKET);
-                        getCart().addItemToChest(milk);
-                        if (milk.getCount() <= 0) {
-                            milkbuffer = 0;
-                            @Nonnull ItemStack itemStack = bucket;
-                            itemStack.shrink(1);
-                            if (itemStack.getCount() <= 0) {
-                                setStack(i, ItemStack.EMPTY);
-                            }
-                        }
+                IModularCart.ModuleSlot bucket = findBucket();
+                if (bucket != null) {
+                    @Nonnull ItemStack milk = new ItemStack(Items.MILK_BUCKET);
+                    getCart().addItemToChest(milk);
+                    if (milk.isEmpty()) {
+                        milkbuffer = 0;
+                        bucket.take(1);
                     }
                 }
             }
         }
+    }
+
+    private IModularCart.ModuleSlot findBucket() {
+        for (int i = 0; i < getInventorySize(); i++) {
+            if (getStack(i).is(Items.BUCKET)) {
+                return new IModularCart.ModuleSlot(this, i);
+            }
+        }
+        return getCart().findItemInAccessibleStorage(stack -> stack.is(Items.BUCKET)).orElse(null);
     }
 
     private void generateMilk() {

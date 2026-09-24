@@ -57,6 +57,11 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator> {
     }
 
     @Override
+    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        //NO-OP
+    }
+
+    @Override
     public void extractContents(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float p_230430_4_) {
         this.extractBackground(graphics, mouseX, mouseY, p_230430_4_);
         super.extractContents(graphics, mouseX, mouseY, p_230430_4_);

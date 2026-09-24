@@ -250,7 +250,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
         if (iStack.isEmpty() || iStack.getCount() <= 0) {
             return true;
         }
-        for (ModuleBase module : getCart().modules()) {
+        for (ModuleBase module : getCart().getAccessibleModules()) {
             if (module instanceof ModuleIncinerator) {
                 ((ModuleIncinerator) module).incinerate(iStack);
                 if (iStack.getCount() <= 0) {
@@ -264,7 +264,7 @@ public abstract class ModuleDrill extends ModuleTool implements IActivatorModule
             return true;
         }
         boolean hasChest = false;
-        for (ModuleBase module2 : getCart().modules()) {
+        for (ModuleBase module2 : getCart().getAccessibleModules()) {
             if (module2 instanceof ModuleChest) {
                 hasChest = true;
                 break;

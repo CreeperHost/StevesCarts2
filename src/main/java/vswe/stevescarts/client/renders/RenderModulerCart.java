@@ -38,6 +38,10 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
 
         super.submit(state, poseStack, nodeCollector, cameraRenderState);
 
+        for (CartHitchRenderer.HitchConnection hitch : state.hitches) {
+            CartHitchRenderer.submit(hitch, poseStack, nodeCollector, state.lightCoords);
+        }
+
         poseStack.pushPose();
         long offsetSeed = state.offsetSeed;
         float xOffset = (((float) (offsetSeed >> 16 & 7L) + 0.5F) / 8.0F - 0.5F) * 0.004F;
@@ -127,6 +131,22 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
         state.isInvisible = entity.isInvisible() || state.modules.stream().anyMatch(e -> !e.shouldCartRender());
         state.label.clear();
         state.label.addAll(entity.getLabel());
+        state.hitches.clear();
+        Vec3 cartPosition = entity.getPosition(partialTick);
+        for (int i = 0; i < 2; i++) {
+            int linkedEntityId = entity.getLinkedCartEntityId(i);
+            if (linkedEntityId < 0 || entity.getId() >= linkedEntityId) {
+                continue;
+            }
+            if (entity.level().getEntity(linkedEntityId) instanceof ModularMinecart linkedCart) {
+                ModularMinecartBehavior linkedBehavior = (ModularMinecartBehavior) linkedCart.getBehavior();
+                float linkedYRot = linkedBehavior.cartHasPosRotLerp()
+                        ? linkedBehavior.getCartLerpYRot(partialTick)
+                        : linkedCart.getYRot();
+                state.hitches.add(new CartHitchRenderer.HitchConnection(
+                        linkedCart.getPosition(partialTick).subtract(cartPosition), state.yRot, linkedYRot));
+            }
+        }
     }
 
     public static class ModularCartRenderState extends EntityRenderState {
@@ -142,5 +162,6 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
         public Vec3 renderPos;
         public List<ModuleBase> modules = new ArrayList<>();
         public List<Component> label = new ArrayList<>();
+        public List<CartHitchRenderer.HitchConnection> hitches = new ArrayList<>();
     }
 }

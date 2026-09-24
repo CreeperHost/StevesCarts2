@@ -19,8 +19,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.NonNull;
 import vswe.stevescarts.Constants;
 import vswe.stevescarts.client.renders.ItemStackRenderer;
+import vswe.stevescarts.helpers.ComponentTypes;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItems;
+import vswe.stevescarts.init.StevesCartsModules;
 
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -131,6 +133,12 @@ public class GeneratorModels extends ModelProvider {
             if (item == ModItems.CARTS.get()) {
                 Identifier baseModel = ModelLocationUtils.getModelLocation(item);
                 itemModels.itemModelOutput.accept(item, ItemModelUtils.specialModel(baseModel, new ItemStackRenderer.Unbaked()));
+                return;
+            }
+
+            if (item == ModItems.MODULES.get(StevesCartsModules.TRAIN_INTERFACE).get()) {
+                Item simplePcb = ModItems.COMPONENTS.get(ComponentTypes.SIMPLE_PCB).get();
+                itemModels.itemModelOutput.accept(item, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(simplePcb)));
                 return;
             }
 

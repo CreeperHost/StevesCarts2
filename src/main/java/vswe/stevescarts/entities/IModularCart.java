@@ -26,6 +26,7 @@ import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
+import vswe.stevescarts.api.modules.template.ModuleChest;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
@@ -36,6 +37,7 @@ import vswe.stevescarts.helpers.GuiAllocationHelper;
 import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.modules.addons.ModuleCreativeSupplies;
+import vswe.stevescarts.modules.addons.ModuleTrainInterface;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.modules.workers.CompWorkModule;
 
@@ -43,6 +45,8 @@ import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -653,7 +657,12 @@ public interface IModularCart extends Container, IFluidHandler {
     }
 
     default void addItemToChest(@Nonnull ItemStack iStack) {
-        TransferHandler.TransferItem(iStack, this, getCon(null), Slot.class, null, -1);
+        for (ModularMinecart cart : getModuleAccessCarts()) {
+            TransferHandler.TransferItem(iStack, cart, cart.getCon(null), Slot.class, null, -1);
+            if (iStack.isEmpty()) {
+                break;
+            }
+        }
     }
 
     default void addItemToChest(@Nonnull ItemStack iStack, int start, int end) {
@@ -661,7 +670,81 @@ public interface IModularCart extends Container, IFluidHandler {
     }
 
     default void addItemToChest(@Nonnull ItemStack iStack, Class validSlot, Class invalidSlot) {
-        TransferHandler.TransferItem(iStack, this, getCon(null), validSlot, invalidSlot, -1);
+        for (ModularMinecart cart : getModuleAccessCarts()) {
+            TransferHandler.TransferItem(iStack, cart, cart.getCon(null), validSlot, invalidSlot, -1);
+            if (iStack.isEmpty()) {
+                break;
+            }
+        }
+    }
+
+    default boolean hasTrainInterface() {
+        return modules().stream().anyMatch(ModuleTrainInterface.class::isInstance);
+    }
+
+    default List<ModularMinecart> getModuleAccessCarts() {
+        List<ModularMinecart> carts = new ArrayList<>();
+        carts.add(getCart());
+        if (hasTrainInterface()) {
+            carts.addAll(getCart().getConnectedCarts());
+        }
+        return carts;
+    }
+
+    default List<ModuleBase> getAccessibleModules() {
+        return getModuleAccessCarts().stream()
+                .flatMap(cart -> cart.modules().stream())
+                .toList();
+    }
+
+    record ModuleSlot(ModuleBase module, int slot) {
+        public ItemStack getItem() {
+            return module.getStack(slot);
+        }
+
+        public void setItem(ItemStack stack) {
+            module.setStack(slot, stack);
+            module.getCart().setChanged();
+        }
+
+        public ItemStack take(int amount) {
+            ItemStack stack = getItem();
+            if (stack.isEmpty() || amount <= 0) {
+                return ItemStack.EMPTY;
+            }
+            int taken = Math.min(amount, stack.getCount());
+            ItemStack result = stack.copyWithCount(taken);
+            stack.shrink(taken);
+            if (stack.isEmpty()) {
+                module.setStack(slot, ItemStack.EMPTY);
+            }
+            module.getCart().setChanged();
+            return result;
+        }
+    }
+
+    default List<ModuleSlot> getAccessibleStorageSlots() {
+        List<ModuleSlot> slots = new ArrayList<>();
+        for (ModuleBase module : getAccessibleModules()) {
+            if (module instanceof ModuleChest) {
+                for (int slot = 0; slot < module.getInventorySize(); slot++) {
+                    slots.add(new ModuleSlot(module, slot));
+                }
+            }
+        }
+        return slots;
+    }
+
+    default Optional<ModuleSlot> findItemInAccessibleStorage(Predicate<ItemStack> predicate) {
+        return getAccessibleStorageSlots().stream()
+                .filter(slot -> !slot.getItem().isEmpty() && predicate.test(slot.getItem()))
+                .findFirst();
+    }
+
+    default List<ModuleTank> getAccessibleTanks() {
+        return getModuleAccessCarts().stream()
+                .flatMap(cart -> cart.moduleTanks().stream())
+                .toList();
     }
 
     default AbstractContainerMenu getCon(Inventory playerInventory) {
@@ -676,35 +759,35 @@ public interface IModularCart extends Container, IFluidHandler {
 
     @Override
     default int getTanks() {
-        return moduleTanks().size();
+        return getAccessibleTanks().size();
     }
 
     @Nonnull
     @Override
     default FluidStack getFluidInTank(int tank) {
-        return moduleTanks().get(tank).getFluid();
+        return getAccessibleTanks().get(tank).getFluid();
     }
 
     @Override
     default int getTankCapacity(int tank) {
-        return moduleTanks().get(tank).getCapacity();
+        return getAccessibleTanks().get(tank).getCapacity();
     }
 
     @Override
     default boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
-        return moduleTanks().get(tank).isFluidValid(stack);
+        return getAccessibleTanks().get(tank).isFluidValid(stack);
     }
 
     @Override
     default int fill(FluidStack resource, FluidAction action) {
         int amount = 0;
-        if (resource != null && resource.getAmount() > 0) {
+        if (resource != null && !resource.isEmpty() && resource.getAmount() > 0) {
             FluidStack fluid = resource.copy();
-            for (int i = 0; i < moduleTanks().size(); ++i) {
-                int tempAmount = moduleTanks().get(i).fill(fluid, action);
+            for (ModuleTank tank : getAccessibleTanks()) {
+                int tempAmount = tank.fill(fluid, action);
                 amount += tempAmount;
                 fluid.shrink(tempAmount);
-                if (fluid.getAmount() <= 0) {
+                if (fluid.isEmpty()) {
                     break;
                 }
             }
@@ -713,46 +796,39 @@ public interface IModularCart extends Container, IFluidHandler {
     }
 
     default FluidStack drain(FluidStack resource, int maxDrain, FluidAction doDrain) {
-        FluidStack ret = resource;
-        if (ret != null) {
-            ret = ret.copy();
-            ret.setAmount(0);
+        if (resource == null || resource.isEmpty() || maxDrain <= 0) {
+            return FluidStack.EMPTY;
         }
-        for (int i = 0; i < moduleTanks().size(); ++i) {
-            FluidStack temp = null;
-            temp = moduleTanks().get(i).drain(maxDrain, doDrain);
-            if (temp != null && (ret == null || FluidStack.isSameFluidSameComponents(ret, temp))) {
-                if (ret == null) {
-                    ret = temp;
-                } else {
-                    ret.grow(temp.getAmount());
-                }
-                maxDrain -= temp.getAmount();
-                if (maxDrain <= 0) {
-                    break;
-                }
+        FluidStack result = resource.copy();
+        result.setAmount(0);
+        for (ModuleTank tank : getAccessibleTanks()) {
+            FluidStack request = resource.copy();
+            request.setAmount(maxDrain);
+            FluidStack drained = tank.drain(request, doDrain);
+            if (drained.isEmpty()) {
+                continue;
+            }
+            result.grow(drained.getAmount());
+            maxDrain -= drained.getAmount();
+            if (maxDrain <= 0) {
+                break;
             }
         }
-        if (ret != null && ret.getAmount() == 0) {
-            return null;
-        }
-        return ret;
+        return result.isEmpty() ? FluidStack.EMPTY : result;
     }
 
     default int drain(Fluid type, int maxDrain, FluidAction doDrain) {
         int amount = 0;
         if (type != null && maxDrain > 0) {
-            for (ModuleTank tank : moduleTanks()) {
-                FluidStack drained = tank.drain(maxDrain, doDrain);
-                if (!drained.isEmpty() && type.isSame(drained.getFluid())) {
-                    amount += drained.getAmount();
-                    maxDrain -= drained.getAmount();
-                    if (doDrain == FluidAction.EXECUTE) {
-                        tank.drain(drained.getAmount(), doDrain);
-                    }
-                    if (maxDrain <= 0) {
-                        break;
-                    }
+            for (ModuleTank tank : getAccessibleTanks()) {
+                FluidStack drained = tank.drain(new FluidStack(type, maxDrain), doDrain);
+                if (drained.isEmpty()) {
+                    continue;
+                }
+                amount += drained.getAmount();
+                maxDrain -= drained.getAmount();
+                if (maxDrain <= 0) {
+                    break;
                 }
             }
         }
@@ -762,13 +838,22 @@ public interface IModularCart extends Container, IFluidHandler {
     @Nonnull
     @Override
     default FluidStack drain(FluidStack resource, FluidAction action) {
-        return drain(resource, (!resource.isEmpty()) ? 0 : resource.getAmount(), action);
+        return resource.isEmpty() ? FluidStack.EMPTY : drain(resource, resource.getAmount(), action);
     }
 
     @Nonnull
     @Override
     default FluidStack drain(int maxDrain, FluidAction action) {
-        return drain(maxDrain, action);
+        if (maxDrain <= 0) {
+            return FluidStack.EMPTY;
+        }
+        for (ModuleTank tank : getAccessibleTanks()) {
+            FluidStack fluid = tank.getFluid();
+            if (!fluid.isEmpty()) {
+                return drain(fluid, maxDrain, action);
+            }
+        }
+        return FluidStack.EMPTY;
     }
 
     //=== Client / GUI Stuff ===//

@@ -52,6 +52,21 @@ public abstract class ModuleCoalBase extends ModuleEngine {
                     ++i;
                 }
             }
+            if (getFuelLevel() <= consumption) {
+                getCart().findItemInAccessibleStorage(stack -> FuelHelper.getItemBurnTime(stack, getCart().level()) > 0)
+                        .ifPresent(slot -> {
+                            ItemStack fuel = slot.take(1);
+                            setFuelLevel(getFuelLevel() + FuelHelper.getItemBurnTime(fuel, getCart().level()));
+                            ItemStack remainder = fuel.getCraftingRemainder() != null ? fuel.getCraftingRemainder().create() : ItemStack.EMPTY;
+                            if (!remainder.isEmpty()) {
+                                if (slot.getItem().isEmpty()) {
+                                    slot.setItem(remainder);
+                                } else {
+                                    getCart().addItemToChest(remainder);
+                                }
+                            }
+                        });
+            }
         }
     }
 
@@ -61,6 +76,12 @@ public abstract class ModuleCoalBase extends ModuleEngine {
         for (int i = 0; i < getInventorySize(); ++i) {
             if (!getStack(i).isEmpty()) {
                 totalfuel += FuelHelper.getItemBurnTime(getStack(i), getCart().level()) * getStack(i).getCount();
+            }
+        }
+        for (var slot : getCart().getAccessibleStorageSlots()) {
+            ItemStack stack = slot.getItem();
+            if (!stack.isEmpty()) {
+                totalfuel += FuelHelper.getItemBurnTime(stack, getCart().level()) * stack.getCount();
             }
         }
         return totalfuel;

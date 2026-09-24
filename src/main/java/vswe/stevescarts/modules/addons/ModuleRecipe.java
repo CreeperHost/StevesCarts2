@@ -269,41 +269,27 @@ public abstract class ModuleRecipe extends ModuleAddon {
     }
 
     protected void prepareLists() {
-        if (inputSlots == null) {
-            inputSlots = new ArrayList<>();
-            for (final ModuleBase module : getCart().modules()) {
-                if (module.getSlots() != null) {
-                    for (final SlotStevesCarts slot : module.getSlots()) {
-                        if (slot instanceof SlotChest) {
-                            inputSlots.add(slot);
-                        }
-                    }
+        inputSlots = new ArrayList<>();
+        allTheSlots.clear();
+        outputSlots.clear();
+        final Class validSlot = getValidSlot();
+        for (final ModuleBase module : getCart().getAccessibleModules()) {
+            if (module.getSlots() == null) {
+                continue;
+            }
+            for (final SlotStevesCarts slot : module.getSlots()) {
+                if (slot instanceof SlotChest) {
+                    inputSlots.add(slot);
+                }
+                if (validSlot != null && validSlot.isInstance(slot)) {
+                    outputSlots.add(slot);
+                    allTheSlots.add(slot);
+                } else if (slot instanceof SlotChest) {
+                    allTheSlots.add(slot);
                 }
             }
         }
-        if (dirty) {
-            allTheSlots.clear();
-            outputSlots.clear();
-            final Class validSlot = getValidSlot();
-            if (validSlot != null) {
-                for (final ModuleBase module2 : getCart().modules()) {
-                    if (module2.getSlots() != null) {
-                        for (final SlotStevesCarts slot2 : module2.getSlots()) {
-                            if (validSlot.isInstance(slot2)) {
-                                outputSlots.add(slot2);
-                                allTheSlots.add(slot2);
-                            } else {
-                                if (!(slot2 instanceof SlotChest)) {
-                                    continue;
-                                }
-                                allTheSlots.add(slot2);
-                            }
-                        }
-                    }
-                }
-            }
-            dirty = false;
-        }
+        dirty = false;
     }
 
     protected boolean canCraftMoreOfResult(@Nonnull ItemStack result) {

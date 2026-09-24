@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "stevescarts",
+  "key": {
+    "C": "minecraft:iron_chain",
+    "I": "#c:ingots/iron",
+    "R": "stevescarts:component_simple_pcb"
+  },
+  "pattern": [
+    "ICI",
+    "CRC",
+    "ICI"
+  ],
+  "result": {
+    "id": "stevescarts:module_train_interface"
+  }
+}

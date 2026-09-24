@@ -77,6 +77,17 @@ public class GeneratorRecipes extends RecipeProvider {
     }
 
     private void addModuleRecipes() {
+        shaped(RecipeCategory.MISC, getItemForModule(StevesCartsModules.TRAIN_INTERFACE))
+                .pattern("ICI")
+                .pattern("CRC")
+                .pattern("ICI")
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('C', Items.IRON_CHAIN)
+                .define('R', ModItems.COMPONENTS.get(ComponentTypes.SIMPLE_PCB).get())
+                .group(Constants.MOD_ID)
+                .unlockedBy("has_item", has(Items.IRON_CHAIN))
+                .save(output);
+
         shaped(RecipeCategory.MISC, getItemForModule(StevesCartsModules.CHUNK_LOADER))
                 .pattern("III")
                 .pattern("GEG")

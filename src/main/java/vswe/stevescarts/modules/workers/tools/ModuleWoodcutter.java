@@ -29,6 +29,7 @@ import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotRepair;
 import vswe.stevescarts.containers.slots.SlotSapling;
+import vswe.stevescarts.entities.IModularCart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.BlockPosHelpers;
 import vswe.stevescarts.modules.addons.plants.ModulePlantSize;
@@ -165,19 +166,13 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
         } else if ((pos.getX() == cx && pos.getX() / size % 2 == 0) || (pos.getZ() == cz && pos.getZ() / size % 2 == 0)) {
             return false;
         }
-        @Nonnull ItemStack sapling = ItemStack.EMPTY;
-        for (int i = 0; i < getInventorySize(); ++i) {
-            final SlotStevesCarts slot = getSlots().get(i);
-            if (slot.containsValidItem() && !(slot instanceof SlotRepair)) {
-                sapling = getStack(i);
-                break;
-            }
-        }
-        if (!sapling.isEmpty()) {
+        IModularCart.ModuleSlot saplingSlot = findSapling();
+        if (saplingSlot != null) {
+            ItemStack sapling = saplingSlot.getItem();
             if (doPreWork()) {
                 if (isSaplingHandler(sapling)) {
                     if (plantSapling(getCart().level(), pos, sapling, getFakePlayer())) {
-                        sapling.shrink(1);
+                        saplingSlot.take(1);
                         startWorking(25);
                         return isPlanting = true;
                     }
@@ -332,12 +327,18 @@ public abstract class ModuleWoodcutter extends ModuleTool implements ISuppliesMo
 
     @Override
     public boolean haveSupplies() {
+        return findSapling() != null;
+    }
+
+    private IModularCart.ModuleSlot findSapling() {
         for (int i = 0; i < getInventorySize(); ++i) {
             if (getSlots().get(i).containsValidItem()) {
-                return true;
+                if (!(getSlots().get(i) instanceof SlotRepair)) {
+                    return new IModularCart.ModuleSlot(this, i);
+                }
             }
         }
-        return false;
+        return getCart().findItemInAccessibleStorage(this::isSaplingHandler).orElse(null);
     }
 
     public boolean isLeavesHandler(BlockState blockState, BlockPos pos) {

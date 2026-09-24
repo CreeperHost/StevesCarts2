@@ -12,6 +12,7 @@ import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBridge;
+import vswe.stevescarts.entities.IModularCart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -74,19 +75,14 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
     private boolean tryBuildBridge(Level world, BlockPos pos, final boolean doPlace) {
         final Block blockAtPos = world.getBlockState(pos).getBlock();
         if ((countsAsAir(pos) || !world.getFluidState(pos).isEmpty()) && isValidForTrack(pos.above(), false)) {
-            for (int slot = 0; slot < getInventorySize(); ++slot) {
-                ItemStack stack = getStack(slot);
-                if (stack.isEmpty() || !SlotBridge.isBridgeMaterial(stack)) continue;
+            IModularCart.ModuleSlot material = findBridgeMaterial();
+            if (material != null) {
                 if (doPlace) {
-                    Block block = Block.byItem(stack.getItem());
+                    Block block = Block.byItem(material.getItem().getItem());
                     boolean placed = getCart().level().setBlock(pos, block.defaultBlockState(), 3);
                     if (!placed) return false;
                     if (!getCart().hasCreativeSupplies()) {
-                        stack.shrink(1);
-                        if (getStack(slot).getCount() == 0) {
-                            setStack(slot, ItemStack.EMPTY);
-                        }
-                        getCart().setChanged();
+                        material.take(1);
                     }
                 }
                 return true;
@@ -108,12 +104,16 @@ public class ModuleBridge extends ModuleWorker implements ISuppliesModule {
 
     @Override
     public boolean haveSupplies() {
+        return findBridgeMaterial() != null;
+    }
+
+    private IModularCart.ModuleSlot findBridgeMaterial() {
         for (int i = 0; i < getInventorySize(); ++i) {
             ItemStack item = getStack(i);
             if (!item.isEmpty() && SlotBridge.isBridgeMaterial(item)) {
-                return true;
+                return new IModularCart.ModuleSlot(this, i);
             }
         }
-        return false;
+        return getCart().findItemInAccessibleStorage(SlotBridge::isBridgeMaterial).orElse(null);
     }
 }

@@ -116,6 +116,7 @@ public class StevesCartsModules {
     public static ModuleData INFORMATION_PROVIDER;
     public static ModuleData EXPERIENCE_BANK;
     public static ModuleData CAKE_SERVER;
+    public static ModuleData TRAIN_INTERFACE;
 
     //TANKS
     public static ModuleData INTERNAL_TANK;
@@ -412,6 +413,9 @@ public class StevesCartsModules {
 
         CAKE_SERVER = StevesCartsAPI.registerModule(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "cake_server"),
                 new ModuleData(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "cake_server"), "Cake Server", ModuleCakeServer.class, ModuleType.ADDON, 10).addSide(ModuleData.SIDE.TOP).addMessage("info.stevescarts.alphaExtraMessage"));
+
+        TRAIN_INTERFACE = StevesCartsAPI.registerModule(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "train_interface"),
+                new ModuleData(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "train_interface"), "Train Interface", ModuleTrainInterface.class, ModuleType.ADDON, 12).addMessage("info.stevescarts.trainInterface"));
 
         CHUNK_LOADER = StevesCartsAPI.registerModule(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "chunk_loader"),
                 new ModuleData(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "chunk_loader"), "Chunk Loader", ModuleChunkLoader.class, ModuleType.ADDON, 10));

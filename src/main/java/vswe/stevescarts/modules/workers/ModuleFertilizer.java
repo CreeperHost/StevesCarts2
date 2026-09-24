@@ -23,6 +23,7 @@ import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotFertilizer;
+import vswe.stevescarts.entities.IModularCart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.modules.workers.tools.ModuleFarmer;
@@ -165,19 +166,29 @@ public class ModuleFertilizer extends ModuleWorker implements ISuppliesModule {
         if (getCart().level().isClientSide()) {
             return;
         }
-        ItemStack stack = getStack(0);
-        if (!stack.isEmpty()) {
-            int amount = 0;
-            if (stack.is(Items.BONE_MEAL)) amount = 1;
-            else if (stack.is(Tags.Items.BONES)) amount = 3;
-            else if (stack.is(Items.BONE_BLOCK)) amount = 9;
-            if (amount == 0) return;
+        IModularCart.ModuleSlot fertilizerSlot = findFertilizer();
+        if (fertilizerSlot != null) {
+            int amount = getFertilizerValue(fertilizerSlot.getItem());
             amount *= 4;
             if (getFertAmount() + amount <= 768) {
-                stack.shrink(1);
+                fertilizerSlot.take(1);
                 addFert(amount);
             }
         }
+    }
+
+    private IModularCart.ModuleSlot findFertilizer() {
+        if (getFertilizerValue(getStack(0)) > 0) {
+            return new IModularCart.ModuleSlot(this, 0);
+        }
+        return getCart().findItemInAccessibleStorage(stack -> getFertilizerValue(stack) > 0).orElse(null);
+    }
+
+    private int getFertilizerValue(ItemStack stack) {
+        if (stack.is(Items.BONE_MEAL)) return 1;
+        if (stack.is(Tags.Items.BONES)) return 3;
+        if (stack.is(Items.BONE_BLOCK)) return 9;
+        return 0;
     }
 
     private int getMaxFert() {

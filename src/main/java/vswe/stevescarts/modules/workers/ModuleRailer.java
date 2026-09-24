@@ -18,6 +18,7 @@ import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotBuilder;
+import vswe.stevescarts.entities.IModularCart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -117,9 +118,9 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
         }
 
         FakePlayer fakePlayer = getFakePlayer();
-        for (int slot = 0; slot < getInventorySize(); slot++) {
-            ItemStack stack = getStack(slot);
-            if (stack.isEmpty() || !validRail(stack.getItem())) continue;
+        IModularCart.ModuleSlot rail = findRail();
+        if (rail != null) {
+            ItemStack stack = rail.getItem();
             if (!fakePlayer.mayUseItemAt(pos, Direction.DOWN, stack)) return false;
 
             if (doPlace) {
@@ -127,12 +128,10 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
                 boolean placed = getCart().level().setBlock(pos, block.defaultBlockState(), 3);
                 if (!placed) return false;
                 if (!getCart().hasCreativeSupplies()) {
-                    stack.shrink(1);
-                    getCart().setChanged();
+                    rail.take(1);
                 }
             }
             return true;
-
         }
         turnback();
         return true;
@@ -183,12 +182,16 @@ public class ModuleRailer extends ModuleWorker implements ISuppliesModule {
 
     @Override
     public boolean haveSupplies() {
+        return findRail() != null;
+    }
+
+    private IModularCart.ModuleSlot findRail() {
         for (int i = 0; i < getInventorySize(); ++i) {
             ItemStack item = getStack(i);
             if (!item.isEmpty() && validRail(item.getItem())) {
-                return true;
+                return new IModularCart.ModuleSlot(this, i);
             }
         }
-        return false;
+        return getCart().findItemInAccessibleStorage(stack -> validRail(stack.getItem())).orElse(null);
     }
 }

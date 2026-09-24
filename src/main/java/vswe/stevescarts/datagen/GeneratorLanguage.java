@@ -15,6 +15,16 @@ public class GeneratorLanguage extends LanguageProvider {
         add("stevescarts.creativetab.items", "Steve's Carts 2 Components");
         add("stevescarts.creativetab.blocks", "Steve's Carts 2 Blocks");
         add("entity.stevescarts.modular_cart", "Modular Cart");
+        add("message.stevescarts.chain.selected", "Cart selected. Right-click another cart with the chain to link it.");
+        add("message.stevescarts.chain.selection_cleared", "Cart selection cleared.");
+        add("message.stevescarts.chain.reselected", "The selected cart is unavailable. This cart is now selected.");
+        add("message.stevescarts.chain.too_far", "The selected cart is too far away.");
+        add("message.stevescarts.chain.linked", "Carts linked. One chain was used.");
+        add("message.stevescarts.chain.already_connected", "These carts are already part of the same train.");
+        add("message.stevescarts.chain.no_free_link", "One of these carts already has two links.");
+        add("message.stevescarts.chain.train_full", "A train can contain at most 8 carts.");
+        add("message.stevescarts.chain.disconnected", "Cart disconnected. Recovered %1$s Iron Chain(s).");
+        add("message.stevescarts.chain.not_linked", "This cart is not linked.");
         add("gui.stevescarts.cartAssembler", "Cart Assembler");
         add("gui.stevescarts.basicAssembleInstruction", "To start making a cart, please add a Cart Hull of your choice to the Hull Slot.");
         add("gui.stevescarts.invalidHullError", "The Cart Hull added to the Hull Slot is not a valid Hull. This should not be possible so you've probably done something strange.");
@@ -91,6 +101,7 @@ public class GeneratorLanguage extends LanguageProvider {
         add("gui.stevescarts.transferAllLiquidShort", "MAX");
         add("gui.stevescarts.transferBucketShort", "B");
         add("gui.stevescarts.moduleToggler", "Module Toggler");
+        add("gui.stevescarts.cartTab", "Cart %1$s");
         add("gui.stevescarts.optionDrill", "Drill");
         add("gui.stevescarts.optionShield", "Shield");
         add("gui.stevescarts.optionInvisibility", "Invisibility");
@@ -295,6 +306,7 @@ public class GeneratorLanguage extends LanguageProvider {
         add("item.stevescarts.projectile_cake", "Projectile: Cake");
         add("item.stevescarts.trick_or_treat_cake_server", "Trick-or-Treat Cake Server");
         add("item.stevescarts.cake_server", "Cake Server");
+        add("item.stevescarts.train_interface", "Train Interface");
         add("item.stevescarts.creative_incinerator", "Creative Incinerator");
         add("item.stevescarts.creative_supplies", "Creative Supplies");
         add("item.stevescarts.color_randomizer", "Color Randomizer");
@@ -469,6 +481,7 @@ public class GeneratorLanguage extends LanguageProvider {
         add("info.stevescarts.oceanExtraMessage", "Room for an average sized ocean");
         add("info.stevescarts.openExtraMessage", "This module will accumulate small amount of water when it rains");
         add("info.stevescarts.alphaExtraMessage", "1 year in alpha");
+        add("info.stevescarts.trainInterface", "Allows this cart's modules to access modules on connected carts");
         add("info.stevescarts.storageEmpty", "Empty");
         add("info.stevescarts.storageFull", "Full");
         add("info.stevescarts.giftStorageFull", "Might contain a surprise");

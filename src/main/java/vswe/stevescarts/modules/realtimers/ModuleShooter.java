@@ -26,6 +26,7 @@ import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotArrow;
+import vswe.stevescarts.entities.IModularCart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ModularEnchantments;
 import vswe.stevescarts.helpers.ResourceHelper;
@@ -267,16 +268,24 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
         if (consume && enchanter != null && enchanter.useInfinity()) {
             consume = false;
         }
+        IModularCart.ModuleSlot projectileSlot = null;
         for (int i = 0; i < getInventorySize(); ++i) {
-            if (!isValidProjectileItem(getStack(i))) continue;
-            ItemStack projectile = getStack(i).copy();
-            projectile.setCount(1);
-            if (consume && !getCart().hasCreativeSupplies()) {
-                getStack(i).shrink(1);
+            if (isValidProjectileItem(getStack(i))) {
+                projectileSlot = new IModularCart.ModuleSlot(this, i);
+                break;
             }
-            return projectile;
         }
-        return ItemStack.EMPTY;
+        if (projectileSlot == null) {
+            projectileSlot = getCart().findItemInAccessibleStorage(this::isValidProjectileItem).orElse(null);
+        }
+        if (projectileSlot == null) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack projectile = projectileSlot.getItem().copyWithCount(1);
+        if (consume && !getCart().hasCreativeSupplies()) {
+            projectileSlot.take(1);
+        }
+        return projectile;
     }
 
     protected void shoot() {

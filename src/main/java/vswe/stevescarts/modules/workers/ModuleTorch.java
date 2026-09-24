@@ -10,7 +10,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.TorchBlock;
 import net.minecraft.world.level.block.WallTorchBlock;
@@ -22,6 +21,7 @@ import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotTorch;
+import vswe.stevescarts.entities.IModularCart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
@@ -100,27 +100,17 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
                 }
 
                 if (world.getBlockState(pos).isAir() && canPlace) {
-                    int i = 0;
-                    while (i < getInventorySize()) {
-                        if (!getStack(i).isEmpty() && Block.byItem(getStack(i).getItem()) == Blocks.TORCH) {
-                            if (doPreWork()) {
-                                startWorking(3);
-                                return true;
-                            }
+                    IModularCart.ModuleSlot torch = findTorch();
+                    if (torch != null) {
+                        if (doPreWork()) {
+                            startWorking(3);
+                            return true;
+                        }
 
-                            world.setBlock(pos, state, 3);
-                            if (!cart.hasCreativeSupplies()) {
-                                @Nonnull ItemStack stack = getStack(i);
-                                stack.shrink(1);
-                                if (getStack(i).getCount() == 0) {
-                                    setStack(i, ItemStack.EMPTY);
-                                }
-                                onInventoryChanged();
-                                break;
-                            }
-                            break;
-                        } else {
-                            ++i;
+                        world.setBlock(pos, state, 3);
+                        if (!cart.hasCreativeSupplies()) {
+                            torch.take(1);
+                            onInventoryChanged();
                         }
                     }
                     break;
@@ -281,12 +271,16 @@ public class ModuleTorch extends ModuleWorker implements ISuppliesModule {
 
     @Override
     public boolean haveSupplies() {
+        return findTorch() != null;
+    }
+
+    private IModularCart.ModuleSlot findTorch() {
         for (int i = 0; i < getInventorySize(); ++i) {
             @Nonnull ItemStack item = getStack(i);
             if (!item.isEmpty() && item.getItem() == Items.TORCH) {
-                return true;
+                return new IModularCart.ModuleSlot(this, i);
             }
         }
-        return false;
+        return getCart().findItemInAccessibleStorage(stack -> stack.is(Items.TORCH)).orElse(null);
     }
 }

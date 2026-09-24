@@ -18,6 +18,7 @@ import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotFirework;
+import vswe.stevescarts.entities.IModularCart;
 import vswe.stevescarts.entities.ModularMinecart;
 
 import javax.annotation.Nonnull;
@@ -97,8 +98,9 @@ public class ModuleFirework extends ModuleBase {
         boolean hasPaper = false;
 
         boolean canMakeCharge = false;
-        for (int i = 0; i < getInventorySize(); ++i) {
-            ItemStack stack = getStack(i);
+        List<IModularCart.ModuleSlot> supplySlots = getSupplySlots();
+        for (IModularCart.ModuleSlot slot : supplySlots) {
+            ItemStack stack = slot.getItem();
             if (stack.isEmpty()) continue;
             if (stack.is(Tags.Items.DYES) || stack.is(Items.FIREWORK_STAR)) {
                 canMakeCharge = true;
@@ -107,13 +109,12 @@ public class ModuleFirework extends ModuleBase {
         }
         if (!canMakeCharge) return ItemStack.EMPTY;
 
-        for (int i = 0; i < getInventorySize(); ++i) {
-            ItemStack item = getStack(i);
+        for (IModularCart.ModuleSlot slot : supplySlots) {
+            ItemStack item = slot.getItem();
             if (!item.isEmpty()) {
                 if (item.getItem() == Items.FIREWORK_ROCKET) {
-                    ItemStack firework = item.copy();
-                    firework.setCount(1);
-                    removeItemStack(item, firework.getCount(), i);
+                    ItemStack firework = item.copyWithCount(1);
+                    consume(slot, 1);
                     return firework;
                 }
                 if (item.getItem() == Items.PAPER) {
@@ -127,16 +128,16 @@ public class ModuleFirework extends ModuleBase {
             int maxGunpowder = getCart().getRandom().nextInt(3) + 1;
             int countGunpowder = 0;
             boolean removedPaper = false;
-            for (int j = 0; j < getInventorySize(); ++j) {
-                ItemStack item2 = getStack(j);
+            for (IModularCart.ModuleSlot slot : supplySlots) {
+                ItemStack item2 = slot.getItem();
                 if (!item2.isEmpty()) {
                     if (item2.getItem() == Items.PAPER && !removedPaper) {
-                        removeItemStack(item2, 1, j);
+                        consume(slot, 1);
                         removedPaper = true;
                     } else if (item2.getItem() == Items.GUNPOWDER && countGunpowder < maxGunpowder) {
                         while (item2.getCount() > 0 && countGunpowder < maxGunpowder) {
                             ++countGunpowder;
-                            removeItemStack(item2, 1, j);
+                            consume(slot, 1);
                         }
                     }
                 }
@@ -175,21 +176,20 @@ public class ModuleFirework extends ModuleBase {
     */
 
     private ItemStack getCharge() {
-        List<Integer> starSlots = new ArrayList<>();
+        List<IModularCart.ModuleSlot> supplySlots = getSupplySlots();
+        List<IModularCart.ModuleSlot> starSlots = new ArrayList<>();
 
-        for (int i = 0; i < getInventorySize(); ++i) {
-            ItemStack item = getStack(i);
+        for (IModularCart.ModuleSlot slot : supplySlots) {
+            ItemStack item = slot.getItem();
             if (!item.isEmpty() && item.getItem() == Items.FIREWORK_STAR) {
-                starSlots.add(i);
+                starSlots.add(slot);
             }
         }
         RandomSource random = getCart().getRandom();
         if (!starSlots.isEmpty()) {
-            int slot = starSlots.get(random.nextInt(starSlots.size()));
-            ItemStack item = getStack(slot);
-            ItemStack charge = item.copy();
-            charge.setCount(1);
-            removeItemStack(item, charge.getCount(), slot);
+            IModularCart.ModuleSlot slot = starSlots.get(random.nextInt(starSlots.size()));
+            ItemStack charge = slot.getItem().copyWithCount(1);
+            consume(slot, 1);
             return charge;
         }
 
@@ -205,11 +205,11 @@ public class ModuleFirework extends ModuleBase {
         Shape wantedShape = Shape.byId(1 + random.nextInt(4));
 
         boolean removedGunpowder = false;
-        for (int j = 0; j < getInventorySize(); ++j) {
-            ItemStack item = getStack(j);
+        for (IModularCart.ModuleSlot slot : supplySlots) {
+            ItemStack item = slot.getItem();
             if (item.isEmpty()) continue;
             if (item.getItem() == Items.GUNPOWDER && !removedGunpowder) {
-                removeItemStack(item, 1, j);
+                consume(slot, 1);
                 removedGunpowder = true;
                 break;
             }
@@ -222,19 +222,19 @@ public class ModuleFirework extends ModuleBase {
         boolean removedModifier = false;
         boolean removedDiamond = false;
         boolean removedGlow = false;
-        for (int j = 0; j < getInventorySize(); ++j) {
-            ItemStack item = getStack(j);
+        for (IModularCart.ModuleSlot slot : supplySlots) {
+            ItemStack item = slot.getItem();
             if (item.isEmpty()) continue;
             if (item.getItem() == Items.GLOWSTONE_DUST && attemptTwinkle && !removedGlow) {
-                removeItemStack(item, 1, j);
+                consume(slot, 1);
                 removedGlow = true;
                 hasTwinkle = true;
             } else if (item.getItem() == Items.DIAMOND && attemptTrail && !removedDiamond) {
-                removeItemStack(item, 1, j);
+                consume(slot, 1);
                 removedDiamond = true;
                 hasTrail = true;
             } else if (attemptModifier && !removedModifier && ((item.getItem() == Items.FIRE_CHARGE && wantedShape == Shape.LARGE_BALL) || (item.getItem() == Items.GOLD_NUGGET && wantedShape == Shape.STAR) || (item.is(ItemTags.SKULLS) && wantedShape == Shape.CREEPER) || (item.getItem() == Items.FEATHER && wantedShape == Shape.BURST))) {
-                removeItemStack(item, 1, j);
+                consume(slot, 1);
                 removedModifier = true;
                 shape = wantedShape;
             }
@@ -256,8 +256,9 @@ public class ModuleFirework extends ModuleBase {
     private void generateColors(IntList colours, int maxColorCount) {
         int[] maxColors = new int[16];
         int[] currentColors = new int[16];
-        for (int i = 0; i < getInventorySize(); ++i) {
-            ItemStack stack = getStack(i);
+        List<IModularCart.ModuleSlot> supplySlots = getSupplySlots();
+        for (IModularCart.ModuleSlot slot : supplySlots) {
+            ItemStack stack = slot.getItem();
             if (stack.isEmpty() || !stack.is(Tags.Items.DYES)) continue;
             DyeColor colour = DyeColor.getColor(stack);
             if (colour == null) continue;
@@ -287,8 +288,8 @@ public class ModuleFirework extends ModuleBase {
             --colorCount;
         }
 
-        for (int k = 0; k < getInventorySize(); ++k) {
-            ItemStack stack = getStack(k);
+        for (IModularCart.ModuleSlot slot : supplySlots) {
+            ItemStack stack = slot.getItem();
             if (stack.isEmpty() || !stack.is(Tags.Items.DYES)) continue;
             DyeColor colour = DyeColor.getColor(stack);
             if (colour == null) continue;
@@ -296,18 +297,24 @@ public class ModuleFirework extends ModuleBase {
             int used = currentColors[colour.getId()];
             if (used > 0) {
                 used = Math.min(used, stack.getCount());
-                removeItemStack(stack, used, k);
+                consume(slot, used);
                 currentColors[colour.getId()] -= used;
             }
         }
     }
 
-    private void removeItemStack(@Nonnull ItemStack item, int count, int slot) {
+    private List<IModularCart.ModuleSlot> getSupplySlots() {
+        List<IModularCart.ModuleSlot> slots = new ArrayList<>();
+        for (int slot = 0; slot < getInventorySize(); slot++) {
+            slots.add(new IModularCart.ModuleSlot(this, slot));
+        }
+        slots.addAll(getCart().getAccessibleStorageSlots());
+        return slots;
+    }
+
+    private void consume(IModularCart.ModuleSlot slot, int count) {
         if (!getCart().hasCreativeSupplies()) {
-            item.shrink(count);
-            if (item.getCount() <= 0) {
-                setStack(slot, ItemStack.EMPTY);
-            }
+            slot.take(count);
         }
     }
 

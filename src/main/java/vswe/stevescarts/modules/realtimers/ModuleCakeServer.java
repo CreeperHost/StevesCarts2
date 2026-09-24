@@ -6,7 +6,6 @@ import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -15,11 +14,10 @@ import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotCake;
+import vswe.stevescarts.entities.IModularCart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.polylib.EntityData;
-
-import javax.annotation.Nonnull;
 
 public class ModuleCakeServer extends ModuleBase implements ISuppliesModule {
     private static final int MAX_CAKES = 10;
@@ -49,12 +47,19 @@ public class ModuleCakeServer extends ModuleBase implements ISuppliesModule {
                     ++cooldown;
                 }
             }
-            @Nonnull ItemStack item = getStack(0);
-            if (!item.isEmpty() && item.getItem().equals(Items.CAKE) && getCakeBuffer() + 6 <= 66) {
+            IModularCart.ModuleSlot cake = findCake();
+            if (cake != null && getCakeBuffer() + 6 <= 66) {
                 setCakeBuffer(getCakeBuffer() + 6);
-                setStack(0, ItemStack.EMPTY);
+                cake.take(1);
             }
         }
+    }
+
+    private IModularCart.ModuleSlot findCake() {
+        if (getStack(0).is(Items.CAKE)) {
+            return new IModularCart.ModuleSlot(this, 0);
+        }
+        return getCart().findItemInAccessibleStorage(stack -> stack.is(Items.CAKE)).orElse(null);
     }
 
     private int getCakeBuffer() {

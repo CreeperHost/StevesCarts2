@@ -28,6 +28,7 @@ import vswe.stevescarts.api.modules.template.ModuleTool;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.containers.slots.SlotSeed;
+import vswe.stevescarts.entities.IModularCart;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.polylib.EntityData;
 
@@ -140,37 +141,40 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
     }
 
     protected boolean plant(Level world, BlockPos pos) {
-        int hasSeeds = -1;
         BlockState soilState = world.getBlockState(pos);
         Block soilblock = soilState.getBlock();
         if (soilblock != null) {
-            for (int i = 0; i < getInventorySize(); ++i) {
-                if (!getStack(i).isEmpty() && isSeedValidHandler(getStack(i))) {
-                    BlockState cropblock = getCropFromSeedHandler(getStack(i), world, pos);
-                    if (cropblock != null && world.getBlockState(pos.above()).isAir()) {
-                        if (cropblock.canSurvive(world, pos.above())) {
-                            hasSeeds = i;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (hasSeeds != -1) {
+            IModularCart.ModuleSlot seed = findPlantableSeed(world, pos);
+            if (seed != null) {
                 if (doPreWork()) {
                     startWorking(25);
                     return true;
                 }
                 stopWorking();
-                BlockState cropblock2 = getCropFromSeedHandler(getStack(hasSeeds), world, pos);
+                BlockState cropblock2 = getCropFromSeedHandler(seed.getItem(), world, pos);
                 world.setBlock(pos.above(), cropblock2, 3);
-                ItemStack stack = getStack(hasSeeds);
-                stack.shrink(1);
-                if (getStack(hasSeeds).getCount() <= 0) {
-                    setStack(hasSeeds, ItemStack.EMPTY);
-                }
+                seed.take(1);
             }
         }
         return false;
+    }
+
+    private IModularCart.ModuleSlot findPlantableSeed(Level world, BlockPos pos) {
+        for (int i = 0; i < getInventorySize(); ++i) {
+            ItemStack stack = getStack(i);
+            if (canPlantSeed(stack, world, pos)) {
+                return new IModularCart.ModuleSlot(this, i);
+            }
+        }
+        return getCart().findItemInAccessibleStorage(stack -> canPlantSeed(stack, world, pos)).orElse(null);
+    }
+
+    private boolean canPlantSeed(ItemStack stack, Level world, BlockPos pos) {
+        if (stack.isEmpty() || !isSeedValidHandler(stack) || !world.getBlockState(pos.above()).isAir()) {
+            return false;
+        }
+        BlockState crop = getCropFromSeedHandler(stack, world, pos);
+        return crop != null && crop.canSurvive(world, pos.above());
     }
 
     protected boolean farm(Level world, BlockPos pos) {
@@ -299,6 +303,6 @@ public abstract class ModuleFarmer extends ModuleTool implements ISuppliesModule
                 return true;
             }
         }
-        return false;
+        return getCart().findItemInAccessibleStorage(this::isSeedValidHandler).isPresent();
     }
 }

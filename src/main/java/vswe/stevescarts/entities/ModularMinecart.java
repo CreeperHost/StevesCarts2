@@ -53,14 +53,20 @@ import vswe.stevescarts.containers.ContainerMinecart;
 import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModEntities;
+import vswe.stevescarts.items.CartLinking;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.polylib.DataEntity;
 import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by brandon3055 on 07/12/2024
@@ -68,6 +74,13 @@ import java.util.Optional;
 public class ModularMinecart extends AbstractMinecart implements IEntityWithComplexSpawn, MenuProvider, DataEntity, IModularCart {
     private static final double STOP_CENTER_EPSILON = 1.0 / 64.0;
     private static final double STOP_CENTER_SPEED = 0.125;
+    private static final double LINK_DISTANCE = 1.6;
+    private static final double LINK_CORRECTION = 0.35;
+    private static final double MAX_LINK_CORRECTION_SPEED = 0.12;
+    private static final double MAX_LINK_IMPULSE = 0.2;
+    private static final int LINK_CONSTRAINT_ITERATIONS = 8;
+    private static final int MAX_CART_LINKS = 2;
+    private static final int MAX_TRAIN_CARTS = 8;
     public static final int MODULAR_SPACE_WIDTH = 443;
     public static final int MODULAR_SPACE_HEIGHT = 168;
     public static final int[][][] railDirectionCoordinates = new int[][][]{
@@ -83,6 +96,18 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
             {{0, 0, -1}, {1, 0, 0}}};
     private static final EntityDataAccessor<Boolean> IS_BURNING = SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> IS_DISANABLED = SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> LINKED_CART_0 = SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> LINKED_CART_1 = SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT);
+    private static final List<EntityDataAccessor<Integer>> TRAIN_CART_IDS = List.of(
+            SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT),
+            SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT),
+            SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT),
+            SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT),
+            SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT),
+            SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT),
+            SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT),
+            SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT)
+    );
     protected final List<ChunkPos> forcedChunks = new ArrayList<>();
     private final ArrayList<ModuleCountPair> moduleCounts = new ArrayList<>();
     private final ArrayList<ModuleBase> modules = new ArrayList<>();
@@ -90,6 +115,8 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     private final ArrayList<ModuleEngine> engineModules = new ArrayList<>();
     private final ArrayList<ModuleTank> tankModules = new ArrayList<>();
     private final List<EntityData<?>> entityDataList = new ArrayList<>();
+    private final List<UUID> linkedCartIds = new ArrayList<>(MAX_CART_LINKS);
+    private long lastLinkUpdateGameTime = Long.MIN_VALUE;
     public boolean canScrollModules;
     public int modularSpaceHeight;
     protected TileEntityCartAssembler placeholderAsssembler;
@@ -217,6 +244,9 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         double lastYRot = this.getYRot();
         Vec3 lastPos = this.position();
         super.tick();
+        if (this.level() instanceof ServerLevel serverLevel) {
+            updateCartLinks(serverLevel);
+        }
         if (this.level().isClientSide() && lastPos.distanceTo(this.position()) > 0.01) {
             this.rotationOffset += (float) ((this.getYRot() - lastYRot) % 360.0);
             this.rotationOffset %= 360.0F;
@@ -228,6 +258,11 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         super.defineSynchedData(builder);
         builder.define(IS_BURNING, false);
         builder.define(IS_DISANABLED, false);
+        builder.define(LINKED_CART_0, -1);
+        builder.define(LINKED_CART_1, -1);
+        for (EntityDataAccessor<Integer> trainCartId : TRAIN_CART_IDS) {
+            builder.define(trainCartId, -1);
+        }
     }
 
     @Override
@@ -251,6 +286,14 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     }
 
     @Override
+    public void push(Entity entity) {
+        if (entity instanceof ModularMinecart other && isLinkedTo(other)) {
+            return;
+        }
+        super.push(entity);
+    }
+
+    @Override
     public boolean canRiderInteract() {
         return true;
     }
@@ -268,8 +311,15 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     //Override this to stop it spawning a vanilla minecart
     @Override
     protected void destroy(ServerLevel level, DamageSource damageSource) {
+        int returnedChains = unlinkAllCarts();
         this.kill(level);
-        if (level.getGameRules().get(GameRules.ENTITY_DROPS) && dropOnDeath()) {
+        if (!level.getGameRules().get(GameRules.ENTITY_DROPS)) {
+            return;
+        }
+        if (returnedChains > 0) {
+            this.spawnAtLocation(level, new ItemStack(Items.IRON_CHAIN, returnedChains));
+        }
+        if (dropOnDeath()) {
             ItemStack itemstack = getCartItem();
             if (this.hasCustomName()) {
                 itemstack.set(DataComponents.CUSTOM_NAME, getCustomName());
@@ -491,6 +541,19 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         if (isPlaceholder()) {
             return InteractionResult.FAIL;
         }
+        ItemStack heldItem = player.getItemInHand(hand);
+        if (heldItem.is(Items.IRON_CHAIN)) {
+            if (player instanceof ServerPlayer serverPlayer) {
+                return CartLinking.interactWithCart(heldItem, serverPlayer, this);
+            }
+            return InteractionResult.SUCCESS;
+        }
+        if (heldItem.is(Items.SHEARS)) {
+            if (player instanceof ServerPlayer serverPlayer) {
+                return CartLinking.cutCartLinks(heldItem, serverPlayer, this, hand);
+            }
+            return InteractionResult.SUCCESS;
+        }
         if (!player.isCrouching()) {
             boolean interupt = false;
             for (ModuleBase module : modules()) {
@@ -506,6 +569,11 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
             player.openMenu(this, packetBuffer -> packetBuffer.writeInt(getId()));
         }
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public boolean shouldTriggerClientSideContainerClosingOnOpen() {
+        return false;
     }
 
     @Override
@@ -583,6 +651,9 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         if (disabledPos != null) {
             output.store("disabled_pos", BlockPos.CODEC, disabledPos);
         }
+        for (int i = 0; i < linkedCartIds.size(); i++) {
+            output.putString("linked_cart_" + i, linkedCartIds.get(i).toString());
+        }
 
         ValueOutput list = output.child("modules");
         list.putInt("count", modules.size());
@@ -606,8 +677,183 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         }
         workingTime = input.getShortOr("workingTime", (short) 0);
         disabledPos = input.read("disabled_pos", BlockPos.CODEC).orElse(null);
+        linkedCartIds.clear();
+        for (int i = 0; i < MAX_CART_LINKS; i++) {
+            String id = input.getStringOr("linked_cart_" + i, "");
+            if (!id.isEmpty()) {
+                try {
+                    linkedCartIds.add(UUID.fromString(id));
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+        }
 
         loadModules(input);
+    }
+
+    public LinkResult linkCart(ModularMinecart other) {
+        if (other == this || isLinkedTo(other) || isConnectedTo(other)) {
+            return LinkResult.ALREADY_CONNECTED;
+        }
+        if (linkedCartIds.size() >= MAX_CART_LINKS || other.linkedCartIds.size() >= MAX_CART_LINKS) {
+            return LinkResult.NO_FREE_LINK;
+        }
+        if (getConnectedCarts().size() + other.getConnectedCarts().size() + 2 > MAX_TRAIN_CARTS) {
+            return LinkResult.TRAIN_FULL;
+        }
+        linkedCartIds.add(other.getUUID());
+        other.linkedCartIds.add(getUUID());
+        return LinkResult.LINKED;
+    }
+
+    public int unlinkAllCarts() {
+        int linkCount = linkedCartIds.size();
+        if (level() instanceof ServerLevel serverLevel) {
+            for (UUID linkedId : List.copyOf(linkedCartIds)) {
+                Entity entity = serverLevel.getEntity(linkedId);
+                if (entity instanceof ModularMinecart linkedCart) {
+                    linkedCart.linkedCartIds.remove(getUUID());
+                }
+            }
+        }
+        linkedCartIds.clear();
+        entityData.set(LINKED_CART_0, -1);
+        entityData.set(LINKED_CART_1, -1);
+        for (EntityDataAccessor<Integer> trainCartId : TRAIN_CART_IDS) {
+            entityData.set(trainCartId, -1);
+        }
+        return linkCount;
+    }
+
+    public int getLinkedCartEntityId(int index) {
+        return entityData.get(index == 0 ? LINKED_CART_0 : LINKED_CART_1);
+    }
+
+    public List<Integer> getTrainCartEntityIds() {
+        List<Integer> ids = new ArrayList<>(MAX_TRAIN_CARTS);
+        for (EntityDataAccessor<Integer> trainCartId : TRAIN_CART_IDS) {
+            int id = entityData.get(trainCartId);
+            if (id >= 0) {
+                ids.add(id);
+            }
+        }
+        return ids;
+    }
+
+    public List<ModularMinecart> getConnectedCarts() {
+        if (!(level() instanceof ServerLevel serverLevel)) {
+            return List.of();
+        }
+        return getConnectedCarts(serverLevel);
+    }
+
+    private boolean isLinkedTo(ModularMinecart other) {
+        return linkedCartIds.contains(other.getUUID());
+    }
+
+    private boolean isConnectedTo(ModularMinecart target) {
+        if (!(level() instanceof ServerLevel serverLevel)) {
+            return false;
+        }
+        return getConnectedCarts(serverLevel).contains(target);
+    }
+
+    private List<ModularMinecart> getConnectedCarts(ServerLevel serverLevel) {
+        List<ModularMinecart> connectedCarts = new ArrayList<>();
+        Set<UUID> visited = new HashSet<>();
+        ArrayDeque<UUID> pending = new ArrayDeque<>(linkedCartIds);
+        visited.add(getUUID());
+        while (!pending.isEmpty()) {
+            UUID id = pending.removeFirst();
+            if (!visited.add(id)) {
+                continue;
+            }
+            Entity entity = serverLevel.getEntity(id);
+            if (entity instanceof ModularMinecart linkedCart) {
+                connectedCarts.add(linkedCart);
+                pending.addAll(linkedCart.linkedCartIds);
+            }
+        }
+        return connectedCarts;
+    }
+
+    private void updateCartLinks(ServerLevel serverLevel) {
+        int[] linkedEntityIds = {-1, -1};
+        List<UUID> links = List.copyOf(linkedCartIds);
+        for (int i = 0; i < links.size(); i++) {
+            UUID linkedId = links.get(i);
+            Entity entity = serverLevel.getEntity(linkedId);
+            if (!(entity instanceof ModularMinecart linkedCart) || !linkedCart.isAlive()) {
+                continue;
+            }
+            linkedEntityIds[i] = linkedCart.getId();
+            if (!linkedCart.linkedCartIds.contains(getUUID())) {
+                if (linkedCart.linkedCartIds.size() >= MAX_CART_LINKS) {
+                    linkedCartIds.remove(linkedId);
+                    continue;
+                }
+                linkedCart.linkedCartIds.add(getUUID());
+            }
+        }
+        entityData.set(LINKED_CART_0, linkedEntityIds[0]);
+        entityData.set(LINKED_CART_1, linkedEntityIds[1]);
+        List<ModularMinecart> connectedCarts = getConnectedCarts(serverLevel);
+        List<ModularMinecart> trainCarts = new ArrayList<>(connectedCarts.size() + 1);
+        trainCarts.add(this);
+        trainCarts.addAll(connectedCarts);
+        trainCarts.sort(Comparator.comparingInt(Entity::getId));
+        lastLinkUpdateGameTime = serverLevel.getGameTime();
+        for (ModularMinecart trainCart : trainCarts) {
+            for (int i = 0; i < TRAIN_CART_IDS.size(); i++) {
+                trainCart.entityData.set(TRAIN_CART_IDS.get(i), i < trainCarts.size() ? trainCarts.get(i).getId() : -1);
+            }
+        }
+        if (trainCarts.stream().allMatch(cart -> cart.lastLinkUpdateGameTime == serverLevel.getGameTime())) {
+            applyTrainLinkConstraints(serverLevel, trainCarts);
+        }
+    }
+
+    private static void applyTrainLinkConstraints(ServerLevel serverLevel, List<ModularMinecart> trainCarts) {
+        for (int iteration = 0; iteration < LINK_CONSTRAINT_ITERATIONS; iteration++) {
+            for (ModularMinecart cart : trainCarts) {
+                for (UUID linkedId : cart.linkedCartIds) {
+                    Entity entity = serverLevel.getEntity(linkedId);
+                    if (entity instanceof ModularMinecart linkedCart && cart.getId() < linkedCart.getId()) {
+                        cart.applyLinkConstraint(linkedCart);
+                    }
+                }
+            }
+        }
+    }
+
+    private void applyLinkConstraint(ModularMinecart linkedCart) {
+        Vec3 offset = linkedCart.position().subtract(position());
+        double distance = offset.length();
+        if (distance < 1.0E-4) {
+            return;
+        }
+        Vec3 direction = offset.scale(1.0 / distance);
+        double relativeSpeed = linkedCart.getDeltaMovement().subtract(getDeltaMovement()).dot(direction);
+        double correctionSpeed = java.lang.Math.clamp(
+                (distance - LINK_DISTANCE) * LINK_CORRECTION,
+                -MAX_LINK_CORRECTION_SPEED,
+                MAX_LINK_CORRECTION_SPEED
+        );
+        double impulseStrength = java.lang.Math.clamp(
+                (relativeSpeed + correctionSpeed) * 0.5,
+                -MAX_LINK_IMPULSE,
+                MAX_LINK_IMPULSE
+        );
+        Vec3 impulse = direction.scale(impulseStrength);
+        setDeltaMovement(getDeltaMovement().add(impulse));
+        linkedCart.setDeltaMovement(linkedCart.getDeltaMovement().subtract(impulse));
+    }
+
+    public enum LinkResult {
+        LINKED,
+        ALREADY_CONNECTED,
+        NO_FREE_LINK,
+        TRAIN_FULL
     }
 
     public void loadModules(ValueInput input) {

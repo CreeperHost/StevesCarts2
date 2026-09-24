@@ -21,10 +21,14 @@ import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.helpers.ResourceHelper;
 import vswe.stevescarts.network.packets.PacketMinecartTurn;
+import vswe.stevescarts.network.packets.PacketOpenConnectedCart;
 
 import java.util.*;
 
 public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
+    private static final int TRAIN_TAB_WIDTH = 56;
+    private static final int TRAIN_TAB_HEIGHT = 20;
+    private static final int TRAIN_TAB_GAP = 2;
     private static Identifier textureLeft;
     private static Identifier textureRight;
     private static Identifier textureReturn;
@@ -90,6 +94,7 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiMinecart.textureLeft, left, top, 0, 0, 256, 256, 256, 256);
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiMinecart.textureRight, left + 256, top, 0, 0, imageWidth - 256, imageHeight, 256, 256);
         if (cart != null) {
+            renderTrainTabs(guiGraphics, mouseX, mouseY);
             final ModuleBase thief = cart.getInterfaceThief();
             if (thief != null) {
                 drawModuleSlots(guiGraphics, GuiMinecart.textureRight, thief);
@@ -139,6 +144,31 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
         y -= getTopPos();
         int uy = inRect(x, y, returnButton) ? 12 : 0;
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiMinecart.textureReturn, returnButton[0] + getLeftPos(), returnButton[1] + getTopPos(), 0, uy, returnButton[2], returnButton[3], 256, 256);
+    }
+
+    private void renderTrainTabs(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
+        List<Integer> cartIds = cart.getTrainCartEntityIds();
+        if (cartIds.size() < 2) return;
+
+        int startX = getLeftPos() + (imageWidth - getTrainTabsWidth(cartIds.size())) / 2;
+        int tabY = getTopPos() - TRAIN_TAB_HEIGHT;
+        for (int i = 0; i < cartIds.size(); i++) {
+            int tabX = startX + i * (TRAIN_TAB_WIDTH + TRAIN_TAB_GAP);
+            boolean selected = cartIds.get(i) == cart.getId();
+            boolean hovered = inRect(mouseX, mouseY, tabX, tabY, TRAIN_TAB_WIDTH, TRAIN_TAB_HEIGHT);
+            int colour = selected ? 0xFFC6C6C6 : hovered ? 0xFFA0A0A0 : 0xFF808080;
+            guiGraphics.fill(tabX, tabY, tabX + TRAIN_TAB_WIDTH, tabY + TRAIN_TAB_HEIGHT, 0xFF000000);
+            guiGraphics.fill(tabX + 1, tabY + 1, tabX + TRAIN_TAB_WIDTH - 1,
+                    tabY + TRAIN_TAB_HEIGHT + (selected ? 1 : -1), colour);
+            Component label = Component.translatable("gui.stevescarts.cartTab", i + 1);
+            guiGraphics.text(Minecraft.getInstance().font, label,
+                    tabX + (TRAIN_TAB_WIDTH - Minecraft.getInstance().font.width(label)) / 2,
+                    tabY + 6, selected ? 0xFF404040 : 0xFFFFFFFF, false);
+        }
+    }
+
+    private int getTrainTabsWidth(int cartCount) {
+        return cartCount * TRAIN_TAB_WIDTH + (cartCount - 1) * TRAIN_TAB_GAP;
     }
 
     public void drawModuleIcon(GuiGraphicsExtractor guiGraphics, ItemStack icon, final int targetX, final int targetY, final float sizeX, final float sizeY, final float offsetX, final float offsetY) {
@@ -219,6 +249,9 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
+        if (event.button() == 1 && clickTrainTab((int) event.x(), (int) event.y())) {
+            return true;
+        }
         ModuleBase thief = cart.getInterfaceThief();
         if (thief != null) {
             handleModuleMouseClicked(thief, (int) event.x(), (int) event.y(), event.button());
@@ -236,6 +269,25 @@ public class GuiMinecart extends AbstractContainerScreen<ContainerMinecart> {
             }
         }
         return super.mouseClicked(event, isDoubleClick);
+    }
+
+    private boolean clickTrainTab(int mouseX, int mouseY) {
+        List<Integer> cartIds = cart.getTrainCartEntityIds();
+        if (cartIds.size() < 2) return false;
+
+        int startX = getLeftPos() + (imageWidth - getTrainTabsWidth(cartIds.size())) / 2;
+        int tabY = getTopPos() - TRAIN_TAB_HEIGHT;
+        for (int i = 0; i < cartIds.size(); i++) {
+            int tabX = startX + i * (TRAIN_TAB_WIDTH + TRAIN_TAB_GAP);
+            if (inRect(mouseX, mouseY, tabX, tabY, TRAIN_TAB_WIDTH, TRAIN_TAB_HEIGHT)) {
+                int targetCartId = cartIds.get(i);
+                if (targetCartId != cart.getId()) {
+                    StevesCartsClient.sendToServer(new PacketOpenConnectedCart(cart.getId(), targetCartId));
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
