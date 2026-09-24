@@ -13,6 +13,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -54,6 +55,7 @@ import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModEntities;
 import vswe.stevescarts.items.CartLinking;
+import vswe.stevescarts.modules.realtimers.ModuleSeat;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.polylib.DataEntity;
 import vswe.stevescarts.polylib.EntityData;
@@ -250,6 +252,9 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         if (this.level().isClientSide() && lastPos.distanceTo(this.position()) > 0.01) {
             this.rotationOffset += (float) ((this.getYRot() - lastYRot) % 360.0);
             this.rotationOffset %= 360.0F;
+        }
+        if (this.level().isClientSide() && getPassengers().stream().noneMatch(Player.class::isInstance)) {
+            this.playerRotationOffset = this.rotationOffset;
         }
     }
 
@@ -919,12 +924,14 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     @Override
     protected void positionRider(Entity passenger, Entity.MoveFunction moveFunction) {
         super.positionRider(passenger, moveFunction);
-        if (this.level().isClientSide() && passenger instanceof Player player) {
-            if (player.shouldRotateWithMinecart()) {
-                //TODO Restore rider rotation when cart seats support it.
-            }
+        if (this.level().isClientSide()
+                && passenger instanceof Player player
+                && player.shouldRotateWithMinecart()
+                && modules().stream().anyMatch(ModuleSeat.class::isInstance)) {
+            float yRot = (float) Mth.rotLerp(0.5, this.playerRotationOffset, this.rotationOffset);
+            player.setYRot(player.getYRot() - (yRot - this.playerRotationOffset));
+            this.playerRotationOffset = yRot;
         }
-
     }
 
 }
