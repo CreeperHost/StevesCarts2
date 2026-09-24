@@ -126,32 +126,32 @@ public class GuiCargo extends ModularGuiContainer<ContainerCargo> {
             int y = (int) (mouseY - yMin());
             if (inRect(x, y, getMiddleCoords())) {
                 manager.sendPacket(5, (byte) ((button == InputConstants.MOUSE_BUTTON_LEFT) ? 1 : -1));
-            } else {
-                for (int i = 0; i < 4; ++i) {
-                    byte data = (byte) i;
-                    data |= (byte) (encodedButton << 2);
-                    if (inRect(x, y, getArrowCoords(i))) {
-                        manager.sendPacket(0, (byte) i);
-                        break;
-                    }
-                    if (inRect(x, y, getTextCoords(i))) {
-                        manager.sendPacket(2, data);
-                        break;
-                    }
-                    if (inRect(x, y, getColorpickerCoords(i))) {
-                        manager.sendPacket(3, data);
-                        break;
-                    }
-                    if (inRect(x, y, getReturnCoords(i))) {
-                        manager.sendPacket(4, (byte) i);
-                        break;
-                    }
-                    if (sendOnClick(i, x, y, data)) {
-                        break;
-                    }
+                return true;
+            }
+            for (int i = 0; i < 4; ++i) {
+                byte data = (byte) i;
+                data |= (byte) (encodedButton << 2);
+                if (inRect(x, y, getArrowCoords(i))) {
+                    manager.sendPacket(0, (byte) i);
+                    return true;
+                }
+                if (inRect(x, y, getTextCoords(i))) {
+                    manager.sendPacket(2, data);
+                    return true;
+                }
+                if (inRect(x, y, getColorpickerCoords(i))) {
+                    manager.sendPacket(3, data);
+                    return true;
+                }
+                if (inRect(x, y, getReturnCoords(i))) {
+                    manager.sendPacket(4, (byte) i);
+                    return true;
+                }
+                if (sendOnClick(i, x, y, data)) {
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
 
         protected void drawColors(GuiRender render, Identifier resourceLocation, final int id, final int color, final int left, final int top) {

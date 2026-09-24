@@ -111,10 +111,10 @@ public class GuiActivator extends AbstractContainerScreen<ContainerActivator> {
             if (inRect((int) mouseX, (int) mouseY, box)) {
                 byte data = (byte) ((button == InputConstants.MOUSE_BUTTON_RIGHT) ? 1 : 0);
                 data |= (byte) (i << 1);
-                activator.getOptions().get(i).changeOption(button == InputConstants.MOUSE_BUTTON_LEFT);
                 StevesCartsClient.sendToServer(new PacketActivator(activator.getBlockPos(), 0, new byte[]{data}));
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }

@@ -54,6 +54,18 @@ public class ContainerCargo extends ContainerBase {
         return data.get(0);
     }
 
+    @Override
+    public void setData(int id, int value) {
+        super.setData(id, value);
+        if (id == 0) {
+            for (Slot slot : slots) {
+                if (slot instanceof SlotCargo cargoSlot) {
+                    cargoSlot.updatePosition();
+                }
+            }
+        }
+    }
+
     public int[] getColor() {
         return new int[]{data.get(1), data.get(2), data.get(3), data.get(4)};
     }

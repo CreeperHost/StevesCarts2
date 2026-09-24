@@ -12,7 +12,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -33,6 +33,24 @@ import java.util.ArrayList;
 
 public class TileEntityActivator extends TileEntityBase implements MenuProvider {
     private ArrayList<ActivatorOption> options;
+    private final ContainerData dataAccess = new ContainerData() {
+        @Override
+        public int get(int id) {
+            return id >= 0 && id < options.size() ? options.get(id).getOption() : 0;
+        }
+
+        @Override
+        public void set(int id, int value) {
+            if (id >= 0 && id < options.size()) {
+                options.get(id).setOption(value);
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return options.size();
+        }
+    };
 
     public TileEntityActivator(BlockPos blockPos, BlockState blockState) {
         super(ModBlocks.MODULE_TOGGLER_TILE.get(), blockPos, blockState);
@@ -107,6 +125,6 @@ public class TileEntityActivator extends TileEntityBase implements MenuProvider 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player playerEntity) {
-        return new ContainerActivator(id, playerInventory, this, new SimpleContainerData(0));
+        return new ContainerActivator(id, playerInventory, this, dataAccess);
     }
 }
