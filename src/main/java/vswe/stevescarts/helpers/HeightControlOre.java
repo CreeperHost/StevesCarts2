@@ -7,16 +7,15 @@ public record HeightControlOre(String name, boolean useDefaultTexture, String sp
     public static final ArrayList<HeightControlOre> ores;
 
     static {
-        //TODO the "Optimal" ranges need some work.
         ores = new ArrayList<>();
-        new HeightControlOre("Diamond", 0, -64, 16, -60, -58);
-        new HeightControlOre("Redstone", 1, -64, 16, -60, -58);
-        new HeightControlOre("Gold", 2, -64, 32, -17, -15);
-        new HeightControlOre("Lapis Lazuli", 3, -64, 64, -2, 0);
-        new HeightControlOre("Iron", 4, -64, 320, 0, 40);
-        new HeightControlOre("Coal", 5, 0, 320, 44, 95);
-        new HeightControlOre("Emerald", 6, -16, 320, 235, 236);
-        new HeightControlOre("Copper", 7, -16, 112, 47, 49);
+        new HeightControlOre("Diamond", 0, -64, 16, -59, -58);
+        new HeightControlOre("Redstone", 1, -64, 15, -59, -58);
+        new HeightControlOre("Gold", 2, -64, 32, -16, -16);
+        new HeightControlOre("Lapis Lazuli", 3, -64, 64, 0, 0);
+        new HeightControlOre("Iron", 4, -64, 319, 16, 16);
+        new HeightControlOre("Coal", 5, 0, 319, 96, 96);
+        new HeightControlOre("Emerald", 6, -16, 319, 232, 232);
+        new HeightControlOre("Copper", 7, -16, 112, 48, 48);
     }
 
     public HeightControlOre(final String name, final int textureid, final int spanLowest, final int spanHighest, final int bestLowest, final int bestHighest) {
