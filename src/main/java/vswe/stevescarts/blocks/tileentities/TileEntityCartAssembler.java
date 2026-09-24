@@ -6,6 +6,8 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.PlainTextContents;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
@@ -315,7 +317,10 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                         if (effect instanceof Disassemble) {
                             @Nonnull ItemStack oldcart = tile.getItem(0);
                             if (!oldcart.isEmpty() && !outputItem.isEmpty() && oldcart.getItem() instanceof ItemCarts && outputItem.getItem() instanceof ItemCarts) {
-                                outputItem.set(DataComponents.CUSTOM_NAME, oldcart.getDisplayName());
+                                Component customName = getCartCustomName(oldcart);
+                                if (customName != null) {
+                                    outputItem.set(DataComponents.CUSTOM_NAME, customName);
+                                }
                             }
                             tile.setItem(0, ItemStack.EMPTY);
                         }
@@ -731,6 +736,34 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                 // Continue until every applicable manager rule has completed.
             }
         }
+    }
+
+    @Nullable
+    private static Component getCartCustomName(ItemStack cart) {
+        Component name = cart.get(DataComponents.CUSTOM_NAME);
+        boolean unwrappedLegacyName = false;
+
+        while (name != null) {
+            if (name.getContents() instanceof TranslatableContents contents
+                    && contents.getKey().equals("chat.square_brackets")
+                    && contents.getArgs().length == 1
+                    && contents.getArgs()[0] instanceof Component innerName) {
+                name = innerName;
+                unwrappedLegacyName = true;
+                continue;
+            }
+
+            if (unwrappedLegacyName
+                    && name.getContents() == PlainTextContents.EMPTY
+                    && name.getSiblings().size() == 1) {
+                name = name.getSiblings().get(0);
+                continue;
+            }
+
+            return name;
+        }
+
+        return null;
     }
 
     private void deploySpares() {

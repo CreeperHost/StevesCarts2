@@ -1,7 +1,6 @@
 package vswe.stevescarts.items;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
@@ -84,7 +83,7 @@ public class ItemCarts extends MinecartItem {
         if (!ModItemData.hasTag(stack)) return;
         CompoundTag tag = ModItemData.getTagCopy(stack);
         if (tag.contains("modules")) {
-            if (!Screen.hasShiftDown()) {
+            if (!flag.hasShiftDown()) {
                 consumer.accept(Component.translatable(
                         "tooltip.stevescarts.hold_shift_for_modules",
                         Component.literal("Shift").withStyle(ChatFormatting.YELLOW)
