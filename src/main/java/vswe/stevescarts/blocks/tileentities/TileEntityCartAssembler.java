@@ -43,6 +43,7 @@ import vswe.stevescarts.helpers.DropDownMenuItem;
 import vswe.stevescarts.helpers.SimulationInfo;
 import vswe.stevescarts.helpers.TitleBox;
 import vswe.stevescarts.helpers.storages.TransferHandler;
+import vswe.stevescarts.helpers.storages.TransferManager;
 import vswe.stevescarts.init.ModBlocks;
 import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
@@ -680,6 +681,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                     continue;
                 }
                 if (level.addFreshEntity(cart)) {
+                    managerInteract(cart, true);
                     outputSlot.set(ItemStack.EMPTY);
                     setChanged();
                     return true;
@@ -691,6 +693,44 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
             }
         }
         return false;
+    }
+
+    public void managerInteract(final ModularMinecart cart, final boolean toCart) {
+        if (level == null || level.isClientSide() || cart == null || cart.isRemoved()) {
+            return;
+        }
+
+        for (TileEntityUpgrade tile : getUpgradeTiles()) {
+            if (tile.getUpgrade() == null || tile.getUpgrade().getEffects().stream().noneMatch(Manager.class::isInstance)) {
+                continue;
+            }
+
+            Direction bridgeDirection = tile.getSide().getOpposite();
+            if (!bridgeDirection.getAxis().isHorizontal()) {
+                continue;
+            }
+
+            BlockPos managerPos = tile.getBlockPos().relative(bridgeDirection);
+            if (!(level.getBlockEntity(managerPos) instanceof TileEntityManager manager)) {
+                continue;
+            }
+
+            TransferManager transfer = new TransferManager();
+            transfer.setCart(cart);
+            transfer.setSide(switch (bridgeDirection) {
+                case WEST -> 0;
+                case NORTH -> 1;
+                case SOUTH -> 2;
+                case EAST -> 3;
+                default -> throw new IllegalStateException("Unexpected manager bridge direction: " + bridgeDirection);
+            });
+            transfer.setToCartEnabled(toCart);
+            transfer.setFromCartEnabled(!toCart);
+
+            while (manager.exchangeItems(transfer)) {
+                // Continue until every applicable manager rule has completed.
+            }
+        }
     }
 
     private void deploySpares() {

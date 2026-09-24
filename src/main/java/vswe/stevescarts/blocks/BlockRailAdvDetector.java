@@ -110,16 +110,17 @@ public class BlockRailAdvDetector extends BaseRailBlock {
                         TileEntityUpgrade upgrade = (TileEntityUpgrade) tileentity;
                         if (upgrade != null && upgrade.getUpgrade() != null) {
                             for (BaseUpgradeEffect effect : upgrade.getUpgrade().getEffects()) {
-                                if (effect instanceof Transposer transposer) {
+                                if (effect instanceof Transposer) {
                                     if (upgrade.getMaster() == null) {
                                         continue;
                                     }
                                     for (TileEntityUpgrade tile : upgrade.getMaster().getUpgradeTiles()) {
                                         if (tile.getUpgrade() != null) {
                                             for (BaseUpgradeEffect effect2 : tile.getUpgrade().getEffects()) {
-                                                if (effect2 instanceof Disassemble disassembler) {
+                                                if (effect2 instanceof Disassemble) {
                                                     if (tile.getItem(0).isEmpty()) {
                                                         tile.setItem(0, ModuleData.createModularCart(cart));
+                                                        upgrade.getMaster().managerInteract(cart, false);
                                                         for (int p = 0; p < cart.getContainerSize(); ++p) {
                                                             @Nonnull ItemStack item = cart.removeItem(p, 64);
                                                             if (!item.isEmpty()) {
