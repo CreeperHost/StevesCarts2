@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import vswe.stevescarts.entities.ModularMinecart;
+import vswe.stevescarts.api.carts.CartLinkResult;
 import vswe.stevescarts.init.ModItemData;
 
 import java.util.UUID;
@@ -47,7 +48,7 @@ public final class CartLinking {
             return InteractionResult.SUCCESS;
         }
 
-        ModularMinecart.LinkResult result = selectedCart.linkCart(cart);
+        CartLinkResult result = selectedCart.linkCart(cart);
         switch (result) {
             case LINKED -> {
                 clearSelection(chain);
@@ -59,6 +60,9 @@ public final class CartLinking {
             case ALREADY_CONNECTED -> player.sendSystemMessage(Component.translatable("message.stevescarts.chain.already_connected"));
             case NO_FREE_LINK -> player.sendSystemMessage(Component.translatable("message.stevescarts.chain.no_free_link"));
             case TRAIN_FULL -> player.sendSystemMessage(Component.translatable("message.stevescarts.chain.train_full"));
+            case INVALID_CART -> player.sendSystemMessage(Component.translatable("message.stevescarts.chain.invalid_cart"));
+            case DIFFERENT_LEVEL -> player.sendSystemMessage(Component.translatable("message.stevescarts.chain.different_level"));
+            case CANCELLED -> player.sendSystemMessage(Component.translatable("message.stevescarts.chain.cancelled"));
         }
         return InteractionResult.SUCCESS;
     }

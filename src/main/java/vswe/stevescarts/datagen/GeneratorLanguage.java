@@ -23,6 +23,9 @@ public class GeneratorLanguage extends LanguageProvider {
         add("message.stevescarts.chain.already_connected", "These carts are already part of the same train.");
         add("message.stevescarts.chain.no_free_link", "One of these carts already has two links.");
         add("message.stevescarts.chain.train_full", "A train can contain at most 8 carts.");
+        add("message.stevescarts.chain.invalid_cart", "Those carts cannot be linked.");
+        add("message.stevescarts.chain.different_level", "Carts must be in the same dimension to link.");
+        add("message.stevescarts.chain.cancelled", "Another mod prevented those carts from linking.");
         add("message.stevescarts.chain.disconnected", "Cart disconnected. Recovered %1$s Iron Chain(s).");
         add("message.stevescarts.chain.not_linked", "This cart is not linked.");
         add("tooltip.stevescarts.hold_shift_for_modules", "Hold %1$s to show installed modules");

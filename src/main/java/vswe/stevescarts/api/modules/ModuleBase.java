@@ -1427,7 +1427,7 @@ public abstract class ModuleBase {
      * @return The data
      */
     public ModuleData getData() {
-        return StevesCartsAPI.MODULE_REGISTRY.get(getModuleId());
+        return StevesCartsAPI.getModule(getModuleId());
     }
 
     /**
@@ -1480,11 +1480,13 @@ public abstract class ModuleBase {
     }
 
     public String getModuleName() {
-        return Component.translatable("item.stevescarts." + StevesCartsAPI.MODULE_REGISTRY.get(getModuleId()).getRawName()).getString();
+        ModuleData data = getData();
+        return data == null ? getModuleId().toString() : data.getDisplayName();
     }
 
     public ItemStack getItemStack() {
-        return new ItemStack(ModItems.MODULES.get(getData()).get());
+        ModuleData data = getData();
+        return data == null ? ItemStack.EMPTY : data.getItemStack();
     }
 
     public enum RAILDIRECTION {

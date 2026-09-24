@@ -44,6 +44,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import vswe.stevescarts.api.StevesCartsAPI;
+import vswe.stevescarts.api.carts.CartLinkResult;
+import vswe.stevescarts.api.carts.CartTrain;
 import vswe.stevescarts.api.events.CartEvents;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
@@ -73,7 +75,7 @@ import java.util.UUID;
 /**
  * Created by brandon3055 on 07/12/2024
  */
-public class ModularMinecart extends AbstractMinecart implements IEntityWithComplexSpawn, MenuProvider, DataEntity, IModularCart {
+public class ModularMinecart extends AbstractMinecart implements IEntityWithComplexSpawn, MenuProvider, DataEntity, IModularCart, CartTrain {
     private static final double STOP_CENTER_EPSILON = 1.0 / 64.0;
     private static final double STOP_CENTER_SPEED = 0.125;
     private static final double LINK_DISTANCE = 1.6;
@@ -81,8 +83,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     private static final double MAX_LINK_CORRECTION_SPEED = 0.12;
     private static final double MAX_LINK_IMPULSE = 0.2;
     private static final int LINK_CONSTRAINT_ITERATIONS = 8;
-    private static final int MAX_CART_LINKS = 2;
-    private static final int MAX_TRAIN_CARTS = 8;
     public static final int MODULAR_SPACE_WIDTH = 443;
     public static final int MODULAR_SPACE_HEIGHT = 168;
     public static final int[][][] railDirectionCoordinates = new int[][][]{
@@ -117,7 +117,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     private final ArrayList<ModuleEngine> engineModules = new ArrayList<>();
     private final ArrayList<ModuleTank> tankModules = new ArrayList<>();
     private final List<EntityData<?>> entityDataList = new ArrayList<>();
-    private final List<UUID> linkedCartIds = new ArrayList<>(MAX_CART_LINKS);
+    private final List<UUID> linkedCartIds = new ArrayList<>(MAX_DIRECT_LINKS);
     private long lastLinkUpdateGameTime = Long.MIN_VALUE;
     public boolean canScrollModules;
     public int modularSpaceHeight;
@@ -210,7 +210,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
             for (int i = 0; i < data.size(); i++) {
                 CompoundTag tag = data.get(i);
                 Identifier name = Identifier.parse(tag.getStringOr(String.valueOf(i), ""));
-                doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(name), tag);
+                doLoadModules(StevesCartsAPI.getModule(name), tag);
             }
         }
         initModules();
@@ -683,7 +683,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         workingTime = input.getShortOr("workingTime", (short) 0);
         disabledPos = input.read("disabled_pos", BlockPos.CODEC).orElse(null);
         linkedCartIds.clear();
-        for (int i = 0; i < MAX_CART_LINKS; i++) {
+        for (int i = 0; i < MAX_DIRECT_LINKS; i++) {
             String id = input.getStringOr("linked_cart_" + i, "");
             if (!id.isEmpty()) {
                 try {
@@ -696,44 +696,100 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         loadModules(input);
     }
 
-    public LinkResult linkCart(ModularMinecart other) {
-        if (other == this || isLinkedTo(other) || isConnectedTo(other)) {
-            return LinkResult.ALREADY_CONNECTED;
+    @Override
+    public CartLinkResult linkCart(ModularMinecart other) {
+        if (other == null || other == this || !isAlive() || !other.isAlive()) {
+            return CartLinkResult.INVALID_CART;
         }
-        if (linkedCartIds.size() >= MAX_CART_LINKS || other.linkedCartIds.size() >= MAX_CART_LINKS) {
-            return LinkResult.NO_FREE_LINK;
+        if (level() != other.level()) {
+            return CartLinkResult.DIFFERENT_LEVEL;
         }
-        if (getConnectedCarts().size() + other.getConnectedCarts().size() + 2 > MAX_TRAIN_CARTS) {
-            return LinkResult.TRAIN_FULL;
+        if (!(level() instanceof ServerLevel)) {
+            return CartLinkResult.INVALID_CART;
         }
+        if (isLinkedTo(other) || isConnectedTo(other)) {
+            return CartLinkResult.ALREADY_CONNECTED;
+        }
+        if (linkedCartIds.size() >= MAX_DIRECT_LINKS || other.linkedCartIds.size() >= MAX_DIRECT_LINKS) {
+            return CartLinkResult.NO_FREE_LINK;
+        }
+        if (getTrainSize() + other.getTrainSize() > MAX_TRAIN_CARTS) {
+            return CartLinkResult.TRAIN_FULL;
+        }
+
+        CartEvents.CartLinkEvent event = new CartEvents.CartLinkEvent(this, other);
+        NeoForge.EVENT_BUS.post(event);
+        if (event.isCanceled()) {
+            return CartLinkResult.CANCELLED;
+        }
+
         linkedCartIds.add(other.getUUID());
         other.linkedCartIds.add(getUUID());
-        return LinkResult.LINKED;
+        return CartLinkResult.LINKED;
     }
 
+    @Override
+    public boolean unlinkCart(ModularMinecart other) {
+        if (other == null || other == this || level() != other.level() || level().isClientSide()) {
+            return false;
+        }
+        boolean removed = linkedCartIds.remove(other.getUUID());
+        boolean removedOther = other.linkedCartIds.remove(getUUID());
+        if (removed || removedOther) {
+            clearSyncedCartLinks();
+            other.clearSyncedCartLinks();
+            NeoForge.EVENT_BUS.post(new CartEvents.CartUnlinkEvent(this, other));
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public int unlinkAllCarts() {
         int linkCount = linkedCartIds.size();
         if (level() instanceof ServerLevel serverLevel) {
             for (UUID linkedId : List.copyOf(linkedCartIds)) {
                 Entity entity = serverLevel.getEntity(linkedId);
                 if (entity instanceof ModularMinecart linkedCart) {
-                    linkedCart.linkedCartIds.remove(getUUID());
+                    unlinkCart(linkedCart);
+                } else {
+                    linkedCartIds.remove(linkedId);
                 }
             }
         }
         linkedCartIds.clear();
+        clearSyncedCartLinks();
+        return linkCount;
+    }
+
+    private void clearSyncedCartLinks() {
         entityData.set(LINKED_CART_0, -1);
         entityData.set(LINKED_CART_1, -1);
         for (EntityDataAccessor<Integer> trainCartId : TRAIN_CART_IDS) {
             entityData.set(trainCartId, -1);
         }
-        return linkCount;
     }
 
     public int getLinkedCartEntityId(int index) {
+        if (index < 0 || index >= MAX_DIRECT_LINKS) {
+            throw new IndexOutOfBoundsException("A cart only has " + MAX_DIRECT_LINKS + " direct link slots");
+        }
         return entityData.get(index == 0 ? LINKED_CART_0 : LINKED_CART_1);
     }
 
+    @Override
+    public List<Integer> getLinkedCartEntityIds() {
+        List<Integer> ids = new ArrayList<>(MAX_DIRECT_LINKS);
+        for (int i = 0; i < MAX_DIRECT_LINKS; i++) {
+            int id = getLinkedCartEntityId(i);
+            if (id >= 0) {
+                ids.add(id);
+            }
+        }
+        return List.copyOf(ids);
+    }
+
+    @Override
     public List<Integer> getTrainCartEntityIds() {
         List<Integer> ids = new ArrayList<>(MAX_TRAIN_CARTS);
         for (EntityDataAccessor<Integer> trainCartId : TRAIN_CART_IDS) {
@@ -742,21 +798,61 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
                 ids.add(id);
             }
         }
-        return ids;
+        return List.copyOf(ids);
     }
 
+    @Override
+    public List<UUID> getLinkedCartIds() {
+        return List.copyOf(linkedCartIds);
+    }
+
+    @Override
+    public List<ModularMinecart> getDirectlyLinkedCarts() {
+        if (!(level() instanceof ServerLevel serverLevel)) {
+            return List.of();
+        }
+        return linkedCartIds.stream()
+                .map(serverLevel::getEntity)
+                .filter(ModularMinecart.class::isInstance)
+                .map(ModularMinecart.class::cast)
+                .filter(Entity::isAlive)
+                .toList();
+    }
+
+    @Override
     public List<ModularMinecart> getConnectedCarts() {
         if (!(level() instanceof ServerLevel serverLevel)) {
             return List.of();
         }
-        return getConnectedCarts(serverLevel);
+        return List.copyOf(getConnectedCarts(serverLevel));
     }
 
-    private boolean isLinkedTo(ModularMinecart other) {
-        return linkedCartIds.contains(other.getUUID());
+    @Override
+    public List<ModularMinecart> getTrainCarts() {
+        if (level().isClientSide()) {
+            return List.of();
+        }
+        List<ModularMinecart> carts = new ArrayList<>(getConnectedCarts());
+        carts.add(this);
+        carts.sort(Comparator.comparingInt(Entity::getId));
+        return List.copyOf(carts);
     }
 
-    private boolean isConnectedTo(ModularMinecart target) {
+    @Override
+    public int getTrainSize() {
+        return level().isClientSide() ? java.lang.Math.max(1, getTrainCartEntityIds().size()) : getConnectedCarts().size() + 1;
+    }
+
+    @Override
+    public boolean isLinkedTo(ModularMinecart other) {
+        return other != null && linkedCartIds.contains(other.getUUID());
+    }
+
+    @Override
+    public boolean isConnectedTo(ModularMinecart target) {
+        if (target == null) {
+            return false;
+        }
         if (!(level() instanceof ServerLevel serverLevel)) {
             return false;
         }
@@ -793,7 +889,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
             }
             linkedEntityIds[i] = linkedCart.getId();
             if (!linkedCart.linkedCartIds.contains(getUUID())) {
-                if (linkedCart.linkedCartIds.size() >= MAX_CART_LINKS) {
+                if (linkedCart.linkedCartIds.size() >= MAX_DIRECT_LINKS) {
                     linkedCartIds.remove(linkedId);
                     continue;
                 }
@@ -802,11 +898,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         }
         entityData.set(LINKED_CART_0, linkedEntityIds[0]);
         entityData.set(LINKED_CART_1, linkedEntityIds[1]);
-        List<ModularMinecart> connectedCarts = getConnectedCarts(serverLevel);
-        List<ModularMinecart> trainCarts = new ArrayList<>(connectedCarts.size() + 1);
-        trainCarts.add(this);
-        trainCarts.addAll(connectedCarts);
-        trainCarts.sort(Comparator.comparingInt(Entity::getId));
+        List<ModularMinecart> trainCarts = getTrainCarts();
         lastLinkUpdateGameTime = serverLevel.getGameTime();
         for (ModularMinecart trainCart : trainCarts) {
             for (int i = 0; i < TRAIN_CART_IDS.size(); i++) {
@@ -854,13 +946,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         linkedCart.setDeltaMovement(linkedCart.getDeltaMovement().subtract(impulse));
     }
 
-    public enum LinkResult {
-        LINKED,
-        ALREADY_CONNECTED,
-        NO_FREE_LINK,
-        TRAIN_FULL
-    }
-
     public void loadModules(ValueInput input) {
         List<Identifier> names = new ArrayList<>();
 
@@ -892,7 +977,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
 
         modules().clear();
         for (Identifier name : names) {
-            doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(name), null);
+            doLoadModules(StevesCartsAPI.getModule(name), null);
         }
         initModules();
 

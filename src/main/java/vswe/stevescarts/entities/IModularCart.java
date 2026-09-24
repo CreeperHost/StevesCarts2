@@ -26,6 +26,7 @@ import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
+import vswe.stevescarts.api.modules.interfaces.ITrainModuleAccess;
 import vswe.stevescarts.api.modules.template.ModuleChest;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
@@ -37,12 +38,10 @@ import vswe.stevescarts.helpers.GuiAllocationHelper;
 import vswe.stevescarts.helpers.ModuleCountPair;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.modules.addons.ModuleCreativeSupplies;
-import vswe.stevescarts.modules.addons.ModuleTrainInterface;
 import vswe.stevescarts.modules.storages.tanks.ModuleTank;
 import vswe.stevescarts.modules.workers.CompWorkModule;
 
 import javax.annotation.Nonnull;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -77,6 +76,24 @@ public interface IModularCart extends Container, IFluidHandler {
     //=== Module Methods ===//
 
     ArrayList<ModuleBase> modules();
+
+    default <T extends ModuleBase> List<T> getModulesOfType(Class<T> moduleType) {
+        return modules().stream()
+                .filter(moduleType::isInstance)
+                .map(moduleType::cast)
+                .toList();
+    }
+
+    default <T extends ModuleBase> Optional<T> getModuleOfType(Class<T> moduleType) {
+        return modules().stream()
+                .filter(moduleType::isInstance)
+                .map(moduleType::cast)
+                .findFirst();
+    }
+
+    default boolean hasModule(Class<? extends ModuleBase> moduleType) {
+        return modules().stream().anyMatch(moduleType::isInstance);
+    }
 
     ArrayList<ModuleWorker> workers();
 
@@ -459,7 +476,7 @@ public interface IModularCart extends Container, IFluidHandler {
     default void initModules() {
         moduleCounts().clear();
         for (ModuleBase module : modules()) {
-            ModuleData data = StevesCartsAPI.MODULE_REGISTRY.get(module.getModuleId());
+            ModuleData data = StevesCartsAPI.getModule(module.getModuleId());
             boolean found = false;
             for (ModuleCountPair count : moduleCounts()) {
                 if (count.isContainingData(data)) {
@@ -551,7 +568,7 @@ public interface IModularCart extends Container, IFluidHandler {
     default void loadPlaceHolderModules(List<Identifier> data) {
         modules().clear();
         for (Identifier moduleIdentifier : data) {
-            ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(moduleIdentifier);
+            ModuleData moduleData = StevesCartsAPI.getModule(moduleIdentifier);
             doLoadModules(moduleData, null);
         }
 
@@ -562,9 +579,7 @@ public interface IModularCart extends Container, IFluidHandler {
     default void doLoadModules(ModuleData moduleData, @org.jetbrains.annotations.Nullable CompoundTag data) {
         if (moduleData == null) return;
         try {
-            Class<? extends ModuleBase> moduleClass = moduleData.getModuleClass();
-            Constructor<? extends ModuleBase> moduleConstructor = moduleClass.getConstructor(ModularMinecart.class);
-            ModuleBase module = moduleConstructor.newInstance(this);
+            ModuleBase module = moduleData.createModule(getCart());
             module.setModuleId(moduleData.getID());
             modules().add(module);
         } catch (Exception e) {
@@ -585,7 +600,7 @@ public interface IModularCart extends Container, IFluidHandler {
         modules().clear();
         if (data != null) {
             for (Identifier name : data) {
-                doLoadModules(StevesCartsAPI.MODULE_REGISTRY.get(name), null);
+                doLoadModules(StevesCartsAPI.getModule(name), null);
             }
         }
         initModules();
@@ -678,14 +693,21 @@ public interface IModularCart extends Container, IFluidHandler {
         }
     }
 
+    default boolean hasTrainModuleAccess() {
+        return modules().stream().anyMatch(module -> module instanceof ITrainModuleAccess access
+                && access.grantsTrainModuleAccess());
+    }
+
+    /** @deprecated Use {@link #hasTrainModuleAccess()}. */
+    @Deprecated
     default boolean hasTrainInterface() {
-        return modules().stream().anyMatch(ModuleTrainInterface.class::isInstance);
+        return hasTrainModuleAccess();
     }
 
     default List<ModularMinecart> getModuleAccessCarts() {
         List<ModularMinecart> carts = new ArrayList<>();
         carts.add(getCart());
-        if (hasTrainInterface()) {
+        if (hasTrainModuleAccess()) {
             carts.addAll(getCart().getConnectedCarts());
         }
         return carts;

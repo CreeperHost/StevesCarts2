@@ -13,24 +13,26 @@ import vswe.stevescarts.init.ModItemData;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
+import java.util.Objects;
 
 public class ItemCartModule extends Item implements IModuleItem {
-    public ModuleData moduleData;
+    private final ModuleData moduleData;
 
     public ItemCartModule(ModuleData moduleData, Item.Properties properties) {
         super(properties);
-        this.moduleData = moduleData;
+        this.moduleData = Objects.requireNonNull(moduleData, "moduleData");
+        moduleData.setItem(() -> this);
     }
 
     @Override
     public @NotNull Component getName(@NotNull ItemStack stack) {
-        return Component.translatable("item.stevescarts." + moduleData.getRawName());
+        return moduleData.getDisplayNameComponent();
     }
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> consumer, TooltipFlag flag) {
         if (moduleData != null) {
-            moduleData.addInformation(consumer, ModItemData.getTagCopy(stack));
+            moduleData.addInformation(consumer, ModItemData.getTagCopy(stack), flag);
             if (flag.isAdvanced())
                 consumer.accept(Component.literal("ID " + moduleData.getID()));
         }

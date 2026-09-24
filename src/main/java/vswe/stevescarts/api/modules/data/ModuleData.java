@@ -7,28 +7,34 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import vswe.stevescarts.StevesCartsClient;
+import net.minecraft.world.item.TooltipFlag;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
+import vswe.stevescarts.api.modules.ModuleFactory;
 import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.entities.ModularMinecart;
-import vswe.stevescarts.init.ModItemData;
 import vswe.stevescarts.init.ModItems;
+import vswe.stevescarts.init.ModItemData;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class ModuleData {
     private static final int MAX_MESSAGE_ROW_LENGTH = 30;
     private final Identifier id;
     private final Class<? extends ModuleBase> moduleClass;
+    private final ModuleFactory<? extends ModuleBase> moduleFactory;
     private final String name;
     private final int modularCost;
     private final ModuleType moduleType;
@@ -46,23 +52,37 @@ public class ModuleData {
     private float modelMult;
     private boolean useExtraData;
     private byte extraDataDefaultValue;
+    private String translationKey;
+    private Supplier<? extends Item> itemSupplier;
 
     public ModuleData(final Identifier id, final String name, final Class<? extends ModuleBase> moduleClass, ModuleType moduleType, final int modularCost) {
-        this.nemesis = null;
-        this.requirement = null;
-        this.parent = null;
-        this.modelMult = 0.75f;
-        this.id = id;
-        this.moduleClass = moduleClass;
-        this.name = name;
-        this.modularCost = modularCost;
-        this.moduleType = moduleType;
+        this(id, name, moduleClass, cart -> {
+            try {
+                return moduleClass.getConstructor(ModularMinecart.class).newInstance(cart);
+            } catch (ReflectiveOperationException exception) {
+                throw new IllegalStateException("Failed to create module " + id
+                        + ". Supply a ModuleFactory or a public constructor accepting ModularMinecart.", exception);
+            }
+        }, moduleType, modularCost);
     }
 
-    @SuppressWarnings("unused")
-    protected static void addNemesis(final ModuleData m1, final ModuleData m2) {
-        m2.addNemesis(m1);
-        m1.addNemesis(m2);
+    public ModuleData(final Identifier id, final String name, final Class<? extends ModuleBase> moduleClass,
+                      ModuleFactory<? extends ModuleBase> moduleFactory, ModuleType moduleType, final int modularCost) {
+        this.nemesis = new ArrayList<>();
+        this.requirement = new ArrayList<>();
+        this.parent = null;
+        this.modelMult = 0.75f;
+        this.id = Objects.requireNonNull(id, "id");
+        this.moduleClass = Objects.requireNonNull(moduleClass, "moduleClass");
+        this.moduleFactory = Objects.requireNonNull(moduleFactory, "moduleFactory");
+        this.name = Objects.requireNonNull(name, "name");
+        this.modularCost = modularCost;
+        this.moduleType = Objects.requireNonNull(moduleType, "moduleType");
+        this.translationKey = "item." + id.getNamespace() + "." + id.getPath();
+    }
+
+    public static void addNemesis(final ModuleData first, final ModuleData second) {
+        first.conflictsWith(second);
     }
 
     public static NonNullList<ItemStack> getModularItems(@Nonnull ItemStack cart) {
@@ -75,8 +95,16 @@ public class ModuleData {
                     CompoundTag moduleTag = (CompoundTag) tag;
                     //If this ever explodes, then someone please slap whoever decided to use the arbitrary index of the module used as the key for the id field. WTF...
                     String regName = moduleTag.getStringOr(String.valueOf(i), "");
-                    ModuleData data = StevesCartsAPI.MODULE_REGISTRY.get(Identifier.parse(regName));
+                    ModuleData data = StevesCartsAPI.getModule(Identifier.parse(regName));
+                    if (data == null) {
+                        i++;
+                        continue;
+                    }
                     ItemStack module = data.getItemStack();
+                    if (module.isEmpty()) {
+                        i++;
+                        continue;
+                    }
                     if (moduleTag.contains("data")) {
                         ModItemData.modifyTag(module, t -> t.put("data", moduleTag.getCompoundOrEmpty("data")));
                     }
@@ -258,6 +286,18 @@ public class ModuleData {
         return moduleClass;
     }
 
+    public ModuleBase createModule(ModularMinecart cart) {
+        ModuleBase module = moduleFactory.create(cart);
+        if (module == null) {
+            throw new IllegalStateException("Module factory for " + id + " returned null");
+        }
+        if (!moduleClass.isInstance(module)) {
+            throw new IllegalStateException("Module factory for " + id + " returned "
+                    + module.getClass().getName() + " instead of " + moduleClass.getName());
+        }
+        return module;
+    }
+
     public ModuleType getModuleType() {
         return moduleType;
     }
@@ -273,7 +313,7 @@ public class ModuleData {
     }
 
     @SuppressWarnings("unused")
-    protected ModuleData lock() {
+    public ModuleData lock() {
         isLocked = true;
         return this;
     }
@@ -284,7 +324,7 @@ public class ModuleData {
     }
 
     @SuppressWarnings("unused")
-    protected ModuleData lockByDefault() {
+    public ModuleData lockByDefault() {
         defaultLock = true;
         return this;
     }
@@ -294,7 +334,7 @@ public class ModuleData {
         return this;
     }
 
-    protected boolean getAllowDuplicate() {
+    public boolean getAllowDuplicate() {
         return allowDuplicate;
     }
 
@@ -348,11 +388,18 @@ public class ModuleData {
         return this;
     }
 
-    protected void addNemesis(final ModuleData nemesis) {
-        if (this.nemesis == null) {
-            this.nemesis = new ArrayList<>();
+    public ModuleData conflictsWith(final ModuleData other) {
+        Objects.requireNonNull(other, "other");
+        if (other == this) {
+            throw new IllegalArgumentException("A module cannot conflict with itself");
         }
-        this.nemesis.add(nemesis);
+        if (!nemesis.contains(other)) {
+            nemesis.add(other);
+        }
+        if (!other.nemesis.contains(this)) {
+            other.nemesis.add(this);
+        }
+        return this;
     }
 
     public ModuleData addRequirement(final ModuleDataGroup requirement) {
@@ -427,7 +474,7 @@ public class ModuleData {
     }
 
     public String getDisplayName() {
-        return name;
+        return getDisplayNameComponent().getString();
     }
 
     public String getName() {
@@ -442,16 +489,17 @@ public class ModuleData {
         return modularCost;
     }
 
-    protected ModuleData getParent() {
+    @Nullable
+    public ModuleData getParent() {
         return parent;
     }
 
-    protected ArrayList<ModuleData> getNemesis() {
-        return nemesis;
+    public java.util.List<ModuleData> getNemesis() {
+        return java.util.List.copyOf(nemesis);
     }
 
-    protected ArrayList<ModuleDataGroup> getRequirement() {
-        return requirement;
+    public java.util.List<ModuleDataGroup> getRequirement() {
+        return java.util.List.copyOf(requirement);
     }
 
     public String getModuleInfoText(final byte b) {
@@ -462,15 +510,31 @@ public class ModuleData {
         return name;
     }
 
-    @Deprecated(forRemoval = true)
     @Nonnull
     public ItemStack getItemStack() {
-        ItemStack stack = ItemStack.EMPTY;
+        return itemSupplier == null ? ItemStack.EMPTY : new ItemStack(itemSupplier.get());
+    }
 
-        if (ModItems.MODULES.get(this) != null) {
-            stack = new ItemStack(ModItems.MODULES.get(this).get());
-        }
-        return stack;
+    public ModuleData setItem(Supplier<? extends Item> itemSupplier) {
+        this.itemSupplier = Objects.requireNonNull(itemSupplier, "itemSupplier");
+        return this;
+    }
+
+    public boolean hasItem() {
+        return itemSupplier != null;
+    }
+
+    public String getTranslationKey() {
+        return translationKey;
+    }
+
+    public ModuleData setTranslationKey(String translationKey) {
+        this.translationKey = Objects.requireNonNull(translationKey, "translationKey");
+        return this;
+    }
+
+    public Component getDisplayNameComponent() {
+        return Component.translatableWithFallback(translationKey, name);
     }
 
     public void addExtraMessage(Consumer<Component> consumer) {
@@ -502,7 +566,7 @@ public class ModuleData {
         consumer.accept(Component.literal(ChatFormatting.DARK_GRAY + (ChatFormatting.ITALIC + str + ChatFormatting.RESET)));
     }
 
-    public final void addInformation(Consumer<Component> consumer, final CompoundTag compound) {
+    public final void addInformation(Consumer<Component> consumer, final CompoundTag compound, TooltipFlag tooltipFlag) {
         consumer.accept(Component.literal(ChatFormatting.GRAY + Component.translatable("info.stevescarts.modularCost").getString() + ": " + modularCost));
         if (compound != null && compound.contains("Data")) {
             final String extradatainfo = getModuleInfoText(compound.getByteOr("Data", (byte) 0));
@@ -510,7 +574,7 @@ public class ModuleData {
                 consumer.accept(Component.literal(ChatFormatting.WHITE + extradatainfo));
             }
         }
-        if (StevesCartsClient.hasShiftDown()) {
+        if (tooltipFlag.hasShiftDown()) {
             if (getRenderingSides() == null || getRenderingSides().size() == 0) {
                 consumer.accept(Component.literal(ChatFormatting.DARK_AQUA + Component.translatable("info.stevescarts.noSides").getString()));
             } else {

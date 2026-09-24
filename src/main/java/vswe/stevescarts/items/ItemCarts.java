@@ -56,8 +56,7 @@ public class ItemCarts extends MinecartItem {
                             ByteArrayTag moduleIDTag = (ByteArrayTag) info.get("Modules");
                             for (final byte id : moduleIDTag.getAsByteArray()) {
                                 try {
-                                    final Class<? extends ModuleBase> moduleClass = StevesCartsAPI.MODULE_REGISTRY.get(id).getModuleClass();
-                                    StevesCarts.LOGGER.error("--- " + moduleClass.getCanonicalName());
+                                    StevesCarts.LOGGER.error("--- legacy module id " + id);
                                 } catch (Exception ex) {
                                     StevesCarts.LOGGER.error("Failed to load module with ID " + id + "! More info below.");
                                     e.printStackTrace();
@@ -97,7 +96,7 @@ public class ItemCarts extends MinecartItem {
                 for (int i = 0; i < moduleListTag.size(); i++) {
                     CompoundTag moduleTag = (CompoundTag) moduleListTag.get(i);
                     Identifier resourceLocation = Identifier.parse(moduleTag.getStringOr(String.valueOf(i), ""));
-                    ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(resourceLocation);
+                    ModuleData moduleData = StevesCartsAPI.getModule(resourceLocation);
                     if (moduleData != null)
                         consumer.accept(Component.literal(moduleData.getDisplayName()).withStyle(ChatFormatting.GOLD));
                 }

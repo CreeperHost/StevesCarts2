@@ -9,5 +9,10 @@ import javax.annotation.Nonnull;
 public interface IModuleItem {
     ModuleData getModuleData();
 
-    void addExtraDataToCart(final CompoundTag save, @Nonnull ItemStack module, final int i);
+    /**
+     * Allows a module item to add assembly data to a cart. Most module items do not
+     * need to implement this hook.
+     */
+    default void addExtraDataToCart(final CompoundTag save, @Nonnull ItemStack module, final int i) {
+    }
 }

@@ -35,9 +35,11 @@ public class ModItems {
     });
 
     public static final Map<ModuleData, Supplier<Item>> MODULES = Util.make(new LinkedHashMap<>(), map -> {
-        for (ModuleData value : StevesCartsAPI.MODULE_REGISTRY.values()) {
+        for (ModuleData value : StevesCartsAPI.getRegisteredModules().values()) {
             if (value.getID().getNamespace().equalsIgnoreCase(Constants.MOD_ID)) {
-                map.put(value, ITEMS.registerItem(value.getName(), props -> new ItemCartModule(value, props)));
+                Supplier<Item> item = ITEMS.registerItem(value.getName(), props -> new ItemCartModule(value, props));
+                value.setItem(item);
+                map.put(value, item);
             }
         }
     });
