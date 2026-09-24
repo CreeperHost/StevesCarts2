@@ -8,23 +8,26 @@ import net.minecraft.world.entity.animal.chicken.Chicken;
 import net.minecraft.world.entity.animal.cow.Cow;
 import net.minecraft.world.entity.animal.cow.MushroomCow;
 import net.minecraft.world.entity.animal.feline.Ocelot;
+import net.minecraft.world.entity.animal.golem.SnowGolem;
+import net.minecraft.world.entity.animal.pig.Pig;
 import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Silverfish;
 import net.minecraft.world.entity.monster.Witch;
-import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.skeleton.Skeleton;
 import net.minecraft.world.entity.monster.spider.Spider;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.monster.zombie.ZombieVillager;
+import net.minecraft.world.entity.monster.zombie.ZombifiedPiglin;
+import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.player.Player;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.modules.template.ModuleChest;
-import vswe.stevescarts.arcade.monopoly.Villager;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.modules.addons.ModuleChunkLoader;
 import vswe.stevescarts.modules.addons.ModuleInvisible;
@@ -69,27 +72,27 @@ public class ModuleState {
         new ModuleStatePassenger(14, "gui.stevescarts.stateAnimal", Animal.class);
         new ModuleStatePassenger(15, "gui.stevescarts.stateTameable", TamableAnimal.class);
         new ModuleStatePassenger(16, "gui.stevescarts.stateBreedable", AgeableMob.class);
-        new ModuleStatePassenger(17, "gui.stevescarts.stateHostile", Mob.class);
+        new ModuleStatePassenger(17, "gui.stevescarts.stateHostile", Enemy.class);
         new ModuleStatePassenger(18, "gui.stevescarts.stateCreeper", Creeper.class);
         new ModuleStatePassenger(19, "gui.stevescarts.stateSkeleton", Skeleton.class);
         new ModuleStatePassenger(20, "gui.stevescarts.stateSpider", Spider.class);
         new ModuleStatePassenger(21, "gui.stevescarts.stateZombie", Zombie.class);
-        new ModuleStatePassenger(22, "gui.stevescarts.stateZombiePigMan", Piglin.class);
+        new ModuleStatePassenger(22, "gui.stevescarts.stateZombiePigMan", ZombifiedPiglin.class);
         new ModuleStatePassenger(23, "gui.stevescarts.stateSilverFish", Silverfish.class);
         new ModuleStatePassenger(24, "gui.stevescarts.stateBlaze", Blaze.class);
         new ModuleStatePassenger(25, "gui.stevescarts.stateBat", Bat.class);
         new ModuleStatePassenger(26, "gui.stevescarts.stateWitch", Witch.class);
-        new ModuleStatePassenger(27, "gui.stevescarts.statePig", Piglin.class);
+        new ModuleStatePassenger(27, "gui.stevescarts.statePig", Pig.class);
         new ModuleStatePassenger(28, "gui.stevescarts.stateSheep", Sheep.class);
         new ModuleStatePassenger(29, "gui.stevescarts.stateCow", Cow.class);
         new ModuleStatePassenger(30, "gui.stevescarts.stateMooshroom", MushroomCow.class);
         new ModuleStatePassenger(31, "gui.stevescarts.stateChicken", Chicken.class);
         new ModuleStatePassenger(32, "gui.stevescarts.stateWolf", Wolf.class);
-        //TODO Restore snow golem passenger detection.
+        new ModuleStatePassenger(33, "gui.stevescarts.stateSnowGolem", SnowGolem.class);
         new ModuleStatePassenger(34, "gui.stevescarts.stateOcelot", Ocelot.class);
         new ModuleStatePassenger(35, "gui.stevescarts.stateVillager", Villager.class);
         new ModuleStatePassenger(36, "gui.stevescarts.statePlayer", Player.class);
-        new ModuleStatePassenger(37, "gui.stevescarts.stateZombie", Zombie.class) {
+        new ModuleStatePassenger(37, "gui.stevescarts.stateZombieVillager", Zombie.class) {
             @Override
             public boolean isPassengerValid(final Entity passenger) {
                 return passenger instanceof ZombieVillager;
@@ -98,7 +101,7 @@ public class ModuleState {
         new ModuleStatePassenger(38, "gui.stevescarts.stateChild", AgeableMob.class) {
             @Override
             public boolean isPassengerValid(final Entity passenger) {
-                return ((AgeableMob) passenger).getAge() > 0;
+                return ((AgeableMob) passenger).isBaby();
             }
         };
         new ModuleStatePassenger(39, "gui.stevescarts.stateTamed", TamableAnimal.class) {
