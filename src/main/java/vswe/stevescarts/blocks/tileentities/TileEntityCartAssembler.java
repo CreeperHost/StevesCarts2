@@ -15,13 +15,16 @@ import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
+import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.SCConfig;
 import vswe.stevescarts.api.IModuleItem;
 import vswe.stevescarts.api.modules.ModuleType;
@@ -102,6 +105,7 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
     private int maxAssemblingTime;
     private float currentAssemblingTime;
     private int fuelCheckTimer;
+    private int deployCheckTimer;
     private boolean isAssembling;
     private boolean shouldSpin;
     private ModularMinecart placeholder;
@@ -628,7 +632,65 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
         return efficiency;
     }
 
-    private void deployCart() {
+    private boolean deployCart() {
+        if (level == null || level.isClientSide() || outputSlot == null) {
+            return false;
+        }
+
+        ItemStack cartStack = outputSlot.getItem();
+        if (cartStack.isEmpty() || !(cartStack.getItem() instanceof ItemCarts)) {
+            return false;
+        }
+
+        CompoundTag cartData = ModItemData.getTagCopy(cartStack);
+        if (!cartData.contains("modules")) {
+            return false;
+        }
+
+        for (TileEntityUpgrade tile : getUpgradeTiles()) {
+            if (tile.getUpgrade() == null || tile.getUpgrade().getEffects().stream().noneMatch(Deployer.class::isInstance)) {
+                continue;
+            }
+
+            BlockPos offset = tile.getBlockPos().subtract(getBlockPos());
+            if (offset.getY() != 0 || Math.abs(offset.getX()) + Math.abs(offset.getZ()) != 1) {
+                continue;
+            }
+
+            BlockPos deployPos = tile.getBlockPos().offset(offset);
+            if (!BaseRailBlock.isRail(level, deployPos)) {
+                continue;
+            }
+
+            try {
+                ModularMinecart cart = new ModularMinecart(
+                        level,
+                        deployPos.getX() + 0.5,
+                        deployPos.getY() + 0.5,
+                        deployPos.getZ() + 0.5,
+                        cartData
+                );
+                float yaw = (float) (Math.toDegrees(Math.atan2(offset.getX(), offset.getZ())) - 90.0);
+                cart.setYRot(yaw);
+                if (cartStack.has(DataComponents.CUSTOM_NAME)) {
+                    cart.setCustomName(cartStack.get(DataComponents.CUSTOM_NAME));
+                }
+
+                if (!level.getEntitiesOfClass(AbstractMinecart.class, cart.getBoundingBox().inflate(0.1)).isEmpty()) {
+                    continue;
+                }
+                if (level.addFreshEntity(cart)) {
+                    outputSlot.set(ItemStack.EMPTY);
+                    setChanged();
+                    return true;
+                }
+            } catch (RuntimeException exception) {
+                deployCheckTimer = 200;
+                StevesCarts.LOGGER.error("Failed to deploy the assembled cart at {}", deployPos, exception);
+                return false;
+            }
+        }
+        return false;
     }
 
     private void deploySpares() {
@@ -682,6 +744,10 @@ public class TileEntityCartAssembler extends TileEntityBase implements WorldlyCo
                     outputItem = newItem;
                     outputSlot.set(ItemStack.EMPTY);
                 }
+            }
+            if (!level.isClientSide() && !isAssembling && deployCheckTimer-- <= 0) {
+                deployCheckTimer = 10;
+                deployCart();
             }
         }
         if (getFuelLevel() > getMaxFuelLevel()) {
