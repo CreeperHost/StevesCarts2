@@ -21,6 +21,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -58,9 +59,11 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     public void setMaster(final TileEntityCartAssembler master, Direction side) {
         this.master = master;
         if (level == null) return;
-        if (level.getBlockState(getBlockPos()).getBlock() instanceof BlockUpgrade) {
-            if (side != null) {
-                level.getBlockState(getBlockPos()).setValue(BlockUpgrade.CONNECTED, master != null);
+        BlockState state = level.getBlockState(getBlockPos());
+        if (state.getBlock() instanceof BlockUpgrade) {
+            boolean connected = master != null && side != null;
+            if (state.getValue(BlockUpgrade.CONNECTED) != connected) {
+                level.setBlock(getBlockPos(), state.setValue(BlockUpgrade.CONNECTED, connected), Block.UPDATE_CLIENTS);
             }
             setChanged();
         }

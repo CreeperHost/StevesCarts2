@@ -44,16 +44,13 @@ public class BlockUpgrade extends BlockContainerBase implements TooltipBlock {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty CONNECTED = BooleanProperty.create("connected");
 
-    private static final VoxelShape[] BBS = new VoxelShape[6];
+    private static final VoxelShape[] SHAPES = new VoxelShape[6];
 
     static {
-        float thickness = 2.0F;
-        BBS[Direction.UP.ordinal()] = Block.box(0, 0, 0, 16, thickness, 16);
-        BBS[Direction.DOWN.ordinal()] = Block.box(0, 16 - thickness, 0, 16, 16, 16);
-        BBS[Direction.EAST.ordinal()] = Block.box(0, 0, 0, thickness, 16, 16);
-        BBS[Direction.WEST.ordinal()] = Block.box(16 - thickness, 0, 0, 16, 16, 16);
-        BBS[Direction.NORTH.ordinal()] = Block.box(0, 0, 16 - thickness, 16, 16, 16);
-        BBS[Direction.SOUTH.ordinal()] = Block.box(0, 0, 0, 16, 16, thickness);
+        SHAPES[Direction.NORTH.ordinal()] = Block.box(3, 3, 0, 13, 13, 2);
+        SHAPES[Direction.SOUTH.ordinal()] = Block.box(3, 3, 14, 13, 13, 16);
+        SHAPES[Direction.WEST.ordinal()] = Block.box(0, 3, 3, 2, 13, 13);
+        SHAPES[Direction.EAST.ordinal()] = Block.box(14, 3, 3, 16, 13, 13);
     }
 
     private final AssemblerUpgrade assemblerUpgrade;
@@ -75,13 +72,25 @@ public class BlockUpgrade extends BlockContainerBase implements TooltipBlock {
 
     @Override
     public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter blockReader, @NotNull BlockPos blockPos, @NotNull CollisionContext selectionContext) {
-        return BBS[state.getValue(FACING).getOpposite().ordinal()];
+        return SHAPES[state.getValue(FACING).ordinal()];
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext blockItemUseContext) {
-        return this.defaultBlockState().setValue(FACING, blockItemUseContext.getHorizontalDirection()).setValue(CONNECTED, false);
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        BlockPos placementPos = context.getClickedPos();
+        Direction clickedSide = context.getClickedFace().getOpposite();
+        if (clickedSide.getAxis().isHorizontal()
+                && context.getLevel().getBlockEntity(placementPos.relative(clickedSide)) instanceof TileEntityCartAssembler) {
+            return defaultBlockState().setValue(FACING, clickedSide).setValue(CONNECTED, true);
+        }
+
+        for (Direction direction : new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST}) {
+            if (context.getLevel().getBlockEntity(placementPos.relative(direction)) instanceof TileEntityCartAssembler) {
+                return defaultBlockState().setValue(FACING, direction).setValue(CONNECTED, true);
+            }
+        }
+        return null;
     }
 
     @org.jetbrains.annotations.Nullable
