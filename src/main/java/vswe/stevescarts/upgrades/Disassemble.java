@@ -13,7 +13,7 @@ import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.containers.ContainerCartAssembler;
-import vswe.stevescarts.containers.slots.SlotCart;
+import vswe.stevescarts.containers.slots.SlotCartDisassemble;
 import vswe.stevescarts.containers.slots.SlotModule;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModItemData;
@@ -49,7 +49,7 @@ public class Disassemble extends InventoryUpgradeEffect {
     @Override
     public Class<? extends Slot> getSlot(final int i) {
         if (i == 0) {
-            return SlotCart.class;
+            return SlotCartDisassemble.class;
         }
         return SlotModule.class;
     }
