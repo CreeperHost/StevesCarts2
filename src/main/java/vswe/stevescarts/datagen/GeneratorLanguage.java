@@ -25,6 +25,9 @@ public class GeneratorLanguage extends LanguageProvider {
         add("message.stevescarts.chain.train_full", "A train can contain at most 8 carts.");
         add("message.stevescarts.chain.disconnected", "Cart disconnected. Recovered %1$s Iron Chain(s).");
         add("message.stevescarts.chain.not_linked", "This cart is not linked.");
+        add("tooltip.stevescarts.hold_shift_for_modules", "Hold %1$s to show installed modules");
+        add("tooltip.stevescarts.installed_modules", "Installed Modules:");
+        add("tooltip.stevescarts.no_modules_loaded", "No modules loaded");
         add("gui.stevescarts.cartAssembler", "Cart Assembler");
         add("gui.stevescarts.basicAssembleInstruction", "To start making a cart, please add a Cart Hull of your choice to the Hull Slot.");
         add("gui.stevescarts.invalidHullError", "The Cart Hull added to the Hull Slot is not a valid Hull. This should not be possible so you've probably done something strange.");

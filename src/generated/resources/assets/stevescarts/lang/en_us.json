@@ -765,5 +765,8 @@
   "stories.beginning.stevescarts.stop": "If you want you can now press the Stop button to stop him.",
   "stories.beginning.stevescarts.thanks": "Thank you for playing! :)",
   "stories.beginning.stevescarts.title": "The beginning",
-  "stories.beginning.stevescarts.trackOperator": "You are The Track Operator, your job is to make sure that the rails are set up properly. Click on the junctions to change their directions before pressing the Start button."
+  "stories.beginning.stevescarts.trackOperator": "You are The Track Operator, your job is to make sure that the rails are set up properly. Click on the junctions to change their directions before pressing the Start button.",
+  "tooltip.stevescarts.hold_shift_for_modules": "Hold %1$s to show installed modules",
+  "tooltip.stevescarts.installed_modules": "Installed Modules:",
+  "tooltip.stevescarts.no_modules_loaded": "No modules loaded"
 }

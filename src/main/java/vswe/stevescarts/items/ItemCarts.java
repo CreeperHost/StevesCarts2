@@ -1,6 +1,7 @@
 package vswe.stevescarts.items;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
@@ -83,7 +84,15 @@ public class ItemCarts extends MinecartItem {
         if (!ModItemData.hasTag(stack)) return;
         CompoundTag tag = ModItemData.getTagCopy(stack);
         if (tag.contains("modules")) {
-            consumer.accept(Component.literal(ChatFormatting.BLUE + "Installed Modules:"));
+            if (!Screen.hasShiftDown()) {
+                consumer.accept(Component.translatable(
+                        "tooltip.stevescarts.hold_shift_for_modules",
+                        Component.literal("Shift").withStyle(ChatFormatting.YELLOW)
+                ).withStyle(ChatFormatting.DARK_GRAY));
+                return;
+            }
+
+            consumer.accept(Component.translatable("tooltip.stevescarts.installed_modules").withStyle(ChatFormatting.BLUE));
             ListTag moduleListTag = (ListTag) tag.get("modules");
             if (moduleListTag != null && !moduleListTag.isEmpty()) {
                 for (int i = 0; i < moduleListTag.size(); i++) {
@@ -91,10 +100,10 @@ public class ItemCarts extends MinecartItem {
                     Identifier resourceLocation = Identifier.parse(moduleTag.getStringOr(String.valueOf(i), ""));
                     ModuleData moduleData = StevesCartsAPI.MODULE_REGISTRY.get(resourceLocation);
                     if (moduleData != null)
-                        consumer.accept(Component.literal(ChatFormatting.GOLD + moduleData.getDisplayName()));
+                        consumer.accept(Component.literal(moduleData.getDisplayName()).withStyle(ChatFormatting.GOLD));
                 }
             } else {
-                consumer.accept(Component.literal(ChatFormatting.RED + "No modules loaded"));
+                consumer.accept(Component.translatable("tooltip.stevescarts.no_modules_loaded").withStyle(ChatFormatting.RED));
             }
         }
     }
