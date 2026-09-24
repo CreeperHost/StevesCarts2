@@ -3,18 +3,31 @@ package vswe.stevescarts.modules.workers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.neoforge.fluids.FluidStack;
-import vswe.stevescarts.helpers.storages.IFluidHandler;
 import vswe.stevescarts.api.modules.template.ModuleWorker;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.BlockPosHelpers;
+import vswe.stevescarts.helpers.storages.IFluidHandler;
 import vswe.stevescarts.modules.workers.tools.ModuleDrill;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ModuleLiquidDrainer extends ModuleWorker {
+    private static final int MAX_SOURCE_BLOCKS = 100;
+    private static final int MILLIBUCKETS_PER_SOURCE = 1000;
+    private static final int WORK_TIME_PER_SOURCE = 100;
+    private static final int MAX_WORK_TIME = 200;
+
+    private BlockPos drainTarget;
+    private Fluid drainFluid;
+    private int plannedSources;
+
     public ModuleLiquidDrainer(ModularMinecart cart) {
         super(cart);
     }
@@ -26,77 +39,104 @@ public class ModuleLiquidDrainer extends ModuleWorker {
 
     @Override
     public boolean work() {
+        if (drainTarget != null && drainFluid != null && plannedSources > 0) {
+            drainSources(getCart().level(), drainTarget, drainFluid, plannedSources);
+        }
+
+        clearPlan();
+        stopWorking();
         return false;
     }
 
     public void handleLiquid(final ModuleDrill drill, BlockPos pos) {
-        ArrayList<BlockPos> checked = new ArrayList<>();
-        int result = drainAt(getCart().level(), drill, checked, pos, 0);
-        if (result > 0 && doPreWork()) {
-            drill.kill();
-            startWorking((int) (2.5f * result));
-        } else {
+        if (!doPreWork()) {
+            return;
+        }
+
+        FluidState fluidState = getCart().level().getFluidState(pos);
+        if (fluidState.isEmpty() || !fluidState.isSource()) {
+            return;
+        }
+
+        Fluid fluid = fluidState.getType();
+        List<BlockPos> sources = findSources(getCart().level(), pos, fluid);
+        if (sources.isEmpty()) {
+            return;
+        }
+
+        FluidStack requested = new FluidStack(fluid, sources.size() * MILLIBUCKETS_PER_SOURCE);
+        int accepted = getCart().fill(requested, IFluidHandler.FluidAction.SIMULATE);
+        int sourceCount = Math.min(sources.size(), accepted / MILLIBUCKETS_PER_SOURCE);
+        if (sourceCount <= 0) {
+            clearPlan();
             stopWorking();
+            return;
         }
+
+        drainTarget = pos.immutable();
+        drainFluid = fluid;
+        plannedSources = sourceCount;
+        drill.kill();
+        startWorking(Math.min(MAX_WORK_TIME, sourceCount * WORK_TIME_PER_SOURCE));
     }
 
-    @Override
-    public boolean preventAutoShutdown() {
-        return true;
-    }
-
-    private int drainAt(Level level, final ModuleDrill drill, final ArrayList<BlockPos> checked, final BlockPos pos, int buckets) {
+    private void drainSources(Level level, BlockPos start, Fluid fluid, int sourceLimit) {
+        List<BlockPos> sources = findSources(level, start, fluid);
         int drained = 0;
-        BlockState state = level.getBlockState(pos);
-        if (!isLiquid(state)) {
-            return 0;
-        }
-        FluidStack liquid = getFluidStack(state, pos, !doPreWork());
-        if (liquid != null) {
-            if (doPreWork()) {
-                liquid.grow(buckets * 1000);
+
+        for (BlockPos source : sources) {
+            if (drained >= sourceLimit) {
+                break;
             }
-            int amount = getCart().fill(liquid, IFluidHandler.FluidAction.SIMULATE);
-            if (amount == liquid.getAmount()) {
-                if (!doPreWork()) {
-                    getCart().fill(liquid, IFluidHandler.FluidAction.EXECUTE);
-                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
-                }
-                drained += 40;
-                buckets += 1;
-            } else if (amount == 0 && drained == 0) {
-                drained = -1;
+
+            FluidStack bucket = new FluidStack(fluid, MILLIBUCKETS_PER_SOURCE);
+            if (getCart().fill(bucket, IFluidHandler.FluidAction.SIMULATE) != MILLIBUCKETS_PER_SOURCE) {
+                break;
+            }
+
+            if (getCart().fill(bucket, IFluidHandler.FluidAction.EXECUTE) == MILLIBUCKETS_PER_SOURCE) {
+                level.setBlock(source, Blocks.AIR.defaultBlockState(), 11);
+                drained++;
             }
         }
-        checked.add(pos);
-        if (checked.size() < 100 && BlockPosHelpers.getHorizontalDistToCartSquared(pos, getCart()) < 200.0) {
-            for (int y = 1; y >= 0; --y) {
-                for (int x = -1; x <= 1; ++x) {
-                    for (int z = -1; z <= 1; ++z) {
-                        if (Math.abs(x) + Math.abs(y) + Math.abs(z) == 1) {
-                            BlockPos next = pos.offset(x, y, z);
-                            if (!checked.contains(next)) {
-                                drained += drainAt(level, drill, checked, next, buckets);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return drained;
     }
 
-    private boolean isLiquid(BlockState state) {
-        FluidState fluid = state.getFluidState();
-        return (!fluid.isEmpty() && fluid.isSource());
-    }
+    private List<BlockPos> findSources(Level level, BlockPos start, Fluid fluid) {
+        ArrayDeque<BlockPos> pending = new ArrayDeque<>();
+        Set<BlockPos> checked = new HashSet<>();
+        List<BlockPos> sources = new ArrayList<>();
+        pending.add(start.immutable());
 
-    private FluidStack getFluidStack(BlockState state, BlockPos pos, boolean doDrain) {
-        FluidState fluid = state.getFluidState();
-        if (fluid.isEmpty() || !fluid.isSource()) {
-            return null;
+        while (!pending.isEmpty() && sources.size() < MAX_SOURCE_BLOCKS) {
+            BlockPos pos = pending.removeFirst();
+            if (!checked.add(pos)) {
+                continue;
+            }
+
+            FluidState state = level.getFluidState(pos);
+            if (state.isEmpty() || !state.isSource() || state.getType() != fluid) {
+                continue;
+            }
+
+            sources.add(pos);
+            if (sources.size() >= MAX_SOURCE_BLOCKS
+                    || BlockPosHelpers.getHorizontalDistToCartSquared(pos, getCart()) >= 200.0) {
+                continue;
+            }
+
+            pending.addLast(pos.above());
+            pending.addLast(pos.north());
+            pending.addLast(pos.south());
+            pending.addLast(pos.west());
+            pending.addLast(pos.east());
         }
 
-        return new FluidStack(fluid.getType(), 1000);
+        return sources;
+    }
+
+    private void clearPlan() {
+        drainTarget = null;
+        drainFluid = null;
+        plannedSources = 0;
     }
 }
