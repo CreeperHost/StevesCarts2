@@ -31,7 +31,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.WeakHashMap;
 
 /** Shared persistent link graph and movement handling for every minecart type. */
 public final class CartTrainLinker {
@@ -41,9 +40,6 @@ public final class CartTrainLinker {
     private static final double MAX_LINK_DISTANCE = 2.25D;
     private static final double MAX_CATCH_UP_SPEED = 0.35D;
     private static final int MAX_RAIL_PATH_NODES = 128;
-    private static final Map<AbstractMinecart, Long> LAST_TICK = new WeakHashMap<>();
-    private static final Map<AbstractMinecart, Long> LAST_SOLVED = new WeakHashMap<>();
-
     private CartTrainLinker() {
     }
 
@@ -206,19 +202,12 @@ public final class CartTrainLinker {
         if (!(cart.level() instanceof ServerLevel serverLevel)) {
             return;
         }
-        long gameTime = serverLevel.getGameTime();
-        LAST_TICK.put(cart, gameTime);
         syncDirectLinks(cart);
 
         List<AbstractMinecart> train = getTrainCarts(cart);
-        if (train.size() < 2 || train.stream().anyMatch(member -> LAST_TICK.getOrDefault(member, Long.MIN_VALUE) != gameTime)) {
+        if (train.size() < 2 || train.getFirst() != cart) {
             return;
         }
-        AbstractMinecart leader = train.getFirst();
-        if (LAST_SOLVED.getOrDefault(leader, Long.MIN_VALUE) == gameTime) {
-            return;
-        }
-        LAST_SOLVED.put(leader, gameTime);
         synchronizeCreativeTrainSpeed(serverLevel, train);
         applyLinkConstraints(train);
         for (AbstractMinecart member : train) {
@@ -332,6 +321,9 @@ public final class CartTrainLinker {
             double urgency = path.distance() > MAX_LINK_DISTANCE ? 0.5D : 0.25D;
             double catchUp = Math.min(MAX_CATCH_UP_SPEED, error * urgency);
             accelerateAlongRail(trailingCart, trailingDirection, leadingSpeed + catchUp);
+            if (path.distance() > MAX_LINK_DISTANCE) {
+                slowBy(leadingCart, catchUp);
+            }
         } else {
             slowBy(trailingCart, Math.min(MAX_CATCH_UP_SPEED, -error * 0.25D));
         }
