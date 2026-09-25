@@ -17,6 +17,7 @@ import org.jspecify.annotations.NonNull;
 import vswe.stevescarts.api.client.ModelCartbase;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.template.ModuleHull;
+import vswe.stevescarts.client.models.pig.ModelPigHead;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.entities.ModularMinecartBehavior;
 import vswe.stevescarts.init.StevesCartsModules;
@@ -28,6 +29,7 @@ import java.util.List;
 public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderModulerCart.ModularCartRenderState> {
     public RenderModulerCart(EntityRendererProvider.Context context) {
         super(context);
+        ModelPigHead.setEquipmentRenderer(context.getEquipmentRenderer());
     }
 
     @Override
