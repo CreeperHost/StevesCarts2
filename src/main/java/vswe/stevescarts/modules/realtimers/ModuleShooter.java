@@ -6,6 +6,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.creeperhost.polylib.data.serializable.ByteData;
 import net.creeperhost.polylib.data.serializable.IntData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -20,7 +21,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import vswe.stevescarts.StevesCarts;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.ISuppliesModule;
 import vswe.stevescarts.api.slots.SlotStevesCarts;
@@ -170,10 +170,9 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
         drawImage(GuiGraphicsExtractor, texture, gui, targetX + 1 + (16 - len), targetY + 10, srcX2 + 1 + (16 - len), srcY2 + 10, len, 2);
     }
 
-    private int getCurrentCooldownState() {
-        final double perc = arrowTick / AInterval[getInterval()];
-        setCooldownState((int) (41.0 * perc));
-        return getCooldownState();
+    private int calculateCooldownState() {
+        double progress = arrowTick / (double) AInterval[getInterval()];
+        return (int) Math.round(41.0 * Math.clamp(progress, 0.0, 1.0));
     }
 
     private int[] getRectForPipe(final int pipe) {
@@ -185,7 +184,6 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
         if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             if (inRect(x, y, intervalDragArea)) {
                 dragState = y - (intervalSelectionY + getInterval() * 2);
-                StevesCarts.LOGGER.info("dragState: {}", dragState);
             } else {
                 for (int i = 0; i < pipes.size(); ++i) {
                     if (inRect(x, y, getRectForPipe(pipes.get(i)))) {
@@ -201,9 +199,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
     public void mouseMovedOrUp(final GuiMinecart gui, final int x, final int y, final int button) {
         if (button != -1) {
             dragState = -1;
-            StevesCarts.LOGGER.info("A dragState: {}, Button: {}", dragState, button);
         } else if (dragState != -1) {
-            StevesCarts.LOGGER.info("B dragState: {}, Button: {}", dragState, button);
             int interval = (y + getCart().getRealScrollY() - intervalSelectionY - dragState) / 2;
             if (interval != getInterval() && interval >= 0 && interval < AInterval.length) {
                 sendPacket(1, (byte) interval);
@@ -241,6 +237,10 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
                 --arrowTick;
             } else {
                 shoot();
+            }
+            int cooldownState = calculateCooldownState();
+            if (cooldownState != getCooldownState()) {
+                setCooldownState(cooldownState);
             }
         } else {
             rotatePipes(false);
@@ -290,12 +290,12 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
 
     protected void shoot() {
         setTimeToNext(AInterval[getInterval()]);
-        double pushX = getCart().getEffectiveVelocity().x;
-        double pushZ = getCart().getEffectiveVelocity().z;
-        //TODO, Test this and figure out if it needs to be re-written...
-        if ((pushX != 0.0 && pushZ != 0.0) || (pushX == 0.0 && pushZ == 0.0) || !getCart().hasFuel()) {
+        if (!getCart().hasFuel()) {
             return;
         }
+
+        Direction forward = getCardinalTravelDirection();
+        Direction right = forward.getClockWise();
         boolean hasShot = false;
         for (int i = 0; i < pipes.size(); ++i) {
             if (isPipeActive(i)) {
@@ -303,24 +303,13 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
                 if (!hasProjectileItem()) {
                     break;
                 }
-                int x = pipe % 3 - 1;
-                int y = pipe / 3 - 1;
-                if (pushZ > 0.0) {
-                    y *= -1;
-                    x *= -1;
-                } else if (pushZ < 0) {
-                } else if (pushX < 0) {
-                    int temp = -x;
-                    x = y;
-                    y = temp;
-                } else if (pushX > 0.0) {
-                    int temp = x;
-                    x = -y;
-                    y = temp;
-                }
+                int lateral = pipe % 3 - 1;
+                int forwardOffset = 1 - pipe / 3;
+                int x = forward.getStepX() * forwardOffset + right.getStepX() * lateral;
+                int z = forward.getStepZ() * forwardOffset + right.getStepZ() * lateral;
                 Entity projectile = getProjectile(null, getProjectileItem(true));
-                projectile.setPos(getCart().getX() + x * 1.5, getCart().getY() + 0.75F, getCart().getZ() + y * 1.5);
-                setHeading(projectile, x, 0.10000000149011612D, y, 1.6f, 12.0f);
+                projectile.setPos(getCart().getX() + x * 1.5, getCart().getY() + 0.75F, getCart().getZ() + z * 1.5);
+                setHeading(projectile, x, 0.1D, z, 1.6f, 12.0f);
                 setProjectileDamage(projectile);
                 setProjectileOnFire(projectile);
                 getCart().level().addFreshEntity(projectile);
@@ -331,6 +320,15 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
         if (hasShot) {
             getCart().level().levelEvent(1002, getCart().blockPosition(), 0);
         }
+    }
+
+    private Direction getCardinalTravelDirection() {
+        double x = getCart().getEffectiveVelocity().x;
+        double z = getCart().getEffectiveVelocity().z;
+        if (Math.abs(x) > Math.abs(z)) {
+            return x >= 0.0 ? Direction.EAST : Direction.WEST;
+        }
+        return z >= 0.0 ? Direction.SOUTH : Direction.NORTH;
     }
 
     protected void damageEnchant() {
@@ -423,7 +421,7 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
     }
 
     public void setInterval(int interval) {
-        arrowInterval.set(interval);
+        arrowInterval.set(Math.clamp(interval, 0, AInterval.length - 1));
     }
 
     public int getCooldownState() {
@@ -472,11 +470,11 @@ public class ModuleShooter extends ModuleBase implements ISuppliesModule {
     }
 
     protected void saveTick(ValueOutput tagCompound, final int id) {
-        tagCompound.putByte(generateNBTName("Tick", id), (byte) arrowTick);
+        tagCompound.putInt(generateNBTName("Tick", id), arrowTick);
     }
 
     protected void loadTick(ValueInput tagCompound, final int id) {
-        arrowTick = tagCompound.getByteOr(generateNBTName("Tick", id), (byte) 0);
+        arrowTick = Math.max(0, tagCompound.getIntOr(generateNBTName("Tick", id), 0));
     }
 
     @Override

@@ -137,6 +137,7 @@ public class ModuleShooterAdv extends ModuleShooter {
     private void shootAtTarget(Entity target) {
         Entity projectile = getProjectile(target, getProjectileItem(true));
         double posY = getCart().getY() + (double) getCart().getEyeHeight() - 0.10000000149011612D;
+        projectile.setPos(getCart().getX(), posY, getCart().getZ());
 
         double disX = target.getX() - getCart().getX();
         double disY = target.getY() + (double) target.getEyeHeight() - 0.699999988079071D - posY;
@@ -150,14 +151,13 @@ public class ModuleShooterAdv extends ModuleShooter {
 
             setRifleDirection((float) Math.atan2(disZ, disX));
 
-            projectile.setPos(getCart().getX(), posY, getCart().getZ());
             projectile.forceSetRotation(theta, false, phi, false);
 
             float disD5 = (float) dis * 0.2f;
             setHeading(projectile, disX, disY + (double) disD5, disZ, 1.6f, 0.0f);
         }
         BlockPos pos = getCart().blockPosition();
-        getCart().level().playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ARROW_HIT, SoundSource.NEUTRAL, 1.0f, 1.0f / (getCart().getRandom().nextFloat() * 0.4f + 0.8f));
+        getCart().level().playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0f, 1.0f / (getCart().getRandom().nextFloat() * 0.4f + 0.8f));
 
         setProjectileDamage(projectile);
         setProjectileOnFire(projectile);
@@ -176,7 +176,7 @@ public class ModuleShooterAdv extends ModuleShooter {
         entities.sort(sorter);
 
         for (LivingEntity target : entities) {
-            if (target.isDeadOrDying() || !hasLineOfSight(target)) continue;
+            if (target.isDeadOrDying() || target.getVehicle() == getCart() || !hasLineOfSight(target)) continue;
             for (int i = 0; i < detectors.size(); ++i) {
                 if (!isOptionActive(i)) continue;
                 ModuleMobdetector detector = detectors.get(i);
