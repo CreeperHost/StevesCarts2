@@ -4,9 +4,13 @@
   "minVersion": "0.7.11",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "CollisionContextMixin"
+    "CollisionContextMixin",
+    "MinecartTrainMixin",
+    "VehicleEntityMixin"
   ],
   "client": [
+    "client.MinecartRenderStateMixin",
+    "client.AbstractMinecartRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

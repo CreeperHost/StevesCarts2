@@ -12,5 +12,9 @@
  * {@link vswe.stevescarts.api.carts.CartTrain}. Graph methods returning cart objects are server-side;
  * client code should use its synchronized entity-ID methods. Link and unlink notifications are in
  * {@link vswe.stevescarts.api.events.CartEvents}.
+ * <p>
+ * Blocks can integrate with the advanced detector rail by implementing
+ * {@link vswe.stevescarts.api.detector.AdvancedDetectorHandler} on their block entity or by using
+ * {@link vswe.stevescarts.api.StevesCartsAPI#registerAdvancedDetectorHandler}.
  */
 package vswe.stevescarts.api;

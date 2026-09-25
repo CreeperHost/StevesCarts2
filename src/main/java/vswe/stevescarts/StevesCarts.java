@@ -16,6 +16,7 @@ import vswe.stevescarts.client.StevesCartsCreativeTabs;
 import vswe.stevescarts.events.OverlayEventHandler;
 import vswe.stevescarts.helpers.ForceChunkHelper;
 import vswe.stevescarts.init.*;
+import vswe.stevescarts.items.CartLinking;
 import vswe.stevescarts.network.PacketHandler;
 
 @Mod(Constants.MOD_ID)
@@ -51,6 +52,8 @@ public class StevesCarts {
         PacketHandler.init(modBus);
         ModSerializers.init(modBus);
         ModItemData.init(modBus);
+        ModAttachments.init(modBus);
+        CartLinking.init();
 
         if (FMLEnvironment.getDist().isClient()) {
             OverlayEventHandler.init(modBus);

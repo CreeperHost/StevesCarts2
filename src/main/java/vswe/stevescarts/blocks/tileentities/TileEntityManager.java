@@ -13,13 +13,15 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import vswe.stevescarts.StevesCartsClient;
+import vswe.stevescarts.api.detector.AdvancedDetectorContext;
+import vswe.stevescarts.api.detector.AdvancedDetectorHandler;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.helpers.storages.TransferManager;
 import vswe.stevescarts.network.packets.PacketCargpManager;
 
 import javax.annotation.Nonnull;
 
-public abstract class TileEntityManager extends TileEntityBase implements Container {
+public abstract class TileEntityManager extends TileEntityBase implements Container, AdvancedDetectorHandler {
     private final TransferManager standardTransferHandler;
     public int layoutType;
     public int moveTime;
@@ -137,6 +139,15 @@ public abstract class TileEntityManager extends TileEntityBase implements Contai
 
     public void setSide(final int val) {
         standardTransferHandler.setSide(val);
+    }
+
+    @Override
+    public boolean handleCart(AdvancedDetectorContext context) {
+        if (getCart() == null) {
+            setCart(context.cart());
+            setSide(context.managerSide());
+        }
+        return true;
     }
 
     public int getLastSetting() {

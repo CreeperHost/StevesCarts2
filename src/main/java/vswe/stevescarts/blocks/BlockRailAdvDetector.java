@@ -2,6 +2,7 @@ package vswe.stevescarts.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.item.ItemStack;
@@ -19,10 +20,12 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import vswe.stevescarts.api.StevesCartsAPI;
+import vswe.stevescarts.api.detector.AdvancedDetectorContext;
+import vswe.stevescarts.api.detector.AdvancedDetectorHandler;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.blocks.tileentities.TileEntityActivator;
-import vswe.stevescarts.blocks.tileentities.TileEntityManager;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.init.ModBlocks;
@@ -56,7 +59,7 @@ public class BlockRailAdvDetector extends BaseRailBlock {
 
     //TODO, Switch back to forge's onMinecartPass if it gets fixed.
     public void onMinecartPassSC(BlockState state, Level world, BlockPos pos, AbstractMinecart entityMinecart) {
-        if (world.isClientSide() || !(entityMinecart instanceof ModularMinecart cart)) {
+        if (!(world instanceof ServerLevel serverLevel) || !(entityMinecart instanceof ModularMinecart cart)) {
             return;
         }
         if (!isCartReadyForAction(cart, pos)) {
@@ -67,19 +70,19 @@ public class BlockRailAdvDetector extends BaseRailBlock {
             for (int j = -1; j <= 1; ++j) {
                 if (Math.abs(i) != Math.abs(j)) {
                     BlockPos offset = pos.offset(i, 0, j);
-                    Block block = world.getBlockState(offset).getBlock();
-                    if (block == ModBlocks.CARGO_MANAGER.get() || block == ModBlocks.LIQUID_MANAGER.get()) {
-                        BlockEntity tileentity = world.getBlockEntity(offset);
-                        if (tileentity instanceof TileEntityManager manager) {
-                            if (manager.getCart() == null) {
-                                manager.setCart(cart);
-                                manager.setSide(side);
-                            }
+                    BlockState handlerState = world.getBlockState(offset);
+                    Block block = handlerState.getBlock();
+                    BlockEntity tileentity = world.getBlockEntity(offset);
+                    AdvancedDetectorHandler handler = getAdvancedDetectorHandler(block, tileentity);
+                    if (handler != null) {
+                        Direction direction = directionFromOffset(i, j);
+                        AdvancedDetectorContext context = new AdvancedDetectorContext(
+                                serverLevel, pos, offset, handlerState, direction, side, cart);
+                        if (handler.handleCart(context)) {
+                            return;
                         }
-                        return;
                     }
                     if (block == ModBlocks.MODULE_TOGGLER.get()) {
-                        BlockEntity tileentity = world.getBlockEntity(offset);
                         if (tileentity instanceof TileEntityActivator activator) {
                             Vec3 velocity = cart.getEffectiveVelocity();
                             boolean isOrange = false;
@@ -99,16 +102,13 @@ public class BlockRailAdvDetector extends BaseRailBlock {
                                     isOrange = (velocity.z < 0.0);
                                 }
                             }
-                            boolean isBlueBerry = false;
                             activator.handleCart(cart, isOrange);
                             cart.releaseCart();
                         }
                         return;
                     }
-                    if (block instanceof BlockUpgrade) {
-                        BlockEntity tileentity = world.getBlockEntity(offset);
-                        TileEntityUpgrade upgrade = (TileEntityUpgrade) tileentity;
-                        if (upgrade != null && upgrade.getUpgrade() != null) {
+                    if (block instanceof BlockUpgrade && tileentity instanceof TileEntityUpgrade upgrade) {
+                        if (upgrade.getUpgrade() != null) {
                             for (BaseUpgradeEffect effect : upgrade.getUpgrade().getEffects()) {
                                 if (effect instanceof Transposer) {
                                     if (upgrade.getMaster() == null) {
@@ -157,11 +157,15 @@ public class BlockRailAdvDetector extends BaseRailBlock {
         for (Direction facing : Direction.values()) {
             if (facing.getAxis() == Direction.Axis.Y) continue;
             BlockPos posOther = pos.relative(facing);
-            Block block = level.getBlockState(posOther).getBlock();
-            if (block == ModBlocks.CARGO_MANAGER.get() || block == ModBlocks.LIQUID_MANAGER.get() || block == ModBlocks.MODULE_TOGGLER.get()) {
+            BlockState otherState = level.getBlockState(posOther);
+            Block block = otherState.getBlock();
+            BlockEntity blockEntity = level.getBlockEntity(posOther);
+            AdvancedDetectorHandler handler = getAdvancedDetectorHandler(block, blockEntity);
+            if ((handler != null && handler.blocksRedstoneConnection(level, posOther, otherState))
+                    || block == ModBlocks.MODULE_TOGGLER.get()) {
                 return false;
             }
-            if (level.getBlockEntity(posOther) instanceof TileEntityUpgrade upgrade) {
+            if (blockEntity instanceof TileEntityUpgrade upgrade) {
                 if (upgrade.getUpgrade() != null) {
                     for (BaseUpgradeEffect effect : upgrade.getUpgrade().getEffects()) {
                         if (effect instanceof Transposer && upgrade.getMaster() != null) {
@@ -180,5 +184,23 @@ public class BlockRailAdvDetector extends BaseRailBlock {
             }
         }
         return true;
+    }
+
+    @Nullable
+    private static AdvancedDetectorHandler getAdvancedDetectorHandler(Block block, @Nullable BlockEntity blockEntity) {
+        if (blockEntity instanceof AdvancedDetectorHandler handler) {
+            return handler;
+        }
+        return StevesCartsAPI.getAdvancedDetectorHandler(block);
+    }
+
+    private static Direction directionFromOffset(int xOffset, int zOffset) {
+        if (xOffset < 0) {
+            return Direction.WEST;
+        }
+        if (xOffset > 0) {
+            return Direction.EAST;
+        }
+        return zOffset < 0 ? Direction.NORTH : Direction.SOUTH;
     }
 }

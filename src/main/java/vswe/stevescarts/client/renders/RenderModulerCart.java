@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -140,11 +141,14 @@ public class RenderModulerCart extends EntityRenderer<ModularMinecart, RenderMod
             if (linkedEntityId < 0 || entity.getId() >= linkedEntityId) {
                 continue;
             }
-            if (entity.level().getEntity(linkedEntityId) instanceof ModularMinecart linkedCart) {
-                ModularMinecartBehavior linkedBehavior = (ModularMinecartBehavior) linkedCart.getBehavior();
-                float linkedYRot = linkedBehavior.cartHasPosRotLerp()
-                        ? linkedBehavior.getCartLerpYRot(partialTick)
-                        : linkedCart.getYRot();
+            if (entity.level().getEntity(linkedEntityId) instanceof AbstractMinecart linkedCart) {
+                float linkedYRot = linkedCart.getYRot();
+                if (linkedCart instanceof ModularMinecart linkedModularCart) {
+                    ModularMinecartBehavior linkedBehavior = (ModularMinecartBehavior) linkedModularCart.getBehavior();
+                    linkedYRot = linkedBehavior.cartHasPosRotLerp()
+                            ? linkedBehavior.getCartLerpYRot(partialTick)
+                            : linkedModularCart.getYRot();
+                }
                 state.hitches.add(new CartHitchRenderer.HitchConnection(
                         linkedCart.getPosition(partialTick).subtract(cartPosition), state.yRot, linkedYRot));
             }

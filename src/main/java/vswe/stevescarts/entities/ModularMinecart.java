@@ -46,6 +46,7 @@ import org.joml.Math;
 import vswe.stevescarts.api.StevesCartsAPI;
 import vswe.stevescarts.api.carts.CartLinkResult;
 import vswe.stevescarts.api.carts.CartTrain;
+import vswe.stevescarts.api.carts.CartTrainLinker;
 import vswe.stevescarts.api.events.CartEvents;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.data.ModuleData;
@@ -64,13 +65,9 @@ import vswe.stevescarts.polylib.EntityData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.ArrayDeque;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -79,11 +76,6 @@ import java.util.UUID;
 public class ModularMinecart extends AbstractMinecart implements IEntityWithComplexSpawn, MenuProvider, DataEntity, IModularCart, CartTrain {
     private static final double STOP_CENTER_EPSILON = 1.0 / 64.0;
     private static final double STOP_CENTER_SPEED = 0.125;
-    private static final double LINK_DISTANCE = 1.6;
-    private static final double LINK_CORRECTION = 0.35;
-    private static final double MAX_LINK_CORRECTION_SPEED = 0.12;
-    private static final double MAX_LINK_IMPULSE = 0.2;
-    private static final int LINK_CONSTRAINT_ITERATIONS = 8;
     public static final int MODULAR_SPACE_WIDTH = 443;
     public static final int MODULAR_SPACE_HEIGHT = 168;
     public static final int[][][] railDirectionCoordinates = new int[][][]{
@@ -99,8 +91,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
             {{0, 0, -1}, {1, 0, 0}}};
     private static final EntityDataAccessor<Boolean> IS_BURNING = SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> IS_DISANABLED = SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Integer> LINKED_CART_0 = SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> LINKED_CART_1 = SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT);
     private static final List<EntityDataAccessor<Integer>> TRAIN_CART_IDS = List.of(
             SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT),
             SynchedEntityData.defineId(ModularMinecart.class, EntityDataSerializers.INT),
@@ -118,8 +108,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
     private final ArrayList<ModuleEngine> engineModules = new ArrayList<>();
     private final ArrayList<ModuleTank> tankModules = new ArrayList<>();
     private final List<EntityData<?>> entityDataList = new ArrayList<>();
-    private final List<UUID> linkedCartIds = new ArrayList<>(MAX_DIRECT_LINKS);
-    private long lastLinkUpdateGameTime = Long.MIN_VALUE;
     public boolean canScrollModules;
     public int modularSpaceHeight;
     protected TileEntityCartAssembler placeholderAsssembler;
@@ -247,9 +235,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         double lastYRot = this.getYRot();
         Vec3 lastPos = this.position();
         super.tick();
-        if (this.level() instanceof ServerLevel serverLevel) {
-            updateCartLinks(serverLevel);
-        }
         if (this.level().isClientSide() && lastPos.distanceTo(this.position()) > 0.01) {
             this.rotationOffset += (float) ((this.getYRot() - lastYRot) % 360.0);
             this.rotationOffset %= 360.0F;
@@ -264,8 +249,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         super.defineSynchedData(builder);
         builder.define(IS_BURNING, false);
         builder.define(IS_DISANABLED, false);
-        builder.define(LINKED_CART_0, -1);
-        builder.define(LINKED_CART_1, -1);
         for (EntityDataAccessor<Integer> trainCartId : TRAIN_CART_IDS) {
             builder.define(trainCartId, -1);
         }
@@ -293,7 +276,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
 
     @Override
     public void push(Entity entity) {
-        if (entity instanceof ModularMinecart other && isLinkedTo(other)) {
+        if (entity instanceof AbstractMinecart other && CartTrainLinker.isLinked(this, other)) {
             return;
         }
         super.push(entity);
@@ -658,10 +641,6 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         if (disabledPos != null) {
             output.store("disabled_pos", BlockPos.CODEC, disabledPos);
         }
-        for (int i = 0; i < linkedCartIds.size(); i++) {
-            output.putString("linked_cart_" + i, linkedCartIds.get(i).toString());
-        }
-
         ValueOutput list = output.child("modules");
         list.putInt("count", modules.size());
         for (int i = 0; i < modules.size(); i++) {
@@ -684,15 +663,18 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         }
         workingTime = input.getShortOr("workingTime", (short) 0);
         disabledPos = input.read("disabled_pos", BlockPos.CODEC).orElse(null);
-        linkedCartIds.clear();
-        for (int i = 0; i < MAX_DIRECT_LINKS; i++) {
-            String id = input.getStringOr("linked_cart_" + i, "");
-            if (!id.isEmpty()) {
-                try {
-                    linkedCartIds.add(UUID.fromString(id));
-                } catch (IllegalArgumentException ignored) {
+        if (CartTrainLinker.getLinkedCartIds(this).isEmpty()) {
+            List<UUID> migratedLinks = new ArrayList<>(MAX_DIRECT_LINKS);
+            for (int i = 0; i < MAX_DIRECT_LINKS; i++) {
+                String id = input.getStringOr("linked_cart_" + i, "");
+                if (!id.isEmpty()) {
+                    try {
+                        migratedLinks.add(UUID.fromString(id));
+                    } catch (IllegalArgumentException ignored) {
+                    }
                 }
             }
+            CartTrainLinker.setLinkedCartIds(this, migratedLinks);
         }
 
         loadModules(input);
@@ -700,83 +682,32 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
 
     @Override
     public CartLinkResult linkCart(ModularMinecart other) {
-        if (other == null || other == this || !isAlive() || !other.isAlive()) {
-            return CartLinkResult.INVALID_CART;
-        }
-        if (level() != other.level()) {
-            return CartLinkResult.DIFFERENT_LEVEL;
-        }
-        if (!(level() instanceof ServerLevel)) {
-            return CartLinkResult.INVALID_CART;
-        }
-        if (isLinkedTo(other) || isConnectedTo(other)) {
-            return CartLinkResult.ALREADY_CONNECTED;
-        }
-        if (linkedCartIds.size() >= MAX_DIRECT_LINKS || other.linkedCartIds.size() >= MAX_DIRECT_LINKS) {
-            return CartLinkResult.NO_FREE_LINK;
-        }
-        if (getTrainSize() + other.getTrainSize() > MAX_TRAIN_CARTS) {
-            return CartLinkResult.TRAIN_FULL;
-        }
+        return linkCart((AbstractMinecart) other);
+    }
 
-        CartEvents.CartLinkEvent event = new CartEvents.CartLinkEvent(this, other);
-        NeoForge.EVENT_BUS.post(event);
-        if (event.isCanceled()) {
-            return CartLinkResult.CANCELLED;
-        }
-
-        linkedCartIds.add(other.getUUID());
-        other.linkedCartIds.add(getUUID());
-        return CartLinkResult.LINKED;
+    public CartLinkResult linkCart(AbstractMinecart other) {
+        return CartTrainLinker.link(this, other);
     }
 
     @Override
     public boolean unlinkCart(ModularMinecart other) {
-        if (other == null || other == this || level() != other.level() || level().isClientSide()) {
-            return false;
-        }
-        boolean removed = linkedCartIds.remove(other.getUUID());
-        boolean removedOther = other.linkedCartIds.remove(getUUID());
-        if (removed || removedOther) {
-            clearSyncedCartLinks();
-            other.clearSyncedCartLinks();
-            NeoForge.EVENT_BUS.post(new CartEvents.CartUnlinkEvent(this, other));
-            return true;
-        }
-        return false;
+        return unlinkCart((AbstractMinecart) other);
+    }
+
+    public boolean unlinkCart(AbstractMinecart other) {
+        return CartTrainLinker.unlink(this, other);
     }
 
     @Override
     public int unlinkAllCarts() {
-        int linkCount = linkedCartIds.size();
-        if (level() instanceof ServerLevel serverLevel) {
-            for (UUID linkedId : List.copyOf(linkedCartIds)) {
-                Entity entity = serverLevel.getEntity(linkedId);
-                if (entity instanceof ModularMinecart linkedCart) {
-                    unlinkCart(linkedCart);
-                } else {
-                    linkedCartIds.remove(linkedId);
-                }
-            }
-        }
-        linkedCartIds.clear();
-        clearSyncedCartLinks();
-        return linkCount;
-    }
-
-    private void clearSyncedCartLinks() {
-        entityData.set(LINKED_CART_0, -1);
-        entityData.set(LINKED_CART_1, -1);
-        for (EntityDataAccessor<Integer> trainCartId : TRAIN_CART_IDS) {
-            entityData.set(trainCartId, -1);
-        }
+        return CartTrainLinker.unlinkAll(this);
     }
 
     public int getLinkedCartEntityId(int index) {
         if (index < 0 || index >= MAX_DIRECT_LINKS) {
             throw new IndexOutOfBoundsException("A cart only has " + MAX_DIRECT_LINKS + " direct link slots");
         }
-        return entityData.get(index == 0 ? LINKED_CART_0 : LINKED_CART_1);
+        return CartTrainLinker.getLinkedCartEntityId(this, index);
     }
 
     @Override
@@ -805,86 +736,63 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
 
     @Override
     public List<UUID> getLinkedCartIds() {
-        return List.copyOf(linkedCartIds);
+        return CartTrainLinker.getLinkedCartIds(this);
     }
 
     @Override
     public List<ModularMinecart> getDirectlyLinkedCarts() {
-        if (!(level() instanceof ServerLevel serverLevel)) {
-            return List.of();
-        }
-        return linkedCartIds.stream()
-                .map(serverLevel::getEntity)
+        return CartTrainLinker.getDirectlyLinkedCarts(this).stream()
                 .filter(ModularMinecart.class::isInstance)
                 .map(ModularMinecart.class::cast)
-                .filter(Entity::isAlive)
                 .toList();
     }
 
     @Override
     public List<ModularMinecart> getConnectedCarts() {
-        if (!(level() instanceof ServerLevel serverLevel)) {
-            return List.of();
-        }
-        return List.copyOf(getConnectedCarts(serverLevel));
+        return CartTrainLinker.getConnectedCarts(this).stream()
+                .filter(ModularMinecart.class::isInstance)
+                .map(ModularMinecart.class::cast)
+                .toList();
     }
 
     @Override
     public List<ModularMinecart> getTrainCarts() {
-        if (level().isClientSide()) {
-            return List.of();
-        }
-        List<ModularMinecart> carts = new ArrayList<>(getConnectedCarts());
-        carts.add(this);
-        carts.sort(Comparator.comparingInt(Entity::getId));
-        return List.copyOf(carts);
+        return CartTrainLinker.getTrainCarts(this).stream()
+                .filter(ModularMinecart.class::isInstance)
+                .map(ModularMinecart.class::cast)
+                .toList();
     }
 
     @Override
     public int getTrainSize() {
-        return level().isClientSide() ? java.lang.Math.max(1, getTrainCartEntityIds().size()) : getConnectedCarts().size() + 1;
+        return level().isClientSide() ? java.lang.Math.max(1, getTrainCartEntityIds().size()) : CartTrainLinker.getTrainSize(this);
     }
 
     @Override
     public boolean isLinkedTo(ModularMinecart other) {
-        return other != null && linkedCartIds.contains(other.getUUID());
+        return isLinkedTo((AbstractMinecart) other);
+    }
+
+    public boolean isLinkedTo(AbstractMinecart other) {
+        return CartTrainLinker.isLinked(this, other);
     }
 
     @Override
     public boolean isConnectedTo(ModularMinecart target) {
-        if (target == null) {
-            return false;
-        }
-        if (!(level() instanceof ServerLevel serverLevel)) {
-            return false;
-        }
-        return getConnectedCarts(serverLevel).contains(target);
+        return isConnectedTo((AbstractMinecart) target);
     }
 
-    private List<ModularMinecart> getConnectedCarts(ServerLevel serverLevel) {
-        List<ModularMinecart> connectedCarts = new ArrayList<>();
-        Set<UUID> visited = new HashSet<>();
-        ArrayDeque<UUID> pending = new ArrayDeque<>(linkedCartIds);
-        visited.add(getUUID());
-        while (!pending.isEmpty()) {
-            UUID id = pending.removeFirst();
-            if (!visited.add(id)) {
-                continue;
-            }
-            Entity entity = serverLevel.getEntity(id);
-            if (entity instanceof ModularMinecart linkedCart) {
-                connectedCarts.add(linkedCart);
-                pending.addAll(linkedCart.linkedCartIds);
-            }
-        }
-        return connectedCarts;
+    public boolean isConnectedTo(AbstractMinecart target) {
+        return CartTrainLinker.isConnected(this, target);
     }
 
     List<ModuleBase> getTrainModulesForMovement() {
         if (!(level() instanceof ServerLevel)) {
             return List.copyOf(modules);
         }
-        return getTrainCarts().stream()
+        return CartTrainLinker.getTrainCarts(this).stream()
+                .filter(ModularMinecart.class::isInstance)
+                .map(ModularMinecart.class::cast)
                 .flatMap(cart -> cart.modules.stream())
                 .toList();
     }
@@ -901,72 +809,14 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
                 .findFirst();
     }
 
-    private void updateCartLinks(ServerLevel serverLevel) {
-        int[] linkedEntityIds = {-1, -1};
-        List<UUID> links = List.copyOf(linkedCartIds);
-        for (int i = 0; i < links.size(); i++) {
-            UUID linkedId = links.get(i);
-            Entity entity = serverLevel.getEntity(linkedId);
-            if (!(entity instanceof ModularMinecart linkedCart) || !linkedCart.isAlive()) {
-                continue;
-            }
-            linkedEntityIds[i] = linkedCart.getId();
-            if (!linkedCart.linkedCartIds.contains(getUUID())) {
-                if (linkedCart.linkedCartIds.size() >= MAX_DIRECT_LINKS) {
-                    linkedCartIds.remove(linkedId);
-                    continue;
-                }
-                linkedCart.linkedCartIds.add(getUUID());
-            }
+    public void syncTrainCartIds(List<AbstractMinecart> trainCarts) {
+        List<Integer> modularCartIds = trainCarts.stream()
+                .filter(ModularMinecart.class::isInstance)
+                .map(Entity::getId)
+                .toList();
+        for (int i = 0; i < TRAIN_CART_IDS.size(); i++) {
+            entityData.set(TRAIN_CART_IDS.get(i), i < modularCartIds.size() ? modularCartIds.get(i) : -1);
         }
-        entityData.set(LINKED_CART_0, linkedEntityIds[0]);
-        entityData.set(LINKED_CART_1, linkedEntityIds[1]);
-        List<ModularMinecart> trainCarts = getTrainCarts();
-        lastLinkUpdateGameTime = serverLevel.getGameTime();
-        for (ModularMinecart trainCart : trainCarts) {
-            for (int i = 0; i < TRAIN_CART_IDS.size(); i++) {
-                trainCart.entityData.set(TRAIN_CART_IDS.get(i), i < trainCarts.size() ? trainCarts.get(i).getId() : -1);
-            }
-        }
-        if (trainCarts.stream().allMatch(cart -> cart.lastLinkUpdateGameTime == serverLevel.getGameTime())) {
-            applyTrainLinkConstraints(serverLevel, trainCarts);
-        }
-    }
-
-    private static void applyTrainLinkConstraints(ServerLevel serverLevel, List<ModularMinecart> trainCarts) {
-        for (int iteration = 0; iteration < LINK_CONSTRAINT_ITERATIONS; iteration++) {
-            for (ModularMinecart cart : trainCarts) {
-                for (UUID linkedId : cart.linkedCartIds) {
-                    Entity entity = serverLevel.getEntity(linkedId);
-                    if (entity instanceof ModularMinecart linkedCart && cart.getId() < linkedCart.getId()) {
-                        cart.applyLinkConstraint(linkedCart);
-                    }
-                }
-            }
-        }
-    }
-
-    private void applyLinkConstraint(ModularMinecart linkedCart) {
-        Vec3 offset = linkedCart.position().subtract(position());
-        double distance = offset.length();
-        if (distance < 1.0E-4) {
-            return;
-        }
-        Vec3 direction = offset.scale(1.0 / distance);
-        double relativeSpeed = linkedCart.getDeltaMovement().subtract(getDeltaMovement()).dot(direction);
-        double correctionSpeed = java.lang.Math.clamp(
-                (distance - LINK_DISTANCE) * LINK_CORRECTION,
-                -MAX_LINK_CORRECTION_SPEED,
-                MAX_LINK_CORRECTION_SPEED
-        );
-        double impulseStrength = java.lang.Math.clamp(
-                (relativeSpeed + correctionSpeed) * 0.5,
-                -MAX_LINK_IMPULSE,
-                MAX_LINK_IMPULSE
-        );
-        Vec3 impulse = direction.scale(impulseStrength);
-        setDeltaMovement(getDeltaMovement().add(impulse));
-        linkedCart.setDeltaMovement(linkedCart.getDeltaMovement().subtract(impulse));
     }
 
     public void loadModules(ValueInput input) {

@@ -7,8 +7,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import vswe.stevescarts.api.carts.CartTrainLinker;
 import vswe.stevescarts.entities.ModularMinecart;
 import vswe.stevescarts.api.carts.CartLinkResult;
 import vswe.stevescarts.init.ModItemData;
@@ -22,7 +27,12 @@ public final class CartLinking {
     private CartLinking() {
     }
 
-    public static InteractionResult interactWithCart(ItemStack chain, ServerPlayer player, ModularMinecart cart) {
+    public static void init() {
+        NeoForge.EVENT_BUS.addListener(CartLinking::onEntityInteract);
+        NeoForge.EVENT_BUS.addListener(CartLinking::onEntityLeaveLevel);
+    }
+
+    public static InteractionResult interactWithCart(ItemStack chain, ServerPlayer player, AbstractMinecart cart) {
         UUID selectedId = getSelectedCart(chain);
         if (selectedId == null) {
             selectCart(chain, cart);
@@ -37,7 +47,7 @@ public final class CartLinking {
         }
 
         Entity selectedEntity = player.level().getEntity(selectedId);
-        if (!(selectedEntity instanceof ModularMinecart selectedCart) || !selectedCart.isAlive()) {
+        if (!(selectedEntity instanceof AbstractMinecart selectedCart) || !selectedCart.isAlive()) {
             selectCart(chain, cart);
             player.sendSystemMessage(Component.translatable("message.stevescarts.chain.reselected"));
             return InteractionResult.SUCCESS;
@@ -48,7 +58,7 @@ public final class CartLinking {
             return InteractionResult.SUCCESS;
         }
 
-        CartLinkResult result = selectedCart.linkCart(cart);
+        CartLinkResult result = CartTrainLinker.link(selectedCart, cart);
         switch (result) {
             case LINKED -> {
                 clearSelection(chain);
@@ -67,8 +77,8 @@ public final class CartLinking {
         return InteractionResult.SUCCESS;
     }
 
-    public static InteractionResult cutCartLinks(ItemStack shears, ServerPlayer player, ModularMinecart cart, InteractionHand hand) {
-        int linkCount = cart.unlinkAllCarts();
+    public static InteractionResult cutCartLinks(ItemStack shears, ServerPlayer player, AbstractMinecart cart, InteractionHand hand) {
+        int linkCount = CartTrainLinker.unlinkAll(cart);
         if (linkCount == 0) {
             player.sendSystemMessage(Component.translatable("message.stevescarts.chain.not_linked"));
             return InteractionResult.SUCCESS;
@@ -98,8 +108,35 @@ public final class CartLinking {
         }
     }
 
-    private static void selectCart(ItemStack stack, ModularMinecart cart) {
+    private static void selectCart(ItemStack stack, AbstractMinecart cart) {
         ModItemData.modifyTag(stack, tag -> tag.putString(SELECTED_CART, cart.getUUID().toString()));
+    }
+
+    private static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
+        if (!(event.getTarget() instanceof AbstractMinecart cart) || cart instanceof ModularMinecart) {
+            return;
+        }
+        ItemStack heldItem = event.getEntity().getItemInHand(event.getHand());
+        if (!heldItem.is(Items.IRON_CHAIN) && !heldItem.is(Items.SHEARS)) {
+            return;
+        }
+        InteractionResult result = InteractionResult.SUCCESS;
+        if (event.getEntity() instanceof ServerPlayer player) {
+            result = heldItem.is(Items.IRON_CHAIN)
+                    ? interactWithCart(heldItem, player, cart)
+                    : cutCartLinks(heldItem, player, cart, event.getHand());
+        }
+        event.setCancellationResult(result);
+        event.setCanceled(true);
+    }
+
+    private static void onEntityLeaveLevel(EntityLeaveLevelEvent event) {
+        if (!(event.getEntity() instanceof AbstractMinecart cart) || event.getLevel().isClientSide()
+                || cart.getRemovalReason() == null
+                || !cart.getRemovalReason().shouldDestroy()) {
+            return;
+        }
+        CartTrainLinker.onCartDestroyed(cart);
     }
 
     private static void clearSelection(ItemStack stack) {
