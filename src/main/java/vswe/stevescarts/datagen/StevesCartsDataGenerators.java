@@ -15,6 +15,7 @@ public class StevesCartsDataGenerators {
     public static void gatherData(GatherDataEvent.Client event) {
         event.createProvider(GeneratorModels::new);
         event.createProvider(GeneratorBlockTags::new);
+        event.createProvider(GeneratorEntityTypeTags::new);
         event.createProvider(GeneratorLanguage::new);
         event.createReloadableRegistryObjects(new RegistrySetBuilder()
                 .add(Registries.LOOT_TABLE, new GeneratorLootTables())

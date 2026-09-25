@@ -1,0 +1,22 @@
+{
+  "values": [
+    "minecraft:player",
+    "minecraft:iron_golem",
+    "minecraft:ender_dragon",
+    "minecraft:slime",
+    "minecraft:magma_cube",
+    "minecraft:cod",
+    "minecraft:salmon",
+    "minecraft:pufferfish",
+    "minecraft:tropical_fish",
+    "minecraft:dolphin",
+    "minecraft:squid",
+    "minecraft:glow_squid",
+    "minecraft:wither",
+    "minecraft:enderman",
+    "minecraft:spider",
+    "minecraft:giant",
+    "minecraft:bee",
+    "minecraft:parrot"
+  ]
+}

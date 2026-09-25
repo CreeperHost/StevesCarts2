@@ -8,22 +8,12 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ambient.Bat;
-import net.minecraft.world.entity.animal.bee.Bee;
-import net.minecraft.world.entity.animal.parrot.Parrot;
-import net.minecraft.world.entity.animal.fish.WaterAnimal;
-import net.minecraft.world.entity.animal.golem.IronGolem;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.boss.wither.WitherBoss;
-import net.minecraft.world.entity.monster.Enderman;
-import net.minecraft.world.entity.monster.Giant;
-import net.minecraft.world.entity.monster.cubemob.Slime;
 import net.minecraft.world.entity.monster.skeleton.Skeleton;
-import net.minecraft.world.entity.monster.spider.CaveSpider;
-import net.minecraft.world.entity.monster.spider.Spider;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import vswe.stevescarts.api.StevesCartsTags;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.api.modules.interfaces.IActivatorModule;
 import vswe.stevescarts.client.guis.GuiMinecart;
@@ -158,12 +148,10 @@ public class ModuleCage extends ModuleBase implements IActivatorModule {
         final List<LivingEntity> entities = getCart().level().getEntitiesOfClass(LivingEntity.class, getCart().getBoundingBox().inflate(searchDistance, 4.0, searchDistance));
         entities.sort(sorter);
         for (LivingEntity target : entities) {
-            //TODO this is horrid, Maybe datatag??
-            if (!(target instanceof Player) && !(target instanceof IronGolem) && !(target instanceof EnderDragon) && !(target instanceof Slime) && !(target instanceof WaterAnimal) && !(target instanceof WitherBoss) && !(target instanceof Enderman) && (!(target instanceof Spider) || target instanceof CaveSpider) && !(target instanceof Giant) && !(target instanceof Bee) && !(target instanceof Parrot)) {
-                if (target.getPassengers().isEmpty()) {
-                    target.startRiding(getCart());
-                    return;
-                }
+            if (!target.typeHolder().is(StevesCartsTags.EntityTypes.CAGE_BLACKLIST)
+                    && target.getPassengers().isEmpty()
+                    && target.startRiding(getCart())) {
+                return;
             }
         }
     }
