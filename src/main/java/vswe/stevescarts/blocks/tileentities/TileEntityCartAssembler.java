@@ -33,6 +33,7 @@ import vswe.stevescarts.api.modules.ModuleType;
 import vswe.stevescarts.api.modules.data.ModuleData;
 import vswe.stevescarts.api.modules.data.ModuleDataHull;
 import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
+import vswe.stevescarts.api.upgrades.AssemblerUpgrade;
 import vswe.stevescarts.blocks.BlockCartAssembler;
 import vswe.stevescarts.containers.ContainerCartAssembler;
 import vswe.stevescarts.containers.ContainerUpgrade;

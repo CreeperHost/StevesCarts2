@@ -52,6 +52,7 @@ import java.util.List;
  * @author Vswe
  */
 public abstract class ModuleBase {
+    public static final float DEFAULT_MAX_SPEED = 1.1F;
     private final ModularMinecart cart;
     @Nonnull
     private final NonNullList<ItemStack> cargo;
@@ -319,7 +320,16 @@ public abstract class ModuleBase {
      * @return The maximum speed of the cart
      */
     public float getMaxSpeed() {
-        return 1.1f;
+        return DEFAULT_MAX_SPEED;
+    }
+
+    /**
+     * Allows an engine to use the improved-minecart speed game rule instead of
+     * the legacy Steve's Carts speed ceiling. Modules can still return a lower
+     * speed from {@link #getMaxSpeed()} when the cart must slow down or stop.
+     */
+    public boolean usesExperimentalMaxMinecartSpeed() {
+        return false;
     }
 
     /**

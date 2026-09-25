@@ -33,7 +33,7 @@ import vswe.stevescarts.api.upgrades.BaseUpgradeEffect;
 import vswe.stevescarts.blocks.tileentities.TileEntityCartAssembler;
 import vswe.stevescarts.blocks.tileentities.TileEntityUpgrade;
 import vswe.stevescarts.items.TooltipBlock;
-import vswe.stevescarts.upgrades.AssemblerUpgrade;
+import vswe.stevescarts.api.upgrades.AssemblerUpgrade;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;

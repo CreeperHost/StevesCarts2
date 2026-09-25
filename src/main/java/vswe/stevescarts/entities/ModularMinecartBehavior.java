@@ -13,6 +13,8 @@ import net.minecraft.world.phys.Vec3;
 import vswe.stevescarts.api.modules.ModuleBase;
 import vswe.stevescarts.blocks.BlockRailAdvDetector;
 
+import java.util.List;
+
 public class ModularMinecartBehavior extends NewMinecartBehavior {
 
     private final ModularMinecart minecart;
@@ -102,6 +104,14 @@ public class ModularMinecartBehavior extends NewMinecartBehavior {
     @Override
     public double getMaxSpeed(ServerLevel level) {
         double maxSpeed = super.getMaxSpeed(level);
-        return Math.min(maxSpeed, minecart.modules().stream().mapToDouble(ModuleBase::getMaxSpeed).min().orElse(maxSpeed));
+        List<ModuleBase> trainModules = minecart.getTrainModulesForMovement();
+        boolean usesExperimentalSpeed = trainModules.stream()
+                .anyMatch(ModuleBase::usesExperimentalMaxMinecartSpeed);
+        double moduleSpeed = trainModules.stream()
+                .mapToDouble(ModuleBase::getMaxSpeed)
+                .filter(speed -> !usesExperimentalSpeed || speed < ModuleBase.DEFAULT_MAX_SPEED)
+                .min()
+                .orElse(maxSpeed);
+        return Math.min(maxSpeed, moduleSpeed);
     }
 }

@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.WorldlyContainer;
@@ -33,13 +34,14 @@ import vswe.stevescarts.helpers.storages.ITankHolder;
 import vswe.stevescarts.helpers.storages.SCTank;
 import vswe.stevescarts.helpers.storages.TransferHandler;
 import vswe.stevescarts.init.ModBlocks;
-import vswe.stevescarts.upgrades.AssemblerUpgrade;
+import vswe.stevescarts.api.StevesCartsAPI;
+import vswe.stevescarts.api.upgrades.AssemblerUpgrade;
 import vswe.stevescarts.upgrades.InventoryUpgradeEffect;
 
 public class TileEntityUpgrade extends TileEntityBase implements WorldlyContainer, ITankHolder, MenuProvider {
     public SCTank tank = new SCTank(this, 0, 0);
     private TileEntityCartAssembler master;
-    private int type;
+    private Identifier upgradeId;
     private boolean initialized;
     private CompoundTag comp;
     private NonNullList<ItemStack> inventoryStacks;
@@ -52,8 +54,7 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
 
     public TileEntityUpgrade(AssemblerUpgrade assemblerUpgrade, BlockPos blockPos, BlockState blockState) {
         super(ModBlocks.UPGRADE_TILE.get(), blockPos, blockState);
-        this.type = assemblerUpgrade.getId();
-        setType(assemblerUpgrade.getId());
+        setUpgrade(assemblerUpgrade);
     }
 
     public void setMaster(final TileEntityCartAssembler master, Direction side) {
@@ -78,17 +79,18 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
         return master;
     }
 
-    public void setType(final int type) {
-        this.type = type;
+    public void setUpgrade(AssemblerUpgrade upgrade) {
+        this.upgradeId = upgrade == null ? null : upgrade.getId();
         if (!initialized) {
             initialized = true;
-            final AssemblerUpgrade upgrade = getUpgrade();
             if (upgrade != null) {
+                InventoryUpgradeEffect inventoryEffect = upgrade.getEffect(InventoryUpgradeEffect.class);
+                int inventorySize = inventoryEffect == null ? 0 : inventoryEffect.getInventorySize();
                 comp = new CompoundTag();
-                slotsForSide = new int[upgrade.getInventorySize()];
+                slotsForSide = new int[inventorySize];
                 upgrade.init(this);
-                if (upgrade.getInventorySize() > 0) {
-                    inventoryStacks = NonNullList.withSize(upgrade.getInventorySize(), ItemStack.EMPTY);
+                if (inventorySize > 0) {
+                    inventoryStacks = NonNullList.withSize(inventorySize, ItemStack.EMPTY);
                     for (int i = 0; i < slotsForSide.length; ++i) {
                         slotsForSide[i] = i;
                     }
@@ -119,7 +121,7 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     }
 
     public AssemblerUpgrade getUpgrade() {
-        return AssemblerUpgrade.getUpgrade(type);
+        return upgradeId == null ? null : StevesCartsAPI.getAssemblerUpgrade(upgradeId);
     }
 
     @SuppressWarnings("unused")
@@ -130,12 +132,17 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
-        setType(input.getByteOr("Type", (byte) 0));
-        ContainerHelper.loadAllItems(input, inventoryStacks);
+        AssemblerUpgrade loadedUpgrade = input.getString("UpgradeId")
+                .map(Identifier::tryParse)
+                .map(StevesCartsAPI::getAssemblerUpgrade)
+                .orElseGet(() -> StevesCartsAPI.getAssemblerUpgradeByLegacyId(input.getByteOr("Type", (byte) 0)));
+        setUpgrade(loadedUpgrade);
+        if (inventoryStacks != null) {
+            ContainerHelper.loadAllItems(input, inventoryStacks);
+        }
         setChanged();
-        final AssemblerUpgrade upgrade = getUpgrade();
-        if (upgrade != null) {
-            upgrade.load(this, input);
+        if (loadedUpgrade != null) {
+            loadedUpgrade.load(this, input);
         }
     }
 
@@ -145,9 +152,10 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
         if (inventoryStacks != null) {
             ContainerHelper.saveAllItems(output, inventoryStacks);
         }
-        output.putByte("Type", (byte) type);
         final AssemblerUpgrade upgrade = getUpgrade();
         if (upgrade != null) {
+            output.putString("UpgradeId", upgrade.getId().toString());
+            upgrade.getLegacyId().ifPresent(legacyId -> output.putByte("Type", (byte) legacyId));
             upgrade.save(this, output);
         }
     }
@@ -235,7 +243,7 @@ public class TileEntityUpgrade extends TileEntityBase implements WorldlyContaine
     public void setChanged() {
         super.setChanged();
         if (getUpgrade() != null) {
-            final InventoryUpgradeEffect inv = getUpgrade().getInventoryEffect();
+            final InventoryUpgradeEffect inv = getUpgrade().getEffect(InventoryUpgradeEffect.class);
             if (inv != null) {
                 inv.onInventoryChanged(this);
             }

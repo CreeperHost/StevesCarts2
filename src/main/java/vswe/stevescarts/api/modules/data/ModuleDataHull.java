@@ -49,6 +49,18 @@ public class ModuleDataHull extends ModuleData {
         return complexityMax;
     }
 
+    public int getMaxCount(ModuleType type) {
+        return switch (type) {
+            case HULL -> 1;
+            case ENGINE -> getEngineMax();
+            case TOOL -> 1;
+            case ATTACHMENT -> 6;
+            case STORAGE -> 4;
+            case ADDON -> getAddonMax();
+            case NONE -> 0;
+        };
+    }
+
     public ModuleDataHull setComplexityMax(final int val) {
         complexityMax = val;
         return this;

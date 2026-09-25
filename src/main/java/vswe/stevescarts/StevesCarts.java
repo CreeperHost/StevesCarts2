@@ -17,7 +17,6 @@ import vswe.stevescarts.events.OverlayEventHandler;
 import vswe.stevescarts.helpers.ForceChunkHelper;
 import vswe.stevescarts.init.*;
 import vswe.stevescarts.network.PacketHandler;
-import vswe.stevescarts.upgrades.AssemblerUpgrade;
 
 @Mod(Constants.MOD_ID)
 public class StevesCarts {
@@ -30,7 +29,7 @@ public class StevesCarts {
         modBus.addListener(this::commonSetup);
         StevesCartsModules.init();
 
-        AssemblerUpgrade.init();
+        StevesCartsUpgrades.init();
         ModItems.ITEMS.register(modBus);
         ModBlocks.BLOCKS.register(modBus);
         ModSounds.SOUND_EVENTS.register(modBus);
@@ -76,8 +75,6 @@ public class StevesCarts {
     }
 
     public void commonSetup(final FMLCommonSetupEvent event) {
-        AssemblerUpgrade.init();
-
         TileEntityCargo.loadSelectionSettings();
     }
 }

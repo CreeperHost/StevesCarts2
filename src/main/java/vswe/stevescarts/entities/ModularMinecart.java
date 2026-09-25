@@ -69,6 +69,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.UUID;
 
@@ -399,9 +400,10 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         if (isDisabled()) {
             return Vec3.ZERO;
         }
+        OptionalDouble trainPushFactor = getExperimentalTrainPushFactor();
         //If engine is burning and we are not stopped, then apply engine power.
-        if (isEngineBurning() && preStopVelocity == null) {
-            double pushFactor = getPushFactor();
+        if ((isEngineBurning() || trainPushFactor.isPresent()) && preStopVelocity == null) {
+            double pushFactor = trainPushFactor.orElseGet(this::getPushFactor);
             Vec3 velocity = getEffectiveVelocity();
             initialVelocity = initialVelocity.multiply(0.8D, 0.0D, 0.8D).add(velocity.multiply(pushFactor, 0, pushFactor));
             if (isInWater()) {
@@ -876,6 +878,27 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
             }
         }
         return connectedCarts;
+    }
+
+    List<ModuleBase> getTrainModulesForMovement() {
+        if (!(level() instanceof ServerLevel)) {
+            return List.copyOf(modules);
+        }
+        return getTrainCarts().stream()
+                .flatMap(cart -> cart.modules.stream())
+                .toList();
+    }
+
+    private OptionalDouble getExperimentalTrainPushFactor() {
+        if (!(level() instanceof ServerLevel)) {
+            return OptionalDouble.empty();
+        }
+        return getTrainModulesForMovement().stream()
+                .filter(ModuleBase::usesExperimentalMaxMinecartSpeed)
+                .filter(module -> module.getCart().isEngineBurning())
+                .mapToDouble(ModuleBase::getPushFactor)
+                .filter(pushFactor -> pushFactor >= 0.0D)
+                .findFirst();
     }
 
     private void updateCartLinks(ServerLevel serverLevel) {

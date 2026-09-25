@@ -23,8 +23,8 @@ import vswe.stevescarts.init.ModItemData;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -172,114 +172,22 @@ public class ModuleData {
         return false;
     }
 
-    //TODO rewrite all of this
     public static boolean isValidModuleItem(final ModuleType moduleType, final ModuleData module) {
-        if (module != null) {
-            return module.getModuleType() == moduleType;
-        }
-        return false;
+        return module != null && module.getModuleType() == moduleType;
     }
 
-    public static boolean isValidModuleCombo(final ModuleDataHull hull, final ArrayList<ModuleData> modules) {
-        if (hull == null || modules == null) {
-            return false;
-        }
-
-        EnumMap<ModuleType, Integer> counts = new EnumMap<>(ModuleType.class);
-        for (ModuleData module : modules) {
-            if (module == null) {
-                return false;
-            }
-
-            ModuleType type = module.getModuleType();
-            int maximum = switch (type) {
-                case HULL -> 1;
-                case ENGINE -> hull.getEngineMax();
-                case TOOL -> 1;
-                case ATTACHMENT -> 6;
-                case STORAGE -> 4;
-                case ADDON -> hull.getAddonMax();
-                case NONE -> 0;
-            };
-            int count = counts.merge(type, 1, Integer::sum);
-            if (count > maximum) {
-                return false;
-            }
-        }
-        return true;
+    public static boolean isValidModuleCombo(final ModuleDataHull hull, final List<ModuleData> modules) {
+        return ModuleAssemblyValidator.hasValidSlotCounts(hull, modules);
     }
 
-    public static String checkForErrors(final ModuleDataHull hull, final ArrayList<ModuleData> modules) {
-        if (getTotalCost(modules) > hull.getCapacity()) {
-            return Component.translatable("info.stevescarts.capacityOverloadError").getString();
-        }
-        if (!isValidModuleCombo(hull, modules)) {
-            return Component.translatable("info.stevescarts.impossibleCombinationError").getString();
-        }
-        for (int i = 0; i < modules.size(); ++i) {
-            final ModuleData mod1 = modules.get(i);
-            if (mod1.getCost() > hull.getComplexityMax()) {
-                return Component.translatable("info.stevescarts.complexityOverloadError", mod1.getName()).getString();
-            }
-            if (mod1.getParent() != null && !modules.contains(mod1.getParent())) {
-                return Component.translatable("info.stevescarts.missingParentError", mod1.getName(), mod1.getParent().getName()).getString();
-            }
-            if (mod1.getNemesis() != null) {
-                for (final ModuleData nemesis : mod1.getNemesis()) {
-                    if (modules.contains(nemesis)) {
-                        return Component.translatable("info.stevescarts.presentNemesisError", mod1.getName(), nemesis.getName()).getString();
-                    }
-                }
-            }
-            if (mod1.getRequirement() != null) {
-                for (final ModuleDataGroup group : mod1.getRequirement()) {
-                    int count = 0;
-                    for (final ModuleData mod2 : group.getModules()) {
-                        for (final ModuleData mod3 : modules) {
-                            if (mod2.equals(mod3)) {
-                                ++count;
-                            }
-                        }
-                    }
-                    if (count < group.getCount()) {
-                        return Component.translatable("info.stevescarts.missingParentError", mod1.getName(), group.getCountName() + " " + group.getName()).getString();
-                    }
-                }
-            }
-            for (int j = i + 1; j < modules.size(); ++j) {
-                final ModuleData mod4 = modules.get(j);
-                if (mod1 == mod4) {
-                    if (!mod1.getAllowDuplicate()) {
-                        return Component.translatable("info.stevescarts.presentDuplicateError", mod1.getName()).getString();
-                    }
-                } else if (mod1.getRenderingSides() != null && mod4.getRenderingSides() != null) {
-                    SIDE clash = SIDE.NONE;
-                    for (final SIDE side1 : mod1.getRenderingSides()) {
-                        for (final SIDE side2 : mod4.getRenderingSides()) {
-                            if (side1 == side2) {
-                                clash = side1;
-                                break;
-                            }
-                        }
-                        if (clash != SIDE.NONE) {
-                            break;
-                        }
-                    }
-                    if (clash != SIDE.NONE) {
-                        return Component.translatable("info.stevescarts.sideClashError", mod1.getName(), mod4.getName(), clash.toString()).getString();
-                    }
-                }
-            }
-        }
-        return null;
+    @Nullable
+    public static String checkForErrors(final ModuleDataHull hull, final List<ModuleData> modules) {
+        Component error = ModuleAssemblyValidator.validate(hull, modules).error();
+        return error == null ? null : error.getString();
     }
 
-    public static int getTotalCost(final ArrayList<ModuleData> modules) {
-        int currentCost = 0;
-        for (final ModuleData module : modules) {
-            currentCost += module.getCost();
-        }
-        return currentCost;
+    public static int getTotalCost(final List<ModuleData> modules) {
+        return ModuleAssemblyValidator.getTotalCost(modules);
     }
 
     public Class<? extends ModuleBase> getModuleClass() {

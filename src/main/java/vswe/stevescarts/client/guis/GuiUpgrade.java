@@ -33,7 +33,7 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade> {
         this.extractBackground(guiGraphics, mouseX, mouseY, p_230430_4_);
         super.extractContents(guiGraphics, mouseX, mouseY, p_230430_4_);
         if (upgrade.getUpgrade() != null) {
-            final InterfaceUpgradeEffect gui = upgrade.getUpgrade().getInterfaceEffect();
+            final InterfaceUpgradeEffect gui = upgrade.getUpgrade().getEffect(InterfaceUpgradeEffect.class);
             if (gui != null) {
                 gui.drawForeground(upgrade, this);
                 gui.drawMouseOver(guiGraphics, upgrade, this, mouseX, mouseY);
@@ -60,13 +60,13 @@ public class GuiUpgrade extends AbstractContainerScreen<ContainerUpgrade> {
         final int k = getTopPos();
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiUpgrade.texture, j, k, 0, 0, imageWidth, imageHeight, 256, 256);
         if (upgrade.getUpgrade() != null) {
-            final InventoryUpgradeEffect inventory = upgrade.getUpgrade().getInventoryEffect();
+            final InventoryUpgradeEffect inventory = upgrade.getUpgrade().getEffect(InventoryUpgradeEffect.class);
             if (inventory != null) {
                 for (int i = 0; i < inventory.getInventorySize(); ++i) {
                     guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GuiUpgrade.texture, j + inventory.getSlotX(i) - 1, k + inventory.getSlotY(i) - 1, 0, imageHeight, 18, 18, 256, 256);
                 }
             }
-            final InterfaceUpgradeEffect gui = upgrade.getUpgrade().getInterfaceEffect();
+            final InterfaceUpgradeEffect gui = upgrade.getUpgrade().getEffect(InterfaceUpgradeEffect.class);
             if (gui != null) {
                 gui.drawBackground(guiGraphics, upgrade, this, mouseX, mouseY);
             }

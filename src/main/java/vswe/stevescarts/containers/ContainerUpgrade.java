@@ -32,9 +32,9 @@ public class ContainerUpgrade extends ContainerBase {
         this.upgrade = upgrade;
         if (upgrade.getUpgrade() == null) return;
 
-        if (upgrade.getUpgrade().getInventoryEffect() != null) {
+        if (upgrade.getUpgrade().getEffect(InventoryUpgradeEffect.class) != null) {
             try {
-                final InventoryUpgradeEffect inventory = upgrade.getUpgrade().getInventoryEffect();
+                final InventoryUpgradeEffect inventory = upgrade.getUpgrade().getEffect(InventoryUpgradeEffect.class);
                 inventory.clear();
                 for (int id = 0; id < inventory.getInventorySize(); ++id) {
                     final Slot slot = inventory.createSlot(upgrade, id);

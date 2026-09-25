@@ -5,6 +5,7 @@ import net.minecraft.world.item.Item;
 import vswe.stevescarts.api.farms.ICropModule;
 import vswe.stevescarts.api.farms.ITreeModule;
 import vswe.stevescarts.api.modules.data.ModuleData;
+import vswe.stevescarts.api.upgrades.AssemblerUpgrade;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import java.util.function.Supplier;
 
 public final class StevesCartsAPI {
     private static final Map<Identifier, ModuleData> MODULE_REGISTRY = new LinkedHashMap<>();
+    private static final Map<Identifier, AssemblerUpgrade> ASSEMBLER_UPGRADE_REGISTRY = new LinkedHashMap<>();
+    private static final Map<Integer, AssemblerUpgrade> LEGACY_ASSEMBLER_UPGRADES = new LinkedHashMap<>();
     public static final List<ITreeModule> TREE_MODULES = new ArrayList<>();
     public static final List<ICropModule> CROP_MODULES = new ArrayList<>();
 
@@ -56,5 +59,38 @@ public final class StevesCartsAPI {
 
     public static Map<Identifier, ModuleData> getRegisteredModules() {
         return Collections.unmodifiableMap(MODULE_REGISTRY);
+    }
+
+    public static AssemblerUpgrade registerAssemblerUpgrade(AssemblerUpgrade upgrade) {
+        Objects.requireNonNull(upgrade, "upgrade");
+        AssemblerUpgrade previous = ASSEMBLER_UPGRADE_REGISTRY.putIfAbsent(upgrade.getId(), upgrade);
+        if (previous != null) {
+            throw new IllegalArgumentException("An assembler upgrade is already registered as " + upgrade.getId());
+        }
+
+        if (upgrade.getLegacyId().isPresent()) {
+            int legacyId = upgrade.getLegacyId().getAsInt();
+            AssemblerUpgrade previousLegacy = LEGACY_ASSEMBLER_UPGRADES.putIfAbsent(legacyId, upgrade);
+            if (previousLegacy != null) {
+                ASSEMBLER_UPGRADE_REGISTRY.remove(upgrade.getId());
+                throw new IllegalArgumentException("Legacy assembler upgrade id " + legacyId
+                        + " is already used by " + previousLegacy.getId());
+            }
+        }
+        return upgrade;
+    }
+
+    @Nullable
+    public static AssemblerUpgrade getAssemblerUpgrade(Identifier id) {
+        return ASSEMBLER_UPGRADE_REGISTRY.get(id);
+    }
+
+    @Nullable
+    public static AssemblerUpgrade getAssemblerUpgradeByLegacyId(int legacyId) {
+        return LEGACY_ASSEMBLER_UPGRADES.get(legacyId);
+    }
+
+    public static Map<Identifier, AssemblerUpgrade> getRegisteredAssemblerUpgrades() {
+        return Collections.unmodifiableMap(ASSEMBLER_UPGRADE_REGISTRY);
     }
 }

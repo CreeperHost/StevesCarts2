@@ -49,7 +49,7 @@ public class InputChest extends SimpleInventoryUpgradeEffect {
                 comp.putByte("TransferCooldown", (byte) (comp.getByteOr("TransferCooldown", (byte) 0) - 1));
             } else {
                 comp.putByte("TransferCooldown", (byte) 20);
-                for (int slotId = 0; slotId < upgrade.getUpgrade().getInventorySize(); ++slotId) {
+                for (int slotId = 0; slotId < getInventorySize(); ++slotId) {
                     @Nonnull ItemStack itemstack = upgrade.getItem(slotId);
                     if (!itemstack.isEmpty()) {
                         IModuleItem itemCartModule = (IModuleItem) itemstack.getItem();

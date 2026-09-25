@@ -12,7 +12,7 @@ import vswe.stevescarts.Constants;
 import vswe.stevescarts.blocks.*;
 import vswe.stevescarts.blocks.tileentities.*;
 import vswe.stevescarts.items.TooltipBlockItem;
-import vswe.stevescarts.upgrades.AssemblerUpgrade;
+import vswe.stevescarts.api.upgrades.AssemblerUpgrade;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -45,30 +45,31 @@ public class ModBlocks {
     public static final DeferredHolder<Block, Block> ENHANCED_GALGADORIAN_METAL = registerBlock("enhanced_galgadorian_metal", BlockMetalStorage::new, () -> Properties.of().strength(2.0F));
 
     //Upgrades
-    public static final DeferredHolder<Block, Block> BATTERIES = registerUpgrade("upgrade_batteries", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(0)));
-    public static final DeferredHolder<Block, Block> POWER_CRYSTAL = registerUpgrade("upgrade_power_crystal", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(1)));
-    public static final DeferredHolder<Block, Block> KNOWLEDGE = registerUpgrade("upgrade_module_knowledge", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(2)));
-    public static final DeferredHolder<Block, Block> INDUSTRIAL_ESPIONAGE = registerUpgrade("upgrade_industrial_espionage", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(3)));
-    public static final DeferredHolder<Block, Block> EXPERIENCED_ASSEMBLER = registerUpgrade("upgrade_experienced_assembler", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(4)));
-    public static final DeferredHolder<Block, Block> NEW_ERA = registerUpgrade("upgrade_new_era", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(5)));
-    public static final DeferredHolder<Block, Block> COTWO_FRIENDLY = registerUpgrade("upgrade_cotwo_friendly", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(6)));
-    public static final DeferredHolder<Block, Block> GENERIC_ENGINE = registerUpgrade("upgrade_generic_engine", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(7)));
-    public static final DeferredHolder<Block, Block> MODULE_INPUT = registerUpgrade("upgrade_module_input", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(8)));
-    public static final DeferredHolder<Block, Block> PRODUCTION_LINE = registerUpgrade("upgrade_production_line", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(9)));
-    public static final DeferredHolder<Block, Block> CART_DEPLOYER = registerUpgrade("upgrade_cart_deployer", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(10)));
-    public static final DeferredHolder<Block, Block> CART_MODIFIER = registerUpgrade("upgrade_cart_modifier", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(11)));
-    public static final DeferredHolder<Block, Block> CART_CRANE = registerUpgrade("upgrade_cart_crane", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(12)));
-    public static final DeferredHolder<Block, Block> REDSTONE_CONTROL = registerUpgrade("upgrade_redstone_control", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(13)));
-    public static final DeferredHolder<Block, Block> CREATIVE_MODE = registerUpgrade("upgrade_creative_mode", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(14)));
-    public static final DeferredHolder<Block, Block> QUICK_DEMOLISHER = registerUpgrade("upgrade_quick_demolisher", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(15)));
-    public static final DeferredHolder<Block, Block> ENTROPY = registerUpgrade("upgrade_entropy", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(16)));
-    public static final DeferredHolder<Block, Block> MANAGER_BRIDGE = registerUpgrade("upgrade_manager_bridge", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(17)));
-    public static final DeferredHolder<Block, Block> THERMAL_ENGINE = registerUpgrade("upgrade_thermal_engine", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(18)));
-    public static final DeferredHolder<Block, Block> SOLAR_PANEL = registerUpgrade("upgrade_solar_panel", props -> new BlockUpgrade(props, AssemblerUpgrade.getUpgrade(19)));
+    public static final DeferredHolder<Block, Block> BATTERIES = registerUpgrade(StevesCartsUpgrades.BATTERIES);
+    public static final DeferredHolder<Block, Block> POWER_CRYSTAL = registerUpgrade(StevesCartsUpgrades.POWER_CRYSTAL);
+    public static final DeferredHolder<Block, Block> KNOWLEDGE = registerUpgrade(StevesCartsUpgrades.MODULE_KNOWLEDGE);
+    public static final DeferredHolder<Block, Block> INDUSTRIAL_ESPIONAGE = registerUpgrade(StevesCartsUpgrades.INDUSTRIAL_ESPIONAGE);
+    public static final DeferredHolder<Block, Block> EXPERIENCED_ASSEMBLER = registerUpgrade(StevesCartsUpgrades.EXPERIENCED_ASSEMBLER);
+    public static final DeferredHolder<Block, Block> NEW_ERA = registerUpgrade(StevesCartsUpgrades.NEW_ERA);
+    public static final DeferredHolder<Block, Block> COTWO_FRIENDLY = registerUpgrade(StevesCartsUpgrades.COTWO_FRIENDLY);
+    public static final DeferredHolder<Block, Block> GENERIC_ENGINE = registerUpgrade(StevesCartsUpgrades.GENERIC_ENGINE);
+    public static final DeferredHolder<Block, Block> MODULE_INPUT = registerUpgrade(StevesCartsUpgrades.MODULE_INPUT);
+    public static final DeferredHolder<Block, Block> PRODUCTION_LINE = registerUpgrade(StevesCartsUpgrades.PRODUCTION_LINE);
+    public static final DeferredHolder<Block, Block> CART_DEPLOYER = registerUpgrade(StevesCartsUpgrades.CART_DEPLOYER);
+    public static final DeferredHolder<Block, Block> CART_MODIFIER = registerUpgrade(StevesCartsUpgrades.CART_MODIFIER);
+    public static final DeferredHolder<Block, Block> CART_CRANE = registerUpgrade(StevesCartsUpgrades.CART_CRANE);
+    public static final DeferredHolder<Block, Block> REDSTONE_CONTROL = registerUpgrade(StevesCartsUpgrades.REDSTONE_CONTROL);
+    public static final DeferredHolder<Block, Block> CREATIVE_MODE = registerUpgrade(StevesCartsUpgrades.CREATIVE_MODE);
+    public static final DeferredHolder<Block, Block> QUICK_DEMOLISHER = registerUpgrade(StevesCartsUpgrades.QUICK_DEMOLISHER);
+    public static final DeferredHolder<Block, Block> ENTROPY = registerUpgrade(StevesCartsUpgrades.ENTROPY);
+    public static final DeferredHolder<Block, Block> MANAGER_BRIDGE = registerUpgrade(StevesCartsUpgrades.MANAGER_BRIDGE);
+    public static final DeferredHolder<Block, Block> THERMAL_ENGINE = registerUpgrade(StevesCartsUpgrades.THERMAL_ENGINE);
+    public static final DeferredHolder<Block, Block> SOLAR_PANEL = registerUpgrade(StevesCartsUpgrades.SOLAR_PANEL);
 
-    private static DeferredBlock<Block> registerUpgrade(String name, Function<Properties, BlockUpgrade> func) {
+    private static DeferredBlock<Block> registerUpgrade(AssemblerUpgrade upgrade) {
+        String name = upgrade.getId().getPath();
         Properties props = Properties.of().noOcclusion().randomTicks().strength(2.0F);
-        DeferredBlock<Block> block = BLOCKS.registerBlock(name, func, () -> props);
+        DeferredBlock<Block> block = BLOCKS.registerBlock(name, properties -> new BlockUpgrade(properties, upgrade), () -> props);
         ModItems.ITEMS.registerItem(name, (p) -> new TooltipBlockItem(block.get(), p));
         return block;
     }

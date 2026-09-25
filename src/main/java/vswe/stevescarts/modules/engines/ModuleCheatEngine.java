@@ -3,6 +3,8 @@ package vswe.stevescarts.modules.engines;
 import net.minecraft.network.chat.Component;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.gamerules.GameRules;
 import vswe.stevescarts.api.modules.template.ModuleEngine;
 import vswe.stevescarts.client.guis.GuiMinecart;
 import vswe.stevescarts.entities.ModularMinecart;
@@ -49,5 +51,18 @@ public class ModuleCheatEngine extends ModuleEngine {
     @Override
     public boolean hasSlots() {
         return false;
+    }
+
+    @Override
+    public boolean usesExperimentalMaxMinecartSpeed() {
+        return true;
+    }
+
+    @Override
+    public double getPushFactor() {
+        if (getCart().level() instanceof ServerLevel level) {
+            return level.getGameRules().get(GameRules.MAX_MINECART_SPEED) / 20.0D;
+        }
+        return super.getPushFactor();
     }
 }
