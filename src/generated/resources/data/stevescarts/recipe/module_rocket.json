@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "stevescarts",
+  "key": {
+    "F": "minecraft:firework_rocket",
+    "P": "minecraft:piston",
+    "R": "stevescarts:component_simple_pcb"
+  },
+  "pattern": [
+    " F ",
+    "FPF",
+    " R "
+  ],
+  "result": {
+    "id": "stevescarts:module_rocket"
+  }
+}

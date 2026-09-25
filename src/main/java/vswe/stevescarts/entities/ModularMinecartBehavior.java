@@ -3,6 +3,7 @@ package vswe.stevescarts.entities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.vehicle.minecart.NewMinecartBehavior;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
@@ -31,6 +32,11 @@ public class ModularMinecartBehavior extends NewMinecartBehavior {
 
     @Override
     public void moveAlongTrack(ServerLevel serverLevel) {
+        if (minecart.isModuleControllingMovement()) {
+            moveWithModuleController(serverLevel);
+            return;
+        }
+
         for (TrackIteration newminecartbehavior$trackiteration = new TrackIteration(); newminecartbehavior$trackiteration.shouldIterate() && this.minecart.isAlive(); newminecartbehavior$trackiteration.firstIteration = false) {
             Vec3 vec3 = this.getDeltaMovement();
             BlockPos blockpos = this.minecart.getCurrentBlockPosOrRailBelow();
@@ -99,6 +105,28 @@ public class ModularMinecartBehavior extends NewMinecartBehavior {
                 this.minecart.applyEffectsFromBlocks();
             }
         }
+    }
+
+    private void moveWithModuleController(ServerLevel serverLevel) {
+        Vec3 previousPosition = minecart.position();
+        Vec3 movement = getDeltaMovement();
+        minecart.setOnRails(false);
+        minecart.resetFallDistance();
+        minecart.setOldPosAndRot();
+        minecart.move(MoverType.SELF, movement);
+
+        Vec3 position = minecart.position();
+        double distance = position.distanceTo(previousPosition);
+        if (distance > 1.0E-5D || movement.lengthSqr() > 0.0D) {
+            lerpSteps.add(new MinecartStep(
+                    position,
+                    getDeltaMovement(),
+                    getYRot(),
+                    getXRot(),
+                    (float) Math.min(distance, getMaxSpeed(serverLevel))
+            ));
+        }
+        minecart.applyEffectsFromBlocks();
     }
 
     @Override

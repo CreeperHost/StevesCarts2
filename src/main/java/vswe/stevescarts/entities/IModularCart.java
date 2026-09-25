@@ -95,6 +95,10 @@ public interface IModularCart extends Container, IFluidHandler {
         return modules().stream().anyMatch(moduleType::isInstance);
     }
 
+    default boolean isModuleControllingMovement() {
+        return modules().stream().anyMatch(ModuleBase::controlsCartMovement);
+    }
+
     ArrayList<ModuleWorker> workers();
 
     ArrayList<ModuleEngine> engines();
@@ -175,7 +179,8 @@ public interface IModularCart extends Container, IFluidHandler {
     }
 
     default int getConsumption() {
-        return getConsumption(!getCart().isDisabled() && getCart().isEngineBurning());
+        return getConsumption(!getCart().isDisabled()
+                && (getCart().isEngineBurning() || isModuleControllingMovement()));
     }
 
     default int getConsumption(boolean isMoving) {

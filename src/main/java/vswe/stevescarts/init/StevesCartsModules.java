@@ -90,6 +90,7 @@ public class StevesCartsModules {
     public static ModuleData FREEZER;
     public static ModuleData CAGE;
     public static ModuleData FIREWORK_DISPLAY;
+    public static ModuleData ROCKET;
 
     //Detectors
     public static ModuleData ENTITY_DETECTOR_ANIMAL;
@@ -362,6 +363,9 @@ public class StevesCartsModules {
 
         FIREWORK_DISPLAY = StevesCartsAPI.registerModule(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "firework_display"),
                 new ModuleData(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "firework_display"), "Firework display", ModuleFirework.class, ModuleType.ADDON, 45));
+
+        ROCKET = StevesCartsAPI.registerModule(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "rocket"),
+                new ModuleData(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "rocket"), "Rocket", ModuleRocket.class, ModuleType.ADDON, 15));
 
         INCINERATOR = StevesCartsAPI.registerModule(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "incinerator"),
                 new ModuleData(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "incinerator"), "Incinerator", ModuleIncinerator.class, ModuleType.ADDON, 23).addRequirement(DefaultModuleGroups.DRILL_GROUP));

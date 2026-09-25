@@ -77,6 +77,17 @@ public class GeneratorRecipes extends RecipeProvider {
     }
 
     private void addModuleRecipes() {
+        shaped(RecipeCategory.MISC, getItemForModule(StevesCartsModules.ROCKET))
+                .pattern(" F ")
+                .pattern("FPF")
+                .pattern(" R ")
+                .define('F', Items.FIREWORK_ROCKET)
+                .define('P', Items.PISTON)
+                .define('R', ModItems.COMPONENTS.get(ComponentTypes.SIMPLE_PCB).get())
+                .group(Constants.MOD_ID)
+                .unlockedBy("has_item", has(Items.FIREWORK_ROCKET))
+                .save(output);
+
         shaped(RecipeCategory.MISC, getItemForModule(StevesCartsModules.TRAIN_INTERFACE))
                 .pattern("ICI")
                 .pattern("CRC")

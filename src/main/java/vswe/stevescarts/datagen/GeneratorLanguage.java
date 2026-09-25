@@ -271,6 +271,7 @@ public class GeneratorLanguage extends LanguageProvider {
         add("item.stevescarts.projectile_egg", "Projectile: Egg");
         add("item.stevescarts.projectile_fire_charge", "Projectile: Fire Charge");
         add("item.stevescarts.firework_display", "Firework display");
+        add("item.stevescarts.rocket", "Rocket");
         add("item.stevescarts.crop_nether_wart", "Crop: Nether Wart");
         add("item.stevescarts.cage", "Cage");
         add("item.stevescarts.compact_solar_engine", "Compact Solar Engine");
@@ -598,6 +599,8 @@ public class GeneratorLanguage extends LanguageProvider {
         add("modules.addons.stevescarts.recipeChangeLimit64", "Ctrl click to change by 64.");
         add("modules.addons.stevescarts.shieldToggle.activate", "Activate shield");
         add("modules.addons.stevescarts.shieldToggle.deactivate", "Deactivate shield");
+        add("modules.addons.stevescarts.rocketToggle.activate", "Activate flight");
+        add("modules.addons.stevescarts.rocketToggle.deactivate", "Deactivate flight");
         add("modules.addons.stevescarts.buttonRandomize", "Randomize Color");
         add("modules.engines.stevescarts.creativePowerLevel", "Power Level: %1$s");
         add("modules.engines.stevescarts.coalEngineTitle", "Coal Engine");

@@ -304,6 +304,14 @@ public abstract class ModuleBase {
     }
 
     /**
+     * Whether this module is currently controlling the cart's movement directly.
+     * While active, normal rail movement is skipped for the cart.
+     */
+    public boolean controlsCartMovement() {
+        return false;
+    }
+
+    /**
      * Returns if this module has enough fuel to keep the cart going one tick more. This should, however, be moved to engineModuleBase
      *
      * @param consumption The number of fuel units the cart wants to consume

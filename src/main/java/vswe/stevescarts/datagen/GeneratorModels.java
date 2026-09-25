@@ -14,6 +14,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jspecify.annotations.NonNull;
@@ -139,6 +140,11 @@ public class GeneratorModels extends ModelProvider {
             if (item == ModItems.MODULES.get(StevesCartsModules.TRAIN_INTERFACE).get()) {
                 Item simplePcb = ModItems.COMPONENTS.get(ComponentTypes.SIMPLE_PCB).get();
                 itemModels.itemModelOutput.accept(item, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(simplePcb)));
+                return;
+            }
+
+            if (item == ModItems.MODULES.get(StevesCartsModules.ROCKET).get()) {
+                itemModels.itemModelOutput.accept(item, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(Items.FIREWORK_ROCKET)));
                 return;
             }
 

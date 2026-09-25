@@ -217,12 +217,13 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
         } else {
             readRiderInput();
         }
-        if (!lastBackKey && isBackKeyDown()) {
+        boolean movementControlled = getCart().isModuleControllingMovement();
+        if (!movementControlled && !lastBackKey && isBackKeyDown()) {
             turnback();
         }
-        lastBackKey = isBackKeyDown();
+        lastBackKey = !movementControlled && isBackKeyDown();
 
-        if (!getCart().level().isClientSide()) {
+        if (!getCart().level().isClientSide() && !movementControlled) {
             if (speedChangeCooldown == 0) {
                 if (!isJumpKeyDown() || !isControlKeyDown()) {
                     if (isJumpKeyDown()) {
@@ -391,7 +392,7 @@ public class ModuleAdvControl extends ModuleBase implements ILeverModule {
 
     @Override
     public boolean stopEngines() {
-        return getSpeedSetting() == 0;
+        return getSpeedSetting() == 0 && !getCart().isModuleControllingMovement();
     }
 
     @Override

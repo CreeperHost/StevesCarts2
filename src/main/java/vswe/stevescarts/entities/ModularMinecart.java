@@ -885,6 +885,7 @@ public class ModularMinecart extends AbstractMinecart implements IEntityWithComp
         if (this.level().isClientSide()
                 && passenger instanceof Player player
                 && player.shouldRotateWithMinecart()
+                && !isModuleControllingMovement()
                 && modules().stream().anyMatch(ModuleSeat.class::isInstance)) {
             float yRot = (float) Mth.rotLerp(0.5, this.playerRotationOffset, this.rotationOffset);
             player.setYRot(player.getYRot() - (yRot - this.playerRotationOffset));

@@ -109,7 +109,7 @@ public class ModuleSeat extends ModuleBase {
     @Override
     public void update() {
         super.update();
-        if (getCart().getCartRider() != null) {
+        if (getCart().getCartRider() != null && !getCart().isModuleControllingMovement()) {
             relative = false;
             chairAngle = (float) Math.toRadians(getCart().getCartRider().getYRot());
         } else {
