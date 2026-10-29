@@ -43,7 +43,7 @@ public class StevesCarts {
         modBus.addListener(this::clientInit);
 
         container.registerConfig(ModConfig.Type.CLIENT, SCConfig.clientSpec, Constants.MOD_ID + "-client.toml");
-        container.registerConfig(ModConfig.Type.COMMON, SCConfig.commonSpec, Constants.MOD_ID + "-common.toml");
+        container.registerConfig(ModConfig.Type.LOCAL, SCConfig.commonSpec, Constants.MOD_ID + "-common.toml");
         modBus.register(SCConfig.class);
 
         NeoForgeMod.enableMilkFluid();
